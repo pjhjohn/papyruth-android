@@ -1,0 +1,81 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:gravity="center_horizontal"
+    android:orientation="vertical" android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/appDefaultBackgroundColor"
+    tools:context="com.montserrat.activity.AuthActivity">
+
+    <!-- Signin progress -->
+    <ProgressBar android:id="@+id/signin_progress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
+    <LinearLayout android:id="@+id/signin_form" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+        <!--TODO : Prevent TextView from auto focused into input state-->
+        <!--http://stackoverflow.com/questions/11133585/set-next-edittext-focused-and-editable-on-key-down-->
+
+        <LinearLayout android:id="@+id/email_signin_form" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:layout_gravity="center">
+            <TextView android:id="@+id/signin_title"
+                android:layout_width="match_parent"
+                android:text="Montserrat.com"
+                android:textSize="40sp"
+                android:gravity="center"
+                android:layout_marginBottom="120dp"
+                android:textColor="@drawable/appDefaultForegroundColor"
+                android:layout_height="wrap_content">
+            </TextView>
+            <AutoCompleteTextView
+                style="@style/SigninTextAppearance"
+                android:id="@+id/email" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:hint="@string/prompt_email"
+                android:inputType="textEmailAddress" android:maxLines="1"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
+
+            <EditText
+                style="@style/SigninTextAppearance"
+                android:id="@+id/password" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:hint="@string/prompt_password"
+                android:imeActionId="@+id/signin"
+                android:imeActionLabel="@string/action_sign_in"
+                android:imeOptions="actionDone" android:inputType="textPassword"
+                android:maxLines="1" android:singleLine="true" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <Button
+                    android:id="@+id/btn_sign_in"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/action_sign_in"
+                    android:background="@drawable/appDefaultForegroundColor"
+                    android:textColor="@drawable/appDefaultBackgroundColor"
+                    android:textStyle="bold"
+                    android:layout_weight="0.5" />
+
+                <Button
+                    android:id="@+id/btn_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_up"
+                    android:background="@drawable/appDefaultForegroundColor"
+                    android:textColor="@drawable/appDefaultBackgroundColor"
+                    android:textStyle="bold"
+                    android:layout_weight="0.5" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
+
+

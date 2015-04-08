@@ -1,0 +1,24 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">#1CAF9A</item>
+        <item name="colorPrimary">#2B3643</item>
+        <item name="colorPrimaryDark">#2B3643</item>
+        <item name="colorControlHighlight">#1CAF9A</item>
+        <item name="colorControlNormal">#1CAF9A</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/nav_listview_selector</item>
+    </style>
+
+    <style name="SigninTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@drawable/appDefaultForegroundColor</item>
+        <item name="android:textColorHint">@drawable/appDefaultHighlightColor</item>
+        <item name="android:layout_marginBottom">24dp</item>
+    </style>
+    <style name="MainTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@drawable/appDefaultHighlightColor</item>
+    </style>
+    <style name="MainRatingBar" parent="@android:style/Widget.Holo.Light.RatingBar.Indicator">
+        <item name="android:textAppearance">@style/MainTextAppearance</item>
+    </style>
+</resources>
