@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 
 import com.montserrat.parts.auth.AuthenticationFragment;
-import com.montserrat.utils.request.JSONRequestableFragment;
+import com.montserrat.utils.requestable_fragment.JSONRequestableFragment;
 
 public class AuthActivity extends Activity {
     @Override

@@ -66,19 +66,13 @@ public class JSONRequestAsyncTask extends AsyncTask<String, Void, JSONRequestAsy
         try {
             response.status = Response.Status.SUCCESS;
             response.body = EntityUtils.toString(this.client.execute(this.request).getEntity());
-        } catch(ConnectTimeoutException e){
-            response.status = Response.Status.TIMEOUT;
-            response.body = e.getMessage();
-        } catch(SocketTimeoutException e){
+        } catch(ConnectTimeoutException | SocketTimeoutException e){
             response.status = Response.Status.TIMEOUT;
             response.body = e.getMessage();
         } catch(UnknownHostException e) {
             response.status = Response.Status.NO_CONNECTION;
             response.body = e.getMessage();
-        } catch(ClientProtocolException e) {
-            response.status = Response.Status.ERROR;
-            response.body = e.getMessage();
-        } catch(IOException e) {
+        } catch(IOException e) { // includes handling ClientProtocolException
             response.status = Response.Status.ERROR;
             response.body = e.getMessage();
         }
@@ -110,7 +104,6 @@ public class JSONRequestAsyncTask extends AsyncTask<String, Void, JSONRequestAsy
         public static enum Status {
             SUCCESS, ERROR, TIMEOUT, NO_CONNECTION
         }
-        public Response(){}
         public Status status = null;
         public String body = null;
     }

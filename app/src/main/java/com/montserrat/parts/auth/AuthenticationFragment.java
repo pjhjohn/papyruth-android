@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
-import com.montserrat.utils.request.JSONRequestableFragment;
+import com.montserrat.utils.requestable_fragment.JSONRequestableFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -169,10 +169,8 @@ public class AuthenticationFragment extends JSONRequestableFragment{
                 this.form.put("email", email)
                          .put("password", passwd)
                          .submit();
-            } catch (JSONException e) {
+            } catch (JSONException | UnsupportedEncodingException e) {
                 Log.e (this.getClass().toString(), e.toString());
-            } catch (UnsupportedEncodingException e) {
-                Log.e(this.getClass().toString(), e.toString());
             }
         }
     }
@@ -202,6 +200,10 @@ public class AuthenticationFragment extends JSONRequestableFragment{
     @Override
     protected String getEndpoint() {
         return "http://pjhjohn.appspot.com/signin";
+    }
+    @Override
+    protected int getFragmentLayoutId() {
+        return R.layout.fragment_auth;
     }
 
     @Override

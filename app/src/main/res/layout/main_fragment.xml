@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_horizontal_margin"
     android:background="@drawable/appDefaultBackgroundColor"
-    tools:context=".MainActivity$PlaceholderFragment">
+    tools:context=".MainActivity">
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_listview"
@@ -15,6 +15,6 @@
         android:background="@android:color/transparent"
         android:dividerHeight="16dp"
         android:headerDividersEnabled="true"
-        tools:context=".NavigationDrawerFragment"
+        tools:context=".MainActivity"
         />
 </RelativeLayout>
