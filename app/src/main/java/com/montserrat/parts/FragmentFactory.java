@@ -12,17 +12,20 @@ import org.apache.http.auth.AUTH;
  */
 public class FragmentFactory {
     private FragmentFactory () {}
-    public static final int _MAIN = 0x01;
-    public static final int _AUTH = 0X02;
+    /* TODO : static final integer VS enum */
+    public enum Type {
+        MAIN, AUTH
+    }
 
-    private static Fragment create(int fragmentId) {
+    public static Fragment create(Type type, int position) {
         Fragment fragment = null;
-        switch (fragmentId) {
-//            case _MAIN :
-//                return MainFragment.newInstance();
-//            case _AUTH:
-//                return AuthenticationFragment.newInstance();
-//            ...
+        switch (type) {
+            case MAIN :
+                fragment = MainFragment.newInstance(position);
+                break;
+            case AUTH :
+                fragment = new AuthenticationFragment();
+                break;
         } return fragment;
     }
 }

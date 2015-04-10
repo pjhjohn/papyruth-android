@@ -11,6 +11,9 @@ import com.montserrat.utils.request.JSONRequestForm;
 public abstract class JSONRequestableFragment extends Fragment implements JSONRequestForm.OnResponse {
     protected JSONRequestForm form = null;
 
+    /**
+     * Should call super.onCreateView(~) from the child classes of this.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /* Inflate View */

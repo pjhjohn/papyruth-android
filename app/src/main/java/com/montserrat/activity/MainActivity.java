@@ -6,46 +6,34 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
-import com.montserrat.parts.main.MainFragment;
+import com.montserrat.parts.FragmentFactory;
 import com.montserrat.parts.nav.NavFragment;
 
 public class MainActivity extends ActionBarActivity implements NavFragment.NavCallback {
-    private NavFragment nav;
-    private CharSequence title;
+    private NavFragment navigation_drawer;
+    private FrameLayout container;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
 
-        this.nav = (NavFragment) this.getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        this.nav.setUp(R.id.navigation_drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
-        this.title = this.getTitle();
+        this.navigation_drawer = (NavFragment) this.getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        this.container = (FrameLayout) this.findViewById(R.id.activity_main_container);
 
-        /* Launch AuthActivity For Authentication */
-//        this.startActivity(new Intent(this, AuthActivity.class));
+        this.navigation_drawer.setUp(R.id.navigation_drawer, (DrawerLayout) this.findViewById(R.id.activity_main_nav));
+
+//        this.title = this.getTitle();
     }
 
     @Override
     public void onNavItemSelected(int position) {
         this.getFragmentManager().beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance(position + 1))
+                .replace(R.id.activity_main_container, FragmentFactory.create(FragmentFactory.Type.MAIN, position))
                 .commit();
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1: title = this.getString(R.string.nav_item_home);             break;
-            case 2: title = this.getString(R.string.nav_item_search);           break;
-            case 3: title = this.getString(R.string.nav_item_recommendation);   break;
-            case 4: title = this.getString(R.string.nav_item_write);            break;
-            case 5: title = this.getString(R.string.nav_item_random);           break;
-            case 6: title = this.getString(R.string.nav_item_profile);          break;
-            case 7: title = this.getString(R.string.nav_item_time);             break;
-            case 8: title = this.getString(R.string.nav_item_signout);          break;
-            default: break;
-        }
     }
 
     public void restoreActionBar() {
@@ -58,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(!this.nav.isDrawerOpen()) {
+        if(!this.navigation_drawer.isDrawerOpen()) {
             this.getMenuInflater().inflate(R.menu.main, menu);
             this.restoreActionBar();
             return true;
