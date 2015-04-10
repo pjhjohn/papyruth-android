@@ -24,13 +24,13 @@ public class MainFragment extends JSONRequestableFragmentWithListView<MainListIt
         Random random = new Random();
         Log.d("DEBUG", "" + this.items);
         this.items.clear();
-        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject1), this.getString(R.string.main_dummy_professor1), random.nextFloat() * 5), R.layout.main_item));
-        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject2), this.getString(R.string.main_dummy_professor2), random.nextFloat() * 5), R.layout.main_item));
-        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject3), this.getString(R.string.main_dummy_professor3), random.nextFloat() * 5), R.layout.main_item));
-        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject4), this.getString(R.string.main_dummy_professor4), random.nextFloat() * 5), R.layout.main_item));
-        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject5), this.getString(R.string.main_dummy_professor5), random.nextFloat() * 5), R.layout.main_item));
-        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject6), this.getString(R.string.main_dummy_professor6), random.nextFloat() * 5), R.layout.main_item));
-        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject7), this.getString(R.string.main_dummy_professor7), random.nextFloat() * 5), R.layout.main_item));
+        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject1), this.getString(R.string.main_dummy_professor1), random.nextFloat() * 5)));
+        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject2), this.getString(R.string.main_dummy_professor2), random.nextFloat() * 5)));
+        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject3), this.getString(R.string.main_dummy_professor3), random.nextFloat() * 5)));
+        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject4), this.getString(R.string.main_dummy_professor4), random.nextFloat() * 5)));
+        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject5), this.getString(R.string.main_dummy_professor5), random.nextFloat() * 5)));
+        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject6), this.getString(R.string.main_dummy_professor6), random.nextFloat() * 5)));
+        this.items.add(new MainListItemView(new MainListItemView.Data(this.getString(R.string.main_dummy_subject7), this.getString(R.string.main_dummy_professor7), random.nextFloat() * 5)));
         this.listview.setAdapter(new UniversalAdapter(
                 this.items, this.getActivity().getApplicationContext()
         ));

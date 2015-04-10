@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
 
-        this.nav = (NavFragment) this.getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        this.nav = (NavFragment) this.getFragmentManager().findFragmentById(R.id.navigation_drawer);
         this.nav.setUp(R.id.navigation_drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
         this.title = this.getTitle();
 

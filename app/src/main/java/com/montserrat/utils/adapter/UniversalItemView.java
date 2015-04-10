@@ -11,28 +11,22 @@ import java.lang.reflect.Field;
  * Created by pjhjohn on 2015-04-09.
  */
 public abstract class UniversalItemView<T,E> implements Adaptable{
-    private static final String TAG = "BaseView";
-    protected int layoutId;
+    private static final String TAG = "UniversalItemView";
     protected T viewHolder;
     protected E entity;
-    public UniversalItemView (){}
 
-    public UniversalItemView (E entity, int layoutId) {
+    public UniversalItemView (E entity) {
         this.entity = entity;
-        this.layoutId = layoutId;
     }
 
     protected void invokeView(View v) {
         try {
-            Field fs[] = viewHolder.getClass().getFields();
-            for(Field f : fs) {
-                InvokeView a = f.getAnnotation(InvokeView.class);
+            for(Field field : viewHolder.getClass().getFields()) {
+                InvokeView annotation = field.getAnnotation(InvokeView.class);
 
-                int id = a.viewId();
-                Log.d("DEBUG", "field name : " + f.getName());
-                Log.d("DEBUG", "view id : " + id);
-                Log.d("DEBUG", "class : " + f.getClass());
-                f.set(viewHolder, v.findViewById(id));
+                int id = annotation.viewId();
+                Log.d("DEBUG", String.format("View #%d : Field %s", id, field.getName()));
+                field.set(viewHolder, v.findViewById(id));
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -41,18 +35,19 @@ public abstract class UniversalItemView<T,E> implements Adaptable{
 
     @SuppressWarnings("unchecked")
     @Override
-    public View buildView(View v, LayoutInflater inflater, ViewGroup parent) {
-        if (v == null) {
-            v = inflater.inflate(layoutId, parent, false);
-            invokeView(v);
-            v.setTag(viewHolder);
+    public View buildView(View view, LayoutInflater inflater, ViewGroup parent) {
+        if (view == null) {
+            view = inflater.inflate(this.getLayoutId(), parent, false);
+            invokeView(view);
+            view.setTag(viewHolder);
         } else {
-            viewHolder = (T) v.getTag();
+            viewHolder = (T) view.getTag();
         }
 
         mappingData(viewHolder, entity);
-        return v;
+        return view;
     }
 
     protected abstract void mappingData(T viewHolder, E entity);
+    protected abstract int getLayoutId();
 }

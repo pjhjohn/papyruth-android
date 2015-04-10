@@ -1,12 +1,12 @@
 package com.montserrat.parts.nav;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -22,12 +22,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.montserrat.activity.R;
+import com.montserrat.utils.adapter.UniversalAdapter;
+import com.montserrat.utils.requestable_fragment.JSONRequestableFragmentWithListView;
 
 import java.util.ArrayList;
 
 public class NavFragment extends Fragment {
-    public NavFragment() {
-    }
+    public NavFragment() {}
 
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
@@ -62,8 +63,8 @@ public class NavFragment extends Fragment {
         this.setHasOptionsMenu(true);
     }
 
-    private ArrayList<NavItem> navItems;
-    private NavAdapter navAdapter;
+    private ArrayList<NavListItemView> navItems;
+    private UniversalAdapter navAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.navListView = (ListView) inflater.inflate(R.layout.nav_fragment, container, false);
@@ -74,16 +75,16 @@ public class NavFragment extends Fragment {
             }
         });
         this.navItems = new ArrayList<>();
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit));
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_time), R.drawable.ic_action_time));
-        this.navItems.add(new NavItem(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid)));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search)));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching)));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit)));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle)));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings)));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_time), R.drawable.ic_action_time)));
+        this.navItems.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove)));
 
-        this.navAdapter = new NavAdapter(this.getActionBar().getThemedContext(), R.layout.nav_item, this.navItems);
+        this.navAdapter = new UniversalAdapter(this.navItems, getActivity());
 
         this.navListView.setAdapter(this.navAdapter);
         this.navListView.setItemChecked(this.currentSelectedPosition, true);
@@ -112,7 +113,7 @@ public class NavFragment extends Fragment {
             public void onDrawerClosed(View navView) {
                 super.onDrawerClosed(navView);
                 if (!isAdded()) return;
-                NavFragment.this.getActivity().supportInvalidateOptionsMenu();
+                NavFragment.this.getActivity().invalidateOptionsMenu();
             }
 
             @Override
@@ -124,7 +125,7 @@ public class NavFragment extends Fragment {
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(NavFragment.this.getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-                NavFragment.this.getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                NavFragment.this.getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 

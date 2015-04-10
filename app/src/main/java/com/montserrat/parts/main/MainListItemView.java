@@ -11,8 +11,8 @@ import com.montserrat.utils.adapter.InvokeView;
  * Created by pjhjohn on 2015-04-09.
  */
 public class MainListItemView extends UniversalItemView<MainListItemView.Holder, MainListItemView.Data> {
-    public MainListItemView (Data data, int layoutId) {
-        super(data, layoutId);
+    public MainListItemView (Data data) {
+        super(data);
         this.viewHolder = new Holder();
     }
 
@@ -21,6 +21,11 @@ public class MainListItemView extends UniversalItemView<MainListItemView.Holder,
         holder.subject.setText(entity.subject);
         holder.professor.setText(entity.professor);
         holder.rating.setRating(entity.rating);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.main_item;
     }
 
     public static class Data {

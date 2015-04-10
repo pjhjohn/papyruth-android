@@ -28,7 +28,13 @@ public abstract class JSONRequestableFragmentWithListView<T> extends JSONRequest
         this.form = new JSONRequestForm(this, this.getEndpoint());
 
         /* Register Event Handlers within this class if exist */
-        this.listview = (ListView) view.findViewById(this.getListViewId());
+        try {
+            if (view instanceof ListView) this.listview = (ListView) view;
+            else this.listview = (ListView) view.findViewById(this.getListViewId());
+        } catch (ClassCastException e) {
+            Log.e("DEBUG", "There is no ListView Element within the Fragemnt.");
+            e.printStackTrace();
+        }
         Log.d("DEBUG", "" + this.listview);
         this.items = new ArrayList<T>();
 
