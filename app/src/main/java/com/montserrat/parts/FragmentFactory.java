@@ -2,10 +2,8 @@ package com.montserrat.parts;
 
 import android.app.Fragment;
 
-import com.montserrat.parts.auth.AuthenticationFragment;
+import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.main.MainFragment;
-
-import org.apache.http.auth.AUTH;
 
 /**
  * Created by pjhjohn on 2015-04-09.
@@ -24,7 +22,7 @@ public class FragmentFactory {
                 fragment = MainFragment.newInstance(position);
                 break;
             case AUTH :
-                fragment = new AuthenticationFragment();
+                fragment = new AuthFragment();
                 break;
         } return fragment;
     }

@@ -1,5 +1,6 @@
 package com.montserrat.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -28,6 +29,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         this.container = (FrameLayout) this.findViewById(R.id.container);
         this.drawer = (NavFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
+
+        this.startActivity(new Intent(this, AuthActivity.class));
     }
 
     @Override

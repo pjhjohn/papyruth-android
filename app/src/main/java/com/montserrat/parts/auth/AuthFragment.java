@@ -38,13 +38,12 @@ import java.util.List;
 /**
  * Created by mrl on 2015-04-07.
  */
-public class AuthenticationFragment extends JSONRequestableFragment{
-    public AuthenticationFragment(){}
+public class AuthFragment extends JSONRequestableFragment{
+    public AuthFragment (){}
 
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
     private View vProgress;
-    private View vSigninForm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +54,7 @@ public class AuthenticationFragment extends JSONRequestableFragment{
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 return new CursorLoader(
-                        AuthenticationFragment.this.getActivity(),
+                        AuthFragment.this.getActivity(),
                         Uri.withAppendedPath(
                                 ContactsContract.Profile.CONTENT_URI,
                                 ContactsContract.Contacts.Data.CONTENT_DIRECTORY
@@ -77,7 +76,7 @@ public class AuthenticationFragment extends JSONRequestableFragment{
                 }
                 /* Add to Emails View */
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                        AuthenticationFragment.this.getActivity(),
+                        AuthFragment.this.getActivity(),
                         android.R.layout.simple_dropdown_item_1line,
                         emails
                 );
@@ -93,7 +92,7 @@ public class AuthenticationFragment extends JSONRequestableFragment{
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == R.id.signin || actionId == EditorInfo.IME_NULL || actionId == EditorInfo.IME_ACTION_DONE) {
-                    AuthenticationFragment.this.attemtSignin();
+                    AuthFragment.this.attemtSignin();
                     return true;
                 } else return false;
             }
@@ -102,19 +101,18 @@ public class AuthenticationFragment extends JSONRequestableFragment{
         view.findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AuthenticationFragment.this.attemtSignin();
+                AuthFragment.this.attemtSignin();
             }
         });
 
         view.findViewById(R.id.btn_sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthenticationFragment.this.attemptSignup();
+                AuthFragment.this.attemptSignup();
             }
         });
 
-        this.vSigninForm = view.findViewById(R.id.email_signin_form);
-        this.vProgress = view.findViewById(R.id.signin_progress);
+        this.vProgress = view.findViewById(R.id.auth_progress);
 
         return view;
     }
@@ -178,21 +176,12 @@ public class AuthenticationFragment extends JSONRequestableFragment{
     public void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        this.vSigninForm.setVisibility(show ? View.GONE : View.VISIBLE);
-        this.vSigninForm.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                AuthenticationFragment.this.vSigninForm.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
-
         this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
         this.vProgress.animate().setDuration(shortAnimTime).alpha(
                 show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                AuthenticationFragment.this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+                AuthFragment.this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
     }
@@ -219,7 +208,7 @@ public class AuthenticationFragment extends JSONRequestableFragment{
         else {
             try {
                 if (json.getBoolean("success") == true) {
-                    AuthenticationFragment.this.getActivity().finish();
+                    AuthFragment.this.getActivity().finish();
                 } else {
                     this.vPassword.setError("Invalid Password");
                     this.vPassword.requestFocus();
