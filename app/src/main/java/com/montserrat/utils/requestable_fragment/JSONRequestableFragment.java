@@ -17,7 +17,7 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
     protected View progress = null;
     protected View content = null;
     private int progressAnimationTime;
-    private boolean isContentHiddenAtProgressState;
+    private boolean isContentVisibleAtProgressState = true;
 
     /**
      * Should call super.onCreateView(~) from the child classes of this.
@@ -32,10 +32,9 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
 
         /* Register Event Handlers within this class if exist */
         this.progress = view.findViewById(this.getProgressViewId());
-        this.progressAnimationTime = this.getResources().getInteger(android.R.integer.config_shortAnimTime);
-
         this.content = view.findViewById(this.getContentViewId());
-        this.isContentHiddenAtProgressState = false;
+
+        this.progressAnimationTime = this.getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         /* Return inflated view */
         return view;
@@ -59,23 +58,24 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
         return 0;
     }
     protected void setOnProgressContentsVisibilityFlag(boolean show) {
-        this.isContentHiddenAtProgressState = !show;
+        this.isContentVisibleAtProgressState = show;
     }
 
     public void setProgressState(final boolean show) {
-        this.progress.setVisibility(show? View.VISIBLE : View.GONE);
-        this.progress
-                .animate()
-                .setDuration(progressAnimationTime)
-                .alpha(show ? 1 : 0)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd (Animator animation) {
-                        JSONRequestableFragment.this.progress.setVisibility(show ? View.VISIBLE : View.GONE);
-                    }
-                });
-
-        if(this.isContentHiddenAtProgressState) {
+        if(this.progress != null) {
+            this.progress.setVisibility(show ? View.VISIBLE : View.GONE);
+            this.progress
+                    .animate()
+                    .setDuration(progressAnimationTime)
+                    .alpha(show ? 1 : 0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd (Animator animation) {
+                            JSONRequestableFragment.this.progress.setVisibility(show ? View.VISIBLE : View.GONE);
+                        }
+                    });
+        }
+        if(this.content != null && (!this.isContentVisibleAtProgressState)) {
             this.content.setVisibility(show? View.GONE : View.VISIBLE);
             this.content
                     .animate()

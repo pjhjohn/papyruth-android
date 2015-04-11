@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.montserrat.activity.AuthActivity">
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/auth_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/appDefaultBackgroundColor"
@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
-            <TextView android:id="@+id/signin_title"
+            <TextView android:id="@+id/auth_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="120dp"
@@ -29,7 +29,7 @@
                 android:textSize="40sp">
             </TextView>
 
-            <AutoCompleteTextView android:id="@+id/email"
+            <AutoCompleteTextView android:id="@+id/auth_email"
                 style="@style/SigninTextAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:maxLines="1"
                 android:singleLine="true"/>
 
-            <EditText android:id="@+id/password"
+            <EditText android:id="@+id/auth_password"
                 style="@style/SigninTextAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

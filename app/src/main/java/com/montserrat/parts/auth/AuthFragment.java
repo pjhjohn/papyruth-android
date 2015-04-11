@@ -46,7 +46,7 @@ public class AuthFragment extends JSONRequestableFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        this.vEmail = (AutoCompleteTextView) view.findViewById(R.id.email);
+        this.vEmail = (AutoCompleteTextView) view.findViewById(R.id.auth_email);
         this.getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -84,7 +84,7 @@ public class AuthFragment extends JSONRequestableFragment{
             public void onLoaderReset(Loader<Cursor> cursorLoader) {}
         });
 
-        this.vPassword = (EditText) view.findViewById(R.id.password);
+        this.vPassword = (EditText) view.findViewById(R.id.auth_password);
         this.vPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -176,6 +176,9 @@ public class AuthFragment extends JSONRequestableFragment{
     @Override protected int getProgressViewId() {
         return R.id.auth_progress;
     }
+    @Override protected int getContentViewId() {
+        return R.id.auth_content;
+    }
 
     @Override
     public void onSuccess(String responseBody) {
@@ -189,7 +192,7 @@ public class AuthFragment extends JSONRequestableFragment{
         if(json == null) return;
         else {
             try {
-                if (json.getBoolean("success") == true) {
+                if (json.getBoolean("success")) {
                     AuthFragment.this.getActivity().finish();
                 } else {
                     this.vPassword.setError("Invalid Password");
