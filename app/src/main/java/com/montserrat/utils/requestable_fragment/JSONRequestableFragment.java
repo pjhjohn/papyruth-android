@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.utils.request.JSONRequestForm;
 
-public abstract class JSONRequestableFragment extends Fragment implements JSONRequestForm.OnResponse {
+public abstract class JSONRequestableFragment extends Fragment implements JSONRequestForm.OnRequest, JSONRequestForm.OnResponse {
     protected JSONRequestForm form = null;
     protected View progress = null;
     protected View content = null;
@@ -28,12 +28,11 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
         View view = inflater.inflate(this.getFragmentLayoutId(), container, false);
 
         /* Receive Endpoint by Argument & Register JSONRequestForm for this fragment */
-        this.form = new JSONRequestForm(this, this.getEndpoint());
+        this.form = new JSONRequestForm(this, this, this.getEndpoint());
 
-        /* Register Event Handlers within this class if exist */
+        /* Register View Components for Handling Progress */
         this.progress = view.findViewById(this.getProgressViewId());
         this.content = view.findViewById(this.getContentViewId());
-
         this.progressAnimationTime = this.getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         /* Return inflated view */
@@ -44,13 +43,8 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
     protected abstract int getFragmentLayoutId();
     protected abstract String getEndpoint();
 
-    /** Should Implement JSONRequestForm.OnResponse methods in order to handle responses */
-    // ...
-
-    /**
-     * 0 is not a valid resource id
-     * http://developer.android.com/reference/android/content/res/Resources.html#getIdentifier%28java.lang.String,%20java.lang.String,%20java.lang.String%29
-     */
+    /* Handling ProgressView */
+    /** 0 is not a valid resource id : http://developer.android.com/reference/android/content/res/Resources.html#getIdentifier%28java.lang.String,%20java.lang.String,%20java.lang.String%29 */
     protected int getProgressViewId() {
         return 0;
     }
@@ -90,8 +84,12 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
         }
     }
 
+    /* JSONRequestForm.OnRequest */
+    public void onRequest() {
+        this.setProgressState(true);
+    }
 
-    /* 필요에 따라 오버라이드 해서 사용 */
+    /* JSONRequestForm.OnResponse */
     @Override
     public void onSuccess(String response) {
         this.setProgressState(false);
@@ -104,8 +102,7 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
     public void onNoInternetConnection(String errorMsg) {
         this.setProgressState(false);
     }
-
-    /* TODO : 백버튼 연동 */
+    // TODO : 백버튼 연동
     @Override
     public void onCanceled() {
         this.setProgressState(false);

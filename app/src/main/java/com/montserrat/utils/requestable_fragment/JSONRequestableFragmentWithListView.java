@@ -39,7 +39,5 @@ public abstract class JSONRequestableFragmentWithListView<T> extends JSONRequest
     }
 
     /** Should Implement this to set endpoint of the request for the fragment */
-    protected abstract int getFragmentLayoutId();
     protected abstract int getListViewId();
-    protected abstract String getEndpoint();
 }

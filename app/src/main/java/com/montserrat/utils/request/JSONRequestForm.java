@@ -10,19 +10,25 @@ import java.io.UnsupportedEncodingException;
 public class JSONRequestForm {
     private static final int DEFAULT_CONNECTION_TIMEOUT_MS = 5000;
     private final OnResponse receiver;
+    private final OnRequest requester;
     private final String endpoint;
     private JSONObject json;
     private int timeout;
 
+    public static interface OnRequest {
+        void onRequest();                             // 리퀘스트 던질 때 먼저 실행될 것.
+    }
+
     public static interface OnResponse {
-        void onSuccess(String responseBody);         // 성공
+        void onSuccess(String responseBody);          // 성공
         void onTimeout(String errorMsg);              // 타임아웃
         void onNoInternetConnection(String errorMsg); // 인터넷 연결 안되어있을때
         void onCanceled();                            // 사용자가 취소했을 때 처리
     }
 
-    public JSONRequestForm(OnResponse receiver, String endpoint) {
+    public JSONRequestForm(OnRequest requester, OnResponse receiver, String endpoint) {
         /* Essential Requirements for http request */
+        this.requester= requester;
         this.receiver = receiver;
         this.endpoint = endpoint;
 
@@ -77,11 +83,7 @@ public class JSONRequestForm {
     }
 
     public void submit() throws JSONException, UnsupportedEncodingException {
-        try {
-            ((JSONRequestableFragment) this.receiver).setProgressState(true);
-        } catch (ClassCastException e) {
-            // Not Requestable Fragment. Skip.
-        }
+        if(this.requester!=null) this.requester.onRequest();
         new JSONRequestAsyncTask(this.receiver, this.endpoint, this.json, this.timeout).submit();
     }
 }
