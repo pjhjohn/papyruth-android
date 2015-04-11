@@ -7,16 +7,16 @@ import android.content.SharedPreferences;
  * Created by pjhjohn on 2015-04-10.
  * Contains Various Parameters for the application : Should be singleton.
  */
-public class ApplicationManager {
+public class AppManager {
     private static String APP_PREFERENCE_NAME = "montserrat_shared_preference";
-    private ApplicationManager () {
+    private AppManager () {
         this.appContext = null;
         this.sharedpref = null;
     }
-    private static ApplicationManager instance;
-    public static ApplicationManager getInstance() {
+    private static AppManager instance;
+    public static AppManager getInstance() {
         if ( instance == null ) {
-            return instance = new ApplicationManager();
+            return instance = new AppManager();
         } else return instance;
     }
 
