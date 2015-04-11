@@ -1,5 +1,7 @@
 package com.montserrat.utils.request;
 
+import com.montserrat.utils.requestable_fragment.JSONRequestableFragment;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,6 +77,11 @@ public class JSONRequestForm {
     }
 
     public void submit() throws JSONException, UnsupportedEncodingException {
+        try {
+            ((JSONRequestableFragment) this.receiver).setProgressState(true);
+        } catch (ClassCastException e) {
+            // Not Requestable Fragment. Skip.
+        }
         new JSONRequestAsyncTask(this.receiver, this.endpoint, this.json, this.timeout).submit();
     }
 }

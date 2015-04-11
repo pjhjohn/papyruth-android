@@ -1,7 +1,5 @@
 package com.montserrat.parts.auth;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -43,7 +41,6 @@ public class AuthFragment extends JSONRequestableFragment{
 
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
-    private View vProgress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,8 +109,6 @@ public class AuthFragment extends JSONRequestableFragment{
             }
         });
 
-        this.vProgress = view.findViewById(R.id.auth_progress);
-
         return view;
     }
     private interface ProfileQuery {
@@ -162,7 +157,6 @@ public class AuthFragment extends JSONRequestableFragment{
         if (cancel) {
             vFocus.requestFocus();
         } else {
-            this.showProgress(true);
             try {
                 this.form.put("email", email)
                          .put("password", passwd)
@@ -173,31 +167,19 @@ public class AuthFragment extends JSONRequestableFragment{
         }
     }
 
-    public void showProgress(final boolean show) {
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-        this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-        this.vProgress.animate().setDuration(shortAnimTime).alpha(
-                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                AuthFragment.this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
-    }
-
-    @Override
-    protected String getEndpoint() {
+    @Override protected String getEndpoint() {
         return "http://pjhjohn.appspot.com/signin";
     }
-    @Override
-    protected int getFragmentLayoutId() {
+    @Override protected int getFragmentLayoutId() {
         return R.layout.fragment_auth;
+    }
+    @Override protected int getProgressViewId() {
+        return R.id.auth_progress;
     }
 
     @Override
     public void onSuccess(String responseBody) {
-        this.showProgress(false);
+        super.onSuccess(responseBody);
         JSONObject json = null;
         try {
             json = new JSONObject(responseBody);
@@ -221,19 +203,15 @@ public class AuthFragment extends JSONRequestableFragment{
 
     @Override
     public void onTimeout(String errorMsg) {
+        super.onTimeout(errorMsg);
         Toast.makeText(this.getActivity(), "인터넷 연결이 불안정합니다.", Toast.LENGTH_LONG).show();
-        this.showProgress(false);
+
     }
 
     @Override
     public void onNoInternetConnection(String errorMsg) {
+        super.onNoInternetConnection(errorMsg);
         Toast.makeText(this.getActivity(), "인터넷 연결이 되어있지 않습니다.", Toast.LENGTH_LONG).show();
-        this.showProgress(false);
-    }
-
-    @Override
-    public void onCanceled() {
-        this.showProgress(false);
     }
 
     // TODO : Replace this with your own logic
