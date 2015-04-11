@@ -5,11 +5,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,9 +28,11 @@ import java.util.List;
 public class NavFragment extends Fragment {
     public NavFragment() {}
 
-
     private int iActiveNavItem;
     private NavCallback callback;
+    private View fragmentContainerView;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,8 @@ public class NavFragment extends Fragment {
     private UniversalAdapter navAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final ListView listview = (ListView) inflater.inflate(R.layout.nav_fragment, container, false);
+        View view = inflater.inflate(R.layout.nav_fragment, container, false);
+        final ListView listview = (ListView) view.findViewById(R.id.nav_listview);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,7 +83,7 @@ public class NavFragment extends Fragment {
 
         listview.setAdapter(new UniversalAdapter(items, this.getActivity()));
         listview.setItemChecked(this.iActiveNavItem, true);
-        return listview;
+        return view;
     }
 
     public boolean isDrawerOpen() {
@@ -89,24 +91,15 @@ public class NavFragment extends Fragment {
     }
 
 
-    private View fragmentContainerView;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
+
 
     public void setUp(int fragment_id, DrawerLayout drawerLayout) {
         this.fragmentContainerView = this.getActivity().findViewById(fragment_id);
         this.drawerLayout = drawerLayout;
-        this.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        this.drawerToggle = new ActionBarDrawerToggle(
-                this.getActivity(),
-                drawerLayout,
-                R.drawable.ic_drawer,
-                R.string.app_name, // for open
-                R.string.app_name  // for close. But dunno what these strings do.
-        ) {
+        this.drawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this.getActivity(), drawerLayout, R.string.app_name, R.string.app_name) {
             @Override
             public void onDrawerClosed(View navView) {
                 super.onDrawerClosed(navView);

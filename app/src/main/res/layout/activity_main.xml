@@ -21,11 +21,12 @@
             android:background="#303F9F" />
     </LinearLayout>
 
-    <View
+    <fragment
         android:id="@+id/drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#3F51B5"
+        android:name="com.montserrat.parts.nav.NavFragment"
         android:fitsSystemWindows="true"/>
 </android.support.v4.widget.DrawerLayout>
