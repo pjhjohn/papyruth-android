@@ -1,17 +1,59 @@
 package com.montserrat.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
-import com.montserrat.parts.FragmentFactory;
-import com.montserrat.parts.nav.NavFragment;
+public class MainActivity extends ActionBarActivity {// implements NavFragment.NavCallback {
 
-public class MainActivity extends ActionBarActivity implements NavFragment.NavCallback {
+    Toolbar toolbar;
+    DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_main);
+
+        this.toolbar = (Toolbar) this.findViewById(R.id.toolbar);
+        this.drawer = (DrawerLayout) this.findViewById(R.id.drawer_layout);
+
+        this.setSupportActionBar(toolbar); /* toolbar acts like a ActionBar */
+
+        this.toggle = new ActionBarDrawerToggle(this, this.drawer, R.string.app_name, R.string.app_name);
+        this.drawer.setDrawerListener(this.toggle);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        this.toggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        this.toggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (this.toggle.onOptionsItemSelected(item)) return true;
+        else return super.onOptionsItemSelected(item);
+    }
+
+    /*
     private NavFragment navigation_drawer;
     private FrameLayout container;
     private String title;
@@ -59,5 +101,5 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         int id = item.getItemId();
         if (id == R.id.action_search) return true;
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
