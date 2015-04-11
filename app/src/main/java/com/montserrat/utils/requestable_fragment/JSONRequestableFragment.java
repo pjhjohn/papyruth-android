@@ -90,21 +90,22 @@ public abstract class JSONRequestableFragment extends Fragment implements JSONRe
         }
     }
 
+
+    /* 필요에 따라 오버라이드 해서 사용 */
     @Override
     public void onSuccess(String response) {
         this.setProgressState(false);
     }
-
     @Override
     public void onTimeout(String errorMsg) {
         this.setProgressState(false);
     }
-
     @Override
     public void onNoInternetConnection(String errorMsg) {
         this.setProgressState(false);
     }
 
+    /* TODO : 백버튼 연동 */
     @Override
     public void onCanceled() {
         this.setProgressState(false);

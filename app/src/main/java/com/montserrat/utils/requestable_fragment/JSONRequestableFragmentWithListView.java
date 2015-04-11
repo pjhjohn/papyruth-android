@@ -21,11 +21,7 @@ public abstract class JSONRequestableFragmentWithListView<T> extends JSONRequest
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /* Inflate View */
-        View view = inflater.inflate(this.getFragmentLayoutId(), container, false);
-
-        /* Receive Endpoint by Argument & Register JSONRequestForm for this fragment */
-        this.form = new JSONRequestForm(this, this.getEndpoint());
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         /* Register Event Handlers within this class if exist */
         try {
@@ -46,6 +42,4 @@ public abstract class JSONRequestableFragmentWithListView<T> extends JSONRequest
     protected abstract int getFragmentLayoutId();
     protected abstract int getListViewId();
     protected abstract String getEndpoint();
-
-    /** Should Implement JSONRequestForm.OnResponse methods in order to handle responses */
 }
