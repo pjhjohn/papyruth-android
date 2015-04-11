@@ -5,12 +5,11 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -97,14 +96,12 @@ public class SubjectFragment extends Fragment {
     public void setUp(int fragmentId, DrawerLayout navLayout) {
         this.fragmentContainerView = this.getActivity().findViewById(fragmentId);
         this.navLayout = navLayout;
-        this.navLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         this.navToggle = new ActionBarDrawerToggle(
                 getActivity(),
                 navLayout,
-                R.drawable.ic_drawer,
                 R.string.app_name, // for open
                 R.string.app_name  // for close. But dunno what these strings do.
         ) {
