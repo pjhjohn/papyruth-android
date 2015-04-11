@@ -21,4 +21,8 @@
     <style name="MainRatingBar" parent="@android:style/Widget.Holo.Light.RatingBar.Indicator">
         <item name="android:textAppearance">@style/MainTextAppearance</item>
     </style>
+    <!--<style name="CustomToolBarTheme" parents="ThemeOverlay.AppCompat.Light">-->
+        <!--<item name="android:textColorPrimary">#F00</item>-->
+        <!--<item name="android:textColorSecondary">#0F0</item>-->
+    <!--</style>-->
 </resources>
