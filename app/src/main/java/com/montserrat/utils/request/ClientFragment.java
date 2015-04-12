@@ -43,12 +43,6 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
         return view;
     }
 
-    /** Should Implement this to set endpoint of the request for the fragment */
-    protected abstract int getFragmentLayoutId();
-    protected abstract String getEndpoint();
-
-    protected int getProgressViewId(){ return 0; }
-    protected int getContentViewId (){ return 0; }
     protected void setOnProgressContentsVisibilityFlag(boolean show) { this.isContentVisibleAtProgressState = show; }
     public void setProgressState(final boolean show) {
         if(this.progress != null) {
@@ -90,13 +84,24 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
         this.queue.addToRequestQueue(request);
     }
 
+    /* TODO : Override if necessary */
     @Override
     public void onResponse (JSONObject response) {
         this.setProgressState(false);
     }
-
     @Override
     public void onErrorResponse (VolleyError error) {
         this.setProgressState(false);
     }
+    protected int getProgressViewId() {
+        return 0;
+    }
+    protected int getContentViewId() {
+        return 0;
+    }
+
+    /* TODO : Should implement followings */
+    /** Should Implement this to set endpoint of the request for the fragment */
+    protected abstract int getFragmentLayoutId();
+    protected abstract String getEndpoint();
 }
