@@ -1,60 +1,60 @@
 package com.montserrat.parts.rating;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.montserrat.utils.request.JSONRequestableFragment;
+import com.android.volley.VolleyError;
+import com.montserrat.utils.request.ClientFragment;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class RateDescriptionFragment extends JSONRequestableFragment {
+public class RateDescriptionFragment extends ClientFragment {
     public RateDescriptionFragment (){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
+        // TODO : Fill in your code here.
+
         return view;
     }
 
-    @Override protected String getEndpoint() { return null; }
-    @Override protected int getFragmentLayoutId() { return 0; }
-    @Override protected int getProgressViewId() { return 0; }
-    @Override protected int getContentViewId() { return 0; }
-
+    /* TODO : FILL IT. It's necessary. */
     @Override
-    public void onSuccess(String jsonStr) {
-        super.onSuccess(jsonStr);
-        JSONObject json = null;
-        try {
-            json = new JSONObject(jsonStr);
-        } catch (JSONException e) {
-            Log.d(this.getClass().toString(), "ERROR IN PARSING JSON RESPONSE DATA : " + jsonStr);
-            e.printStackTrace();
-        }
-        if (json == null) return;
-
-        /* JSONObject Response Ready*/
-        //...
+    protected int getFragmentLayoutId () {
+        return 0;
     }
-    @Override
-    public void onTimeout(String errorMsg) {
-        super.onTimeout(errorMsg);
-        Toast.makeText(this.getActivity(), "인터넷 연결이 불안정합니다.", Toast.LENGTH_LONG).show();
 
-    }
     @Override
-    public void onNoInternetConnection(String errorMsg) {
-        super.onNoInternetConnection(errorMsg);
-        Toast.makeText(this.getActivity(), "인터넷 연결이 되어있지 않습니다.", Toast.LENGTH_LONG).show();
+    protected String getEndpoint () {
+        return null;
+    }
+
+    /* TODO : Fill if necessary */
+    @Override
+    protected int getProgressViewId() {
+        return 0;
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return 0;
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        super.onResponse(response);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        super.onErrorResponse(error);
     }
 }
