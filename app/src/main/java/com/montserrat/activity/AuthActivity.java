@@ -1,6 +1,7 @@
 package com.montserrat.activity;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 
@@ -17,7 +18,7 @@ public class AuthActivity extends Activity {
         setContentView(R.layout.activity_auth);
 
         FragmentManager fragmentManager = this.getFragmentManager();
-        JSONRequestableFragment fragment = new AuthFragment();
+        Fragment fragment = new AuthFragment();
         fragmentManager
                 .beginTransaction()
                 .add(R.id.activity_signin, fragment)

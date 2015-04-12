@@ -1,5 +1,6 @@
 package com.montserrat.parts.auth;
 
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -22,21 +23,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.utils.requestable_fragment.JSONRequestableFragment;
+import com.montserrat.utils.requestable_fragment.MyRequestQueue;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mrl on 2015-04-07.
  */
-public class AuthFragment extends JSONRequestableFragment{
+public class AuthFragment extends Fragment {
     public AuthFragment (){}
 
     private AutoCompleteTextView vEmail;
@@ -44,7 +54,7 @@ public class AuthFragment extends JSONRequestableFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_auth, container, false);
 
         this.vEmail = (AutoCompleteTextView) view.findViewById(R.id.auth_email);
         this.getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -127,7 +137,7 @@ public class AuthFragment extends JSONRequestableFragment{
     }
 
     private void attemtSignin() {
-        this.form.clear();
+//        this.form.clear();
 
         vEmail.setError(null);
         vPassword.setError(null);
@@ -157,65 +167,99 @@ public class AuthFragment extends JSONRequestableFragment{
         if (cancel) {
             vFocus.requestFocus();
         } else {
-            try {
-                this.form.put("email", email)
-                         .put("password", passwd)
-                         .submit();
-            } catch (JSONException | UnsupportedEncodingException e) {
-                Log.e (this.getClass().toString(), e.toString());
-            }
-        }
-    }
+            MyRequestQueue queue = MyRequestQueue.getInstance(this.getActivity());
+            String url = "http://pjhjohn.appspot.com/signin";
 
-    @Override protected String getEndpoint() {
-        return "http://pjhjohn.appspot.com/signin";
-    }
-    @Override protected int getFragmentLayoutId() {
-        return R.layout.fragment_auth;
-    }
-    @Override protected int getProgressViewId() {
-        return R.id.auth_progress;
-    }
-    @Override protected int getContentViewId() {
-        return R.id.auth_content;
-    }
-
-    @Override
-    public void onSuccess(String responseBody) {
-        super.onSuccess(responseBody);
-        JSONObject json = null;
-        try {
-            json = new JSONObject(responseBody);
-        } catch (JSONException e) {
-            Toast.makeText(this.getActivity(), "Exception During Parsing : " + responseBody, Toast.LENGTH_LONG).show();
-        }
-        if(json == null) return;
-        else {
+            JSONObject json = new JSONObject();
             try {
-                if (json.getBoolean("success")) {
-                    AuthFragment.this.getActivity().finish();
-                } else {
-                    this.vPassword.setError("Invalid Password");
-                    this.vPassword.requestFocus();
+                json.put("email", email)
+                    .put("password", passwd);
+            } catch (JSONException e) {}
+
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse (JSONObject jsonObject) {
+                        try {
+                            if (jsonObject.getBoolean("success"))
+                                AuthFragment.this.getActivity().finish();
+                            else {
+                                AuthFragment.this.vPassword.setError("Invalid Password");
+                                AuthFragment.this.vPassword.requestFocus();
+                            }
+                        } catch(JSONException e) {}
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse (VolleyError error) {
+                        Toast.makeText(AuthFragment.this.getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+                    }
                 }
-            } catch (JSONException e) {
-                Toast.makeText(this.getActivity(), "Exception During getting boolean" + responseBody, Toast.LENGTH_LONG).show();
-            }
+            );
+            queue.addToRequestQueue(jsonRequest);
+//            try {
+//                this.form.put("email", email)
+//                         .put("password", passwd)
+//                         .submit();
+//            } catch (JSONException | UnsupportedEncodingException e) {
+//                Log.e (this.getClass().toString(), e.toString());
+//            }
         }
     }
+//
+//    @Override protected String getEndpoint() {
+//        return "http://pjhjohn.appspot.com/signin";
+//    }
+//    @Override protected int getFragmentLayoutId() {
+//        return R.layout.fragment_auth;
+//    }
+//    @Override protected int getProgressViewId() {
+//        return R.id.auth_progress;
+//    }
+//    @Override protected int getContentViewId() {
+//        return R.id.auth_content;
+//    }
+//
+//    @Override
+//    public void onSuccess(String responseBody) {
+//        super.onSuccess(responseBody);
+//        JSONObject json = null;
+//        try {
+//            json = new JSONObject(responseBody);
+//        } catch (JSONException e) {
+//            Toast.makeText(this.getActivity(), "Exception During Parsing : " + responseBody, Toast.LENGTH_LONG).show();
+//        }
+//        if(json == null) return;
+//        else {
+//            try {
+//                if (json.getBoolean("success")) {
+//                    AuthFragment.this.getActivity().finish();
+//                } else {
+//                    this.vPassword.setError("Invalid Password");
+//                    this.vPassword.requestFocus();
+//                }
+//            } catch (JSONException e) {
+//                Toast.makeText(this.getActivity(), "Exception During getting boolean" + responseBody, Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 
-    @Override
-    public void onTimeout(String errorMsg) {
-        super.onTimeout(errorMsg);
-        Toast.makeText(this.getActivity(), "인터넷 연결이 불안정합니다.", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onNoInternetConnection(String errorMsg) {
-        super.onNoInternetConnection(errorMsg);
-        Toast.makeText(this.getActivity(), "인터넷 연결이 되어있지 않습니다.", Toast.LENGTH_LONG).show();
-    }
+//    @Override
+//    public void onTimeout(String errorMsg) {
+//        super.onTimeout(errorMsg);
+//        Toast.makeText(this.getActivity(), "인터넷 연결이 불안정합니다.", Toast.LENGTH_LONG).show();
+//
+//    }
+//
+//    @Override
+//    public void onNoInternetConnection(String errorMsg) {
+//        super.onNoInternetConnection(errorMsg);
+//        Toast.makeText(this.getActivity(), "인터넷 연결이 되어있지 않습니다.", Toast.LENGTH_LONG).show();
+//    }
 
     // TODO : Replace this with your own logic
     private boolean isEmailValid(String email) {
