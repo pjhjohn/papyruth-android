@@ -10,8 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,19 +97,17 @@ public class NavFragment extends Fragment {
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        this.drawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this.getActivity(), drawerLayout, R.string.app_name, R.string.app_name) {
+        this.drawerToggle = new ActionBarDrawerToggle(this.getActivity(), drawerLayout, R.string.app_name, R.string.app_name) {
             @Override
             public void onDrawerClosed(View navView) {
                 super.onDrawerClosed(navView);
-                if (!NavFragment.this.isAdded()) return;
-                NavFragment.this.getActivity().invalidateOptionsMenu();
+                if (NavFragment.this.isAdded()) NavFragment.this.getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerOpened(View navView) {
                 super.onDrawerClosed(navView);
-                if (!NavFragment.this.isAdded()) return;
-                NavFragment.this.getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                if (NavFragment.this.isAdded()) NavFragment.this.getActivity().invalidateOptionsMenu();
             }
         };
 
@@ -164,14 +160,14 @@ public class NavFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (this.drawerLayout != null && this.isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
-            this.showGlobalContextActionBar();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+////        if (this.drawerLayout != null && this.isDrawerOpen()) {
+////            inflater.inflate(R.menu.global, menu);
+////            this.showGlobalContextActionBar();
+////        }
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
 
 
