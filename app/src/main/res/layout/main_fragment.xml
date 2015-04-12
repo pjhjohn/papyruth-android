@@ -1,8 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_horizontal_margin"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/listview_divider_width"
     android:background="@drawable/appDefaultBackgroundColor"
     tools:context=".MainActivity">
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,8 +13,8 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:background="@android:color/transparent"
-        android:dividerHeight="16dp"
-        android:headerDividersEnabled="true"
+        android:dividerHeight="@dimen/listview_divider_width"
         tools:context=".MainActivity"
         />
-</RelativeLayout>
+    <include android:id="@+id/fab" layout="@layout/floating_action_button"/>
+</FrameLayout>

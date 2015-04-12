@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
 import com.montserrat.utils.request.ClientFragmentWithListView;
 
@@ -28,6 +30,9 @@ public class MainFragment extends ClientFragmentWithListView<MainListItemView> {
                 // Do Something
             }
         });
+
+        /* Bind FAB to Listview*/
+        ((FloatingActionButton) view.findViewById(R.id.fab)).attachToListView(this.listview);
 
         /* Request for Data */
         this.submit(new JSONObject());
