@@ -54,11 +54,11 @@ public class AutoSigninFragment extends ClientFragment {
 
     @Override
     public void onResponse(JSONObject response) {
-
+        super.onResponse(response);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-
+        super.onErrorResponse(error);
     }
 }
