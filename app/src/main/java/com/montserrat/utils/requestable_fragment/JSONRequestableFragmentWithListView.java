@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class JSONRequestableFragmentWithListView<T> extends JSONRequestableFragment {
-    protected JSONRequestForm form = null;
     protected ListView listview = null;
     protected List<T> items = null;
     protected UniversalAdapter adapter = null;
@@ -31,8 +30,8 @@ public abstract class JSONRequestableFragmentWithListView<T> extends JSONRequest
             Log.e("DEBUG", "There is no ListView Element within the Fragemnt.");
             e.printStackTrace();
         }
-        Log.d("DEBUG", "" + this.listview);
-        this.items = new ArrayList<T>();
+        if (listview != null)
+            this.listview.setAdapter(this.adapter = new UniversalAdapter(this.items = new ArrayList<T>(), this.getActivity().getApplicationContext()));
 
         /* Return inflated view */
         return view;
