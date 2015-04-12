@@ -77,17 +77,8 @@
 
         </LinearLayout>
     </LinearLayout>
-    <FrameLayout android:id="@+id/auth_progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000"
-        android:visibility="gone">
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"/>
-    </FrameLayout>
+    <include android:id="@+id/auth_progress" layout="@layout/progress"/>
+    <include android:id="@+id/fab" layout="@layout/floating_action_button"/>
 </FrameLayout>
 
 
