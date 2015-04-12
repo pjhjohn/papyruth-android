@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.montserrat.utils.requestable_fragment.JSONRequestableFragment;
+import com.montserrat.utils.request.JSONRequestableFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

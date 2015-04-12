@@ -6,7 +6,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 
 import com.montserrat.parts.auth.AuthFragment;
-import com.montserrat.utils.requestable_fragment.JSONRequestableFragment;
 
 /**
  * Activity For Authentication.

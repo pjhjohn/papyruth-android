@@ -1,4 +1,4 @@
-package com.montserrat.utils.requestable_fragment;
+package com.montserrat.utils.request;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7,10 +7,6 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.montserrat.parts.auth.AuthFragment;
-import com.montserrat.utils.request.JSONRequestForm;
 
 public abstract class JSONRequestableFragment extends Fragment implements JSONRequestForm.OnRequest, JSONRequestForm.OnResponse {
     protected JSONRequestForm form = null;

@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 
 import com.montserrat.activity.R;
 import com.montserrat.utils.adapter.UniversalAdapter;
-import com.montserrat.utils.requestable_fragment.JSONRequestableFragmentWithListView;
+import com.montserrat.utils.request.JSONRequestableFragmentWithListView;
 
 import java.util.Random;
 

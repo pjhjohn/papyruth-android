@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.montserrat.activity.R;
-import com.montserrat.utils.requestable_fragment.JSONRequestableFragmentWithListView;
+import com.montserrat.utils.request.JSONRequestableFragmentWithListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,24 +1,23 @@
-package com.montserrat.utils.requestable_fragment;
+package com.montserrat.utils.request;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
-public class MyRequestQueue {
-    private static MyRequestQueue mInstance;
-    private RequestQueue mRequestQueue;
+public class RequestQueue {
+    private static RequestQueue mInstance;
+    private com.android.volley.RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private static Context mCtx;
 
-    private MyRequestQueue (Context context) {
+    private RequestQueue (Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
 
@@ -39,14 +38,14 @@ public class MyRequestQueue {
                 });
     }
 
-    public static synchronized MyRequestQueue getInstance(Context context) {
+    public static synchronized RequestQueue getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new MyRequestQueue(context);
+            mInstance = new RequestQueue(context);
         }
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
+    public com.android.volley.RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.

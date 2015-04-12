@@ -1,7 +1,5 @@
 package com.montserrat.utils.request;
 
-import com.montserrat.utils.requestable_fragment.JSONRequestableFragment;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

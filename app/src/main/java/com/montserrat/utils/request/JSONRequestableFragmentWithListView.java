@@ -1,4 +1,4 @@
-package com.montserrat.utils.requestable_fragment;
+package com.montserrat.utils.request;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.montserrat.utils.adapter.UniversalAdapter;
-import com.montserrat.utils.request.JSONRequestForm;
 
 import java.util.ArrayList;
 import java.util.List;

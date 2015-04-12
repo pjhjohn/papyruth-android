@@ -25,7 +25,7 @@ public abstract class UniversalItemView<T,E> implements Adaptable{
                 InvokeView annotation = field.getAnnotation(InvokeView.class);
 
                 int id = annotation.viewId();
-                Log.d("DEBUG", String.format("View #%d : Field %s", id, field.getName()));
+//                Log.d("DEBUG", String.format("View #%d : Field %s", id, field.getName()));
                 field.set(viewHolder, v.findViewById(id));
             }
         } catch(Exception e) {
