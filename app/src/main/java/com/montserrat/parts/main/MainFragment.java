@@ -2,23 +2,19 @@ package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.montserrat.activity.R;
-import com.montserrat.utils.request.JSONRequestableFragmentWithListView;
+import com.montserrat.utils.request.ClientFragmentWithListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-
-public class MainFragment extends JSONRequestableFragmentWithListView<MainListItemView> {
+public class MainFragment extends ClientFragmentWithListView<MainListItemView> {
     public MainFragment() {}
 
     @Override
@@ -34,43 +30,49 @@ public class MainFragment extends JSONRequestableFragmentWithListView<MainListIt
         });
 
         /* Request for Data */
-        try {
-            this.form.submit();
-        } catch (JSONException| UnsupportedEncodingException e) {
-            Log.e (this.getClass().toString(), e.toString());
-        }
+        this.submit(new JSONObject());
+
         return view;
     }
 
+    /* TODO : FILL IT. It's necessary. */
     @Override
     protected int getFragmentLayoutId () {
         return R.layout.main_fragment;
     }
-    @Override
-    protected int getListViewId () {
-        return R.id.main_listview;
-    }
+
     @Override
     protected String getEndpoint () {
         return "http://pjhjohn.appspot.com/search";
     }
+
     @Override
-    public void onSuccess (String responseBody) {
-        super.onSuccess(responseBody);
-        Toast.makeText(this.getActivity(), responseBody, Toast.LENGTH_LONG).show();
-        JSONObject json = null;
+    protected int getListViewId () {
+        return R.id.main_listview;
+    }
+
+    /* TODO : Fill if necessary */
+    @Override
+    protected int getProgressViewId() {
+        return 0;
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return 0;
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        super.onResponse(response);
         try {
-            json = new JSONObject(responseBody);
-        } catch(JSONException e) {}
-        if(json == null) return;
-        try {
-            if(json.getBoolean("success")) {
-                JSONArray data = json.getJSONArray("data");
+            if(response.getBoolean("success")) {
+                JSONArray data = response.getJSONArray("data");
                 for (int i = 0; i < data.length(); i++) {
-                    JSONObject row = (JSONObject)data.get(i);
+                    JSONObject row = (JSONObject) data.get(i);
                     this.items.add(new MainListItemView(new MainListItemView.Data(
                             row.getString("subject"),
-                            row.getString("subject"),
+                            row.getString("professor"),
                             (float)row.getDouble("rating")
                     )));
                 }
@@ -79,16 +81,6 @@ public class MainFragment extends JSONRequestableFragmentWithListView<MainListIt
             e.printStackTrace();
         }
         this.adapter.notifyDataSetChanged();
-    }
-    @Override
-    public void onTimeout(String error) {
-        super.onTimeout(error);
-        Toast.makeText(this.getActivity(), error, Toast.LENGTH_LONG).show();
-    }
-    @Override
-    public void onNoInternetConnection(String error) {
-        super.onTimeout(error);
-        Toast.makeText(this.getActivity(), error, Toast.LENGTH_LONG).show();
     }
 
     public static Fragment newInstance (int i) {
