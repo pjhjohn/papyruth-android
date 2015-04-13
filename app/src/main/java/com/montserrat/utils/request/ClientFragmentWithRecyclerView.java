@@ -1,6 +1,5 @@
 package com.montserrat.utils.request;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.montserrat.parts.main.MainFragment;
+import com.montserrat.utils.recycler.HidingScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +23,7 @@ import java.util.List;
  * Created by pjhjohn on 2015-04-13.
  */
 public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment{
-    private static final String TAG = "ClientFragmentWithRecyclerView";
+    private static final String TAG = "ClientFragment";
 
     protected Toolbar toolbar = null;
     protected FloatingActionButton fab = null;
@@ -34,6 +38,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         if (this.toolbar == null) Log.d(TAG, "Couldn't find ID of toolbar");
 
         this.fab = (FloatingActionButton) this.getActivity().findViewById(this.getFloatingActionButtonId());
+        if (this.fab == null) this.fab = (FloatingActionButton) view.findViewById(this.getFloatingActionButtonId());
         if (this.fab == null) Log.d(TAG, "Couldn't find ID of FAB");
 
         this.items = new ArrayList<>();
@@ -43,7 +48,17 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity())); // TODO : has issue of dependency on LinearLayout
         this.adapter = this.getAdapter(this.items);
         recyclerView.setAdapter(this.adapter);
+        recyclerView.setOnScrollListener(new HidingScrollListener() {
+            @Override
+            public void onHide() {
+                ClientFragmentWithRecyclerView.this.hideViews();
+            }
 
+            @Override
+            public void onShow() {
+                ClientFragmentWithRecyclerView.this.showViews();
+            }
+        });
         return view;
     }
 
@@ -58,4 +73,22 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     }
 
     protected abstract int getRecyclerViewId();
+
+
+    private void hideViews() {
+        if(this.toolbar != null) {
+            this.toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        }
+        if(this.fab != null) {
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.fab.getLayoutParams();
+            int fabBottomMargin = lp.bottomMargin;
+            this.fab.animate().translationY(this.fab.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+        }
+    }
+
+    private void showViews() {
+        if(this.toolbar != null) this.toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        if(this.fab != null) this.fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    }
+
 }

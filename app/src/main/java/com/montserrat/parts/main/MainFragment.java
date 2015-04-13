@@ -2,85 +2,52 @@ package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 
-import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
-import com.montserrat.utils.recycler.HidingScrollListener;
-import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragment extends ClientFragment {
+public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter, RecyclerAdapter.Data> {
     public MainFragment() {}
-    private FloatingActionButton fab;
-    private Toolbar toolbar;
-    private List<RecyclerAdapter.Data> items;
-    private RecyclerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        /* Bind Toolbar */
-        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar); //(Toolbar) view.getRootView().findViewById(R.id.toolbar);
-        Log.d("DEBUG", "Currently toolbar in MainFragment is : " + this.toolbar);
-
-        /* Bind fab */
-        this.fab = (FloatingActionButton) view.findViewById(R.id.fab);
-
-        /* Initializer for RecyclerView */
-        this.items = new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.main_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        this.adapter = new RecyclerAdapter(this.items);
-        recyclerView.setAdapter(this.adapter);
-
-        recyclerView.setOnScrollListener(new HidingScrollListener() {
-            @Override
-            public void onHide() {
-                MainFragment.this.hideViews();
-            }
-
-            @Override
-            public void onShow() {
-                MainFragment.this.showViews();
-            }
-        });
 
         /* Request for Data */
         this.submit(new JSONObject());
 
         return view;
     }
-    private void hideViews() {
-        this.toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(
-                new AccelerateInterpolator(2)
-        );
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.fab.getLayoutParams();
-        int fabBottomMargin = lp.bottomMargin;
-        this.fab.animate().translationY(this.fab.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
 
+    @Override
+    protected int getToolbarId() {
+        return R.id.toolbar;
     }
 
-    private void showViews() {
-        this.toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        this.fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    @Override
+    protected int getFloatingActionButtonId() {
+        return R.id.fab;
     }
+
+    @Override
+    protected RecyclerAdapter getAdapter (List<RecyclerAdapter.Data> items) {
+        return new RecyclerAdapter(this.items);
+    }
+
+    @Override
+    protected int getRecyclerViewId () {
+        return R.id.main_recyclerview;
+    }
+
 
 
     /* TODO : FILL IT. It's necessary. */
