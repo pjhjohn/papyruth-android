@@ -1,12 +1,18 @@
 package com.montserrat.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -42,17 +48,39 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.searchview, menu);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            MenuItem searchitem = menu.findItem(R.id.menu_search);
+            SearchView searchView = (SearchView) searchitem.getActionView();
+            if(searchView != null){
+                searchView.setQueryHint("?");
+
+                SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+                if(searchManager != null){
+                    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+                }
+                searchView.setIconifiedByDefault(true);
+            }
+        }
         if (!this.drawer.isDrawerOpen()) {
             this.getMenuInflater().inflate(R.menu.main, menu);
             this.restoreActionBar();
             return true;
-        } return super.onCreateOptionsMenu(menu);
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_search) return true;
+        if (id == R.id.menu_search){
+            Log.i("Main-Search", "ready to use searchView***********");
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

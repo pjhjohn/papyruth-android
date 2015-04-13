@@ -33,4 +33,7 @@
     <string name="main_dummy_professor6">이영민</string>
     <string name="main_dummy_professor7">김우철</string>
 
+
+    <string name="menu_search">search</string>
+
 </resources>

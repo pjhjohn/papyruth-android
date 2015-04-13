@@ -152,7 +152,7 @@ public class NavFragment extends Fragment {
         if (this.drawerToggle.onOptionsItemSelected(item)) return true;
         // actionbar second
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.menu_search:
                 Toast.makeText(this.getActivity(), "TODO : Transition to editText on ActionBar", Toast.LENGTH_SHORT).show();
                 return true;
             default:

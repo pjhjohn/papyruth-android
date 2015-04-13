@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <item
+            android:title="@string/menu_search"
+            android:id="@+id/menu_search"
+            android:icon="@drawable/ic_action_search"
+            android:orderInCategory="1"
+            app:actionViewClass="android.support.v7.widget.SearchView"
+            app:showAsAction="always"
+            />
+
+    <!--android:icon="@drawable/abc_ic_search_api_mtrl_alpha"-->
+</menu>
