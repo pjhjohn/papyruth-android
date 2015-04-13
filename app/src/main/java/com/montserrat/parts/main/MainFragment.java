@@ -2,8 +2,6 @@ package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +15,7 @@ import android.widget.FrameLayout;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
+import com.montserrat.utils.recycler.HidingScrollListener;
 import com.montserrat.utils.request.ClientFragment;
 
 import org.json.JSONArray;

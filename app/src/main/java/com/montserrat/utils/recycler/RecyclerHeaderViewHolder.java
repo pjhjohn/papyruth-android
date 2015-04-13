@@ -1,4 +1,4 @@
-package com.montserrat.parts.main;
+package com.montserrat.utils.recycler;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
