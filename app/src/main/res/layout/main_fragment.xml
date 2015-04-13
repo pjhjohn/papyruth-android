@@ -1,20 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_horizontal_margin"
-    android:background="@drawable/appDefaultBackgroundColor"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_listview"
+    <android.support.v7.widget.RecyclerView android:id="@+id/main_recyclerview"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:background="@android:color/transparent"
-        android:dividerHeight="16dp"
-        android:headerDividersEnabled="true"
-        tools:context=".MainActivity"
-        />
-</RelativeLayout>
+        android:layout_height="match_parent"/>
+    <include android:id="@+id/fab" layout="@layout/floating_action_button"/>
+</FrameLayout>

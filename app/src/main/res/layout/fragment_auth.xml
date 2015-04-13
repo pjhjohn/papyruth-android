@@ -78,7 +78,6 @@
         </LinearLayout>
     </LinearLayout>
     <include android:id="@+id/auth_progress" layout="@layout/progress"/>
-    <include android:id="@+id/fab" layout="@layout/floating_action_button"/>
 </FrameLayout>
 
 
