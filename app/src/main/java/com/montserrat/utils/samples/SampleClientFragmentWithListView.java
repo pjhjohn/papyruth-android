@@ -1,26 +1,33 @@
-package com.montserrat.parts.main;
+package com.montserrat.utils.samples;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.montserrat.activity.R;
-import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
+import com.montserrat.utils.request.ClientFragmentWithListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
-public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter, RecyclerAdapter.Data> {
-    public MainFragment() {}
+public class SampleClientFragmentWithListView extends ClientFragmentWithListView<SampleUniversalItemView> {
+    public SampleClientFragmentWithListView () {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        /* Set ItemClick Listener for Action */
+        this.listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+                // Do Something
+            }
+        });
 
         /* Request for Data */
         this.submit(new JSONObject());
@@ -28,37 +35,20 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
         return view;
     }
 
-    @Override
-    protected int getToolbarId() {
-        return R.id.toolbar;
-    }
-
-    @Override
-    protected int getFloatingActionButtonId() {
-        return R.id.fab;
-    }
-
-    @Override
-    protected RecyclerAdapter getAdapter (List<RecyclerAdapter.Data> items) {
-        return new RecyclerAdapter(this.items);
-    }
-
-    @Override
-    protected int getRecyclerViewId () {
-        return R.id.main_recyclerview;
-    }
-
-
-
     /* TODO : FILL IT. It's necessary. */
     @Override
     protected int getFragmentLayoutId () {
-        return R.layout.main_fragment;
+        return 0;
     }
 
     @Override
     protected String getEndpoint () {
-        return "http://pjhjohn.appspot.com/search";
+        return null;
+    }
+
+    @Override
+    protected int getListViewId () {
+        return 0;
     }
 
     /* TODO : Fill if necessary */
@@ -80,21 +70,20 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
                 JSONArray data = response.getJSONArray("data");
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject row = (JSONObject) data.get(i);
-                    this.items.add(new RecyclerAdapter.Data(
+                    this.items.add(new SampleUniversalItemView(new SampleUniversalItemView.Data(
                             row.getString("subject"),
                             row.getString("professor"),
                             (float)row.getDouble("rating")
-                    ));
+                    )));
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         this.adapter.notifyDataSetChanged();
     }
 
     public static Fragment newInstance (int i) {
-        return new MainFragment();
+        return new SampleClientFragmentWithListView();
     }
 }
