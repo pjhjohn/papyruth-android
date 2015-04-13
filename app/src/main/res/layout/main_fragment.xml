@@ -2,19 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/listview_divider_width"
-    android:background="@drawable/appDefaultBackgroundColor"
     tools:context=".MainActivity">
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_listview"
+    <android.support.v7.widget.RecyclerView android:id="@+id/main_recyclerview"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:background="@android:color/transparent"
-        android:dividerHeight="@dimen/listview_divider_width"
-        tools:context=".MainActivity"
-        />
+        android:layout_height="match_parent"/>
     <include android:id="@+id/fab" layout="@layout/floating_action_button"/>
 </FrameLayout>

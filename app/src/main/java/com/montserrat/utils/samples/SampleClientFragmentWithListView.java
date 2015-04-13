@@ -38,17 +38,17 @@ public class SampleClientFragmentWithListView extends ClientFragmentWithListView
     /* TODO : FILL IT. It's necessary. */
     @Override
     protected int getFragmentLayoutId () {
-        return R.layout.main_fragment;
+        return 0;
     }
 
     @Override
     protected String getEndpoint () {
-        return "http://pjhjohn.appspot.com/search";
+        return null;
     }
 
     @Override
     protected int getListViewId () {
-        return R.id.main_listview;
+        return 0;
     }
 
     /* TODO : Fill if necessary */
