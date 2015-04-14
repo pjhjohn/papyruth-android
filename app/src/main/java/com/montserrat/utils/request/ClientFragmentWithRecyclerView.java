@@ -48,7 +48,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         if (this.fab == null) Log.d(TAG, "Couldn't find ID of FAB");
 
         /* Register SwipeRefreshLayout */
-        this.swipe = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
+        this.swipe = (SwipeRefreshLayout) view.findViewById(this.getSwipeRefreshLayoutId());
         if (this.swipe == null) Log.d(TAG, "Couldn't find ID of SwipeRefreshLayout");
         else {
             Log.d("DEBUG", "Height of Toolbar : " + this.toolbar.getHeight());
@@ -91,6 +91,8 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     }
 
     protected abstract int getRecyclerViewId();
+
+    protected int getSwipeRefreshLayoutId() { return 0; }
 
 
     private void hideViews() {

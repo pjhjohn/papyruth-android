@@ -36,6 +36,9 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
     }
 
     @Override
+    protected int getSwipeRefreshLayoutId() { return R.id.swipe; }
+
+    @Override
     protected int getToolbarId() {
         return R.id.toolbar;
     }
