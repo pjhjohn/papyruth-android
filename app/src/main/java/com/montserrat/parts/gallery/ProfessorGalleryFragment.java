@@ -33,7 +33,7 @@ public class ProfessorGalleryFragment extends ClientFragmentWithGridView<Profess
     /* TODO : FILL IT. It's necessary. */
     @Override
     protected int getFragmentLayoutId () {
-        return R.layout.main_fragment;
+        return R.layout.fragment_main;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.montserrat.parts.nav;
 
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
@@ -25,7 +24,7 @@ public class NavListItemView extends UniversalItemView<NavListItemView.Holder, N
 
     @Override
     public int getLayoutId() {
-        return R.layout.nav_item;
+        return R.layout.list_item_nav;
     }
 
     public static class Data {

@@ -35,10 +35,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         if (viewType == TYPE_ITEM) {
-            final View view = LayoutInflater.from(context).inflate(R.layout.main_item, parent, false);
+            final View view = LayoutInflater.from(context).inflate(R.layout.recycler_item_main, parent, false);
             return Holder.newInstance(view);
         } else if (viewType == TYPE_HEADER) {
-            final View view = LayoutInflater.from(context).inflate(R.layout.main_header, parent, false);
+            final View view = LayoutInflater.from(context).inflate(R.layout.recycler_header_empty, parent, false);
             return new RecyclerHeaderViewHolder(view);
         } else throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
     }

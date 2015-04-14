@@ -25,7 +25,7 @@ public class DetailListItemView extends UniversalItemView<DetailListItemView.Hol
 
     @Override
     public int getLayoutId() {
-        return R.layout.main_item;
+        return R.layout.recycler_item_main;
     }
 
     public static class Data {

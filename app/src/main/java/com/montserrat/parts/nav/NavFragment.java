@@ -59,7 +59,7 @@ public class NavFragment extends Fragment {
     private UniversalAdapter navAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.nav_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_nav, container, false);
         final ListView listview = (ListView) view.findViewById(R.id.nav_listview);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

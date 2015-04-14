@@ -53,7 +53,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
     /* TODO : FILL IT. It's necessary. */
     @Override
     protected int getFragmentLayoutId () {
-        return R.layout.main_fragment;
+        return R.layout.fragment_main;
     }
 
     @Override
