@@ -16,7 +16,7 @@
     </FrameLayout>
     <fragment
         android:id="@+id/drawer"
-        android:layout_width="240dp"
+        android:layout_width="304dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:name="com.montserrat.parts.nav.NavFragment"
