@@ -1,12 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <ImageView
+    android:orientation="vertical"
+    android:background="#fff">
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:id="@+id/nav_image"
-        android:background="@drawable/lucky_placeholder"/>
+        android:layout_height="180dp"
+        android:background="@drawable/nav_dummy">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textSize="24dp"
+            android:textColor="@color/gold"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_gravity="bottom|left"
+            android:text="pjhjohn@gmail.com"/>
+    </FrameLayout>
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:id="@+id/nav_listview"
@@ -15,6 +25,5 @@
               android:choiceMode="singleChoice"
               android:divider="@android:color/transparent"
               android:dividerHeight="0dp"
-              android:background="#2B3643"
               tools:context=".NavigationDrawerFragment"/>
 </LinearLayout>

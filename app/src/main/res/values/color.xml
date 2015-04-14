@@ -8,4 +8,9 @@
     <drawable name="appDefaultBackgroundColor">#2B3643</drawable>
     <drawable name="appDefaultForegroundColor">#1CAF9A</drawable>
     <drawable name="appDefaultHighlightColor">#4CDFCA</drawable>
+
+    <color name="gold">#facd1d</color>
+    <color name="transparent">#00000000</color>
+    <color name="translucent_white">#80ffffff</color>
+    <color name="translucent_black">#80000000</color>
 </resources>
