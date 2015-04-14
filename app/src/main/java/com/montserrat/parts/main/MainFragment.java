@@ -2,6 +2,7 @@ package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,14 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        /* Request for Data */
-        this.submit(new JSONObject());
+        /* Register swipe's OnRefresh Action */
+        this.swipe.setEnabled(true);
+        this.swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh () {
+                MainFragment.this.submit(new JSONObject());
+            }
+        });
 
         return view;
     }
@@ -90,7 +97,6 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         this.adapter.notifyDataSetChanged();
     }
 
