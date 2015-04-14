@@ -113,22 +113,22 @@ public class DetailActivity extends ActionBarActivity {
         public Object instantiateItem(View pager, int position) {
             View v = null;
             if(position==0){
-                v = mInflater.inflate(R.layout.page1, null);
+                v = mInflater.inflate(R.layout.sss_page1, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==1){
-                v = mInflater.inflate(R.layout.page1, null);
+                v = mInflater.inflate(R.layout.sss_page1, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==2){
-                v = mInflater.inflate(R.layout.page1, null);
+                v = mInflater.inflate(R.layout.sss_page1, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==3){
-                v = mInflater.inflate(R.layout.page1, null);
+                v = mInflater.inflate(R.layout.sss_page1, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==4){
-                v = mInflater.inflate(R.layout.page1, null);
+                v = mInflater.inflate(R.layout.sss_page1, null);
                 v.findViewById(R.id.iv_one);
             }else{
-                v = mInflater.inflate(R.layout.page1, null);
+                v = mInflater.inflate(R.layout.sss_page1, null);
                 v.findViewById(R.id.iv_one);
             }
 
