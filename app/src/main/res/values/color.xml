@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <drawable name="colorNavBackgroundNormal">#00FFFFFF</drawable>
-    <drawable name="colorNavBackgroundPressed">#4CDFCA</drawable>
-    <drawable name="colorNavBackgroundActivated">#1CAF9A</drawable>
+    <color name="colorNavBackgroundNormal">#00FFFFFF</color>
+    <color name="colorNavBackgroundPressed">#4CDFCA</color>
+    <color name="colorNavBackgroundActivated">#1CAF9A</color>
 
-
-    <drawable name="appDefaultBackgroundColor">#2B3643</drawable>
-    <drawable name="appDefaultForegroundColor">#1CAF9A</drawable>
-    <drawable name="appDefaultHighlightColor">#4CDFCA</drawable>
+    <color name="appDefaultBackgroundColor">#2B3643</color>
+    <color name="appDefaultForegroundColor">#1CAF9A</color>
+    <color name="appDefaultHighlightColor">#4CDFCA</color>
 
     <color name="gold">#facd1d</color>
     <color name="transparent">#00000000</color>

@@ -15,25 +15,6 @@
     <string name="title_subject_list">Subjects</string>
     <string name="title_subject_detail">Subject Detail</string>
 
-
-    <!--dummy data for main list-->
-    <string name="main_dummy_subject1">시뮬레이션 연구방법론</string>
-    <string name="main_dummy_subject2">특수교육학개론</string>
-    <string name="main_dummy_subject3">심리철학</string>
-    <string name="main_dummy_subject4">통계학 실험</string>
-    <string name="main_dummy_subject5">프로그래밍 언어</string>
-    <string name="main_dummy_subject6">공학수학 1</string>
-    <string name="main_dummy_subject7">통계학</string>
-
-    <string name="main_dummy_professor1">이제호</string>
-    <string name="main_dummy_professor2">고혜정</string>
-    <string name="main_dummy_professor3">이선형</string>
-    <string name="main_dummy_professor4">김우성</string>
-    <string name="main_dummy_professor5">이재진</string>
-    <string name="main_dummy_professor6">이영민</string>
-    <string name="main_dummy_professor7">김우철</string>
-
-
     <string name="menu_search">search</string>
 
 </resources>

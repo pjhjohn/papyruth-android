@@ -14,12 +14,12 @@
     </style>
 
     <style name="SigninTextAppearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@drawable/appDefaultForegroundColor</item>
-        <item name="android:textColorHint">@drawable/appDefaultHighlightColor</item>
+        <item name="android:textColor">@color/appDefaultForegroundColor</item>
+        <item name="android:textColorHint">@color/appDefaultHighlightColor</item>
         <item name="android:layout_marginBottom">24dp</item>
     </style>
     <style name="MainTextAppearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@drawable/appDefaultHighlightColor</item>
+        <item name="android:textColor">@color/appDefaultHighlightColor</item>
     </style>
     <style name="MainRatingBar" parent="@android:style/Widget.Holo.Light.RatingBar.Indicator">
         <item name="android:textAppearance">@style/MainTextAppearance</item>

@@ -8,7 +8,7 @@
     <LinearLayout android:id="@+id/auth_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/appDefaultBackgroundColor"
+        android:background="@color/appDefaultBackgroundColor"
         android:padding="24dp">
         <!--TODO : Prevent TextView from auto focused into input state-->
         <!--http://stackoverflow.com/questions/11133585/set-next-edittext-focused-and-editable-on-key-down-->
@@ -25,7 +25,7 @@
                 android:layout_marginBottom="120dp"
                 android:gravity="center"
                 android:text="Montserrat.com"
-                android:textColor="@drawable/appDefaultForegroundColor"
+                android:textColor="@color/appDefaultForegroundColor"
                 android:textSize="40sp">
             </TextView>
 
@@ -60,18 +60,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:background="@drawable/appDefaultForegroundColor"
+                    android:background="@color/appDefaultForegroundColor"
                     android:text="@string/action_sign_in"
-                    android:textColor="@drawable/appDefaultBackgroundColor"
+                    android:textColor="@color/appDefaultBackgroundColor"
                     android:textStyle="bold"/>
 
                 <Button android:id="@+id/btn_sign_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:background="@drawable/appDefaultForegroundColor"
+                    android:background="@color/appDefaultForegroundColor"
                     android:text="@string/action_sign_up"
-                    android:textColor="@drawable/appDefaultBackgroundColor"
+                    android:textColor="@color/appDefaultBackgroundColor"
                     android:textStyle="bold"/>
             </LinearLayout>
 

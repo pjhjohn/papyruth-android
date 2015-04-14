@@ -2,10 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_activated="true"
-        android:drawable="@drawable/colorNavBackgroundActivated"></item>
+        android:drawable="@color/colorNavBackgroundActivated"></item>
     <item
         android:state_pressed="true"
-        android:drawable="@drawable/colorNavBackgroundPressed"></item>
+        android:drawable="@color/colorNavBackgroundPressed"></item>
     <item
         android:drawable="@android:color/transparent"></item>
 
