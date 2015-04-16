@@ -11,18 +11,17 @@ import com.montserrat.parts.main.MainFragment;
  */
 public class FragmentFactory {
     private FragmentFactory () {}
+
     /* TODO : static final integer VS enum */
     public enum Type {
         MAIN, AUTH
     }
 
     public static Fragment create(Type type) {
-        Log.d("DEBUG", "FragmentFactory.create");
         switch (type) {
             case MAIN :
                 return MainFragment.newInstance();
             case AUTH :
-                Log.d("DEBUG", "AuthFragment.create -> switch:AUTH");
                 return AuthFragment.newInstance();
             default :
                 throw new RuntimeException("No Fragment found in type " + type);

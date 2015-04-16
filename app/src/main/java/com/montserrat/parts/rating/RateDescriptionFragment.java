@@ -21,8 +21,6 @@ public class RateDescriptionFragment extends ClientFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
-        // TODO : Fill in your code here.
-
         return view;
     }
 }

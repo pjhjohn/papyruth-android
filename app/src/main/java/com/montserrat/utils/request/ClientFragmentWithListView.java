@@ -26,12 +26,9 @@ public abstract class ClientFragmentWithListView<T> extends ClientFragment {
         /* SuperCall */
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        /* Bind Initialization Data from savedInstanceState */
-        if (this.args != null) {
-            this.listId = this.args.getInt(AppConst.Resource.LIST, AppConst.Resource.DEFAULT);
-        } else {
-            this.listId = AppConst.Resource.DEFAULT;
-        }
+        /* Bind Parameters passed via setArguments(Bundle bundle) */
+        if (this.args != null) this.listId = this.args.getInt(AppConst.Resource.LIST, AppConst.Resource.DEFAULT);
+        else this.listId = AppConst.Resource.DEFAULT;
 
         /* Initialize other member variables */
         this.items = new ArrayList<>();

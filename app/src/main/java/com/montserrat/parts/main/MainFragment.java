@@ -2,7 +2,6 @@ package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +17,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter, RecyclerAdapter.Data> {
-    public MainFragment() {}
-
+public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAdapter, MainRecyclerAdapter.Holder.Data> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
@@ -31,8 +28,8 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
     }
 
     @Override
-    protected RecyclerAdapter getAdapter (List<RecyclerAdapter.Data> items) {
-        return new RecyclerAdapter(this.items);
+    protected MainRecyclerAdapter getAdapter (List<MainRecyclerAdapter.Holder.Data> items) {
+        return MainRecyclerAdapter.newInstance(this.items);
     }
 
     @Override
@@ -43,7 +40,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
                 JSONArray data = response.getJSONArray("data");
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject row = (JSONObject) data.get(i);
-                    this.items.add(new RecyclerAdapter.Data(
+                    this.items.add(new MainRecyclerAdapter.Holder.Data(
                             row.getString("subject"),
                             row.getString("professor"),
                             (float)row.getDouble("rating")

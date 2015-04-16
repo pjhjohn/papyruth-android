@@ -41,7 +41,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        /* Bind Initialization Data from savedInstanceState */
+        /* Bind Parameters passed via setArguments(Bundle bundle) */
         if (this.args != null) {
             this.toolbarId      = this.args.getInt(AppConst.Resource.TOOLBAR, AppConst.Resource.DEFAULT);
             this.fabId          = this.args.getInt(AppConst.Resource.FAB, AppConst.Resource.DEFAULT);

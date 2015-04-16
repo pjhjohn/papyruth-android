@@ -46,7 +46,6 @@ public class AuthFragment extends ClientFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("DEBUG", "AuthFragment.onCreateView");
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         this.vEmail = (AutoCompleteTextView) view.findViewById(R.id.auth_email);
@@ -160,10 +159,7 @@ public class AuthFragment extends ClientFragment {
             vFocus.requestFocus();
         } else {
             try {
-                this.setUrl("pjhjohn.appspot.com")
-                    .setController("auth")
-                    .setAction("login")
-                    .setParameters(new JSONObject().put("email", email).put("password", passwd))
+                this.setParameters(new JSONObject().put("email", email).put("password", passwd))
                     .submit();
             } catch (JSONException e){
                 e.printStackTrace();
@@ -173,7 +169,6 @@ public class AuthFragment extends ClientFragment {
 
     @Override
     public void onResponse(JSONObject resp) {
-        Log.d("DEBUG", "onResponse Called with response of : " + resp.toString());
         super.onResponse(resp);
         try {
             if(resp.getBoolean("success")) this.getActivity().finish();
@@ -204,7 +199,6 @@ public class AuthFragment extends ClientFragment {
     }
 
     public static Fragment newInstance() {
-        Log.d("DEBUG", "AuthFragment.newInstance");
         Fragment fragment = new AuthFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");

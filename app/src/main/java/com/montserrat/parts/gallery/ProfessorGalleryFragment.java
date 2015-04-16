@@ -14,8 +14,8 @@ public class ProfessorGalleryFragment extends ClientFragmentWithGridView<Profess
     public ProfessorGalleryFragment () {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-        View view = super.onCreateView(inflater, container, args);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         return view;
     }

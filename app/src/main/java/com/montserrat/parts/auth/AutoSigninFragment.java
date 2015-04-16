@@ -18,21 +18,9 @@ public class AutoSigninFragment extends ClientFragment {
     public AutoSigninFragment(){}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-        View view = super.onCreateView(inflater, container, args);
-
-        // TODO : Fill in your code here.
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         return view;
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        super.onResponse(response);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        super.onErrorResponse(error);
     }
 }

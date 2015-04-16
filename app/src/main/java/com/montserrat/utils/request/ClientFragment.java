@@ -37,6 +37,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     @Override
     public void onAttach (Activity activity) {
         super.onAttach(activity);
+        // TODO : Potential Context Bug when called from two different activities (Not Checked)
         this.queue = RequestQueue.getInstance(activity);
     }
 
@@ -45,8 +46,8 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
      */
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /* Bind Initialization Data from savedInstanceState */
-        this.args = this.getArguments(); // Receives Data from setArguments(Bundle bundle)
+        /* Bind Parameters passed via setArguments(Bundle bundle) */
+        this.args = this.getArguments();
         if (args != null) {
             this.requestUrl         = args.getString(AppConst.Request.URL, AppConst.Request.DEFAULT);
             this.requestController  = args.getString(AppConst.Request.CONTROLLER, AppConst.Request.DEFAULT);
@@ -116,7 +117,9 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
         return this;
     }
 
+    /* TODO : There will be a more elegant way to implement this. */
     public String buildEndpoint () {
+        if(this.requestUrl.subSequence(0, 7).equals("http://")) this.requestUrl = this.requestUrl.subSequence(7, this.requestUrl.length());
         return String.format("http://%s/%s/%s", this.requestUrl, this.requestController, this.requestAction);
     }
 
@@ -128,7 +131,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     public void submit () {
         if (this.jsonToRequest == null) {
             Log.d("DEBUG", "There is no data to send");
-            this.jsonToRequest = new JSONObject();
+            this.jsonToRequest = new JSONObject(); /* TODO : TEST WHAT HAPPENS IF " this.jsonToRequest==null " */
         }
         final JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,

@@ -18,13 +18,6 @@ public class DetailFragment extends ClientFragmentWithListView<DetailListItemVie
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
-                // TODO : Fill your code here.
-            }
-        });
-
         return view;
     }
 
