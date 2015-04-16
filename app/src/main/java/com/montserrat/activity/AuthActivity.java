@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 
+import com.montserrat.parts.FragmentFactory;
 import com.montserrat.parts.auth.AuthFragment;
 
 /**
@@ -17,7 +18,7 @@ public class AuthActivity extends Activity {
         setContentView(R.layout.activity_auth);
 
         FragmentManager fragmentManager = this.getFragmentManager();
-        Fragment fragment = new AuthFragment();
+        Fragment fragment = FragmentFactory.create(FragmentFactory.Type.AUTH);
         fragmentManager
                 .beginTransaction()
                 .add(R.id.activity_signin, fragment)

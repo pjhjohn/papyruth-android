@@ -1,6 +1,7 @@
 package com.montserrat.parts;
 
 import android.app.Fragment;
+import android.util.Log;
 
 import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.main.MainFragment;
@@ -15,15 +16,16 @@ public class FragmentFactory {
         MAIN, AUTH
     }
 
-    public static Fragment create(Type type, int position) {
-        Fragment fragment = null;
+    public static Fragment create(Type type) {
+        Log.d("DEBUG", "FragmentFactory.create");
         switch (type) {
             case MAIN :
-                fragment = MainFragment.newInstance(position);
-                break;
+                return MainFragment.newInstance();
             case AUTH :
-                fragment = new AuthFragment();
-                break;
-        } return fragment;
+                Log.d("DEBUG", "AuthFragment.create -> switch:AUTH");
+                return AuthFragment.newInstance();
+            default :
+                throw new RuntimeException("No Fragment found in type " + type);
+        }
     }
 }

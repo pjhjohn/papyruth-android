@@ -16,10 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.montserrat.controller.AppConst;
 
-import org.apache.http.client.ResponseHandler;
 import org.json.JSONObject;
-
-import java.net.URL;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -35,6 +32,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     private CharSequence requestUrl, requestController, requestAction;
     private int fragmentId, contentId, progressId;
     private JSONObject jsonToRequest;
+    protected Bundle args;
 
     @Override
     public void onAttach (Activity activity) {
@@ -48,20 +46,21 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /* Bind Initialization Data from savedInstanceState */
-        if (savedInstanceState != null) {
-            this.requestUrl = savedInstanceState.getString(AppConst.Request.URL, AppConst.Request.DEFAULT);
-            this.requestController = savedInstanceState.getString(AppConst.Request.CONTROLLER, AppConst.Request.DEFAULT);
-            this.requestAction = savedInstanceState.getString(AppConst.Request.ACTION, AppConst.Request.DEFAULT);
-            this.fragmentId = savedInstanceState.getInt(AppConst.Resource.FRAGMENT, AppConst.Resource.DEFAULT);
-            this.contentId = savedInstanceState.getInt(AppConst.Resource.FRAGMENT, AppConst.Resource.DEFAULT);
-            this.progressId = savedInstanceState.getInt(AppConst.Resource.PROGRESS, AppConst.Resource.DEFAULT);
+        this.args = this.getArguments(); // Receives Data from setArguments(Bundle bundle)
+        if (args != null) {
+            this.requestUrl         = args.getString(AppConst.Request.URL, AppConst.Request.DEFAULT);
+            this.requestController  = args.getString(AppConst.Request.CONTROLLER, AppConst.Request.DEFAULT);
+            this.requestAction      = args.getString(AppConst.Request.ACTION, AppConst.Request.DEFAULT);
+            this.fragmentId         = args.getInt(AppConst.Resource.FRAGMENT, AppConst.Resource.DEFAULT);
+            this.contentId          = args.getInt(AppConst.Resource.FRAGMENT, AppConst.Resource.DEFAULT);
+            this.progressId         = args.getInt(AppConst.Resource.PROGRESS, AppConst.Resource.DEFAULT);
         } else {
-            this.requestUrl = AppConst.Request.DEFAULT;
-            this.requestController = AppConst.Request.DEFAULT;
-            this.requestAction = AppConst.Request.DEFAULT;
-            this.fragmentId = AppConst.Resource.DEFAULT;
-            this.contentId = AppConst.Resource.DEFAULT;
-            this.progressId = AppConst.Resource.DEFAULT;
+            this.requestUrl         = AppConst.Request.DEFAULT;
+            this.requestController  = AppConst.Request.DEFAULT;
+            this.requestAction      = AppConst.Request.DEFAULT;
+            this.fragmentId         = AppConst.Resource.DEFAULT;
+            this.contentId          = AppConst.Resource.DEFAULT;
+            this.progressId         = AppConst.Resource.DEFAULT;
         }
 
         /* Initialize other member variables */

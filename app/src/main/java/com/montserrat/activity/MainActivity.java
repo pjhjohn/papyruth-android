@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
     @Override
     public void onNavItemSelected(int position) {
         this.getFragmentManager().beginTransaction()
-                .replace(R.id.container, FragmentFactory.create(FragmentFactory.Type.MAIN, position))
+                .replace(R.id.container, FragmentFactory.create(FragmentFactory.Type.MAIN))
                 .commit();
     }
 

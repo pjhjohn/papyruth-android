@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +30,10 @@ import java.util.List;
 public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener {
     private Toolbar toolbarView;
     private FloatingActionButton fabView;
-    private SwipeRefreshLayout swipeRefreshView;
+    protected SwipeRefreshLayout swipeRefreshView;
     private RecyclerView recyclerView;
-    private T adapter;
-    private List<E> items;
+    protected T adapter;
+    protected List<E> items;
     private int toolbarId, fabId, swipeRefreshId, recyclerId;
     private boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
     private boolean isRequestFromSwipe, isPending;
@@ -43,16 +42,16 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         /* Bind Initialization Data from savedInstanceState */
-        if (savedInstanceState != null) {
-            this.toolbarId = savedInstanceState.getInt(AppConst.Resource.TOOLBAR, AppConst.Resource.DEFAULT);
-            this.fabId = savedInstanceState.getInt(AppConst.Resource.FAB, AppConst.Resource.DEFAULT);
-            this.swipeRefreshId = savedInstanceState.getInt(AppConst.Resource.SWIPE_REFRESH, AppConst.Resource.DEFAULT);
-            this.recyclerId = savedInstanceState.getInt(AppConst.Resource.RECYCLER, AppConst.Resource.DEFAULT);
+        if (this.args != null) {
+            this.toolbarId      = this.args.getInt(AppConst.Resource.TOOLBAR, AppConst.Resource.DEFAULT);
+            this.fabId          = this.args.getInt(AppConst.Resource.FAB, AppConst.Resource.DEFAULT);
+            this.swipeRefreshId = this.args.getInt(AppConst.Resource.SWIPE_REFRESH, AppConst.Resource.DEFAULT);
+            this.recyclerId     = this.args.getInt(AppConst.Resource.RECYCLER, AppConst.Resource.DEFAULT);
         } else {
-            this.toolbarId = AppConst.Resource.DEFAULT;
-            this.fabId = AppConst.Resource.DEFAULT;
+            this.toolbarId      = AppConst.Resource.DEFAULT;
+            this.fabId          = AppConst.Resource.DEFAULT;
             this.swipeRefreshId = AppConst.Resource.DEFAULT;
-            this.recyclerId = AppConst.Resource.DEFAULT;
+            this.recyclerId     = AppConst.Resource.DEFAULT;
         }
         /* Initialize other member variables */
         this.hideToolbarOnScroll = true;
@@ -115,14 +114,14 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     public void submit() {
         super.submit();
         if(this.isPending) {
-            this.anotherReqeustInProgress(); // handle duplicated reqeust
+            this.anotherRequestInProgress(); // handle duplicated reqeust
             return;
         }
         this.isPending = true;
         if(this.isRequestFromSwipe) this.swipeRefreshView.setRefreshing(true);
     }
 
-    public abstract void anotherReqeustInProgress();
+    public abstract void anotherRequestInProgress ();
 
     @Override
     public void onRefresh() {

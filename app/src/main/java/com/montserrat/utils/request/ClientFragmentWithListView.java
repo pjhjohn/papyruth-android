@@ -1,7 +1,6 @@
 package com.montserrat.utils.request;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,9 @@ import java.util.List;
  * Created by pjhjohn on 2015-04-12.
  */
 public abstract class ClientFragmentWithListView<T> extends ClientFragment {
-    private ListView listView;
-    private List<T> items;
-    private UniversalAdapter adapter;
+    protected ListView listView;
+    protected List<T> items;
+    protected UniversalAdapter adapter;
     private int listId;
 
     @Override
@@ -28,8 +27,8 @@ public abstract class ClientFragmentWithListView<T> extends ClientFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         /* Bind Initialization Data from savedInstanceState */
-        if (savedInstanceState != null) {
-            this.listId = savedInstanceState.getInt(AppConst.Resource.LIST, AppConst.Resource.DEFAULT);
+        if (this.args != null) {
+            this.listId = this.args.getInt(AppConst.Resource.LIST, AppConst.Resource.DEFAULT);
         } else {
             this.listId = AppConst.Resource.DEFAULT;
         }

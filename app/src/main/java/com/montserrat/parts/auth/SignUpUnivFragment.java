@@ -18,34 +18,12 @@ public class SignUpUnivFragment extends ClientFragment {
     public SignUpUnivFragment (){}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+        View view = super.onCreateView(inflater, container, args);
 
         // TODO : Fill in your code here.
 
         return view;
-    }
-
-    /* TODO : FILL IT. It's necessary. */
-    @Override
-    protected int getFragmentLayoutId () {
-        return 0;
-    }
-
-    @Override
-    protected String getEndpoint () {
-        return null;
-    }
-
-    /* TODO : Fill if necessary */
-    @Override
-    protected int getProgressViewId() {
-        return 0;
-    }
-
-    @Override
-    protected int getContentViewId() {
-        return 0;
     }
 
     @Override
