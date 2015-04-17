@@ -1,4 +1,4 @@
-package com.montserrat.parts.main;
+package com.montserrat.parts.auth;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,18 +15,18 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SchoolRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static MainRecyclerAdapter newInstance(List<Holder.Data> initItemList) {
-        return new MainRecyclerAdapter(initItemList);
+    public static SchoolRecyclerAdapter newInstance(List<Holder.Data> initItemList) {
+        return new SchoolRecyclerAdapter(initItemList);
     }
 
 
     private List<Holder.Data> items;
-    private MainRecyclerAdapter (List<Holder.Data> initItemList) {
+    private SchoolRecyclerAdapter (List<Holder.Data> initItemList) {
         this.items = initItemList;
     }
 
@@ -34,8 +34,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_main_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_main, parent, false));
+            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_school_header, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_school, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -83,37 +83,25 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     /* Item of list-like recyclerview */
 
     public static class Holder extends RecyclerView.ViewHolder {
-        private final TextView subject;
-        private final TextView professor;
-        private final RatingBar rating;
-        private Holder(final View parent, TextView viewSubject, TextView viewProfessor, RatingBar viewRating) {
+        private final TextView school;
+        private Holder(final View parent, TextView school) {
             super(parent);
-            this.subject = viewSubject;
-            this.professor = viewProfessor;
-            this.rating = viewRating;
+            this.school = school;
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
-            TextView vSubject = (TextView) parent.findViewById(R.id.main_item_subject);
-            TextView vProfessor = (TextView) parent.findViewById(R.id.main_item_professor);
-            RatingBar vRating = (RatingBar) parent.findViewById(R.id.main_item_rating);
-            return new Holder(parent, vSubject, vProfessor, vRating);
+            TextView school = (TextView) parent.findViewById(R.id.school_item_school);
+            return new Holder(parent, school);
         }
 
-        public void bind(MainRecyclerAdapter.Holder.Data item) {
-            this.subject.setText(item.subject);
-            this.professor.setText(item.professor);
-            this.rating.setRating(item.rating);
+        public void bind(SchoolRecyclerAdapter.Holder.Data item) {
+            this.school.setText(item.school);
         }
         public static class Data {
-            public String subject;
-            public String professor;
-            public float rating;
+            public String school;
             private Data(){}
-            public Data(String subject, String professor, float rating) {
-                this.subject = subject;
-                this.professor = professor;
-                this.rating = rating;
+            public Data(String school) {
+                this.school = school;
             }
         }
     }

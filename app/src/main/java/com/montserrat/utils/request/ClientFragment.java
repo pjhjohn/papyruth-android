@@ -70,9 +70,12 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
 
         /* Bind Views */
         View view = inflater.inflate(this.fragmentId, container, false);
+        if (view == null) Log.d("ClientFragment", "Couldn't inflate Fragment by ID#"+this.fragmentId);
 
         this.progressView = view.findViewById(this.progressId);
+        if (progressView == null) Log.d("ClientFragment", "Couldn't find progressView by ID#"+this.progressId);
         this.contentView = view.findViewById(this.contentId);
+        if (contentView == null) Log.d("ClientFragment", "Couldn't find contentView by ID#"+this.contentId);
         this.progressAnimationTime = this.getResources().getInteger(android.R.integer.config_shortAnimTime);
         return view;
     }
@@ -129,10 +132,6 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     }
 
     public void submit () {
-        if (this.jsonToRequest == null) {
-            Log.d("DEBUG", "There is no data to send");
-            this.jsonToRequest = new JSONObject(); /* TODO : TEST WHAT HAPPENS IF " this.jsonToRequest==null " */
-        }
         final JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
                 this.buildEndpoint(),
@@ -146,6 +145,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
 //                MY_SOCKET_TIMEOUT_MS,
 //                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 //                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Log.d("DEBUG", "Requested to " + this.buildEndpoint() + "\n with following data. \n" + this.jsonToRequest);
         this.queue.addToRequestQueue(request);
     }
 

@@ -39,7 +39,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
             if(response.getBoolean("success")) {
                 JSONArray data = response.getJSONArray("data");
                 for (int i = 0; i < data.length(); i++) {
-                    JSONObject row = (JSONObject) data.get(i);
+                    JSONObject row = data.getJSONObject(i);
                     this.items.add(new MainRecyclerAdapter.Holder.Data(
                             row.getString("subject"),
                             row.getString("professor"),

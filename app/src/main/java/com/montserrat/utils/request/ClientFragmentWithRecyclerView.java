@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,8 +63,11 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
 
         /* Bind Views */
         this.toolbarView = (Toolbar) this.getActivity().findViewById(this.toolbarId);
+        if (this.toolbarView == null) Log.d("ClientFragment", "Couldn't find Toolbar by ID#" + this.toolbarId);
         this.fabView = (FloatingActionButton) view.findViewById(this.fabId);
+        if (this.fabView == null) Log.d("ClientFragment", "Couldn't find FloatingActionButton by ID#" + this.fabId);
         this.swipeRefreshView = (SwipeRefreshLayout) view.findViewById(this.swipeRefreshId);
+        if (this.swipeRefreshView == null) Log.d("ClientFragment", "Couldn't find SwipeRefreshLayout by ID#" + this.swipeRefreshId);
         if(this.swipeRefreshView != null) {
             final int toolbarHeight = this.toolbarView == null? 0 : this.toolbarView.getHeight();
             if(this.toolbarView != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
@@ -72,6 +76,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
             this.swipeRefreshView.setOnRefreshListener(this);
         }
         this.recyclerView = (RecyclerView) view.findViewById(this.recyclerId);
+        if (this.recyclerView == null) Log.d("ClientFragment", "Couldn't find RecyclerView by ID#" + this.recyclerId);
 
         /* Register RecyclerView & its Adapter n Items */
         if(recyclerView != null) {
