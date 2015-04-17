@@ -32,7 +32,7 @@ import java.util.List;
  */
 public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
     private Toolbar toolbarView;
-    private FloatingActionButton fabView;
+    protected FloatingActionButton fabView;
     protected SwipeRefreshLayout swipeRefreshView;
     private RecyclerView recyclerView;
     protected T adapter;
@@ -81,7 +81,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
 
         /* Register RecyclerView & its Adapter n Items */
         if(recyclerView != null) {
-            this.items = new ArrayList<>();
+            this.items = new ArrayList<E>();
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity())); // TODO : dependency to LinearLayout
             this.adapter = this.getAdapter(this.items);
             recyclerView.setAdapter(this.adapter);
@@ -143,12 +143,22 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         /* this block @ child class will call submit() */
     }
 
+    public void onRefreshResponse(JSONObject response) {
+
+    }
+
     @Override
     public void onResponse(JSONObject response) {
         super.onResponse(response);
-        if(this.isRequestFromSwipe) this.swipeRefreshView.setRefreshing(false);
-        this.isRequestFromSwipe = false;
-        this.isPending = false;
+        if(this.isRequestFromSwipe) {
+            this.swipeRefreshView.setRefreshing(false);
+            this.isRequestFromSwipe = false;
+            this.isPending = false;
+            this.onRefreshResponse(response);
+        } else {
+            this.isRequestFromSwipe = false;
+            this.isPending = false;
+        }
     }
 
     @Override

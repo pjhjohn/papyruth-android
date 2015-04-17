@@ -23,6 +23,12 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         View view = super.onCreateView(inflater, container, args);
 
         this.swipeRefreshView.setEnabled(true);
+        this.fabView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                MainFragment.this.submit();
+            }
+        });
 
         return view;
     }
@@ -38,6 +44,27 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         try {
             if(response.getBoolean("success")) {
                 JSONArray data = response.getJSONArray("data");
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject row = data.getJSONObject(i);
+                    this.items.add(new MainRecyclerAdapter.Holder.Data(
+                            row.getString("subject"),
+                            row.getString("professor"),
+                            (float)row.getDouble("rating")
+                    ));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        this.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefreshResponse(JSONObject response) {
+        try {
+            if(response.getBoolean("success")) {
+                JSONArray data = response.getJSONArray("data");
+                this.items.clear();
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject row = data.getJSONObject(i);
                     this.items.add(new MainRecyclerAdapter.Holder.Data(
