@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.searchview, menu);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+
             MenuItem searchitem = menu.findItem(R.id.menu_search);
             SearchView searchView = (SearchView) searchitem.getActionView();
             if(searchView != null){
@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
                 }
                 searchView.setIconifiedByDefault(true);
             }
-        }
+
         if (!this.drawer.isDrawerOpen()) {
             this.getMenuInflater().inflate(R.menu.main, menu);
             this.restoreActionBar();

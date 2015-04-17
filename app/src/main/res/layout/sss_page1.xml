@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ff0000">
-    <TextView
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="PAGE1"
+        android:layout_height="146dp"
         android:gravity="center"
         android:textSize="50dp"
         android:id="@+id/iv_one"
@@ -15,4 +15,12 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp" />
 
-</RelativeLayout>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/iv_one"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffff" />
+
+</LinearLayout>
