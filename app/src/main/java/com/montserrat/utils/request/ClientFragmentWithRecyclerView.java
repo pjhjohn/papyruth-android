@@ -20,6 +20,7 @@ import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.recycler.HidingScrollListener;
+import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import org.json.JSONObject;
 
@@ -29,7 +30,7 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener {
+public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
     private Toolbar toolbarView;
     private FloatingActionButton fabView;
     protected SwipeRefreshLayout swipeRefreshView;

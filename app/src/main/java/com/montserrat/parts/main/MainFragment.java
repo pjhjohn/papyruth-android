@@ -78,4 +78,8 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         fragment.setArguments(bundle);
         return fragment;
     }
+
+    @Override
+    public void recyclerViewListClicked (View view, int position) {
+    }
 }

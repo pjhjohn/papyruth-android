@@ -5,10 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
+import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
@@ -20,14 +20,15 @@ public class SchoolRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static SchoolRecyclerAdapter newInstance(List<Holder.Data> initItemList) {
-        return new SchoolRecyclerAdapter(initItemList);
+    public static SchoolRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new SchoolRecyclerAdapter(initItemList, listener);
     }
 
-
+    private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private SchoolRecyclerAdapter (List<Holder.Data> initItemList) {
+    private SchoolRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
+        this.itemListener = listener;
     }
 
     @Override
@@ -82,11 +83,12 @@ public class SchoolRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     /* Item of list-like recyclerview */
 
-    public static class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView school;
         private Holder(final View parent, TextView school) {
             super(parent);
             this.school = school;
+            parent.setOnClickListener(this);
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
@@ -97,11 +99,19 @@ public class SchoolRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public void bind(SchoolRecyclerAdapter.Holder.Data item) {
             this.school.setText(item.school);
         }
+
+        @Override
+        public void onClick (View view) {
+            SchoolRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition() - 1); // HEADER
+        }
+
         public static class Data {
             public String school;
+            public int schoolCode;
             private Data(){}
-            public Data(String school) {
+            public Data(String school, int schoolCode) {
                 this.school = school;
+                this.schoolCode = schoolCode;
             }
         }
     }

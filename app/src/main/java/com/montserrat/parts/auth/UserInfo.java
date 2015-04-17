@@ -39,9 +39,11 @@ public class UserInfo {
     public void setEmail(CharSequence email) {
         this.email = email;
     }
-
     public void setName(CharSequence name) {
         this.name = name;
+    }
+    public void setSchool(int schoolCode) {
+        this.school = schoolCode;
     }
 
     public boolean isReadyToSubmitForFirstStep() {
