@@ -30,13 +30,9 @@ public class SignUpUnivFragment extends ClientFragmentWithRecyclerView<SchoolRec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         this.submit();
+
+        return view;
     }
 
     @Override
