@@ -1,5 +1,6 @@
 package com.montserrat.parts.auth;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -28,6 +29,7 @@ import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +45,13 @@ public class AuthFragment extends ClientFragment {
 
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
+    private ViewPagerController pageController;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.pageController = (ViewPagerController) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -195,7 +204,7 @@ public class AuthFragment extends ClientFragment {
         return passwd.length() > 4;
     }
     private void attemptSignup() {
-        this.startActivity(new Intent(this.getActivity(), MainActivity.class));
+        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV);
     }
 
     public static Fragment newInstance() {

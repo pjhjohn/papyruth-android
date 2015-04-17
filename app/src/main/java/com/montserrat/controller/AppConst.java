@@ -27,4 +27,15 @@ public class AppConst {
         public static final String CONTROLLER = "controller";
         public static final String ACTION = "action";
     }
+    public static class ViewPager {
+        public static class Auth {
+            public static final int LENGTH = 3;
+            public static final int AUTH = 0;
+            public static final int SIGNUP_UNIV = 1;
+            public static final int SIGNUP_INFO = 2;
+        }
+        public static class Main {
+
+        }
+    }
 }
