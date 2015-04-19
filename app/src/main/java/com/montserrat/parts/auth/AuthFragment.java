@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
+import com.montserrat.utils.etc.Validator;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
@@ -146,7 +147,7 @@ public class AuthFragment extends ClientFragment {
         View vFocus = null;
 
         /* Client-side Form Validation */
-        if (!TextUtils.isEmpty(passwd) && !isPasswordValid(passwd)) {
+        if (!TextUtils.isEmpty(passwd) && !Validator.validatePassword(passwd)) {
             vPassword.setError("This password is too short");
             vFocus = vPassword;
             cancel = true;
@@ -155,7 +156,7 @@ public class AuthFragment extends ClientFragment {
             vEmail.setError("This field is required");
             vFocus = vEmail;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!Validator.validateEmailAddress(email)) {
             vEmail.setError("This email address is invalid");
             vFocus = vEmail;
             cancel = true;
@@ -194,14 +195,8 @@ public class AuthFragment extends ClientFragment {
     }
 
     // TODO : Replace this with your own logic
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-    private boolean isPasswordValid(String passwd) {
-        return passwd.length() > 4;
-    }
     private void attemptSignup() {
-        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV);
+        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1);
     }
 
     public static Fragment newInstance() {

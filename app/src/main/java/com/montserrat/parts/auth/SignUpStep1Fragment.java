@@ -9,11 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.utils.request.ClientFragment;
-import com.montserrat.utils.request.ClientFragmentWithListView;
 import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
@@ -27,7 +24,7 @@ import java.util.List;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpUnivFragment extends ClientFragmentWithRecyclerView<SchoolRecyclerAdapter, SchoolRecyclerAdapter.Holder.Data>{
+public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRecyclerAdapter, SchoolRecyclerAdapter.Holder.Data>{
     private ViewPagerController pageController;
     @Override
     public void onAttach(Activity activity) {
@@ -79,12 +76,12 @@ public class SignUpUnivFragment extends ClientFragmentWithRecyclerView<SchoolRec
     }
 
     public static Fragment newInstance() {
-        Fragment fragment = new SignUpUnivFragment();
+        Fragment fragment = new SignUpStep1Fragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
         bundle.putString(AppConst.Request.CONTROLLER, "university");
         bundle.putString(AppConst.Request.ACTION, "all");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_univ);
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_step1);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.signup_univ_recyclerview);
         fragment.setArguments(bundle);
         return fragment;
@@ -94,6 +91,6 @@ public class SignUpUnivFragment extends ClientFragmentWithRecyclerView<SchoolRec
     public void recyclerViewListClicked (View view, int position) {
         Toast.makeText(this.getActivity(), "Current Position Has Position of " + position, Toast.LENGTH_SHORT).show();
         UserInfo.getInstance().setSchool(this.items.get(position).schoolCode);
-        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_INFO);
+        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2);
     }
 }
