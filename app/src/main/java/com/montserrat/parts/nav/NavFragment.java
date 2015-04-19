@@ -69,14 +69,13 @@ public class NavFragment extends Fragment {
             }
         });
 
-        List<NavListItemView> items = new ArrayList<>();
+        List<NavListItemView> items = new ArrayList<NavListItemView>();
         items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid)));
         items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search)));
         items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching)));
         items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit)));
         items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle)));
         items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings)));
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_time), R.drawable.ic_action_time)));
         items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove)));
 
         listview.setAdapter(new UniversalAdapter(items, this.getActivity()));
@@ -87,9 +86,6 @@ public class NavFragment extends Fragment {
     public boolean isDrawerOpen() {
         return this.drawerLayout != null && this.drawerLayout.isDrawerOpen(this.fragmentContainerView);
     }
-
-
-
 
     public void setUp(int fragment_id, DrawerLayout drawerLayout) {
         this.fragmentContainerView = this.getActivity().findViewById(fragment_id);

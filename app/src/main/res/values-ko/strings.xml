@@ -1,0 +1,30 @@
+<resources>
+    <!--app name-->
+    <string name="app_name">몬쎄라-트</string>
+
+    <!--navigation-->
+    <string name="nav_item_home">홈</string>
+    <string name="nav_item_search">강좌검색</string>
+    <string name="nav_item_recommendation">추천강좌</string>
+    <string name="nav_item_write">강의평작성</string>
+    <string name="nav_item_random">임의강의</string>
+    <string name="nav_item_profile">회원정보</string>
+    <string name="nav_item_signout">나가기</string>
+
+    <!--toolbar-->
+
+    <!-- Strings related to login -->
+    <string name="action_sign_in">로그인</string>
+    <string name="action_sign_up">회원가입</string>
+    <string name="error_invalid_email">이메일 형식이 잘못되었습니다.</string>
+    <string name="error_invalid_password">비밀번호가 너무 짧습니다.</string>
+    <string name="error_incorrect_password">비밀번호가 틀립니다.</string>
+    <string name="error_field_required">채워주세요</string>
+
+    <!--common-->
+    <string name="next">다음</string>
+
+    <!--menu-->
+    <string name="menu_search">메뉴검색</string>
+    <string name="title_activity_login">이건어따쓸까</string>
+</resources>

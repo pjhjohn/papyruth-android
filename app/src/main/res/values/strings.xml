@@ -3,14 +3,13 @@
     <string name="app_name">Montserrat.com</string>
 
     <!--navigation-->
-    <string name="nav_item_home">홈</string>
-    <string name="nav_item_search">강의 찾기</string>
-    <string name="nav_item_recommendation">추천 강의</string>
-    <string name="nav_item_write">강의평 쓰기</string>
-    <string name="nav_item_random">랜덤 강의평</string>
-    <string name="nav_item_profile">회원 정보</string>
-    <string name="nav_item_time">서버 시간</string>
-    <string name="nav_item_signout">나가기</string>
+    <string name="nav_item_home">Home</string>
+    <string name="nav_item_search">Search</string>
+    <string name="nav_item_recommendation">Recommendation</string>
+    <string name="nav_item_write">Write</string>
+    <string name="nav_item_random">Random</string>
+    <string name="nav_item_profile">Profile</string>
+    <string name="nav_item_signout">Sign Out</string>
 
     <!--toolbar-->
 
