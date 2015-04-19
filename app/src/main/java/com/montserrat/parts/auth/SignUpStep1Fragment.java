@@ -3,6 +3,8 @@ package com.montserrat.parts.auth;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,5 +94,10 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRe
         Toast.makeText(this.getActivity(), "Current Position Has Position of " + position, Toast.LENGTH_SHORT).show();
         UserInfo.getInstance().setSchool(this.items.get(position).schoolCode);
         this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2);
+    }
+
+    @Override
+    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
+        return new LinearLayoutManager(this.getActivity());
     }
 }

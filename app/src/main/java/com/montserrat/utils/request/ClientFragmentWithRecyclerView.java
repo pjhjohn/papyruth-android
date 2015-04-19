@@ -81,7 +81,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         /* Register RecyclerView & its Adapter n Items */
         if(recyclerView != null) {
             this.items = new ArrayList<E>();
-            recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity())); // TODO : dependency to LinearLayout
+            recyclerView.setLayoutManager(this.getRecyclerViewLayoutManager()); // TODO : dependency to LinearLayout
             this.adapter = this.getAdapter(this.items);
             recyclerView.setAdapter(this.adapter);
             recyclerView.setOnScrollListener(new HidingScrollListener() {
@@ -172,4 +172,6 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     private int PX2DP(int px){
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, getResources().getDisplayMetrics());
     }
+
+    public abstract RecyclerView.LayoutManager getRecyclerViewLayoutManager();
 }

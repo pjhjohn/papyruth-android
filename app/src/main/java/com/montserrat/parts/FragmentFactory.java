@@ -7,7 +7,6 @@ import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep3Fragment;
-import com.montserrat.parts.auth.SignUpStep4Fragment;
 import com.montserrat.parts.main.MainFragment;
 
 /**
@@ -46,8 +45,6 @@ public class FragmentFactory {
                         return SignUpStep2Fragment.newInstance();
                     case AppConst.ViewPager.Auth.SIGNUP_STEP3 :
                         return SignUpStep3Fragment.newInstance();
-                    case AppConst.ViewPager.Auth.SIGNUP_STEP4 :
-                        return SignUpStep4Fragment.newInstance();
                     default :
                         throw new RuntimeException("No Fragment found in position " + position);
                 }

@@ -2,11 +2,13 @@ package com.montserrat.parts.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
@@ -31,7 +33,7 @@ public class SignUpStep3Fragment extends ClientFragment {
         view.findViewById(R.id.btn_signup_submit).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                SignUpStep3Fragment.this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4);
+                SignUpStep3Fragment.this.getActivity().startActivity(new Intent(SignUpStep3Fragment.this.getActivity(), MainActivity.class));
             }
         });
         return view;
