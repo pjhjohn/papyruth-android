@@ -32,28 +32,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
-            android:id="@+id/signup_password_repeat"
-            android:inputType="textPassword"
-            android:hint="@string/hint_password_repeat"
-            android:layout_marginBottom="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="16dp"-->
-            <!--android:textSize="32dp"-->
-            <!--android:text="@string/signup_category_info"/>-->
-        <EditText
             android:id="@+id/signup_name"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:hint="@string/hint_name"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/signup_nickname"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:hint="@string/hint_nickname"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
@@ -61,24 +48,20 @@
         <RadioGroup
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <RadioButton
-                    android:layout_weight="0.5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gender_male"
-                    android:id="@+id/radioButton"/>
-                <RadioButton
-                    android:layout_weight="0.5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gender_female"
-                    android:id="@+id/radioButton2"/>
-            </LinearLayout>
+                android:text="@string/gender_male"
+                android:id="@+id/radioButton"/>
+            <RadioButton
+                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender_female"
+                android:id="@+id/radioButton2"/>
         </RadioGroup>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -94,8 +77,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:overScrollMode="never"
-                android:scrollbars="none"
                 android:id="@+id/spinner"/>
         </LinearLayout>
         <Button

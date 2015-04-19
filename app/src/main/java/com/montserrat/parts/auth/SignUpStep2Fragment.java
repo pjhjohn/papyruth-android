@@ -17,6 +17,7 @@ import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -44,8 +45,9 @@ public class SignUpStep2Fragment extends ClientFragment {
 
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
         ArrayList<String> list = new ArrayList<String>();
-        for(int i = 0; i < 50; i ++) list.add(""+(2015-i));
-        spinner.setAdapter(new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item_year, list));
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for(int year = currentYear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(""+year);
+        spinner.setAdapter(new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
         return view;
     }
 

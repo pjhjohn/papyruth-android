@@ -33,5 +33,5 @@
     <string name="hint_name">Name</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
-    <string name="prompt_spinner">Year of Entrance</string>
+    <string name="prompt_spinner">Admission Year</string>
 </resources>
