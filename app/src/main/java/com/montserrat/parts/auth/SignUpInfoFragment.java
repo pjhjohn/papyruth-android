@@ -30,7 +30,10 @@ public class SignUpInfoFragment extends ClientFragment {
     public static Fragment newInstance() {
         Fragment fragment = new SignUpInfoFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
+        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
+        bundle.putString(AppConst.Request.CONTROLLER, "university");
+        bundle.putString(AppConst.Request.ACTION, "all");
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_info);
         fragment.setArguments(bundle);
         return fragment;
     }

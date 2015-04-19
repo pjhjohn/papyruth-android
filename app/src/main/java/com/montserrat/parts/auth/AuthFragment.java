@@ -211,8 +211,8 @@ public class AuthFragment extends ClientFragment {
         bundle.putString(AppConst.Request.CONTROLLER, "signin");
         bundle.putString(AppConst.Request.ACTION, "validate");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
-        bundle.putInt(AppConst.Resource.PROGRESS, R.id.auth_progress);
-        bundle.putInt(AppConst.Resource.CONTENT, R.id.auth_content);
+        bundle.putInt(AppConst.Resource.PROGRESS, R.id.progress_auth);
+        bundle.putInt(AppConst.Resource.CONTENT, R.id.content_auth);
         fragment.setArguments(bundle);
         return fragment;
     }

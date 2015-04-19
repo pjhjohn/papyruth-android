@@ -1,6 +1,8 @@
 <resources>
+    <!--app name-->
     <string name="app_name">Montserrat.com</string>
 
+    <!--navigation-->
     <string name="nav_item_home">홈</string>
     <string name="nav_item_search">강의 찾기</string>
     <string name="nav_item_recommendation">추천 강의</string>
@@ -10,11 +12,20 @@
     <string name="nav_item_time">서버 시간</string>
     <string name="nav_item_signout">나가기</string>
 
-    <string name="search_title">Search</string>
-    <string name="search_hint">Search Hint</string>
-    <string name="title_subject_list">Subjects</string>
-    <string name="title_subject_detail">Subject Detail</string>
+    <!--toolbar-->
 
-    <string name="menu_search">search</string>
+    <!-- Strings related to login -->
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
 
+    <!--common-->
+    <string name="next">Next</string>
+
+    <!--menu-->
+    <string name="menu_search">Menu Search</string>
+    <string name="title_activity_login">title</string>
 </resources>
