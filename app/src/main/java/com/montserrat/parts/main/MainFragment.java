@@ -39,8 +39,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     }
 
     @Override
-    public void onResponse(JSONObject response) {
-        super.onResponse(response);
+    public void onRequestResponse(JSONObject response) {
         try {
             if(response.getBoolean("success")) {
                 JSONArray data = response.getJSONArray("data");
@@ -87,8 +86,8 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     }
 
     @Override
-    public void anotherRequestInProgress () {
-        Toast.makeText(this.getActivity(), "Multiple Request Attemption", Toast.LENGTH_SHORT).show();
+    public void onPendingRequest () {
+        Toast.makeText(this.getActivity(), "Another request is pending...", Toast.LENGTH_SHORT).show();
     }
 
     public static Fragment newInstance () {

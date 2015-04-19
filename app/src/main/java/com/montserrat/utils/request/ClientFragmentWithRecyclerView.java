@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
@@ -39,7 +38,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     protected List<E> items;
     private int toolbarId, fabId, swipeRefreshId, recyclerId;
     private boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
-    private boolean isRequestFromSwipe, isPending;
+    private boolean isRequestForRefreshing, isPending;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +58,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         /* Initialize other member variables */
         this.hideToolbarOnScroll = true;
         this.hideFloatingActionButtonOnScroll = true;
-        this.isRequestFromSwipe = false;
+        this.isRequestForRefreshing = false;
         this.isPending = false;
 
         /* Bind Views */
@@ -129,44 +128,44 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     public void submit() {
         super.submit();
         if(this.isPending) {
-            this.anotherRequestInProgress(); // handle duplicated reqeust
+            this.onPendingRequest(); // handle duplicated reqeust
             return;
         }
         this.isPending = true;
-        if(this.isRequestFromSwipe) this.swipeRefreshView.setRefreshing(true);
+        if(this.isRequestForRefreshing) this.swipeRefreshView.setRefreshing(true);
     }
 
-    public abstract void anotherRequestInProgress ();
+    public abstract void onPendingRequest ();
 
     @Override
     public void onRefresh() {
-        this.isRequestFromSwipe = true;
-        /* this block @ child class will call submit() */
-    }
-
-    public void onRefreshResponse(JSONObject response) {
-
+        this.isRequestForRefreshing = true;
+        /* this block at child class will call submit() */
     }
 
     @Override
-    public void onResponse(JSONObject response) {
+    public final void onResponse(JSONObject response) {
         super.onResponse(response);
-        if(this.isRequestFromSwipe) {
+        if(this.isRequestForRefreshing) {
             this.swipeRefreshView.setRefreshing(false);
-            this.isRequestFromSwipe = false;
+            this.isRequestForRefreshing = false;
             this.isPending = false;
             this.onRefreshResponse(response);
         } else {
-            this.isRequestFromSwipe = false;
+            this.isRequestForRefreshing = false;
             this.isPending = false;
+            this.onRequestResponse(response);
         }
     }
+
+    public abstract void onRequestResponse(JSONObject response);
+    public abstract void onRefreshResponse(JSONObject response);
 
     @Override
     public void onErrorResponse(VolleyError error) {
         super.onErrorResponse(error);
-        if(this.isRequestFromSwipe) this.swipeRefreshView.setRefreshing(false);
-        this.isRequestFromSwipe = false;
+        if(this.isRequestForRefreshing) this.swipeRefreshView.setRefreshing(false);
+        this.isRequestForRefreshing = false;
         this.isPending = false;
     }
 

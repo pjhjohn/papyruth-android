@@ -49,13 +49,12 @@ public class SignUpUnivFragment extends ClientFragmentWithRecyclerView<SchoolRec
     }
 
     @Override
-    public void anotherRequestInProgress () {
+    public void onPendingRequest () {
         Toast.makeText(this.getActivity(), "Multiple Request Attemption", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onResponse(JSONObject response) {
-        super.onResponse(response);
+    public void onRequestResponse(JSONObject response) {
         Log.d("DEBUG", "response data : " + response);
         try {
             if(response.getBoolean("success")) {
@@ -72,6 +71,11 @@ public class SignUpUnivFragment extends ClientFragmentWithRecyclerView<SchoolRec
             e.printStackTrace();
         }
         this.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefreshResponse(JSONObject response) {
+
     }
 
     public static Fragment newInstance() {
