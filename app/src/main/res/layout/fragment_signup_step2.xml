@@ -3,36 +3,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:name="comm.montserrat.activity.AuthActivity">
-    <LinearLayout android:id="@+id/content_signup_info"
+    <LinearLayout
+        android:id="@+id/content_signup_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/activity_vertical_margin">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="32sp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/signup_category_account"/>
         <EditText
             android:id="@+id/signup_email"
             android:inputType="textEmailAddress"
             android:hint="@string/hint_email"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/signup_password"
             android:inputType="textVisiblePassword"
             android:hint="@string/hint_password"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/signup_password_repeat"
             android:inputType="textPassword"
             android:hint="@string/hint_password_repeat"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="16dp"-->
+            <!--android:textSize="32dp"-->
+            <!--android:text="@string/signup_category_info"/>-->
+        <EditText
+            android:id="@+id/signup_name"
+            android:inputType="textPassword"
+            android:hint="@string/hint_name"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/signup_nickname"
             android:inputType="textPassword"
             android:hint="@string/hint_nickname"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <RadioGroup
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gender_male"
+                    android:id="@+id/radioButton"/>
+                <RadioButton
+                    android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gender_female"
+                    android:id="@+id/radioButton2"/>
+            </LinearLayout>
+        </RadioGroup>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_spinner"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                android:id="@+id/spinner"/>
+        </LinearLayout>
         <Button
             android:id="@+id/btn_signup_submit"
             android:layout_width="match_parent"

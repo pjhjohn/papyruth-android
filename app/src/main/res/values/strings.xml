@@ -28,4 +28,10 @@
     <string name="menu_search">Menu Search</string>
     <string name="title_activity_login">title</string>
     <string name="user_dummy">pjhjohn@gmail.com</string>
+    <string name="signup_category_account">Account</string>
+    <string name="signup_category_info">Additional</string>
+    <string name="hint_name">Name</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="prompt_spinner">Year of Entrance</string>
 </resources>
