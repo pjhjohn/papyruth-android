@@ -31,7 +31,7 @@ public abstract class ClientFragmentWithListView<T> extends ClientFragment {
         else this.listId = AppConst.Resource.DEFAULT;
 
         /* Initialize other member variables */
-        this.items = new ArrayList<>();
+        this.items = new ArrayList<T>();
         this.adapter = new UniversalAdapter(this.items, this.getActivity());
 
         /* Bind Views */

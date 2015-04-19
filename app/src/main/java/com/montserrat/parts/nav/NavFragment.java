@@ -36,7 +36,7 @@ public class NavFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /* Initially, no SharedPreference used, set drawer initial index to ZERO */
+        /* Initially, with no SharedPreference used, set drawer initial index to ZERO */
         /*
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         this.isUserLeardedNav = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);

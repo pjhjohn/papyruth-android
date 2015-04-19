@@ -107,20 +107,21 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
             this.toolbarView.animate().translationY(-toolbarView.getHeight()).setInterpolator(new AccelerateInterpolator(2));
         }
         if(this.fabView != null && this.hideFloatingActionButtonOnScroll) {
-//            Animation in vertical
-//            int fabBottomMargin = lp.bottomMargin;
-//            this.fabView.animate().translationY(this.fabView.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+            //Vertical
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.fabView.getLayoutParams();
+            int fabBottomMargin = lp.bottomMargin;
+            this.fabView.animate().translationY(this.fabView.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
             //Horizontal
-            this.fabView.animate().translationX(this.fabView.getWidth()/2).setInterpolator(new AccelerateInterpolator(2)).start();
+            //this.fabView.animate().translationX(this.fabView.getWidth()/2).setInterpolator(new AccelerateInterpolator(2)).start();
         }
     }
     private void showViews() {
         if(this.toolbarView != null && this.hideToolbarOnScroll) this.toolbarView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         if(this.fabView != null && this.hideFloatingActionButtonOnScroll) {
-//            Animation-back in vertical
-//            this.fabView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            //Vertical
+            this.fabView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
             //Horizontal
-            this.fabView.animate().translationX(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            //this.fabView.animate().translationX(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
     }
 
