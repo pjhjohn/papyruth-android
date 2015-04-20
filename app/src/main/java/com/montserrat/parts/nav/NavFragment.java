@@ -3,12 +3,14 @@ package com.montserrat.parts.nav;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,6 +125,13 @@ public class NavFragment extends Fragment {
         this.iActiveNavItem = position;
         if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
         if (this.callback != null) this.callback.onNavItemSelected(position);
+
+        //testCode for DetailFragment
+        //By sss
+        if(position == 6){
+//            this.getActivity().setContentView(R.layout.fragment_detail);
+            Log.i("Activity2222", this.getActivity().toString());
+        }
     }
 
     @Override

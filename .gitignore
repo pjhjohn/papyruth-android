@@ -5,6 +5,7 @@
 /.idea/libraries
 .DS_Store
 /build
+/app/app.iml
 
 # Gradle Home under gradle.xml has dependency
 /.idea/gradle.xml

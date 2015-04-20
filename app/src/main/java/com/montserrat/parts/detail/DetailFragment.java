@@ -28,9 +28,6 @@ public class DetailFragment  extends Fragment {
 
     private int iActiveNavItem;
     private NavCallback callback;
-    private View fragmentContainerView;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +56,7 @@ public class DetailFragment  extends Fragment {
     private UniversalAdapter navAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_nav, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
         final ListView listview = (ListView) view.findViewById(R.id.nav_listview);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,45 +74,19 @@ public class DetailFragment  extends Fragment {
         return view;
     }
 
-    public boolean isDrawerOpen() {
-        return this.drawerLayout != null && this.drawerLayout.isDrawerOpen(this.fragmentContainerView);
-    }
-
 
 
 
     public void setUp(int fragment_id, DrawerLayout drawerLayout) {
-        this.fragmentContainerView = this.getActivity().findViewById(fragment_id);
-        this.drawerLayout = drawerLayout;
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        this.drawerToggle = new ActionBarDrawerToggle(this.getActivity(), drawerLayout, R.string.app_name, R.string.app_name) {
-            @Override
-            public void onDrawerClosed(View navView) {
-                super.onDrawerClosed(navView);
-                if (DetailFragment.this.isAdded()) DetailFragment.this.getActivity().invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerOpened(View navView) {
-                super.onDrawerClosed(navView);
-                if (DetailFragment.this.isAdded()) DetailFragment.this.getActivity().invalidateOptionsMenu();
-            }
-        };
-
-        this.drawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                DetailFragment.this.drawerToggle.syncState();
-            }
-        });
-        this.drawerLayout.setDrawerListener(this.drawerToggle);
     }
+
     private void selectItem(int position) {
         this.iActiveNavItem = position;
-        if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
         if (this.callback != null) this.callback.onNavItemSelected(position);
+
     }
 
     @Override
@@ -137,13 +108,11 @@ public class DetailFragment  extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        this.drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // navigation first
-        if (this.drawerToggle.onOptionsItemSelected(item)) return true;
         // actionbar second
         switch (item.getItemId()) {
             case R.id.menu_search:
