@@ -1,5 +1,7 @@
 package com.montserrat.parts.auth;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -25,7 +27,9 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
+import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +45,13 @@ public class AuthFragment extends ClientFragment {
 
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
+    private ViewPagerController pageController;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.pageController = (ViewPagerController) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -157,10 +168,8 @@ public class AuthFragment extends ClientFragment {
             vFocus.requestFocus();
         } else {
             try {
-                this.submit(new JSONObject()
-                        .put("email", email)
-                        .put("password", passwd)
-                );
+                this.setParameters(new JSONObject().put("email", email).put("password", passwd))
+                    .submit();
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -169,7 +178,6 @@ public class AuthFragment extends ClientFragment {
 
     @Override
     public void onResponse(JSONObject resp) {
-        Log.d("DEBUG", "onResponse Called with response of : " + resp.toString());
         super.onResponse(resp);
         try {
             if(resp.getBoolean("success")) this.getActivity().finish();
@@ -188,19 +196,6 @@ public class AuthFragment extends ClientFragment {
         Toast.makeText(AuthFragment.this.getActivity(), error.toString(), Toast.LENGTH_LONG).show();
     }
 
-    @Override protected String getEndpoint() {
-        return "http://pjhjohn.appspot.com/signin";
-    }
-    @Override protected int getFragmentLayoutId() {
-        return R.layout.fragment_auth;
-    }
-    @Override protected int getProgressViewId() {
-        return R.id.auth_progress;
-    }
-    @Override protected int getContentViewId() {
-        return R.id.auth_content;
-    }
-
     // TODO : Replace this with your own logic
     private boolean isEmailValid(String email) {
         return email.contains("@");
@@ -209,6 +204,19 @@ public class AuthFragment extends ClientFragment {
         return passwd.length() > 4;
     }
     private void attemptSignup() {
-        this.startActivity(new Intent(this.getActivity(), MainActivity.class));
+        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV);
+    }
+
+    public static Fragment newInstance() {
+        Fragment fragment = new AuthFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
+        bundle.putString(AppConst.Request.CONTROLLER, "signin");
+        bundle.putString(AppConst.Request.ACTION, "validate");
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
+        bundle.putInt(AppConst.Resource.PROGRESS, R.id.auth_progress);
+        bundle.putInt(AppConst.Resource.CONTENT, R.id.auth_content);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 }

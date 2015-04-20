@@ -1,11 +1,14 @@
 package com.montserrat.parts.auth;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.VolleyError;
+import com.montserrat.activity.R;
+import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
 
 import org.json.JSONObject;
@@ -21,40 +24,14 @@ public class SignUpUnivFragment extends ClientFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        // TODO : Fill in your code here.
-
         return view;
     }
 
-    /* TODO : FILL IT. It's necessary. */
-    @Override
-    protected int getFragmentLayoutId () {
-        return 0;
-    }
-
-    @Override
-    protected String getEndpoint () {
-        return null;
-    }
-
-    /* TODO : Fill if necessary */
-    @Override
-    protected int getProgressViewId() {
-        return 0;
-    }
-
-    @Override
-    protected int getContentViewId() {
-        return 0;
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        super.onResponse(response);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        super.onErrorResponse(error);
+    public static Fragment newInstance() {
+        Fragment fragment = new SignUpUnivFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 }

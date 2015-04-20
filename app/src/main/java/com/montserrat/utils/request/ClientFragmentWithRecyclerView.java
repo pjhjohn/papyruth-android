@@ -5,17 +5,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
+import com.android.volley.VolleyError;
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
+import com.montserrat.controller.AppConst;
 import com.montserrat.utils.recycler.HidingScrollListener;
 
 import org.json.JSONObject;
@@ -26,101 +28,129 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment{
-    private static final String TAG = "ClientFragment";
-
-    protected Toolbar toolbar = null;
-    protected FloatingActionButton fab = null;
-    protected SwipeRefreshLayout swipe = null;
-    protected T adapter = null;
-    protected List<E> items = null;
+public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener {
+    private Toolbar toolbarView;
+    private FloatingActionButton fabView;
+    protected SwipeRefreshLayout swipeRefreshView;
+    private RecyclerView recyclerView;
+    protected T adapter;
+    protected List<E> items;
+    private int toolbarId, fabId, swipeRefreshId, recyclerId;
+    private boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
+    private boolean isRequestFromSwipe, isPending;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        /* Bind Parameters passed via setArguments(Bundle bundle) */
+        if (this.args != null) {
+            this.toolbarId      = this.args.getInt(AppConst.Resource.TOOLBAR, AppConst.Resource.DEFAULT);
+            this.fabId          = this.args.getInt(AppConst.Resource.FAB, AppConst.Resource.DEFAULT);
+            this.swipeRefreshId = this.args.getInt(AppConst.Resource.SWIPE_REFRESH, AppConst.Resource.DEFAULT);
+            this.recyclerId     = this.args.getInt(AppConst.Resource.RECYCLER, AppConst.Resource.DEFAULT);
+        } else {
+            this.toolbarId      = AppConst.Resource.DEFAULT;
+            this.fabId          = AppConst.Resource.DEFAULT;
+            this.swipeRefreshId = AppConst.Resource.DEFAULT;
+            this.recyclerId     = AppConst.Resource.DEFAULT;
+        }
+        /* Initialize other member variables */
+        this.hideToolbarOnScroll = true;
+        this.hideFloatingActionButtonOnScroll = true;
+        this.isRequestFromSwipe = false;
+        this.isPending = false;
 
-        /* Register Toolbar */
-        this.toolbar = (Toolbar) this.getActivity().findViewById(this.getToolbarId());
-        if (this.toolbar == null) Log.d(TAG, "Couldn't find ID of toolbar");
+        /* Bind Views */
+        this.toolbarView = (Toolbar) this.getActivity().findViewById(this.toolbarId);
+        this.fabView = (FloatingActionButton) view.findViewById(this.fabId);
+        this.swipeRefreshView = (SwipeRefreshLayout) view.findViewById(this.swipeRefreshId);
+        if(this.swipeRefreshView != null) {
+            final int toolbarHeight = this.toolbarView == null? 0 : this.toolbarView.getHeight();
+            if(this.toolbarView != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
+            this.swipeRefreshView.setColorSchemeColors(this.getResources().getColor(R.color.appDefaultForegroundColor));
+            this.swipeRefreshView.setEnabled(false);
+            this.swipeRefreshView.setOnRefreshListener(this);
+        }
+        this.recyclerView = (RecyclerView) view.findViewById(this.recyclerId);
 
-        /* Register FAB */
-        this.fab = (FloatingActionButton) view.findViewById(this.getFloatingActionButtonId());
-        if (this.fab == null) Log.d(TAG, "Couldn't find ID of FAB");
+        /* Register RecyclerView & its Adapter n Items */
+        if(recyclerView != null) {
+            this.items = new ArrayList<>();
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity())); // TODO : dependency to LinearLayout
+            this.adapter = this.getAdapter(this.items);
+            recyclerView.setAdapter(this.adapter);
+            recyclerView.setOnScrollListener(new HidingScrollListener() {
+                @Override
+                public void onHide() {
+                    ClientFragmentWithRecyclerView.this.hideViews();
+                }
 
-        /* Register SwipeRefreshLayout */
-        this.swipe = (SwipeRefreshLayout) view.findViewById(this.getSwipeRefreshLayoutId());
-        if (this.swipe == null) Log.d(TAG, "Couldn't find ID of SwipeRefreshLayout");
-        else {
-            Log.d("DEBUG", "Height of Toolbar : " + this.toolbar.getHeight());
-            if(this.toolbar != null) this.swipe.setProgressViewOffset(false, PX2DP(this.toolbar.getHeight()), PX2DP(this.toolbar.getHeight() + 80));
-            this.swipe.setColorSchemeColors(this.getResources().getColor(R.color.appDefaultForegroundColor));
-            this.swipe.setEnabled(false);
+                @Override
+                public void onShow() {
+                    ClientFragmentWithRecyclerView.this.showViews();
+                }
+            });
         }
 
-        /* Register RecyclerView & its Adapter&Items */
-        this.items = new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(this.getRecyclerViewId());
-        if (recyclerView == null) throw new RuntimeException("Couldn't find RecyclerView");
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity())); // TODO : has issue of dependency on LinearLayout
-        this.adapter = this.getAdapter(this.items);
-        recyclerView.setAdapter(this.adapter);
-
-        recyclerView.setOnScrollListener(new HidingScrollListener() {
-            @Override
-            public void onHide() {
-                ClientFragmentWithRecyclerView.this.hideViews();
-            }
-
-            @Override
-            public void onShow() {
-                ClientFragmentWithRecyclerView.this.showViews();
-            }
-        });
         return view;
     }
 
     protected abstract T getAdapter (List<E> items);
-
-    protected int getToolbarId() {
-        return 0;
-    }
-
-    protected int getFloatingActionButtonId() {
-        return 0;
-    }
-
-    protected abstract int getRecyclerViewId();
-
-    protected int getSwipeRefreshLayoutId() { return 0; }
-
-
     private void hideViews() {
-        if(this.toolbar != null) {
-            this.toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        if(this.toolbarView != null && this.hideToolbarOnScroll) {
+            this.toolbarView.animate().translationY(-toolbarView.getHeight()).setInterpolator(new AccelerateInterpolator(2));
         }
-        if(this.fab != null) {
-            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.fab.getLayoutParams();
-            int fabBottomMargin = lp.bottomMargin;
-            this.fab.animate().translationY(this.fab.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+        if(this.fabView != null && this.hideFloatingActionButtonOnScroll) {
+//            Animation in vertical
+//            int fabBottomMargin = lp.bottomMargin;
+//            this.fabView.animate().translationY(this.fabView.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+            //Horizontal
+            this.fabView.animate().translationX(this.fabView.getWidth()/2).setInterpolator(new AccelerateInterpolator(2)).start();
         }
     }
-
     private void showViews() {
-        if(this.toolbar != null) this.toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        if(this.fab != null) this.fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        if(this.toolbarView != null && this.hideToolbarOnScroll) this.toolbarView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        if(this.fabView != null && this.hideFloatingActionButtonOnScroll) {
+//            Animation-back in vertical
+//            this.fabView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            //Horizontal
+            this.fabView.animate().translationX(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        }
     }
 
     @Override
-    public void submit(JSONObject jsonToRequest) {
-        super.submit(jsonToRequest);
-        this.swipe.setRefreshing(true);
+    public void submit() {
+        super.submit();
+        if(this.isPending) {
+            this.anotherRequestInProgress(); // handle duplicated reqeust
+            return;
+        }
+        this.isPending = true;
+        if(this.isRequestFromSwipe) this.swipeRefreshView.setRefreshing(true);
+    }
+
+    public abstract void anotherRequestInProgress ();
+
+    @Override
+    public void onRefresh() {
+        this.isRequestFromSwipe = true;
+        /* this block @ child class will call submit() */
     }
 
     @Override
     public void onResponse(JSONObject response) {
         super.onResponse(response);
-        this.swipe.setRefreshing(false);
+        if(this.isRequestFromSwipe) this.swipeRefreshView.setRefreshing(false);
+        this.isRequestFromSwipe = false;
+        this.isPending = false;
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        super.onErrorResponse(error);
+        if(this.isRequestFromSwipe) this.swipeRefreshView.setRefreshing(false);
+        this.isRequestFromSwipe = false;
+        this.isPending = false;
     }
 
     private int PX2DP(int px){

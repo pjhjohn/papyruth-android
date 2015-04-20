@@ -3,7 +3,6 @@ package com.montserrat.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -42,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
     @Override
     public void onNavItemSelected(int position) {
         this.getFragmentManager().beginTransaction()
-                .replace(R.id.container, FragmentFactory.create(FragmentFactory.Type.MAIN, position))
+                .replace(R.id.container, FragmentFactory.create(FragmentFactory.Type.MAIN))
                 .commit();
     }
 
@@ -63,6 +62,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
                     searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
                 }
                 searchView.setIconifiedByDefault(true);
+                searchView.setOnQueryTextListener(new queryTextListner());
+
             }
 
         if (!this.drawer.isDrawerOpen()) {
@@ -89,5 +90,21 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(this.title);
+    }
+
+
+    //searchview Listener
+    public class queryTextListner implements SearchView.OnQueryTextListener{
+
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        //자동완성 기능에 사용.
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            return false;
+        }
     }
 }

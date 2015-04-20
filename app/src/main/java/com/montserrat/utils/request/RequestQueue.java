@@ -11,6 +11,8 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by pjhjohn on 2015-04-12.
  */
+/* TODO : Image Caching */
+/* TODO : Is it okay to be a singleton? */
 public class RequestQueue {
     private static RequestQueue mInstance;
     private com.android.volley.RequestQueue mRequestQueue;

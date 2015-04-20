@@ -2,12 +2,13 @@ package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.montserrat.activity.R;
+import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
 
 import org.json.JSONArray;
@@ -16,70 +17,19 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter, RecyclerAdapter.Data> {
-    public MainFragment() {}
-
+public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAdapter, MainRecyclerAdapter.Holder.Data> {
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+        View view = super.onCreateView(inflater, container, args);
 
-        /* Register swipe's OnRefresh Action */
-        this.swipe.setEnabled(true);
-        this.swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh () {
-                MainFragment.this.submit(new JSONObject());
-            }
-        });
+        this.swipeRefreshView.setEnabled(true);
 
         return view;
     }
 
     @Override
-    protected int getSwipeRefreshLayoutId() { return R.id.swipe; }
-
-    @Override
-    protected int getToolbarId() {
-        return R.id.toolbar;
-    }
-
-    @Override
-    protected int getFloatingActionButtonId() {
-        return R.id.fab;
-    }
-
-    @Override
-    protected RecyclerAdapter getAdapter (List<RecyclerAdapter.Data> items) {
-        return new RecyclerAdapter(this.items);
-    }
-
-    @Override
-    protected int getRecyclerViewId () {
-        return R.id.main_recyclerview;
-    }
-
-
-
-    /* TODO : FILL IT. It's necessary. */
-    @Override
-    protected int getFragmentLayoutId () {
-        return R.layout.fragment_main;
-    }
-
-    @Override
-    protected String getEndpoint () {
-        return "http://pjhjohn.appspot.com/search";
-    }
-
-    /* TODO : Fill if necessary */
-    @Override
-    protected int getProgressViewId() {
-        return 0;
-    }
-
-    @Override
-    protected int getContentViewId() {
-        return 0;
+    protected MainRecyclerAdapter getAdapter (List<MainRecyclerAdapter.Holder.Data> items) {
+        return MainRecyclerAdapter.newInstance(this.items);
     }
 
     @Override
@@ -90,7 +40,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
                 JSONArray data = response.getJSONArray("data");
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject row = (JSONObject) data.get(i);
-                    this.items.add(new RecyclerAdapter.Data(
+                    this.items.add(new MainRecyclerAdapter.Holder.Data(
                             row.getString("subject"),
                             row.getString("professor"),
                             (float)row.getDouble("rating")
@@ -103,7 +53,29 @@ public class MainFragment extends ClientFragmentWithRecyclerView<RecyclerAdapter
         this.adapter.notifyDataSetChanged();
     }
 
-    public static Fragment newInstance (int i) {
-        return new MainFragment();
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        this.setParameters(new JSONObject()).submit();
+    }
+
+    @Override
+    public void anotherRequestInProgress () {
+        Toast.makeText(this.getActivity(), "Multiple Request Attemption", Toast.LENGTH_SHORT).show();
+    }
+
+    public static Fragment newInstance () {
+        Fragment fragment = new MainFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
+        bundle.putString(AppConst.Request.CONTROLLER, "search");
+        bundle.putString(AppConst.Request.ACTION, "dummy");
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_main);
+        bundle.putInt(AppConst.Resource.RECYCLER, R.id.main_recyclerview);
+        bundle.putInt(AppConst.Resource.FAB, R.id.fab);
+        bundle.putInt(AppConst.Resource.TOOLBAR, R.id.toolbar);
+        bundle.putInt(AppConst.Resource.SWIPE_REFRESH, R.id.swipe);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 }

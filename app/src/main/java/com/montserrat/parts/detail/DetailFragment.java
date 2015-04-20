@@ -139,6 +139,9 @@ public class DetailFragment  extends Fragment {
         super.onConfigurationChanged(newConfig);
         this.drawerToggle.onConfigurationChanged(newConfig);
     }
+        return view;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // navigation first
