@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.etc.Validator;
@@ -137,40 +139,23 @@ public class AuthFragment extends ClientFragment {
     }
 
     private void attemtSignin() {
-        vEmail.setError(null);
-        vPassword.setError(null);
-
-        String email = vEmail.getText().toString();
-        String passwd = vPassword.getText().toString();
-
-        boolean cancel = false;
-        View vFocus = null;
-
-        /* Client-side Form Validation */
-        if (!TextUtils.isEmpty(passwd) && !Validator.validatePassword(passwd)) {
-            vPassword.setError("This password is too short");
-            vFocus = vPassword;
-            cancel = true;
+        boolean success;
+        success = Validator.validate(vEmail, Validator.Type.EMAIL, Validator.REQUIRED);
+        if(!success) {
+            vEmail.requestFocus();
+            return;
         }
-        if (TextUtils.isEmpty(email)) {
-            vEmail.setError("This field is required");
-            vFocus = vEmail;
-            cancel = true;
-        } else if (!Validator.validateEmailAddress(email)) {
-            vEmail.setError("This email address is invalid");
-            vFocus = vEmail;
-            cancel = true;
+        success = Validator.validate(vPassword, Validator.Type.PASSWORD, Validator.REQUIRED);
+        if(!success) {
+            vPassword.requestFocus();
+            return;
         }
 
-        if (cancel) {
-            vFocus.requestFocus();
-        } else {
-            try {
-                this.setParameters(new JSONObject().put("email", email).put("password", passwd))
-                    .submit();
-            } catch (JSONException e){
-                e.printStackTrace();
-            }
+        try {
+            this.setParameters(new JSONObject().put("email", vEmail.getText().toString()).put("password", vPassword.getText().toString()))
+                .submit();
+        } catch (JSONException e){
+            e.printStackTrace();
         }
     }
 
@@ -178,7 +163,7 @@ public class AuthFragment extends ClientFragment {
     public void onResponse(JSONObject resp) {
         super.onResponse(resp);
         try {
-            if(resp.getBoolean("success")) this.getActivity().finish();
+            if(resp.getBoolean("success")) this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
             else {
                 this.vPassword.setError("Invalid Password");
                 this.vPassword.requestFocus();
