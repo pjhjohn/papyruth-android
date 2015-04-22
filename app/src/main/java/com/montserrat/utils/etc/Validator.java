@@ -8,7 +8,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.montserrat.controller.AppManager;
 
@@ -19,6 +18,7 @@ import java.util.Queue;
 
 /**
  * Created by pjhjohn on 2015-04-19.
+ * Validation class for multiple views that takes some behavior for fill-up forms.
  */
 public class Validator {
     public static final boolean REQUIRED = true;
@@ -45,18 +45,18 @@ public class Validator {
         return errorMsg == null ? null : field;
     }
 
-    public static CharSequence validateEmail(String email) {
+    private static CharSequence validateEmail(String email) {
         boolean success = email.contains("@");
         return success ? null : "Invalid Email Format."; // TODO : return error message value should be in R.string.~
     }
-    public static CharSequence validatePassword(String password) {
+    private static CharSequence validatePassword(String password) {
         boolean success = password.length() > 4;
         return success ? null  : "Password is too short";
     }
-    public static CharSequence validateName(String name) {
+    private static CharSequence validateName(String name) {
         return null; // TODO : Should connect to server if there exist unique property on the field.
     }
-    public static CharSequence validateNickName(String nickname) {
+    private static CharSequence validateNickName(String nickname) {
         return null; // TODO : Should connect to server if there exist unique property on the field.
     }
 
@@ -125,7 +125,7 @@ public class Validator {
             return errorView;
         }
     }
-    public static CharSequence validateAdmissionYear(Object admissionYear) {
+    private static CharSequence validateAdmissionYear(Object admissionYear) {
         try {
             int admissionyear = Integer.parseInt((String) admissionYear);
             return admissionyear >= 2000 ? null : "Invalid Range of Admission Year";
