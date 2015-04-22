@@ -1,7 +1,18 @@
 package com.montserrat.utils.etc;
 
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Created by pjhjohn on 2015-04-19.
@@ -13,15 +24,44 @@ public class Validator {
      * @return success flag of validation
      */
     public static final boolean REQUIRED = true;
+    public static final boolean NOT_REQUIRED = false;
     private static final boolean FAIL = false;
     private static final boolean SUCCESS = true;
     public static enum Type {
-        EMAIL, PASSWORD, NAME, NICKNAME, GENDER, ADMISSION_YEAR
+        EMAIL, PASSWORD, NAME, NICKNAME, ADMISSION_YEAR
     }
-    public static boolean validate(EditText field, Type fieldType) {
-        return Validator.validate(field, fieldType, false);
+    public static boolean validate(RadioGroup group) {
+        return Validator.validate(group, Validator.NOT_REQUIRED);
     }
-    public static boolean validate(EditText field, Type fieldType, boolean required) {
+
+    public static boolean validate(RadioGroup group, boolean required) {
+        List<RadioButton> buttons = new ArrayList<RadioButton>();
+        /* Get RadioButton List of RadioGroup by running DFS */
+        Queue<ViewGroup> queue = new LinkedList<ViewGroup>();
+        queue.add(group);
+        while (!queue.isEmpty()) {
+            ViewGroup head = queue.remove();
+            for (int i = 0; i < head.getChildCount(); i++) {
+                View child = head.getChildAt(i);
+                if (child instanceof ViewGroup) {
+                    queue.add((ViewGroup) child);
+                } else if (child instanceof RadioButton) {
+                    buttons.add((RadioButton) child);
+                } else continue;
+            }
+        }
+        if (required && group.getCheckedRadioButtonId() == -1) {
+            for (RadioButton button : buttons) button.setError("Should choose one of these");
+            return Validator.FAIL;
+        }
+        for (RadioButton button : buttons) button.setError(null);
+        return Validator.SUCCESS;
+    }
+
+    public static boolean validate(EditText field, Type textType) {
+        return Validator.validate(field, textType, Validator.NOT_REQUIRED);
+    }
+    public static boolean validate(EditText field, Type textType, boolean required) {
         String fieldValue = field.getText().toString();
         if (required) {
             if (TextUtils.isEmpty(fieldValue)) {
@@ -30,14 +70,14 @@ public class Validator {
             }
         }
         CharSequence validationResponse = null;
-        switch(fieldType) {
+        switch(textType) {
             case EMAIL         : field.setError(validationResponse = Validator.validateEmail(fieldValue));         break;
             case PASSWORD      : field.setError(validationResponse = Validator.validatePassword(fieldValue));      break;
             case NAME          : field.setError(validationResponse = Validator.validateName(fieldValue));          break;
             case NICKNAME      : field.setError(validationResponse = Validator.validateNickName(fieldValue));      break;
-            default: return false;
+            default: return Validator.FAIL;
         }
-        return validationResponse == null;
+        return validationResponse == null ? Validator.SUCCESS : Validator.FAIL;
     }
 
     public static CharSequence validateEmail(String email) {

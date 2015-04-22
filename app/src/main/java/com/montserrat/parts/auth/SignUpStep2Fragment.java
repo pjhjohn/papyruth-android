@@ -10,6 +10,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -69,6 +70,23 @@ public class SignUpStep2Fragment extends ClientFragment {
     }
 
     public void attemptSignUp() {
+        UserInfo.getInstance().setEmail(vEmail.getText().toString());
+        UserInfo.getInstance().setName(vName.getText().toString());
+        UserInfo.getInstance().setNickName(vNickname.getText().toString());
+        UserInfo.getInstance().setGender(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
+//        UserInfo.getInstance().setAdmissionYear();
+        if(UserInfo.getInstance().isDataReadyOnStep2()) {
+            this.setParameters(null).submit();
+        }
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        try {
+            if (response.getBoolean("success")) this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -89,8 +107,8 @@ public class SignUpStep2Fragment extends ClientFragment {
         success = Validator.validate(vNickname, Validator.Type.NICKNAME, Validator.REQUIRED);
         if(!success) return vNickname;
         /* gender : TODO - Handle RadioGroup */
-//        success = Validator.validate(vGender, Validator.Type.GENDER, Validator.REQUIRED);
-//        if(!success) return vGender;
+        success = Validator.validate(vGender, Validator.REQUIRED);
+        if(!success) return vGender;
         /* admission year : TODO - Handle Spinner*/
 //        success = Validator.validate(vAdmission, Validator.Type.ADMISSION_YEAR, Validator.REQUIRED);
 //        if(!success) return vAdmission;

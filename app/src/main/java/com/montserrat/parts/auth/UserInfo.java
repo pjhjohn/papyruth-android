@@ -55,11 +55,11 @@ public class UserInfo {
         this.isBoy = isBoy;
     }
 
-    public boolean isReadyToSubmitForFirstStep() {
+    public boolean isDataReadyOnStep1 () {
         return this.school != null;
     }
 
-    public boolean isReadyToSubmitForSecondStep() {
+    public boolean isDataReadyOnStep2 () {
         return this.school != null
                 && this.name != null
                 && this.nickname != null

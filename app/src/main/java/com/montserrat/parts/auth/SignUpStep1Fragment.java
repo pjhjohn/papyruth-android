@@ -37,7 +37,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        this.submit();
+        this.submit(); // TODO : request with api-defined form
 
         return view;
     }
@@ -49,7 +49,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRe
 
     @Override
     public void onPendingRequest () {
-        Toast.makeText(this.getActivity(), "Multiple Request Attemption", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getActivity(), "Multiple Request Attemption", Toast.LENGTH_SHORT).show(); // TODO : user R.string.~
     }
 
     @Override
@@ -93,7 +93,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRe
     public void recyclerViewListClicked (View view, int position) {
         Toast.makeText(this.getActivity(), "Current Position Has Position of " + position, Toast.LENGTH_SHORT).show();
         UserInfo.getInstance().setSchool(this.items.get(position).schoolCode);
-        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2);
+        if(UserInfo.getInstance().isDataReadyOnStep1()) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2);
     }
 
     @Override
