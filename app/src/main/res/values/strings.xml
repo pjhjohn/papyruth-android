@@ -16,10 +16,12 @@
     <!-- Strings related to login -->
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_up">Sign up</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="field_invalid_required">This field is required</string>
+    <string name="field_invalid_email">Invalid e-mail format</string>
+    <string name="field_invalid_password">Password is too short</string>
+    <string name="field_wrong_password">Wrong password</string>
+    <string name="field_invalid_gender">There is no such gender.</string>
+    <string name="field_invalid_admission_year">Invalid range of admission year</string>
 
     <!--common-->
     <string name="next">Next</string>

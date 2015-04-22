@@ -16,10 +16,12 @@
     <!-- Strings related to login -->
     <string name="action_sign_in">로그인</string>
     <string name="action_sign_up">회원가입</string>
-    <string name="error_invalid_email">이메일 형식이 잘못되었습니다.</string>
-    <string name="error_invalid_password">비밀번호가 너무 짧습니다.</string>
-    <string name="error_incorrect_password">비밀번호가 틀립니다.</string>
-    <string name="error_field_required">채워주세요</string>
+    <string name="field_invalid_required">필수 항목입니다</string>
+    <string name="field_invalid_email">잘못된 이메일 형식입니다</string>
+    <string name="field_invalid_password">비밀번호가 너무 짧습니다</string>
+    <string name="field_wrong_password">비밀번호가 틀렸습니다</string>
+    <string name="field_invalid_gender">존재하지 않는 성별입니다</string>
+    <string name="field_invalid_admission_year">해당 입학년도는 지원되지 않습니다</string>
 
     <!--common-->
     <string name="next">다음</string>

@@ -3,16 +3,15 @@ package com.montserrat.parts.auth;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
@@ -74,7 +73,7 @@ public class SignUpStep2Fragment extends ClientFragment {
         UserInfo.getInstance().setName(vName.getText().toString());
         UserInfo.getInstance().setNickName(vNickname.getText().toString());
         UserInfo.getInstance().setGender(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
-//        UserInfo.getInstance().setAdmissionYear();
+        UserInfo.getInstance().setAdmissionYear(new Integer((String)vAdmission.getSelectedItem()));
         if(UserInfo.getInstance().isDataReadyOnStep2()) {
             this.setParameters(null).submit();
         }
@@ -83,7 +82,8 @@ public class SignUpStep2Fragment extends ClientFragment {
     @Override
     public void onResponse(JSONObject response) {
         try {
-            if (response.getBoolean("success")) this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+            if (response.getBoolean("success")) this.onSignUpSuccess();
+            else this.onSignUpFailure(response);
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -95,23 +95,23 @@ public class SignUpStep2Fragment extends ClientFragment {
     public View validate() {
         boolean success = false;
         /* email */
-        success = Validator.validate(vEmail, Validator.Type.EMAIL, Validator.REQUIRED);
+        success = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
         if(!success) return vEmail;
-        /* password */
-        success = Validator.validate(vPassword, Validator.Type.PASSWORD, Validator.REQUIRED);
+        /* password - TODO : Should handle PASSWORD ENCRYPTION */
+        success = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
         if(!success) return vPassword;
         /* name */
-        success = Validator.validate(vName, Validator.Type.NAME, Validator.REQUIRED);
+        success = Validator.validate(vName, Validator.TextType.NAME, Validator.REQUIRED);
         if(!success) return vName;
         /* nickname */
-        success = Validator.validate(vNickname, Validator.Type.NICKNAME, Validator.REQUIRED);
+        success = Validator.validate(vNickname, Validator.TextType.NICKNAME, Validator.REQUIRED);
         if(!success) return vNickname;
-        /* gender : TODO - Handle RadioGroup */
+        /* gender */
         success = Validator.validate(vGender, Validator.REQUIRED);
         if(!success) return vGender;
-        /* admission year : TODO - Handle Spinner*/
-//        success = Validator.validate(vAdmission, Validator.Type.ADMISSION_YEAR, Validator.REQUIRED);
-//        if(!success) return vAdmission;
+        /* admission year */
+        success = Validator.validate(vAdmission, Validator.SpinnerType.ADMISSION, Validator.REQUIRED);
+        if(!success) return vAdmission;
         /* Initialize Errors to null */
 
         return null; // Passed all valiation rules
@@ -119,6 +119,9 @@ public class SignUpStep2Fragment extends ClientFragment {
 
     public void onSignUpSuccess() {
         SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
+    }
+    public void onSignUpFailure(JSONObject response) {
+        Toast.makeText(this.getActivity(), response.toString(), Toast.LENGTH_LONG).show();
     }
 
     public static Fragment newInstance() {

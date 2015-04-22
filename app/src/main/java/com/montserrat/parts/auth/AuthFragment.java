@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,12 +139,12 @@ public class AuthFragment extends ClientFragment {
 
     private void attemtSignin() {
         boolean success;
-        success = Validator.validate(vEmail, Validator.Type.EMAIL, Validator.REQUIRED);
+        success = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
         if(!success) {
             vEmail.requestFocus();
             return;
         }
-        success = Validator.validate(vPassword, Validator.Type.PASSWORD, Validator.REQUIRED);
+        success = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
         if(!success) {
             vPassword.requestFocus();
             return;
