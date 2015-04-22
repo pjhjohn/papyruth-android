@@ -23,19 +23,17 @@ import java.util.Queue;
 public class Validator {
     public static final boolean REQUIRED = true;
     public static final boolean NOT_REQUIRED = false;
-    private static final boolean FAIL = false;
-    private static final boolean SUCCESS = true;
 
     /* EditText */
     public static enum TextType { EMAIL, PASSWORD, NAME, NICKNAME }
-    public static boolean validate(EditText field, TextType textType) {
+    public static View validate(EditText field, TextType textType) {
         return Validator.validate(field, textType, Validator.NOT_REQUIRED);
     }
-    public static boolean validate(EditText field, TextType textType, boolean required) {
+    public static View validate(EditText field, TextType textType, boolean required) {
         String fieldValue = field.getText().toString();
         if (required && TextUtils.isEmpty(fieldValue)) {
             field.setError("This field is required");
-            return FAIL;
+            return field;
         }
         CharSequence errorMsg = null;
         switch(textType) {
@@ -44,7 +42,7 @@ public class Validator {
             case NAME          : field.setError(errorMsg = Validator.validateName(fieldValue));          break;
             case NICKNAME      : field.setError(errorMsg = Validator.validateNickName(fieldValue));      break;
         }
-        return errorMsg == null ? Validator.SUCCESS : Validator.FAIL;
+        return errorMsg == null ? null : field;
     }
 
     public static CharSequence validateEmail(String email) {
@@ -63,10 +61,10 @@ public class Validator {
     }
 
     /* RadioGroup */
-    public static boolean validate(RadioGroup group) {
+    public static View validate(RadioGroup group) {
         return Validator.validate(group, Validator.NOT_REQUIRED);
     }
-    public static boolean validate(RadioGroup group, boolean required) {
+    public static View validate(RadioGroup group, boolean required) {
         List<RadioButton> buttons = new ArrayList<RadioButton>();
         /* Get RadioButton List of RadioGroup by running DFS */
         Queue<ViewGroup> queue = new LinkedList<ViewGroup>();
@@ -83,38 +81,49 @@ public class Validator {
             }
         }
         if (required && group.getCheckedRadioButtonId() == -1) {
-            for (RadioButton button : buttons) button.setError("Should choose one of these");
-            return Validator.FAIL;
+            if (buttons.isEmpty()) return group;
+            else {
+                for (RadioButton button : buttons) button.setError("Should choose one of these");
+                RadioButton button = buttons.get(0);
+                button.setFocusable(true);
+                button.setFocusableInTouchMode(true);
+                return button;
+            }
         }
-        for (RadioButton button : buttons) button.setError(null);
-        return Validator.SUCCESS;
+        if(buttons.isEmpty()) return group;
+        else {
+            for (RadioButton button : buttons) button.setError(null);
+            return null;
+        }
     }
 
     public static enum SpinnerType {
         ADMISSION
     }
-    public static boolean validate(Spinner spinner, SpinnerType spinnerType) {
+    public static View validate(Spinner spinner, SpinnerType spinnerType) {
         return Validator.validate(spinner, spinnerType, Validator.NOT_REQUIRED);
     }
-    public static boolean validate(Spinner spinner, SpinnerType spinnerType, boolean required) {
+    public static View validate(Spinner spinner, SpinnerType spinnerType, boolean required) {
         Object activeSpinnerItem = spinner.getSelectedItem();
-        if(required && activeSpinnerItem == null) {
-            if(spinner.getSelectedView()==null)
-                Toast.makeText(AppManager.getInstance().getContext(), "getSelectedView is null", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(AppManager.getInstance().getContext(), "getSelectedView exists", Toast.LENGTH_SHORT).show();
-            // TODO : SOMEHOW DO SOMETHING SIMILAR TO THAT OF .setError(CharSequence msg) for EditText
-            return Validator.FAIL;
-        }
+        if(required && activeSpinnerItem == null) return null;
+
         CharSequence errorMsg = null;
+        View errorView = null;
         switch(spinnerType) {
             case ADMISSION:
                 errorMsg = Validator.validateAdmissionYear(activeSpinnerItem);
-                View selectedView = spinner.getSelectedView();
-                if(selectedView instanceof TextView) ((TextView) selectedView).setError(errorMsg);
+                errorView = spinner.getSelectedView();
+                if(errorView instanceof TextView) ((TextView) errorView).setError(errorMsg);
                 break;
         }
-        return errorMsg == null ? Validator.SUCCESS : Validator.FAIL;
+
+        if(errorMsg == null) return null;
+        else if(errorView == null) return null;
+        else {
+            errorView.setFocusable(true);
+            errorView.setFocusableInTouchMode(true);
+            return errorView;
+        }
     }
     public static CharSequence validateAdmissionYear(Object admissionYear) {
         try {

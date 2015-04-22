@@ -138,24 +138,23 @@ public class AuthFragment extends ClientFragment {
     }
 
     private void attemtSignin() {
-        boolean success;
-        success = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
-        if(!success) {
-            vEmail.requestFocus();
-            return;
-        }
-        success = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
-        if(!success) {
-            vPassword.requestFocus();
-            return;
-        }
+        List<View> vFailed = new ArrayList<View>();
+        View candidate;
+        /* email */
+        candidate = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
+        /* password - TODO : Should handle PASSWORD ENCRYPTION */
+        candidate = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
 
-        try {
-            this.setParameters(new JSONObject().put("email", vEmail.getText().toString()).put("password", vPassword.getText().toString()))
-                .submit();
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
+        if(vFailed.isEmpty()) {
+            try {
+                this.setParameters(new JSONObject().put("email", vEmail.getText().toString()).put("password", vPassword.getText().toString()))
+                        .submit();
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        } else vFailed.get(0).requestFocus();
     }
 
     @Override

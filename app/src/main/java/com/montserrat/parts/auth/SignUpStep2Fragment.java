@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -95,28 +96,29 @@ public class SignUpStep2Fragment extends ClientFragment {
      * Validate data in the form and returns if there exist View to be re-checked.
      */
     public View validate() {
-        boolean success = false;
+        List<View> vFailed = new ArrayList<View>();
+        View candidate;
         /* email */
-        success = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
-        if(!success) return vEmail;
+        candidate = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
         /* password - TODO : Should handle PASSWORD ENCRYPTION */
-        success = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
-        if(!success) return vPassword;
+        candidate = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
         /* name */
-        success = Validator.validate(vName, Validator.TextType.NAME, Validator.REQUIRED);
-        if(!success) return vName;
+        candidate = Validator.validate(vName, Validator.TextType.NAME, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
         /* nickname */
-        success = Validator.validate(vNickname, Validator.TextType.NICKNAME, Validator.REQUIRED);
-        if(!success) return vNickname;
+        candidate = Validator.validate(vNickname, Validator.TextType.NICKNAME, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
         /* gender */
-        success = Validator.validate(vGender, Validator.REQUIRED);
-        if(!success) return vGender;
+        candidate = Validator.validate(vGender, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
         /* admission year */
-        success = Validator.validate(vAdmission, Validator.SpinnerType.ADMISSION, Validator.REQUIRED);
-        if(!success) return vAdmission;
+        candidate = Validator.validate(vAdmission, Validator.SpinnerType.ADMISSION, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
         /* Initialize Errors to null */
 
-        return null; // Passed all valiation rules
+        return vFailed.isEmpty() ? null : vFailed.get(0);
     }
 
     public void onSignUpSuccess() {
