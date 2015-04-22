@@ -20,6 +20,8 @@
     <string name="field_invalid_email">Invalid e-mail format</string>
     <string name="field_invalid_password">Password is too short</string>
     <string name="field_wrong_password">Wrong password</string>
+    <string name="field_invalid_name">Name is too long</string>
+    <string name="field_invalid_nickname">Nickname is too long</string>
     <string name="field_invalid_gender">There is no such gender.</string>
     <string name="field_invalid_admission_year">Invalid range of admission year</string>
 

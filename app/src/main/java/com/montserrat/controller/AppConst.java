@@ -5,6 +5,8 @@ package com.montserrat.controller;
  */
 public class AppConst {
     public static final int MIN_ADMISSION_YEAR = 1900;
+    public static final int MAX_NAME_BYTES = 20;
+    public static final int MAX_NICKNAME_BYTES = 20;
 
     public static class Resource {
         /* For ClientFragment */

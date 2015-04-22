@@ -8,7 +8,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.montserrat.activity.R;
+import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
 
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class Validator {
     public static View validate(EditText field, TextType textType, boolean required) {
         String fieldValue = field.getText().toString();
         if (required && TextUtils.isEmpty(fieldValue)) {
-            field.setError("This field is required");
+            field.setError(AppManager.getInstance().getString(R.string.field_invalid_required));
             return field;
         }
         CharSequence errorMsg = null;
@@ -47,17 +50,20 @@ public class Validator {
 
     private static CharSequence validateEmail(String email) {
         boolean success = email.contains("@");
-        return success ? null : "Invalid Email Format."; // TODO : return error message value should be in R.string.~
+        return success ? null : AppManager.getInstance().getString(R.string.field_invalid_email);
     }
     private static CharSequence validatePassword(String password) {
         boolean success = password.length() > 4;
-        return success ? null  : "Password is too short";
+        return success ? null : AppManager.getInstance().getString(R.string.field_invalid_password);
     }
     private static CharSequence validateName(String name) {
-        return null; // TODO : Should connect to server if there exist unique property on the field.
+        Toast.makeText(AppManager.getInstance().getContext(), name.getBytes().length+"",Toast.LENGTH_LONG).show();
+        boolean success = name.getBytes().length <= AppConst.MAX_NAME_BYTES;
+        return success ? null : AppManager.getInstance().getString(R.string.field_invalid_name);
     }
     private static CharSequence validateNickName(String nickname) {
-        return null; // TODO : Should connect to server if there exist unique property on the field.
+        boolean success = nickname.getBytes().length <= AppConst.MAX_NICKNAME_BYTES;
+        return success ? null : AppManager.getInstance().getString(R.string.field_invalid_nickname);
     }
 
     /* RadioGroup */
@@ -77,13 +83,13 @@ public class Validator {
                     queue.add((ViewGroup) child);
                 } else if (child instanceof RadioButton) {
                     buttons.add((RadioButton) child);
-                } else continue;
+                }
             }
         }
         if (required && group.getCheckedRadioButtonId() == -1) {
             if (buttons.isEmpty()) return group;
             else {
-                for (RadioButton button : buttons) button.setError("Should choose one of these");
+                for (RadioButton button : buttons) button.setError(AppManager.getInstance().getString(R.string.field_invalid_required));
                 RadioButton button = buttons.get(0);
                 button.setFocusable(true);
                 button.setFocusableInTouchMode(true);
@@ -126,13 +132,7 @@ public class Validator {
         }
     }
     private static CharSequence validateAdmissionYear(Object admissionYear) {
-        try {
-            int admissionyear = Integer.parseInt((String) admissionYear);
-            return admissionyear >= 2000 ? null : "Invalid Range of Admission Year";
-        } catch (ClassCastException e) {
-            return "Error During Casting Object to String";
-        } catch (NumberFormatException e) {
-            return "Error During Casting String to int";
-        }
+        if (admissionYear == null) return null;
+        else return (Integer) admissionYear >= AppConst.MIN_ADMISSION_YEAR ? null : AppManager.getInstance().getString(R.string.field_invalid_admission_year);
     }
 }

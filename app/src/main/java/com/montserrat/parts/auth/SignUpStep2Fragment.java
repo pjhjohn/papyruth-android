@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.controller.AppManager;
 import com.montserrat.utils.etc.Validator;
 import com.montserrat.utils.request.ClientFragment;
 
@@ -53,10 +52,10 @@ public class SignUpStep2Fragment extends ClientFragment {
 
         /* admission year */
         vAdmission = (Spinner) view.findViewById(R.id.signup_admission);
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<Integer> list = new ArrayList<Integer>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for(int year = currentYear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(""+year);
-        vAdmission.setAdapter(new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
+        for(int year = currentYear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(year);
+        vAdmission.setAdapter(new ArrayAdapter<Integer>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
 
         /* button */
         view.findViewById(R.id.btn_signup_submit).setOnClickListener(new View.OnClickListener() {
@@ -67,7 +66,6 @@ public class SignUpStep2Fragment extends ClientFragment {
                 else SignUpStep2Fragment.this.attemptSignUp();
             }
         });
-        AppManager.getInstance().setContext(this.getActivity());
         return view;
     }
 
@@ -76,7 +74,7 @@ public class SignUpStep2Fragment extends ClientFragment {
         UserInfo.getInstance().setName(vName.getText().toString());
         UserInfo.getInstance().setNickName(vNickname.getText().toString());
         UserInfo.getInstance().setGender(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
-        UserInfo.getInstance().setAdmissionYear(new Integer((String)vAdmission.getSelectedItem()));
+        UserInfo.getInstance().setAdmissionYear((Integer)vAdmission.getSelectedItem());
         if(UserInfo.getInstance().isDataReadyOnStep2()) {
             this.setParameters(null).submit();
         }
