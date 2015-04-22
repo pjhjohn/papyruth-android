@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
+import com.montserrat.controller.AppManager;
 import com.montserrat.utils.etc.Validator;
 import com.montserrat.utils.request.ClientFragment;
 
@@ -65,6 +66,7 @@ public class SignUpStep2Fragment extends ClientFragment {
                 else SignUpStep2Fragment.this.attemptSignUp();
             }
         });
+        AppManager.getInstance().setContext(this.getActivity());
         return view;
     }
 

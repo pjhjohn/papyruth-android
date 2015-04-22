@@ -4,7 +4,7 @@ package com.montserrat.controller;
  * Created by pjhjohn on 2015-04-16.
  */
 public class AppConst {
-    public static final int MIN_ADMISSION_YEAR = 2000;
+    public static final int MIN_ADMISSION_YEAR = 1900;
 
     public static class Resource {
         /* For ClientFragment */

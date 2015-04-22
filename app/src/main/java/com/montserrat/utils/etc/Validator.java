@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.montserrat.controller.AppManager;
 
@@ -97,6 +99,10 @@ public class Validator {
     public static boolean validate(Spinner spinner, SpinnerType spinnerType, boolean required) {
         Object activeSpinnerItem = spinner.getSelectedItem();
         if(required && activeSpinnerItem == null) {
+            if(spinner.getSelectedView()==null)
+                Toast.makeText(AppManager.getInstance().getContext(), "getSelectedView is null", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(AppManager.getInstance().getContext(), "getSelectedView exists", Toast.LENGTH_SHORT).show();
             // TODO : SOMEHOW DO SOMETHING SIMILAR TO THAT OF .setError(CharSequence msg) for EditText
             return Validator.FAIL;
         }
@@ -104,7 +110,8 @@ public class Validator {
         switch(spinnerType) {
             case ADMISSION:
                 errorMsg = Validator.validateAdmissionYear(activeSpinnerItem);
-                // TODO : SOMEHOW DO SOMETHING SIMILAR TO THAT OF .setError(CharSequence msg) for EditText with errorMsg
+                View selectedView = spinner.getSelectedView();
+                if(selectedView instanceof TextView) ((TextView) selectedView).setError(errorMsg);
                 break;
         }
         return errorMsg == null ? Validator.SUCCESS : Validator.FAIL;
