@@ -8,6 +8,7 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 
 import com.montserrat.controller.AppConst;
+import com.montserrat.controller.AppManager;
 import com.montserrat.parts.FragmentFactory;
 import com.montserrat.utils.viewpager.FlexibleViewPager;
 import com.montserrat.utils.viewpager.ViewPagerController;
@@ -28,6 +29,8 @@ public class AuthActivity extends Activity implements ViewPagerController {
         this.viewPagerAdapter = new SlideViewPagerAdapter(this.getFragmentManager());
         this.viewPager.setAdapter(this.viewPagerAdapter);
         this.viewPager.setSwipeEnabled(false);
+
+        AppManager.getInstance().setContext(this);
     }
 
     @Override

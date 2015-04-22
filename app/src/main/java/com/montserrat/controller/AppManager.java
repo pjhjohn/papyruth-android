@@ -28,4 +28,8 @@ public class AppManager {
     public Context getContext() {
         return this.context;
     }
+    public String getString(int stringResId) throws Resources.NotFoundException {
+        if(this.context==null) throw new Resources.NotFoundException("You must set Context to AppManager before calling getResources()");
+        else return this.context.getResources().getString(stringResId);
+    }
 }
