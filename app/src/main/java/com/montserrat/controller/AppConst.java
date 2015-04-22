@@ -4,7 +4,8 @@ package com.montserrat.controller;
  * Created by pjhjohn on 2015-04-16.
  */
 public class AppConst {
-    public static final int MIN_ADMISSION_YEAR = 1900;
+    public static final int MIN_ADMISSION_YEAR = 2000;
+    /* KOREAN : 1 WORD == 3 BYTES */
     public static final int MAX_NAME_BYTES = 20;
     public static final int MAX_NICKNAME_BYTES = 20;
 

@@ -57,7 +57,6 @@ public class Validator {
         return success ? null : AppManager.getInstance().getString(R.string.field_invalid_password);
     }
     private static CharSequence validateName(String name) {
-        Toast.makeText(AppManager.getInstance().getContext(), name.getBytes().length+"",Toast.LENGTH_LONG).show();
         boolean success = name.getBytes().length <= AppConst.MAX_NAME_BYTES;
         return success ? null : AppManager.getInstance().getString(R.string.field_invalid_name);
     }
@@ -66,7 +65,7 @@ public class Validator {
         return success ? null : AppManager.getInstance().getString(R.string.field_invalid_nickname);
     }
 
-    /* RadioGroup */
+    /* RadioGroup - TODO : By enabling setFocusableInTouchMode, needs 2 click to actually click the button. Will find way to override it. */
     public static View validate(RadioGroup group) {
         return Validator.validate(group, Validator.NOT_REQUIRED);
     }
@@ -103,6 +102,7 @@ public class Validator {
         }
     }
 
+    /* Spinner - TODO : ONLY (!) mark is showed. not critical. */
     public static enum SpinnerType {
         ADMISSION
     }
@@ -132,7 +132,7 @@ public class Validator {
         }
     }
     private static CharSequence validateAdmissionYear(Object admissionYear) {
-        if (admissionYear == null) return null;
+        if (admissionYear == null) return AppManager.getInstance().getString(R.string.field_invalid_admission_year);
         else return (Integer) admissionYear >= AppConst.MIN_ADMISSION_YEAR ? null : AppManager.getInstance().getString(R.string.field_invalid_admission_year);
     }
 }
