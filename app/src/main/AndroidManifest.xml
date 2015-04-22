@@ -29,20 +29,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SubjectActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".MainActivity"/>
-        <activity
-            android:name=".SubjectDetailActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".SubjectActivity"/>
-        <activity
             android:name=".ProfessorGalleryActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".SubjectActivity"/>
-        <activity
-            android:name=".ProfessorGalleryDetailActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".ProfessorGalleryActivity"/>
+            android:parentActivityName=".MainActivity"/>
     </application>
 </manifest>

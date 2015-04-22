@@ -34,11 +34,10 @@ public class AppConst {
     }
     public static class ViewPager {
         public static class Auth {
-            public static final int LENGTH = 4;
+            public static final int LENGTH = 3;
             public static final int AUTH = 0;
             public static final int SIGNUP_STEP1 = 1;
             public static final int SIGNUP_STEP2 = 2;
-            public static final int SIGNUP_STEP3 = 3;
         }
         public static class Main {
 
