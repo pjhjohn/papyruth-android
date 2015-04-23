@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.validator.Validator;
 
 import org.json.JSONException;
 import org.json.JSONObject;

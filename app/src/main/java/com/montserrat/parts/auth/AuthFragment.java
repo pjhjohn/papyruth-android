@@ -26,8 +26,8 @@ import com.android.volley.VolleyError;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONException;

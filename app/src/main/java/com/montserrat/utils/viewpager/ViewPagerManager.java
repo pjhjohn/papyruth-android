@@ -3,12 +3,8 @@ package com.montserrat.utils.viewpager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.View;
 
-import com.montserrat.controller.AppConst;
 import com.montserrat.parts.FragmentFactory;
 
 import java.util.Stack;
@@ -49,14 +45,12 @@ public class ViewPagerManager implements ViewPagerController {
     public void setCurrentPage(int pageNum, boolean addToBackStack) {
         this.addToBackStack = addToBackStack;
         this.pager.setCurrentItem(pageNum);
-        Log.d("DEBUG", "page set to #" + pageNum + ", history length : " + this.history.size());
     }
 
     /**
      * @return true if override is succeed, false otherwise.
      */
     public boolean onBackPressed() {
-        Log.d("DEBUG", "onBackPressed on Mediator");
         if(!this.history.isEmpty()) {
             this.addToBackStack = false;
             this.pager.setCurrentItem(this.history.pop().intValue());

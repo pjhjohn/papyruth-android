@@ -1,7 +1,6 @@
 package com.montserrat.controller;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 /**
