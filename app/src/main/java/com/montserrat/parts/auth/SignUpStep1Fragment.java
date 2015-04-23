@@ -3,7 +3,7 @@ package com.montserrat.parts.auth;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +26,7 @@ import java.util.List;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRecyclerAdapter, SchoolRecyclerAdapter.Holder.Data>{
+public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<UniversityRecyclerAdapter, UniversityRecyclerAdapter.Holder.Data>{
     private ViewPagerController pageController;
     @Override
     public void onAttach(Activity activity) {
@@ -43,8 +43,8 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRe
     }
 
     @Override
-    protected SchoolRecyclerAdapter getAdapter (List<SchoolRecyclerAdapter.Holder.Data> items) {
-        return SchoolRecyclerAdapter.newInstance(this.items, this);
+    protected UniversityRecyclerAdapter getAdapter (List<UniversityRecyclerAdapter.Holder.Data> items) {
+        return UniversityRecyclerAdapter.newInstance(this.items, this);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRe
                 JSONArray data = response.getJSONArray("data");
                 for(int i = 0; i < data.length(); i ++) {
                     JSONObject row = data.getJSONObject(i);
-                    this.items.add(new SchoolRecyclerAdapter.Holder.Data(
+                    this.items.add(new UniversityRecyclerAdapter.Holder.Data(
                             row.getString("name"),
                             row.getInt("code")
                     ));
@@ -98,6 +98,6 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<SchoolRe
 
     @Override
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new LinearLayoutManager(this.getActivity());
+        return new GridLayoutManager(this.getActivity(), 2);
     }
 }

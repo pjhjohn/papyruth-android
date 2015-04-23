@@ -15,18 +15,17 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class SchoolRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
-        public static final int HEADER = 1;
-        public static final int ITEM = 2;
+        public static final int ITEM = 1;
     }
-    public static SchoolRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new SchoolRecyclerAdapter(initItemList, listener);
+    public static UniversityRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new UniversityRecyclerAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private SchoolRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private UniversityRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         this.itemListener = listener;
     }
@@ -35,54 +34,29 @@ public class SchoolRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_school_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_school, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_university, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Log.d("DEBUG", "View " + this.getClass().toString() + " @" + position);
-        if (!isPositionOfHeader(position)) {
-            Holder holder = (Holder) viewHolder;
-            Holder.Data item = this.items.get(position - 1);
-            holder.bind(item);
-        }
-    }
-
-    // old item count
-    public int getBasicItemCount() {
-        return this.items == null ? 0 : this.items.size();
+        Holder holder = (Holder) viewHolder;
+        Holder.Data item = this.items.get(position);
+        holder.bind(item);
     }
 
     @Override
     public int getItemCount() {
-        return getBasicItemCount() + 1; // 1 is for header.
+        return this.items == null ? 0 : this.items.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return isPositionOfHeader(position)? Type.HEADER : Type.ITEM;
+        return Type.ITEM;
     }
 
-    private boolean isPositionOfHeader (int position) {
-        return position == 0;
-    }
-
-
-    /* Header of list-list recyclerview */
-    public static class Header extends RecyclerView.ViewHolder {
-        private Header(View itemView) {
-            super(itemView);
-        }
-        public static RecyclerView.ViewHolder newInstance(View parent) {
-            return new Header(parent);
-        }
-    }
-
-    /* Item of list-like recyclerview */
-
+    /* Item of list-like recyclerview : WILL BE DISPLAYED AS GRIDVIEW-ELEMENT */
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView school;
         private Holder(final View parent, TextView school) {
@@ -96,13 +70,13 @@ public class SchoolRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return new Holder(parent, school);
         }
 
-        public void bind(SchoolRecyclerAdapter.Holder.Data item) {
+        public void bind(UniversityRecyclerAdapter.Holder.Data item) {
             this.school.setText(item.school);
         }
 
         @Override
         public void onClick (View view) {
-            SchoolRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition() - 1); // HEADER
+            UniversityRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
         public static class Data {
