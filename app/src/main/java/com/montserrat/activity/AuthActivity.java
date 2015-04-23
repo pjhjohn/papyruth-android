@@ -12,6 +12,7 @@ import com.montserrat.controller.AppManager;
 import com.montserrat.parts.FragmentFactory;
 import com.montserrat.utils.viewpager.FlexibleViewPager;
 import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.viewpager.ViewPagerMediator;
 
 /**
  * Activity For Authentication.
@@ -19,6 +20,7 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 public class AuthActivity extends Activity implements ViewPagerController {
     private FlexibleViewPager viewPager;
     private PagerAdapter viewPagerAdapter;
+    private ViewPagerMediator mediator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,19 @@ public class AuthActivity extends Activity implements ViewPagerController {
         this.viewPager.setAdapter(this.viewPagerAdapter);
         this.viewPager.setSwipeEnabled(false);
 
+        this.mediator = new ViewPagerMediator(this.viewPager, this.viewPagerAdapter);
+
         AppManager.getInstance().setContext(this);
     }
 
     @Override
-    public void setCurrentPage (int pageNum) {
-        this.viewPager.setCurrentItem(pageNum);
+    public void setCurrentPage (int pageNum, boolean addToBackStack) {
+        this.mediator.setCurrentPage(pageNum, addToBackStack);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!this.mediator.onBackPressed()) super.onBackPressed();
     }
 
     private class SlideViewPagerAdapter extends FragmentStatePagerAdapter {

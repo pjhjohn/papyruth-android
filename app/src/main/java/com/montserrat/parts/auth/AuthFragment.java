@@ -26,7 +26,7 @@ import com.android.volley.VolleyError;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.utils.etc.Validator;
+import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
@@ -179,7 +179,7 @@ public class AuthFragment extends ClientFragment {
 
     // TODO : Replace this with your own logic
     private void attemptSignup() {
-        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1);
+        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
     }
 
     public static Fragment newInstance() {

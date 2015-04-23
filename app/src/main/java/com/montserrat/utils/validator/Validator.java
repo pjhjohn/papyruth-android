@@ -1,4 +1,4 @@
-package com.montserrat.utils.etc;
+package com.montserrat.utils.validator;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -8,7 +8,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
