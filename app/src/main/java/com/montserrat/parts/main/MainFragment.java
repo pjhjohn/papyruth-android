@@ -2,6 +2,8 @@ package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,12 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         View view = super.onCreateView(inflater, container, args);
 
         this.swipeRefreshView.setEnabled(true);
+        this.fabView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                MainFragment.this.submit();
+            }
+        });
 
         return view;
     }
@@ -33,13 +41,33 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     }
 
     @Override
-    public void onResponse(JSONObject response) {
-        super.onResponse(response);
+    public void onRequestResponse(JSONObject response) {
         try {
             if(response.getBoolean("success")) {
                 JSONArray data = response.getJSONArray("data");
                 for (int i = 0; i < data.length(); i++) {
-                    JSONObject row = (JSONObject) data.get(i);
+                    JSONObject row = data.getJSONObject(i);
+                    this.items.add(new MainRecyclerAdapter.Holder.Data(
+                            row.getString("subject"),
+                            row.getString("professor"),
+                            (float)row.getDouble("rating")
+                    ));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        this.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefreshResponse(JSONObject response) {
+        try {
+            if(response.getBoolean("success")) {
+                JSONArray data = response.getJSONArray("data");
+                this.items.clear();
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject row = data.getJSONObject(i);
                     this.items.add(new MainRecyclerAdapter.Holder.Data(
                             row.getString("subject"),
                             row.getString("professor"),
@@ -60,8 +88,8 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     }
 
     @Override
-    public void anotherRequestInProgress () {
-        Toast.makeText(this.getActivity(), "Multiple Request Attemption", Toast.LENGTH_SHORT).show();
+    public void onPendingRequest () {
+        Toast.makeText(this.getActivity(), "Another request is pending...", Toast.LENGTH_SHORT).show();
     }
 
     public static Fragment newInstance () {
@@ -77,5 +105,14 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         bundle.putInt(AppConst.Resource.SWIPE_REFRESH, R.id.swipe);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void recyclerViewListClicked (View view, int position) {
+    }
+
+    @Override
+    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
+        return new LinearLayoutManager(this.getActivity());
     }
 }

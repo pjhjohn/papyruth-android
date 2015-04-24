@@ -34,7 +34,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_header, parent, false));
+            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_main_header, parent, false));
             case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_main, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }

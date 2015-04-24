@@ -7,10 +7,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/swipe">
-        <android.support.v7.widget.RecyclerView android:id="@+id/main_recyclerview"
-            android:scrollbars="vertical"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none"/>
     </android.support.v4.widget.SwipeRefreshLayout>
     <include android:id="@+id/fab" layout="@layout/part_fab"/>
 </FrameLayout>

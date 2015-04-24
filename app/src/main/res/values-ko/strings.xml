@@ -1,0 +1,41 @@
+<resources>
+    <!--app name-->
+    <string name="app_name">몬쎄라-트</string>
+
+    <!--navigation-->
+    <string name="nav_item_home">홈</string>
+    <string name="nav_item_search">강좌검색</string>
+    <string name="nav_item_recommendation">추천강좌</string>
+    <string name="nav_item_write">강의평작성</string>
+    <string name="nav_item_random">임의강의</string>
+    <string name="nav_item_profile">회원정보</string>
+    <string name="nav_item_signout">나가기</string>
+
+    <!--toolbar-->
+
+    <!-- Strings related to login -->
+    <string name="action_sign_in">로그인</string>
+    <string name="action_sign_up">회원가입</string>
+    <string name="field_invalid_required">필수 항목입니다</string>
+    <string name="field_invalid_email">잘못된 이메일 형식입니다</string>
+    <string name="field_invalid_password">비밀번호가 너무 짧습니다</string>
+    <string name="field_wrong_password">비밀번호가 틀렸습니다</string>
+    <string name="field_invalid_name">이름이 너무 깁니다</string>
+    <string name="field_invalid_nickname">닉네임이 너무 깁니다</string>
+    <string name="field_invalid_gender">존재하지 않는 성별입니다</string>
+    <string name="field_invalid_admission_year">해당 입학년도는 지원되지 않습니다</string>
+
+    <!--common-->
+    <string name="next">다음</string>
+
+    <!--menu-->
+    <string name="menu_search">메뉴검색</string>
+    <string name="title_activity_login">이건어따쓸까</string>
+    <string name="signup_category_account">계정</string>
+    <string name="signup_category_info">추가 정보</string>
+    <string name="hint_name">이름</string>
+    <string name="gender_male">남자</string>
+    <string name="gender_female">여자</string>
+    <string name="prompt_spinner">입학 년도</string>
+
+</resources>

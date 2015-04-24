@@ -10,8 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +27,7 @@ import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONException;
@@ -139,48 +138,30 @@ public class AuthFragment extends ClientFragment {
     }
 
     private void attemtSignin() {
-        vEmail.setError(null);
-        vPassword.setError(null);
+        List<View> vFailed = new ArrayList<View>();
+        View candidate;
+        /* email */
+        candidate = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
+        /* password - TODO : Should handle PASSWORD ENCRYPTION */
+        candidate = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
+        if(candidate != null) vFailed.add(candidate);
 
-        String email = vEmail.getText().toString();
-        String passwd = vPassword.getText().toString();
-
-        boolean cancel = false;
-        View vFocus = null;
-
-        /* Client-side Form Validation */
-        if (!TextUtils.isEmpty(passwd) && !isPasswordValid(passwd)) {
-            vPassword.setError("This password is too short");
-            vFocus = vPassword;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(email)) {
-            vEmail.setError("This field is required");
-            vFocus = vEmail;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            vEmail.setError("This email address is invalid");
-            vFocus = vEmail;
-            cancel = true;
-        }
-
-        if (cancel) {
-            vFocus.requestFocus();
-        } else {
+        if(vFailed.isEmpty()) {
             try {
-                this.setParameters(new JSONObject().put("email", email).put("password", passwd))
-                    .submit();
+                this.setParameters(new JSONObject().put("email", vEmail.getText().toString()).put("password", vPassword.getText().toString()))
+                        .submit();
             } catch (JSONException e){
                 e.printStackTrace();
             }
-        }
+        } else vFailed.get(0).requestFocus();
     }
 
     @Override
     public void onResponse(JSONObject resp) {
         super.onResponse(resp);
         try {
-            if(resp.getBoolean("success")) this.getActivity().finish();
+            if(resp.getBoolean("success")) this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
             else {
                 this.vPassword.setError("Invalid Password");
                 this.vPassword.requestFocus();
@@ -197,14 +178,8 @@ public class AuthFragment extends ClientFragment {
     }
 
     // TODO : Replace this with your own logic
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-    private boolean isPasswordValid(String passwd) {
-        return passwd.length() > 4;
-    }
     private void attemptSignup() {
-        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV);
+        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
     }
 
     public static Fragment newInstance() {
@@ -214,8 +189,8 @@ public class AuthFragment extends ClientFragment {
         bundle.putString(AppConst.Request.CONTROLLER, "signin");
         bundle.putString(AppConst.Request.ACTION, "validate");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
-        bundle.putInt(AppConst.Resource.PROGRESS, R.id.auth_progress);
-        bundle.putInt(AppConst.Resource.CONTENT, R.id.auth_content);
+        bundle.putInt(AppConst.Resource.PROGRESS, R.id.progress_auth);
+        bundle.putInt(AppConst.Resource.CONTENT, R.id.content_auth);
         fragment.setArguments(bundle);
         return fragment;
     }

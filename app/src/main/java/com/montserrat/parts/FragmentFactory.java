@@ -1,12 +1,11 @@
 package com.montserrat.parts;
 
 import android.app.Fragment;
-import android.util.Log;
 
 import com.montserrat.controller.AppConst;
 import com.montserrat.parts.auth.AuthFragment;
-import com.montserrat.parts.auth.SignUpInfoFragment;
-import com.montserrat.parts.auth.SignUpUnivFragment;
+import com.montserrat.parts.auth.SignUpStep1Fragment;
+import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.main.MainFragment;
 
 /**
@@ -39,10 +38,10 @@ public class FragmentFactory {
                 switch(position) {
                     case AppConst.ViewPager.Auth.AUTH :
                         return AuthFragment.newInstance();
-                    case AppConst.ViewPager.Auth.SIGNUP_UNIV :
-                        return SignUpUnivFragment.newInstance();
-                    case AppConst.ViewPager.Auth.SIGNUP_INFO :
-                        return SignUpInfoFragment.newInstance();
+                    case AppConst.ViewPager.Auth.SIGNUP_STEP1 :
+                        return SignUpStep1Fragment.newInstance();
+                    case AppConst.ViewPager.Auth.SIGNUP_STEP2 :
+                        return SignUpStep2Fragment.newInstance();
                     default :
                         throw new RuntimeException("No Fragment found in position " + position);
                 }

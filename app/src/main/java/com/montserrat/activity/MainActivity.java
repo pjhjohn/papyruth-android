@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.montserrat.controller.AppManager;
 import com.montserrat.parts.FragmentFactory;
 import com.montserrat.parts.nav.NavFragment;
 
@@ -35,7 +36,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         this.drawer = (NavFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
 
-        this.startActivity(new Intent(this, AuthActivity.class));
+        AppManager.getInstance().setContext(this);
     }
 
     //

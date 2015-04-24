@@ -1,0 +1,5 @@
+<resources>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_nickname">Enter Your Nickname!</string>
+</resources>

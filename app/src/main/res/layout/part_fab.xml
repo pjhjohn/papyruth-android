@@ -8,7 +8,4 @@
     android:layout_margin="16dp"
     android:src="@drawable/ic_action_edit"
     fab:fab_colorNormal="@color/appDefaultForegroundColor"
-    fab:fab_colorPressed="@color/appDefaultHighlightColor"
-    fab:fab_colorRipple="@color/appDefaultForegroundColor"/>
-
-
+    fab:fab_colorPressed="@color/appDefaultHighlightColor"/>

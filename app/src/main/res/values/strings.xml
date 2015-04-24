@@ -1,20 +1,41 @@
 <resources>
+    <!--app name-->
     <string name="app_name">Montserrat.com</string>
 
-    <string name="nav_item_home">홈</string>
-    <string name="nav_item_search">강의 찾기</string>
-    <string name="nav_item_recommendation">추천 강의</string>
-    <string name="nav_item_write">강의평 쓰기</string>
-    <string name="nav_item_random">랜덤 강의평</string>
-    <string name="nav_item_profile">회원 정보</string>
-    <string name="nav_item_time">서버 시간</string>
-    <string name="nav_item_signout">나가기</string>
+    <!--navigation-->
+    <string name="nav_item_home">Home</string>
+    <string name="nav_item_search">Search</string>
+    <string name="nav_item_recommendation">Recommendation</string>
+    <string name="nav_item_write">Write</string>
+    <string name="nav_item_random">Random</string>
+    <string name="nav_item_profile">Profile</string>
+    <string name="nav_item_signout">Sign Out</string>
 
-    <string name="search_title">Search</string>
-    <string name="search_hint">Search Hint</string>
-    <string name="title_subject_list">Subjects</string>
-    <string name="title_subject_detail">Subject Detail</string>
+    <!--toolbar-->
 
-    <string name="menu_search">search</string>
+    <!-- Strings related to login -->
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="field_invalid_required">This field is required</string>
+    <string name="field_invalid_email">Invalid e-mail format</string>
+    <string name="field_invalid_password">Password is too short</string>
+    <string name="field_wrong_password">Wrong password</string>
+    <string name="field_invalid_name">Name is too long</string>
+    <string name="field_invalid_nickname">Nickname is too long</string>
+    <string name="field_invalid_gender">There is no such gender.</string>
+    <string name="field_invalid_admission_year">Invalid range of admission year</string>
 
+    <!--common-->
+    <string name="next">Next</string>
+
+    <!--menu-->
+    <string name="menu_search">Menu Search</string>
+    <string name="title_activity_login">title</string>
+    <string name="user_dummy">pjhjohn@gmail.com</string>
+    <string name="signup_category_account">Account</string>
+    <string name="signup_category_info">Additional</string>
+    <string name="hint_name">Name</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="prompt_spinner">Admission Year</string>
 </resources>
