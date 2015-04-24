@@ -144,6 +144,7 @@ public class DetailActivity extends ActionBarActivity {
 //            }
             return 0.9f;
         }
+
         @Override
         public void destroyItem(View pager, int position, Object view) {
             ((ViewPager)pager).removeView((View)view);

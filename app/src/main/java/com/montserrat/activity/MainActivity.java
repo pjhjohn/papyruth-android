@@ -38,11 +38,18 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         this.startActivity(new Intent(this, AuthActivity.class));
     }
 
+    //
     @Override
     public void onNavItemSelected(int position) {
         this.getFragmentManager().beginTransaction()
                 .replace(R.id.container, FragmentFactory.create(FragmentFactory.Type.MAIN))
                 .commit();
+
+        //testCode for DetailFragment
+        //By sss
+        if(position == 6){
+            Log.i("Activity2222", this.toString());
+        }
     }
 
     @Override

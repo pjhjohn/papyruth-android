@@ -126,12 +126,6 @@ public class NavFragment extends Fragment {
         if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
         if (this.callback != null) this.callback.onNavItemSelected(position);
 
-        //testCode for DetailFragment
-        //By sss
-        if(position == 6){
-//            this.getActivity().setContentView(R.layout.fragment_detail);
-            Log.i("Activity2222", this.getActivity().toString());
-        }
     }
 
     @Override
