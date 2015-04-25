@@ -37,7 +37,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
 
     @Override
     protected MainRecyclerAdapter getAdapter (List<MainRecyclerAdapter.Holder.Data> items) {
-        return MainRecyclerAdapter.newInstance(this.items);
+        return MainRecyclerAdapter.newInstance(this.items, this);
     }
 
     @Override
@@ -109,6 +109,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
+        // To Lecture Page
     }
 
     @Override

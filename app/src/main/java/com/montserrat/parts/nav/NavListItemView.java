@@ -24,7 +24,7 @@ public class NavListItemView extends UniversalItemView<NavListItemView.Holder, N
 
     @Override
     public int getLayoutId() {
-        return R.layout.list_item_nav;
+        return R.layout.recycler_item_nav;
     }
 
     public static class Data {

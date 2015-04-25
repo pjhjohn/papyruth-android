@@ -49,7 +49,7 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<MainRec
 
     @Override
     protected MainRecyclerAdapter getAdapter (List<MainRecyclerAdapter.Holder.Data> items) {
-        return MainRecyclerAdapter.newInstance(this.items);
+        return MainRecyclerAdapter.newInstance(this.items, this);
     }
 
     @Override

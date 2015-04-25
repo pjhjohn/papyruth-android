@@ -3,36 +3,41 @@ package com.montserrat.parts.nav;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.montserrat.activity.R;
-import com.montserrat.utils.adapter.UniversalAdapter;
+import com.montserrat.controller.AppConst;
+import com.montserrat.parts.main.MainFragment;
+import com.montserrat.utils.recycler.HidingScrollListener;
+import com.montserrat.utils.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavFragment extends Fragment {
-    public NavFragment() {}
-
+public class NavFragment extends Fragment implements RecyclerViewClickListener{
     private int iActiveNavItem;
     private NavCallback callback;
     private View fragmentContainerView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+    private RecyclerView recyclerView;
+    private NavRecyclerAdapter adapter;
+    private List<NavRecyclerAdapter.Holder.Data> items;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,6 @@ public class NavFragment extends Fragment {
             this.fromSavedInstanceState = true;
         }
         */
-        this.selectItem(this.iActiveNavItem = 0);
     }
 
     @Override
@@ -57,32 +61,38 @@ public class NavFragment extends Fragment {
         this.setHasOptionsMenu(true);
     }
 
-    private ArrayList<NavListItemView> navItems;
-    private UniversalAdapter navAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nav, container, false);
-        final ListView listview = (ListView) view.findViewById(R.id.nav_listview);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                listview.setItemChecked(position, true);
-                NavFragment.this.selectItem(position);
-            }
-        });
+        /* items */
+        this.items = new ArrayList<>();
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove));
 
-        List<NavListItemView> items = new ArrayList<NavListItemView>();
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid)));
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search)));
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching)));
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit)));
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle)));
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings)));
-        items.add(new NavListItemView( new NavListItemView.Data(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove)));
+        /* adapter */
+        this.adapter = NavRecyclerAdapter.newInstance(this.items, this);
 
-        listview.setAdapter(new UniversalAdapter(items, this.getActivity()));
-        listview.setItemChecked(this.iActiveNavItem, true);
+        /* recyclerview */
+        this.recyclerView = (RecyclerView) view.findViewById(R.id.nav_recyclerview);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        this.recyclerView.setAdapter(this.adapter);
+
+        /* Perform force click */
+        this.recyclerViewListClicked(this.recyclerView.getChildAt(this.iActiveNavItem), iActiveNavItem);
+
         return view;
+    }
+
+    @Override
+    public void recyclerViewListClicked (View view, int position) {
+        this.iActiveNavItem = position;
+        if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
+        if (this.callback != null) this.callback.onNavItemSelected(position);
     }
 
     public boolean isDrawerOpen() {
@@ -116,12 +126,6 @@ public class NavFragment extends Fragment {
             }
         });
         this.drawerLayout.setDrawerListener(this.drawerToggle);
-    }
-    private void selectItem(int position) {
-        this.iActiveNavItem = position;
-        if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
-        if (this.callback != null) this.callback.onNavItemSelected(position);
-
     }
 
     @Override
@@ -177,7 +181,6 @@ public class NavFragment extends Fragment {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
     }
-
     private ActionBar getActionBar() {
         return ((ActionBarActivity) this.getActivity()).getSupportActionBar();
     }

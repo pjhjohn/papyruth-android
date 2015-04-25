@@ -80,7 +80,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         /* Register RecyclerView & its Adapter n Items */
         if(recyclerView != null) {
             this.items = new ArrayList<E>();
-            recyclerView.setLayoutManager(this.getRecyclerViewLayoutManager()); // TODO : dependency to LinearLayout
+            recyclerView.setLayoutManager(this.getRecyclerViewLayoutManager());
             this.adapter = this.getAdapter(this.items);
             recyclerView.setAdapter(this.adapter);
             recyclerView.setOnScrollListener(new HidingScrollListener() {

@@ -27,7 +27,7 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private List<Holder.Data> items;
     private UniversityRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        this.itemListener = listener;
+        UniversityRecyclerAdapter.itemListener = listener;
     }
 
     @Override

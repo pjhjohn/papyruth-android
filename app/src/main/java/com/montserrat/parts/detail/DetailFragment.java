@@ -57,7 +57,7 @@ public class DetailFragment  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        final ListView listview = (ListView) view.findViewById(R.id.nav_listview);
+        final ListView listview = (ListView) view.findViewById(R.id.nav_recyclerview/* Should be changed */);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

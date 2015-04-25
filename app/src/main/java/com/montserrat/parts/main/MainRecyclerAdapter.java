@@ -9,6 +9,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
+import com.montserrat.parts.nav.NavRecyclerAdapter;
+import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
@@ -20,14 +22,15 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static MainRecyclerAdapter newInstance(List<Holder.Data> initItemList) {
-        return new MainRecyclerAdapter(initItemList);
+    public static MainRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new MainRecyclerAdapter(initItemList, listener);
     }
 
-
+    private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private MainRecyclerAdapter (List<Holder.Data> initItemList) {
+    private MainRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
+        MainRecyclerAdapter.itemListener = listener;
     }
 
     @Override
@@ -81,8 +84,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     /* Item of list-like recyclerview */
-
-    public static class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView subject;
         private final TextView professor;
         private final RatingBar rating;
@@ -91,6 +93,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.subject = viewSubject;
             this.professor = viewProfessor;
             this.rating = viewRating;
+            parent.setOnClickListener(this);
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
@@ -105,6 +108,12 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.professor.setText(item.professor);
             this.rating.setRating(item.rating);
         }
+
+        @Override
+        public void onClick (View view) {
+            MainRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+        }
+
         public static class Data {
             public String subject;
             public String professor;
