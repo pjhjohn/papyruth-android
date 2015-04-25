@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.activity.R;
@@ -31,12 +32,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<MainRecyclerAdapter, MainRecyclerAdapter.Holder.Data> {
+public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailRecyclerAdapter, DetailRecyclerAdapter.Holder.Data> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
-        this.swipeRefreshView.setEnabled(true);
+//        this.swipeRefreshView.setEnabled(false);
+        TextView content = (TextView) view.findViewById(R.id.reply_Contents);
+
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -48,8 +51,8 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<MainRec
     }
 
     @Override
-    protected MainRecyclerAdapter getAdapter (List<MainRecyclerAdapter.Holder.Data> items) {
-        return MainRecyclerAdapter.newInstance(this.items, this);
+    protected DetailRecyclerAdapter getAdapter (List<DetailRecyclerAdapter.Holder.Data> items) {
+        return DetailRecyclerAdapter.newInstance(this.items);
     }
 
     @Override
@@ -81,6 +84,7 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<MainRec
         bundle.putString(AppConst.Request.CONTROLLER, "detail");
         bundle.putString(AppConst.Request.ACTION, "dummy");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_detail);
+        bundle.putInt(AppConst.Resource.FAB, R.id.detail_fab);
         fragment.setArguments(bundle);
         return fragment;
     }
