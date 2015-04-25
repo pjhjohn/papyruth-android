@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,7 @@ import java.util.List;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<UniversityRecyclerAdapter, UniversityRecyclerAdapter.Holder.Data>{
+public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<UniversityRecyclerAdapter, UniversityRecyclerAdapter.Holder.Data> {
     private ViewPagerController pageController;
     @Override
     public void onAttach(Activity activity) {
@@ -44,7 +43,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
 
     @Override
     protected UniversityRecyclerAdapter getAdapter (List<UniversityRecyclerAdapter.Holder.Data> items) {
-        return UniversityRecyclerAdapter.newInstance(this.items, this);
+        return UniversityRecyclerAdapter.newInstance(this.items, this, this);
     }
 
     @Override
@@ -54,17 +53,16 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
 
     @Override
     public void onRequestResponse(JSONObject response) {
-        Log.d("DEBUG", "response data : " + response);
         try {
-            if(response.getBoolean("success")) {
-                JSONArray data = response.getJSONArray("data");
-                for(int i = 0; i < data.length(); i ++) {
-                    JSONObject row = data.getJSONObject(i);
-                    this.items.add(new UniversityRecyclerAdapter.Holder.Data(
-                            row.getString("name"),
-                            row.getInt("code")
-                    ));
-                }
+            JSONArray universities = response.getJSONArray("universities");
+            for(int i = 0; i < universities.length(); i++) {
+                JSONObject university = universities.getJSONObject(i);
+                this.items.add(new UniversityRecyclerAdapter.Holder.Data(
+                        university.getString("name"),
+                        university.getString("email_domain"),
+                        university.getString("image_url"),
+                        university.getInt("id")
+                ));
             }
         } catch(JSONException e) {
             e.printStackTrace();
@@ -80,9 +78,9 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     public static Fragment newInstance() {
         Fragment fragment = new SignUpStep1Fragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
-        bundle.putString(AppConst.Request.CONTROLLER, "university");
-        bundle.putString(AppConst.Request.ACTION, "all");
+        bundle.putString(AppConst.Request.URL, "http://mont.izz.kr:3000");
+        bundle.putString(AppConst.Request.CONTROLLER, "universities");
+        bundle.putString(AppConst.Request.ACTION, "list");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_step1);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.signup_univ_recyclerview);
         fragment.setArguments(bundle);
@@ -92,7 +90,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     @Override
     public void recyclerViewListClicked (View view, int position) {
         Toast.makeText(this.getActivity(), "Current Position Has Position of " + position, Toast.LENGTH_SHORT).show();
-        UserInfo.getInstance().setSchool(this.items.get(position).schoolCode);
+        UserInfo.getInstance().setSchool(this.items.get(position).schoolId);
         if(UserInfo.getInstance().isDataReadyOnStep1()) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 

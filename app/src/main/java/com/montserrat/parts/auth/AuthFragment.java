@@ -40,8 +40,6 @@ import java.util.List;
  * Created by mrl on 2015-04-07.
  */
 public class AuthFragment extends ClientFragment {
-    public AuthFragment (){}
-
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
     private ViewPagerController pageController;
@@ -97,8 +95,8 @@ public class AuthFragment extends ClientFragment {
         this.vPassword = (EditText) view.findViewById(R.id.auth_password);
         this.vPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == R.id.signin || actionId == EditorInfo.IME_NULL || actionId == EditorInfo.IME_ACTION_DONE) {
+            public boolean onEditorAction(TextView view, int action, KeyEvent event) {
+                if (action == R.id.signin || action == EditorInfo.IME_NULL || action == EditorInfo.IME_ACTION_DONE) {
                     AuthFragment.this.attemtSignin();
                     return true;
                 } else return false;

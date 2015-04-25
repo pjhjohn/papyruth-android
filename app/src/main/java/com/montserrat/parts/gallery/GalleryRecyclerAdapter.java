@@ -65,7 +65,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
-            TextView school = (TextView) parent.findViewById(R.id.school_item_school);
+            TextView school = (TextView) parent.findViewById(R.id.university_item_school);
             return new Holder(parent, school);
         }
 

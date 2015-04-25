@@ -8,13 +8,13 @@
     android:layout_margin="@dimen/grid_divider_width"
     card_view:cardCornerRadius="0dp">
     <com.montserrat.utils.etc.SquareImageView
-        android:id="@+id/picture"
+        android:id="@+id/university_item_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/snu_logo"
         android:scaleType="centerCrop"/>
     <TextView
-        android:id="@+id/school_item_school"
+        android:id="@+id/university_item_school"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
