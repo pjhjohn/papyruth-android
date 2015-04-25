@@ -1,5 +1,8 @@
 package com.montserrat.controller;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.Volley;
+
 /**
  * Created by pjhjohn on 2015-04-16.
  */
@@ -28,9 +31,14 @@ public class AppConst {
     public static class Request {
         /* For ClientFragment - Volley */
         public static final String DEFAULT = "";
+        public static final String METHOD = "request_method";
         public static final String URL = "request_url";
         public static final String CONTROLLER = "request_controller";
         public static final String ACTION = "request_action";
+        public static class Method {
+            public static final int GET = com.android.volley.Request.Method.GET;
+            public static final int POST = com.android.volley.Request.Method.POST;
+        }
     }
     public static class ViewPager {
         public static class Auth {

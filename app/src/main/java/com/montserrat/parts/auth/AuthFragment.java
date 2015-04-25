@@ -185,9 +185,9 @@ public class AuthFragment extends ClientFragment {
     public static Fragment newInstance() {
         Fragment fragment = new AuthFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
-        bundle.putString(AppConst.Request.CONTROLLER, "signin");
-        bundle.putString(AppConst.Request.ACTION, "validate");
+        bundle.putString(AppConst.Request.URL, "http://mont.izz.kr:3000");
+        bundle.putString(AppConst.Request.CONTROLLER, "authentication");
+        bundle.putString(AppConst.Request.ACTION, "sign_in");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
         bundle.putInt(AppConst.Resource.PROGRESS, R.id.progress_auth);
         bundle.putInt(AppConst.Resource.CONTENT, R.id.content_auth);
