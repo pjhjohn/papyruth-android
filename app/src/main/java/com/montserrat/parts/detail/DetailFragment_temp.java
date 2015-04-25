@@ -40,12 +40,12 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailR
 //        this.swipeRefreshView.setEnabled(false);
         TextView content = (TextView) view.findViewById(R.id.reply_Contents);
 
-//        this.fabView.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view) {
-//                DetailFragment_temp.this.submit();
-//            }
-//        });
+        this.fabView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                DetailFragment_temp.this.submit();
+            }
+        });
 
         return view;
     }
@@ -84,6 +84,7 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailR
         bundle.putString(AppConst.Request.CONTROLLER, "detail");
         bundle.putString(AppConst.Request.ACTION, "dummy");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_detail);
+        bundle.putInt(AppConst.Resource.FAB, R.id.detail_fab);
         fragment.setArguments(bundle);
         return fragment;
     }

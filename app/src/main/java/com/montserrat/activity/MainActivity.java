@@ -53,7 +53,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         //testCode for DetailFragment
         //By sss
         if(position == 6){
-            Log.i("Activity2222", this.toString());
             this.getFragmentManager().beginTransaction().replace(R.id.container, FragmentFactory.create(FragmentFactory.Type.DETAIL)).commit();
         }
     }
