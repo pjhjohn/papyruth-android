@@ -6,6 +6,8 @@ import com.montserrat.controller.AppConst;
 import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
+import com.montserrat.parts.detail.DetailFragment;
+import com.montserrat.parts.detail.DetailFragment_temp;
 import com.montserrat.parts.main.MainFragment;
 
 /**
@@ -16,7 +18,7 @@ public class FragmentFactory {
 
     /* TODO : static final integer VS enum */
     public enum Type {
-        MAIN, AUTH
+        MAIN, AUTH, DETAIL
     }
 
     public static Fragment create(Type type) {
@@ -25,6 +27,8 @@ public class FragmentFactory {
                 return MainFragment.newInstance();
             case AUTH :
                 return AuthFragment.newInstance();
+            case DETAIL:
+                return DetailFragment_temp.newInstance();
             default :
                 throw new RuntimeException("No Fragment found in type " + type);
         }
@@ -45,6 +49,8 @@ public class FragmentFactory {
                     default :
                         throw new RuntimeException("No Fragment found in position " + position);
                 }
+            case DETAIL:
+                return create(type);
             default :
                 return create(type);
         }

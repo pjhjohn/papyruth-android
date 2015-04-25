@@ -42,6 +42,9 @@ public class AppConst {
         public static class Main {
 
         }
+        public static class Detail{
+
+        }
     }
     public static class User {
         public static final String UNIVERSITY = "user_university";

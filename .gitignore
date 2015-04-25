@@ -1,11 +1,9 @@
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/misc.xml
-/.idea/libraries
 .DS_Store
 /build
 /app/app.iml
+/.idea
 
 # Gradle Home under gradle.xml has dependency
 /.idea/gradle.xml
