@@ -6,7 +6,6 @@ import com.montserrat.controller.AppConst;
 import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
-import com.montserrat.parts.detail.DetailFragment;
 import com.montserrat.parts.detail.DetailFragment_temp;
 import com.montserrat.parts.main.MainFragment;
 
