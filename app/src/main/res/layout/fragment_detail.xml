@@ -18,4 +18,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true" />
 
+    <include android:id="@+id/fab" layout="@layout/part_fab"/>
 </LinearLayout>

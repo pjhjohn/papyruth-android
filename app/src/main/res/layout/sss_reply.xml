@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="프로그래밍 교수론"
-        android:id="@+id/lecTitle"
+        android:id="@+id/reply_lecTitle"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
@@ -19,8 +19,8 @@
         android:layout_width="198dp"
         android:layout_height="wrap_content"
         android:text="박 준호 교수"
-        android:id="@+id/replyContents"
-        android:layout_below="@+id/lecTitle"
+        android:id="@+id/reply_Contents"
+        android:layout_below="@+id/reply_lecTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -28,9 +28,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="like!"
-        android:id="@+id/button"
+        android:id="@+id/reply_like"
         android:layout_gravity="right"
-        android:layout_alignBottom="@+id/replyContents"
+        android:layout_alignBottom="@+id/reply_Contents"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>

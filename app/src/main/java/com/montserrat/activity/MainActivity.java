@@ -10,14 +10,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.montserrat.controller.AppManager;
 import com.montserrat.parts.FragmentFactory;
 import com.montserrat.parts.nav.NavFragment;
+
+import java.util.zip.Inflater;
 
 public class MainActivity extends ActionBarActivity implements NavFragment.NavCallback {
 
@@ -50,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         //By sss
         if(position == 6){
             Log.i("Activity2222", this.toString());
+            this.getFragmentManager().beginTransaction().replace(R.id.container, FragmentFactory.create(FragmentFactory.Type.DETAIL)).commit();
         }
     }
 
