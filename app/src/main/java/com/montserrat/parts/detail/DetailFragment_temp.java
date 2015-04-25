@@ -59,6 +59,11 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailR
     }
 
     @Override
+    public void onAskMoreIfAny (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+        //TODO : Implement it.
+    }
+
+    @Override
     public void onPendingRequest () {
         Toast.makeText(this.getActivity(), "Another request is pending...", Toast.LENGTH_SHORT).show();
     }

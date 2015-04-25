@@ -52,6 +52,11 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     }
 
     @Override
+    public void onAskMoreIfAny (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+        //TODO : Implement it.
+    }
+
+    @Override
     public void onRequestResponse(JSONObject response) {
         try {
             JSONArray universities = response.getJSONArray("universities");

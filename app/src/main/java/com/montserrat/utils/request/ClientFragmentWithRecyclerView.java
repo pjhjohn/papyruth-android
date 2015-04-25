@@ -18,6 +18,8 @@ import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.recycler.HidingScrollListener;
+import com.montserrat.utils.recycler.HidingScrollWithAskMoreListener;
+import com.montserrat.utils.recycler.RecyclerViewAskMoreListener;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import org.json.JSONObject;
@@ -28,7 +30,7 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
+public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener, RecyclerViewAskMoreListener {
     private Toolbar toolbarView;
     protected FloatingActionButton fabView;
     protected SwipeRefreshLayout swipeRefreshView;
@@ -38,6 +40,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     private int toolbarId, fabId, swipeRefreshId, recyclerId;
     private boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
     private boolean isRequestForRefreshing, isPending;
+    private HidingScrollWithAskMoreListener recyclerViewScrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         this.hideFloatingActionButtonOnScroll = true;
         this.isRequestForRefreshing = false;
         this.isPending = false;
+        this.recyclerViewScrollListener = null;
 
         /* Bind Views */
         this.toolbarView = (Toolbar) this.getActivity().findViewById(this.toolbarId);
@@ -80,17 +84,22 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         /* Register RecyclerView & its Adapter n Items */
         if(recyclerView != null) {
             this.items = new ArrayList<E>();
-            recyclerView.setLayoutManager(this.getRecyclerViewLayoutManager());
+            this.recyclerView.setLayoutManager(this.getRecyclerViewLayoutManager());
             this.adapter = this.getAdapter(this.items);
-            recyclerView.setAdapter(this.adapter);
-            recyclerView.setOnScrollListener(new HidingScrollListener() {
+            this.recyclerView.setAdapter(this.adapter);
+            this.recyclerView.setOnScrollListener(recyclerViewScrollListener = new HidingScrollWithAskMoreListener() {
                 @Override
-                public void onHide() {
+                public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+                    ClientFragmentWithRecyclerView.this.onAskMoreIfAny(overallItemsCount, itemsBeforeMore, maxLastVisiblePosition);
+                }
+
+                @Override
+                public void onHide () {
                     ClientFragmentWithRecyclerView.this.hideViews();
                 }
 
                 @Override
-                public void onShow() {
+                public void onShow () {
                     ClientFragmentWithRecyclerView.this.showViews();
                 }
             });
@@ -130,7 +139,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
             this.onPendingRequest(); // handle duplicated reqeust
             return;
         }
-        this.isPending = true;
+        this.recyclerViewScrollListener.setIsRequestPending(this.isPending = true);
         if(this.isRequestForRefreshing) this.swipeRefreshView.setRefreshing(true);
     }
 
@@ -148,15 +157,17 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         if(this.isRequestForRefreshing) {
             this.swipeRefreshView.setRefreshing(false);
             this.isRequestForRefreshing = false;
-            this.isPending = false;
+            this.recyclerViewScrollListener.setIsRequestPending(this.isPending = false);
             this.onRefreshResponse(response);
         } else {
             this.isRequestForRefreshing = false;
-            this.isPending = false;
+            this.recyclerViewScrollListener.setIsRequestPending(this.isPending = false);
             this.onRequestResponse(response);
         }
     }
 
+    @Override
+    public abstract void onAskMoreIfAny(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition);
     public abstract void onRequestResponse(JSONObject response);
     public abstract void onRefreshResponse(JSONObject response);
 
@@ -165,7 +176,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         super.onErrorResponse(error);
         if(this.isRequestForRefreshing) this.swipeRefreshView.setRefreshing(false);
         this.isRequestForRefreshing = false;
-        this.isPending = false;
+        this.recyclerViewScrollListener.setIsRequestPending(this.isPending = false);
     }
 
     private int PX2DP(int px){

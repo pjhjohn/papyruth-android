@@ -28,7 +28,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                MainFragment.this.submit();
+//                MainFragment.this.submit();
             }
         });
 
@@ -85,6 +85,11 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     public void onRefresh() {
         super.onRefresh();
         this.setParameters(new JSONObject()).submit();
+    }
+
+    @Override
+    public void onAskMoreIfAny (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+        MainFragment.this.submit();
     }
 
     @Override
