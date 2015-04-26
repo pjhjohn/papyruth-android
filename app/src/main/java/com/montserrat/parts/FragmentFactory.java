@@ -73,6 +73,9 @@ public class FragmentFactory {
 
     public static Fragment create(Type type, int position, JSONObject initializer) {
         Fragment fragment = FragmentFactory.create(type, position);
+        if(fragment == null) return fragment;
+
+        /* Set Data in JSONObject which needs to be requested */
         Bundle bundle = fragment.getArguments();
         bundle.putString(AppConst.Resource.INITIALIZER, initializer.toString()); // TODO : Parse into JSONObject at Fragment-side
         fragment.setArguments(bundle);
