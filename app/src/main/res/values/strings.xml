@@ -38,4 +38,6 @@
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="prompt_spinner">Admission Year</string>
+    <string name="hint_lecture">Lecture Title</string>
+    <string name="hint_professor">Professor Name</string>
 </resources>

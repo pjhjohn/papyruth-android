@@ -9,6 +9,9 @@ import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.detail.DetailFragment_temp;
 import com.montserrat.parts.lecture.LecturesFragment;
+import com.montserrat.parts.rating.RatingStep1Fragment;
+import com.montserrat.parts.rating.RatingStep2Fragment;
+import com.montserrat.parts.rating.RatingStep3Fragment;
 
 import org.json.JSONObject;
 
@@ -49,9 +52,9 @@ public class FragmentFactory {
                 } break;
             case WRITE :
                 switch(position) {
-                    case AppConst.ViewPager.Write.WRITE_STEP1   : fragment = DummyFragment.newInstance();       break;
-                    case AppConst.ViewPager.Write.WRITE_STEP2   : fragment = DummyFragment.newInstance();       break;
-                    case AppConst.ViewPager.Write.WRITE_STEP3   : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Write.WRITE_STEP1   : fragment = RatingStep1Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Write.WRITE_STEP2   : fragment = RatingStep2Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Write.WRITE_STEP3   : fragment = RatingStep3Fragment.newInstance();       break;
                 } break;
             case RANDOM :
                 switch(position) {

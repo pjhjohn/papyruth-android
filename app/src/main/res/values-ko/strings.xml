@@ -37,5 +37,7 @@
     <string name="gender_male">남자</string>
     <string name="gender_female">여자</string>
     <string name="prompt_spinner">입학 년도</string>
+    <string name="hint_lecture">강좌 제목</string>
+    <string name="hint_professor">교수님 성함</string>
 
 </resources>
