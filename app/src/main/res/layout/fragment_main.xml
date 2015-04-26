@@ -3,16 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <android.support.v4.widget.SwipeRefreshLayout
+    <FrameLayout
+        android:id="@+id/content_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swipe">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/main_recyclerview"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:scrollbars="none"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
-    <include android:id="@+id/fab" layout="@layout/part_fab"/>
+            android:id="@+id/swipe">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/main_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <include android:id="@+id/fab" layout="@layout/part_fab"/>
+    </FrameLayout>
+    <include android:id="@+id/progress_main" layout="@layout/part_progress_transparent"/>
 </FrameLayout>

@@ -121,8 +121,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
         return this;
     }
 
-    public ClientFragment setAction (String action) throws InvalidPropertiesFormatException  {
-        if (action.split("/").length != 1) throw new InvalidPropertiesFormatException("Controller field does not accept '/' character.");
+    public ClientFragment setAction (String action) {
         this.requestAction = action;
         return this;
     }

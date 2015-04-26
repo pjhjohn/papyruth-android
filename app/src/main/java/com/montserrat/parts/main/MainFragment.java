@@ -84,12 +84,12 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     @Override
     public void onRefresh() {
         super.onRefresh();
-        this.setParameters(new JSONObject()).submit();
+        this.setAction("refresh").submit();
     }
 
     @Override
     public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-        MainFragment.this.submit();
+        this.setAction("more").submit();
     }
 
     @Override
@@ -102,12 +102,14 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
         bundle.putString(AppConst.Request.CONTROLLER, "search");
-        bundle.putString(AppConst.Request.ACTION, "dummy");
+        bundle.putString(AppConst.Request.ACTION, "refresh");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_main);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.main_recyclerview);
         bundle.putInt(AppConst.Resource.FAB, R.id.fab);
         bundle.putInt(AppConst.Resource.TOOLBAR, R.id.toolbar);
         bundle.putInt(AppConst.Resource.SWIPE_REFRESH, R.id.swipe);
+        bundle.putInt(AppConst.Resource.CONTENT, R.id.content_main);
+        bundle.putInt(AppConst.Resource.PROGRESS, R.id.progress_main);
         fragment.setArguments(bundle);
         return fragment;
     }

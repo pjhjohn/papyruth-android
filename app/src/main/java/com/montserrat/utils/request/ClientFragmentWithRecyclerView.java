@@ -39,7 +39,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     private int toolbarId, fabId, swipeRefreshId, recyclerId;
     private boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
     private boolean isRequestForRefreshing, isPending;
-    private PanelControllerOnScrollWithAskMore recyclerViewScrollListener;
+    protected PanelControllerOnScrollWithAskMore recyclerViewScrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
             this.recyclerView.setLayoutManager(this.getRecyclerViewLayoutManager());
             this.adapter = this.getAdapter(this.items);
             this.recyclerView.setAdapter(this.adapter);
-            this.recyclerView.setOnScrollListener(recyclerViewScrollListener = new PanelControllerOnScrollWithAskMore() {
+            this.recyclerView.setOnScrollListener(recyclerViewScrollListener = new PanelControllerOnScrollWithAskMore(AppConst.DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE) {
                 @Override
                 public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
                     ClientFragmentWithRecyclerView.this.onAskMore(overallItemsCount, itemsBeforeMore, maxLastVisiblePosition);

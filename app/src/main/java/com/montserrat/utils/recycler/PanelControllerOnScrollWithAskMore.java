@@ -7,12 +7,18 @@ import android.support.v7.widget.RecyclerView;
  * Created by pjhjohn on 2015-04-25.
  */
 public abstract class PanelControllerOnScrollWithAskMore extends PanelControllerOnScroll {
-    private static final int ITEM_LEFT_TO_LOAD_MORE = 10;
+    /* ItemCount to the end of current list. Triggers onAskMore when the count is lower than following constant. */
+    private int numOfItemsLeftToAskMore;
+    public PanelControllerOnScrollWithAskMore(int numOfItemsLeftToAskMore) {
+        this.numOfItemsLeftToAskMore = numOfItemsLeftToAskMore;
+    }
 
     private boolean isRequestPending = false;
-
     public void setIsRequestPending(boolean isPending) {
         this.isRequestPending = isPending;
+    }
+    public void setNumOfItemsLeftToAskMore (int numOfItemsLeftToAskMore) {
+        this.numOfItemsLeftToAskMore = numOfItemsLeftToAskMore;
     }
 
     @Override
@@ -30,8 +36,8 @@ public abstract class PanelControllerOnScrollWithAskMore extends PanelController
         } else throw new RuntimeException("Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager");
 
         /* FOR ASK_MORE */
-        if (((nItemTotal - iItemVisibleLast) <= ITEM_LEFT_TO_LOAD_MORE || (nItemTotal - iItemVisibleLast) == 0 && nItemTotal > nItemVisible) && !isRequestPending) {
-            onAskMore(recyclerView.getAdapter().getItemCount(), ITEM_LEFT_TO_LOAD_MORE, iItemVisibleLast);
+        if (!isRequestPending && ((nItemTotal - iItemVisibleLast) <= numOfItemsLeftToAskMore || (nItemTotal - iItemVisibleLast) == 0 && nItemTotal > nItemVisible )) {
+            onAskMore(recyclerView.getAdapter().getItemCount(), numOfItemsLeftToAskMore, iItemVisibleLast);
         }
     }
 

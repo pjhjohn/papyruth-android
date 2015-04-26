@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
  * Created by pjhjohn on 2015-04-13.
  */
 public abstract class PanelControllerOnScroll extends RecyclerView.OnScrollListener {
+    /* Diatance in dp to trigger hiding panels */
     private static final int HIDE_THRESHOLD = 20;
 
     private int scrolledDistance = 0;

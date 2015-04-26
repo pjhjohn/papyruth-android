@@ -11,6 +11,7 @@ public class AppConst {
     /* KOREAN : 1 WORD == 3 BYTES */
     public static final int MAX_NAME_BYTES = 20;
     public static final int MAX_NICKNAME_BYTES = 20;
+    public static final int DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE = 5;
 
     public static class Resource {
         /* For ClientFragment */
