@@ -121,6 +121,7 @@ public class SignUpStep2Fragment extends ClientFragment {
 
     public void onSignUpSuccess() {
         SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
+		SignUpStep2Fragment.this.getActivity().finish();
     }
     public void onSignUpFailure(JSONObject response) {
         Toast.makeText(this.getActivity(), response.toString(), Toast.LENGTH_LONG).show();
