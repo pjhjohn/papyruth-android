@@ -30,7 +30,7 @@
         android:text="like!"
         android:id="@+id/reply_like"
         android:layout_gravity="right"
-        android:layout_alignBottom="@+id/reply_Contents"
+        android:layout_alignBottom="@+id/reply_like"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>

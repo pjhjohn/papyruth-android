@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,18 +19,21 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailRecyclerAdapter, DetailRecyclerAdapter.Holder.Data> {
+public class DetailFragment extends ClientFragmentWithRecyclerView<DetailRecyclerAdapter, DetailRecyclerAdapter.Holder.Data> {
+
+    private Button content;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
 //        this.swipeRefreshView.setEnabled(false);
-        TextView content = (TextView) view.findViewById(R.id.reply_Contents);
+        this.content = (Button) view.findViewById(R.id.reply_like);
+        this.content.setText("this is contents");
 
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                DetailFragment_temp.this.submit();
+                DetailFragment.this.submit();
             }
         });
 
@@ -69,7 +73,7 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailR
     }
 
     public static Fragment newInstance () {
-        Fragment fragment = new DetailFragment_temp();
+        Fragment fragment = new DetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
         bundle.putString(AppConst.Request.CONTROLLER, "detail");
