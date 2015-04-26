@@ -28,6 +28,9 @@ public class AppConst {
         public static final String FAB = "resource_fab";
         public static final String SWIPE_REFRESH = "resource_swipe_refresh";
         public static final String RECYCLER = "resource_recycler";
+
+        /* Initializer for Fragment */
+        public static final String INITIALIZER = "resource_initializer";
     }
     public static class Request {
         /* For ClientFragment - Volley */

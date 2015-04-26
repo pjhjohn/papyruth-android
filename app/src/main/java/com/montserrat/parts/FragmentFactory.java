@@ -1,6 +1,7 @@
 package com.montserrat.parts;
 
 import android.app.Fragment;
+import android.os.Bundle;
 
 import com.montserrat.controller.AppConst;
 import com.montserrat.parts.auth.AuthFragment;
@@ -8,6 +9,8 @@ import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.detail.DetailFragment_temp;
 import com.montserrat.parts.main.MainFragment;
+
+import org.json.JSONObject;
 
 /**
  * Created by pjhjohn on 2015-04-09.
@@ -67,6 +70,15 @@ public class FragmentFactory {
         if (fragment == null) throw new RuntimeException(String.format("No Fragment found in Fragment.Type.%s with position of %d.", stringify(type), position));
         return fragment;
     }
+
+    public static Fragment create(Type type, int position, JSONObject initializer) {
+        Fragment fragment = FragmentFactory.create(type, position);
+        Bundle bundle = fragment.getArguments();
+        bundle.putString(AppConst.Resource.INITIALIZER, initializer.toString()); // TODO : Parse into JSONObject at Fragment-side
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     private static String stringify(Type type) {
         switch(type) {
             case AUTH   : return "AUTH";
