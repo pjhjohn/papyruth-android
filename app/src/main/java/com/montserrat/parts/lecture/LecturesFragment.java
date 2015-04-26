@@ -28,9 +28,15 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-//                MainFragment.this.submit();
+                // TODO : Access to NavFragment so that changing category is possible
             }
         });
+
+        /* Request with Initializer Data. ENPOINT SHOULD BE DEFINED WITH */
+        if(this.args!=null) try {
+            final JSONObject initialDataToSubmit = new JSONObject(this.args.getString(AppConst.Resource.INITIALIZER, AppConst.Request.DEFAULT));
+            this.setParameters(initialDataToSubmit).submit();
+        } catch (JSONException e) {}
 
         return view;
     }
