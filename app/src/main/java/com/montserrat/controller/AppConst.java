@@ -64,7 +64,7 @@ public class AppConst {
             public static final int LENGTH = 1;
             public static final int DUMMY = 0;
         }
-        public static class Suggestion {
+        public static class Suggest {
             public static final int LENGTH = 1;
             public static final int DUMMY = 0;
         }
@@ -75,7 +75,7 @@ public class AppConst {
             public static final int WRITE_STEP3 = 2;
         }
         public static class Random {
-            public static final int LENGTH = 3;
+            public static final int LENGTH = 1;
             public static final int DUMMY = 0;
         }
         public static class Profile {
@@ -85,12 +85,6 @@ public class AppConst {
         public static class Signout {
             public static final int LENGTH = 1;
             public static final int DUMMY = 0;
-        }
-
-        /* Legacy for sss */
-        public static class Detail{
-            public static final int LENGTH = 1;
-            public static final int TEMP = 0;
         }
     }
     public static class User {

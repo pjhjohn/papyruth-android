@@ -16,7 +16,7 @@ public class FragmentFactory {
     private FragmentFactory () {}
     /* TODO : static final integer VS enum */
     public enum Type {
-        AUTH, DETAIL, HOME, SEARCH, SUGGEST, WRITE, RANDOM, PROFILE, SIGNOUT
+        AUTH, HOME, SEARCH, SUGGEST, WRITE, RANDOM, PROFILE, SIGNOUT
     }
 
     public static Fragment create(Type type) {
@@ -32,10 +32,6 @@ public class FragmentFactory {
                     case AppConst.ViewPager.Auth.SIGNUP_STEP1   : fragment = SignUpStep1Fragment.newInstance(); break;
                     case AppConst.ViewPager.Auth.SIGNUP_STEP2   : fragment = SignUpStep2Fragment.newInstance(); break;
                 } break;
-            case DETAIL:
-                switch(position) {
-                    case AppConst.ViewPager.Detail.TEMP         : fragment = DetailFragment_temp.newInstance(); break;
-                } break;
             case HOME :
                 switch(position) {
                     case AppConst.ViewPager.Home.HOME           : fragment = MainFragment.newInstance();        break;
@@ -46,7 +42,7 @@ public class FragmentFactory {
                 } break;
             case SUGGEST:
                 switch(position) {
-                    case AppConst.ViewPager.Suggestion.DUMMY    : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Suggest.DUMMY    : fragment = DummyFragment.newInstance();       break;
                 } break;
             case WRITE :
                 switch(position) {
@@ -64,7 +60,7 @@ public class FragmentFactory {
                 } break;
             case SIGNOUT :
                 switch(position) {
-                    case AppConst.ViewPager.Signout.DUMMY       : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Signout.DUMMY       : fragment = DetailFragment_temp.newInstance();       break;
                 } break;
             default : break;
         }
@@ -74,7 +70,6 @@ public class FragmentFactory {
     private static String stringify(Type type) {
         switch(type) {
             case AUTH   : return "AUTH";
-            case DETAIL : return "DETAIL";
             case HOME   : return "HOME";
             case SEARCH : return "SEARCH";
             case SUGGEST: return "SUGGEST";

@@ -76,9 +76,6 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         this.recyclerView.setAdapter(this.adapter);
 
-        /* Perform force click */
-        this.recyclerViewListClicked(this.recyclerView.getChildAt(this.iActiveNavItem), iActiveNavItem);
-
         return view;
     }
 
