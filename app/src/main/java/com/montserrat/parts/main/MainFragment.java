@@ -88,7 +88,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     }
 
     @Override
-    public void onAskMoreIfAny (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+    public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         MainFragment.this.submit();
     }
 

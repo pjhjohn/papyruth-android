@@ -18,13 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.montserrat.activity.R;
-import com.montserrat.controller.AppConst;
-import com.montserrat.parts.main.MainFragment;
-import com.montserrat.utils.recycler.HidingScrollListener;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
-import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

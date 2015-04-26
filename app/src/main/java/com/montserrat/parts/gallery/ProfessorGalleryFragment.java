@@ -34,7 +34,7 @@ public class ProfessorGalleryFragment extends ClientFragmentWithRecyclerView<Gal
     }
 
     @Override
-    public void onAskMoreIfAny (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+    public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         //TODO : Implement it.
     }
 

@@ -59,7 +59,7 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailR
     }
 
     @Override
-    public void onAskMoreIfAny (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+    public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         //TODO : Implement it.
     }
 

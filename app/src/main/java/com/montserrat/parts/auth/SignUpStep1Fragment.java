@@ -52,7 +52,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     }
 
     @Override
-    public void onAskMoreIfAny (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+    public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         //TODO : Implement it.
     }
 

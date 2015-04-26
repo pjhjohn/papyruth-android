@@ -17,8 +17,7 @@ import com.android.volley.VolleyError;
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.utils.recycler.HidingScrollListener;
-import com.montserrat.utils.recycler.HidingScrollWithAskMoreListener;
+import com.montserrat.utils.recycler.PanelControllerOnScrollWithAskMore;
 import com.montserrat.utils.recycler.RecyclerViewAskMoreListener;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
@@ -40,7 +39,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     private int toolbarId, fabId, swipeRefreshId, recyclerId;
     private boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
     private boolean isRequestForRefreshing, isPending;
-    private HidingScrollWithAskMoreListener recyclerViewScrollListener;
+    private PanelControllerOnScrollWithAskMore recyclerViewScrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,19 +86,19 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
             this.recyclerView.setLayoutManager(this.getRecyclerViewLayoutManager());
             this.adapter = this.getAdapter(this.items);
             this.recyclerView.setAdapter(this.adapter);
-            this.recyclerView.setOnScrollListener(recyclerViewScrollListener = new HidingScrollWithAskMoreListener() {
+            this.recyclerView.setOnScrollListener(recyclerViewScrollListener = new PanelControllerOnScrollWithAskMore() {
                 @Override
                 public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-                    ClientFragmentWithRecyclerView.this.onAskMoreIfAny(overallItemsCount, itemsBeforeMore, maxLastVisiblePosition);
+                    ClientFragmentWithRecyclerView.this.onAskMore(overallItemsCount, itemsBeforeMore, maxLastVisiblePosition);
                 }
 
                 @Override
-                public void onHide () {
+                public void onHidePanels () {
                     ClientFragmentWithRecyclerView.this.hideViews();
                 }
 
                 @Override
-                public void onShow () {
+                public void onShowPanels () {
                     ClientFragmentWithRecyclerView.this.showViews();
                 }
             });
@@ -167,7 +166,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     }
 
     @Override
-    public abstract void onAskMoreIfAny(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition);
+    public abstract void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition);
     public abstract void onRequestResponse(JSONObject response);
     public abstract void onRefreshResponse(JSONObject response);
 
