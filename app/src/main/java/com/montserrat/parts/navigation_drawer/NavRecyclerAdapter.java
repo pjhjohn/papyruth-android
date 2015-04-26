@@ -1,4 +1,4 @@
-package com.montserrat.parts.nav;
+package com.montserrat.parts.navigation_drawer;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
-import com.montserrat.parts.auth.UniversityRecyclerAdapter;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;

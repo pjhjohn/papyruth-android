@@ -1,4 +1,4 @@
-package com.montserrat.parts.main;
+package com.montserrat.parts.lecture;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +9,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
-import com.montserrat.parts.nav.NavRecyclerAdapter;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -17,28 +16,28 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static MainRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new MainRecyclerAdapter(initItemList, listener);
+    public static LecturesRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new LecturesRecyclerAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private MainRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private LecturesRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        MainRecyclerAdapter.itemListener = listener;
+        LecturesRecyclerAdapter.itemListener = listener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_main_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_main, parent, false));
+            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_home_header, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_home, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -97,13 +96,13 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
-            TextView vSubject = (TextView) parent.findViewById(R.id.main_item_subject);
-            TextView vProfessor = (TextView) parent.findViewById(R.id.main_item_professor);
-            RatingBar vRating = (RatingBar) parent.findViewById(R.id.main_item_rating);
+            TextView vSubject = (TextView) parent.findViewById(R.id.home_item_subject);
+            TextView vProfessor = (TextView) parent.findViewById(R.id.home_item_professor);
+            RatingBar vRating = (RatingBar) parent.findViewById(R.id.home_item_rating);
             return new Holder(parent, vSubject, vProfessor, vRating);
         }
 
-        public void bind(MainRecyclerAdapter.Holder.Data item) {
+        public void bind(LecturesRecyclerAdapter.Holder.Data item) {
             this.subject.setText(item.subject);
             this.professor.setText(item.professor);
             this.rating.setRating(item.rating);
@@ -111,7 +110,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick (View view) {
-            MainRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            LecturesRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
         public static class Data {

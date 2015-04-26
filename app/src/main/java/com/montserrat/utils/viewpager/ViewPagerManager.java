@@ -17,24 +17,37 @@ public class ViewPagerManager implements ViewPagerController {
     private Stack<Integer> history;
     private boolean addToBackStack;
     private int currentPage;
+    private Adapter adapter;
 
     public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, FragmentFactory.Type fragmentType, int viewCount) {
-        this.history = new Stack<Integer>();
+        this.adapter = new Adapter(manager, fragmentType, viewCount);
 
         this.pager = pager;
-        this.pager.setAdapter(new Adapter(manager, fragmentType, viewCount));
+        this.pager.setAdapter(this.adapter);
         this.pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled (int position, float positionOffset, int positionOffsetPixels) {}
             @Override public void onPageScrollStateChanged (int state) {}
             @Override
             public void onPageSelected (int position) {
-                if(ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(Integer.valueOf(currentPage));
+                if(ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(currentPage);
                 ViewPagerManager.this.addToBackStack = true;
                 ViewPagerManager.this.currentPage = position;
             }
         });
+
+        this.reset();
+    }
+
+    public void active() {
+        this.pager.setAdapter(this.adapter);
+        this.reset();
+    }
+
+    public void reset() {
+        this.history = new Stack<Integer>();
         this.addToBackStack = true;
-        this.currentPage = this.pager.getCurrentItem();
+        this.currentPage = 0;
+        this.setCurrentPage(this.currentPage, false);
     }
 
     public void setSwipeEnabled(boolean swipable) {
@@ -53,7 +66,7 @@ public class ViewPagerManager implements ViewPagerController {
     public boolean onBackPressed() {
         if(!this.history.isEmpty()) {
             this.addToBackStack = false;
-            this.pager.setCurrentItem(this.history.pop().intValue());
+            this.pager.setCurrentItem(this.history.pop());
             return true;
         } return false;
     }

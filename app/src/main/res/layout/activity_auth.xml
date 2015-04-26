@@ -8,8 +8,7 @@
     <com.montserrat.utils.viewpager.FlexibleViewPager
         android:id="@+id/auth_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
     </com.montserrat.utils.viewpager.FlexibleViewPager>
 </LinearLayout>
 

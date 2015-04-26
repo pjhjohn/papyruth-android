@@ -14,7 +14,7 @@ public class UserInfo {
     private CharSequence name;
     private CharSequence nickname;
     private CharSequence email;
-    private Integer school;
+    private Integer university;
     private Integer admission;
     private Boolean isBoy;
     private boolean validUser;
@@ -27,7 +27,7 @@ public class UserInfo {
         this.name       = null;
         this.nickname   = null;
         this.email      = null;
-        this.school     = null;
+        this.university = null;
         this.isBoy      = null;
         this.admission  = null;
         this.validUser  = false;
@@ -45,8 +45,8 @@ public class UserInfo {
     public void setName(CharSequence name) {
         this.name = name;
     }
-    public void setSchool(int schoolCode) {
-        this.school = schoolCode;
+    public void setSchool(int universityId) {
+        this.university = universityId;
     }
     public void setAdmissionYear(int admissionYear) {
         this.admission = admissionYear;
@@ -56,11 +56,11 @@ public class UserInfo {
     }
 
     public boolean isDataReadyOnStep1 () {
-        return this.school != null;
+        return this.university != null;
     }
 
     public boolean isDataReadyOnStep2 () {
-        return this.school != null
+        return this.university != null
                 && this.name != null
                 && this.nickname != null
                 && this.email != null

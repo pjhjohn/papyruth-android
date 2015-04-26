@@ -1,4 +1,4 @@
-package com.montserrat.parts.main;
+package com.montserrat.parts.lecture;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAdapter, MainRecyclerAdapter.Holder.Data> {
+public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRecyclerAdapter, LecturesRecyclerAdapter.Holder.Data> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
@@ -28,16 +28,22 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-//                MainFragment.this.submit();
+                // TODO : Access to NavFragment so that changing category is possible
             }
         });
+
+        /* Request with Initializer Data. ENPOINT SHOULD BE DEFINED WITH */
+        if(this.args!=null) try {
+            final JSONObject initialDataToSubmit = new JSONObject(this.args.getString(AppConst.Resource.INITIALIZER, AppConst.Request.DEFAULT));
+            this.setParameters(initialDataToSubmit).submit();
+        } catch (JSONException e) {}
 
         return view;
     }
 
     @Override
-    protected MainRecyclerAdapter getAdapter (List<MainRecyclerAdapter.Holder.Data> items) {
-        return MainRecyclerAdapter.newInstance(this.items, this);
+    protected LecturesRecyclerAdapter getAdapter (List<LecturesRecyclerAdapter.Holder.Data> items) {
+        return LecturesRecyclerAdapter.newInstance(this.items, this);
     }
 
     @Override
@@ -47,7 +53,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
                 JSONArray data = response.getJSONArray("data");
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject row = data.getJSONObject(i);
-                    this.items.add(new MainRecyclerAdapter.Holder.Data(
+                    this.items.add(new LecturesRecyclerAdapter.Holder.Data(
                             row.getString("subject"),
                             row.getString("professor"),
                             (float)row.getDouble("rating")
@@ -68,7 +74,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
                 this.items.clear();
                 for (int i = 0; i < data.length(); i++) {
                     JSONObject row = data.getJSONObject(i);
-                    this.items.add(new MainRecyclerAdapter.Holder.Data(
+                    this.items.add(new LecturesRecyclerAdapter.Holder.Data(
                             row.getString("subject"),
                             row.getString("professor"),
                             (float)row.getDouble("rating")
@@ -98,12 +104,12 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
     }
 
     public static Fragment newInstance () {
-        Fragment fragment = new MainFragment();
+        Fragment fragment = new LecturesFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
         bundle.putString(AppConst.Request.CONTROLLER, "search");
         bundle.putString(AppConst.Request.ACTION, "refresh");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_main);
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_home);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.main_recyclerview);
         bundle.putInt(AppConst.Resource.FAB, R.id.fab);
         bundle.putInt(AppConst.Resource.TOOLBAR, R.id.toolbar);

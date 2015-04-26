@@ -22,7 +22,7 @@
             android:elevation="15dp">
             <TextView
                 style="@style/MainTextAppearance"
-                android:id="@+id/main_item_subject"
+                android:id="@+id/home_item_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -33,19 +33,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/main_item_professor"
+                    android:id="@+id/home_item_professor"
                     style="@style/MainTextAppearance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_alignParentLeft="true"
                     android:textSize="16sp"
-                    android:layout_alignBottom="@+id/main_item_rating"/>
+                    android:layout_alignBottom="@+id/home_item_rating"/>
                 <!--style="?android:ratingBarStyleIndicator"-->
                 <!--style="@style/MainRatingBar"-->
                 <RatingBar
                     style="?android:ratingBarStyleSmall"
-                    android:id="@+id/main_item_rating"
+                    android:id="@+id/home_item_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
