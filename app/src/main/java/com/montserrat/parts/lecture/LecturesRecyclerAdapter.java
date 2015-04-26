@@ -1,4 +1,4 @@
-package com.montserrat.parts.main;
+package com.montserrat.parts.lecture;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,20 +16,20 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static MainRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new MainRecyclerAdapter(initItemList, listener);
+    public static LecturesRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new LecturesRecyclerAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private MainRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private LecturesRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        MainRecyclerAdapter.itemListener = listener;
+        LecturesRecyclerAdapter.itemListener = listener;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return new Holder(parent, vSubject, vProfessor, vRating);
         }
 
-        public void bind(MainRecyclerAdapter.Holder.Data item) {
+        public void bind(LecturesRecyclerAdapter.Holder.Data item) {
             this.subject.setText(item.subject);
             this.professor.setText(item.professor);
             this.rating.setRating(item.rating);
@@ -110,7 +110,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick (View view) {
-            MainRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            LecturesRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
         public static class Data {

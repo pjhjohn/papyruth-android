@@ -8,7 +8,7 @@ import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.detail.DetailFragment_temp;
-import com.montserrat.parts.main.MainFragment;
+import com.montserrat.parts.lecture.LecturesFragment;
 
 import org.json.JSONObject;
 
@@ -37,7 +37,7 @@ public class FragmentFactory {
                 } break;
             case HOME :
                 switch(position) {
-                    case AppConst.ViewPager.Home.HOME           : fragment = MainFragment.newInstance();        break;
+                    case AppConst.ViewPager.Home.HOME           : fragment = LecturesFragment.newInstance();        break;
                 } break;
             case SEARCH :
                 switch(position) {
@@ -45,7 +45,7 @@ public class FragmentFactory {
                 } break;
             case SUGGEST:
                 switch(position) {
-                    case AppConst.ViewPager.Suggest.DUMMY    : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Suggest.DUMMY       : fragment = DummyFragment.newInstance();       break;
                 } break;
             case WRITE :
                 switch(position) {
@@ -63,7 +63,7 @@ public class FragmentFactory {
                 } break;
             case SIGNOUT :
                 switch(position) {
-                    case AppConst.ViewPager.Signout.DUMMY       : fragment = DetailFragment_temp.newInstance();       break;
+                    case AppConst.ViewPager.Signout.DUMMY       : fragment = DetailFragment_temp.newInstance(); break;
                 } break;
             default : break;
         }
