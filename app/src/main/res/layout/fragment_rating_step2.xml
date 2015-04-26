@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/padding_vertical_thick"
+    android:paddingRight="@dimen/padding_vertical_thick">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <AutoCompleteTextView
+            android:id="@+id/autotext_lecture"
+            android:hint="@string/hint_lecture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <AutoCompleteTextView
+            android:id="@+id/autotext_professor"
+            android:hint="@string/hint_professor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <RatingBar
+            android:id="@+id/score_overall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:stepSize="2"
+            android:rating="0"/>
+
+        <SeekBar
+            android:id="@+id/score_satisfaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <SeekBar
+            android:id="@+id/score_easiness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <SeekBar
+            android:id="@+id/score_lecture_quality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/next"/>
+    </LinearLayout>
+</FrameLayout>

@@ -1,31 +1,21 @@
 package com.montserrat.parts.rating;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.Button;
 
-import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.parts.auth.SignUpStep2Fragment;
-import com.montserrat.parts.auth.UserInfo;
 import com.montserrat.utils.request.ClientFragment;
-import com.montserrat.utils.validator.Validator;
+import com.montserrat.utils.viewpager.ViewPagerController;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -33,11 +23,25 @@ import java.util.List;
  * Searches Lecture for Rating on Step 1.
  */
 public class RatingStep1Fragment extends ClientFragment {
+    private ViewPagerController pageController;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.pageController = (ViewPagerController) activity;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
         /* Bind Views */
+        ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                RatingStep1Fragment.this.pageController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP2, true);
+            }
+        });
 
         return view;
     }

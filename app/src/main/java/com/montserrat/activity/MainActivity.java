@@ -18,12 +18,13 @@ import com.montserrat.controller.AppManager;
 import com.montserrat.parts.FragmentFactory;
 import com.montserrat.parts.navigation_drawer.NavFragment;
 import com.montserrat.utils.viewpager.FlexibleViewPager;
+import com.montserrat.utils.viewpager.ViewPagerController;
 import com.montserrat.utils.viewpager.ViewPagerManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.NavCallback {
+public class MainActivity extends ActionBarActivity implements NavFragment.NavCallback, ViewPagerController {
     private NavFragment drawer;
     private FlexibleViewPager viewpager;
     private String title;
@@ -47,11 +48,12 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.HOME     , AppConst.ViewPager.Home.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SEARCH   , AppConst.ViewPager.Search.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SUGGEST  , AppConst.ViewPager.Suggest.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.WRITE    , AppConst.ViewPager.Write.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RATING, AppConst.ViewPager.Rating.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RANDOM   , AppConst.ViewPager.Random.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.PROFILE  , AppConst.ViewPager.Profile.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SIGNOUT  , AppConst.ViewPager.Signout.LENGTH));
         this.managers.get(0).active();
+        for(ViewPagerManager manager : this.managers) manager.setSwipeEnabled(false);
     }
 
     //
@@ -107,6 +109,11 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         actionBar.setTitle(this.title);
     }
 
+    @Override
+    public void setCurrentPage (int pageNum, boolean addToBackStack) {
+        this.managers.get(this.drawer.getActiveCategory()).setCurrentPage(pageNum, addToBackStack);
+    }
+
 
     //searchview Listener
     public class queryTextListner implements SearchView.OnQueryTextListener{
@@ -121,5 +128,10 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         public boolean onQueryTextChange(String newText) {
             return false;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!this.managers.get(this.drawer.getActiveCategory()).onBackPressed()) super.onBackPressed();
     }
 }

@@ -38,7 +38,7 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                LecturesFragment.this.navCallback.onNavItemSelected(NavFragment.Category.WRITE);
+                LecturesFragment.this.navCallback.onNavItemSelected(NavFragment.Category.RATING);
             }
         });
 

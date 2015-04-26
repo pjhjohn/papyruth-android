@@ -58,11 +58,23 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
     /**
      * TODO : Synchronize Category with Data initializatio in onCreateView
      */
+    public static String stringify(int category) {
+        switch(category) {
+            case Category.HOME : return "HOME";
+            case Category.SEARCH : return "SEARCH";
+            case Category.SUGGEST : return "SUGGEST";
+            case Category.RATING: return "RATING";
+            case Category.RANDOM : return "RANDOM";
+            case Category.PROFILE : return "PROFILE";
+            case Category.SIGNOUT : return "SIGNOUT";
+            default : return "<UNASSIGNED>";
+        }
+    }
     public static final class Category {
         public static final int HOME    = 0;
         public static final int SEARCH  = 1;
         public static final int SUGGEST = 2;
-        public static final int WRITE   = 3;
+        public static final int RATING = 3;
         public static final int RANDOM  = 4;
         public static final int PROFILE = 5;
         public static final int SIGNOUT = 6;
@@ -90,6 +102,10 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.recyclerView.setAdapter(this.adapter);
 
         return view;
+    }
+
+    public int getActiveCategory() {
+        return this.iActiveNavItem;
     }
 
     @Override
