@@ -5,7 +5,7 @@
     <!--navigation-->
     <string name="nav_item_home">Home</string>
     <string name="nav_item_search">Search</string>
-    <string name="nav_item_recommendation">Recommendation</string>
+    <string name="nav_item_suggest">Suggestion</string>
     <string name="nav_item_write">Write</string>
     <string name="nav_item_random">Random</string>
     <string name="nav_item_profile">Profile</string>

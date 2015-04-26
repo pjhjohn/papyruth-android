@@ -55,6 +55,19 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.setHasOptionsMenu(true);
     }
 
+    /**
+     * TODO : Synchronize Category with Data initializatio in onCreateView
+     */
+    public static final class Category {
+        public static final int HOME    = 0;
+        public static final int SEARCH  = 1;
+        public static final int SUGGEST = 2;
+        public static final int WRITE   = 3;
+        public static final int RANDOM  = 4;
+        public static final int PROFILE = 5;
+        public static final int SIGNOUT = 6;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nav, container, false);
@@ -62,7 +75,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.items = new ArrayList<>();
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_suggest), R.drawable.ic_action_location_searching));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
