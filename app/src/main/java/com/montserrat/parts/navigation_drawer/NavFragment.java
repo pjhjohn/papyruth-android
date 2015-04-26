@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NavFragment extends Fragment implements RecyclerViewClickListener{
-    private int iActiveNavItem;
-    private NavCallback callback;
+    private int iActiveCategory;
+    private OnCategoryClickListener callback;
     private View fragmentContainerView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -104,15 +104,19 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         return view;
     }
 
+    public void setActiveCategory(int category) {
+        this.iActiveCategory = category;
+    }
+
     public int getActiveCategory() {
-        return this.iActiveNavItem;
+        return this.iActiveCategory;
     }
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        this.iActiveNavItem = position;
+        this.iActiveCategory = position;
         if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
-        if (this.callback != null) this.callback.onNavItemSelected(position);
+        if (this.callback != null) this.callback.onCategorySelected(position);
     }
 
     public boolean isDrawerOpen() {
@@ -141,7 +145,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
 
         this.drawerLayout.post(new Runnable() {
             @Override
-            public void run() {
+            public void run () {
                 NavFragment.this.drawerToggle.syncState();
             }
         });
@@ -152,7 +156,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            this.callback = (NavCallback) activity;
+            this.callback = (OnCategoryClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavCallback.");
         }
@@ -205,7 +209,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         return ((ActionBarActivity) this.getActivity()).getSupportActionBar();
     }
 
-    public static interface NavCallback {
-        void onNavItemSelected(int position);
+    public static interface OnCategoryClickListener {
+        void onCategorySelected (int category);
     }
 }

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
@@ -24,10 +25,9 @@ import com.montserrat.utils.viewpager.ViewPagerManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.NavCallback, ViewPagerController {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerController {
     private NavFragment drawer;
     private FlexibleViewPager viewpager;
-    private String title;
     private List<ViewPagerManager> managers;
 
     @Override
@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.HOME     , AppConst.ViewPager.Home.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SEARCH   , AppConst.ViewPager.Search.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SUGGEST  , AppConst.ViewPager.Suggest.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RATING, AppConst.ViewPager.Rating.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RATING   , AppConst.ViewPager.Rating.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RANDOM   , AppConst.ViewPager.Random.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.PROFILE  , AppConst.ViewPager.Profile.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SIGNOUT  , AppConst.ViewPager.Signout.LENGTH));
@@ -58,8 +58,9 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
 
     //
     @Override
-    public void onNavItemSelected(int position) {
-        this.managers.get(position).active();
+    public void onCategorySelected (int category) {
+        this.drawer.setActiveCategory(category);
+        this.managers.get(category).active();
     }
 
     @Override
@@ -106,11 +107,12 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
         ActionBar actionBar = this.getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(this.title);
+        actionBar.setTitle("");
     }
 
     @Override
     public void setCurrentPage (int pageNum, boolean addToBackStack) {
+        Toast.makeText(this, ""+NavFragment.stringify(this.drawer.getActiveCategory()), Toast.LENGTH_LONG).show();
         this.managers.get(this.drawer.getActiveCategory()).setCurrentPage(pageNum, addToBackStack);
     }
 
@@ -132,6 +134,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.NavCa
 
     @Override
     public void onBackPressed() {
+        Toast.makeText(this, ""+NavFragment.stringify(this.drawer.getActiveCategory()), Toast.LENGTH_LONG).show();
         if(!this.managers.get(this.drawer.getActiveCategory()).onBackPressed()) super.onBackPressed();
     }
 }

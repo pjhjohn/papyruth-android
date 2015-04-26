@@ -22,12 +22,12 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRecyclerAdapter, LecturesRecyclerAdapter.Holder.Data> {
-    private NavFragment.NavCallback navCallback;
+    private NavFragment.OnCategoryClickListener callback;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navCallback = (NavFragment.NavCallback) activity;
+        this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                LecturesFragment.this.navCallback.onNavItemSelected(NavFragment.Category.RATING);
+                LecturesFragment.this.callback.onCategorySelected(NavFragment.Category.RATING);
             }
         });
 

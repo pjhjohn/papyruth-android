@@ -18,13 +18,11 @@ public class ViewPagerManager implements ViewPagerController {
     private boolean addToBackStack;
     private int currentPage;
     private Adapter adapter;
+    private ViewPager.OnPageChangeListener listener;
 
     public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, FragmentFactory.Type fragmentType, int viewCount) {
         this.adapter = new Adapter(manager, fragmentType, viewCount);
-
-        this.pager = pager;
-        this.pager.setAdapter(this.adapter);
-        this.pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        this.listener = new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled (int position, float positionOffset, int positionOffsetPixels) {}
             @Override public void onPageScrollStateChanged (int state) {}
             @Override
@@ -33,13 +31,15 @@ public class ViewPagerManager implements ViewPagerController {
                 ViewPagerManager.this.addToBackStack = true;
                 ViewPagerManager.this.currentPage = position;
             }
-        });
+        };
 
-        this.reset();
+        this.pager = pager;
+        this.active();
     }
 
     public void active() {
         this.pager.setAdapter(this.adapter);
+        this.pager.setOnPageChangeListener(this.listener);
         this.reset();
     }
 
