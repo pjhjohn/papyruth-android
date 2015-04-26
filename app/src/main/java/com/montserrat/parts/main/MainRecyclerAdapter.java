@@ -9,7 +9,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
-import com.montserrat.parts.nav.NavRecyclerAdapter;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -37,8 +36,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_main_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_main, parent, false));
+            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_home_header, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_home, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -97,9 +96,9 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
-            TextView vSubject = (TextView) parent.findViewById(R.id.main_item_subject);
-            TextView vProfessor = (TextView) parent.findViewById(R.id.main_item_professor);
-            RatingBar vRating = (RatingBar) parent.findViewById(R.id.main_item_rating);
+            TextView vSubject = (TextView) parent.findViewById(R.id.home_item_subject);
+            TextView vProfessor = (TextView) parent.findViewById(R.id.home_item_professor);
+            RatingBar vRating = (RatingBar) parent.findViewById(R.id.home_item_rating);
             return new Holder(parent, vSubject, vProfessor, vRating);
         }
 

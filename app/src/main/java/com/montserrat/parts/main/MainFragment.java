@@ -103,7 +103,7 @@ public class MainFragment extends ClientFragmentWithRecyclerView<MainRecyclerAda
         bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
         bundle.putString(AppConst.Request.CONTROLLER, "search");
         bundle.putString(AppConst.Request.ACTION, "refresh");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_main);
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_home);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.main_recyclerview);
         bundle.putInt(AppConst.Resource.FAB, R.id.fab);
         bundle.putInt(AppConst.Resource.TOOLBAR, R.id.toolbar);

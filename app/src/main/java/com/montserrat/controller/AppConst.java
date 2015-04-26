@@ -41,18 +41,56 @@ public class AppConst {
             public static final int POST = com.android.volley.Request.Method.POST;
         }
     }
+
+    /**
+     * Hierachy of ViewPager is directly mapped to FragmentFactory & ViewPagerManager
+     * Subclass of ViewPager should be registered as Type of FragmentFactory
+     */
     public static class ViewPager {
+        /* For Auth Activity */
         public static class Auth {
             public static final int LENGTH = 3;
             public static final int AUTH = 0;
             public static final int SIGNUP_STEP1 = 1;
             public static final int SIGNUP_STEP2 = 2;
         }
-        public static class Main {
 
+        /* For Main Activity : Subclasses are 1 : 1 mapped to navigation category */
+        public static class Home {
+            public static final int LENGTH = 1;
+            public static final int HOME = 0;
         }
-        public static class Detail{
+        public static class Search {
+            public static final int LENGTH = 1;
+            public static final int DUMMY = 0;
+        }
+        public static class Suggestion {
+            public static final int LENGTH = 1;
+            public static final int DUMMY = 0;
+        }
+        public static class Write {
+            public static final int LENGTH = 3;
+            public static final int WRITE_STEP1 = 0;
+            public static final int WRITE_STEP2 = 1;
+            public static final int WRITE_STEP3 = 2;
+        }
+        public static class Random {
+            public static final int LENGTH = 3;
+            public static final int DUMMY = 0;
+        }
+        public static class Profile {
+            public static final int LENGTH = 1;
+            public static final int DUMMY = 0;
+        }
+        public static class Signout {
+            public static final int LENGTH = 1;
+            public static final int DUMMY = 0;
+        }
 
+        /* Legacy for sss */
+        public static class Detail{
+            public static final int LENGTH = 1;
+            public static final int TEMP = 0;
         }
     }
     public static class User {
