@@ -133,6 +133,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
 
     @Override
     public void submit() {
+        if(this.isRequestForRefreshing) this.setProgressActive(false);
         super.submit();
         if(this.isPending) {
             this.onPendingRequest(); // handle duplicated reqeust
@@ -157,9 +158,9 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
             this.swipeRefreshView.setRefreshing(false);
             this.isRequestForRefreshing = false;
             this.recyclerViewScrollListener.setIsRequestPending(this.isPending = false);
+            this.setProgressActive(true);
             this.onRefreshResponse(response);
         } else {
-            this.isRequestForRefreshing = false;
             this.recyclerViewScrollListener.setIsRequestPending(this.isPending = false);
             this.onRequestResponse(response);
         }
@@ -173,7 +174,10 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
     @Override
     public void onErrorResponse(VolleyError error) {
         super.onErrorResponse(error);
-        if(this.isRequestForRefreshing) this.swipeRefreshView.setRefreshing(false);
+        if(this.isRequestForRefreshing) {
+            this.swipeRefreshView.setRefreshing(false);
+            this.setProgressActive(true);
+        }
         this.isRequestForRefreshing = false;
         this.recyclerViewScrollListener.setIsRequestPending(this.isPending = false);
     }

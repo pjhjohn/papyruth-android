@@ -29,6 +29,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     private View progressView;
     private View contentView;
     private int progressAnimationTime;
+    private boolean isProgressActive;
     private boolean isContentVisibleDuringProgress;
     private int requestMethod;
     private String requestUrl, requestController, requestAction;
@@ -70,12 +71,12 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
 
         /* Initialize other member variables */
         this.isContentVisibleDuringProgress = true;
+        this.isProgressActive = true;
         this.jsonToRequest = null;
 
         /* Bind Views */
         View view = inflater.inflate(this.fragmentId, container, false);
         if (view == null) Log.d("ClientFragment", "Couldn't inflate Fragment by ID#"+this.fragmentId);
-
         this.progressView = view.findViewById(this.progressId);
         if (progressView == null) Log.d("ClientFragment", "Couldn't find progressView by ID#"+this.progressId);
         this.contentView = view.findViewById(this.contentId);
@@ -84,11 +85,15 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
         return view;
     }
 
+    protected void setProgressActive (boolean enable) {
+        this.isProgressActive = enable;
+    }
+
     protected void setContentVisibilityOnProgress (boolean visibleOnProgress) {
         this.isContentVisibleDuringProgress = visibleOnProgress;
     }
 
-    public void setProgressState (final boolean show) {
+    private void showProgress (final boolean show) {
         if (this.progressView != null) {
             this.progressView.setVisibility(show ? View.VISIBLE : View.GONE);
             this.progressView.animate().setDuration(this.progressAnimationTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -149,7 +154,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
                 this,
                 this
         );
-        this.setProgressState(true);
+        if(this.isProgressActive) this.showProgress(true);
 //        TODO : TIMEOUT HANDLING, RETRY POLICY
 //        myRequest.setRetryPolicy(new DefaultRetryPolicy(
 //                MY_SOCKET_TIMEOUT_MS,
@@ -167,12 +172,12 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     @Override
     public void onResponse (JSONObject response) {
         Log.d("DEBUG", "Response\n" + response.toString());
-        this.setProgressState(false);
+        if(this.isProgressActive) this.showProgress(false);
     }
 
     @Override
     public void onErrorResponse (VolleyError error) {
         Log.d("DEBUG", "Error\n" + error.toString());
-        this.setProgressState(false);
+        if(this.isProgressActive) this.showProgress(false);
     }
 }
