@@ -56,16 +56,11 @@ public class UserInfo {
         this.isBoy = isBoy;
     }
 
-    public boolean isDataReadyOnStep1 () {
-        return this.university != null;
-    }
-
-    public boolean isDataReadyOnStep2 () {
-        return this.university != null
-                && this.name != null
-                && this.nickname != null
-                && this.email != null
-                && this.isBoy != null
-                && this.admission != null;
+    public int getCompletionLevel() {
+        /* STEP 1 */
+        if(this.university == null) return 0;
+        /* STEP 2 */
+        if(this.name == null || this.nickname == null || this.email == null || this.isBoy == null || this.admission == null ) return 1;
+        return 2;
     }
 }
