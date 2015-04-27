@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     //
     @Override
     public void onCategorySelected (int category) {
+        this.terminate = false;
         this.drawer.setActiveCategory(category);
         this.managers.get(category).active();
     }
@@ -112,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     @Override
     public void setCurrentPage (int pageNum, boolean addToBackStack) {
-        Toast.makeText(this, ""+NavFragment.stringify(this.drawer.getActiveCategory()), Toast.LENGTH_LONG).show();
+        this.terminate = false;
         this.managers.get(this.drawer.getActiveCategory()).setCurrentPage(pageNum, addToBackStack);
     }
 
@@ -132,9 +133,15 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         }
     }
 
+    private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, ""+NavFragment.stringify(this.drawer.getActiveCategory()), Toast.LENGTH_LONG).show();
-        if(!this.managers.get(this.drawer.getActiveCategory()).onBackPressed()) super.onBackPressed();
+        if(!this.managers.get(this.drawer.getActiveCategory()).onBackPressed()) {
+            if(terminate) super.onBackPressed();
+            else {
+                Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();
+                terminate = true;
+            }
+        } else terminate = false;
     }
 }

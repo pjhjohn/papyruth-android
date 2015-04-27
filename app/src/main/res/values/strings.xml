@@ -40,4 +40,5 @@
     <string name="prompt_spinner">Admission Year</string>
     <string name="hint_lecture">Lecture Title</string>
     <string name="hint_professor">Professor Name</string>
+    <string name="confirm_exit">Press again to close application</string>
 </resources>
