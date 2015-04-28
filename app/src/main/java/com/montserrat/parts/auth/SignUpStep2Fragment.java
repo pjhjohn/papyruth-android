@@ -75,7 +75,7 @@ public class SignUpStep2Fragment extends ClientFragment {
         UserInfo.getInstance().setNickName(vNickname.getText().toString());
         UserInfo.getInstance().setGender(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
         UserInfo.getInstance().setAdmissionYear((Integer)vAdmission.getSelectedItem());
-        if(UserInfo.getInstance().isDataReadyOnStep2()) {
+        if ( UserInfo.getInstance().getCompletionLevel() >= 2 ) {
             this.setParameters(null).submit();
         }
     }
@@ -121,6 +121,7 @@ public class SignUpStep2Fragment extends ClientFragment {
 
     public void onSignUpSuccess() {
         SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
+		SignUpStep2Fragment.this.getActivity().finish();
     }
     public void onSignUpFailure(JSONObject response) {
         Toast.makeText(this.getActivity(), response.toString(), Toast.LENGTH_LONG).show();

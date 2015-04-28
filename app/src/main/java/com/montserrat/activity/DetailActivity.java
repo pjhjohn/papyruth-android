@@ -62,12 +62,12 @@ public class DetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        mPager = (ViewPager)findViewById(R.id.viewPager);
-        mPager.setAdapter(new PagerAdapterClass(getApplicationContext()));
-        mPager.setPageMargin(15);
-        mPager.enableCenterLockOfChilds();
-        mPager.setCurrentItemInCenter(0);
+//
+//        mPager = (ViewPager)findViewById(R.id.viewPager);
+//        mPager.setAdapter(new PagerAdapterClass(getApplicationContext()));
+//        mPager.setPageMargin(15);
+//        mPager.enableCenterLockOfChilds();
+//        mPager.setCurrentItemInCenter(0);
     }
 
     private void setCurrentInflateItem(int type){
@@ -113,22 +113,22 @@ public class DetailActivity extends ActionBarActivity {
         public Object instantiateItem(View pager, int position) {
             View v = null;
             if(position==0){
-                v = mInflater.inflate(R.layout.sss_page1, null);
+                v = mInflater.inflate(R.layout.fragment_detail, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==1){
-                v = mInflater.inflate(R.layout.sss_page1, null);
+                v = mInflater.inflate(R.layout.fragment_detail, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==2){
-                v = mInflater.inflate(R.layout.sss_page1, null);
+                v = mInflater.inflate(R.layout.fragment_detail, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==3){
-                v = mInflater.inflate(R.layout.sss_page1, null);
+                v = mInflater.inflate(R.layout.fragment_detail, null);
                 v.findViewById(R.id.iv_one);
             }else if(position==4){
-                v = mInflater.inflate(R.layout.sss_page1, null);
+                v = mInflater.inflate(R.layout.fragment_detail, null);
                 v.findViewById(R.id.iv_one);
             }else{
-                v = mInflater.inflate(R.layout.sss_page1, null);
+                v = mInflater.inflate(R.layout.fragment_detail, null);
                 v.findViewById(R.id.iv_one);
             }
 

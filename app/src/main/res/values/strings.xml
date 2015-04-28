@@ -5,7 +5,7 @@
     <!--navigation-->
     <string name="nav_item_home">Home</string>
     <string name="nav_item_search">Search</string>
-    <string name="nav_item_recommendation">Recommendation</string>
+    <string name="nav_item_suggest">Suggestion</string>
     <string name="nav_item_write">Write</string>
     <string name="nav_item_random">Random</string>
     <string name="nav_item_profile">Profile</string>
@@ -38,4 +38,7 @@
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="prompt_spinner">Admission Year</string>
+    <string name="hint_lecture">Lecture Title</string>
+    <string name="hint_professor">Professor Name</string>
+    <string name="confirm_exit">Press again to close application</string>
 </resources>

@@ -9,6 +9,9 @@ import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.detail.DetailFragment;
 import com.montserrat.parts.lecture.LecturesFragment;
+import com.montserrat.parts.rating.RatingStep1Fragment;
+import com.montserrat.parts.rating.RatingStep2Fragment;
+import com.montserrat.parts.rating.RatingStep3Fragment;
 
 import org.json.JSONObject;
 
@@ -19,7 +22,7 @@ public class FragmentFactory {
     private FragmentFactory () {}
     /* TODO : static final integer VS enum */
     public enum Type {
-        AUTH, HOME, SEARCH, SUGGEST, WRITE, RANDOM, PROFILE, SIGNOUT
+        AUTH, HOME, SEARCH, SUGGEST, RATING, RANDOM, PROFILE, SIGNOUT
     }
 
     public static Fragment create(Type type) {
@@ -47,11 +50,11 @@ public class FragmentFactory {
                 switch(position) {
                     case AppConst.ViewPager.Suggest.DUMMY       : fragment = DummyFragment.newInstance();       break;
                 } break;
-            case WRITE :
+            case RATING:
                 switch(position) {
-                    case AppConst.ViewPager.Write.WRITE_STEP1   : fragment = DummyFragment.newInstance();       break;
-                    case AppConst.ViewPager.Write.WRITE_STEP2   : fragment = DummyFragment.newInstance();       break;
-                    case AppConst.ViewPager.Write.WRITE_STEP3   : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Rating.RATING_STEP1: fragment = RatingStep1Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Rating.RATING_STEP2: fragment = RatingStep2Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Rating.RATING_STEP3: fragment = RatingStep3Fragment.newInstance();       break;
                 } break;
             case RANDOM :
                 switch(position) {
@@ -98,7 +101,7 @@ public class FragmentFactory {
             case HOME   : return "HOME";
             case SEARCH : return "SEARCH";
             case SUGGEST: return "SUGGEST";
-            case WRITE  : return "WRITE";
+            case RATING: return "RATING";
             case RANDOM : return "RANDOM";
             case PROFILE: return "PROFILE";
             case SIGNOUT: return "SIGNOUT";

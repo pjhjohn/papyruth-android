@@ -12,8 +12,8 @@
             android:layout_height="24dp"
             android:textSize="24sp"
             android:textColor="@color/gold"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/padding_vertical_basic"
+            android:layout_marginStart="@dimen/padding_vertical_basic"
             android:layout_gravity="bottom|left"
             android:text="@string/user_dummy"/>
     </FrameLayout>

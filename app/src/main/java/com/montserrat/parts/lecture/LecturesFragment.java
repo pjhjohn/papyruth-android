@@ -1,5 +1,6 @@
 package com.montserrat.parts.lecture;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
+import com.montserrat.parts.navigation_drawer.NavFragment;
 import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
 
 import org.json.JSONArray;
@@ -20,6 +22,14 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRecyclerAdapter, LecturesRecyclerAdapter.Holder.Data> {
+    private NavFragment.OnCategoryClickListener callback;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.callback = (NavFragment.OnCategoryClickListener) activity;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
@@ -28,7 +38,7 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         this.fabView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                // TODO : Access to NavFragment so that changing category is possible
+                LecturesFragment.this.callback.onCategorySelected(NavFragment.Category.RATING);
             }
         });
 

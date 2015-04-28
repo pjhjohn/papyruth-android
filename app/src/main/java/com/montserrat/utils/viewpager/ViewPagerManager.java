@@ -13,18 +13,19 @@ import java.util.Stack;
  * Created by pjhjohn on 2015-04-23.
  */
 public class ViewPagerManager implements ViewPagerController {
+    public static enum Mode {
+        STANDARD, SWIPE, MULTIPLE, SWIPE_MULTIPLE
+    }
     private FlexibleViewPager pager;
     private Stack<Integer> history;
     private boolean addToBackStack;
     private int currentPage;
     private Adapter adapter;
+    private ViewPager.OnPageChangeListener listener;
 
     public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, FragmentFactory.Type fragmentType, int viewCount) {
         this.adapter = new Adapter(manager, fragmentType, viewCount);
-
-        this.pager = pager;
-        this.pager.setAdapter(this.adapter);
-        this.pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        this.listener = new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled (int position, float positionOffset, int positionOffsetPixels) {}
             @Override public void onPageScrollStateChanged (int state) {}
             @Override
@@ -33,13 +34,15 @@ public class ViewPagerManager implements ViewPagerController {
                 ViewPagerManager.this.addToBackStack = true;
                 ViewPagerManager.this.currentPage = position;
             }
-        });
+        };
 
-        this.reset();
+        this.pager = pager;
+        this.active();
     }
 
     public void active() {
         this.pager.setAdapter(this.adapter);
+        this.pager.setOnPageChangeListener(this.listener);
         this.reset();
     }
 
@@ -50,8 +53,35 @@ public class ViewPagerManager implements ViewPagerController {
         this.setCurrentPage(this.currentPage, false);
     }
 
+    public void setMode(Mode mode) {
+        switch(mode) {
+            case STANDARD:
+                this.setSwipeEnabled(false);
+                this.setAdjacentPagesVisible(false);
+            case SWIPE:
+                this.setSwipeEnabled(true);
+                this.setAdjacentPagesVisible(false);
+            case MULTIPLE:
+                this.setSwipeEnabled(false);
+                this.setAdjacentPagesVisible(true);
+            case SWIPE_MULTIPLE:
+                this.setSwipeEnabled(true);
+                this.setAdjacentPagesVisible(true);
+        }
+    }
+
     public void setSwipeEnabled(boolean swipable) {
         this.pager.setSwipeEnabled(swipable);
+    }
+    
+    public void setAdjacentPagesVisible(boolean visible){
+        this.pager.setPadding(
+                visible? 20 : 0,
+                0,
+                visible? 20 : 0,
+                0
+        );
+        this.pager.setClipToPadding(visible);
     }
 
     @Override

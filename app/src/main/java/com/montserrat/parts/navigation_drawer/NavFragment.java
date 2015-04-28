@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NavFragment extends Fragment implements RecyclerViewClickListener{
-    private int iActiveNavItem;
-    private NavCallback callback;
+    private int iActiveCategory;
+    private OnCategoryClickListener callback;
     private View fragmentContainerView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -55,6 +55,31 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.setHasOptionsMenu(true);
     }
 
+    /**
+     * TODO : Synchronize Category with Data initializatio in onCreateView
+     */
+    public static String stringify(int category) {
+        switch(category) {
+            case Category.HOME : return "HOME";
+            case Category.SEARCH : return "SEARCH";
+            case Category.SUGGEST : return "SUGGEST";
+            case Category.RATING: return "RATING";
+            case Category.RANDOM : return "RANDOM";
+            case Category.PROFILE : return "PROFILE";
+            case Category.SIGNOUT : return "SIGNOUT";
+            default : return "<UNASSIGNED>";
+        }
+    }
+    public static final class Category {
+        public static final int HOME    = 0;
+        public static final int SEARCH  = 1;
+        public static final int SUGGEST = 2;
+        public static final int RATING = 3;
+        public static final int RANDOM  = 4;
+        public static final int PROFILE = 5;
+        public static final int SIGNOUT = 6;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nav, container, false);
@@ -62,7 +87,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.items = new ArrayList<>();
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_suggest), R.drawable.ic_action_location_searching));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
@@ -79,11 +104,19 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         return view;
     }
 
+    public void setActiveCategory(int category) {
+        this.iActiveCategory = category;
+    }
+
+    public int getActiveCategory() {
+        return this.iActiveCategory;
+    }
+
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        this.iActiveNavItem = position;
+        this.iActiveCategory = position;
         if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
-        if (this.callback != null) this.callback.onNavItemSelected(position);
+        if (this.callback != null) this.callback.onCategorySelected(position);
     }
 
     public boolean isDrawerOpen() {
@@ -112,7 +145,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
 
         this.drawerLayout.post(new Runnable() {
             @Override
-            public void run() {
+            public void run () {
                 NavFragment.this.drawerToggle.syncState();
             }
         });
@@ -123,7 +156,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            this.callback = (NavCallback) activity;
+            this.callback = (OnCategoryClickListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavCallback.");
         }
@@ -176,7 +209,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         return ((ActionBarActivity) this.getActivity()).getSupportActionBar();
     }
 
-    public static interface NavCallback {
-        void onNavItemSelected(int position);
+    public static interface OnCategoryClickListener {
+        void onCategorySelected (int category);
     }
 }

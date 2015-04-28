@@ -1,15 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-        <com.montserrat.lib.ViewPager.ViewPager
-            android:layout_width="match_parent"
-            android:layout_height="564dp"
-            android:id="@+id/viewPager"
-            android:clipToPadding="true"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp" />
+    android:background="#ff0000">
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="146dp"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:id="@+id/iv_one"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp" />
 
-        <include android:id="@+id/detail_fab" layout="@layout/part_fab"/>
-</FrameLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_gravity="right" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/iv_one"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffff" />
+
+</LinearLayout>

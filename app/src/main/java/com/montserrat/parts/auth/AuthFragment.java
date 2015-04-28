@@ -159,8 +159,10 @@ public class AuthFragment extends ClientFragment {
     public void onResponse(JSONObject resp) {
         super.onResponse(resp);
         try {
-            if(resp.getBoolean("success")) this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
-            else {
+            if(resp.getBoolean("success")) {
+                this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
+                this.getActivity().finish();
+            } else {
                 this.vPassword.setError("Invalid Password");
                 this.vPassword.requestFocus();
             }

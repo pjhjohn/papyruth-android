@@ -96,7 +96,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     public void recyclerViewListClicked (View view, int position) {
         Toast.makeText(this.getActivity(), "Current Position Has Position of " + position, Toast.LENGTH_SHORT).show();
         UserInfo.getInstance().setSchool(this.items.get(position).schoolId);
-        if(UserInfo.getInstance().isDataReadyOnStep1()) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+        if ( UserInfo.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 
     @Override
