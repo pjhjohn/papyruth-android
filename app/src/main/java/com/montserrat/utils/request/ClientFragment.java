@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.montserrat.controller.AppConst;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.InvalidPropertiesFormatException;
@@ -170,13 +171,17 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     /* TODO : Override if necessary */
     @Override
     public void onResponse (JSONObject response) {
-        Log.d("DEBUG", "Response\n" + response.toString());
+        try {
+            Log.d("DEBUG", "Response : " + response.toString(2));
+        } catch ( JSONException e ) {
+            Log.d("DEBUG", "Response : " + response.toString());
+        }
         if(this.isProgressActive) this.showProgress(false);
     }
 
     @Override
     public void onErrorResponse (VolleyError error) {
-        Log.d("DEBUG", String.format("%d %s", error.networkResponse.statusCode, error));
+        Log.d("DEBUG", String.format("Status : %d\n%s", error.networkResponse.statusCode, error));
         if(this.isProgressActive) this.showProgress(false);
     }
 }
