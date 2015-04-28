@@ -30,6 +30,7 @@ import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
+import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -160,16 +161,13 @@ public class AuthFragment extends ClientFragment {
     @Override
     public void onResponse(JSONObject resp) {
         super.onResponse(resp);
-        Toast.makeText(this.getActivity(), resp.toString(), Toast.LENGTH_LONG).show();
         try {
             if(resp.getBoolean("success")) {
+                UserInfo.getInstance().setData(resp.getJSONObject("user"));
+                UserInfo.getInstance().setAccessToken(resp.getString("access_token"));
                 this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
                 this.getActivity().finish();
-            } else {
-                this.vPassword.setError("Invalid Password");
-                this.vPassword.requestFocus();
-            }
-
+            } else this.onFailedToSignin();
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -177,6 +175,12 @@ public class AuthFragment extends ClientFragment {
     @Override
     public void onErrorResponse(VolleyError error) {
         super.onErrorResponse(error);
+        if(error.networkResponse.statusCode == 403) this.onFailedToSignin();
+    }
+
+    private void onFailedToSignin() {
+        this.vPassword.setError("Invalid Password");
+        this.vPassword.requestFocus();
     }
 
     public static Fragment newInstance() {

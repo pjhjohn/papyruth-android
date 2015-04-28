@@ -90,12 +90,12 @@ public class UserInfo {
      * @param data data to assign
      */
     public void setData(JSONObject data) {
-        try { this.realname      = data.getString("realname"  ); } catch (JSONException e) {}
-        try { this.nickname      = data.getString("nickname"  ); } catch (JSONException e) {}
-        try { this.email         = data.getString("email"     ); } catch (JSONException e) {}
-        try { this.university_id = data.getInt("university_id"); } catch (JSONException e) {}
-        try { this.entrance_year = data.getInt("enterance_year"); } catch (JSONException e) {}
-        try { this.is_boy        = data.getBoolean("is_boy"   ); } catch (JSONException e) {}
+        try { this.realname      = data.getString("realname"  );   } catch (JSONException e) {}
+        try { this.nickname      = data.getString("nickname"  );   } catch (JSONException e) {}
+        try { this.email         = data.getString("email"     );   } catch (JSONException e) {}
+        try { this.university_id = data.getInt("university_id");   } catch (JSONException e) {}
+        try { this.entrance_year = data.getInt("enterance_year");  } catch (JSONException e) {}
+        try { this.is_boy        = data.getBoolean("is_boy"   );   } catch (JSONException e) {}
     }
 
     /**

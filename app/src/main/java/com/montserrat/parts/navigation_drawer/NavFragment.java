@@ -15,9 +15,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.activity.R;
+import com.montserrat.parts.auth.UserInfo;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.ArrayList;
@@ -83,6 +85,9 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nav, container, false);
+        /* views */
+        ((TextView) view.findViewById(R.id.user_email)).setText(UserInfo.getInstance().getEmail() == null ? this.getResources().getString(R.string.email_default) : UserInfo.getInstance().getEmail());
+
         /* items */
         this.items = new ArrayList<>();
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));

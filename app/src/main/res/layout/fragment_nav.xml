@@ -8,14 +8,14 @@
         android:layout_height="180dp"
         android:background="@drawable/nav_dummy">
         <TextView
+            android:id="@+id/user_email"
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:textSize="24sp"
             android:textColor="@color/gold"
             android:layout_marginLeft="@dimen/padding_vertical_basic"
             android:layout_marginStart="@dimen/padding_vertical_basic"
-            android:layout_gravity="bottom|left"
-            android:text="@string/user_dummy"/>
+            android:layout_gravity="bottom|left"/>
     </FrameLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/nav_recyclerview"
