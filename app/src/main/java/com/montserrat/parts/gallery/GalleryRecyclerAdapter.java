@@ -57,20 +57,20 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     /* Item of list-like recyclerview : WILL BE DISPLAYED AS GRIDVIEW-ELEMENT */
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView school;
-        private Holder(final View parent, TextView school) {
+        private final TextView vUniv;
+        private Holder(final View parent, TextView vUniv) {
             super(parent);
-            this.school = school;
+            this.vUniv = vUniv;
             parent.setOnClickListener(this);
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
-            TextView school = (TextView) parent.findViewById(R.id.university_item_school);
-            return new Holder(parent, school);
+            TextView vUniv = (TextView) parent.findViewById(R.id.university_item_name);
+            return new Holder(parent, vUniv);
         }
 
         public void bind(GalleryRecyclerAdapter.Holder.Data item) {
-            this.school.setText(item.school);
+            this.vUniv.setText(item.univ);
         }
 
         @Override
@@ -79,12 +79,12 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         public static class Data {
-            public String school;
-            public int schoolCode;
+            public String univ;
+            public int univCode;
             private Data(){}
-            public Data(String school, int schoolCode) {
-                this.school = school;
-                this.schoolCode = schoolCode;
+            public Data(String univ, int univCode) {
+                this.univ = univ;
+                this.univCode = univCode;
             }
         }
     }

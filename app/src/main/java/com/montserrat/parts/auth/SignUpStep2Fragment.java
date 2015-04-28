@@ -71,12 +71,18 @@ public class SignUpStep2Fragment extends ClientFragment {
 
     public void attemptSignUp() {
         UserInfo.getInstance().setEmail(vEmail.getText().toString());
-        UserInfo.getInstance().setName(vName.getText().toString());
+        UserInfo.getInstance().setRealname(vName.getText().toString());
         UserInfo.getInstance().setNickName(vNickname.getText().toString());
         UserInfo.getInstance().setGender(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
         UserInfo.getInstance().setAdmissionYear((Integer)vAdmission.getSelectedItem());
         if ( UserInfo.getInstance().getCompletionLevel() >= 2 ) {
-            this.setParameters(null).submit();
+            JSONObject data = UserInfo.getInstance().toJSONObject();
+            try {
+                data.put("password", this.vPassword.getText().toString());
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+            this.setParameters(data).submit();
         }
     }
 
@@ -130,9 +136,10 @@ public class SignUpStep2Fragment extends ClientFragment {
     public static Fragment newInstance() {
         Fragment fragment = new SignUpStep2Fragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
-        bundle.putString(AppConst.Request.CONTROLLER, "university");
-        bundle.putString(AppConst.Request.ACTION, "all");
+        bundle.putInt(AppConst.Request.METHOD, AppConst.Request.Method.POST);
+        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
+        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
+        bundle.putString(AppConst.Request.ACTION, "users/sign_up");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_step2);
         fragment.setArguments(bundle);
         return fragment;

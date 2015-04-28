@@ -83,9 +83,9 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     public static Fragment newInstance() {
         Fragment fragment = new SignUpStep1Fragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.URL, "http://mont.izz.kr:3000");
-        bundle.putString(AppConst.Request.CONTROLLER, "universities");
-        bundle.putString(AppConst.Request.ACTION, "list");
+        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
+        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
+        bundle.putString(AppConst.Request.ACTION, "universities");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_step1);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.signup_univ_recyclerview);
         fragment.setArguments(bundle);
@@ -95,7 +95,7 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     @Override
     public void recyclerViewListClicked (View view, int position) {
         Toast.makeText(this.getActivity(), "Current Position Has Position of " + position, Toast.LENGTH_SHORT).show();
-        UserInfo.getInstance().setSchool(this.items.get(position).schoolId);
+        UserInfo.getInstance().setUniversityId(this.items.get(position).universityId);
         if ( UserInfo.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 

@@ -71,8 +71,8 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailR
     public static Fragment newInstance () {
         Fragment fragment = new DetailFragment_temp();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
-        bundle.putString(AppConst.Request.CONTROLLER, "detail");
+        bundle.putString(AppConst.Request.API_ROOT_URL, "pjhjohn.appspot.com");
+        bundle.putString(AppConst.Request.API_VERSION, "detail");
         bundle.putString(AppConst.Request.ACTION, "dummy");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_detail);
         bundle.putInt(AppConst.Resource.FAB, R.id.detail_fab);

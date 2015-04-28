@@ -113,7 +113,7 @@ public class AuthFragment extends ClientFragment {
         view.findViewById(R.id.btn_sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthFragment.this.attemptSignup();
+                AuthFragment.this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
             }
         });
 
@@ -147,8 +147,10 @@ public class AuthFragment extends ClientFragment {
 
         if(vFailed.isEmpty()) {
             try {
-                this.setParameters(new JSONObject().put("email", vEmail.getText().toString()).put("password", vPassword.getText().toString()))
-                        .submit();
+                this.setParameters(new JSONObject()
+                        .put("email", vEmail.getText().toString())
+                        .put("password", vPassword.getText().toString()))
+                    .submit();
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -158,6 +160,7 @@ public class AuthFragment extends ClientFragment {
     @Override
     public void onResponse(JSONObject resp) {
         super.onResponse(resp);
+        Toast.makeText(this.getActivity(), resp.toString(), Toast.LENGTH_LONG).show();
         try {
             if(resp.getBoolean("success")) {
                 this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
@@ -174,20 +177,15 @@ public class AuthFragment extends ClientFragment {
     @Override
     public void onErrorResponse(VolleyError error) {
         super.onErrorResponse(error);
-        Toast.makeText(AuthFragment.this.getActivity(), error.toString(), Toast.LENGTH_LONG).show();
-    }
-
-    // TODO : Replace this with your own logic
-    private void attemptSignup() {
-        this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
     }
 
     public static Fragment newInstance() {
         Fragment fragment = new AuthFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.URL, "http://mont.izz.kr:3000");
-        bundle.putString(AppConst.Request.CONTROLLER, "authentication");
-        bundle.putString(AppConst.Request.ACTION, "sign_in");
+        bundle.putInt(AppConst.Request.METHOD, AppConst.Request.Method.POST);
+        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
+        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
+        bundle.putString(AppConst.Request.ACTION, "users/sign_in");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
         bundle.putInt(AppConst.Resource.PROGRESS, R.id.progress_auth);
         bundle.putInt(AppConst.Resource.CONTENT, R.id.content_auth);

@@ -65,9 +65,9 @@ public class RatingStep1Fragment extends ClientFragment {
         Fragment fragment = new RatingStep1Fragment();
         Bundle bundle = new Bundle();
         /* For AutoComplete TextView for lecture title & professor name */
-        bundle.putString(AppConst.Request.URL, "mont.izz.kr:3000");
-        bundle.putString(AppConst.Request.CONTROLLER, "lectures");
-        bundle.putString(AppConst.Request.ACTION, "autocomplete");
+        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
+        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
+        bundle.putString(AppConst.Request.ACTION, "");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_rating_step1);
         fragment.setArguments(bundle);
         return fragment;

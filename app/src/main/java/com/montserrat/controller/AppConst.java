@@ -7,6 +7,10 @@ import com.android.volley.toolbox.Volley;
  * Created by pjhjohn on 2015-04-16.
  */
 public class AppConst {
+    /* API BINDING */
+    public static final String API_ROOT = "http://mont.izz.kr:3001/api";
+    public static final String API_VERSION = "v1";
+
     public static final int MIN_ADMISSION_YEAR = 2000;
     /* KOREAN : 1 WORD == 3 BYTES */
     public static final int MAX_NAME_BYTES = 20;
@@ -36,8 +40,8 @@ public class AppConst {
         /* For ClientFragment - Volley */
         public static final String DEFAULT = "";
         public static final String METHOD = "request_method";
-        public static final String URL = "request_url";
-        public static final String CONTROLLER = "request_controller";
+        public static final String API_ROOT_URL = "request_api_root_url";
+        public static final String API_VERSION = "request_api_vertion";
         public static final String ACTION = "request_action";
         public static class Method {
             public static final int GET = com.android.volley.Request.Method.GET;

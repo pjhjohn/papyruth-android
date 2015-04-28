@@ -32,7 +32,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     private boolean isProgressActive;
     private boolean isContentVisibleDuringProgress;
     private int requestMethod;
-    private String requestUrl, requestController, requestAction;
+    private String apiRootUrl, apiVersion, action;
     private int fragmentId, contentId, progressId;
     private JSONObject jsonToRequest;
     protected Bundle args;
@@ -53,17 +53,17 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
         this.args = this.getArguments();
         if (args != null) {
             this.requestMethod      = args.getInt(AppConst.Request.METHOD, AppConst.Request.Method.GET);
-            this.requestUrl         = args.getString(AppConst.Request.URL, AppConst.Request.DEFAULT);
-            this.requestController  = args.getString(AppConst.Request.CONTROLLER, AppConst.Request.DEFAULT);
-            this.requestAction      = args.getString(AppConst.Request.ACTION, AppConst.Request.DEFAULT);
+            this.apiRootUrl         = args.getString(AppConst.Request.API_ROOT_URL, AppConst.Request.DEFAULT);
+            this.apiVersion         = args.getString(AppConst.Request.API_VERSION, AppConst.Request.DEFAULT);
+            this.action             = args.getString(AppConst.Request.ACTION, AppConst.Request.DEFAULT);
             this.fragmentId         = args.getInt(AppConst.Resource.FRAGMENT, AppConst.Resource.DEFAULT);
             this.contentId          = args.getInt(AppConst.Resource.FRAGMENT, AppConst.Resource.DEFAULT);
             this.progressId         = args.getInt(AppConst.Resource.PROGRESS, AppConst.Resource.DEFAULT);
         } else {
             this.requestMethod      = AppConst.Request.Method.GET;
-            this.requestUrl         = AppConst.Request.DEFAULT;
-            this.requestController  = AppConst.Request.DEFAULT;
-            this.requestAction      = AppConst.Request.DEFAULT;
+            this.apiRootUrl         = AppConst.Request.DEFAULT;
+            this.apiVersion         = AppConst.Request.DEFAULT;
+            this.action             = AppConst.Request.DEFAULT;
             this.fragmentId         = AppConst.Resource.DEFAULT;
             this.contentId          = AppConst.Resource.DEFAULT;
             this.progressId         = AppConst.Resource.DEFAULT;
@@ -114,30 +114,29 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
         }
     }
 
-    public ClientFragment setUrl (String url) throws InvalidPropertiesFormatException {
+    public ClientFragment setApiRootUrl (String url) throws InvalidPropertiesFormatException {
         if (url.split("://").length > 2) throw new InvalidPropertiesFormatException("Invalid URL format. Should in form of (http(s)://)root_url_path:port, where () is optional.");
-        this.requestUrl = url;
+        this.apiRootUrl = url;
         return this;
     }
 
-    public ClientFragment setController (String controller) throws InvalidPropertiesFormatException  {
-        if (controller.split("/").length != 1) throw new InvalidPropertiesFormatException("Controller field does not accept '/' character.");
-        this.requestController = controller;
+    public ClientFragment setApiVersion (String controller) {
+        this.apiVersion = controller;
         return this;
     }
 
     public ClientFragment setAction (String action) {
-        this.requestAction = action;
+        this.action = action;
         return this;
     }
 
     /* TODO : There will be a more elegant way to implement this. */
     public String getRequestEndpoint ()  {
-        if (this.requestUrl.split("://").length == 1) this.requestUrl = "http://" + this.requestUrl; // Default is http, not https.
+        if (this.apiRootUrl.split("://").length == 1) this.apiRootUrl = "http://" + this.apiRootUrl; // Default is http, not https.
         return String.format("%s%s%s",
-                this.requestUrl,
-                this.requestController.isEmpty() ? "" : "/" + this.requestController,
-                this.requestAction.isEmpty()? "" : "/" + this.requestAction
+                this.apiRootUrl,
+                this.apiVersion.isEmpty() ? "" : "/" + this.apiVersion,
+                this.action.isEmpty()? "" : "/" + this.action
         );
     }
 
@@ -177,7 +176,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
 
     @Override
     public void onErrorResponse (VolleyError error) {
-        Log.d("DEBUG", "Error\n" + error.toString());
+        Log.d("DEBUG", String.format("%d %s", error.networkResponse.statusCode, error));
         if(this.isProgressActive) this.showProgress(false);
     }
 }

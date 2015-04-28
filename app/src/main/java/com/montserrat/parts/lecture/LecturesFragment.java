@@ -116,8 +116,8 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
     public static Fragment newInstance () {
         Fragment fragment = new LecturesFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
-        bundle.putString(AppConst.Request.CONTROLLER, "search");
+        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
+        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
         bundle.putString(AppConst.Request.ACTION, "refresh");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_home);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.main_recyclerview);

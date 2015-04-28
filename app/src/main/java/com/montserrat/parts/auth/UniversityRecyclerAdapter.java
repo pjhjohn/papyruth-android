@@ -2,11 +2,9 @@ package com.montserrat.parts.auth;
 
 import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -64,25 +62,25 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     /* Item of list-like recyclerview : WILL BE DISPLAYED AS GRIDVIEW-ELEMENT */
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView viewSchoolName;
-        private SquareImageView viewSchoolImage;
-        private Holder(final View parent, TextView viewSchoolName, SquareImageView viewSchoolImage) {
+        private TextView vUniversityName;
+        private SquareImageView vUniversitySquareImage;
+        private Holder(final View parent, TextView vUniversityName, SquareImageView vUniversitySquareImage) {
             super(parent);
-            this.viewSchoolName = viewSchoolName;
-            this.viewSchoolImage = viewSchoolImage;
+            this.vUniversityName = vUniversityName;
+            this.vUniversitySquareImage = vUniversitySquareImage;
             parent.setOnClickListener(this);
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
             return new Holder(parent,
-                (TextView) parent.findViewById(R.id.university_item_school),
+                (TextView) parent.findViewById(R.id.university_item_name),
                 (SquareImageView) parent.findViewById(R.id.university_item_image)
             );
         }
 
         public void bind(UniversityRecyclerAdapter.Holder.Data item) {
-            this.viewSchoolName.setText(item.schoolName);
-            Glide.with(fragment).load(item.schoolImageUrl).into(this.viewSchoolImage);
+            this.vUniversityName.setText(item.universityName);
+            Glide.with(fragment).load(item.universityImageUrl).into(this.vUniversitySquareImage);
         }
 
         @Override
@@ -91,15 +89,15 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         public static class Data {
-            public String schoolName;
-            public String schoolDomain;
-            public String schoolImageUrl;
-            public int schoolId;
-            public Data(String schoolName, String schoolDomain, String schoolImageUrl, int schoolId) {
-                this.schoolName = schoolName;
-                this.schoolDomain = schoolDomain;
-                this.schoolImageUrl = schoolImageUrl;
-                this.schoolId = schoolId;
+            public String universityName;
+            public String universityDomain;
+            public String universityImageUrl;
+            public int universityId;
+            public Data(String universityName, String universityDomain, String universityImageUrl, int universityId) {
+                this.universityName = universityName;
+                this.universityDomain = universityDomain;
+                this.universityImageUrl = universityImageUrl;
+                this.universityId = universityId;
             }
         }
     }

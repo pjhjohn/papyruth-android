@@ -14,7 +14,7 @@
         android:src="@drawable/snu_logo"
         android:scaleType="centerCrop"/>
     <TextView
-        android:id="@+id/university_item_school"
+        android:id="@+id/university_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
