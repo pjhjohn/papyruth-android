@@ -73,10 +73,10 @@ public class SignUpStep2Fragment extends ClientFragment {
         UserInfo.getInstance().setEmail(vEmail.getText().toString());
         UserInfo.getInstance().setRealname(vName.getText().toString());
         UserInfo.getInstance().setNickName(vNickname.getText().toString());
-        UserInfo.getInstance().setGender(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
+        UserInfo.getInstance().setGenderIsBoy(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
         UserInfo.getInstance().setAdmissionYear((Integer)vAdmission.getSelectedItem());
         if ( UserInfo.getInstance().getCompletionLevel() >= 2 ) {
-            JSONObject data = UserInfo.getInstance().toJSONObject();
+            JSONObject data = UserInfo.getInstance().getData();
             try {
                 data.put("password", this.vPassword.getText().toString());
             } catch(JSONException e) {
