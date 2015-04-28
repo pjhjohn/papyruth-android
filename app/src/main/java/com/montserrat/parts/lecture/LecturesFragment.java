@@ -100,12 +100,12 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
     @Override
     public void onRefresh() {
         super.onRefresh();
-        this.setAction("refresh").submit();
+        this.submit();
     }
 
     @Override
     public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-        this.setAction("more").submit();
+        this.submit();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
         bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
-        bundle.putString(AppConst.Request.ACTION, "refresh");
+        bundle.putString(AppConst.Request.ACTION, "lectures");
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_home);
         bundle.putInt(AppConst.Resource.RECYCLER, R.id.main_recyclerview);
         bundle.putInt(AppConst.Resource.FAB, R.id.fab);
