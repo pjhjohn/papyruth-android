@@ -10,15 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.montserrat.controller.AppConst;
+import com.montserrat.parts.auth.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
+import java.util.Map;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -147,13 +152,22 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     }
 
     public void submit () {
-        final JsonObjectRequest request = new JsonObjectRequest(
+        final JsonObjectRequest request = new JsonObjectRequest (
                 this.requestMethod,
                 this.getRequestEndpoint(),
                 this.jsonToRequest,
                 this,
                 this
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                CharSequence access_token = UserInfo.getInstance().getAccessToken();
+                if(access_token != null && !access_token.toString().isEmpty())
+                    params.put("Authorization", String.format("Token token=\"%s\"", access_token.toString()));
+                return params;
+            }
+        };
         if(this.isProgressActive) this.showProgress(true);
 //        TODO : TIMEOUT HANDLING, RETRY POLICY
 //        myRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -183,5 +197,12 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
     public void onErrorResponse (VolleyError error) {
         Log.d("DEBUG", String.format("Status : %d\n%s", error.networkResponse.statusCode, error));
         if(this.isProgressActive) this.showProgress(false);
+        if(error instanceof AuthFailureError) {
+            // TODO : Handle AuthFailureError, which may caused by Token Expiration */
+        } else if (error instanceof TimeoutError) {
+            // TODO : Handle TimeoutError once Timeout & Retry Policy set.
+        } else {
+            // TODO : Handler other VolleyErrors.
+        }
     }
 }

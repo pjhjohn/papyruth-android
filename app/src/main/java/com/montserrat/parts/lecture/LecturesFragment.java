@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
+import com.montserrat.parts.auth.UserInfo;
 import com.montserrat.parts.navigation_drawer.NavFragment;
 import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
 
@@ -43,11 +44,14 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         });
 
         /* Request with Initializer Data. ENPOINT SHOULD BE DEFINED WITH */
-        if(this.args!=null) try {
-            final JSONObject initialDataToSubmit = new JSONObject(this.args.getString(AppConst.Resource.INITIALIZER, AppConst.Request.DEFAULT));
-            this.setParameters(initialDataToSubmit).submit();
-        } catch (JSONException e) {}
-
+        if(this.args!=null) {
+            try {
+                final JSONObject initialDataToSubmit = new JSONObject(this.args.getString(AppConst.Resource.INITIALIZER, AppConst.Request.DEFAULT));
+                this.setParameters(initialDataToSubmit).submit();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         return view;
     }
 
@@ -59,16 +63,14 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
     @Override
     public void onRequestResponse(JSONObject response) {
         try {
-            if(response.getBoolean("success")) {
-                JSONArray data = response.getJSONArray("data");
-                for (int i = 0; i < data.length(); i++) {
-                    JSONObject row = data.getJSONObject(i);
-                    this.items.add(new LecturesRecyclerAdapter.Holder.Data(
-                            row.getString("subject"),
-                            row.getString("professor"),
-                            (float)row.getDouble("rating")
-                    ));
-                }
+            JSONArray data = response.getJSONArray("lectures");
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject row = data.getJSONObject(i);
+                this.items.add(new LecturesRecyclerAdapter.Holder.Data(
+                        row.getString("name"),
+                        "STATIC_DUMMY",
+                        0
+                ));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -79,17 +81,15 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
     @Override
     public void onRefreshResponse(JSONObject response) {
         try {
-            if(response.getBoolean("success")) {
-                JSONArray data = response.getJSONArray("data");
-                this.items.clear();
-                for (int i = 0; i < data.length(); i++) {
-                    JSONObject row = data.getJSONObject(i);
-                    this.items.add(new LecturesRecyclerAdapter.Holder.Data(
-                            row.getString("subject"),
-                            row.getString("professor"),
-                            (float)row.getDouble("rating")
-                    ));
-                }
+            JSONArray data = response.getJSONArray("lectures");
+            this.items.clear();
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject row = data.getJSONObject(i);
+                this.items.add(new LecturesRecyclerAdapter.Holder.Data(
+                        row.getString("name"),
+                        "STATIC_DUMMY",
+                        0
+                ));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -100,11 +100,21 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
     @Override
     public void onRefresh() {
         super.onRefresh();
+        try {
+            this.setParameters(new JSONObject().put("university_id", UserInfo.getInstance().getUniversityId()));
+        } catch(JSONException e) {
+            this.setParameters(new JSONObject());
+        }
         this.submit();
     }
 
     @Override
     public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+        try {
+            this.setParameters(new JSONObject().put("university_id", UserInfo.getInstance().getUniversityId()));
+        } catch(JSONException e) {
+            this.setParameters(new JSONObject());
+        }
         this.submit();
     }
 

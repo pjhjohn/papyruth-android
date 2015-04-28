@@ -114,6 +114,10 @@ public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         public static class Data {
+            public int id; // lecture id
+            public int unit; // lecture unit
+            public String code; // lecture code
+            public int university_id;
             public String subject;
             public String professor;
             public float rating;
