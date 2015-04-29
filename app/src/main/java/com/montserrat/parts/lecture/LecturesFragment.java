@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.List;
 
 public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRecyclerAdapter, LecturesRecyclerAdapter.Holder.Data> {
     private NavFragment.OnCategoryClickListener callback;
+    private long minLectureId, maxLectureId;
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,59 +64,63 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
 
     @Override
     public void onRequestResponse(JSONObject response) {
-        try {
-            JSONArray data = response.getJSONArray("lectures");
-            for (int i = 0; i < data.length(); i++) {
-                JSONObject row = data.getJSONObject(i);
-                this.items.add(new LecturesRecyclerAdapter.Holder.Data(
-                        row.getString("name"),
-                        "STATIC_DUMMY",
-                        0
-                ));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        this.adapter.notifyDataSetChanged();
+        JSONArray lectures = response.optJSONArray("lectures");
+        if ( lectures == null ) return;
+
+        for (int i = 0; i < lectures.length(); i++) {
+            JSONObject lecture = lectures.optJSONObject(i);
+            if ( lecture == null ) continue;
+            this.items.add(new LecturesRecyclerAdapter.Holder.Data(
+                lecture.optString("name", "NO-NAME"),
+                lecture.optString("professor", "<PROFESSOR>"),
+                (float) lecture.optDouble("rating", 0.0)
+            ));
+        } this.adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onRefreshResponse(JSONObject response) {
-        try {
-            JSONArray data = response.getJSONArray("lectures");
-            this.items.clear();
-            for (int i = 0; i < data.length(); i++) {
-                JSONObject row = data.getJSONObject(i);
-                this.items.add(new LecturesRecyclerAdapter.Holder.Data(
-                        row.getString("name"),
-                        "STATIC_DUMMY",
-                        0
-                ));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        this.adapter.notifyDataSetChanged();
+        JSONArray lectures = response.optJSONArray("lectures");
+        if ( lectures == null ) return;
+
+        this.items.clear();
+        for (int i = 0; i < lectures.length(); i++) {
+            JSONObject lecture = lectures.optJSONObject(i);
+            if ( lecture == null ) continue;
+            this.items.add(new LecturesRecyclerAdapter.Holder.Data(
+                    lecture.optString("name", "NO-NAME"),
+                    lecture.optString("professor", "<PROFESSOR>"),
+                    (float) lecture.optDouble("rating", 0.0)
+            ));
+        } this.adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onRefresh() {
         super.onRefresh();
+        JSONObject params = new JSONObject();
         try {
-            this.setParameters(new JSONObject().put("university_id", UserInfo.getInstance().getUniversityId()));
-        } catch(JSONException e) {
-            this.setParameters(new JSONObject());
+            params.putOpt("university_id", UserInfo.getInstance().getUniversityId());
+            params.putOpt("since_id", this.minLectureId);
+            params.putOpt("max_id", this.minLectureId);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        this.setParameters(params);
         this.submit();
     }
 
     @Override
     public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+        JSONObject params = new JSONObject();
         try {
-            this.setParameters(new JSONObject().put("university_id", UserInfo.getInstance().getUniversityId()));
-        } catch(JSONException e) {
-            this.setParameters(new JSONObject());
+            params.putOpt("university_id", UserInfo.getInstance().getUniversityId());
+            params.putOpt("since_id", this.minLectureId);
+            params.putOpt("limit", 10);
+        } catch (JSONException e) {
+            Log.e("DEBUG", "JSONException Occured with possible null value UserInfo.university_id : " + UserInfo.getInstance().getUniversityId());
         }
+        this.setParameters(params);
         this.submit();
     }
 
