@@ -42,7 +42,7 @@ public class AuthFragment extends ClientFragment {
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
     private ViewPagerController pagerController;
-    
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

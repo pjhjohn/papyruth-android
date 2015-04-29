@@ -95,7 +95,7 @@ public class FragmentFactory {
         return fragment;
     }
 
-    private static String stringify(Type type) {
+    public static String stringify(Type type) {
         switch(type) {
             case AUTH   : return "AUTH";
             case HOME   : return "HOME";

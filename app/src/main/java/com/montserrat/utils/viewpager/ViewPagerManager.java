@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.montserrat.parts.FragmentFactory;
 
@@ -23,7 +24,8 @@ public class ViewPagerManager implements ViewPagerController {
     private Adapter adapter;
     private ViewPager.OnPageChangeListener listener;
 
-    public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, FragmentFactory.Type fragmentType, int viewCount) {
+    public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, final FragmentFactory.Type fragmentType, int viewCount) {
+        this.pager = pager;
         this.adapter = new Adapter(manager, fragmentType, viewCount);
         this.listener = new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled (int position, float positionOffset, int positionOffsetPixels) {}
@@ -33,10 +35,16 @@ public class ViewPagerManager implements ViewPagerController {
                 if(ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(currentPage);
                 ViewPagerManager.this.addToBackStack = true;
                 ViewPagerManager.this.currentPage = position;
+
+                /* Trigger onPageFocus function of Selected Page*/
+                onPageFocus focusedPage = null;
+                try {
+                    focusedPage = (onPageFocus) ViewPagerManager.this.adapter.getItem(position);
+                } catch (ClassCastException e) {
+                    Log.d("DEBUG", String.format("ClassCastException triggered. Maybe the page <%s#%d> is not implementing onPageFocus", FragmentFactory.stringify(fragmentType), position));
+                } if(focusedPage != null) focusedPage.onPageFocus();
             }
         };
-
-        this.pager = pager;
         this.active();
     }
 
@@ -120,5 +128,9 @@ public class ViewPagerManager implements ViewPagerController {
         public int getCount() {
             return count;
         }
+    }
+
+    public static interface onPageFocus {
+        public void onPageFocus ();
     }
 }
