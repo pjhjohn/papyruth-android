@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.montserrat.activity.MainActivity;
@@ -30,7 +29,6 @@ import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,19 +41,22 @@ import java.util.List;
 public class AuthFragment extends ClientFragment {
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
-    private ViewPagerController pageController;
-
+    private ViewPagerController pagerController;
+    
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pageController = (ViewPagerController) activity;
+        this.pagerController = (ViewPagerController) activity;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
+        /* Bind Views */
         this.vEmail = (AutoCompleteTextView) view.findViewById(R.id.auth_email);
+
+        /* AutoComplete Email View */
         this.getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -67,21 +68,21 @@ public class AuthFragment extends ClientFragment {
                         ),
                         ProfileQuery.PROJECTION,
                         ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                        new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+                        new String[] { ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE },
                         ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
                 );
             }
 
             @Override
             public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-                List<String> emails = new ArrayList<String>();
+                List<String> emails = new ArrayList<>();
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     emails.add(cursor.getString(ProfileQuery.ADDRESS));
                     cursor.moveToNext();
                 }
                 /* Add to Emails View */
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
                         AuthFragment.this.getActivity(),
                         android.R.layout.simple_dropdown_item_1line,
                         emails
@@ -93,6 +94,7 @@ public class AuthFragment extends ClientFragment {
             public void onLoaderReset(Loader<Cursor> cursorLoader) {}
         });
 
+        /* Password View */
         this.vPassword = (EditText) view.findViewById(R.id.auth_password);
         this.vPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -104,6 +106,7 @@ public class AuthFragment extends ClientFragment {
             }
         });
 
+        /* Signin Button */
         view.findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,23 +114,15 @@ public class AuthFragment extends ClientFragment {
             }
         });
 
+        /* Signup Button*/
         view.findViewById(R.id.btn_sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthFragment.this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+                AuthFragment.this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
             }
         });
 
         return view;
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     @Override
@@ -142,45 +137,60 @@ public class AuthFragment extends ClientFragment {
         /* email */
         candidate = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
         if(candidate != null) vFailed.add(candidate);
-        /* password - TODO : Should handle PASSWORD ENCRYPTION */
+        /* password : plain password through HTTPS */
         candidate = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
         if(candidate != null) vFailed.add(candidate);
 
-        if(vFailed.isEmpty()) {
-            try {
-                this.setParameters(new JSONObject()
-                        .put("email", vEmail.getText().toString())
-                        .put("password", vPassword.getText().toString()))
-                    .submit();
-            } catch (JSONException e){
-                e.printStackTrace();
-            }
-        } else vFailed.get(0).requestFocus();
+        /* Failed to pass validator : RequestFocus to first invalid view */
+        if(!vFailed.isEmpty()) {
+            vFailed.get(0).requestFocus();
+            return;
+        }
+
+        /* Success to pass validator : Send request */
+        JSONObject params = new JSONObject();
+        try {
+            params.put("email", vEmail.getText().toString())
+                  .put("password", vPassword.getText().toString());
+        } catch (JSONException e){
+            params = new JSONObject();
+        } this.setParameters(params).submit();
     }
 
     @Override
     public void onResponse(JSONObject resp) {
         super.onResponse(resp);
-        try {
-            if(resp.getBoolean("success")) {
-                UserInfo.getInstance().setData(resp.getJSONObject("user"));
-                UserInfo.getInstance().setAccessToken(resp.getString("access_token"));
-                this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
-                this.getActivity().finish();
-            } else this.onFailedToSignin();
-        } catch(JSONException e) {
-            e.printStackTrace();
+        boolean success = resp.optBoolean("success", false);
+        if (!success) this.onFailedToSignin();
+        else {
+            UserInfo.getInstance().setData(resp.optJSONObject("user"));
+            UserInfo.getInstance().setAccessToken(resp.optString(null)); // TODO : Check existance of access-token at setter or
+            this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
+            this.getActivity().finish();
         }
     }
+
     @Override
     public void onErrorResponse(VolleyError error) {
         super.onErrorResponse(error);
-        if(error.networkResponse.statusCode == 403) this.onFailedToSignin();
+        /* 403 if failed to signin */
+        if(error.networkResponse.statusCode == 403) {
+            this.onFailedToSignin();
+        }
     }
 
     private void onFailedToSignin() {
         this.vPassword.setError("Invalid Password");
         this.vPassword.requestFocus();
+    }
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
     }
 
     public static Fragment newInstance() {
