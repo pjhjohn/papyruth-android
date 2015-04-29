@@ -56,10 +56,11 @@ public class AppConst {
     public static class ViewPager {
         /* For Auth Activity */
         public static class Auth {
-            public static final int LENGTH = 3;
-            public static final int AUTH = 0;
-            public static final int SIGNUP_STEP1 = 1;
-            public static final int SIGNUP_STEP2 = 2;
+            public static final int LENGTH = 4;
+            public static final int LOADING = 0;
+            public static final int AUTH = 1;
+            public static final int SIGNUP_STEP1 = 2;
+            public static final int SIGNUP_STEP2 = 3;
         }
 
         /* For Main Activity : Subclasses are 1 : 1 mapped to navigation category */
@@ -94,11 +95,14 @@ public class AppConst {
             public static final int DUMMY = 0;
         }
     }
-    public static class User {
-        public static final String UNIVERSITY = "user_university";
-        public static final String EMAIL = "user_email";
-        public static final String NAME = "user_name";
-        public static final String GENDER = "user_gender";
-        public static final String AUTO_SIGNIN = "user_auto_signin";
+
+    /* Preferences */
+    public static class Preference {
+        /* Preference Storage Name */
+        public static final String STORAGE_NAME = "montserrat_sharedpref";
+
+        /* Keys */
+        public static final String AUTO_SIGNIN = "auto_signin";
+        public static final String ACCESS_TOKEN = "access_token";
     }
 }

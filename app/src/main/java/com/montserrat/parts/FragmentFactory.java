@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.montserrat.controller.AppConst;
 import com.montserrat.parts.auth.AuthFragment;
+import com.montserrat.parts.auth.LoadingFragment;
 import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.detail.DetailFragment_temp;
@@ -34,6 +35,7 @@ public class FragmentFactory {
         switch (type) {
             case AUTH :
                 switch(position) {
+                    case AppConst.ViewPager.Auth.LOADING        : fragment = LoadingFragment.newInstance();
                     case AppConst.ViewPager.Auth.AUTH           : fragment = AuthFragment.newInstance();        break;
                     case AppConst.ViewPager.Auth.SIGNUP_STEP1   : fragment = SignUpStep1Fragment.newInstance(); break;
                     case AppConst.ViewPager.Auth.SIGNUP_STEP2   : fragment = SignUpStep2Fragment.newInstance(); break;
