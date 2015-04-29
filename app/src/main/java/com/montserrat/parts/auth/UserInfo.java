@@ -94,7 +94,7 @@ public class UserInfo {
         try { this.nickname      = data.getString("nickname"  );   } catch (JSONException e) {}
         try { this.email         = data.getString("email"     );   } catch (JSONException e) {}
         try { this.university_id = data.getInt("university_id");   } catch (JSONException e) {}
-        try { this.entrance_year = data.getInt("enterance_year");  } catch (JSONException e) {}
+        try { this.entrance_year = data.getInt("entrance_year");   } catch (JSONException e) {}
         try { this.is_boy        = data.getBoolean("is_boy"   );   } catch (JSONException e) {}
     }
 
@@ -108,7 +108,7 @@ public class UserInfo {
             if(this.nickname      != null) data.put("nickname"       , this.nickname     );
             if(this.email         != null) data.put("email"          , this.email        );
             if(this.university_id != null) data.put("university_id"  , this.university_id);
-            if(this.entrance_year != null) data.put("enterance_year" , this.entrance_year);
+            if(this.entrance_year != null) data.put("entrance_year"  , this.entrance_year);
             if(this.is_boy        != null) data.put("is_boy"         , this.is_boy       );
         } catch (JSONException e) {
             data = null;
