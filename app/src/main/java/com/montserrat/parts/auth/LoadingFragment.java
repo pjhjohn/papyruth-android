@@ -84,9 +84,7 @@ public class LoadingFragment extends ClientFragment {
     @Override
     public void onResponse(JSONObject response) {
         super.onResponse(response);
-
         AppManager.getInstance().getBoolean(AppConst.Preference.AUTO_SIGNIN, false);
-
     }
 
     @Override

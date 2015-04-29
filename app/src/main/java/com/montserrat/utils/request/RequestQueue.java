@@ -11,56 +11,29 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by pjhjohn on 2015-04-12.
  */
-/* TODO : Image Caching */
 /* TODO : Is it okay to be a singleton? */
 public class RequestQueue {
-    private static RequestQueue mInstance;
-    private com.android.volley.RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
-    private static Context mCtx;
+    private static RequestQueue instance;
+    private com.android.volley.RequestQueue queue;
+    private static Context context;
 
     private RequestQueue (Context context) {
-        mCtx = context;
-        mRequestQueue = getRequestQueue();
-
-        mImageLoader = new ImageLoader(mRequestQueue,
-                new ImageLoader.ImageCache() {
-                    private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
-
-                    @Override
-                    public Bitmap getBitmap(String url) {
-                        return cache.get(url);
-                    }
-
-                    @Override
-                    public void putBitmap(String url, Bitmap bitmap) {
-                        cache.put(url, bitmap);
-                    }
-                });
+        RequestQueue.context = context;
+        queue = getRequestQueue();
     }
 
     public static synchronized RequestQueue getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new RequestQueue(context);
-        }
-        return mInstance;
+        if (instance == null) instance = new RequestQueue(context);
+        return instance;
     }
 
     public com.android.volley.RequestQueue getRequestQueue() {
-        if (mRequestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
-        }
-        return mRequestQueue;
+        /* getApplicationContext is key for keeping you from leaking the Activity|BroadcastReceiver if someone passes one in. */
+        if (queue == null) queue = Volley.newRequestQueue(context.getApplicationContext());
+        return queue;
     }
 
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
-    }
-
-    public ImageLoader getImageLoader() {
-        return mImageLoader;
     }
 }
