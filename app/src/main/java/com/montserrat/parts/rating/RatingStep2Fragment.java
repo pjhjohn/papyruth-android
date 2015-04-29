@@ -12,18 +12,19 @@ import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.viewpager.ViewPagerManager;
 
 /**
  * Created by pjhjohn on 2015-04-26.
  */
 
-public class RatingStep2Fragment extends ClientFragment {
-    private ViewPagerController pageController;
+public class RatingStep2Fragment extends ClientFragment  implements ViewPagerManager.onPageFocus {
+    private ViewPagerController pagerController;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pageController = (ViewPagerController) activity;
+        this.pagerController = (ViewPagerController) activity;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class RatingStep2Fragment extends ClientFragment {
         ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-                RatingStep2Fragment.this.pageController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP3, true);
+                RatingStep2Fragment.this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP3, true);
             }
         });
 
@@ -52,4 +53,9 @@ public class RatingStep2Fragment extends ClientFragment {
         return fragment;
     }
 
+    @Override
+    public void onPageFocus () {
+        if(RatingForm.getInstance().getCompletionLevel() < 1)
+            this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP1, false);
+    }
 }

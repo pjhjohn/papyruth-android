@@ -12,6 +12,7 @@ import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.viewpager.ViewPagerManager;
 
 import org.json.JSONObject;
 
@@ -22,13 +23,13 @@ import java.util.List;
  * Created by pjhjohn on 2015-04-26.
  * Searches Lecture for Rating on Step 1.
  */
-public class RatingStep1Fragment extends ClientFragment {
-    private ViewPagerController pageController;
+public class RatingStep1Fragment extends ClientFragment implements ViewPagerManager.onPageFocus{
+    private ViewPagerController pagerController;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pageController = (ViewPagerController) activity;
+        this.pagerController = (ViewPagerController) activity;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class RatingStep1Fragment extends ClientFragment {
         ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-                RatingStep1Fragment.this.pageController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP2, true);
+                RatingStep1Fragment.this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP2, true);
             }
         });
 
@@ -71,5 +72,10 @@ public class RatingStep1Fragment extends ClientFragment {
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_rating_step1);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onPageFocus () {
+        // Does Nothing
     }
 }
