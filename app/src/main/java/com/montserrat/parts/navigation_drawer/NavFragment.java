@@ -148,12 +148,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
             }
         };
 
-        this.drawerLayout.post(new Runnable() {
-            @Override
-            public void run () {
-                NavFragment.this.drawerToggle.syncState();
-            }
-        });
+        this.drawerLayout.post(this.drawerToggle::syncState);
         this.drawerLayout.setDrawerListener(this.drawerToggle);
     }
 

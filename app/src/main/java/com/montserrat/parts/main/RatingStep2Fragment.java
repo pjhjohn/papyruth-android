@@ -30,12 +30,7 @@ public class RatingStep2Fragment extends ClientFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
-        ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                RatingStep2Fragment.this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP3, true);
-            }
-        });
+        ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP3, true));
 
         return view;
     }

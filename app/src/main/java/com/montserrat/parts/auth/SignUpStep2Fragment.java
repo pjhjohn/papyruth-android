@@ -58,13 +58,10 @@ public class SignUpStep2Fragment extends ClientFragment {
         vAdmission.setAdapter(new ArrayAdapter<Integer>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
 
         /* button */
-        view.findViewById(R.id.btn_signup_submit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-                View viewToFocus = SignUpStep2Fragment.this.validate();
-                if (viewToFocus != null) viewToFocus.requestFocus();
-                else SignUpStep2Fragment.this.attemptSignUp();
-            }
+        view.findViewById(R.id.btn_signup_submit).setOnClickListener(v -> {
+            View viewToFocus = this.validate();
+            if (viewToFocus != null) viewToFocus.requestFocus();
+            else this.attemptSignUp();
         });
         return view;
     }

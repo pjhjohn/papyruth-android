@@ -20,7 +20,7 @@ public class DetailSampleData {
     public void initLectureData(){
         lectureData data;
         for(int i = 0; i < 10; i++) {
-            String[] s = {i+"a", i+"b"};
+            String[] s = {i+"점", i+"점"};
             data = new lectureData("lecture"+i, "prof"+i, s);
             lecturedata.add(data);
         }

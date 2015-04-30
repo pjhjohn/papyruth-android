@@ -72,12 +72,8 @@ public abstract class ClientFragmentWithPanels extends ClientFragment {
         this.vFAB = (FloatingActionButton) view.findViewById(this.idFAB);
         if (this.vFAB == null) Log.d(TAG, "Couldn't find FloatingActionButton by ID#" + this.idFAB);
 
-        this.vFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-                if(ClientFragmentWithPanels.this.navigationCallback != null)
-                    ClientFragmentWithPanels.this.navigationCallback.onCategorySelected(NavFragment.Category.RATING);
-            }
+        this.vFAB.setOnClickListener(v -> {
+            if(this.navigationCallback != null) this.navigationCallback.onCategorySelected(NavFragment.Category.RATING);
         });
 
         return view;

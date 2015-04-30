@@ -38,12 +38,7 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         View view = super.onCreateView(inflater, container, args);
 
         this.swipeRefreshView.setEnabled(true);
-        this.fabView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                LecturesFragment.this.callback.onCategorySelected(NavFragment.Category.RATING);
-            }
-        });
+        this.fabView.setOnClickListener(v -> this.callback.onCategorySelected(NavFragment.Category.RATING));
 
         /* Request with Initializer Data. ENPOINT SHOULD BE DEFINED WITH */
         if(this.args!=null) {

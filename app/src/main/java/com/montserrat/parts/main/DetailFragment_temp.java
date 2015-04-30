@@ -26,12 +26,7 @@ public class DetailFragment_temp  extends ClientFragmentWithRecyclerView<DetailR
 //        this.swipeRefreshView.setEnabled(false);
         TextView content = (TextView) view.findViewById(R.id.reply_Contents);
 
-        this.fabView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                DetailFragment_temp.this.submit();
-            }
-        });
+        this.fabView.setOnClickListener(v -> this.submit());
 
         return view;
     }

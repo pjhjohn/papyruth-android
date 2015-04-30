@@ -96,31 +96,18 @@ public class AuthFragment extends ClientFragment {
 
         /* Password View */
         this.vPassword = (EditText) view.findViewById(R.id.auth_password);
-        this.vPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView view, int action, KeyEvent event) {
-                if (action == R.id.signin || action == EditorInfo.IME_NULL || action == EditorInfo.IME_ACTION_DONE) {
-                    AuthFragment.this.attemtSignin();
-                    return true;
-                } else return false;
-            }
+        this.vPassword.setOnEditorActionListener((v, action, event) -> {
+            if (action == R.id.signin || action == EditorInfo.IME_NULL || action == EditorInfo.IME_ACTION_DONE) {
+                this.attemtSignin();
+                return true;
+            } else return false;
         });
 
         /* Signin Button */
-        view.findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AuthFragment.this.attemtSignin();
-            }
-        });
+        view.findViewById(R.id.btn_sign_in).setOnClickListener(v -> this.attemtSignin());
 
         /* Signup Button*/
-        view.findViewById(R.id.btn_sign_up).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AuthFragment.this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-            }
-        });
+        view.findViewById(R.id.btn_sign_up).setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true));
 
         return view;
     }

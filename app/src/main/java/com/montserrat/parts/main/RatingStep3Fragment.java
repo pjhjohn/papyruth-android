@@ -30,12 +30,7 @@ public class RatingStep3Fragment extends ClientFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
-        ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                RatingStep3Fragment.this.submitRatingForm();
-            }
-        });
+        ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(v -> this.submitRatingForm());
 
         return view;
     }
