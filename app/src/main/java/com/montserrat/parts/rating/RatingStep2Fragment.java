@@ -18,7 +18,7 @@ import com.montserrat.utils.viewpager.ViewPagerManager;
  * Created by pjhjohn on 2015-04-26.
  */
 
-public class RatingStep2Fragment extends ClientFragment  implements ViewPagerManager.onPageFocus {
+public class RatingStep2Fragment extends ClientFragment {
     private ViewPagerController pagerController;
 
     @Override
@@ -51,11 +51,5 @@ public class RatingStep2Fragment extends ClientFragment  implements ViewPagerMan
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_rating_step2);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    @Override
-    public void onPageFocus () {
-        if(RatingForm.getInstance().getCompletionLevel() < 1)
-            this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP1, false);
     }
 }

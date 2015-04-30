@@ -45,6 +45,8 @@ import java.util.List;
 // TODO : TIMER for minimum loading period
 public class LoadingFragment extends ClientFragment {
     private ViewPagerController pagerController;
+    private boolean isTimerTerminated;
+    private boolean isResourceDownloaded;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -92,6 +94,8 @@ public class LoadingFragment extends ClientFragment {
         super.onErrorResponse(error);
         if(error.networkResponse.statusCode == 401) {
             // TODO : access-token has expired -> retrieve data from '/info' -> wait for it -> to AuthFragment
+        } else {
+            // TODO : Specify error type - if no connection -> Fetch data from SharedPreference
         }
     }
 
@@ -100,7 +104,7 @@ public class LoadingFragment extends ClientFragment {
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
         bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_loading); // TODO : make a layout and assign id
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_loading);
         fragment.setArguments(bundle);
         return fragment;
     }

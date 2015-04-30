@@ -23,7 +23,7 @@ import java.util.List;
  * Created by pjhjohn on 2015-04-26.
  * Searches Lecture for Rating on Step 1.
  */
-public class RatingStep1Fragment extends ClientFragment implements ViewPagerManager.onPageFocus{
+public class RatingStep1Fragment extends ClientFragment {
     private ViewPagerController pagerController;
 
     @Override
@@ -72,10 +72,5 @@ public class RatingStep1Fragment extends ClientFragment implements ViewPagerMana
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_rating_step1);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    @Override
-    public void onPageFocus () {
-        // Does Nothing
     }
 }

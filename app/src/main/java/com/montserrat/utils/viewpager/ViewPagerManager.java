@@ -35,14 +35,6 @@ public class ViewPagerManager implements ViewPagerController {
                 if(ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(currentPage);
                 ViewPagerManager.this.addToBackStack = true;
                 ViewPagerManager.this.currentPage = position;
-
-                /* Trigger onPageFocus function of Selected Page*/
-                onPageFocus focusedPage = null;
-                try {
-                    focusedPage = (onPageFocus) ViewPagerManager.this.adapter.getItem(position);
-                } catch (ClassCastException e) {
-                    Log.d("DEBUG", String.format("ClassCastException triggered. Maybe the page <%s#%d> is not implementing onPageFocus", FragmentFactory.stringify(fragmentType), position));
-                } if(focusedPage != null) focusedPage.onPageFocus();
             }
         };
         this.active();
@@ -128,9 +120,5 @@ public class ViewPagerManager implements ViewPagerController {
         public int getCount() {
             return count;
         }
-    }
-
-    public static interface onPageFocus {
-        public void onPageFocus ();
     }
 }
