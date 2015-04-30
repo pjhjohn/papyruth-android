@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,10 +28,14 @@ public class DetailFragment extends ClientFragmentWithRecyclerView<DetailRecycle
         View view = super.onCreateView(inflater, container, args);
 
 //        this.swipeRefreshView.setEnabled(false);
-        TextView title = (TextView) view.findViewById(R.id.reply_lecTitle);
-        TextView prof = (TextView) view.findViewById(R.id.reply_Contents);
-        this.content = (Button) view.findViewById(R.id.reply_like);
-        this.content.setText("this is contents");
+        View info = (View) view.findViewById(R.id.detail_info);
+        TextView title = (TextView) info.findViewById(R.id.info_title);
+        TextView prof = (TextView) info.findViewById(R.id.info_prof);
+//        Button btb = (Button)view.findViewById(R.id.button2);
+        title.setText("this is contents");
+        prof.setText("this is prof");
+//        btb.setText("button!!!!!");
+        ListView list = (ListView) view.findViewById(R.id.detail_list);
 
 //        this.fabView.setOnClickListener(new View.OnClickListener(){
 //            @Override
@@ -80,7 +85,7 @@ public class DetailFragment extends ClientFragmentWithRecyclerView<DetailRecycle
         bundle.putString(AppConst.Request.URL, "pjhjohn.appspot.com");
         bundle.putString(AppConst.Request.CONTROLLER, "detail");
         bundle.putString(AppConst.Request.ACTION, "dummy");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.sss_reply);
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_detail);
 //        bundle.putInt(AppConst.Resource.FAB, R.id.detail_fab);
         fragment.setArguments(bundle);
         return fragment;

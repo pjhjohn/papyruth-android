@@ -112,25 +112,25 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public Object instantiateItem(View pager, int position) {
             View v = null;
-            if(position==0){
-                v = mInflater.inflate(R.layout.fragment_detail, null);
-                v.findViewById(R.id.iv_one);
-            }else if(position==1){
-                v = mInflater.inflate(R.layout.fragment_detail, null);
-                v.findViewById(R.id.iv_one);
-            }else if(position==2){
-                v = mInflater.inflate(R.layout.fragment_detail, null);
-                v.findViewById(R.id.iv_one);
-            }else if(position==3){
-                v = mInflater.inflate(R.layout.fragment_detail, null);
-                v.findViewById(R.id.iv_one);
-            }else if(position==4){
-                v = mInflater.inflate(R.layout.fragment_detail, null);
-                v.findViewById(R.id.iv_one);
-            }else{
-                v = mInflater.inflate(R.layout.fragment_detail, null);
-                v.findViewById(R.id.iv_one);
-            }
+//            if(position==0){
+//                v = mInflater.inflate(R.layout.fragment_detail, null);
+//                v.findViewById(R.id.iv_one);
+//            }else if(position==1){
+//                v = mInflater.inflate(R.layout.fragment_detail, null);
+//                v.findViewById(R.id.iv_one);
+//            }else if(position==2){
+//                v = mInflater.inflate(R.layout.fragment_detail, null);
+//                v.findViewById(R.id.iv_one);
+//            }else if(position==3){
+//                v = mInflater.inflate(R.layout.fragment_detail, null);
+//                v.findViewById(R.id.iv_one);
+//            }else if(position==4){
+//                v = mInflater.inflate(R.layout.fragment_detail, null);
+//                v.findViewById(R.id.iv_one);
+//            }else{
+//                v = mInflater.inflate(R.layout.fragment_detail, null);
+//                v.findViewById(R.id.iv_one);
+//            }
 
             ((ViewPager)pager).addView(v, 0);
 
