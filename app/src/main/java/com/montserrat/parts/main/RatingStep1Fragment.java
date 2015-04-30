@@ -1,4 +1,4 @@
-package com.montserrat.parts.rating;
+package com.montserrat.parts.main;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -12,7 +12,6 @@ import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
-import com.montserrat.utils.viewpager.ViewPagerManager;
 
 import org.json.JSONObject;
 

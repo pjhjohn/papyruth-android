@@ -1,4 +1,4 @@
-package com.montserrat.parts.gallery;
+package com.montserrat.parts.professor_gallery;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;

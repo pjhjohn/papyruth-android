@@ -1,35 +1,33 @@
-package com.montserrat.parts.lecture;
+package com.montserrat.parts.main;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
-import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
 /**
- * Created by pjhjohn on 2015-04-13.
+ * Created by SSS on 2015-04-25.
  */
-public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static LecturesRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new LecturesRecyclerAdapter(initItemList, listener);
+    public static DetailRecyclerAdapter newInstance(List<Holder.Data> initItemList) {
+        return new DetailRecyclerAdapter(initItemList);
     }
 
-    private static RecyclerViewClickListener itemListener;
+
     private List<Holder.Data> items;
-    private LecturesRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private DetailRecyclerAdapter (List<Holder.Data> initItemList) {
         this.items = initItemList;
-        LecturesRecyclerAdapter.itemListener = listener;
     }
 
     @Override
@@ -83,49 +81,39 @@ public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     /* Item of list-like recyclerview */
-    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView subject;
-        private final TextView professor;
-        private final RatingBar rating;
-        private Holder(final View parent, TextView viewSubject, TextView viewProfessor, RatingBar viewRating) {
+
+    public static class Holder extends RecyclerView.ViewHolder {
+        private final TextView lecture;
+        private final TextView content;
+        private final Button like;
+        private Holder(final View parent, TextView viewSubject, TextView viewProfessor, Button viewRating) {
             super(parent);
-            this.subject = viewSubject;
-            this.professor = viewProfessor;
-            this.rating = viewRating;
-            parent.setOnClickListener(this);
+            this.lecture = viewSubject;
+            this.content = viewProfessor;
+            this.like = viewRating;
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
-            TextView vSubject = (TextView) parent.findViewById(R.id.home_item_subject);
-            TextView vProfessor = (TextView) parent.findViewById(R.id.home_item_professor);
-            RatingBar vRating = (RatingBar) parent.findViewById(R.id.home_item_rating);
-            return new Holder(parent, vSubject, vProfessor, vRating);
+            TextView vLecture = (TextView) parent.findViewById(R.id.reply_lecTitle);
+            TextView vContent = (TextView) parent.findViewById(R.id.reply_Contents);
+            Button vLike = (Button) parent.findViewById(R.id.reply_like);
+            return new Holder(parent, vLecture, vContent, vLike);
         }
 
-        public void bind(LecturesRecyclerAdapter.Holder.Data item) {
-            this.subject.setText(item.subject);
-            this.professor.setText(item.professor);
-            this.rating.setRating(item.rating);
+        public void bind(DetailRecyclerAdapter.Holder.Data item) {
+            this.lecture.setText(item.lecture);
+            this.content.setText(item.content);
+            this.like.setText(item.like);
         }
-
-        @Override
-        public void onClick (View view) {
-            LecturesRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
-        }
-
         public static class Data {
-            public int id; // lecture id
-            public int unit; // lecture unit
-            public String code; // lecture code
-            public int university_id;
-            public String subject;
-            public String professor;
-            public float rating;
+            public String lecture;
+            public String content;
+            public int like;
             private Data(){}
-            public Data(String subject, String professor, float rating) {
-                this.subject = subject;
-                this.professor = professor;
-                this.rating = rating;
+            public Data(String lecture, String content, int like) {
+                this.lecture = lecture;
+                this.content = content;
+                this.like = like;
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.montserrat.parts.gallery;
+package com.montserrat.parts.professor_gallery;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

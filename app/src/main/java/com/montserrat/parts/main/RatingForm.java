@@ -1,4 +1,4 @@
-package com.montserrat.parts.rating;
+package com.montserrat.parts.main;
 
 /**
  * Created by pjhjohn on 2015-04-26.

@@ -8,11 +8,11 @@ import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.auth.LoadingFragment;
 import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
-import com.montserrat.parts.detail.DetailFragment_temp;
-import com.montserrat.parts.lecture.LecturesFragment;
-import com.montserrat.parts.rating.RatingStep1Fragment;
-import com.montserrat.parts.rating.RatingStep2Fragment;
-import com.montserrat.parts.rating.RatingStep3Fragment;
+import com.montserrat.parts.main.DetailFragment_temp;
+import com.montserrat.parts.main.LecturesFragment;
+import com.montserrat.parts.main.RatingStep1Fragment;
+import com.montserrat.parts.main.RatingStep2Fragment;
+import com.montserrat.parts.main.RatingStep3Fragment;
 
 import org.json.JSONObject;
 
@@ -35,7 +35,7 @@ public class FragmentFactory {
         switch (type) {
             case AUTH :
                 switch(position) {
-                    case AppConst.ViewPager.Auth.LOADING        : fragment = LoadingFragment.newInstance();
+                    case AppConst.ViewPager.Auth.LOADING        : fragment = LoadingFragment.newInstance();     break;
                     case AppConst.ViewPager.Auth.AUTH           : fragment = AuthFragment.newInstance();        break;
                     case AppConst.ViewPager.Auth.SIGNUP_STEP1   : fragment = SignUpStep1Fragment.newInstance(); break;
                     case AppConst.ViewPager.Auth.SIGNUP_STEP2   : fragment = SignUpStep2Fragment.newInstance(); break;

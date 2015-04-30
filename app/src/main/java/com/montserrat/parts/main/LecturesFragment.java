@@ -1,4 +1,4 @@
-package com.montserrat.parts.lecture;
+package com.montserrat.parts.main;
 
 import android.app.Activity;
 import android.app.Fragment;

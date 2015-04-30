@@ -1,4 +1,4 @@
-package com.montserrat.parts.lecture;
+package com.montserrat.parts.main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
