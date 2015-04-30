@@ -14,22 +14,13 @@ public class DetailSampleData {
     }
 
     public void initSearchData(){
-        searchdata.add("가가가");
-        searchdata.add("가가나");
-        searchdata.add("강아지");
-        searchdata.add("강의평가");
-        searchdata.add("게잡이");
-        searchdata.add("나옹이");
-        searchdata.add("나락");
-        searchdata.add("냄비");
-        searchdata.add("높새바람");
-        searchdata.add("다람쥐");
+        for(int i = 0; i < 10; i++) searchdata.add("aaa");
     }
 
     public void initLectureData(){
         lectureData data;
         for(int i = 0; i < 10; i++) {
-            String[] s = {i+"점", i+"점"};
+            String[] s = {i+"a", i+"b"};
             data = new lectureData("lecture"+i, "prof"+i, s);
             lecturedata.add(data);
         }

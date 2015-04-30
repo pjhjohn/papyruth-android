@@ -14,14 +14,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
 
-        </activity>
         <activity
-            android:name=".AuthActivity"
+            android:name="com.montserrat.activity.AuthActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible">
@@ -30,10 +25,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".ProfessorGalleryActivity"
+            android:name="com.montserrat.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:label="@string/app_name"
-            android:parentActivityName=".MainActivity"/>
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name="com.montserrat.activity.ProfessorGalleryActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name">
+        </activity>
     </application>
 </manifest>

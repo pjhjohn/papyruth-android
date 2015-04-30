@@ -126,7 +126,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
             return false;
         }
 
-        //자동완성 기능에 사용.
+        // for text auto-completion
         @Override
         public boolean onQueryTextChange(String newText) {
             return false;
