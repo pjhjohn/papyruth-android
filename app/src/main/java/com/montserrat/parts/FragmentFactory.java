@@ -8,7 +8,7 @@ import com.montserrat.parts.auth.AuthFragment;
 import com.montserrat.parts.auth.LoadingFragment;
 import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
-import com.montserrat.parts.detail.DetailFragment;
+import com.montserrat.parts.main.DetailFragment;
 import com.montserrat.parts.main.LecturesFragment;
 import com.montserrat.parts.main.RatingStep1Fragment;
 import com.montserrat.parts.main.RatingStep2Fragment;

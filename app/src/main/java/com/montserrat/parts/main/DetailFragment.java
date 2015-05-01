@@ -1,4 +1,4 @@
-package com.montserrat.parts.detail;
+package com.montserrat.parts.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
