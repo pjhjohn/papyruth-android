@@ -10,15 +10,16 @@
         <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/swipe">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/main_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:scrollbars="none"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
+            android:id="@+id/swipe"></android.support.v4.widget.SwipeRefreshLayout>
         <include android:id="@+id/fab" layout="@layout/part_fab"/>
     </FrameLayout>
     <include android:id="@+id/progress_main" layout="@layout/part_progress_transparent"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_gravity="left|top" />
 </FrameLayout>
