@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
+import com.montserrat.controller.AppManager;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.viewpager.ViewPagerController;
@@ -151,7 +150,8 @@ public class AuthFragment extends ClientFragment {
         if (!success) this.onFailedToSignin();
         else {
             UserInfo.getInstance().setData(resp.optJSONObject("user"));
-            UserInfo.getInstance().setAccessToken(resp.optString(null)); // TODO : Check existance of access-token at setter or
+            UserInfo.getInstance().setAccessToken(resp.optString("access_token", null)); // TODO : Check existance of access-token at setter or
+            AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, resp.optString("access_token", null));
             this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
             this.getActivity().finish();
         }
@@ -166,7 +166,7 @@ public class AuthFragment extends ClientFragment {
         }
     }
 
-    private void onFailedToSignin() {
+    private void onFailedToSignin() { // TODO : email can be invalid, too.
         this.vPassword.setError("Invalid Password");
         this.vPassword.requestFocus();
     }

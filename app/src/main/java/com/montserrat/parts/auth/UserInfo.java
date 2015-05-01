@@ -59,19 +59,19 @@ public class UserInfo {
     public void setEmail(CharSequence email) {
         this.email = email;
     }
-    public int getUniversityId() {
+    public Integer getUniversityId() {
         return this.university_id;
     }
-    public void setUniversityId (int university_id) {
+    public void setUniversityId (Integer university_id) {
         this.university_id = university_id;
     }
-    public int getAdmissionYear() {
+    public Integer getAdmissionYear() {
         return this.entrance_year;
     }
-    public void setAdmissionYear(int admission_year) {
+    public void setAdmissionYear(Integer admission_year) {
         this.entrance_year = admission_year;
     }
-    public boolean getGenderIsBoe() {
+    public boolean getGenderIsBoy() {
         return this.is_boy;
     }
     public void setGenderIsBoy (boolean is_boy) {
@@ -90,12 +90,12 @@ public class UserInfo {
      * @param data data to assign
      */
     public void setData(JSONObject data) {
-        try { this.realname      = data.getString("realname"  );   } catch (JSONException e) {}
-        try { this.nickname      = data.getString("nickname"  );   } catch (JSONException e) {}
-        try { this.email         = data.getString("email"     );   } catch (JSONException e) {}
-        try { this.university_id = data.getInt("university_id");   } catch (JSONException e) {}
-        try { this.entrance_year = data.getInt("entrance_year");   } catch (JSONException e) {}
-        try { this.is_boy        = data.getBoolean("is_boy"   );   } catch (JSONException e) {}
+        try { this.realname      = data.getString("realname");   } catch (JSONException e) { e.printStackTrace(); }
+        try { this.nickname      = data.getString("nickname");   } catch (JSONException e) { e.printStackTrace(); }
+        try { this.email         = data.getString("email");   } catch (JSONException e) { e.printStackTrace(); }
+        try { this.university_id = data.getInt("university_id");   } catch (JSONException e) { e.printStackTrace(); }
+        try { this.entrance_year = data.getInt("entrance_year");   } catch (JSONException e) { e.printStackTrace(); }
+        try { this.is_boy        = data.getBoolean("is_boy");   } catch (JSONException e) { e.printStackTrace(); }
     }
 
     /**
@@ -114,5 +114,10 @@ public class UserInfo {
             data = null;
         }
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("<access_token : %s>\n <realname : %s>\n <nickname : %s>\n <email : %s>\n <university_id : %d>\n <entrance_year : %d>\n <is_boy : %b>\n", this.access_token, this.realname, this.nickname, this.email, this.university_id, this.entrance_year, this.is_boy);
     }
 }
