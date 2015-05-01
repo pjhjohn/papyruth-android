@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         AppManager.getInstance().setContext(this);
 
         /* Instantiate Multiple ViewPagerManagers */
-        this.managers = new ArrayList<> ();
+        this.managers = new ArrayList<ViewPagerManager> ();
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.HOME     , AppConst.ViewPager.Home.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SEARCH   , AppConst.ViewPager.Search.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SUGGEST  , AppConst.ViewPager.Suggest.LENGTH));
