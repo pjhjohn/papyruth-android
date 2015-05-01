@@ -43,8 +43,11 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         /* Request with Initializer Data. ENPOINT SHOULD BE DEFINED WITH */
         if(this.args!=null) {
             try {
-                final JSONObject initialDataToSubmit = new JSONObject(this.args.getString(AppConst.Resource.INITIALIZER, AppConst.Request.DEFAULT));
-                this.setParameters(initialDataToSubmit).submit();
+                String initStr = this.args.getString(AppConst.Resource.INITIALIZER, AppConst.Request.DEFAULT);
+                if(!initStr.isEmpty()) {
+                    final JSONObject initialDataToSubmit = new JSONObject(initStr);
+                    this.setParameters(initialDataToSubmit).submit();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

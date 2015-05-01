@@ -31,13 +31,13 @@ import java.util.Map;
  */
 
 public abstract class ClientFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
-    private RequestQueue queue;
+    protected RequestQueue queue;
     private View progressView;
     private View contentView;
     private int progressAnimationTime;
     private boolean isProgressActive;
     private boolean isContentVisibleDuringProgress;
-    private int requestMethod;
+    protected int requestMethod;
     private String apiRootUrl, apiVersion, action;
     private int fragmentId, contentId, progressId;
     private JSONObject jsonToRequest;
