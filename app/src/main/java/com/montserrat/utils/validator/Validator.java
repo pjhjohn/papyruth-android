@@ -52,7 +52,7 @@ public class Validator {
         return success ? null : AppManager.getInstance().getString(R.string.field_invalid_email);
     }
     private static CharSequence validatePassword(String password) {
-        boolean success = password.length() > 4;
+        boolean success = password.length() > 0;
         return success ? null : AppManager.getInstance().getString(R.string.field_invalid_password);
     }
     private static CharSequence validateName(String name) {
