@@ -1,24 +1,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
-
+        android:layout_marginTop="120dp"
+        android:orientation="vertical">
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@+id/textView5"
-            android:layout_centerHorizontal="true">
-
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="0px"
                 android:layout_weight="0.3333333"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical">
+                android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/loading_university_image"
                     android:layout_width="match_parent"
@@ -37,8 +33,7 @@
                 android:orientation="vertical"
                 android:layout_width="0px"
                 android:layout_weight="0.33333333"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical">
+                android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/loading_users_image"
                     android:layout_width="match_parent"
@@ -57,8 +52,7 @@
                 android:orientation="vertical"
                 android:layout_width="0px"
                 android:layout_weight="0.33333333"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical">
+                android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/loading_evaluations_image"
                     android:layout_width="match_parent"
@@ -74,37 +68,22 @@
             </LinearLayout>
         </LinearLayout>
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView5"
-            android:text="사용한다"
-            android:textSize="20sp"
-            android:layout_marginBottom="40dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView6"
             android:text="몬-쎄라트-"
             android:textSize="60sp"
-            android:layout_marginBottom="40dp"
-            android:layout_below="@+id/textView5"
-            android:layout_centerHorizontal="true"/>
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="에서"
             android:textSize="20sp"
-            android:layout_marginBottom="40dp"
-            android:layout_below="@+id/textView6"
-            android:layout_centerHorizontal="true"/>
-
-    </RelativeLayout>
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"/>
+    </LinearLayout>
 </FrameLayout>
 
 
