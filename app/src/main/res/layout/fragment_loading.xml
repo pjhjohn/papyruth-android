@@ -30,7 +30,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="32sp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -50,7 +50,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="32sp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -70,7 +70,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="32sp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
         </LinearLayout>
 

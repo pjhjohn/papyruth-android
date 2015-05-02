@@ -2,69 +2,38 @@ package com.montserrat.parts.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.google.android.gms.internal.io;
+import com.bumptech.glide.Glide;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
-import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.request.RequestQueue;
-import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Observer;
-import rx.Scheduler;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -74,10 +43,12 @@ import static android.widget.Toast.LENGTH_LONG;
 public class LoadingFragment extends Fragment {
     /* Setup ViewPagerController */
     private ViewPagerController pagerController;
+    private Locale locale;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+        locale = activity.getResources().getConfiguration().locale;
     }
     /* Inflate Fragment View */
     private TextView vUnivText, vUserText, vEvalText;
@@ -96,11 +67,12 @@ public class LoadingFragment extends Fragment {
 
     private Subscription requestSubscription;
     private Subscription timerSubscription;
-    private boolean requestReady, timerReady, proceedToMainActivity;
+    private Boolean requestReady;
+    private boolean timerReady, proceedToMainActivity;
     @Override
     public void onResume() {
         super.onResume();
-        requestReady = false;
+        requestReady = null;
         timerReady = false;
         proceedToMainActivity = false;
     }
@@ -109,8 +81,8 @@ public class LoadingFragment extends Fragment {
         super.onStart();
         /* Step 1 : Get access-token -> Request user information */
         UserInfo userinfo = UserInfo.getInstance();
-        if(userinfo.getAccessToken() == null || userinfo.getAccessToken().toString().isEmpty()) userinfo.setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        requestSubscription = observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/users/me", (String)userinfo.getAccessToken(), new JSONObject())
+        if(userinfo.getAccessToken() == null || userinfo.getAccessToken().isEmpty()) userinfo.setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
+        requestSubscription = observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/users/me", userinfo.getAccessToken(), new JSONObject())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -119,6 +91,7 @@ public class LoadingFragment extends Fragment {
                         Log.e("DEBUG", response.toString());
                         UserInfo.getInstance().setData(response.optJSONObject("user"));
                         Log.e("DEBUG", "userinfo : " + UserInfo.getInstance());
+                        Log.e("DEBUG", "Locale : " + locale);
                         this.fetchUniversityStatistics();
                     },
                     error -> { /* Token no longer valid -> To the AuthFragment */
@@ -133,7 +106,7 @@ public class LoadingFragment extends Fragment {
             );
         /* Set Timer for 5 seconds */
         timerSubscription = Observable.just(true)
-                .delay(3, TimeUnit.SECONDS)
+                .delay(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(success -> {
@@ -153,47 +126,48 @@ public class LoadingFragment extends Fragment {
 
     private void fetchUniversityStatistics () {
         if(!requestSubscription.isUnsubscribed()) requestSubscription.unsubscribe();
-        requestSubscription = observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), (String)UserInfo.getInstance().getAccessToken(), new JSONObject())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> { /* Success with valid token -> render view & proceed to MainActivity */
-                            Log.d("DEBUG", response.toString());
-                            JSONObject data = response.optJSONObject("university");
-                            this.vUnivText.setText(""+data.optInt("university_count"));
-                            this.vUserText.setText(""+data.optInt("user_count"));
-                            this.vEvalText.setText(""+data.optInt("evaluation_count"));
-                            this.requestSubscription.unsubscribe();
-                            this.requestReady = true;
-                            this.proceedToMainActivity = true;
-                            this.finish();
-                        },
-                        Throwable::printStackTrace
-                );
+        requestSubscription =
+            observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                    response -> { /* Success with valid token -> render view & proceed to MainActivity */
+                        Log.d("DEBUG", response.toString());
+                        JSONObject univ_data = response.optJSONObject("university");
+                        Glide.with(this).load(univ_data.optString("image_url", "")).into(this.vUnivIcon);
+                        this.vUnivText.setText(String.format(locale, "%s\nhas", univ_data.optString("name")));
+                        this.vUserText.setText(String.format(locale, "%d\nstudents with", univ_data.optInt("user_count")));
+                        this.vEvalText.setText(String.format(locale, "%d\nevaluations", univ_data.optInt("evaluation_count")));
+                        this.requestSubscription.unsubscribe();
+                        this.requestReady = true;
+                        this.proceedToMainActivity = true;
+                        this.finish();
+                    }, Throwable::printStackTrace
+            );
     }
 
     private void fetchGlobalStatistics() {
         if(!requestSubscription.isUnsubscribed()) requestSubscription.unsubscribe();
-        requestSubscription = observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/info", new JSONObject())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> {
-                            Log.d("DEBUG", response.toString());
-                            this.vUnivText.setText(response.optInt("university_count"));
-                            this.vUserText.setText(response.optInt("user_count"));
-                            this.vEvalText.setText(response.optInt("evaluation_count"));
-                            this.requestSubscription.unsubscribe();
-                            this.requestReady = true;
-                            this.finish();
-                        },
-                        Throwable::printStackTrace
-                );
+        requestSubscription =
+            observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/info", new JSONObject())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                    response -> {
+                        Log.d("DEBUG", response.toString());
+                        this.vUnivText.setText(String.format(locale, "%d\nuniversities has", response.optInt("university_count")));
+                        this.vUserText.setText(String.format(locale, "%d\nstudents with", response.optInt("user_count")));
+                        this.vEvalText.setText(String.format(locale, "%d\nevaluations", response.optInt("evaluation_count")));
+                        this.requestSubscription.unsubscribe();
+                        this.requestReady = true;
+                        this.finish();
+                    }, Throwable::printStackTrace
+            );
     }
 
     private void finish() {
         Log.d("DEBUG", String.format("<timerReady:%b> <requestReady:%b> <proceedToMainActivity:%b>", timerReady, requestReady, proceedToMainActivity));
-        if (timerReady && requestReady) {
+        if (requestReady!= null && requestReady && timerReady) {
             if (proceedToMainActivity) {
                 this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
                 this.getActivity().finish();
@@ -211,8 +185,7 @@ public class LoadingFragment extends Fragment {
         return observableJsonObjectRequest(url, Request.Method.GET, token, body);
     }
     public Observable<JSONObject> observableJsonObjectRequest(String url, int method, String token, JSONObject body) {
-        return Observable.create(subscriber -> {
-            RequestQueue.getInstance(this.getActivity()).addToRequestQueue(new JsonObjectRequest(
+        return Observable.create(subscriber -> RequestQueue.getInstance(this.getActivity()).addToRequestQueue(new JsonObjectRequest(
                     method,
                     url,
                     body,
@@ -232,12 +205,11 @@ public class LoadingFragment extends Fragment {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> headers = new HashMap<>();
-                    if (token != null) headers.put("Authorization", String.format("Token token=\"%s\"", token));
+                    if (token != null) headers.put("Authorization", token);
                     Log.d("DEBUG", String.format("<url:%s> <token:%s>\n request body : %s", url, token, body.toString()));
                     return headers;
                 }
-            });
-        });
+            }));
     }
 
     public static Fragment newInstance() {

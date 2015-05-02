@@ -15,48 +15,50 @@ public class UserInfo {
         return UserInfo.instance;
     }
 
-    private CharSequence access_token;
-    private CharSequence realname;
-    private CharSequence nickname;
-    private CharSequence email;
+    private String access_token;
+    private String realname;
+    private String nickname;
+    private String email;
+    private Boolean is_boy;
     private Integer university_id;
     private Integer entrance_year;
-    private Boolean is_boy;
 
     private UserInfo () {
         this.clear();
     }
 
     public void clear() {
-        this.access_token = null;
-        this.realname    = null;
-        this.nickname    = null;
-        this.email       = null;
+        this.access_token  = null;
+        this.realname      = null;
+        this.nickname      = null;
+        this.email         = null;
+        this.is_boy        = null;
         this.university_id = null;
-        this.is_boy = null;
         this.entrance_year = null;
     }
 
-    public CharSequence getAccessToken () {
+    public String getAccessToken () {
         return this.access_token;
     }
-    public void setAccessToken (CharSequence token) { this.access_token = token; }
-    public CharSequence getRealname () {
+    public void setAccessToken (String token) {
+        if (token != null) this.access_token = String.format("Token token=\"%s\"", token);
+    }
+    public String getRealname () {
         return this.realname;
     }
-    public void setRealname (CharSequence realname) {
+    public void setRealname (String realname) {
         this.realname = realname;
     }
-    public CharSequence getNickname() {
+    public String getNickname() {
         return this.nickname;
     }
-    public void setNickName(CharSequence nickname) {
+    public void setNickName(String nickname) {
         this.nickname = nickname;
     }
-    public CharSequence getEmail() {
+    public String getEmail() {
         return this.email;
     }
-    public void setEmail(CharSequence email) {
+    public void setEmail(String email) {
         this.email = email;
     }
     public Integer getUniversityId() {
@@ -90,6 +92,7 @@ public class UserInfo {
      * @param data data to assign
      */
     public void setData(JSONObject data) {
+        this.setAccessToken(data.optString("access_token", null));
         try { this.realname      = data.getString("realname");   } catch (JSONException e) { e.printStackTrace(); }
         try { this.nickname      = data.getString("nickname");   } catch (JSONException e) { e.printStackTrace(); }
         try { this.email         = data.getString("email");   } catch (JSONException e) { e.printStackTrace(); }

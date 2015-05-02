@@ -162,9 +162,9 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                CharSequence access_token = UserInfo.getInstance().getAccessToken();
-                if(access_token != null && !access_token.toString().isEmpty())
-                    params.put("Authorization", String.format("Token token=\"%s\"", access_token.toString()));
+                String access_token = UserInfo.getInstance().getAccessToken();
+                if(access_token != null && !access_token.isEmpty())
+                    params.put("Authorization", access_token);
                 return params;
             }
         };
