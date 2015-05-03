@@ -10,10 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.controller.AppManager;
 import com.montserrat.parts.auth.UserInfo;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.request.RxVolley;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
@@ -44,23 +44,22 @@ public class RatingStep1Fragment extends ClientFragment {
         this.pagerController = (ViewPagerController) activity;
     }
 
+    private EditText vLectureQuery;
+    private ListView vLectureList;
     private Button btnNext;
-    private AutoCompleteTextView vAutoComplete;
+
     private CompositeSubscription subscriptions = new CompositeSubscription();
-    private ArrayAdapter<String> lectureAdapter;
-    private List<String> lectureItems;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
         /* Bind Views */
-        this.vAutoComplete = (AutoCompleteTextView) view.findViewById(R.id.autotext_lecture);
+        this.vLectureQuery = (EditText) view.findViewById(R.id.autotext_lecture);
+        this.vLectureList = (ListView) view.findViewById(R.id.result_lecture);
         this.btnNext = (Button) view.findViewById(R.id.btn_next);
 
         /* Bind Events */
-        this.lectureItems = new ArrayList<>();
-        this.lectureAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_dropdown_item_1line, this.lectureItems);
-        this.vAutoComplete.setAdapter(this.lectureAdapter);
         this.btnNext.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP2, true));
 
         return view;
@@ -70,41 +69,40 @@ public class RatingStep1Fragment extends ClientFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         subscriptions.add(
-            WidgetObservable.text(vAutoComplete)
-                .debounce(500, TimeUnit.MILLISECONDS, Schedulers.io())
+            WidgetObservable.text(vLectureQuery)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .flatMap(onTextChangeEvent -> {
+                    try {
+                        return RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/lectures/dummy_autocomplete", UserInfo.getInstance().getAccessToken(), new JSONObject().put("query", onTextChangeEvent.text().toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
+                .filter(response -> response != null) // JSONException
+                .map(response -> response.optJSONArray("lectures"))
+                .filter(jsonarray -> jsonarray != null) // Wrong Data
+                .map(jsonarray -> {
+                    List<String> lectures = new ArrayList<>();
+                    for (int i = 0; i < jsonarray.length(); i++) lectures.add(((JSONObject)jsonarray.opt(i)).optString("name"));
+                    return lectures;
+                })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    text -> {
-                        Log.d("DEBUG", "onNext : Generate RxVolley Request with " + text.text());
-                        try {
-                            RxVolley.createObservable(
-                                "http://mont.izz.kr:3001/api/v1/lectures/dummy_autocomplete",
-                                UserInfo.getInstance().getAccessToken(),
-                                new JSONObject().put("query", text.text())
-                            )
-                                .map(response -> response.optJSONArray("lectures"))
-                                .filter(jsonarray -> jsonarray != null)
-                                .map(jsonarray -> {
-                                    this.lectureItems.clear();
-                                    for (int i = 0; i < jsonarray.length(); i++)
-//                                                        this.lectureItems.add(new Lecture((JSONObject) jsonarray.opt(i)));
-                                        this.lectureItems.add(((JSONObject) jsonarray.opt(i)).optString("name"));
-                                    return this.lectureItems;
-                                })
-                                .subscribeOn(Schedulers.io()) /* performed in background till here */
-                                .observeOn(AndroidSchedulers.mainThread()). /* performed in UI-thread from here */
-                                subscribe(
-                                lectures -> {
-                                    Log.d("DEBUG", "onNext : Received data : " + lectures);
-                                    Log.d("DEBUG", "lectureItems length : " + this.lectureItems.size());
-                                    Log.d("DEBUG", "lectureAdapter length : " + this.lectureAdapter.getCount());
-                                    this.lectureAdapter.notifyDataSetChanged();
-                                }, Throwable::printStackTrace
-                            );
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    })
+                    lectures -> {
+                        Log.d("DEBUG", "onNext : Received data : " + lectures);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                            RatingStep1Fragment.this.getActivity(),
+                            android.R.layout.simple_list_item_activated_1,
+                            lectures
+                        );
+                        this.vLectureList.setAdapter(adapter);
+                        Log.d("DEBUG", "lectureAdapter length : " + this.vLectureList.getAdapter().getCount());
+//                        this.lectureAdapter.notifyDataSetChanged();
+                    }, Throwable::printStackTrace
+                )
         );
     }
 

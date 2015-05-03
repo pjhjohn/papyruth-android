@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.montserrat.controller.AppManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -29,30 +31,41 @@ public class RxVolley {
         return createObservable(url, method, null, body);
     }
     public static Observable<JSONObject> createObservable (String url, int method, String token, JSONObject body) {
-        return Observable.create(subscriber -> RequestQueue.getInstance(AppManager.getInstance().getContext()).addToRequestQueue(new JsonObjectRequest(
+        return Observable.create( observer -> RequestQueue.getInstance(AppManager.getInstance().getContext())
+            .addToRequestQueue(new JsonObjectRequest(
                 method,
                 url,
                 body,
-                (response) -> {
+                response -> {
                     Log.d("DEBUG", response.toString());
-                    if (!subscriber.isUnsubscribed()) {
-                        subscriber.onNext(response);
-                        subscriber.onCompleted();
+                    if (!observer.isUnsubscribed()) {
+                        try {
+                            observer.onNext(response.put("status", 200));
+                            observer.onCompleted();
+                        } catch (JSONException e) {
+                            observer.onError(e);
+                        }
                     }
                 },
-                (error) -> {
-                    if (!subscriber.isUnsubscribed()) {
-                        subscriber.onError(error);
+                error -> {
+                    if (!observer.isUnsubscribed()) {
+                        try {
+                            observer.onNext(new JSONObject().put("status", error.networkResponse.statusCode).put("message", error.toString()));
+                            observer.onCompleted();
+                        } catch (JSONException e) {
+                            observer.onError(e);
+                        }
                     }
+
                 }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                if (token != null) headers.put("Authorization", token);
-                Log.d("DEBUG", String.format("<url:%s> <token:%s>\n request body : %s", url, token, body.toString()));
-                return headers;
-            }
-        }));
+            ){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    if (token != null) headers.put("Authorization", token);
+                    Log.d("DEBUG", String.format("<url:%s> <token:%s>\n request body : %s", url, token, body.toString()));
+                    return headers;
+                }
+            }));
     }
 }

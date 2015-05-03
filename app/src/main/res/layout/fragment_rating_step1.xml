@@ -2,29 +2,34 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/padding_vertical_thick"
-    android:paddingRight="@dimen/padding_vertical_thick">
-    <LinearLayout
+    android:layout_height="match_parent">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_gravity="center"
-        android:orientation="vertical">
-        <AutoCompleteTextView
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize">
+        <EditText
             android:id="@+id/autotext_lecture"
             android:hint="@string/hint_lecture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <AutoCompleteTextView
-            android:id="@+id/autotext_professor"
-            android:hint="@string/hint_professor"
+        <ListView
+            android:id="@+id/result_lecture"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:layout_below="@+id/autotext_lecture"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/btn_next"/>
         <Button
             android:id="@+id/btn_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/next"/>
-    </LinearLayout>
+            android:text="@string/next"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+    </RelativeLayout>
 </FrameLayout>
