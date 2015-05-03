@@ -38,20 +38,6 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         View view = super.onCreateView(inflater, container, args);
 
         this.swipeRefreshView.setEnabled(true);
-        this.fabView.setOnClickListener(v -> this.callback.onCategorySelected(NavFragment.Category.RATING));
-
-        /* Request with Initializer Data. ENPOINT SHOULD BE DEFINED WITH */
-        if(this.args!=null) {
-            try {
-                String initStr = this.args.getString(AppConst.Resource.INITIALIZER, AppConst.Request.DEFAULT);
-                if(!initStr.isEmpty()) {
-                    final JSONObject initialDataToSubmit = new JSONObject(initStr);
-                    this.setParameters(initialDataToSubmit).submit();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
         return view;
     }
 

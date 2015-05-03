@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:isIndicator="false"
             android:numStars="5"
-            android:stepSize="20"
+            android:stepSize="10"
             android:rating="0"/>
 
         <SeekBar

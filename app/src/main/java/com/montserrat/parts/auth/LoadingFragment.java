@@ -11,23 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
-import com.montserrat.utils.request.RequestQueue;
+import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -82,7 +77,7 @@ public class LoadingFragment extends Fragment {
         /* Step 1 : Get access-token -> Request user information */
         UserInfo userinfo = UserInfo.getInstance();
         if(userinfo.getAccessToken() == null || userinfo.getAccessToken().isEmpty()) userinfo.setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        requestSubscription = observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/users/me", userinfo.getAccessToken(), new JSONObject())
+        requestSubscription = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/users/me", userinfo.getAccessToken(), new JSONObject())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -127,7 +122,7 @@ public class LoadingFragment extends Fragment {
     private void fetchUniversityStatistics () {
         if(!requestSubscription.isUnsubscribed()) requestSubscription.unsubscribe();
         requestSubscription =
-            observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject())
+            RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -149,7 +144,7 @@ public class LoadingFragment extends Fragment {
     private void fetchGlobalStatistics() {
         if(!requestSubscription.isUnsubscribed()) requestSubscription.unsubscribe();
         requestSubscription =
-            observableJsonObjectRequest( "http://mont.izz.kr:3001/api/v1/info", new JSONObject())
+            RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/info", new JSONObject())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -177,40 +172,7 @@ public class LoadingFragment extends Fragment {
         }
     }
 
-    /* Observable */
-    public Observable<JSONObject> observableJsonObjectRequest(String url, JSONObject body) {
-        return observableJsonObjectRequest(url, Request.Method.GET, null, body);
-    }
-    public Observable<JSONObject> observableJsonObjectRequest(String url, String token, JSONObject body) {
-        return observableJsonObjectRequest(url, Request.Method.GET, token, body);
-    }
-    public Observable<JSONObject> observableJsonObjectRequest(String url, int method, String token, JSONObject body) {
-        return Observable.create(subscriber -> RequestQueue.getInstance(this.getActivity()).addToRequestQueue(new JsonObjectRequest(
-                    method,
-                    url,
-                    body,
-                    (response) -> {
-                        Log.d("DEBUG", response.toString());
-                        if (!subscriber.isUnsubscribed()) {
-                            subscriber.onNext(response);
-                            subscriber.onCompleted();
-                        }
-                    },
-                    (error) -> {
-                        if (!subscriber.isUnsubscribed()) {
-                            subscriber.onError(error);
-                        }
-                    }
-            ) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    if (token != null) headers.put("Authorization", token);
-                    Log.d("DEBUG", String.format("<url:%s> <token:%s>\n request body : %s", url, token, body.toString()));
-                    return headers;
-                }
-            }));
-    }
+
 
     public static Fragment newInstance() {
         return new LoadingFragment();

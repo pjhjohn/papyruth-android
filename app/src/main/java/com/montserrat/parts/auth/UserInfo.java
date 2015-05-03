@@ -1,5 +1,7 @@
 package com.montserrat.parts.auth;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,7 +43,7 @@ public class UserInfo {
         return this.access_token;
     }
     public void setAccessToken (String token) {
-        if (token != null) this.access_token = String.format("Token token=\"%s\"", token);
+        if (token != null && !token.isEmpty()) this.access_token = String.format("Token token=\"%s\"", token);
     }
     public String getRealname () {
         return this.realname;
