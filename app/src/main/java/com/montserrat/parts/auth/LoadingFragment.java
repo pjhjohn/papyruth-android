@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
@@ -26,9 +25,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -36,7 +35,9 @@ import rx.schedulers.Schedulers;
 
 // TODO : TIMER for minimum loading period
 public class LoadingFragment extends Fragment {
-    /* Setup ViewPagerController */
+    private static final String TAG = "LoadingFragment";
+
+    /* Setup ViewPagerController & Locale */
     private ViewPagerController pagerController;
     private Locale locale;
     @Override
@@ -45,6 +46,7 @@ public class LoadingFragment extends Fragment {
         this.pagerController = (ViewPagerController) activity;
         locale = activity.getResources().getConfiguration().locale;
     }
+
     /* Inflate Fragment View */
     private TextView vUnivText, vUserText, vEvalText;
     private ImageView vUnivIcon, vUserIcon, vEvalIcon;
@@ -60,119 +62,62 @@ public class LoadingFragment extends Fragment {
         return view;
     }
 
-    private Subscription requestSubscription;
-    private Subscription timerSubscription;
-    private Boolean requestReady;
-    private boolean timerReady, proceedToMainActivity;
+    private CompositeSubscription subscriptions = new CompositeSubscription();
     @Override
     public void onResume() {
         super.onResume();
-        requestReady = null;
-        timerReady = false;
-        proceedToMainActivity = false;
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        /* Step 1 : Get access-token -> Request user information */
-        UserInfo userinfo = UserInfo.getInstance();
-        if(userinfo.getAccessToken() == null || userinfo.getAccessToken().isEmpty()) userinfo.setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        requestSubscription = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/users/me", userinfo.getAccessToken(), new JSONObject())
+        UserInfo.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
+        subscriptions.add(
+            Observable.combineLatest(
+                RxVolley
+                    .createObservable("http://mont.izz.kr:3001/api/v1/users/me", UserInfo.getInstance().getAccessToken(), new JSONObject())
+                    .flatMap(userData -> {
+                        final int status = userData.optInt("status", -1);
+                        Observable<JSONObject> chainedRequest = null;
+                        switch (status) {
+                            case 200:
+                                UserInfo.getInstance().setData(userData.optJSONObject("user"));
+                                chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject());
+                                break;
+                            case 401:
+                                chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/info", new JSONObject());
+                                break;
+                            default:
+                                Log.e(TAG, "Non-handled status code : " + status);
+                        }
+                        return chainedRequest;
+                    }),
+                Observable.timer(4, TimeUnit.SECONDS),
+                (chainedResponse, unused) -> chainedResponse
+            )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                    response -> { /* Success with valid token -> Fill up UserInfo and proceed */
-                        requestSubscription.unsubscribe();
-                        Log.e("DEBUG", response.toString());
-                        UserInfo.getInstance().setData(response.optJSONObject("user"));
-                        Log.e("DEBUG", "userinfo : " + UserInfo.getInstance());
-                        Log.e("DEBUG", "Locale : " + locale);
-                        this.fetchUniversityStatistics();
-                    },
-                    error -> { /* Token no longer valid -> To the AuthFragment */
-                        if (error instanceof VolleyError) {
-                            int code = ((VolleyError) error).networkResponse.statusCode;
-                            if (code == 401) {
-                                this.requestReady = true;
-                                this.fetchGlobalStatistics();
-                            }
-                        } else error.printStackTrace();
-                    }
-            );
-        /* Set Timer for 5 seconds */
-        timerSubscription = Observable.just(true)
-                .delay(2, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(success -> {
-                    Log.d("DEBUG", "Timer Terminated");
-                    this.timerReady = true;
-                    this.finish();
-                });
-    }
-
-    /* Unsubscribe */
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(requestSubscription!= null && !requestSubscription.isUnsubscribed()) requestSubscription.unsubscribe();
-        if(timerSubscription!= null && !timerSubscription.isUnsubscribed()) timerSubscription.unsubscribe();
-    }
-
-    private void fetchUniversityStatistics () {
-        if(!requestSubscription.isUnsubscribed()) requestSubscription.unsubscribe();
-        requestSubscription =
-            RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                    response -> { /* Success with valid token -> render view & proceed to MainActivity */
-                        Log.d("DEBUG", response.toString());
-                        JSONObject univ_data = response.optJSONObject("university");
-                        Glide.with(this).load(univ_data.optString("image_url", "")).into(this.vUnivIcon);
-                        this.vUnivText.setText(String.format(locale, "%s\nhas", univ_data.optString("name")));
-                        this.vUserText.setText(String.format(locale, "%d\nstudents with", univ_data.optInt("user_count")));
-                        this.vEvalText.setText(String.format(locale, "%d\nevaluations", univ_data.optInt("evaluation_count")));
-                        this.requestSubscription.unsubscribe();
-                        this.requestReady = true;
-                        this.proceedToMainActivity = true;
-                        this.finish();
-                    }, Throwable::printStackTrace
-            );
-    }
-
-    private void fetchGlobalStatistics() {
-        if(!requestSubscription.isUnsubscribed()) requestSubscription.unsubscribe();
-        requestSubscription =
-            RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/info", new JSONObject())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                    response -> {
-                        Log.d("DEBUG", response.toString());
+                response -> {
+                    JSONObject university = response.optJSONObject("university");
+                    if (university != null) {
+                        Glide.with(this).load(university.optString("image_url", "")).into(this.vUnivIcon);
+                        this.vUnivText.setText(String.format(locale, "%s\nhas", university.optString("name")));
+                        this.vUserText.setText(String.format(locale, "%d\nstudents with", university.optInt("user_count")));
+                        this.vEvalText.setText(String.format(locale, "%d\nevaluations", university.optInt("evaluation_count")));
+                        this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+                        this.getActivity().finish();
+                    } else {
                         this.vUnivText.setText(String.format(locale, "%d\nuniversities has", response.optInt("university_count")));
                         this.vUserText.setText(String.format(locale, "%d\nstudents with", response.optInt("user_count")));
                         this.vEvalText.setText(String.format(locale, "%d\nevaluations", response.optInt("evaluation_count")));
-                        this.requestSubscription.unsubscribe();
-                        this.requestReady = true;
-                        this.finish();
-                    }, Throwable::printStackTrace
-            );
+                        this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
+                    }
+                }
+            )
+        );
     }
 
-    private void finish() {
-        Log.d("DEBUG", String.format("<timerReady:%b> <requestReady:%b> <proceedToMainActivity:%b>", timerReady, requestReady, proceedToMainActivity));
-        if (requestReady!= null && requestReady && timerReady) {
-            if (proceedToMainActivity) {
-                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                this.getActivity().finish();
-            } else {
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
-            }
-        }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if ( this.subscriptions != null ) this.subscriptions.unsubscribe();
     }
-
-
 
     public static Fragment newInstance() {
         return new LoadingFragment();
