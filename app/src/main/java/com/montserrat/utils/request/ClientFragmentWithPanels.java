@@ -35,10 +35,10 @@ import java.util.TooManyListenersException;
  */
 public abstract class ClientFragmentWithPanels extends ClientFragment {
     private static final String TAG = "ClientFragment";
-    private Toolbar vToolbar;
+    protected Toolbar vToolbar;
     protected FloatingActionButton vFAB;
     private int idToolbar, idFAB;
-    private boolean isPending;
+    protected boolean isPending;
     private NavFragment.OnCategoryClickListener navigationCallback;
 
     @Override
@@ -72,7 +72,7 @@ public abstract class ClientFragmentWithPanels extends ClientFragment {
         this.vFAB = (FloatingActionButton) view.findViewById(this.idFAB);
         if (this.vFAB == null) Log.d(TAG, "Couldn't find FloatingActionButton by ID#" + this.idFAB);
 
-        this.vFAB.setOnClickListener(v -> {
+        if (this.vFAB != null) this.vFAB.setOnClickListener(v -> {
             if(this.navigationCallback != null) this.navigationCallback.onCategorySelected(NavFragment.Category.RATING);
         });
 

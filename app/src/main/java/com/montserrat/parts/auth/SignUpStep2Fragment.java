@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
+import com.montserrat.controller.AppManager;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.validator.Validator;
 
@@ -86,7 +87,11 @@ public class SignUpStep2Fragment extends ClientFragment {
     @Override
     public void onResponse(JSONObject response) {
         try {
-            if (response.getBoolean("success")) this.onSignUpSuccess();
+            if (response.getBoolean("success")) {
+                UserInfo.getInstance().setAccessToken(response.optString("access_token", null)); // TODO : Check existance of access-token at setter or
+                AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.optString("access_token", null));
+                this.onSignUpSuccess();
+            }
             else this.onSignUpFailure(response);
         } catch(JSONException e) {
             e.printStackTrace();

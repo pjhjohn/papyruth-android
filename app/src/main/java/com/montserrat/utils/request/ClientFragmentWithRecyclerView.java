@@ -1,9 +1,9 @@
 package com.montserrat.utils.request;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 
 import com.android.volley.VolleyError;
-import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.recycler.PanelControllerOnScrollWithAskMore;
@@ -29,30 +27,29 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener, RecyclerViewAskMoreListener {
-    private Toolbar toolbarView;
-    protected FloatingActionButton fabView;
+public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragmentWithPanels implements SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener, RecyclerViewAskMoreListener {
     protected SwipeRefreshLayout swipeRefreshView;
     private RecyclerView recyclerView;
     protected T adapter;
     protected List<E> items;
-    private int toolbarId, fabId, swipeRefreshId, recyclerId;
-    private boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
-    private boolean isRequestForRefreshing, isPending;
+    private int swipeRefreshId, recyclerId;
+    protected boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
+    private boolean isRequestForRefreshing;
     protected PanelControllerOnScrollWithAskMore recyclerViewScrollListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         /* Bind Parameters passed via setArguments(Bundle bundle) */
         if (this.args != null) {
-            this.toolbarId      = this.args.getInt(AppConst.Resource.TOOLBAR, AppConst.Resource.DEFAULT);
-            this.fabId          = this.args.getInt(AppConst.Resource.FAB, AppConst.Resource.DEFAULT);
             this.swipeRefreshId = this.args.getInt(AppConst.Resource.SWIPE_REFRESH, AppConst.Resource.DEFAULT);
             this.recyclerId     = this.args.getInt(AppConst.Resource.RECYCLER, AppConst.Resource.DEFAULT);
         } else {
-            this.toolbarId      = AppConst.Resource.DEFAULT;
-            this.fabId          = AppConst.Resource.DEFAULT;
             this.swipeRefreshId = AppConst.Resource.DEFAULT;
             this.recyclerId     = AppConst.Resource.DEFAULT;
         }
@@ -60,19 +57,14 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         this.hideToolbarOnScroll = true;
         this.hideFloatingActionButtonOnScroll = true;
         this.isRequestForRefreshing = false;
-        this.isPending = false;
         this.recyclerViewScrollListener = null;
 
         /* Bind Views */
-        this.toolbarView = (Toolbar) this.getActivity().findViewById(this.toolbarId);
-        if (this.toolbarView == null) Log.d("ClientFragment", "Couldn't find Toolbar by ID#" + this.toolbarId);
-        this.fabView = (FloatingActionButton) view.findViewById(this.fabId);
-        if (this.fabView == null) Log.d("ClientFragment", "Couldn't find FloatingActionButton by ID#" + this.fabId);
         this.swipeRefreshView = (SwipeRefreshLayout) view.findViewById(this.swipeRefreshId);
         if (this.swipeRefreshView == null) Log.d("ClientFragment", "Couldn't find SwipeRefreshLayout by ID#" + this.swipeRefreshId);
         if(this.swipeRefreshView != null) {
-            final int toolbarHeight = this.toolbarView == null? 0 : this.toolbarView.getHeight();
-            if(this.toolbarView != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
+            final int toolbarHeight = this.vToolbar == null? 0 : this.vToolbar.getHeight();
+            if(this.vToolbar != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
             this.swipeRefreshView.setColorSchemeColors(this.getResources().getColor(R.color.appDefaultForegroundColor));
             this.swipeRefreshView.setEnabled(false);
             this.swipeRefreshView.setOnRefreshListener(this);
@@ -109,23 +101,23 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
 
     protected abstract T getAdapter (List<E> items);
     private void hideViews() {
-        if(this.toolbarView != null && this.hideToolbarOnScroll) {
-            this.toolbarView.animate().translationY(-toolbarView.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        if(this.vToolbar != null && this.hideToolbarOnScroll) {
+            this.vToolbar.animate().translationY(-vToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
         }
-        if(this.fabView != null && this.hideFloatingActionButtonOnScroll) {
+        if(this.vFAB != null && this.hideFloatingActionButtonOnScroll) {
             //Vertical
-            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.fabView.getLayoutParams();
-            int fabBottomMargin = lp.bottomMargin;
-            this.fabView.animate().translationY(this.fabView.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+            //FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.vFAB.getLayoutParams();
+            //int fabBottomMargin = lp.bottomMargin;
+            //this.vFAB.animate().translationY(this.vFAB.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
             //Horizontal
             //this.fabView.animate().translationX(this.fabView.getWidth()/2).setInterpolator(new AccelerateInterpolator(2)).start();
         }
     }
     private void showViews() {
-        if(this.toolbarView != null && this.hideToolbarOnScroll) this.toolbarView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        if(this.fabView != null && this.hideFloatingActionButtonOnScroll) {
+        if(this.vToolbar != null && this.hideToolbarOnScroll) this.vToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        if(this.vFAB != null && this.hideFloatingActionButtonOnScroll) {
             //Vertical
-            this.fabView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            //this.vFAB.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
             //Horizontal
             //this.fabView.animate().translationX(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
