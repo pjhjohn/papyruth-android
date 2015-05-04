@@ -19,6 +19,7 @@ import com.montserrat.controller.AppManager;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -63,54 +65,75 @@ public class LoadingFragment extends Fragment {
     }
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
+    private boolean timerDone = false, requestDone = false;
+    private Boolean hasAuth = null;
+    private Action1<JSONObject> onNextJSONResponse = response -> {
+        if (response == null) this.timerDone = true;
+        else {
+            try {
+                Log.e("DEBUG", "response : \n" + response.toString(3));
+            } catch (JSONException e) {
+                Log.e("DEBUG", "response : \n" + response.toString());
+            }
+            JSONObject university = response.optJSONObject("university");
+            if (university != null) {
+                Glide.with(this).load(university.optString("image_url", "")).into(this.vUnivIcon);
+                this.vUnivText.setText(String.format("%s\nhas", university.optString("name")));
+                this.vUserText.setText(String.format("%d\nstudents with", university.optInt("user_count")));
+                this.vEvalText.setText(String.format("%d\nevaluations", university.optInt("evaluation_count")));
+                this.hasAuth = true;
+            } else {
+                this.vUnivText.setText(String.format("%d\nuniversities has", response.optInt("university_count", -100)));
+                this.vUserText.setText(String.format("%d\nstudents with", response.optInt("user_count", -100)));
+                this.vEvalText.setText(String.format("%d\nevaluations", response.optInt("evaluation_count", -100)));
+                this.hasAuth = false;
+            } this.requestDone = true;
+        }
+        if (this.timerDone&&this.requestDone) {
+            if ( hasAuth == null ) return;
+            if ( hasAuth ) {
+                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+                this.getActivity().finish();
+            } else {
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
+            }
+        }
+    };
     @Override
     public void onResume() {
         super.onResume();
         UserInfo.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         subscriptions.add(
-            Observable.combineLatest(
-                RxVolley
-                    .createObservable("http://mont.izz.kr:3001/api/v1/users/me", UserInfo.getInstance().getAccessToken(), new JSONObject())
-                    .flatMap(userData -> {
-                        final int status = userData.optInt("status", -1);
-                        Observable<JSONObject> chainedRequest = Observable.just(null);
-                        switch (status) {
-                            case 200:
-                                UserInfo.getInstance().setData(userData.optJSONObject("user"));
-                                chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject());
-                                break;
-                            case 401:
-                                chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/info", new JSONObject());
-                                break;
-                            default:
-                                Log.e(TAG, "Non-handled status code : " + status);
-                        }
-                        return chainedRequest;
-                    }),
-                Observable.timer(4, TimeUnit.SECONDS),
-                (chainedResponse, unused) -> chainedResponse
-            )
-            .filter(chainedResponse -> chainedResponse != null) // filter nullified ( not desired ) observables.
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                response -> {
-                    JSONObject university = response.optJSONObject("university");
-                    if (university != null) {
-                        Glide.with(this).load(university.optString("image_url", "")).into(this.vUnivIcon);
-                        this.vUnivText.setText(String.format(locale, "%s\nhas", university.optString("name")));
-                        this.vUserText.setText(String.format(locale, "%d\nstudents with", university.optInt("user_count")));
-                        this.vEvalText.setText(String.format(locale, "%d\nevaluations", university.optInt("evaluation_count")));
-                        this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                        this.getActivity().finish();
-                    } else {
-                        this.vUnivText.setText(String.format(locale, "%d\nuniversities has", response.optInt("university_count")));
-                        this.vUserText.setText(String.format(locale, "%d\nstudents with", response.optInt("user_count")));
-                        this.vEvalText.setText(String.format(locale, "%d\nevaluations", response.optInt("evaluation_count")));
-                        this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
+            RxVolley
+                .createObservable("http://mont.izz.kr:3001/api/v1/users/me", UserInfo.getInstance().getAccessToken(), new JSONObject())
+                .flatMap(userData -> {
+                    final int status = userData.optInt("status", -1);
+                    Observable<JSONObject> chainedRequest = Observable.just(null);
+                    switch (status) {
+                        case 200:
+                            UserInfo.getInstance().setData(userData.optJSONObject("user"));
+                            chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject());
+                            break;
+                        case 401:
+                            chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/info", new JSONObject());
+                            break;
+                        default:
+                            Log.e(TAG, "Non-handled status code : " + status);
                     }
-                }
-            )
+                    return chainedRequest;
+                })
+                .filter(chainedResponse -> chainedResponse != null) // filter nullified ( not desired ) observables.
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onNextJSONResponse)
+        );
+        subscriptions.add(
+            Observable
+                .timer(3, TimeUnit.SECONDS)
+                .map( unused -> (JSONObject) null )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onNextJSONResponse)
         );
     }
 
