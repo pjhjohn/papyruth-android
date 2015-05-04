@@ -73,7 +73,7 @@ public class LoadingFragment extends Fragment {
                     .createObservable("http://mont.izz.kr:3001/api/v1/users/me", UserInfo.getInstance().getAccessToken(), new JSONObject())
                     .flatMap(userData -> {
                         final int status = userData.optInt("status", -1);
-                        Observable<JSONObject> chainedRequest = null;
+                        Observable<JSONObject> chainedRequest = Observable.just(null);
                         switch (status) {
                             case 200:
                                 UserInfo.getInstance().setData(userData.optJSONObject("user"));
@@ -90,6 +90,7 @@ public class LoadingFragment extends Fragment {
                 Observable.timer(4, TimeUnit.SECONDS),
                 (chainedResponse, unused) -> chainedResponse
             )
+            .filter(chainedResponse -> chainedResponse != null) // filter nullified ( not desired ) observables.
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
