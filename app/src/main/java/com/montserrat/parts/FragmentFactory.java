@@ -10,9 +10,9 @@ import com.montserrat.parts.auth.SignUpStep1Fragment;
 import com.montserrat.parts.auth.SignUpStep2Fragment;
 import com.montserrat.parts.main.CourseFragment;
 import com.montserrat.parts.main.LecturesFragment;
-import com.montserrat.parts.main.RatingStep1Fragment;
-import com.montserrat.parts.main.RatingStep2Fragment;
-import com.montserrat.parts.main.RatingStep3Fragment;
+import com.montserrat.parts.main.EvaluationStep1Fragment;
+import com.montserrat.parts.main.EvaluationStep2Fragment;
+import com.montserrat.parts.main.EvaluationStep3Fragment;
 
 import org.json.JSONObject;
 
@@ -23,7 +23,7 @@ public class FragmentFactory {
     private FragmentFactory () {}
     /* TODO : static final integer VS enum */
     public enum Type {
-        AUTH, HOME, SEARCH, SUGGEST, RATING, RANDOM, PROFILE, SIGNOUT
+        AUTH, HOME, SEARCH, RECOMMENDATION, EVALUAION, RANDOM, PROFILE, SIGNOUT
     }
 
     public static Fragment create(Type type) {
@@ -48,15 +48,15 @@ public class FragmentFactory {
                 switch(position) {
                     case AppConst.ViewPager.Search.DUMMY        : fragment = DummyFragment.newInstance();       break;
                 } break;
-            case SUGGEST:
+            case RECOMMENDATION:
                 switch(position) {
-                    case AppConst.ViewPager.Suggest.DUMMY       : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Recommendation.DUMMY       : fragment = DummyFragment.newInstance();       break;
                 } break;
-            case RATING:
+            case EVALUAION:
                 switch(position) {
-                    case AppConst.ViewPager.Rating.RATING_STEP1: fragment = RatingStep1Fragment.newInstance();       break;
-                    case AppConst.ViewPager.Rating.RATING_STEP2: fragment = RatingStep2Fragment.newInstance();       break;
-                    case AppConst.ViewPager.Rating.RATING_STEP3: fragment = RatingStep3Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP1: fragment = EvaluationStep1Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP2: fragment = EvaluationStep2Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP3: fragment = EvaluationStep3Fragment.newInstance();       break;
                 } break;
             case RANDOM :
                 switch(position) {
@@ -102,8 +102,8 @@ public class FragmentFactory {
             case AUTH   : return "AUTH";
             case HOME   : return "HOME";
             case SEARCH : return "SEARCH";
-            case SUGGEST: return "SUGGEST";
-            case RATING: return "RATING";
+            case RECOMMENDATION: return "RECOMMENDATION";
+            case EVALUAION: return "EVALUAION";
             case RANDOM : return "RANDOM";
             case PROFILE: return "PROFILE";
             case SIGNOUT: return "SIGNOUT";

@@ -3,12 +3,12 @@ package com.montserrat.parts.main;
 /**
  * Created by pjhjohn on 2015-04-26.
  */
-public class RatingForm {
-    private static RatingForm instance = null;
+public class Evaluation {
+    private static Evaluation instance = null;
 
-    public static synchronized RatingForm getInstance() {
-        if( RatingForm.instance == null ) RatingForm.instance = new RatingForm();
-        return RatingForm.instance;
+    public static synchronized Evaluation getInstance() {
+        if( Evaluation.instance == null ) Evaluation.instance = new Evaluation();
+        return Evaluation.instance;
     }
 
     /* STEP 1*/

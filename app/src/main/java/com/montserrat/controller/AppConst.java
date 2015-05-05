@@ -69,15 +69,15 @@ public class AppConst {
             public static final int LENGTH = 1;
             public static final int DUMMY = 0;
         }
-        public static class Suggest {
+        public static class Recommendation {
             public static final int LENGTH = 1;
             public static final int DUMMY = 0;
         }
-        public static class Rating {
+        public static class Evaluation {
             public static final int LENGTH = 3;
-            public static final int RATING_STEP1 = 0;
-            public static final int RATING_STEP2 = 1;
-            public static final int RATING_STEP3 = 2;
+            public static final int EVALUATION_STEP1 = 0;
+            public static final int EVALUATION_STEP2 = 1;
+            public static final int EVALUATION_STEP3 = 2;
         }
         public static class Random {
             public static final int LENGTH = 1;

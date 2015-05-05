@@ -45,8 +45,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.managers = new ArrayList<ViewPagerManager> ();
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.HOME     , AppConst.ViewPager.Home.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SEARCH   , AppConst.ViewPager.Search.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SUGGEST  , AppConst.ViewPager.Suggest.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RATING   , AppConst.ViewPager.Rating.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RECOMMENDATION, AppConst.ViewPager.Recommendation.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.EVALUAION, AppConst.ViewPager.Evaluation.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RANDOM   , AppConst.ViewPager.Random.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.PROFILE  , AppConst.ViewPager.Profile.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SIGNOUT  , AppConst.ViewPager.Signout.LENGTH));

@@ -63,8 +63,8 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         switch(category) {
             case Category.HOME : return "HOME";
             case Category.SEARCH : return "SEARCH";
-            case Category.SUGGEST : return "SUGGEST";
-            case Category.RATING: return "RATING";
+            case Category.SUGGEST : return "RECOMMENDATION";
+            case Category.RATING: return "EVALUAION";
             case Category.RANDOM : return "RANDOM";
             case Category.PROFILE : return "PROFILE";
             case Category.SIGNOUT : return "SIGNOUT";
@@ -91,8 +91,8 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.items = new ArrayList<>();
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_suggest), R.drawable.ic_action_location_searching));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_write), R.drawable.ic_action_edit));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
+        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_evaluation), R.drawable.ic_action_edit));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
         this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove));

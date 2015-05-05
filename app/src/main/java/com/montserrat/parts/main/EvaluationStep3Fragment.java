@@ -17,7 +17,7 @@ import com.montserrat.utils.viewpager.ViewPagerController;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class RatingStep3Fragment extends ClientFragment {
+public class EvaluationStep3Fragment extends ClientFragment {
     private ViewPagerController pagerController;
 
     @Override
@@ -30,23 +30,23 @@ public class RatingStep3Fragment extends ClientFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
 
-        ((Button)view.findViewById(R.id.btn_next)).setOnClickListener(v -> this.submitRatingForm());
+        view.findViewById(R.id.btn_next).setOnClickListener(v -> this.submitEvaluation());
 
         return view;
     }
 
-    public void submitRatingForm() {
+    public void submitEvaluation () {
 
     }
 
     public static Fragment newInstance() {
-        Fragment fragment = new RatingStep3Fragment();
+        Fragment fragment = new EvaluationStep3Fragment();
         Bundle bundle = new Bundle();
         /* For AutoComplete TextView for lecture title & professor name */
         bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
         bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
         bundle.putString(AppConst.Request.ACTION, "");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_rating_step3);
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_evaluation_step3);
         fragment.setArguments(bundle);
         return fragment;
     }

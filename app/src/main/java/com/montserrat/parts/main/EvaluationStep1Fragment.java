@@ -33,9 +33,9 @@ import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-04-26.
- * Searches Lecture for Rating on Step 1.
+ * Searches Lecture for Evaluation on Step 1.
  */
-public class RatingStep1Fragment extends ClientFragment {
+public class EvaluationStep1Fragment extends ClientFragment {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -59,7 +59,7 @@ public class RatingStep1Fragment extends ClientFragment {
         this.btnNext = (Button) view.findViewById(R.id.btn_next);
 
         /* Bind Events */
-        this.btnNext.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Rating.RATING_STEP2, true));
+        this.btnNext.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true));
 
         return view;
     }
@@ -92,7 +92,7 @@ public class RatingStep1Fragment extends ClientFragment {
                 .subscribe(
                     lectures -> {
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                            RatingStep1Fragment.this.getActivity(),
+                            EvaluationStep1Fragment.this.getActivity(),
                             android.R.layout.simple_list_item_activated_1,
                             lectures
                         );
@@ -117,13 +117,13 @@ public class RatingStep1Fragment extends ClientFragment {
     }
 
     public static Fragment newInstance() {
-        Fragment fragment = new RatingStep1Fragment();
+        Fragment fragment = new EvaluationStep1Fragment();
         Bundle bundle = new Bundle();
         /* For AutoComplete TextView for lecture title & professor name */
         bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
         bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
         bundle.putString(AppConst.Request.ACTION, "");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_rating_step1);
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_evaluation_step1);
         fragment.setArguments(bundle);
         return fragment;
     }

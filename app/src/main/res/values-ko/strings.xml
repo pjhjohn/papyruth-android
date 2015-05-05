@@ -5,8 +5,8 @@
     <!--navigation-->
     <string name="nav_item_home">홈</string>
     <string name="nav_item_search">강좌검색</string>
-    <string name="nav_item_suggest">추천강좌</string>
-    <string name="nav_item_write">강의평작성</string>
+    <string name="nav_item_recommendation">추천강좌</string>
+    <string name="nav_item_evaluation">강의평작성</string>
     <string name="nav_item_random">임의강의</string>
     <string name="nav_item_profile">회원정보</string>
     <string name="nav_item_signout">나가기</string>
