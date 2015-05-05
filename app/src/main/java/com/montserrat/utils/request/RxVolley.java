@@ -49,6 +49,7 @@ public class RxVolley {
                     error -> {
                         if (!observer.isUnsubscribed()) {
                             try {
+                                Timber.e(error, "Error OCcured in RxVolley");
                                 observer.onNext(new JSONObject().put("status", error.networkResponse.statusCode).put("message", error.toString()));
                                 observer.onCompleted();
                             } catch (JSONException e) {

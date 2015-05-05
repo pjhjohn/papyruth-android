@@ -15,7 +15,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.montserrat.controller.AppConst;
-import com.montserrat.parts.auth.UserInfo;
+import com.montserrat.parts.auth.User;
 
 import org.json.JSONObject;
 
@@ -162,7 +162,7 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                String access_token = UserInfo.getInstance().getAccessToken();
+                String access_token = User.getInstance().getAccessToken();
                 if(access_token != null && !access_token.isEmpty())
                     params.put("Authorization", access_token);
                 return params;

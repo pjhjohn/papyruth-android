@@ -11,7 +11,7 @@ import android.view.View;
  * Boilerplate fragment that provides some utility functions for child classes.
  */
 
-public class RxVolleyFragment extends Fragment {
+public class ProgressFragment extends Fragment {
     protected View vProgress, vContent;
     private int transitionTime;
     private boolean contentVisibleWhenProgress;
@@ -34,7 +34,7 @@ public class RxVolleyFragment extends Fragment {
             this.vProgress.animate().setDuration(this.transitionTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd (Animator animation) {
-                    RxVolleyFragment.this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+                    ProgressFragment.this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
                 }
             });
         }
@@ -43,7 +43,7 @@ public class RxVolleyFragment extends Fragment {
             this.vContent.animate().setDuration(this.transitionTime).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd (Animator animation) {
-                    RxVolleyFragment.this.vContent.setVisibility(show ? View.GONE : View.VISIBLE);
+                    ProgressFragment.this.vContent.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
         }

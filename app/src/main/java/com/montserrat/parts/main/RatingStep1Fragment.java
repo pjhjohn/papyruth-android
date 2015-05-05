@@ -13,7 +13,8 @@ import android.widget.ListView;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.parts.auth.UserInfo;
+import com.montserrat.parts.auth.User;
+import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
@@ -72,7 +73,7 @@ public class RatingStep1Fragment extends ClientFragment {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(onTextChangeEvent -> {
                     try {
-                        return RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/lectures/dummy_autocomplete", UserInfo.getInstance().getAccessToken(), new JSONObject().put("query", onTextChangeEvent.text().toString()));
+                        return RxVolley.createObservable(Api.url("lectures/dummy_autocomplete"), User.getInstance().getAccessToken(), new JSONObject().put("query", onTextChangeEvent.text().toString()));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

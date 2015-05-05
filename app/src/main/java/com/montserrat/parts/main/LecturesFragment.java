@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
-import com.montserrat.parts.auth.UserInfo;
+import com.montserrat.parts.auth.User;
 import com.montserrat.parts.navigation_drawer.NavFragment;
 import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
 
@@ -84,7 +84,7 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
         super.onRefresh();
         JSONObject params = new JSONObject();
         try {
-            params.putOpt("university_id", UserInfo.getInstance().getUniversityId());
+            params.putOpt("university_id", User.getInstance().getUniversityId());
             params.putOpt("since_id", this.minLectureId);
             params.putOpt("max_id", this.minLectureId);
         } catch (JSONException e) {
@@ -98,11 +98,11 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
     public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         JSONObject params = new JSONObject();
         try {
-            params.putOpt("university_id", UserInfo.getInstance().getUniversityId());
+            params.putOpt("university_id", User.getInstance().getUniversityId());
             params.putOpt("since_id", this.minLectureId);
             params.putOpt("limit", 10);
         } catch (JSONException e) {
-            Timber.e("JSONException Occured with possible null value UserInfo.university_id : %s", UserInfo.getInstance().getUniversityId());
+            Timber.e("JSONException Occured with possible null value UserInfo.university_id : %s", User.getInstance().getUniversityId());
         }
         this.setParameters(params);
         this.submit();

@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
@@ -89,8 +88,8 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        UserInfo.getInstance().setUniversityId(this.items.get(position).universityId);
-        if ( UserInfo.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+        User.getInstance().setUniversityId(this.items.get(position).universityId);
+        if ( User.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 
     @Override

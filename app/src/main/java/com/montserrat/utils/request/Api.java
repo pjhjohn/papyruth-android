@@ -22,6 +22,10 @@ public class Api {
         if (instance.endpoint == null) return null;
         else return instance.endpoint + action;
     }
+    public static String url(String actionFormat, Object...args) {
+        if (instance.endpoint == null) return null;
+        else return instance.endpoint + String.format(actionFormat, args);
+    }
 
     /* Api Builder */
     public static class Builder {

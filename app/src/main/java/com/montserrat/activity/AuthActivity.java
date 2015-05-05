@@ -44,7 +44,7 @@ public class AuthActivity extends Activity implements ViewPagerController {
         /* Api Endpoint Setup */
         new Api.Builder()
                .setRoot("mont.izz.kr:3001")
-               .setVersion("v1")
+               .setVersion(AppConst.API_VERSION)
                .enableSSL(false)
                .build();
 

@@ -15,6 +15,7 @@ import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
+import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
@@ -34,7 +35,6 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-// TODO : TIMER for minimum loading period
 public class LoadingFragment extends Fragment {
     /* Setup ViewPagerController & Locale */
     private ViewPagerController pagerController;
@@ -101,23 +101,22 @@ public class LoadingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        UserInfo.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
+        User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         subscriptions.add(
             RxVolley
-                .createObservable("http://mont.izz.kr:3001/api/v1/users/me", UserInfo.getInstance().getAccessToken(), new JSONObject())
+                .createObservable(Api.url("users/me"), User.getInstance().getAccessToken(), new JSONObject())
                 .flatMap(userData -> {
                     final int status = userData.optInt("status", -1);
-                    Observable<JSONObject> chainedRequest = Observable.just(null);
                     switch (status) {
-                        case 200 :
-                            UserInfo.getInstance().setData(userData.optJSONObject("user"));
-                            chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/universities/" + UserInfo.getInstance().getUniversityId(), UserInfo.getInstance().getAccessToken(), new JSONObject());
-                            break;
-                        case 401 :
-                            chainedRequest = RxVolley.createObservable("http://mont.izz.kr:3001/api/v1/info", new JSONObject());
-                            break;
-                        default : Timber.e("Unexpected Status code : %d - Needs to be implemented", status);
-                    } return chainedRequest;
+                        case 200:
+                            User.getInstance().setData(userData.optJSONObject("user"));
+                            return RxVolley.createObservable(Api.url("universities/%s", User.getInstance().getUniversityId()), User.getInstance().getAccessToken(), new JSONObject());
+                        case 401:
+                            return RxVolley.createObservable(Api.url("info"), new JSONObject());
+                        default:
+                            Timber.e("Unexpected Status code : %d - Needs to be implemented", status);
+                            return Observable.just(null);
+                    }
                 })
                 .filter(chainedResponse -> chainedResponse != null) // filter nullified ( not desired ) observables.
                 .subscribeOn(Schedulers.io())
@@ -127,7 +126,7 @@ public class LoadingFragment extends Fragment {
         subscriptions.add(
             Observable
                 .timer(3, TimeUnit.SECONDS)
-                .map( unused -> (JSONObject) null )
+                .map(unused -> (JSONObject) null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onNextJSONResponse)
@@ -138,10 +137,6 @@ public class LoadingFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if ( this.subscriptions != null ) this.subscriptions.unsubscribe();
-    }
-
-    public static Fragment newInstance() {
-        return new LoadingFragment();
     }
 }
 

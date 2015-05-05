@@ -7,9 +7,11 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +19,21 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
-import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.request.Api;
+import com.montserrat.utils.request.ProgressFragment;
+import com.montserrat.utils.request.RxVolley;
+import com.montserrat.utils.validator.RxValidator;
 import com.montserrat.utils.validator.Validator;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
@@ -34,41 +43,156 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.android.view.OnClickEvent;
+import rx.android.view.ViewObservable;
+import rx.android.widget.OnTextChangeEvent;
+import rx.android.widget.WidgetObservable;
+import rx.functions.Func2;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by mrl on 2015-04-07.
  */
-public class AuthFragment extends ClientFragment {
-    private AutoCompleteTextView vEmail;
-    private EditText vPassword;
+public class AuthFragment extends ProgressFragment {
+    /* Set PageController */
     private ViewPagerController pagerController;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    private AutoCompleteTextView vEmail;
+    private EditText vPassword;
+    private Button btnSignin, btnSignup;
+    private CompositeSubscription subscriptions;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.subscriptions = new CompositeSubscription();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_auth, container, false);
 
         /* Bind Views */
         this.vEmail = (AutoCompleteTextView) view.findViewById(R.id.auth_email);
+        this.vPassword = (EditText) view.findViewById(R.id.auth_password);
+        this.vProgress = view.findViewById(R.id.progress_auth);
+        this.vContent  = view.findViewById(R.id.content_auth);
+        this.btnSignin = (Button) view.findViewById(R.id.btn_sign_in);
+        this.btnSignup = (Button) view.findViewById(R.id.btn_sign_up);
 
-        /* AutoComplete Email View */
+        /* Initialize Views */
+        this.initEmailAutoComplete();
+
+        /* Bind Listeners to Views */
+        this.subscriptions.add(
+            Observable
+            .combineLatest(
+                WidgetObservable.text(vEmail),
+                WidgetObservable.text(vPassword),
+                (OnTextChangeEvent email, OnTextChangeEvent password) -> {
+                    boolean validEmail;
+                    if (validEmail = RxValidator.isValidEmail.call(email)) vEmail.setError(null);
+                    else vEmail.setError(this.getResources().getString(RxValidator.isEmpty.call(email) ? R.string.field_invalid_required : R.string.field_invalid_email));
+
+                    boolean validPassword;
+                    if (validPassword = RxValidator.isValidPassword.call(password)) vPassword.setError(null);
+                    else vPassword.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_password));
+
+                    return validEmail && validPassword;
+                })
+            .subscribe(
+                valid -> {
+                    this.btnSignin.getBackground().setColorFilter(getResources().getColor(valid ? R.color.appDefaultHighlightColor : R.color.appDefaultBackgroundColor), PorterDuff.Mode.MULTIPLY);
+                    this.btnSignin.setEnabled(valid);
+                }
+            )
+        );
+
+        subscriptions.add(
+            Observable
+            .combineLatest(
+                ViewObservable.clicks(this.btnSignin).map(unused -> true),
+                Observable.create(observer -> this.vPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                    if (action == R.id.signin || action == EditorInfo.IME_NULL || action == EditorInfo.IME_ACTION_DONE) {
+                        observer.onNext(true);
+                        observer.onCompleted();
+                        return true;
+                    } return false;
+                })),
+                (Boolean a, Boolean b) -> a && b
+            )
+            .flatMap(unused -> {
+                this.showProgress(true);
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("email", vEmail.getText().toString())
+                        .put("password", vPassword.getText().toString());
+                } catch (JSONException ignored) {
+                }
+                return RxVolley.createObservable(
+                    Api.url("users/sign_in"),
+                    Request.Method.POST,
+                    AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null),
+                    params
+                );
+            })
+            .subscribe(response -> {
+                this.showProgress(false);
+                boolean success = response.optBoolean("success");
+                int status = response.optInt("status");
+                if (status == 200 && success) {
+                    User.getInstance().setData(response.optJSONObject("user"));
+                    User.getInstance().setAccessToken(response.optString("access_token", null)); // TODO : Check existance of access-token at setter or
+                    AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.optString("access_token", null));
+                    this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
+                    this.getActivity().finish();
+
+                } else Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+            })
+        );
+
+        subscriptions.add(ViewObservable.clicks(this.btnSignup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+
+        return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
+
+    private void initEmailAutoComplete() {
         this.getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 return new CursorLoader(
-                        AuthFragment.this.getActivity(),
-                        Uri.withAppendedPath(
-                                ContactsContract.Profile.CONTENT_URI,
-                                ContactsContract.Contacts.Data.CONTENT_DIRECTORY
-                        ),
-                        ProfileQuery.PROJECTION,
-                        ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                        new String[] { ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE },
-                        ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
+                    AuthFragment.this.getActivity(),
+                    Uri.withAppendedPath(
+                        ContactsContract.Profile.CONTENT_URI,
+                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY
+                    ),
+                    ProfileQuery.PROJECTION,
+                    ContactsContract.Contacts.Data.MIMETYPE + " = ?",
+                    new String[] { ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE },
+                    ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
                 );
             }
 
@@ -82,9 +206,9 @@ public class AuthFragment extends ClientFragment {
                 }
                 /* Add to Emails View */
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                        AuthFragment.this.getActivity(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        emails
+                    AuthFragment.this.getActivity(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    emails
                 );
                 vEmail.setAdapter(adapter);
             }
@@ -92,105 +216,5 @@ public class AuthFragment extends ClientFragment {
             @Override
             public void onLoaderReset(Loader<Cursor> cursorLoader) {}
         });
-
-        /* Password View */
-        this.vPassword = (EditText) view.findViewById(R.id.auth_password);
-        this.vPassword.setOnEditorActionListener((v, action, event) -> {
-            if (action == R.id.signin || action == EditorInfo.IME_NULL || action == EditorInfo.IME_ACTION_DONE) {
-                this.attemtSignin();
-                return true;
-            } else return false;
-        });
-
-        /* Signin Button */
-        view.findViewById(R.id.btn_sign_in).setOnClickListener(v -> this.attemtSignin());
-
-        /* Signup Button*/
-        view.findViewById(R.id.btn_sign_up).setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true));
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    }
-
-    private void attemtSignin() {
-        List<View> vFailed = new ArrayList<View>();
-        View candidate;
-        /* email */
-        candidate = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-        /* password : plain password through HTTPS */
-        candidate = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-
-        /* Failed to pass validator : RequestFocus to first invalid view */
-        if(!vFailed.isEmpty()) {
-            vFailed.get(0).requestFocus();
-            return;
-        }
-
-        /* Success to pass validator : Send request */
-        JSONObject params = new JSONObject();
-        try {
-            params.put("email", vEmail.getText().toString())
-                  .put("password", vPassword.getText().toString());
-        } catch (JSONException e){
-            params = new JSONObject();
-        } this.setParameters(params).submit();
-    }
-
-    @Override
-    public void onResponse(JSONObject resp) {
-        super.onResponse(resp);
-        boolean success = resp.optBoolean("success", false);
-        if (!success) this.onFailedToSignin();
-        else {
-            UserInfo.getInstance().setData(resp.optJSONObject("user"));
-            UserInfo.getInstance().setAccessToken(resp.optString("access_token", null)); // TODO : Check existance of access-token at setter or
-            AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, resp.optString("access_token", null));
-            this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
-            this.getActivity().finish();
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        super.onErrorResponse(error);
-        /* 403 if failed to signin */
-        if(error.networkResponse.statusCode == 403) {
-            this.onFailedToSignin();
-        }
-    }
-
-    private void onFailedToSignin() { // TODO : email can be invalid, too.
-        this.vPassword.setError("Invalid Password");
-        this.vPassword.requestFocus();
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
-    public static Fragment newInstance() {
-        Fragment fragment = new AuthFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(AppConst.Request.METHOD, AppConst.Request.Method.POST);
-        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
-        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
-        bundle.putString(AppConst.Request.ACTION, "users/sign_in");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_auth);
-        bundle.putInt(AppConst.Resource.PROGRESS, R.id.progress_auth);
-        bundle.putInt(AppConst.Resource.CONTENT, R.id.content_auth);
-        fragment.setArguments(bundle);
-        return fragment;
     }
 }

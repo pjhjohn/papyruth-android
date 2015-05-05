@@ -7,12 +7,12 @@ import org.json.JSONObject;
  * Created by pjhjohn on 2015-04-17.
  * Used for passing data during sign up process.
  */
-public class UserInfo {
-    private static UserInfo instance = null;
+public class User {
+    private static User instance = null;
 
-    public static synchronized UserInfo getInstance () {
-        if ( UserInfo.instance == null ) UserInfo.instance = new UserInfo();
-        return UserInfo.instance;
+    public static synchronized User getInstance () {
+        if ( User.instance == null ) User.instance = new User();
+        return User.instance;
     }
 
     private String access_token;
@@ -23,7 +23,7 @@ public class UserInfo {
     private Integer university_id;
     private Integer entrance_year;
 
-    private UserInfo () {
+    private User () {
         this.clear();
     }
 

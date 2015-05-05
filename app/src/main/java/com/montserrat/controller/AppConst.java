@@ -1,19 +1,16 @@
 package com.montserrat.controller;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.Volley;
-
 /**
  * Created by pjhjohn on 2015-04-16.
  */
 public class AppConst {
     /* API BINDING */
-    public static final String API_ROOT = "http://mont.izz.kr:3001/api";
+    public static final String API_ROOT = "mont.izz.kr:3001/api";
     public static final String API_VERSION = "v1";
 
     public static final int MIN_ADMISSION_YEAR = 2000;
     /* KOREAN : 1 WORD == 3 BYTES */
-    public static final int MAX_NAME_BYTES = 20;
+    public static final int MAX_REALNAME_BYTES = 20;
     public static final int MAX_NICKNAME_BYTES = 20;
     public static final int DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE = 5;
 

@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
@@ -68,13 +67,13 @@ public class SignUpStep2Fragment extends ClientFragment {
     }
 
     public void attemptSignUp() {
-        UserInfo.getInstance().setEmail(vEmail.getText().toString());
-        UserInfo.getInstance().setRealname(vName.getText().toString());
-        UserInfo.getInstance().setNickName(vNickname.getText().toString());
-        UserInfo.getInstance().setGenderIsBoy(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
-        UserInfo.getInstance().setAdmissionYear((Integer)vAdmission.getSelectedItem());
-        if ( UserInfo.getInstance().getCompletionLevel() >= 2 ) {
-            JSONObject data = UserInfo.getInstance().getData();
+        User.getInstance().setEmail(vEmail.getText().toString());
+        User.getInstance().setRealname(vName.getText().toString());
+        User.getInstance().setNickName(vNickname.getText().toString());
+        User.getInstance().setGenderIsBoy(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
+        User.getInstance().setAdmissionYear((Integer)vAdmission.getSelectedItem());
+        if ( User.getInstance().getCompletionLevel() >= 2 ) {
+            JSONObject data = User.getInstance().getData();
             try {
                 data.put("password", this.vPassword.getText().toString());
             } catch(JSONException e) {
@@ -88,7 +87,7 @@ public class SignUpStep2Fragment extends ClientFragment {
     public void onResponse(JSONObject response) {
         try {
             if (response.getBoolean("success")) {
-                UserInfo.getInstance().setAccessToken(response.optString("access_token", null)); // TODO : Check existance of access-token at setter or
+                User.getInstance().setAccessToken(response.optString("access_token", null)); // TODO : Check existance of access-token at setter or
                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.optString("access_token", null));
                 this.onSignUpSuccess();
             }
