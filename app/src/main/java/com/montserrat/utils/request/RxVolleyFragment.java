@@ -19,7 +19,7 @@ import org.json.JSONObject;
  * Boilerplate fragment that provides some utility functions for child classes.
  */
 
-public abstract class RxVolleyFragment extends Fragment {
+public class RxVolleyFragment extends Fragment {
     protected View vProgress, vContent;
     private int transitionTime;
     private boolean contentVisibleWhenProgress;
@@ -36,7 +36,7 @@ public abstract class RxVolleyFragment extends Fragment {
         this.contentVisibleWhenProgress = visibleOnProgress;
     }
 
-    private void showProgress (final boolean show) {
+    protected void showProgress (final boolean show) {
         if (this.vProgress != null) {
             this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
             this.vProgress.animate().setDuration(this.transitionTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
