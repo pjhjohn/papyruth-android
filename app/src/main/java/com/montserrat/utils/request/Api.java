@@ -18,8 +18,9 @@ public class Api {
         this.endpoint = endpoint;
     }
 
-    public String url(String action) {
-        return this.endpoint + action;
+    public static String url(String action) {
+        if (instance.endpoint == null) return null;
+        else return instance.endpoint + action;
     }
 
     /* Api Builder */
