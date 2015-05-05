@@ -11,6 +11,8 @@ import com.montserrat.utils.viewpager.FlexibleViewPager;
 import com.montserrat.utils.viewpager.ViewPagerController;
 import com.montserrat.utils.viewpager.ViewPagerManager;
 
+import timber.log.Timber;
+
 /**
  * Activity For Authentication.
  */
@@ -22,6 +24,9 @@ public class AuthActivity extends Activity implements ViewPagerController {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
 
+        /* Initializer for entire Application */
+        this.initApplication();
+
         /* Set Manager for ViewPager */
         this.manager = new ViewPagerManager(
                 (FlexibleViewPager) findViewById(R.id.auth_viewpager),
@@ -30,16 +35,21 @@ public class AuthActivity extends Activity implements ViewPagerController {
                 AppConst.ViewPager.Auth.LENGTH
         );
         this.manager.setSwipeEnabled(false);
+    }
 
-        /* Api root setup */
+    private void initApplication() {
+        /* Store ApplicationContext to AppManager */
+        AppManager.getInstance().setContext(this.getApplicationContext());
+
+        /* Api Endpoint Setup */
         new Api.Builder()
                .setRoot("mont.izz:kr:3001")
                .setVersion("v1")
                .enableSSL(false)
                .build();
 
-        /* Let AppManager hold context of current Activity */
-        AppManager.getInstance().setContext(this);
+        /* Timber : logging tool */
+        Timber.plant(new Timber.DebugTree());
     }
 
     @Override

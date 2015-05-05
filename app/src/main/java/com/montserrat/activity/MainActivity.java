@@ -8,14 +8,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.montserrat.controller.AppConst;
-import com.montserrat.controller.AppManager;
 import com.montserrat.parts.FragmentFactory;
 import com.montserrat.parts.navigation_drawer.NavFragment;
 import com.montserrat.utils.viewpager.FlexibleViewPager;
@@ -24,6 +22,8 @@ import com.montserrat.utils.viewpager.ViewPagerManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerController {
     private NavFragment drawer;
@@ -40,8 +40,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.viewpager = (FlexibleViewPager) this.findViewById(R.id.main_viewpager);
         this.drawer = (NavFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
-
-        AppManager.getInstance().setContext(this);
 
         /* Instantiate Multiple ViewPagerManagers */
         this.managers = new ArrayList<ViewPagerManager> ();
@@ -98,7 +96,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_search){
-            Log.i("Main-Search", "ready to use searchView***********");
+            Timber.i("Ready to user searchView");
             return true;
         }
         return super.onOptionsItemSelected(item);

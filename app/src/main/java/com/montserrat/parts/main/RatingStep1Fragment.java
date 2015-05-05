@@ -3,12 +3,10 @@ package com.montserrat.parts.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -92,14 +90,12 @@ public class RatingStep1Fragment extends ClientFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     lectures -> {
-                        Log.d("DEBUG", "onNext : Received data : " + lectures);
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                             RatingStep1Fragment.this.getActivity(),
                             android.R.layout.simple_list_item_activated_1,
                             lectures
                         );
                         this.vLectureList.setAdapter(adapter);
-                        Log.d("DEBUG", "lectureAdapter length : " + this.vLectureList.getAdapter().getCount());
 //                        this.lectureAdapter.notifyDataSetChanged();
                     }, Throwable::printStackTrace
                 )

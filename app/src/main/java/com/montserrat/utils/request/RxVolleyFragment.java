@@ -4,15 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Fragment;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import com.montserrat.controller.AppConst;
-
-import org.json.JSONObject;
 
 /**
  * Created by pjhjohn on 2015-05-04.

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
@@ -72,11 +71,6 @@ public class DetailFragment extends ClientFragmentWithRecyclerView<DetailRecycle
     @Override
     public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         //TODO : Implement it.
-    }
-
-    @Override
-    public void onPendingRequest () {
-        Toast.makeText(this.getActivity(), "Another request is pending...", Toast.LENGTH_SHORT).show();
     }
 
     public static Fragment newInstance () {

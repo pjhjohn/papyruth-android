@@ -132,7 +132,7 @@ public class SignUpStep2Fragment extends ClientFragment {
 		SignUpStep2Fragment.this.getActivity().finish();
     }
     public void onSignUpFailure(JSONObject response) {
-        Toast.makeText(this.getActivity(), response.toString(), Toast.LENGTH_LONG).show();
+        // TODO : Logic for signup failure
     }
 
     public static Fragment newInstance() {

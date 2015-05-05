@@ -1,7 +1,6 @@
 package com.montserrat.parts.main;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Log.d("DEBUG", "View " + this.getClass().toString() + " @" + position);
         if (!isPositionOfHeader(position)) {
             Holder holder = (Holder) viewHolder;
             Holder.Data item = this.items.get(position - 1);

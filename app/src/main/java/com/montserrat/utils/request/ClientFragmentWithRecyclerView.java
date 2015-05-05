@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-13.
@@ -61,7 +62,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
 
         /* Bind Views */
         this.swipeRefreshView = (SwipeRefreshLayout) view.findViewById(this.swipeRefreshId);
-        if (this.swipeRefreshView == null) Log.d("ClientFragment", "Couldn't find SwipeRefreshLayout by ID#" + this.swipeRefreshId);
+        if (this.swipeRefreshView == null) Timber.d("Couldn't find SwipeRefreshLayout by ID#%d", this.swipeRefreshId);
         if(this.swipeRefreshView != null) {
             final int toolbarHeight = this.vToolbar == null? 0 : this.vToolbar.getHeight();
             if(this.vToolbar != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
@@ -70,7 +71,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
             this.swipeRefreshView.setOnRefreshListener(this);
         }
         this.recyclerView = (RecyclerView) view.findViewById(this.recyclerId);
-        if (this.recyclerView == null) Log.d("ClientFragment", "Couldn't find RecyclerView by ID#" + this.recyclerId);
+        if (this.recyclerView == null) Timber.d("Couldn't find RecyclerView by ID#%d", this.recyclerId);
 
         /* Register RecyclerView & its Adapter n Items */
         if(recyclerView != null) {
@@ -134,8 +135,6 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         this.recyclerViewScrollListener.setIsRequestPending(this.isPending = true);
         if(this.isRequestForRefreshing) this.swipeRefreshView.setRefreshing(true);
     }
-
-    public abstract void onPendingRequest ();
 
     @Override
     public void onRefresh() {

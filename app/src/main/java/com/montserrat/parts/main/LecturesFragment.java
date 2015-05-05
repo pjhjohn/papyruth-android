@@ -5,11 +5,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
@@ -22,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRecyclerAdapter, LecturesRecyclerAdapter.Holder.Data> {
     private NavFragment.OnCategoryClickListener callback;
@@ -102,15 +102,10 @@ public class LecturesFragment extends ClientFragmentWithRecyclerView<LecturesRec
             params.putOpt("since_id", this.minLectureId);
             params.putOpt("limit", 10);
         } catch (JSONException e) {
-            Log.e("DEBUG", "JSONException Occured with possible null value UserInfo.university_id : " + UserInfo.getInstance().getUniversityId());
+            Timber.e("JSONException Occured with possible null value UserInfo.university_id : %s", UserInfo.getInstance().getUniversityId());
         }
         this.setParameters(params);
         this.submit();
-    }
-
-    @Override
-    public void onPendingRequest () {
-        Toast.makeText(this.getActivity(), "Another request is pending...", Toast.LENGTH_SHORT).show();
     }
 
     public static Fragment newInstance () {

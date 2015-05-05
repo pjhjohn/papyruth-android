@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.montserrat.controller.AppConst;
 import com.montserrat.parts.auth.UserInfo;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
+
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -82,11 +82,11 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
 
         /* Bind Views */
         View view = inflater.inflate(this.fragmentId, container, false);
-        if (view == null) Log.d("ClientFragment", "Couldn't inflate Fragment by ID#"+this.fragmentId);
+        if (view == null) Timber.e("Couldn't inflate Fragment by ID#%d", this.fragmentId);
         this.progressView = view.findViewById(this.progressId);
-        if (progressView == null) Log.d("ClientFragment", "Couldn't find progressView by ID#"+this.progressId);
+        if (progressView == null) Timber.v("Couldn't find progressView by ID#%d", this.progressId);
         this.contentView = view.findViewById(this.contentId);
-        if (contentView == null) Log.d("ClientFragment", "Couldn't find contentView by ID#"+this.contentId);
+        if (contentView == null) Timber.v("Couldn't find contentView by ID#%d", this.contentId);
         this.progressAnimationTime = this.getResources().getInteger(android.R.integer.config_shortAnimTime);
         return view;
     }
@@ -174,28 +174,20 @@ public abstract class ClientFragment extends Fragment implements Response.Listen
 //                MY_SOCKET_TIMEOUT_MS,
 //                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 //                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Log.d("DEBUG", String.format("%s REQUEST to %s with following data\n%s\n",
-                this.requestMethod == AppConst.Request.Method.GET? "GET" : "POST",
-                this.getRequestEndpoint(),
-                this.jsonToRequest
-        ));
+        Timber.d("%s request to %s with %s", this.requestMethod == AppConst.Request.Method.GET? "GET" : "POST", this.getRequestEndpoint(), this.jsonToRequest);
         this.queue.addToRequestQueue(request);
     }
 
     /* TODO : Override if necessary */
     @Override
     public void onResponse (JSONObject response) {
-        try {
-            Log.d("DEBUG", "Response : " + response.toString(2));
-        } catch ( JSONException e ) {
-            Log.d("DEBUG", "Response : " + response.toString());
-        }
+        Timber.d("Response : %s", response.toString());
         if(this.isProgressActive) this.showProgress(false);
     }
 
     @Override
     public void onErrorResponse (VolleyError error) {
-        Log.d("DEBUG", String.format("Status : %d\n%s", error.networkResponse.statusCode, error));
+        Timber.d("Status : %s, Error : %s", error.networkResponse, error);
         if(this.isProgressActive) this.showProgress(false);
         if(error instanceof AuthFailureError) {
             // TODO : Handle AuthFailureError, which may caused by Token Expiration */

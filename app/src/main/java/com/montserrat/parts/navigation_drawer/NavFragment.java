@@ -180,7 +180,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         // actionbar second
         switch (item.getItemId()) {
             case R.id.menu_search:
-                Toast.makeText(this.getActivity(), "TODO : Transition to editText on ActionBar", Toast.LENGTH_SHORT).show();
+                // TODO : Transition to editText on ActionBar
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -27,6 +27,7 @@
 
     <!--common-->
     <string name="next">Next</string>
+    <string name="pending">Pending Another Request</string>
 
     <!--menu-->
     <string name="menu_search">Menu Search</string>

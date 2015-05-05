@@ -47,11 +47,6 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     }
 
     @Override
-    public void onPendingRequest () {
-        Toast.makeText(this.getActivity(), "Multiple Request Attemption", Toast.LENGTH_SHORT).show(); // TODO : user R.string.~
-    }
-
-    @Override
     public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
         //TODO : Implement it.
     }
@@ -94,7 +89,6 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        Toast.makeText(this.getActivity(), "Current Position Has Position of " + position, Toast.LENGTH_SHORT).show();
         UserInfo.getInstance().setUniversityId(this.items.get(position).universityId);
         if ( UserInfo.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
