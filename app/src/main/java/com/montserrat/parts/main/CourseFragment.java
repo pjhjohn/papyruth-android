@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +18,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class DetailFragment extends ClientFragmentWithRecyclerView<DetailRecyclerAdapter, DetailRecyclerAdapter.Holder.Data> {
+public class CourseFragment extends ClientFragmentWithRecyclerView<CourseRecyclerAdapter, CourseRecyclerAdapter.Holder.Data> {
 
-    private Button content;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = super.onCreateView(inflater, container, args);
@@ -35,21 +32,22 @@ public class DetailFragment extends ClientFragmentWithRecyclerView<DetailRecycle
         title.setText("this is contents");
         prof.setText("this is prof");
 //        btb.setText("button!!!!!");
-        ListView list = (ListView) view.findViewById(R.id.detail_list);
+//        View list = (RecyclerView) view.findViewById(R.id.detail_recyclerview);
 
 //        this.fabView.setOnClickListener(new View.OnClickListener(){
 //            @Override
 //            public void onClick(View view) {
-//                DetailFragment.this.submit();
+//                CourseFragment.this.submit();
 //            }
 //        });
+        this.items.add(new CourseRecyclerAdapter.Holder.Data("good", "good","3"));
 
         return view;
     }
 
     @Override
-    protected DetailRecyclerAdapter getAdapter (List<DetailRecyclerAdapter.Holder.Data> items) {
-        return DetailRecyclerAdapter.newInstance(this.items);
+    protected CourseRecyclerAdapter getAdapter (List<CourseRecyclerAdapter.Holder.Data> items) {
+        return CourseRecyclerAdapter.newInstance(this.items, this);
     }
 
     @Override
@@ -80,12 +78,14 @@ public class DetailFragment extends ClientFragmentWithRecyclerView<DetailRecycle
     }
 
     public static Fragment newInstance () {
-        Fragment fragment = new DetailFragment();
+        Fragment fragment = new CourseFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
         bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
         bundle.putString(AppConst.Request.ACTION, "detail/dummy");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_detail);
+        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_course);
+        bundle.putInt(AppConst.Resource.RECYCLER, R.id.detail_recyclerview);
+        bundle.putInt(AppConst.Resource.TOOLBAR, R.id.toolbar);
 //        bundle.putInt(AppConst.Resource.FAB, R.id.detail_fab);
         fragment.setArguments(bundle);
         return fragment;
