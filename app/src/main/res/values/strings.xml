@@ -15,7 +15,9 @@
 
     <!-- Strings related to login -->
     <string name="action_sign_in">Sign in</string>
+    <string name="failed_sign_in">Failed to Signin</string>
     <string name="action_sign_up">Sign up</string>
+    <string name="failed_sign_up">Failed to Signup</string>
     <string name="field_invalid_required">This field is required</string>
     <string name="field_invalid_email">Invalid e-mail format</string>
     <string name="field_invalid_password">Password is too short</string>

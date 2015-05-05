@@ -15,7 +15,9 @@
 
     <!-- Strings related to login -->
     <string name="action_sign_in">로그인</string>
+    <string name="failed_sign_in">로그인에 실패하였습니다</string>
     <string name="action_sign_up">회원가입</string>
+    <string name="failed_sign_up">회원가입에 실패하였습니다</string>
     <string name="field_invalid_required">필수 항목입니다</string>
     <string name="field_invalid_email">잘못된 이메일 형식입니다</string>
     <string name="field_invalid_password">비밀번호가 너무 짧습니다</string>
