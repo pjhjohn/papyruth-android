@@ -8,25 +8,29 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.montserrat.activity.R;
+import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
 /**
  * Created by SSS on 2015-04-25.
  */
-public class DetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static DetailRecyclerAdapter newInstance(List<Holder.Data> initItemList) {
-        return new DetailRecyclerAdapter(initItemList);
+    public static CourseRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new CourseRecyclerAdapter(initItemList, listener);
     }
 
+    private static RecyclerViewClickListener itemListener;
 
     private List<Holder.Data> items;
-    private DetailRecyclerAdapter (List<Holder.Data> initItemList) {
+    private CourseRecyclerAdapter(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
+        CourseRecyclerAdapter.itemListener = listener;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class DetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
             case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_home_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_home, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.course_eval, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -80,15 +84,15 @@ public class DetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     /* Item of list-like recyclerview */
 
-    public static class Holder extends RecyclerView.ViewHolder {
+    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView lecture;
         private final TextView content;
         private final Button like;
-        private Holder(final View parent, TextView viewSubject, TextView viewProfessor, Button viewRating) {
+        private Holder(final View parent, TextView viewLecture, TextView viewcontent, Button viewLike) {
             super(parent);
-            this.lecture = viewSubject;
-            this.content = viewProfessor;
-            this.like = viewRating;
+            this.lecture = viewLecture;
+            this.content = viewcontent;
+            this.like = viewLike;
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
@@ -98,17 +102,23 @@ public class DetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return new Holder(parent, vLecture, vContent, vLike);
         }
 
-        public void bind(DetailRecyclerAdapter.Holder.Data item) {
+        public void bind(CourseRecyclerAdapter.Holder.Data item) {
             this.lecture.setText(item.lecture);
             this.content.setText(item.content);
             this.like.setText(item.like);
         }
+
+        @Override
+        public void onClick(View v) {
+            CourseRecyclerAdapter.itemListener.recyclerViewListClicked(v, this.getPosition());
+        }
+
         public static class Data {
             public String lecture;
             public String content;
-            public int like;
+            public String like;
             private Data(){}
-            public Data(String lecture, String content, int like) {
+            public Data(String lecture, String content, String like) {
                 this.lecture = lecture;
                 this.content = content;
                 this.like = like;
