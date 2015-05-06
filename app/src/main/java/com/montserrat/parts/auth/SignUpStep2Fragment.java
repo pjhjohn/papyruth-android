@@ -20,17 +20,14 @@ import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
 import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.validator.RxValidator;
-import com.montserrat.utils.validator.Validator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -141,5 +138,6 @@ public class SignUpStep2Fragment extends Fragment {
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 }
