@@ -57,7 +57,7 @@ public class Validator {
     }
     private static CharSequence validateName(String name) {
         boolean success = name.getBytes().length <= AppConst.MAX_REALNAME_BYTES;
-        return success ? null : AppManager.getInstance().getString(R.string.field_invalid_name);
+        return success ? null : AppManager.getInstance().getString(R.string.field_invalid_realname);
     }
     private static CharSequence validateNickName(String nickname) {
         boolean success = nickname.getBytes().length <= AppConst.MAX_NICKNAME_BYTES;

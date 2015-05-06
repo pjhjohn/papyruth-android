@@ -2,21 +2,27 @@ package com.montserrat.parts.auth;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.android.volley.Request;
 import com.montserrat.activity.MainActivity;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
+import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.ClientFragment;
+import com.montserrat.utils.request.RxVolley;
+import com.montserrat.utils.validator.RxValidator;
 import com.montserrat.utils.validator.Validator;
 
 import org.json.JSONException;
@@ -26,123 +32,113 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import rx.Observable;
+import rx.android.view.ViewObservable;
+import rx.android.widget.OnTextChangeEvent;
+import rx.android.widget.WidgetObservable;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends ClientFragment {
-    private EditText vEmail, vPassword, vName, vNickname;
-    private RadioGroup vGender;
-    private Spinner vAdmission;
+public class SignUpStep2Fragment extends Fragment {
+    @InjectView (R.id.signup_email) protected EditText email;
+    @InjectView (R.id.signup_password) protected EditText password;
+    @InjectView (R.id.signup_realname) protected EditText realname;
+    @InjectView (R.id.signup_nickname) protected EditText nickname;
+    @InjectView (R.id.signup_gender) protected RadioGroup genderRadioGroup;
+    @InjectView (R.id.signup_entrance) protected Spinner entranceSpinner;
+    @InjectView (R.id.submit) protected Button submit;
+
+    private CompositeSubscription subscriptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
+        ButterKnife.inject(this, view);
+        this.subscriptions = new CompositeSubscription();
 
-        /* email */
-        vEmail = (EditText) view.findViewById(R.id.signup_email);
-        /* password */
-        vPassword = (EditText) view.findViewById(R.id.signup_password);
-        /* name */
-        vName = (EditText) view.findViewById(R.id.signup_name);
-        /* nickname */
-        vNickname = (EditText) view.findViewById(R.id.signup_nickname);
-        /* gender */
-        vGender = (RadioGroup) view.findViewById(R.id.signup_gender);
+        /* set entrance-year spinner */
+        ArrayList<Integer> list = new ArrayList<>();
+        int todayear = Calendar.getInstance().get(Calendar.YEAR);
+        for(int year = todayear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(year);
+        entranceSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
 
-        /* admission year */
-        vAdmission = (Spinner) view.findViewById(R.id.signup_admission);
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for(int year = currentYear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(year);
-        vAdmission.setAdapter(new ArrayAdapter<Integer>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
+        this.subscriptions.add(Observable
+                .combineLatest(
+                    WidgetObservable.text(this.email),
+                    WidgetObservable.text(this.password),
+                    WidgetObservable.text(this.realname),
+                    WidgetObservable.text(this.nickname),
+                    RxValidator.createObservableRadioGroup(genderRadioGroup),
+                    (OnTextChangeEvent email, OnTextChangeEvent password, OnTextChangeEvent realname, OnTextChangeEvent nickname, Integer checked_id) -> {
+                        boolean validEmail, validPassword, validRealname, validNickname, validGender;
 
-        /* button */
-        view.findViewById(R.id.btn_signup_submit).setOnClickListener(v -> {
-            View viewToFocus = this.validate();
-            if (viewToFocus != null) viewToFocus.requestFocus();
-            else this.attemptSignUp();
-        });
+                        if (validEmail = RxValidator.isValidEmail.call(email))
+                            this.email.setError(null);
+                        else
+                            this.email.setError(this.getResources().getString(RxValidator.isEmpty.call(email) ? R.string.field_invalid_required : R.string.field_invalid_email));
+
+                        if (validPassword = RxValidator.isValidPassword.call(password))
+                            this.password.setError(null);
+                        else
+                            this.password.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_password));
+
+                        if (validRealname = RxValidator.isValidRealname.call(password))
+                            this.realname.setError(null);
+                        else
+                            this.realname.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_realname));
+
+                        if (validNickname = RxValidator.isValidNickname.call(password))
+                            this.password.setError(null);
+                        else
+                            this.nickname.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_nickname));
+
+                        validGender = RxValidator.isValidRadioButton.call(checked_id);
+
+                        return validEmail && validPassword && validRealname && validNickname && validGender;
+                    }
+                ).subscribe(
+                    valid -> {
+                        this.submit.getBackground().setColorFilter(getResources().getColor(valid ? R.color.appDefaultHighlightColor : R.color.appDefaultBackgroundColor), PorterDuff.Mode.MULTIPLY);
+                        this.submit.setEnabled(valid);
+                    }
+                )
+        );
+
+        this.subscriptions.add(ViewObservable
+                .clicks(this.submit)
+                .flatMap(unused -> {
+                    User.getInstance().setEmail(email.getText().toString());
+                    User.getInstance().setRealname(realname.getText().toString());
+                    User.getInstance().setNickName(nickname.getText().toString());
+                    User.getInstance().setGenderIsBoy(((RadioButton) this.genderRadioGroup.findViewById(genderRadioGroup.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
+                    User.getInstance().setEntranceYear((Integer) entranceSpinner.getSelectedItem());
+                    JSONObject params = User.getInstance().getData();
+                    try {
+                        params.putOpt("password", this.password.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return RxVolley.createObservable(Api.url("users/sign_up"), Request.Method.POST, params);
+                })
+                .subscribe(response -> {
+                    if (response.optInt("status") == 200 && response.optBoolean("success")) {
+                        User.getInstance().setAccessToken(response.optString("access_token", null));
+                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.optString("access_token", null));
+                        SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
+                        SignUpStep2Fragment.this.getActivity().finish();
+                    }
+                })
+        );
         return view;
     }
 
-    public void attemptSignUp() {
-        User.getInstance().setEmail(vEmail.getText().toString());
-        User.getInstance().setRealname(vName.getText().toString());
-        User.getInstance().setNickName(vNickname.getText().toString());
-        User.getInstance().setGenderIsBoy(((RadioButton) this.getView().findViewById(vGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
-        User.getInstance().setAdmissionYear((Integer)vAdmission.getSelectedItem());
-        if ( User.getInstance().getCompletionLevel() >= 2 ) {
-            JSONObject data = User.getInstance().getData();
-            try {
-                data.put("password", this.vPassword.getText().toString());
-            } catch(JSONException e) {
-                e.printStackTrace();
-            }
-            this.setParameters(data).submit();
-        }
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        try {
-            if (response.getBoolean("success")) {
-                User.getInstance().setAccessToken(response.optString("access_token", null)); // TODO : Check existance of access-token at setter or
-                AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.optString("access_token", null));
-                this.onSignUpSuccess();
-            }
-            else this.onSignUpFailure(response);
-        } catch(JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Validate data in the form and returns if there exist View to be re-checked.
-     */
-    public View validate() {
-        List<View> vFailed = new ArrayList<View>();
-        View candidate;
-        /* email */
-        candidate = Validator.validate(vEmail, Validator.TextType.EMAIL, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-        /* password - TODO : Should handle PASSWORD ENCRYPTION */
-        candidate = Validator.validate(vPassword, Validator.TextType.PASSWORD, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-        /* name */
-        candidate = Validator.validate(vName, Validator.TextType.NAME, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-        /* nickname */
-        candidate = Validator.validate(vNickname, Validator.TextType.NICKNAME, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-        /* gender */
-        candidate = Validator.validate(vGender, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-        /* admission year */
-        candidate = Validator.validate(vAdmission, Validator.SpinnerType.ADMISSION, Validator.REQUIRED);
-        if(candidate != null) vFailed.add(candidate);
-        /* Initialize Errors to null */
-
-        return vFailed.isEmpty() ? null : vFailed.get(0);
-    }
-
-    public void onSignUpSuccess() {
-        SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
-		SignUpStep2Fragment.this.getActivity().finish();
-    }
-    public void onSignUpFailure(JSONObject response) {
-        // TODO : Logic for signup failure
-    }
-
-    public static Fragment newInstance() {
-        Fragment fragment = new SignUpStep2Fragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(AppConst.Request.METHOD, AppConst.Request.Method.POST);
-        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
-        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
-        bundle.putString(AppConst.Request.ACTION, "users/sign_up");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_step2);
-        fragment.setArguments(bundle);
-        return fragment;
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 }
