@@ -64,7 +64,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
             case Category.HOME : return "HOME";
             case Category.SEARCH : return "SEARCH";
             case Category.SUGGEST : return "RECOMMENDATION";
-            case Category.RATING: return "EVALUAION";
+            case Category.EVALUATION: return "EVALUAION";
             case Category.RANDOM : return "RANDOM";
             case Category.PROFILE : return "PROFILE";
             case Category.SIGNOUT : return "SIGNOUT";
@@ -75,7 +75,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         public static final int HOME    = 0;
         public static final int SEARCH  = 1;
         public static final int SUGGEST = 2;
-        public static final int RATING = 3;
+        public static final int EVALUATION = 3;
         public static final int RANDOM  = 4;
         public static final int PROFILE = 5;
         public static final int SIGNOUT = 6;

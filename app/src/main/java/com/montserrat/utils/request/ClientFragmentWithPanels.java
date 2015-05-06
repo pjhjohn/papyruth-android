@@ -60,7 +60,7 @@ public abstract class ClientFragmentWithPanels extends ClientFragment {
         if (this.vFAB == null) Timber.d("Couldn't find FloatingActionButton by ID#%d", this.idFAB);
 
         if (this.vFAB != null) this.vFAB.setOnClickListener(v -> {
-            if(this.navigationCallback != null) this.navigationCallback.onCategorySelected(NavFragment.Category.RATING);
+            if(this.navigationCallback != null) this.navigationCallback.onCategorySelected(NavFragment.Category.EVALUATION);
         });
 
         return view;
