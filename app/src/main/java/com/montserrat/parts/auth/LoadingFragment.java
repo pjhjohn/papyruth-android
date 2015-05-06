@@ -103,6 +103,7 @@ public class LoadingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
+        Timber.d(User.getInstance().getAccessToken());
         subscriptions.add(
             RxVolley
                 .createObservable(Api.url("users/me"), User.getInstance().getAccessToken(), new JSONObject())

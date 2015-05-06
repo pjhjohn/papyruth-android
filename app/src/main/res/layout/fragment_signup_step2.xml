@@ -81,7 +81,7 @@
                 android:id="@+id/signup_admission"/>
         </LinearLayout>
         <Button
-            android:id="@+id/btn_signup_submit"
+            android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/next"/>

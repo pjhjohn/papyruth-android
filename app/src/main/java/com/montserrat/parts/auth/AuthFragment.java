@@ -55,27 +55,20 @@ import rx.subscriptions.CompositeSubscription;
  * Created by mrl on 2015-04-07.
  */
 public class AuthFragment extends ProgressFragment {
-    /* Set PageController */
+    /* Set PageController & CompositeSubscription */
     private ViewPagerController pagerController;
+    private CompositeSubscription subscriptions;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+        this.subscriptions = new CompositeSubscription();
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private AutoCompleteTextView vEmail;
     private EditText vPassword;
     private Button btnSignin, btnSignup;
-    private CompositeSubscription subscriptions;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.subscriptions = new CompositeSubscription();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth, container, false);

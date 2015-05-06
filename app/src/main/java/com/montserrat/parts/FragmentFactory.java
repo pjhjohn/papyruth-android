@@ -56,7 +56,7 @@ public class FragmentFactory {
                 switch(position) {
                     case AppConst.ViewPager.Evaluation.EVALUATION_STEP1: fragment = EvaluationStep1Fragment.newInstance();       break;
                     case AppConst.ViewPager.Evaluation.EVALUATION_STEP2: fragment = EvaluationStep2Fragment.newInstance();       break;
-                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP3: fragment = EvaluationStep3Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP3: fragment = new EvaluationStep3Fragment();       break;
                 } break;
             case RANDOM :
                 switch(position) {
