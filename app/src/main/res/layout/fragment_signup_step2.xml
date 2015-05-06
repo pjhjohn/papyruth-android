@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
-            android:id="@+id/signup_name"
+            android:id="@+id/signup_realname"
             android:inputType="text"
             android:hint="@string/hint_name"
             android:layout_marginBottom="16dp"
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:id="@+id/signup_admission"/>
+                android:id="@+id/signup_entrance"/>
         </LinearLayout>
         <Button
             android:id="@+id/submit"

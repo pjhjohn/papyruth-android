@@ -38,7 +38,7 @@ public class FragmentFactory {
                     case AppConst.ViewPager.Auth.LOADING        : fragment = new LoadingFragment();     break;
                     case AppConst.ViewPager.Auth.AUTH           : fragment = new AuthFragment();        break;
                     case AppConst.ViewPager.Auth.SIGNUP_STEP1   : fragment = new SignUpStep1Fragment(); break;
-                    case AppConst.ViewPager.Auth.SIGNUP_STEP2   : fragment = SignUpStep2Fragment.newInstance(); break;
+                    case AppConst.ViewPager.Auth.SIGNUP_STEP2   : fragment = new SignUpStep2Fragment(); break;
                 } break;
             case HOME :
                 switch(position) {

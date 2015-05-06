@@ -70,7 +70,7 @@ public class User {
     public Integer getAdmissionYear() {
         return this.entrance_year;
     }
-    public void setAdmissionYear(Integer admission_year) {
+    public void setEntranceYear (Integer admission_year) {
         this.entrance_year = admission_year;
     }
     public boolean getGenderIsBoy() {

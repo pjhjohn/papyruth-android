@@ -61,7 +61,11 @@ public class EvaluationStep3Fragment extends Fragment {
             .flatMap(unused -> RxVolley.createObservable(Api.url("evaluations"), Request.Method.POST, User.getInstance().getAccessToken(), params))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> Timber.d("response : %s", response)));
+            .subscribe(
+                response -> Timber.d("response : %s", response),
+                Throwable::printStackTrace
+            )
+        );
         return view;
     }
 }
