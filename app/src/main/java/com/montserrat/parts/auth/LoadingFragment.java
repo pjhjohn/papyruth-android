@@ -86,6 +86,7 @@ public class LoadingFragment extends Fragment {
                     this.vEvalText.setText(String.format("%d\nevaluations", response.optInt("evaluation_count", -100)));
                     this.hasAuth = false;
                 } this.requestDone = true;
+                break;
             default : Timber.e("Unexpected Status code : %d - Needs to be implemented", status);
             }
         }

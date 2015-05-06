@@ -9,9 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
 import com.montserrat.activity.R;
 import com.montserrat.controller.AppConst;
+import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
+import com.montserrat.utils.request.RecyclerViewFragment;
+import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONArray;
@@ -20,22 +24,51 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<UniversityRecyclerAdapter, UniversityRecyclerAdapter.Holder.Data> {
+public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecyclerAdapter, UniversityRecyclerAdapter.Holder.Data> {
     private ViewPagerController pageController;
+    private CompositeSubscription subscriptions;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pageController = (ViewPagerController) activity;
+        this.subscriptions = new CompositeSubscription();
     }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
+        this.vRecycler = (RecyclerView) view.findViewById(R.id.signup_univ_recyclerview);
+        this.setupRecyclerView();
 
-        this.submit(); // TODO : request with api-defined form
+        subscriptions.add(RxVolley
+            .createObservable(Api.url("universities"), Request.Method.GET, null, new JSONObject())
+            .filter(response -> response.optInt("status") != 0)
+            .map(response -> response.optJSONArray("universities"))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(universities -> {
+                for (int i = 0; i < universities.length(); i++) {
+                    JSONObject university = universities.optJSONObject(i);
+                    this.items.add(new UniversityRecyclerAdapter.Holder.Data(
+                        university.optString("name"),
+                        university.optString("email_domain"),
+                        university.optString("image_url"),
+                        university.optInt("id")
+                    ));
+                }
+                this.adapter.notifyDataSetChanged();
+            })
+        );
 
         return view;
     }
@@ -46,44 +79,8 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     }
 
     @Override
-    public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-        //TODO : Implement it.
-    }
-
-    @Override
-    public void onRequestResponse(JSONObject response) {
-        try {
-            JSONArray universities = response.getJSONArray("universities");
-            for(int i = 0; i < universities.length(); i++) {
-                JSONObject university = universities.getJSONObject(i);
-                this.items.add(new UniversityRecyclerAdapter.Holder.Data(
-                        university.getString("name"),
-                        university.getString("email_domain"),
-                        university.getString("image_url"),
-                        university.getInt("id")
-                ));
-            }
-        } catch(JSONException e) {
-            e.printStackTrace();
-        }
-        this.adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onRefreshResponse(JSONObject response) {
-
-    }
-
-    public static Fragment newInstance() {
-        Fragment fragment = new SignUpStep1Fragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
-        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
-        bundle.putString(AppConst.Request.ACTION, "universities");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_signup_step1);
-        bundle.putInt(AppConst.Resource.RECYCLER, R.id.signup_univ_recyclerview);
-        fragment.setArguments(bundle);
-        return fragment;
+    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
+        return new GridLayoutManager(this.getActivity(), 2);
     }
 
     @Override
@@ -93,7 +90,9 @@ public class SignUpStep1Fragment extends ClientFragmentWithRecyclerView<Universi
     }
 
     @Override
-    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new GridLayoutManager(this.getActivity(), 2);
+    public void onDestroy() {
+        super.onDestroy();
+        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
+
 }
