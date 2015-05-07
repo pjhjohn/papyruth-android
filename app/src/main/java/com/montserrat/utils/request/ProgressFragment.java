@@ -12,7 +12,6 @@ import android.view.View;
  */
 
 public class ProgressFragment extends Fragment {
-    protected View vProgress, vContent;
     private int transitionTime;
     private boolean contentVisibleWhenProgress;
 
@@ -28,22 +27,25 @@ public class ProgressFragment extends Fragment {
         this.contentVisibleWhenProgress = visibleOnProgress;
     }
 
-    protected void showProgress (final boolean show) {
-        if (this.vProgress != null) {
-            this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            this.vProgress.animate().setDuration(this.transitionTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+    protected void showProgress (final View progress, final boolean show) {
+        this.showProgress(progress, null, show);
+    }
+    protected void showProgress (final View progress, final View contents, final boolean show) {
+        if (progress != null) {
+            progress.setVisibility(show ? View.VISIBLE : View.GONE);
+            progress.animate().setDuration(this.transitionTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd (Animator animation) {
-                    ProgressFragment.this.vProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+                    progress.setVisibility(show ? View.VISIBLE : View.GONE);
                 }
             });
         }
-        if (this.vContent != null && !this.contentVisibleWhenProgress) {
-            this.vContent.setVisibility(show ? View.GONE : View.VISIBLE);
-            this.vContent.animate().setDuration(this.transitionTime).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+        if (contents != null && !this.contentVisibleWhenProgress) {
+            contents.setVisibility(show ? View.GONE : View.VISIBLE);
+            contents.animate().setDuration(this.transitionTime).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd (Animator animation) {
-                    ProgressFragment.this.vContent.setVisibility(show ? View.GONE : View.VISIBLE);
+                    contents.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
         }
