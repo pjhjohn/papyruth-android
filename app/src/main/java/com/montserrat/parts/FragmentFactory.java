@@ -60,7 +60,7 @@ public class FragmentFactory {
                 } break;
             case RANDOM :
                 switch(position) {
-                    case AppConst.ViewPager.Signout.DUMMY       : fragment = CourseFragment.newInstance(); break;
+                    case AppConst.ViewPager.Random.DUMMY        : fragment = CourseFragment.newInstance();       break;
                 } break;
             case PROFILE :
                 switch(position) {
@@ -68,7 +68,7 @@ public class FragmentFactory {
                 } break;
             case SIGNOUT :
                 switch(position) {
-                    case AppConst.ViewPager.Random.DUMMY        : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Signout.DUMMY       : fragment = DummyFragment.newInstance(); break;
                 } break;
             default : break;
         }
