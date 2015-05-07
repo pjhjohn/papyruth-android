@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.utils.etc.SquareImageView;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 

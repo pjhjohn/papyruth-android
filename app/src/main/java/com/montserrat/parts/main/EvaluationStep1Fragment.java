@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.parts.auth.User;
 import com.montserrat.utils.request.Api;

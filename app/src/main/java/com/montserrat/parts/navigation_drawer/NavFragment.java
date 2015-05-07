@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.parts.auth.User;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 

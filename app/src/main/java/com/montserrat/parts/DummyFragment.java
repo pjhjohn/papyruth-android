@@ -6,7 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
+
 
 /**
  * Created by pjhjohn on 2015-04-26.

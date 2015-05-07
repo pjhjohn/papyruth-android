@@ -12,7 +12,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.android.volley.VolleyError;
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.recycler.PanelControllerOnScrollWithAskMore;
 import com.montserrat.utils.recycler.RecyclerViewAskMoreListener;

@@ -6,15 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.android.volley.Request;
-import com.montserrat.activity.R;
-import com.montserrat.controller.AppConst;
-import com.montserrat.controller.AppManager;
+import com.montserrat.app.R;
 import com.montserrat.parts.auth.User;
 import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
 

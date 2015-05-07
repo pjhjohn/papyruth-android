@@ -1,31 +1,22 @@
 package com.montserrat.utils.request;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.android.volley.VolleyError;
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.utils.recycler.PanelControllerOnScrollWithAskMore;
-import com.montserrat.utils.recycler.RecyclerViewAskMoreListener;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-13.

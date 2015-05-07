@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
 
@@ -15,11 +15,9 @@ import java.util.List;
 import java.util.Queue;
 
 import rx.Observable;
-import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
 import rx.android.widget.OnTextChangeEvent;
 import rx.functions.Func1;
-import rx.functions.Func2;
 
 /**
  * Created by pjhjohn on 2015-05-06.

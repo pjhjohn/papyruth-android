@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,7 +24,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.montserrat.activity.MainActivity;
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
 import com.montserrat.utils.request.Api;

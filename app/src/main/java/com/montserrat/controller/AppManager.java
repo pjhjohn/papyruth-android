@@ -85,7 +85,7 @@ public class AppManager {
     }
 
     public void remove(String key) {
-        this.pref.edit().remove(key);
+        this.pref.edit().remove(key).commit();
     }
 
     public void clear() {

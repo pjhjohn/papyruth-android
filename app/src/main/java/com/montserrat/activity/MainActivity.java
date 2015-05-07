@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.parts.FragmentFactory;
 import com.montserrat.parts.navigation_drawer.NavFragment;

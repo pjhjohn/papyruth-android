@@ -13,6 +13,7 @@ import com.montserrat.parts.main.LecturesFragment;
 import com.montserrat.parts.main.EvaluationStep1Fragment;
 import com.montserrat.parts.main.EvaluationStep2Fragment;
 import com.montserrat.parts.main.EvaluationStep3Fragment;
+import com.montserrat.parts.main.SignOutFragment;
 
 import org.json.JSONObject;
 
@@ -68,7 +69,7 @@ public class FragmentFactory {
                 } break;
             case SIGNOUT :
                 switch(position) {
-                    case AppConst.ViewPager.Signout.DUMMY       : fragment = DummyFragment.newInstance(); break;
+                    case AppConst.ViewPager.Signout.DUMMY       : fragment = new SignOutFragment(); break;
                 } break;
             default : break;
         }

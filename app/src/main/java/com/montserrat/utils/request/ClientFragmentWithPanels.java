@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.melnykov.fab.FloatingActionButton;
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.parts.navigation_drawer.NavFragment;
 

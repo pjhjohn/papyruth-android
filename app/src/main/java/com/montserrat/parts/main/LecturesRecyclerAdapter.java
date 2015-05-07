@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;

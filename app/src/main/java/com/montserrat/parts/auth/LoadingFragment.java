@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.montserrat.activity.MainActivity;
-import com.montserrat.activity.R;
+import com.montserrat.app.R;
 import com.montserrat.controller.AppConst;
 import com.montserrat.controller.AppManager;
 import com.montserrat.utils.request.Api;
@@ -137,7 +137,10 @@ public class LoadingFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if ( this.subscriptions != null ) this.subscriptions.unsubscribe();
+        if ( this.subscriptions != null && !this.subscriptions.isUnsubscribed()) {
+            this.subscriptions.unsubscribe();
+            this.subscriptions.clear();
+        }
     }
 }
 
