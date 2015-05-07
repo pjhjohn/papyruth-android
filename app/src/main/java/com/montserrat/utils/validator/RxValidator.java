@@ -29,11 +29,33 @@ import rx.functions.Func2;
 public class RxValidator {
 
     /* Text Validation. WidgetObservable.text() emits OnTextChangeEvent */
-    public static Func1<OnTextChangeEvent, Boolean> isEmpty = text -> text.text().length() == 0;
-    public static Func1<OnTextChangeEvent, Boolean> isValidEmail = text -> text.text().toString().contains("@");
-    public static Func1<OnTextChangeEvent, Boolean> isValidPassword = text -> text.text().length() > 0;
-    public static Func1<OnTextChangeEvent, Boolean> isValidRealname = text -> text.text().toString().getBytes().length <= AppConst.MAX_REALNAME_BYTES;
-    public static Func1<OnTextChangeEvent, Boolean> isValidNickname = text -> text.text().toString().getBytes().length <= AppConst.MAX_NICKNAME_BYTES;
+    public static Func1<OnTextChangeEvent, String> toString = text -> text.text().toString();
+    public static Func1<String, Boolean> isEmpty = text -> text.length() == 0;
+    public static Func1<String, Boolean> isValidEmail = text -> !isEmpty.call(text) && text.contains("@");
+    public static Func1<String, Boolean> isValidPassword = text -> !isEmpty.call(text) && text.length() > 0;
+    public static Func1<String, Boolean> isValidRealname = text -> !isEmpty.call(text) && text.getBytes().length <= AppConst.MAX_REALNAME_BYTES;
+    public static Func1<String, Boolean> isValidNickname = text -> !isEmpty.call(text) && text.getBytes().length <= AppConst.MAX_NICKNAME_BYTES;
+
+    public static Func1<String, String> getErrorMessageEmail = text -> {
+        if (isValidEmail.call(text)) return null;
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
+        else return AppManager.getInstance().getString(R.string.field_invalid_email);
+    };
+    public static Func1<String, String> getErrorMessagePassword = text -> {
+        if (isValidPassword.call(text)) return null;
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
+        else return AppManager.getInstance().getString(R.string.field_invalid_password);
+    };
+    public static Func1<String, String> getErrorMessageRealname = text -> {
+        if (isValidEmail.call(text)) return null;
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
+        else return AppManager.getInstance().getString(R.string.field_invalid_realname);
+    };
+    public static Func1<String, String> getErrorMessageNickname = text -> {
+        if (isValidEmail.call(text)) return null;
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
+        else return AppManager.getInstance().getString(R.string.field_invalid_nickname);
+    };
 
     /* RadioGroup Validation. */
     public static Observable<Integer> createObservableRadioGroup(RadioGroup group) {

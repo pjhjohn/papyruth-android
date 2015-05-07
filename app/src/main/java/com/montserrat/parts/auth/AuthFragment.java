@@ -39,17 +39,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
-import rx.android.widget.OnTextChangeEvent;
 import rx.android.widget.WidgetObservable;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import static com.montserrat.utils.validator.RxValidator.toString;
 
 /**
  * Created by mrl on 2015-04-07.
@@ -81,36 +82,26 @@ public class AuthFragment extends ProgressFragment {
         this.initEmailAutoComplete();
 
         /* Bind Listeners to Views */
-        this.subscriptions.add(
-            Observable
-            .combineLatest(
-                WidgetObservable.text(emailField),
-                WidgetObservable.text(passwordField),
-                (OnTextChangeEvent email, OnTextChangeEvent password) -> {
-                    boolean email_valid = RxValidator.isValidEmail.call(email);
-                    if (email_valid) emailField.setError(null);
-                    else emailField.setError(this.getResources().getString(RxValidator.isEmpty.call(email) ? R.string.field_invalid_required : R.string.field_invalid_email));
-
-                    boolean password_valid = RxValidator.isValidPassword.call(password);
-                    if (password_valid) passwordField.setError(null);
-                    else passwordField.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_password));
-
-                    return email_valid && password_valid;
-                })
-            .subscribe(
-                valid -> {
-                    this.submit.getBackground().setColorFilter(getResources().getColor(
-                        valid
-                        ? R.color.appDefaultHighlightColor
-                        : R.color.transparent
-                    ), PorterDuff.Mode.MULTIPLY);
-                    this.submit.setEnabled(valid);
-                }
-            )
+        this.subscriptions.add( Observable.combineLatest(
+            WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+            WidgetObservable.text(passwordField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+            (String emailError, String passwordError) -> {
+                emailField.setError(emailError);
+                passwordField.setError(passwordError);
+                return emailError==null && passwordError==null;
+            })
+            .startWith( false )
+            .subscribe( valid -> {
+                this.submit.getBackground().setColorFilter(getResources().getColor(
+                    valid
+                    ? R.color.appDefaultHighlightColor
+                    : R.color.transparent
+                ), PorterDuff.Mode.MULTIPLY);
+                this.submit.setEnabled(valid);
+            })
         );
 
-        subscriptions.add(
-            Observable
+        subscriptions.add( Observable
             .combineLatest(
                 ViewObservable.clicks(this.submit).map(unused -> true),
                 Observable.create(observer -> this.passwordField.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
@@ -125,11 +116,8 @@ public class AuthFragment extends ProgressFragment {
             .flatMap(unused -> {
                 this.showProgress(this.progress, true);
                 JSONObject params = new JSONObject();
-                try {
-                    params.put("email", emailField.getText().toString())
-                        .put("password", passwordField.getText().toString());
-                } catch (JSONException ignored) {
-                }
+                try { params.put("email", emailField.getText().toString()).put("password", passwordField.getText().toString()); }
+                catch (JSONException ignored) {}
                 return RxVolley.createObservable(
                     Api.url("users/sign_in"),
                     Request.Method.POST,

@@ -28,15 +28,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
-import rx.android.widget.OnTextChangeEvent;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import static com.montserrat.utils.validator.RxValidator.isValidRadioButton;
+import static com.montserrat.utils.validator.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -65,56 +69,37 @@ public class SignUpStep2Fragment extends Fragment {
         for(int year = todayear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(year);
         entranceSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
 
-        this.subscriptions.add(Observable
-            .combineLatest(
-                WidgetObservable.text(this.email),
-                WidgetObservable.text(this.password),
-                WidgetObservable.text(this.realname),
-                WidgetObservable.text(this.nickname),
-                RxValidator.createObservableRadioGroup(genderRadioGroup),
-                (OnTextChangeEvent email, OnTextChangeEvent password, OnTextChangeEvent realname, OnTextChangeEvent nickname, Integer checked_id) -> {
-                    boolean emailOk = RxValidator.isValidEmail.call(email);
-                    if (emailOk) this.email.setError(null);
-                    else this.email.setError(this.getResources().getString(RxValidator.isEmpty.call(email) ? R.string.field_invalid_required : R.string.field_invalid_email));
-
-                    boolean passwordOk = RxValidator.isValidPassword.call(password);
-                    if (passwordOk) this.password.setError(null);
-                    else this.password.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_password));
-
-                    boolean realnameOk = RxValidator.isValidRealname.call(password);
-                    if (realnameOk) this.realname.setError(null);
-                    else this.realname.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_realname));
-
-                    boolean nicknameOk = RxValidator.isValidNickname.call(password);
-                    if (nicknameOk) this.password.setError(null);
-                    else this.nickname.setError(this.getResources().getString(RxValidator.isEmpty.call(password) ? R.string.field_invalid_required : R.string.field_invalid_nickname));
-
-                    boolean genderOk = RxValidator.isValidRadioButton.call(checked_id);
-
-                    return emailOk && passwordOk && realnameOk && nicknameOk && genderOk;
-                }
-            ).subscribe(
-                valid -> {
-                    this.submit.getBackground().setColorFilter(getResources().getColor(valid ? R.color.appDefaultHighlightColor : R.color.appDefaultBackgroundColor), PorterDuff.Mode.MULTIPLY);
-                    this.submit.setEnabled(valid);
-                }
-            )
+        this.subscriptions.add( Observable.combineLatest(
+            WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+            WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+            WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
+            WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
+            RxValidator.createObservableRadioGroup(genderRadioGroup).map(isValidRadioButton),
+            (String emailError, String passwordError, String realnameError, String nicknameError, Boolean validRadioGroup) -> {
+                this.email.setError(emailError);
+                this.password.setError(passwordError);
+                this.realname.setError(realnameError);
+                this.nickname.setError(nicknameError);
+                return emailError==null && passwordError==null && realnameError==null && nicknameError==null;
+            })
+            .startWith( false )
+            .subscribe( valid -> {
+                this.submit.getBackground().setColorFilter(getResources().getColor(valid ? R.color.appDefaultHighlightColor : R.color.appDefaultBackgroundColor), PorterDuff.Mode.MULTIPLY);
+                this.submit.setEnabled(valid);
+            })
         );
 
-        this.subscriptions.add(ViewObservable
+        this.subscriptions.add( ViewObservable
             .clicks(this.submit)
-            .flatMap(unused -> {
+            .flatMap( unused -> {
                 User.getInstance().setEmail(email.getText().toString());
                 User.getInstance().setRealname(realname.getText().toString());
                 User.getInstance().setNickName(nickname.getText().toString());
                 User.getInstance().setGenderIsBoy(((RadioButton) this.genderRadioGroup.findViewById(genderRadioGroup.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
                 User.getInstance().setEntranceYear((Integer) entranceSpinner.getSelectedItem());
                 JSONObject params = User.getInstance().getData();
-                try {
-                    params.putOpt("password", this.password.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                try { params.putOpt("password", this.password.getText().toString()); }
+                catch (JSONException e) { e.printStackTrace(); }
                 return RxVolley.createObservable(Api.url("users/sign_up"), Request.Method.POST, params);
             })
             .subscribe(response -> {
