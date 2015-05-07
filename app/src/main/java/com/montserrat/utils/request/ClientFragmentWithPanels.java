@@ -21,6 +21,7 @@ import timber.log.Timber;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
+@Deprecated
 public abstract class ClientFragmentWithPanels extends ClientFragment {
     protected Toolbar vToolbar;
     protected FloatingActionButton vFAB;

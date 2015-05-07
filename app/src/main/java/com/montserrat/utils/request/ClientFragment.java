@@ -30,6 +30,7 @@ import timber.log.Timber;
  * Abstract Fragment which uses Android Volley to make connection to backend.
  */
 
+@Deprecated
 public abstract class ClientFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
     protected RequestQueue queue;
     private View progressView;

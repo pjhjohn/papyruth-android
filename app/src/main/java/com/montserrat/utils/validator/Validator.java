@@ -22,6 +22,7 @@ import java.util.Queue;
  * Created by pjhjohn on 2015-04-19.
  * Validation class for multiple views that takes some behavior for fill-up forms.
  */
+@Deprecated
 public class Validator {
     public static final boolean REQUIRED = true;
     public static final boolean NOT_REQUIRED = false;

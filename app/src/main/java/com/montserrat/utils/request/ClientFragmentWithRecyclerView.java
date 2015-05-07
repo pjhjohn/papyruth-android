@@ -28,6 +28,7 @@ import timber.log.Timber;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
+@Deprecated
 public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adapter<RecyclerView.ViewHolder>, E> extends ClientFragmentWithPanels implements SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener, RecyclerViewAskMoreListener {
     protected SwipeRefreshLayout swipeRefreshView;
     private RecyclerView recyclerView;
