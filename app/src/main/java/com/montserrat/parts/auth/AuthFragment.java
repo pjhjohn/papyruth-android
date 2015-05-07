@@ -102,18 +102,16 @@ public class AuthFragment extends ProgressFragment {
         );
 
         subscriptions.add( Observable
-            .combineLatest(
-                ViewObservable.clicks(this.submit).map(unused -> true),
+            .merge(
+                ViewObservable.clicks(this.submit).map(unused -> this.submit.isEnabled()),
                 Observable.create(observer -> this.passwordField.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    if (action == R.id.signin || action == EditorInfo.IME_NULL || action == EditorInfo.IME_ACTION_DONE) {
-                        observer.onNext(true);
-                        observer.onCompleted();
-                        return true;
-                    } return false;
-                })),
-                (Boolean a, Boolean b) -> a && b
+                    observer.onNext(this.submit.isEnabled());
+                    observer.onCompleted();
+                    return !this.submit.isEnabled();
+                }))
             )
-            .flatMap(unused -> {
+            .filter( trigger -> trigger )
+            .flatMap( unused -> {
                 this.showProgress(this.progress, true);
                 JSONObject params = new JSONObject();
                 try { params.put("email", emailField.getText().toString()).put("password", passwordField.getText().toString()); }
@@ -128,7 +126,7 @@ public class AuthFragment extends ProgressFragment {
             .subscribe(response -> {
                 this.showProgress(this.progress, false);
                 switch (response.optInt("status")) {
-                    case 200 :
+                    case 200:
                         if (response.optBoolean("success")) {
                             User.getInstance().setData(response.optJSONObject("user"));
                             User.getInstance().setAccessToken(response.optString("access_token", null)); // TODO : Check existance of access-token at setter or
@@ -138,8 +136,14 @@ public class AuthFragment extends ProgressFragment {
                         } else {
                             Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                             // TODO : Implement action for signin failure
-                        } break;
-                    default : Timber.e("Unexpected Status code : %d - Needs to be implemented", response.optInt("status"));
+                        }
+                        break;
+                    case 403 :
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                        // TODO : Implement action for signin failure
+                        break;
+                    default :
+                        Timber.e("Unexpected Status code : %d - Needs to be implemented", response.optInt("status"));
                 }
             })
         );

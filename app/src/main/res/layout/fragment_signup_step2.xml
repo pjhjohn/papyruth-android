@@ -18,35 +18,35 @@
             android:layout_marginBottom="16dp"
             android:text="@string/signup_category_account"/>
         <EditText
-            android:id="@+id/signup_email"
+            android:id="@+id/email"
             android:inputType="textEmailAddress"
             android:hint="@string/hint_email"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
-            android:id="@+id/signup_password"
+            android:id="@+id/password"
             android:inputType="textVisiblePassword"
             android:hint="@string/hint_password"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
-            android:id="@+id/signup_realname"
+            android:id="@+id/realname"
             android:inputType="text"
             android:hint="@string/hint_name"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
-            android:id="@+id/signup_nickname"
+            android:id="@+id/nickname"
             android:inputType="text"
             android:hint="@string/hint_nickname"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <RadioGroup
-            android:id="@+id/signup_gender"
+            android:id="@+id/gender"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:id="@+id/signup_entrance"/>
+                android:id="@+id/entrance"/>
         </LinearLayout>
         <Button
             android:id="@+id/submit"

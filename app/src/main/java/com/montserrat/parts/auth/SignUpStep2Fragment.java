@@ -47,12 +47,12 @@ import static com.montserrat.utils.validator.RxValidator.toString;
  */
 
 public class SignUpStep2Fragment extends Fragment {
-    @InjectView (R.id.signup_email) protected EditText email;
-    @InjectView (R.id.signup_password) protected EditText password;
-    @InjectView (R.id.signup_realname) protected EditText realname;
-    @InjectView (R.id.signup_nickname) protected EditText nickname;
-    @InjectView (R.id.signup_gender) protected RadioGroup genderRadioGroup;
-    @InjectView (R.id.signup_entrance) protected Spinner entranceSpinner;
+    @InjectView (R.id.email) protected EditText email;
+    @InjectView (R.id.password) protected EditText password;
+    @InjectView (R.id.realname) protected EditText realname;
+    @InjectView (R.id.nickname) protected EditText nickname;
+    @InjectView (R.id.gender) protected RadioGroup genderRadioGroup;
+    @InjectView (R.id.entrance) protected Spinner entranceSpinner;
     @InjectView (R.id.submit) protected Button submit;
 
     private CompositeSubscription subscriptions;
@@ -80,10 +80,10 @@ public class SignUpStep2Fragment extends Fragment {
                 this.password.setError(passwordError);
                 this.realname.setError(realnameError);
                 this.nickname.setError(nicknameError);
-                return emailError==null && passwordError==null && realnameError==null && nicknameError==null;
+                return emailError == null && passwordError == null && realnameError == null && nicknameError == null;
             })
-            .startWith( false )
-            .subscribe( valid -> {
+            .startWith(false)
+            .subscribe(valid -> {
                 this.submit.getBackground().setColorFilter(getResources().getColor(valid ? R.color.appDefaultHighlightColor : R.color.appDefaultBackgroundColor), PorterDuff.Mode.MULTIPLY);
                 this.submit.setEnabled(valid);
             })
