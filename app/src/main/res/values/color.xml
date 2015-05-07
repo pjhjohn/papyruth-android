@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorNavBackgroundNormal">#00FFFFFF</color>
-    <color name="colorNavBackgroundPressed">#4CDFCA</color>
-    <color name="colorNavBackgroundActivated">#1CAF9A</color>
+    <color name="bg_normal">#607D8B</color>
+    <color name="bg_accent">#90A4AE</color>
 
-    <color name="appDefaultBackgroundColor">#2B3643</color>
-    <color name="appDefaultForegroundColor">#1CAF9A</color>
-    <color name="appDefaultHighlightColor">#4CDFCA</color>
+    <color name="fg_normal">#00E5FF</color>
+    <color name="fg_accent">#18FFFF</color>
 
-    <color name="gold">#facd1d</color>
-    <color name="transparent">#00000000</color>
-    <color name="translucent_white">#80ffffff</color>
-    <color name="translucent_black">#80000000</color>
-    <color name="material_white">#8affffff</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="translucent">#8affffff</color>
 </resources>

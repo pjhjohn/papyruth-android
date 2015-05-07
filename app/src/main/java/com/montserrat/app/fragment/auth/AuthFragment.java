@@ -102,7 +102,7 @@ public class AuthFragment extends ProgressFragment {
             .subscribe( valid -> {
                 this.submit.getBackground().setColorFilter(getResources().getColor(
                     valid
-                    ? R.color.appDefaultHighlightColor
+                    ? R.color.fg_accent
                     : R.color.transparent
                 ), PorterDuff.Mode.MULTIPLY);
                 this.submit.setEnabled(valid);

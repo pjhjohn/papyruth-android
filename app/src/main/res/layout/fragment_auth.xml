@@ -25,7 +25,6 @@
             </TextView>
 
             <AutoCompleteTextView android:id="@+id/email"
-                style="@style/SigninTextAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_email"
@@ -35,7 +34,6 @@
                 android:singleLine="true"/>
 
             <EditText android:id="@+id/password"
-                style="@style/SigninTextAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_password"

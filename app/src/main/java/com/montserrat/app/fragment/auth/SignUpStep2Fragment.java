@@ -85,7 +85,7 @@ public class SignUpStep2Fragment extends Fragment {
             })
             .startWith(false)
             .subscribe(valid -> {
-                this.submit.getBackground().setColorFilter(getResources().getColor(valid ? R.color.appDefaultHighlightColor : R.color.appDefaultBackgroundColor), PorterDuff.Mode.MULTIPLY);
+                this.submit.getBackground().setColorFilter(getResources().getColor(valid ? R.color.fg_accent : R.color.transparent), PorterDuff.Mode.MULTIPLY);
                 this.submit.setEnabled(valid);
             })
         );

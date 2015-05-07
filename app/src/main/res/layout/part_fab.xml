@@ -6,6 +6,4 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|right"
     android:layout_margin="16dp"
-    android:src="@drawable/ic_action_edit"
-    fab:fab_colorNormal="@color/appDefaultForegroundColor"
-    fab:fab_colorPressed="@color/appDefaultHighlightColor"/>
+    android:src="@drawable/ic_action_edit"/>

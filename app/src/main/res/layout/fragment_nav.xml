@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/appDefaultBackgroundColor">
+    android:background="@color/bg_normal">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
@@ -12,9 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:textSize="24sp"
-            android:textColor="@color/gold"
-            android:layout_marginLeft="@dimen/padding_vertical_basic"
-            android:layout_marginStart="@dimen/padding_vertical_basic"
             android:layout_gravity="bottom|left"/>
     </FrameLayout>
     <android.support.v7.widget.RecyclerView

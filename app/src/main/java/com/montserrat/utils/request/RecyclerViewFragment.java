@@ -58,7 +58,7 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
     }
     protected void setupSwipeRefresh(int offset) {
         this.vSwipeRefresh.setProgressViewOffset(false, offset, offset + 80); // TODO : avoid hard-coding
-        this.vSwipeRefresh.setColorSchemeColors(this.getResources().getColor(R.color.appDefaultForegroundColor));
+        this.vSwipeRefresh.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
     }
 
     protected void setupRecyclerView () {

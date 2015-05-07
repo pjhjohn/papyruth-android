@@ -67,7 +67,7 @@ public abstract class ClientFragmentWithRecyclerView<T extends RecyclerView.Adap
         if(this.swipeRefreshView != null) {
             final int toolbarHeight = this.vToolbar == null? 0 : this.vToolbar.getHeight();
             if(this.vToolbar != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
-            this.swipeRefreshView.setColorSchemeColors(this.getResources().getColor(R.color.appDefaultForegroundColor));
+            this.swipeRefreshView.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
             this.swipeRefreshView.setEnabled(false);
             this.swipeRefreshView.setOnRefreshListener(this);
         }
