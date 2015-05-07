@@ -3,7 +3,7 @@ package com.montserrat.utils.request;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.montserrat.controller.AppManager;
+import com.montserrat.app.AppManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;

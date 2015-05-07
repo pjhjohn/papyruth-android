@@ -10,8 +10,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.controller.AppConst;
-import com.montserrat.controller.AppManager;
+import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

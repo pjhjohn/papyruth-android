@@ -17,7 +17,7 @@
         android:name=".MontserratApp">
 
         <activity
-            android:name="com.montserrat.activity.AuthActivity"
+            android:name="com.montserrat.app.activity.AuthActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible">
@@ -28,13 +28,13 @@
         </activity>
 
         <activity
-            android:name="com.montserrat.activity.MainActivity"
+            android:name="com.montserrat.app.activity.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name="com.montserrat.activity.ProfessorGalleryActivity"
+            android:name="com.montserrat.app.activity.ProfessorGalleryActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name">
         </activity>

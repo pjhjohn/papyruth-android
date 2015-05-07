@@ -14,8 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.montserrat.controller.AppConst;
-import com.montserrat.parts.auth.User;
+import com.montserrat.app.AppConst;
+import com.montserrat.app.model.User;
 
 import org.json.JSONObject;
 

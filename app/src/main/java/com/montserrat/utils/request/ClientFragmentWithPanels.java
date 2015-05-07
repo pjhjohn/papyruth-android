@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.R;
-import com.montserrat.controller.AppConst;
-import com.montserrat.parts.navigation_drawer.NavFragment;
+import com.montserrat.app.AppConst;
+import com.montserrat.app.fragment.nav.NavFragment;
 
 import org.json.JSONObject;
 

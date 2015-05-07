@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.montserrat.parts.FragmentFactory;
+import com.montserrat.app.fragment.FragmentFactory;
 
 import java.util.Stack;
 

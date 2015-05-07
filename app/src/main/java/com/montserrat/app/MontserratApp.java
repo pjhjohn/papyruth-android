@@ -2,8 +2,6 @@ package com.montserrat.app;
 
 import android.app.Application;
 
-import com.montserrat.controller.AppConst;
-import com.montserrat.controller.AppManager;
 import com.montserrat.utils.request.Api;
 
 import timber.log.Timber;

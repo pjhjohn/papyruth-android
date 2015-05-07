@@ -2,16 +2,10 @@ package com.montserrat.utils.request;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.melnykov.fab.FloatingActionButton;
-import com.montserrat.parts.navigation_drawer.NavFragment;
-
-import timber.log.Timber;
+import com.montserrat.app.fragment.nav.NavFragment;
 
 /**
  * Created by pjhjohn on 2015-04-13.
