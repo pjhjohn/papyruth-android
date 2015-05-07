@@ -56,7 +56,7 @@ import static com.montserrat.utils.validator.RxValidator.toString;
  * Created by mrl on 2015-04-07.
  */
 public class AuthFragment extends ProgressFragment {
-    /* Set PageController & CompositeSubscription */
+    /* Set PageController */
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -77,11 +77,19 @@ public class AuthFragment extends ProgressFragment {
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-
-        /* Initialize Views */
         this.initEmailAutoComplete();
+        return view;
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
 
-        /* Bind Listeners to Views */
+    @Override
+    public void onResume() {
+        super.onResume();
         this.subscriptions.add( Observable.combineLatest(
             WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
             WidgetObservable.text(passwordField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
@@ -149,14 +157,6 @@ public class AuthFragment extends ProgressFragment {
         );
 
         subscriptions.add(ViewObservable.clicks(this.signup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
-
-        return view;
-    }
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     private interface ProfileQuery {

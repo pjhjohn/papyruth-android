@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,9 +23,10 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONObject;
 
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -37,32 +39,38 @@ import timber.log.Timber;
  */
 
 public class LoadingFragment extends Fragment {
-    /* Setup ViewPagerController & Locale */
+    /* Set PageController */
     private ViewPagerController pagerController;
-    private Locale locale;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
-        locale = activity.getResources().getConfiguration().locale;
     }
 
     /* Inflate Fragment View */
-    private TextView vUnivText, vUserText, vEvalText;
-    private ImageView vUnivIcon, vUserIcon, vEvalIcon;
+    @InjectView (R.id.loading_university_text) protected TextView vUnivText;
+    @InjectView (R.id.loading_users_text) protected TextView vUserText;
+    @InjectView (R.id.loading_evaluations_text) protected TextView vEvalText;
+    @InjectView (R.id.loading_university_image) protected ImageView vUnivIcon;
+    @InjectView (R.id.loading_users_image) protected ImageView vUserIcon;
+    @InjectView (R.id.loading_evaluations_image) protected ImageView vEvalIcon;
+    private CompositeSubscription subscriptions;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_loading, container, false);
-        this.vUnivText = (TextView) view.findViewById(R.id.loading_university_text);
-        this.vUserText = (TextView) view.findViewById(R.id.loading_users_text);
-        this.vEvalText = (TextView) view.findViewById(R.id.loading_evaluations_text);
-        (this.vUnivIcon = (ImageView) view.findViewById(R.id.loading_university_image)).setImageResource(R.drawable.snu_logo);
-        (this.vUserIcon = (ImageView) view.findViewById(R.id.loading_users_image)).setImageResource(R.drawable.snu_logo);
-        (this.vEvalIcon = (ImageView) view.findViewById(R.id.loading_evaluations_image)).setImageResource(R.drawable.snu_logo);
+        ButterKnife.inject(this, view);
+        this.subscriptions = new CompositeSubscription();
         return view;
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
 
-    private CompositeSubscription subscriptions = new CompositeSubscription();
+
     private boolean timerDone = false, requestDone = false;
     private Boolean hasAuth = null;
     private Action1<JSONObject> onNextJSONResponse = response -> {
@@ -100,6 +108,7 @@ public class LoadingFragment extends Fragment {
             }
         }
     };
+
     @Override
     public void onResume() {
         super.onResume();
@@ -134,15 +143,4 @@ public class LoadingFragment extends Fragment {
                 .subscribe(onNextJSONResponse)
         );
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if ( this.subscriptions != null && !this.subscriptions.isUnsubscribed()) {
-            this.subscriptions.unsubscribe();
-            this.subscriptions.clear();
-        }
-    }
 }
-
-
