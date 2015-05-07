@@ -36,40 +36,40 @@ public class FragmentFactory {
         switch (type) {
             case AUTH :
                 switch(position) {
-                    case AppConst.ViewPager.Auth.LOADING        : fragment = new LoadingFragment();     break;
-                    case AppConst.ViewPager.Auth.AUTH           : fragment = new AuthFragment();        break;
-                    case AppConst.ViewPager.Auth.SIGNUP_STEP1   : fragment = new SignUpStep1Fragment(); break;
-                    case AppConst.ViewPager.Auth.SIGNUP_STEP2   : fragment = new SignUpStep2Fragment(); break;
+                    case AppConst.ViewPager.Auth.LOADING                : fragment = new LoadingFragment();     break;
+                    case AppConst.ViewPager.Auth.AUTH                   : fragment = new AuthFragment();        break;
+                    case AppConst.ViewPager.Auth.SIGNUP_STEP1           : fragment = new SignUpStep1Fragment(); break;
+                    case AppConst.ViewPager.Auth.SIGNUP_STEP2           : fragment = new SignUpStep2Fragment(); break;
                 } break;
             case HOME :
                 switch(position) {
-                    case AppConst.ViewPager.Home.HOME           : fragment = LecturesFragment.newInstance();        break;
+                    case AppConst.ViewPager.Home.HOME                   : fragment = LecturesFragment.newInstance();        break;
                 } break;
             case SEARCH :
                 switch(position) {
-                    case AppConst.ViewPager.Search.DUMMY        : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Search.DUMMY                : fragment = new DummyFragment();       break;
                 } break;
             case RECOMMENDATION:
                 switch(position) {
-                    case AppConst.ViewPager.Recommendation.DUMMY       : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Recommendation.DUMMY        : fragment = new DummyFragment();       break;
                 } break;
             case EVALUAION:
                 switch(position) {
-                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP1: fragment = EvaluationStep1Fragment.newInstance();       break;
-                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP2: fragment = EvaluationStep2Fragment.newInstance();       break;
-                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP3: fragment = new EvaluationStep3Fragment();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP1 : fragment = EvaluationStep1Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP2 : fragment = EvaluationStep2Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP3 : fragment = new EvaluationStep3Fragment();       break;
                 } break;
             case RANDOM :
                 switch(position) {
-                    case AppConst.ViewPager.Random.DUMMY        : fragment = CourseFragment.newInstance();       break;
+                    case AppConst.ViewPager.Random.DUMMY                : fragment = CourseFragment.newInstance();       break;
                 } break;
             case PROFILE :
                 switch(position) {
-                    case AppConst.ViewPager.Profile.DUMMY       : fragment = DummyFragment.newInstance();       break;
+                    case AppConst.ViewPager.Profile.DUMMY               : fragment = new DummyFragment();       break;
                 } break;
             case SIGNOUT :
                 switch(position) {
-                    case AppConst.ViewPager.Signout.DUMMY       : fragment = new SignOutFragment(); break;
+                    case AppConst.ViewPager.Signout.DUMMY               : fragment = new SignOutFragment(); break;
                 } break;
             default : break;
         }

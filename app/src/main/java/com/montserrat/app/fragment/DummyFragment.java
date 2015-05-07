@@ -20,11 +20,4 @@ public class DummyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dummy, container, false);
         return view;
     }
-
-    public static Fragment newInstance() {
-        Fragment fragment = new DummyFragment();
-        Bundle bundle = new Bundle();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 }
