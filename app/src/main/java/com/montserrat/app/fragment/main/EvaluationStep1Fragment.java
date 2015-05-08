@@ -3,19 +3,20 @@ package com.montserrat.app.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
+import com.montserrat.app.R;
+import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.model.User;
+import com.montserrat.utils.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
@@ -25,7 +26,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.Inflater;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
@@ -35,7 +39,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  * Searches Lecture for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends ClientFragment {
+public class EvaluationStep1Fragment extends Fragment implements RecyclerViewClickListener {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -43,25 +47,30 @@ public class EvaluationStep1Fragment extends ClientFragment {
         this.pagerController = (ViewPagerController) activity;
     }
 
-    private EditText vLectureQuery;
-    private ListView vLectureList;
-    private Button btnNext;
+    /* Bind Views */
+    @InjectView(R.id.autotext_lecture) protected EditText vLectureQuery;
+    @InjectView(R.id.result_lecture) protected RecyclerView vLectureList;
+    @InjectView(R.id.btn_next) protected Button btnNext;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-        View view = super.onCreateView(inflater, container, args);
 
-        /* Bind Views */
-        this.vLectureQuery = (EditText) view.findViewById(R.id.autotext_lecture);
-        this.vLectureList = (ListView) view.findViewById(R.id.result_lecture);
-        this.btnNext = (Button) view.findViewById(R.id.btn_next);
+        View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
+        ButterKnife.inject(this, view);
+        this.vLectureList.setLayoutManager(this.getRecyclerViewLayoutManager());
 
         /* Bind Events */
         this.btnNext.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true));
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 
     @Override
@@ -83,29 +92,39 @@ public class EvaluationStep1Fragment extends ClientFragment {
                 .map(response -> response.optJSONArray("lectures"))
                 .filter(jsonarray -> jsonarray != null) // Wrong Data
                 .map(jsonarray -> {
-                    List<String> lectures = new ArrayList<>();
-                    for (int i = 0; i < jsonarray.length(); i++) lectures.add(((JSONObject)jsonarray.opt(i)).optString("name"));
+                    List<EvaluationAdapter.Holder.Data> lectures = new ArrayList<>();
+                    for (int i = 0; i < jsonarray.length(); i++){
+                        try {
+                            EvaluationAdapter.Holder.Data data = new EvaluationAdapter.Holder.Data(
+                                    ((JSONObject)jsonarray.opt(i)).getString("name"),
+                                    "prof",
+                                    ((JSONObject)jsonarray.opt(i)).getInt("id"),
+                                    0
+                            );
+                            lectures.add(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     return lectures;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     lectures -> {
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                            EvaluationStep1Fragment.this.getActivity(),
-                            android.R.layout.simple_list_item_activated_1,
-                            lectures
-                        );
-                        this.vLectureList.setAdapter(adapter);
+                        EvaluationAdapter eAdapter = new EvaluationAdapter(lectures, this);
+                        this.vLectureList.setAdapter(eAdapter);
 //                        this.lectureAdapter.notifyDataSetChanged();
                     }, Throwable::printStackTrace
                 )
         );
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        ButterKnife.reset(this);
         this.subscriptions.unsubscribe();
     }
 
@@ -126,5 +145,14 @@ public class EvaluationStep1Fragment extends ClientFragment {
         bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_evaluation_step1);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void recyclerViewListClicked(View view, int position) {
+
+    }
+
+    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
+        return new LinearLayoutManager(this.getActivity());
     }
 }
