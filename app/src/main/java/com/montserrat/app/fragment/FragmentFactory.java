@@ -43,7 +43,7 @@ public class FragmentFactory {
                 } break;
             case HOME :
                 switch(position) {
-                    case AppConst.ViewPager.Home.HOME                   : fragment = LecturesFragment.newInstance();        break;
+                    case AppConst.ViewPager.Home.HOME                   : fragment = new LecturesFragment();    break;
                 } break;
             case SEARCH :
                 switch(position) {

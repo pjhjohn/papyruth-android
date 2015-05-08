@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
 import com.montserrat.utils.recycler.PanelControllerOnScrollWithAskMore;
@@ -21,12 +23,9 @@ import rx.Observable;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>, ITEM>
-    extends PanelFragment
+public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>, ITEM> extends PanelFragment
     implements RecyclerViewClickListener /*TODO:Implement it*/{
 
-    protected SwipeRefreshLayout vSwipeRefresh;
-    protected RecyclerView vRecycler;
     protected ADAPTER adapter;
     protected List<ITEM> items;
     protected boolean hideToolbarOnScroll, hideFloatingActionButtonOnScroll;
@@ -38,38 +37,29 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
         this.hideFloatingActionButtonOnScroll = true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-    }
 //    final int toolbarHeight = this.vToolbar == null? 0 : this.vToolbar.getHeight();
 //    if(this.vToolbar != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
-
-    protected Observable<Boolean> getRefreshObservable() {
-        this.vSwipeRefresh.setEnabled(false);
+    protected Observable<Boolean> getRefreshObservable(SwipeRefreshLayout view) {
         return Observable.create( observer -> {
-            this.vSwipeRefresh.setOnRefreshListener(() -> {
+            view.setOnRefreshListener(() -> {
                 observer.onNext(true);
-                observer.onCompleted();
             });
         });
     }
-    protected void setupSwipeRefresh(int offset) {
-        this.vSwipeRefresh.setProgressViewOffset(false, offset, offset + 80); // TODO : avoid hard-coding
-        this.vSwipeRefresh.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
+    protected void setupSwipeRefresh(SwipeRefreshLayout view, int offset) {
+        view.setProgressViewOffset(false, offset, offset + 80); // TODO : avoid hard-coding
+        view.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
     }
 
-    protected void setupRecyclerView () {
-        this.items = new ArrayList<ITEM>();
-        this.vRecycler.setLayoutManager(this.getRecyclerViewLayoutManager());
+    protected void setupRecyclerView (RecyclerView view) {
+        this.items = new ArrayList<>();
         this.adapter = this.getAdapter(this.items);
-        this.vRecycler.setAdapter(this.adapter);
+        view.setLayoutManager(this.getRecyclerViewLayoutManager());
+        view.setAdapter(this.adapter);
     }
 
-    protected Observable<Boolean> getRecyclerViewScrollObservable() {
-        return Observable.create( observer -> this.vRecycler.setOnScrollListener( new PanelControllerOnScrollWithAskMore(AppConst.DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE) {
+    protected Observable<Boolean> getRecyclerViewScrollObservable(RecyclerView view, Toolbar toolbar, FloatingActionButton fab) {
+        return Observable.create( observer -> view.setOnScrollListener( new PanelControllerOnScrollWithAskMore(AppConst.DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE) {
             @Override public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) { observer.onNext(null); }
             @Override public void onHidePanels () { observer.onNext(false); }
             @Override public void onShowPanels () { observer.onNext(true); }
@@ -77,18 +67,18 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
         .map( show_panels -> {
             if ( show_panels == null ) return null;
             if ( (boolean) show_panels ) {
-                if(this.vToolbar != null && this.hideToolbarOnScroll) this.vToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-                if(this.vFAB != null && this.hideFloatingActionButtonOnScroll) {
+                if(toolbar != null && this.hideToolbarOnScroll) toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+                if(fab != null && this.hideFloatingActionButtonOnScroll) {
                     //Vertical
                     //this.vFAB.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                     //Horizontal
                     //this.vFAB.animate().translationX(0).setInterpolator(new DecelerateInterpolator(2)).start();
                 } return true;
             } else {
-                if (this.vToolbar != null && this.hideToolbarOnScroll) {
-                    this.vToolbar.animate().translationY(-vToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                if (toolbar != null && this.hideToolbarOnScroll) {
+                    toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
                 }
-                if (this.vFAB != null && this.hideFloatingActionButtonOnScroll) {
+                if (fab != null && this.hideFloatingActionButtonOnScroll) {
                     //Vertical
                     //FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.vFAB.getLayoutParams();
                     //int fabBottomMargin = lp.bottomMargin;

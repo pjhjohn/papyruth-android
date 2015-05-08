@@ -1,6 +1,7 @@
 package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -29,7 +30,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.ProgressFragment;
+import com.montserrat.utils.request.FragmentHelper;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.validator.RxValidator;
 import com.montserrat.utils.viewpager.ViewPagerController;
@@ -55,7 +56,7 @@ import static com.montserrat.utils.validator.RxValidator.toString;
 /**
  * Created by mrl on 2015-04-07.
  */
-public class AuthFragment extends ProgressFragment {
+public class AuthFragment extends Fragment {
     /* Set PageController */
     private ViewPagerController pagerController;
     @Override
@@ -120,7 +121,7 @@ public class AuthFragment extends ProgressFragment {
             )
             .filter( trigger -> trigger )
             .flatMap( unused -> {
-                this.showProgress(this.progress, true);
+                FragmentHelper.showProgress(this.progress, true);
                 JSONObject params = new JSONObject();
                 try { params.put("email", emailField.getText().toString()).put("password", passwordField.getText().toString()); }
                 catch (JSONException ignored) {}
@@ -132,7 +133,7 @@ public class AuthFragment extends ProgressFragment {
                 );
             })
             .subscribe(response -> {
-                this.showProgress(this.progress, false);
+                FragmentHelper.showProgress(this.progress, false);
                 switch (response.optInt("status")) {
                     case 200:
                         if (response.optBoolean("success")) {

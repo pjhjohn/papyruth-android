@@ -18,12 +18,8 @@ public class SignOutFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Timber.d("before %s", AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
-        Timber.d("after %s", AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        Timber.d("Before : %s", User.getInstance().toString());
         User.getInstance().clear();
-        Timber.d("After : %s", User.getInstance().toString());
         activity.startActivity(new Intent(activity, AuthActivity.class));
         activity.finish();
     }
