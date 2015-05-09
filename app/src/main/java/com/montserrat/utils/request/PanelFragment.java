@@ -11,8 +11,6 @@ import com.montserrat.app.fragment.nav.NavFragment;
  * Created by pjhjohn on 2015-04-13.
  */
 public abstract class PanelFragment extends Fragment {
-    protected Toolbar vToolbar;
-    protected FloatingActionButton vFAB;
     private NavFragment.OnCategoryClickListener navigationCallback;
 
     @Override
@@ -25,10 +23,8 @@ public abstract class PanelFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        if (this.vFAB != null) this.vFAB.setOnClickListener( unused -> {
+    protected void setupFloatingActionButton (FloatingActionButton fab) {
+        if (fab != null) fab.setOnClickListener( unused -> {
             if(this.navigationCallback != null) this.navigationCallback.onCategorySelected(NavFragment.Category.EVALUATION);
         });
     }

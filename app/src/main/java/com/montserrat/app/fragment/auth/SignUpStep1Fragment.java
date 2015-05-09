@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -32,20 +34,21 @@ import rx.subscriptions.CompositeSubscription;
 
 public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecyclerAdapter, UniversityRecyclerAdapter.Holder.Data> {
     private ViewPagerController pageController;
-    private CompositeSubscription subscriptions;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pageController = (ViewPagerController) activity;
-        this.subscriptions = new CompositeSubscription();
     }
 
+    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView recycler;
+    private CompositeSubscription subscriptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
-        this.vRecycler = (RecyclerView) view.findViewById(R.id.signup_univ_recyclerview);
-        this.setupRecyclerView();
+        ButterKnife.inject(this, view);
+        this.subscriptions = new CompositeSubscription();
+        this.setupRecyclerView(this.recycler);
 
         subscriptions.add(RxVolley
             .createObservable(Api.url("universities"), Request.Method.GET, null, new JSONObject())
@@ -69,6 +72,12 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
 
         return view;
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
 
     @Override
     protected UniversityRecyclerAdapter getAdapter (List<UniversityRecyclerAdapter.Holder.Data> items) {
@@ -85,11 +94,4 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
         User.getInstance().setUniversityId(this.items.get(position).universityId);
         if ( User.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
-    }
-
 }
