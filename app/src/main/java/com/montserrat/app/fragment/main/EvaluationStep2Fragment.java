@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
-import com.montserrat.utils.request.ClientFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 /**
