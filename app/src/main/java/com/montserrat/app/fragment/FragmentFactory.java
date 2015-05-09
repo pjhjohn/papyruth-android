@@ -55,13 +55,13 @@ public class FragmentFactory {
                 } break;
             case EVALUAION:
                 switch(position) {
-                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP1 : fragment = EvaluationStep1Fragment.newInstance();       break;
-                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP2 : fragment = EvaluationStep2Fragment.newInstance();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP1 : fragment = new EvaluationStep1Fragment();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP2 : fragment = new EvaluationStep2Fragment();       break;
                     case AppConst.ViewPager.Evaluation.EVALUATION_STEP3 : fragment = new EvaluationStep3Fragment();       break;
                 } break;
             case RANDOM :
                 switch(position) {
-                    case AppConst.ViewPager.Random.DUMMY                : fragment = CourseFragment.newInstance();       break;
+                    case AppConst.ViewPager.Random.DUMMY                : fragment = new CourseFragment();       break;
                 } break;
             case PROFILE :
                 switch(position) {

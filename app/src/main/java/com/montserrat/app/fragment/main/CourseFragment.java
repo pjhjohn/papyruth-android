@@ -1,46 +1,59 @@
 package com.montserrat.app.fragment.main;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.AppConst;
 import com.montserrat.app.adapter.CourseRecyclerAdapter;
-import com.montserrat.utils.request.ClientFragmentWithRecyclerView;
-
-import org.json.JSONObject;
+import com.montserrat.app.fragment.nav.NavFragment;
+import com.montserrat.utils.request.RecyclerViewFragment;
+import com.montserrat.utils.viewpager.ViewPagerController;
 
 import java.util.List;
 
-public class CourseFragment extends ClientFragmentWithRecyclerView<CourseRecyclerAdapter, CourseRecyclerAdapter.Holder.Data> {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import rx.subscriptions.CompositeSubscription;
+
+public class CourseFragment extends RecyclerViewFragment<CourseRecyclerAdapter, CourseRecyclerAdapter.Holder.Data> {
+    private ViewPagerController pagerController;
+    private NavFragment.OnCategoryClickListener callback;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.pagerController = (ViewPagerController) activity;
+        this.callback = (NavFragment.OnCategoryClickListener) activity;
+    }
+
+    @InjectView (R.id.detail_recyclerview) protected RecyclerView recycler;
+//    @InjectView (R.id.progress) protected View progress;
+
+    private CompositeSubscription subscriptions;
+    private Toolbar toolbar;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-        View view = super.onCreateView(inflater, container, args);
+    public View onCreateView(LayoutInflater infalter, ViewGroup container, Bundle savedInstanceState) {
+        View view = infalter.inflate(R.layout.fragment_course, container, false);
 
-//        this.swipeRefreshView.setEnabled(false);
+        ButterKnife.inject(this, view);
+        this.subscriptions = new CompositeSubscription();
+        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         View info = (View) view.findViewById(R.id.detail_info);
         TextView title = (TextView) info.findViewById(R.id.info_title);
         TextView prof = (TextView) info.findViewById(R.id.info_prof);
-//        Button btb = (Button)view.findViewById(R.id.button2);
-        title.setText("this is contents");
-        prof.setText("this is prof");
-//        btb.setText("button!!!!!");
-//        View list = (RecyclerView) view.findViewById(R.id.detail_recyclerview);
+        CourseRecyclerAdapter.Holder.Data data = new CourseRecyclerAdapter.Holder.Data("good", "good","3");
+        this.setupRecyclerView(this.recycler);
 
-//        this.fabView.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view) {
-//                CourseFragment.this.submit();
-//            }
-//        });
-        this.items.add(new CourseRecyclerAdapter.Holder.Data("good", "good","3"));
+        this.items.add(data);
+
+        this.adapter.notifyDataSetChanged();
 
         return view;
     }
@@ -48,42 +61,6 @@ public class CourseFragment extends ClientFragmentWithRecyclerView<CourseRecycle
     @Override
     protected CourseRecyclerAdapter getAdapter (List<CourseRecyclerAdapter.Holder.Data> items) {
         return CourseRecyclerAdapter.newInstance(this.items, this);
-    }
-
-    @Override
-    public void onRequestResponse(JSONObject response) {
-
-
-    }
-
-    @Override
-    public void onRefreshResponse(JSONObject response) {
-
-    }
-
-    @Override
-    public void onRefresh() {
-        super.onRefresh();
-        this.setParameters(new JSONObject()).submit();
-    }
-
-    @Override
-    public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
-        //TODO : Implement it.
-    }
-
-    public static Fragment newInstance () {
-        Fragment fragment = new CourseFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
-        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
-        bundle.putString(AppConst.Request.ACTION, "detail/dummy");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_course);
-        bundle.putInt(AppConst.Resource.RECYCLER, R.id.detail_recyclerview);
-        bundle.putInt(AppConst.Resource.TOOLBAR, R.id.toolbar);
-//        bundle.putInt(AppConst.Resource.FAB, R.id.detail_fab);
-        fragment.setArguments(bundle);
-        return fragment;
     }
 
     @Override

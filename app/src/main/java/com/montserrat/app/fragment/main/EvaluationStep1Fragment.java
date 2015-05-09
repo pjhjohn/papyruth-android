@@ -1,5 +1,6 @@
 package com.montserrat.app.fragment.main;
 
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -26,14 +27,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.Inflater;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+
+import static rx.android.widget.WidgetObservable.text;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -52,13 +53,13 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.result_lecture) protected RecyclerView vLectureList;
     @InjectView(R.id.btn_next) protected Button btnNext;
 
-    private CompositeSubscription subscriptions = new CompositeSubscription();
+    private CompositeSubscription subscriptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
         ButterKnife.inject(this, view);
+        this.subscriptions = new CompositeSubscription();
         this.vLectureList.setLayoutManager(this.getRecyclerViewLayoutManager());
 
         /* Bind Events */
@@ -71,13 +72,14 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         subscriptions.add(
-            WidgetObservable.text(vLectureQuery)
+            text(vLectureQuery)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(onTextChangeEvent -> {
@@ -120,31 +122,11 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
         );
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ButterKnife.reset(this);
-        this.subscriptions.unsubscribe();
-    }
-
     public View validate() {
         List<View> vFailed = new ArrayList<View>();
         View candidate;
         // TODO : pick candidates failed to validate certain validation rule.
         return vFailed.isEmpty() ? null : vFailed.get(0);
-    }
-
-    public static Fragment newInstance() {
-        Fragment fragment = new EvaluationStep1Fragment();
-        Bundle bundle = new Bundle();
-        /* For AutoComplete TextView for lecture title & professor name */
-        bundle.putString(AppConst.Request.API_ROOT_URL, AppConst.API_ROOT);
-        bundle.putString(AppConst.Request.API_VERSION, AppConst.API_VERSION);
-        bundle.putString(AppConst.Request.ACTION, "");
-        bundle.putInt(AppConst.Resource.FRAGMENT, R.layout.fragment_evaluation_step1);
-        fragment.setArguments(bundle);
-        return fragment;
     }
 
     @Override
