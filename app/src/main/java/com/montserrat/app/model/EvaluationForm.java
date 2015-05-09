@@ -3,12 +3,12 @@ package com.montserrat.app.model;
 /**
  * Created by pjhjohn on 2015-04-26.
  */
-public class Evaluation {
-    private static Evaluation instance = null;
+public class EvaluationForm {
+    private static EvaluationForm instance = null;
 
-    public static synchronized Evaluation getInstance() {
-        if( Evaluation.instance == null ) Evaluation.instance = new Evaluation();
-        return Evaluation.instance;
+    public static synchronized EvaluationForm getInstance() {
+        if( EvaluationForm.instance == null ) EvaluationForm.instance = new EvaluationForm();
+        return EvaluationForm.instance;
     }
 
     /* STEP 1*/

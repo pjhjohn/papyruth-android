@@ -2,6 +2,8 @@ package com.montserrat.app;
 
 import android.app.Application;
 
+import com.montserrat.app.model.User;
+import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.request.Api;
 
 import timber.log.Timber;
@@ -20,10 +22,18 @@ public class MontserratApp extends Application {
 
         /* AppManager Context */
         AppManager.getInstance().setContext(this.getApplicationContext());
+        User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
 
         /* Api Endpoint */
         new Api.Builder()
-            .setRoot("mont.izz.kr:3001")
+            .setRoot("52.68.184.25:3000")
+            .setVersion(AppConst.API_VERSION)
+            .enableSSL(false)
+            .build();
+
+        /* Retrofit Api */
+        new RetrofitApi.Builder()
+            .setRoot("52.68.184.25:3000")
             .setVersion(AppConst.API_VERSION)
             .enableSSL(false)
             .build();
