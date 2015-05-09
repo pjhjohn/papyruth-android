@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,10 @@ import android.view.ViewGroup;
 import com.android.volley.Request;
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.LecturesRecyclerAdapter;
-import com.montserrat.app.model.User;
+import com.montserrat.app.adapter.BreifCourseAdapter;
+import com.montserrat.app.adapter.HomeAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
+import com.montserrat.app.model.User;
 import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.FragmentHelper;
 import com.montserrat.utils.request.RecyclerViewFragment;
@@ -34,7 +36,11 @@ import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class LecturesFragment extends RecyclerViewFragment<LecturesRecyclerAdapter, LecturesRecyclerAdapter.Holder.Data> {
+/**
+ * Created by pjhjohn on 2015-05-09.
+ * Provides latest evaluations.
+ */
+public class HomeFragment extends RecyclerViewFragment<HomeAdapter, HomeAdapter.Holder.Data> {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
     @Override
@@ -50,6 +56,7 @@ public class LecturesFragment extends RecyclerViewFragment<LecturesRecyclerAdapt
     @InjectView(R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
+    private int since_id = -1, max_id = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,8 +93,8 @@ public class LecturesFragment extends RecyclerViewFragment<LecturesRecyclerAdapt
     }
 
     @Override
-    protected LecturesRecyclerAdapter getAdapter (List<LecturesRecyclerAdapter.Holder.Data> datas) {
-        return LecturesRecyclerAdapter.newInstance(this.items, this);
+    protected HomeAdapter getAdapter (List<HomeAdapter.Holder.Data> datas) {
+        return HomeAdapter.newInstance(this.items, this);
     }
 
     @Override
@@ -107,11 +114,15 @@ public class LecturesFragment extends RecyclerViewFragment<LecturesRecyclerAdapt
             .flatMap(unused -> {
                 JSONObject params = new JSONObject();
                 try {
-                    params.putOpt("university_id", User.getInstance().getUniversityId());
+                    params.put("university_id", User.getInstance().getUniversityId());
+                    if(this.since_id>=0) params.put("since_id", this.since_id);
+                    if(this.max_id >= 0) params.put("max_id", this.max_id);
+                    params.put("limit", 10);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                return RxVolley.createObservable(Api.url("lectures"), Request.Method.GET, User.getInstance().getAccessToken(), params);
+                Timber.d(params.toString());
+                return RxVolley.createObservable(Api.url("evaluations"), Request.Method.GET, User.getInstance().getAccessToken(), params);
             })
             .subscribe(response -> {
                 this.refresh.setRefreshing(false);
@@ -123,7 +134,7 @@ public class LecturesFragment extends RecyclerViewFragment<LecturesRecyclerAdapt
                         for (int i = 0; i < lectures.length(); i++) {
                             JSONObject lecture = lectures.optJSONObject(i);
                             if (lecture == null) continue;
-                            this.items.add(new LecturesRecyclerAdapter.Holder.Data(
+                            this.items.add(new HomeAdapter.Holder.Data(
                                 lecture.optString("name", "NO-NAME"),
                                 lecture.optString("professor", "<PROFESSOR>"),
                                 (float) lecture.optDouble("rating", 0.0)
@@ -143,8 +154,9 @@ public class LecturesFragment extends RecyclerViewFragment<LecturesRecyclerAdapt
                 FragmentHelper.showProgress(this.progress, true);
                 JSONObject params = new JSONObject();
                 try {
-                    params.putOpt("university_id", User.getInstance().getUniversityId());
-                    params.putOpt("limit", 10);
+                    params.put("university_id", User.getInstance().getUniversityId());
+                    if(this.max_id >= 0) params.put("since_id", this.max_id);
+                    params.put("limit", 10);
                 } catch (JSONException e) {
                     Timber.e("JSONException Occured with possible null value UserInfo.university_id : %s", User.getInstance().getUniversityId());
                 }
@@ -159,7 +171,7 @@ public class LecturesFragment extends RecyclerViewFragment<LecturesRecyclerAdapt
                         for (int i = 0; i < lectures.length(); i++) {
                             JSONObject lecture = lectures.optJSONObject(i);
                             if (lecture == null) continue;
-                            this.items.add(new LecturesRecyclerAdapter.Holder.Data(
+                            this.items.add(new HomeAdapter.Holder.Data(
                                 lecture.optString("name", "NO-NAME"),
                                 lecture.optString("professor", "<PROFESSOR>"),
                                 (float) lecture.optDouble("rating", 0.0)

@@ -9,10 +9,11 @@ import com.montserrat.app.fragment.auth.LoadingFragment;
 import com.montserrat.app.fragment.auth.SignUpStep1Fragment;
 import com.montserrat.app.fragment.auth.SignUpStep2Fragment;
 import com.montserrat.app.fragment.main.CourseFragment;
-import com.montserrat.app.fragment.main.LecturesFragment;
+import com.montserrat.app.fragment.main.BriefCourseFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.EvaluationStep2Fragment;
 import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
+import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SignOutFragment;
 
 import org.json.JSONObject;
@@ -43,11 +44,11 @@ public class FragmentFactory {
                 } break;
             case HOME :
                 switch(position) {
-                    case AppConst.ViewPager.Home.HOME                   : fragment = new LecturesFragment();    break;
+                    case AppConst.ViewPager.Home.HOME                   : fragment = new HomeFragment();    break;
                 } break;
             case SEARCH :
                 switch(position) {
-                    case AppConst.ViewPager.Search.DUMMY                : fragment = new DummyFragment();       break;
+                    case AppConst.ViewPager.Search.BRIEF                : fragment = new BriefCourseFragment();       break;
                 } break;
             case RECOMMENDATION:
                 switch(position) {

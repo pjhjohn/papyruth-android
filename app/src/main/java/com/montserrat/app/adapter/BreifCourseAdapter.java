@@ -15,20 +15,20 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BreifCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static LecturesRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new LecturesRecyclerAdapter(initItemList, listener);
+    public static BreifCourseAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new BreifCourseAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private LecturesRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private BreifCourseAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        LecturesRecyclerAdapter.itemListener = listener;
+        BreifCourseAdapter.itemListener = listener;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             return new Holder(parent, vSubject, vProfessor, vRating);
         }
 
-        public void bind(LecturesRecyclerAdapter.Holder.Data item) {
+        public void bind(BreifCourseAdapter.Holder.Data item) {
             this.subject.setText(item.subject);
             this.professor.setText(item.professor);
             this.rating.setRating(item.rating);
@@ -108,7 +108,7 @@ public class LecturesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @Override
         public void onClick (View view) {
-            LecturesRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            BreifCourseAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
         public static class Data {
