@@ -1,6 +1,7 @@
 package com.montserrat.utils.etc;
 
 import com.montserrat.app.model.Evaluations;
+import com.montserrat.app.model.Lectures;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -31,6 +32,13 @@ public class RetrofitApi {
             @Query ("since_id") Integer since_id,
             @Query ("max_id") Integer max_id,
             @Query ("limit") Integer limit
+        );
+
+        @GET ("/lectures")
+        Observable<Lectures> lectures(
+            @Header ("Authorization") String authorization,
+            @Query ("university_id") String university_id,
+            @Query ("query") String query
         );
     }
 

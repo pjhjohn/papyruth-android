@@ -9,7 +9,7 @@ import com.montserrat.app.fragment.auth.LoadingFragment;
 import com.montserrat.app.fragment.auth.SignUpStep1Fragment;
 import com.montserrat.app.fragment.auth.SignUpStep2Fragment;
 import com.montserrat.app.fragment.main.CourseFragment;
-import com.montserrat.app.fragment.main.BriefCourseFragment;
+import com.montserrat.app.fragment.main.BriefLectureFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.EvaluationStep2Fragment;
 import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
@@ -48,7 +48,7 @@ public class FragmentFactory {
                 } break;
             case SEARCH :
                 switch(position) {
-                    case AppConst.ViewPager.Search.BRIEF                : fragment = new BriefCourseFragment();       break;
+                    case AppConst.ViewPager.Search.BRIEF                : fragment = new BriefLectureFragment();       break;
                 } break;
             case RECOMMENDATION:
                 switch(position) {
