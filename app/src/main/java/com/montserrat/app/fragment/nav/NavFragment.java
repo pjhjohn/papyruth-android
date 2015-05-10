@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.NavRecyclerAdapter;
+import com.montserrat.app.adapter.NavAdapter;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
@@ -32,8 +32,8 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private RecyclerView recyclerView;
-    private NavRecyclerAdapter adapter;
-    private List<NavRecyclerAdapter.Holder.Data> items;
+    private NavAdapter adapter;
+    private List<NavAdapter.Holder.Data> items;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,16 +90,16 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
 
         /* items */
         this.items = new ArrayList<>();
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_evaluation), R.drawable.ic_action_edit));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
-        this.items.add(new NavRecyclerAdapter.Holder.Data(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove));
+        this.items.add(new NavAdapter.Holder.Data(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
+        this.items.add(new NavAdapter.Holder.Data(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
+        this.items.add(new NavAdapter.Holder.Data(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
+        this.items.add(new NavAdapter.Holder.Data(this.getString(R.string.nav_item_evaluation), R.drawable.ic_action_edit));
+        this.items.add(new NavAdapter.Holder.Data(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
+        this.items.add(new NavAdapter.Holder.Data(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
+        this.items.add(new NavAdapter.Holder.Data(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove));
 
         /* adapter */
-        this.adapter = NavRecyclerAdapter.newInstance(this.items, this);
+        this.adapter = NavAdapter.newInstance(this.items, this);
 
         /* recyclerview */
         this.recyclerView = (RecyclerView) view.findViewById(R.id.nav_recyclerview);

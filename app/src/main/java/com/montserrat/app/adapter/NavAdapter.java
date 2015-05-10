@@ -15,19 +15,19 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class NavRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int ITEM = 1;
     }
-    public static NavRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new NavRecyclerAdapter(initItemList, listener);
+    public static NavAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new NavAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private NavRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private NavAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        NavRecyclerAdapter.itemListener = listener;
+        NavAdapter.itemListener = listener;
     }
 
     @Override
@@ -76,14 +76,14 @@ public class NavRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             );
         }
 
-        public void bind(NavRecyclerAdapter.Holder.Data item) {
+        public void bind(NavAdapter.Holder.Data item) {
             this.categoryText.setText(item.categoryText);
             this.categoryIcon.setImageDrawable(this.categoryIcon.getResources().getDrawable(item.categoryIconResId));
         }
 
         @Override
         public void onClick (View view) {
-            NavRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            NavAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
         public static class Data {
