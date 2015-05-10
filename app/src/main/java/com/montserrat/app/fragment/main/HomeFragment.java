@@ -15,7 +15,7 @@ import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.HomeAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
-import com.montserrat.app.model.EvaluationResponse;
+import com.montserrat.app.model.Evaluation;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.request.FragmentHelper;
@@ -35,7 +35,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-05-09.
  * Provides latest evaluations.
  */
-public class HomeFragment extends RecyclerViewFragment<HomeAdapter, EvaluationResponse.Evaluation> {
+public class HomeFragment extends RecyclerViewFragment<HomeAdapter, Evaluation> {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -90,7 +90,7 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, EvaluationRe
     }
 
     @Override
-    protected HomeAdapter getAdapter (List<EvaluationResponse.Evaluation> evaluations) {
+    protected HomeAdapter getAdapter (List<Evaluation> evaluations) {
         return HomeAdapter.newInstance(this.items, this);
     }
 

@@ -1,6 +1,6 @@
 package com.montserrat.utils.etc;
 
-import com.montserrat.app.model.EvaluationResponse;
+import com.montserrat.app.model.Evaluations;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -25,7 +25,7 @@ public class RetrofitApi {
 
     public interface Api {
         @GET ("/evaluations")
-        Observable<EvaluationResponse> evaluations(
+        Observable<Evaluations> evaluations(
             @Header ("Authorization") String authorization,
             @Query ("university_id") Integer university_id,
             @Query ("since_id") Integer since_id,
@@ -59,10 +59,6 @@ public class RetrofitApi {
                 root.isEmpty() ? "" : root.charAt(root.length() - 1) == '/' ? root.substring(0, root.length() - 1) : root,
                 version.isEmpty() ? "" : version.charAt(version.length() - 1) == '/' ? version.substring(0, root.length() - 1) : version
             ));
-
-//            final String token = User.getInstance().getAccessToken();
-//            builder.setRequestInterceptor(request -> request.addHeader("Authorization", token));
-
             RetrofitApi.instance = new RetrofitApi(builder.build().create(Api.class));
         }
     }

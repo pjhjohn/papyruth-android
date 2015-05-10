@@ -8,7 +8,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.EvaluationResponse;
+import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.model.Evaluations;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -21,13 +22,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static HomeAdapter newInstance(List<EvaluationResponse.Evaluation> initItemList, RecyclerViewClickListener listener) {
+    public static HomeAdapter newInstance(List<Evaluation> initItemList, RecyclerViewClickListener listener) {
         return new HomeAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<EvaluationResponse.Evaluation> items;
-    private HomeAdapter (List<EvaluationResponse.Evaluation> initItemList, RecyclerViewClickListener listener) {
+    private List<Evaluation> items;
+    private HomeAdapter (List<Evaluation> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         HomeAdapter.itemListener = listener;
     }
@@ -46,7 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (!isPositionOfHeader(position)) {
             Holder holder = (Holder) viewHolder;
-            EvaluationResponse.Evaluation item = this.items.get(position - 1);
+            Evaluation item = this.items.get(position - 1);
             holder.bind(item);
         }
     }
@@ -101,7 +102,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new Holder(parent, vSubject, vProfessor, vRating);
         }
 
-        public void bind(EvaluationResponse.Evaluation item) {
+        public void bind(Evaluation item) {
             this.subject.setText(item.comment);
             this.professor.setText(item.comment);
             this.rating.setRating(item.point_overall);
