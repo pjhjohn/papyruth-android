@@ -12,7 +12,9 @@ import com.android.volley.Request;
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.adapter.UniversityRecyclerAdapter;
+import com.montserrat.app.model.University;
 import com.montserrat.app.model.User;
+import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.RecyclerViewFragment;
 import com.montserrat.utils.request.RxVolley;
@@ -32,7 +34,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecyclerAdapter, UniversityRecyclerAdapter.Holder.Data> {
+public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecyclerAdapter, University> {
     private ViewPagerController pageController;
     @Override
     public void onAttach(Activity activity) {
@@ -50,22 +52,13 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
         this.subscriptions = new CompositeSubscription();
         this.setupRecyclerView(this.recycler);
 
-        subscriptions.add(RxVolley
-            .createObservable(Api.url("universities"), Request.Method.GET, null, new JSONObject())
-            .filter(response -> response.optInt("status") != 0)
-            .map(response -> response.optJSONArray("universities"))
+        this.subscriptions.add(
+            RetrofitApi.getInstance().universities()
+            .map(response -> response.universities)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(universities -> {
-                for (int i = 0; i < universities.length(); i++) {
-                    JSONObject university = universities.optJSONObject(i);
-                    this.items.add(new UniversityRecyclerAdapter.Holder.Data(
-                        university.optString("name"),
-                        university.optString("email_domain"),
-                        university.optString("image_url"),
-                        university.optInt("id")
-                    ));
-                }
+                this.items.addAll(universities);
                 this.adapter.notifyDataSetChanged();
             })
         );
@@ -80,7 +73,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
     }
 
     @Override
-    protected UniversityRecyclerAdapter getAdapter (List<UniversityRecyclerAdapter.Holder.Data> items) {
+    protected UniversityRecyclerAdapter getAdapter (List<University> universities) {
         return UniversityRecyclerAdapter.newInstance(this.items, this, this);
     }
 
@@ -91,7 +84,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        User.getInstance().setUniversityId(this.items.get(position).universityId);
+        User.getInstance().setUniversityId(this.items.get(position).id);
         if ( User.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 }

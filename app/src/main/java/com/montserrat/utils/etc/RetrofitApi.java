@@ -2,6 +2,7 @@ package com.montserrat.utils.etc;
 
 import com.montserrat.app.model.Evaluations;
 import com.montserrat.app.model.Lectures;
+import com.montserrat.app.model.Universities;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -40,6 +41,9 @@ public class RetrofitApi {
             @Query ("university_id") String university_id,
             @Query ("query") String query
         );
+
+        @GET ("/universities")
+        Observable<Universities> universities();
     }
 
     /* Api Builder */
