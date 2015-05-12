@@ -15,6 +15,7 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -39,6 +40,12 @@ public class EvaluationStep2Fragment extends Fragment {
         view.findViewById(R.id.btn_next).setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true));
         ButterKnife.inject(this, view);
         vLecture.setFocusableInTouchMode(false);
+        Timber.d("******************mytag is create2 : %s", getId());
+
         return view;
+    }
+    public void updateText(String lecture, String professor){
+        vLecture.setText(lecture);
+        vProfessor.setText(professor);
     }
 }

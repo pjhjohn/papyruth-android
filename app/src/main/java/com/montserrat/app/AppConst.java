@@ -102,4 +102,12 @@ public class AppConst {
         public static final String AUTO_SIGNIN = "auto_signin";
         public static final String ACCESS_TOKEN = "access_token";
     }
+
+    public static class Tag{
+        public static class Evaluation{
+            public static final String EVALUATION_STEP1 = "evaluation_step1";
+            public static final String EVALUATION_STEP2 = "evaluation_step2";
+            public static final String EVALUATION_STEP3 = "evaluation_step3";
+        }
+    }
 }

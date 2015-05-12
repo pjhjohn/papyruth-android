@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
@@ -33,6 +35,7 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static rx.android.widget.WidgetObservable.text;
 
@@ -61,10 +64,10 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.vLectureList.setLayoutManager(this.getRecyclerViewLayoutManager());
-
         /* Bind Events */
         this.btnNext.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true));
 
+        Timber.d("******************mytag is create : %s", getId());
         return view;
     }
 
@@ -131,7 +134,11 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
+        Timber.d("******************mytag is : %s", getId());
 
+//        EvaluationStep2Fragment nextStep2 = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
+//        nextStep2.updateText("123","123");
+        this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
     }
 
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
