@@ -1,6 +1,7 @@
 package com.montserrat.app.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.montserrat.app.AppConst;
@@ -56,7 +57,9 @@ public class FragmentFactory {
                 } break;
             case EVALUAION:
                 switch(position) {
-                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP1 : fragment = new EvaluationStep1Fragment();       break;
+                    case AppConst.ViewPager.Evaluation.EVALUATION_STEP1 :
+                        fragment = new EvaluationStep1Fragment();
+                        break;
                     case AppConst.ViewPager.Evaluation.EVALUATION_STEP2 : fragment = new EvaluationStep2Fragment();       break;
                     case AppConst.ViewPager.Evaluation.EVALUATION_STEP3 : fragment = new EvaluationStep3Fragment();       break;
                 } break;

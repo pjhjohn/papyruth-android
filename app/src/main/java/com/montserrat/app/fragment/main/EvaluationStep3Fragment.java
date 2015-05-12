@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.SeekBar;
 
 import com.android.volley.Request;
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.request.Api;
@@ -17,6 +21,7 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
@@ -30,6 +35,13 @@ import timber.log.Timber;
 public class EvaluationStep3Fragment extends Fragment {
     private ViewPagerController pagerController;
     private CompositeSubscription subscriptions;
+
+
+    @InjectView(R.id.autotext_lecture) protected EditText vLecture;
+    @InjectView(R.id.autotext_professor) protected EditText vProfessor;
+    @InjectView(R.id.score_overall) protected RatingBar vScoreOverall;
+    @InjectView(R.id.score_satisfaction) protected SeekBar vScoreSatisfaction;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -40,6 +52,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step3, container, false);
+        getFragmentManager().beginTransaction().add(this, AppConst.Tag.Evaluation.EVALUATION_STEP3);
 
         JSONObject params = new JSONObject();
         try {
@@ -63,5 +76,9 @@ public class EvaluationStep3Fragment extends Fragment {
             )
         );
         return view;
+    }
+    public void update(String lecture, String professor){
+        vLecture.setText(lecture);
+        vProfessor.setText(professor);
     }
 }

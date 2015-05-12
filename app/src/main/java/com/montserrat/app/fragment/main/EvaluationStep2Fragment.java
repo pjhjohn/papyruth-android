@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.SeekBar;
 
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
@@ -26,6 +28,8 @@ public class EvaluationStep2Fragment extends Fragment {
 
     @InjectView(R.id.autotext_lecture) protected EditText vLecture;
     @InjectView(R.id.autotext_professor) protected EditText vProfessor;
+    @InjectView(R.id.score_overall) protected RatingBar vScoreOverall;
+    @InjectView(R.id.score_satisfaction) protected SeekBar vScoreSatisfaction;
 
     @Override
     public void onAttach(Activity activity) {
@@ -37,14 +41,23 @@ public class EvaluationStep2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step2, container, false);
 
-        view.findViewById(R.id.btn_next).setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true));
+        view.findViewById(R.id.btn_next).setOnClickListener(v -> next());
         ButterKnife.inject(this, view);
         vLecture.setFocusableInTouchMode(false);
-        Timber.d("******************mytag is create2 : %s", getId());
+        vProfessor.setFocusableInTouchMode(false);
+        vScoreOverall.setStepSize((float)0.5);
+        vScoreOverall.setMax(10);
+        vScoreSatisfaction.setMax(10);
+
+        getFragmentManager().beginTransaction().add(this, AppConst.Tag.Evaluation.EVALUATION_STEP2);
+
 
         return view;
     }
-    public void updateText(String lecture, String professor){
+    public void next(){
+        this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
+    }
+    public void update(String lecture, String professor){
         vLecture.setText(lecture);
         vProfessor.setText(professor);
     }
