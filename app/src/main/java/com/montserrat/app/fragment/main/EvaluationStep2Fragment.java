@@ -13,6 +13,7 @@ import android.widget.SeekBar;
 
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
+import com.montserrat.app.model.Evaluation;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
@@ -30,6 +31,10 @@ public class EvaluationStep2Fragment extends Fragment {
     @InjectView(R.id.autotext_professor) protected EditText vProfessor;
     @InjectView(R.id.score_overall) protected RatingBar vScoreOverall;
     @InjectView(R.id.score_satisfaction) protected SeekBar vScoreSatisfaction;
+    @InjectView(R.id.score_easiness) protected SeekBar vScoreEasiness;
+    @InjectView(R.id.score_lecture_quality) protected SeekBar vScoreLectureQuality;
+
+    private Evaluation eval;
 
     @Override
     public void onAttach(Activity activity) {
@@ -43,11 +48,13 @@ public class EvaluationStep2Fragment extends Fragment {
 
         view.findViewById(R.id.btn_next).setOnClickListener(v -> next());
         ButterKnife.inject(this, view);
-        vLecture.setFocusableInTouchMode(false);
-        vProfessor.setFocusableInTouchMode(false);
+        vLecture.setEnabled(false);
+        vProfessor.setEnabled(false);
+
         vScoreOverall.setStepSize((float)0.5);
-        vScoreOverall.setMax(10);
-        vScoreSatisfaction.setMax(10);
+        vScoreSatisfaction.setMax(5);
+        vScoreEasiness.setMax(5);
+        vScoreLectureQuality.setMax(5);
 
         getFragmentManager().beginTransaction().add(this, AppConst.Tag.Evaluation.EVALUATION_STEP2);
 
@@ -55,6 +62,12 @@ public class EvaluationStep2Fragment extends Fragment {
         return view;
     }
     public void next(){
+        Timber.d("*************over : %s",vScoreOverall.getRating());
+        Timber.d("*************stai : %s",vScoreSatisfaction.getProgress());
+
+
+        EvaluationStep3Fragment nextStep = (EvaluationStep3Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP3);
+        nextStep.update(vLecture.getText().toString(), vProfessor.getText().toString(), vScoreOverall.getRating(), vScoreSatisfaction.getProgress(), vScoreEasiness.getProgress(), vScoreLectureQuality.getProgress());
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
     }
     public void update(String lecture, String professor){

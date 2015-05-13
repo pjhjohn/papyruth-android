@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
+import com.montserrat.app.model.Evaluation;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.request.Api;
@@ -54,6 +55,8 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.result_lecture) protected RecyclerView vLectureList;
     @InjectView(R.id.btn_next) protected Button btnNext;
 
+    private EvaluationAdapter.Holder.Data data;
+    private Evaluation eval;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -98,7 +101,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
                     List<EvaluationAdapter.Holder.Data> lectures = new ArrayList<>();
                     for (int i = 0; i < jsonarray.length(); i++){
                         try {
-                            EvaluationAdapter.Holder.Data data = new EvaluationAdapter.Holder.Data(
+                            data = new EvaluationAdapter.Holder.Data(
                                     ((JSONObject)jsonarray.opt(i)).getString("name"),
                                     "prof",
                                     ((JSONObject)jsonarray.opt(i)).getInt("id"),
@@ -134,8 +137,8 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     public void recyclerViewListClicked(View view, int position) {
         Timber.d("******************mytag is : %s", getTag());
 
-        EvaluationStep2Fragment nextStep2 = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
-        nextStep2.update("123", "123");
+        EvaluationStep2Fragment nextStep = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
+        nextStep.update(data.titleText, data.profText);
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
     }
 
