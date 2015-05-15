@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:text="@string/next"/>
     </LinearLayout>
-    <include android:id="@+id/progress_signup_info" layout="@layout/part_progress"/>
+    <include android:id="@+id/progress" layout="@layout/part_progress"/>
 </FrameLayout>
 
 

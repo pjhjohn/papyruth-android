@@ -10,9 +10,7 @@ import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +29,6 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.request.FragmentHelper;
 import com.montserrat.utils.validator.RxValidator;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
@@ -43,7 +40,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.Observable;
-import rx.android.app.AppObservable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
@@ -130,13 +126,7 @@ public class AuthFragment extends Fragment {
         this.subscriptions.add(
             RetrofitApi.getInstance().signin(emailField.getText().toString(), passwordField.getText().toString())
             .map(response -> {
-                User.getInstance().setEmail(response.user.email);
-                User.getInstance().setRealname(response.user.realname);
-                User.getInstance().setNickName(response.user.nickname);
-                User.getInstance().setGenderIsBoy(response.user.is_boy);
-                User.getInstance().setUniversityId(response.user.university_id);
-                User.getInstance().setEntranceYear(response.user.entrance_year);
-                User.getInstance().setAccessToken(response.access_token);
+                User.getInstance().update(response.user, response.access_token);
                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
                 return response.success;
             })
@@ -154,7 +144,6 @@ public class AuthFragment extends Fragment {
                 },
                 error -> {
                     this.progress.setVisibility(View.GONE);
-                    Timber.d(error, "");
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 403:

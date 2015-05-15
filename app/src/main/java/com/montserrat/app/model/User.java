@@ -88,6 +88,19 @@ public class User {
         return 2;
     }
 
+    public void update(User.Data user) {
+        this.update(user, null);
+    }
+    public void update(User.Data user, String access_token) {
+        this.setEmail(user.email);
+        this.setRealname(user.realname);
+        this.setNickName(user.nickname);
+        this.setGenderIsBoy(user.is_boy);
+        this.setUniversityId(user.university_id);
+        this.setEntranceYear(user.entrance_year);
+        this.setAccessToken(access_token);
+    }
+
     /**
      * @param data data to assign
      */

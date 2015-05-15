@@ -52,6 +52,17 @@ public class RetrofitApi {
             @Query("email") String email,
             @Query("password") String password
         );
+
+        @POST ("/users/sign_up")
+        Observable<User.ResponseData> signup(
+            @Query("email") String email,
+            @Query("password") String password,
+            @Query("realname") String realname,
+            @Query("nickname") String nickname,
+            @Query("is_boy") Boolean is_boy,
+            @Query("university_id") Integer university_id,
+            @Query("entrance_year") Integer entrance_year
+        );
     }
 
     /* Api Builder */
