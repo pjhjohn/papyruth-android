@@ -27,14 +27,14 @@ public class MontserratApp extends Application {
 
         /* Api Endpoint */
         new Api.Builder()
-            .setRoot("52.68.184.25:3000")
+            .setRoot("mont.izz.kr:3001")
             .setVersion(AppConst.API_VERSION)
             .enableSSL(false)
             .build();
 
         /* Retrofit Api */
         new RetrofitApi.Builder()
-            .setRoot("52.68.184.25:3000")
+            .setRoot("mont.izz.kr:3001")
             .setVersion(AppConst.API_VERSION)
             .enableSSL(false)
             .build();

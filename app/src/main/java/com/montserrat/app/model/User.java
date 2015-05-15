@@ -123,4 +123,39 @@ public class User {
     public String toString() {
         return String.format("<access_token : %s>\n <realname : %s>\n <nickname : %s>\n <email : %s>\n <university_id : %d>\n <entrance_year : %d>\n <is_boy : %b>\n", this.access_token, this.realname, this.nickname, this.email, this.university_id, this.entrance_year, this.is_boy);
     }
+
+    public static class ResponseData {
+        public Data user;
+        public String access_token;
+        public Boolean success;
+    }
+
+    public static class Data {
+        public Integer id;
+        public Boolean is_boy;
+        public Integer university_id;
+        public Boolean confirmed;
+        public String realname;
+        public String nickname;
+        public String email;
+        public Integer entrance_year;
+
+        public String confirmed_at;
+        public String confirmation_token;
+        public String confirmation_sent_at;
+        public Boolean confirmation_is_needed;
+        public String reset_password_token;
+        public String reset_password_sent_at;
+        public Boolean allowed;
+        public String current_sign_in_at;
+        public String current_sign_in_ip;
+        public String last_sign_in_ip;
+        public Integer sign_in_count;
+        public String created_at;
+        public String updated_at;
+        public String pwd_salt;
+        public String pwd_hash;
+        public String dropped_out;
+        public String dropped_out_at;
+    }
 }

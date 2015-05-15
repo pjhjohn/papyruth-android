@@ -3,10 +3,12 @@ package com.montserrat.utils.etc;
 import com.montserrat.app.model.Evaluations;
 import com.montserrat.app.model.Lectures;
 import com.montserrat.app.model.Universities;
+import com.montserrat.app.model.User;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
 import retrofit.http.Header;
+import retrofit.http.POST;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -44,6 +46,12 @@ public class RetrofitApi {
 
         @GET ("/universities")
         Observable<Universities> universities();
+
+        @POST("/users/sign_in")
+        Observable<User.ResponseData> signin(
+            @Query("email") String email,
+            @Query("password") String password
+        );
     }
 
     /* Api Builder */
