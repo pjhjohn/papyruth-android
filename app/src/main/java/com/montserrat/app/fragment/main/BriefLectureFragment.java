@@ -17,7 +17,6 @@ import com.montserrat.app.adapter.BriefLectureAdapter;
 import com.montserrat.app.model.Lecture;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.request.FragmentHelper;
 import com.montserrat.utils.request.RecyclerViewFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
 

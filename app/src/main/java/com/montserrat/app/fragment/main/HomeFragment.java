@@ -18,7 +18,6 @@ import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Evaluation;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.request.FragmentHelper;
 import com.montserrat.utils.request.RecyclerViewFragment;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
