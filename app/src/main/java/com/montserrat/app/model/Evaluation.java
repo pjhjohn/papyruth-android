@@ -1,5 +1,10 @@
 package com.montserrat.app.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-04-26.
  */
@@ -16,10 +21,32 @@ public class Evaluation {
     private CharSequence professorName;
 
     /* STEP 2 */
-    private Float scoreOverall;
-    private Float scoreSatifaction;
-    private Float scoreEasiness;
-    private Float scoreLectureQuality;
+    private Integer scoreOverall;
+    private Integer scoreSatifaction;
+    private Integer scoreEasiness;
+    private Integer scoreLectureQuality;
+
+    public CharSequence getLectureTitle() { return lectureTitle; }
+    public CharSequence getProfessorName() { return professorName; }
+    public Integer getScoreOverall() { return scoreOverall; }
+    public Integer getScoreSatifaction() { return scoreSatifaction; }
+    public Integer getScoreEasiness() { return scoreEasiness; }
+    public Integer getScoreLectureQuality() {  return scoreLectureQuality;  }
+    public CharSequence getDescription() {  return description;  }
+    public JSONObject getData(){
+        JSONObject data = new JSONObject();
+        try {
+            data.put("course_id", 1)
+                    .put("score_overall", this.scoreOverall)
+                    .put("score_satisfaction", this.scoreSatifaction)
+                    .put("score_easiness", this.scoreEasiness)
+                    .put("score_lecture_quality", this.scoreLectureQuality)
+                    .put("description", this.description);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
 
     /* STEP 3 */
     private CharSequence description;
@@ -28,9 +55,9 @@ public class Evaluation {
         this.lectureTitle       = null;
         this.professorName      = null;
         this.scoreOverall       = null;
-        this.scoreSatifaction   = null;
-        this.scoreEasiness      = null;
-        this.scoreLectureQuality= null;
+        this.scoreSatifaction   = -1;
+        this.scoreEasiness      = -1;
+        this.scoreLectureQuality= -1;
         this.description        = null;
     }
 
@@ -43,19 +70,19 @@ public class Evaluation {
         this.professorName = professorName;
     }
 
-    public void setScoreOverall (Float scoreOverall) {
+    public void setScoreOverall (Integer scoreOverall) {
         this.scoreOverall = scoreOverall;
     }
 
-    public void setScoreSatifaction (Float scoreSatifaction) {
+    public void setScoreSatifaction (Integer scoreSatifaction) {
         this.scoreSatifaction = scoreSatifaction;
     }
 
-    public void setScoreEasiness (Float scoreEasiness) {
+    public void setScoreEasiness (Integer scoreEasiness) {
         this.scoreEasiness = scoreEasiness;
     }
 
-    public void setScoreLectureQuality (Float scoreLectureQuality) {
+    public void setScoreLectureQuality (Integer scoreLectureQuality) {
         this.scoreLectureQuality = scoreLectureQuality;
     }
 

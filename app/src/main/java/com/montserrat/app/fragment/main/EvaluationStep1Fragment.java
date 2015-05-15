@@ -56,6 +56,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.btn_next) protected Button btnNext;
 
     private EvaluationAdapter.Holder.Data data;
+    private List<EvaluationAdapter.Holder.Data> lectures;
     private Evaluation eval;
     private CompositeSubscription subscriptions;
 
@@ -98,7 +99,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
                 .map(response -> response.optJSONArray("lectures"))
                 .filter(jsonarray -> jsonarray != null) // Wrong Data
                 .map(jsonarray -> {
-                    List<EvaluationAdapter.Holder.Data> lectures = new ArrayList<>();
+                    lectures = new ArrayList<>();
                     for (int i = 0; i < jsonarray.length(); i++){
                         try {
                             data = new EvaluationAdapter.Holder.Data(
@@ -135,10 +136,11 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        Timber.d("******************mytag is : %s", getTag());
-
+        EvaluationAdapter.Holder.Data data = lectures.get(position);
+        Evaluation.getInstance().setLectureTitle(data.titleText);
+        Evaluation.getInstance().setProfessorName(data.profText);
         EvaluationStep2Fragment nextStep = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
-        nextStep.update(data.titleText, data.profText);
+        nextStep.update();
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
     }
 

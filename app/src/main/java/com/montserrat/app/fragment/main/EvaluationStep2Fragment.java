@@ -51,10 +51,11 @@ public class EvaluationStep2Fragment extends Fragment {
         vLecture.setEnabled(false);
         vProfessor.setEnabled(false);
 
-        vScoreOverall.setStepSize((float)0.5);
-        vScoreSatisfaction.setMax(5);
-        vScoreEasiness.setMax(5);
-        vScoreLectureQuality.setMax(5);
+        vScoreOverall.setStepSize((float)1);
+        vScoreOverall.setMax(10);
+        vScoreSatisfaction.setMax(10);
+        vScoreEasiness.setMax(10);
+        vScoreLectureQuality.setMax(10);
 
         getFragmentManager().beginTransaction().add(this, AppConst.Tag.Evaluation.EVALUATION_STEP2);
 
@@ -62,16 +63,16 @@ public class EvaluationStep2Fragment extends Fragment {
         return view;
     }
     public void next(){
-        Timber.d("*************over : %s",vScoreOverall.getRating());
-        Timber.d("*************stai : %s",vScoreSatisfaction.getProgress());
-
-
         EvaluationStep3Fragment nextStep = (EvaluationStep3Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP3);
-        nextStep.update(vLecture.getText().toString(), vProfessor.getText().toString(), vScoreOverall.getRating(), vScoreSatisfaction.getProgress(), vScoreEasiness.getProgress(), vScoreLectureQuality.getProgress());
+        Evaluation.getInstance().setScoreOverall((int)vScoreOverall.getRating());
+        Evaluation.getInstance().setScoreSatifaction(vScoreSatisfaction.getProgress());
+        Evaluation.getInstance().setScoreEasiness(vScoreEasiness.getProgress());
+        Evaluation.getInstance().setScoreLectureQuality(vScoreLectureQuality.getProgress());
+        nextStep.update();
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
     }
-    public void update(String lecture, String professor){
-        vLecture.setText(lecture);
-        vProfessor.setText(professor);
+    public void update(){
+        vLecture.setText(Evaluation.getInstance().getLectureTitle());
+        vProfessor.setText(Evaluation.getInstance().getProfessorName());
     }
 }

@@ -29,6 +29,7 @@
 
     <!--common-->
     <string name="next">Next</string>
+    <string name="submit">Submit</string>
     <string name="pending">Pending Another Request</string>
 
     <!--menu-->

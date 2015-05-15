@@ -29,6 +29,7 @@
 
     <!--common-->
     <string name="next">다음</string>
+    <string name="submit">전송</string>
     <string name="pending">다른 요청이 처리중입니다</string>
 
     <!--menu-->

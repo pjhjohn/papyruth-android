@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
@@ -21,6 +22,8 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Observable;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -46,7 +49,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @InjectView(R.id.score_easiness) protected SeekBar vScoreEasiness;
     @InjectView(R.id.score_lecture_quality) protected SeekBar vScoreLectureQuality;
     @InjectView(R.id.description) protected EditText vDescription;
-    private Evaluation eval;
+    @InjectView(R.id.submit) protected Button vSubmit;
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,27 +70,27 @@ public class EvaluationStep3Fragment extends Fragment {
         vScoreEasiness.setEnabled(false);
         vScoreLectureQuality.setEnabled(false);
 
-        vScoreOverall.setStepSize((float)0.5);
+        vScoreOverall.setStepSize((float)1);
+        vScoreOverall.setMax(10);
         vScoreSatisfaction.setMax(5);
         vScoreEasiness.setMax(5);
         vScoreLectureQuality.setMax(5);
 
-        JSONObject params = new JSONObject();
-        try {
-            params.put("course_id", 0)
-                  .put("score_overall", 0)
-                  .put("score_satisfaction", 0)
-                  .put("score_easiness", 0)
-                  .put("score_lecture_quality", 0)
-                  .put("description", "");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        subscriptions.add(ViewObservable
-            .clicks(view.findViewById(R.id.submit))
-            .flatMap(unused -> RxVolley.createObservable(Api.url("evaluations"), Request.Method.POST, User.getInstance().getAccessToken(), params))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+
+
+        this.subscriptions.add( ViewObservable
+            .clicks(vSubmit)
+            .flatMap(unused -> {
+                Evaluation.getInstance().setDescription(this.vDescription.getText().toString());
+
+                JSONObject params = Evaluation.getInstance().getData();
+                Timber.d("--------------%s", params);
+                return RxVolley.createObservable(
+                        Api.url("evaluations"),
+                        Request.Method.POST,
+                        User.getInstance().getAccessToken(),
+                        params);
+            })
             .subscribe(
                 response -> Timber.d("response : %s", response),
                 Throwable::printStackTrace
@@ -95,12 +98,12 @@ public class EvaluationStep3Fragment extends Fragment {
         );
         return view;
     }
-    public void update(String lecture, String professor, float ovarall, int satisfaction, int easiness, int quality){
-        vLecture.setText(lecture);
-        vProfessor.setText(professor);
-        vScoreOverall.setRating(ovarall);
-        vScoreSatisfaction.setProgress(satisfaction);
-        vScoreEasiness.setProgress(easiness);
-        vScoreLectureQuality.setProgress(quality);
+    public void update(){
+        vLecture.setText(Evaluation.getInstance().getLectureTitle());
+        vProfessor.setText(Evaluation.getInstance().getProfessorName());
+        vScoreOverall.setRating(Evaluation.getInstance().getScoreOverall());
+        vScoreSatisfaction.setProgress(Evaluation.getInstance().getScoreSatifaction());
+        vScoreEasiness.setProgress(Evaluation.getInstance().getScoreEasiness());
+        vScoreLectureQuality.setProgress(Evaluation.getInstance().getScoreLectureQuality());
     }
 }

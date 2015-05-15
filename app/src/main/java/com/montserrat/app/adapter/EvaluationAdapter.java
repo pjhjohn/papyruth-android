@@ -82,7 +82,6 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void bind(Data item) {
-            Timber.d("t:%s p:%s", item.titleText, item.profText);
             this.vTitleText.setText(item.titleText);
             this.vProfText.setText(item.profText);
         }
@@ -91,6 +90,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public void onClick (View view) {
             EvaluationAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
+
 
         public static class Data {
             public String titleText;
