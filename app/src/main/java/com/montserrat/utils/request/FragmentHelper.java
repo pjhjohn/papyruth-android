@@ -11,6 +11,7 @@ import android.view.View;
  * Provides helper functions for fragment.
  */
 
+@Deprecated
 public class FragmentHelper {
 
     public static void showProgress (final View progress, final boolean show) {

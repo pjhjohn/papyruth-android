@@ -18,6 +18,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-05-02.
  * Support Class for wrapping Volley with RxAndroid
  */
+@Deprecated
 public class RxVolley {
     public static Observable<JSONObject> createObservable (String url, JSONObject body) {
         return createObservable(url, Request.Method.GET, null, body);
