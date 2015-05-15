@@ -8,19 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
+import com.montserrat.app.R;
 import com.montserrat.app.adapter.UniversityRecyclerAdapter;
 import com.montserrat.app.model.University;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.RecyclerViewFragment;
-import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
-
-import org.json.JSONObject;
 
 import java.util.List;
 

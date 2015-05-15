@@ -2,13 +2,17 @@ package com.montserrat.utils.etc;
 
 import com.montserrat.app.model.Evaluations;
 import com.montserrat.app.model.Lectures;
+import com.montserrat.app.model.Statistics;
 import com.montserrat.app.model.Universities;
 import com.montserrat.app.model.User;
+import com.montserrat.utils.request.Api;
+import com.montserrat.utils.request.RxVolley;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -46,6 +50,17 @@ public class RetrofitApi {
 
         @GET ("/universities")
         Observable<Universities> universities();
+
+        @GET ("/universities/{univ_id}")
+        Observable<Statistics> statistics(@Header ("Authorization") String authorization,@Path ("univ_id") Integer university_id);
+
+        @GET ("/info")
+        Observable<Statistics> statistics();
+
+        @GET ("/users/me")
+        Observable<User.ResponseData> userinfo(
+            @Header ("Authorization") String authorization
+        );
 
         @POST("/users/sign_in")
         Observable<User.ResponseData> signin(

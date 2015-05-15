@@ -8,4 +8,6 @@ public class University {
     public String name;
     public String image_url;
     public String email_domain;
+    public Integer user_count;
+    public Integer evaluation_count;
 }
