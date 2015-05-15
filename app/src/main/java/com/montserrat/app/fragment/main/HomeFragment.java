@@ -128,14 +128,14 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, Evaluation> 
             getRecyclerViewScrollObservable(this.recycler, this.toolbar, this.fab)
                 .filter(askmoreifnull -> askmoreifnull == null)
                 .flatMap(unused -> {
-                    FragmentHelper.showProgress(this.progress, true);
+                    this.progress.setVisibility(View.VISIBLE);
                     return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
                 })
                 .map(evaluations -> evaluations.evaluation)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
-                    FragmentHelper.showProgress(this.progress, false);
+                    this.progress.setVisibility(View.GONE);
                     this.items.addAll(evaluations);
                     this.adapter.notifyDataSetChanged();
                 })

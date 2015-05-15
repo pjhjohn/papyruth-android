@@ -117,14 +117,14 @@ public class BriefLectureFragment extends RecyclerViewFragment<BriefLectureAdapt
             getRecyclerViewScrollObservable(this.recycler, this.toolbar, this.fab)
             .filter(askmoreifnull -> askmoreifnull == null)
             .flatMap(unused -> {
-                FragmentHelper.showProgress(this.progress, true);
+                this.progress.setVisibility(View.VISIBLE);
                 return RetrofitApi.getInstance().lectures(User.getInstance().getAccessToken(), null, null);
             })
             .map(response -> response.lectures)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(lectures -> {
-                FragmentHelper.showProgress(this.progress, false);
+                this.progress.setVisibility(View.GONE);
                 this.items.addAll(lectures);
                 this.adapter.notifyDataSetChanged();
             })
