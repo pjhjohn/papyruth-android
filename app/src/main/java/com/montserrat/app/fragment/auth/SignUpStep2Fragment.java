@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
@@ -50,11 +49,11 @@ import static com.montserrat.utils.validator.RxValidator.toString;
  */
 
 public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
-    private ViewPagerController pageController;
+    private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pageController = (ViewPagerController) activity;
+        this.pagerController = (ViewPagerController) activity;
     }
 
     @InjectView (R.id.university) protected Button university;
@@ -101,7 +100,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
         );
 
         this.subscriptions.add(ViewObservable.clicks(this.submit).subscribe(unused -> register()));
-        this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused ->pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+        this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
         return view;
     }
 

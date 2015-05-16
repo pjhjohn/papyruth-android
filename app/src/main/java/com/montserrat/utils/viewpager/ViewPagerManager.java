@@ -11,8 +11,6 @@ import com.montserrat.app.fragment.FragmentFactory;
 
 import java.util.Stack;
 
-import timber.log.Timber;
-
 /**
  * Created by pjhjohn on 2015-04-23.
  */
@@ -24,6 +22,7 @@ public class ViewPagerManager implements ViewPagerController {
     private Stack<Integer> history;
     private boolean addToBackStack;
     private int currentPage;
+    private int previousPage;
     private Adapter adapter;
     private ViewPager.OnPageChangeListener listener;
 
@@ -35,8 +34,8 @@ public class ViewPagerManager implements ViewPagerController {
             public void onPageSelected (int position) {
                 if (ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(currentPage);
                 ViewPagerManager.this.addToBackStack = true;
+                ViewPagerManager.this.previousPage = ViewPagerManager.this.currentPage;
                 ViewPagerManager.this.currentPage = position;
-
 
                 final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
                 if (target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
@@ -91,10 +90,23 @@ public class ViewPagerManager implements ViewPagerController {
     }
 
     @Override
+    public int getPreviousPage () {
+        return this.previousPage;
+    }
+
+    @Override
     public void setCurrentPage(int pageNum, boolean addToBackStack) {
-        Timber.d("setCurrentPage#%d", pageNum);
         this.addToBackStack = addToBackStack;
         this.pager.setCurrentItem(pageNum);
+    }
+
+    @Override
+    public void popCurrentPage() {
+        if(!this.history.isEmpty()){
+            final Integer previous = this.history.pop();
+            this.addToBackStack = false;
+            this.pager.setCurrentItem(previous);
+        }
     }
 
     /**

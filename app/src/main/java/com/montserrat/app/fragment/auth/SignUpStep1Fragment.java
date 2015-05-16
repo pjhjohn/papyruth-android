@@ -15,7 +15,6 @@ import com.montserrat.app.model.University;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.request.RecyclerViewFragment;
-import com.montserrat.utils.viewpager.OnPageFocus;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import java.util.List;
@@ -25,18 +24,17 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
 public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecyclerAdapter, University> {
-    private ViewPagerController pageController;
+    private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pageController = (ViewPagerController) activity;
+        this.pagerController = (ViewPagerController) activity;
     }
 
     @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView recycler;
@@ -84,6 +82,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
     public void recyclerViewListClicked (View view, int position) {
         User.getInstance().setUniversityId(this.items.get(position).id);
         User.getInstance().setUniversityName(this.items.get(position).name);
-        if ( User.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) this.pagerController.popCurrentPage();
+        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 }

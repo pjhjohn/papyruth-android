@@ -32,8 +32,18 @@ public class AuthActivity extends Activity implements ViewPagerController {
     }
 
     @Override
+    public int getPreviousPage () {
+        return this.manager.getPreviousPage();
+    }
+
+    @Override
     public void setCurrentPage (int pageNum, boolean addToBackStack) {
         this.manager.setCurrentPage(pageNum, addToBackStack);
+    }
+
+    @Override
+    public void popCurrentPage () {
+        this.manager.popCurrentPage();
     }
 
     @Override
