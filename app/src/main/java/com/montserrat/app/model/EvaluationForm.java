@@ -107,9 +107,7 @@ public class EvaluationForm {
 
         @Override
         public String toString() {
-            String log = "success : "+success+" , evaluation_id : "+ evaluation_id;
-            Timber.i(log);
-            return log;
+            return "success : "+success+" , evaluation_id : "+ evaluation_id;
         }
     }
 }

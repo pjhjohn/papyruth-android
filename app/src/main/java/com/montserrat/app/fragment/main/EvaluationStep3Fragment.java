@@ -74,14 +74,6 @@ public class EvaluationStep3Fragment extends Fragment {
             .flatMap(unused -> {
                 EvaluationForm.getInstance().setDescription(this.vDescription.getText().toString());
 
-//                JSONObject params = EvaluationForm.getInstance().getData();
-//                Observable<JSONObject> ob = RxVolley.createObservable(
-//                        Api.url("evaluations"),
-//                        Request.Method.POST,
-//                        User.getInstance().getAccessToken(),
-//                        params);
-//                Timber.d("--------------%s", params);
-
                 Timber.d("-------------");
                 return RetrofitApi.getInstance().evaluation(
                         User.getInstance().getAccessToken(),
