@@ -3,6 +3,8 @@ package com.montserrat.app.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-04-26.
  */
@@ -97,5 +99,17 @@ public class EvaluationForm {
         /* STEP 3*/
         if ( this.description == null ) return 2;
         return 3;
+    }
+    public class ResponseData{
+        public Evaluation evaluation;
+        public String success;
+        public Integer evaluation_id;
+
+        @Override
+        public String toString() {
+            String log = "success : "+success+" , evaluation_id : "+ evaluation_id;
+            Timber.i(log);
+            return log;
+        }
     }
 }

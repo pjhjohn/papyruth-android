@@ -11,20 +11,15 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 
-import com.android.volley.Request;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.RxVolley;
+import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.viewpager.ViewPagerController;
-
-import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
 import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -79,18 +74,27 @@ public class EvaluationStep3Fragment extends Fragment {
             .flatMap(unused -> {
                 EvaluationForm.getInstance().setDescription(this.vDescription.getText().toString());
 
-                JSONObject params = EvaluationForm.getInstance().getData();
-                Observable<JSONObject> ob = RxVolley.createObservable(
-                        Api.url("evaluations"),
-                        Request.Method.POST,
-                        User.getInstance().getAccessToken(),
-                        params);
-                Timber.d("--------------%s", params);
+//                JSONObject params = EvaluationForm.getInstance().getData();
+//                Observable<JSONObject> ob = RxVolley.createObservable(
+//                        Api.url("evaluations"),
+//                        Request.Method.POST,
+//                        User.getInstance().getAccessToken(),
+//                        params);
+//                Timber.d("--------------%s", params);
 
-                return ob;
+                Timber.d("-------------");
+                return RetrofitApi.getInstance().evaluation(
+                        User.getInstance().getAccessToken(),
+                        1,
+                        EvaluationForm.getInstance().getScoreOverall(),
+                        EvaluationForm.getInstance().getScoreSatifaction(),
+                        EvaluationForm.getInstance().getScoreEasiness(),
+                        EvaluationForm.getInstance().getScoreLectureQuality(),
+                        EvaluationForm.getInstance().getDescription().toString()
+                );
             })
             .subscribe(
-                response -> Timber.d("response : %s", response),
+                response -> Timber.d("response : %s", response.toString()),
                 Throwable::printStackTrace
             )
         );

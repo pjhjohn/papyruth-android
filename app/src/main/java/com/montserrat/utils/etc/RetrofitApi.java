@@ -89,14 +89,14 @@ public class RetrofitApi {
         );
 
         @POST("/evaluations")
-        Observable<EvaluationForm> evaluationSend(
-            @Query("Authorization") String authorization,
-            @Query("course_id") int course_id,
-            @Query("score_overall") int score_overall,
-            @Query("score_satisfaction") int score_satisfaction,
-            @Query("score_easiness") int score_easiness,
-            @Query("score_lecture_quality") int score_lecture_quality,
-            @Query("description") String description
+        Observable<EvaluationForm.ResponseData> evaluation(
+                @Header("Authorization") String authorization,
+                @Query("course_id") Integer course_id,
+                @Query("point_overall") Integer score_overall,
+                @Query("point_gpa_satisfaction") Integer score_satisfaction,
+                @Query("point_easiness") Integer score_easiness,
+                @Query("point_clarity") Integer score_lecture_quality,
+                @Query("comment") String description
         );
     }
 

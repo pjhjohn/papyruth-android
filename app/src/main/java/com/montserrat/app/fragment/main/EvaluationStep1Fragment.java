@@ -91,16 +91,11 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
             text(vLectureQuery)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(onTextChangeEvent -> {
-                    return RetrofitApi.getInstance().eAuto(
-                            User.getInstance().getAccessToken()
-//                                    ,onTextChangeEvent.text().toString()
-                    );
-                })
-                .map(response -> {
-                    return response.lectures;
-//                            return response;
-                })
+                .flatMap(onTextChangeEvent -> RetrofitApi.getInstance().eAuto(
+                        User.getInstance().getAccessToken()
+//                      ,onTextChangeEvent.text().toString()
+                    ))
+                .map(response -> response.lectures )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
