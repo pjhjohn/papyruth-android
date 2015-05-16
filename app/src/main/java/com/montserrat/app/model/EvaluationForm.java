@@ -19,6 +19,7 @@ public class EvaluationForm {
     /* STEP 1*/
     private CharSequence lectureTitle;
     private CharSequence professorName;
+    private Integer course_id;
 
     /* STEP 2 */
     private Integer scoreOverall;
@@ -29,6 +30,7 @@ public class EvaluationForm {
     public CharSequence getLectureTitle() { return lectureTitle; }
     public CharSequence getProfessorName() { return professorName; }
     public Integer getScoreOverall() { return scoreOverall; }
+    public Integer getCourseId() { return course_id; }
     public Integer getScoreSatifaction() { return scoreSatifaction; }
     public Integer getScoreEasiness() { return scoreEasiness; }
     public Integer getScoreLectureQuality() {  return scoreLectureQuality;  }
@@ -54,10 +56,11 @@ public class EvaluationForm {
     public void clear() {
         this.lectureTitle       = null;
         this.professorName      = null;
+        this.course_id          = null;
         this.scoreOverall       = null;
-        this.scoreSatifaction   = -1;
-        this.scoreEasiness      = -1;
-        this.scoreLectureQuality= -1;
+        this.scoreSatifaction   = null;
+        this.scoreEasiness      = null;
+        this.scoreLectureQuality= null;
         this.description        = null;
     }
 
@@ -68,6 +71,9 @@ public class EvaluationForm {
 
     public void setProfessorName (CharSequence professorName) {
         this.professorName = professorName;
+    }
+    public void setCourseId (Integer course_id) {
+        this.course_id = course_id;
     }
 
     public void setScoreOverall (Integer scoreOverall) {
@@ -100,6 +106,14 @@ public class EvaluationForm {
         if ( this.description == null ) return 2;
         return 3;
     }
+
+    @Override
+    public String toString() {
+        return String.format(" <title : %s>\n <professor: %s>\n < courseId: %d>\n <Overall : %d>\n <Satisfaction : %d>\n " +
+                "<Easiness : %d>\n <clarity : %d>\n <commnet : %s>"
+                , lectureTitle, professorName, course_id, scoreOverall,scoreSatifaction, scoreEasiness, scoreLectureQuality, description);
+    }
+
     public class ResponseData{
         public Evaluation evaluation;
         public String success;

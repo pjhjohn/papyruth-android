@@ -4,17 +4,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.Dummy_lecture;
+import com.montserrat.app.model.Lecture;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
 import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-05-08.
@@ -25,13 +23,13 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final class Type {
         public static final int ITEM = 1;
     }
-    public static EvaluationAdapter newInstance(List<Dummy_lecture.lecture> initItemList, RecyclerViewClickListener listener) {
+    public static EvaluationAdapter newInstance(List<Lecture> initItemList, RecyclerViewClickListener listener) {
         return new EvaluationAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Dummy_lecture.lecture> items;
-    public EvaluationAdapter (List<Dummy_lecture.lecture> initItemList, RecyclerViewClickListener listener) {
+    private List<Lecture> items;
+    public EvaluationAdapter (List<Lecture> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         EvaluationAdapter.itemListener = listener;
     }
@@ -48,7 +46,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Holder holder = (Holder) viewHolder;
-        Dummy_lecture.lecture item = this.items.get(position);
+        Lecture item = this.items.get(position);
         holder.bind(item);
     }
 
@@ -82,9 +80,9 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             );
         }
 
-        public void bind(Dummy_lecture.lecture item) {
+        public void bind(Lecture item) {
             this.vTitleText.setText(item.name);
-            this.vProfText.setText("prof");
+            this.vProfText.setText(item.professor);
         }
 
         @Override

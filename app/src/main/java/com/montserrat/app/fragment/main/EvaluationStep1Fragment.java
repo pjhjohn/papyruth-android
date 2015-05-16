@@ -11,22 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
-import com.montserrat.app.model.Dummy_lecture;
 import com.montserrat.app.model.EvaluationForm;
+import com.montserrat.app.model.Lecture;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
-import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +53,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.result_lecture) protected RecyclerView vLectureList;
     @InjectView(R.id.btn_next) protected Button btnNext;
 
-    private Dummy_lecture.lecture data;
-    private List<Dummy_lecture.lecture> lectures;
+    private List<Lecture> lectures;
     private EvaluationForm eval;
     private CompositeSubscription subscriptions;
 
@@ -91,10 +84,10 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
             text(vLectureQuery)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(onTextChangeEvent -> RetrofitApi.getInstance().eAuto(
+                .flatMap(onTextChangeEvent -> RetrofitApi.getInstance().lecturelist(
                         User.getInstance().getAccessToken()
 //                      ,onTextChangeEvent.text().toString()
-                    ))
+                ))
                 .map(response -> response.lectures )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -127,9 +120,10 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        Dummy_lecture.lecture data = lectures.get(position);
+        Lecture data = lectures.get(position);
         EvaluationForm.getInstance().setLectureTitle(data.name);
-        EvaluationForm.getInstance().setProfessorName(data.name);
+        EvaluationForm.getInstance().setProfessorName("prof");
+        EvaluationForm.getInstance().setCourseId(data.id);
         EvaluationStep2Fragment nextStep = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
         nextStep.update();
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);

@@ -74,10 +74,10 @@ public class EvaluationStep3Fragment extends Fragment {
             .flatMap(unused -> {
                 EvaluationForm.getInstance().setDescription(this.vDescription.getText().toString());
 
-                Timber.d("-------------");
+                Timber.d("-------------%s", EvaluationForm.getInstance().toString());
                 return RetrofitApi.getInstance().evaluation(
                         User.getInstance().getAccessToken(),
-                        1,
+                        EvaluationForm.getInstance().getCourseId(),
                         EvaluationForm.getInstance().getScoreOverall(),
                         EvaluationForm.getInstance().getScoreSatifaction(),
                         EvaluationForm.getInstance().getScoreEasiness(),

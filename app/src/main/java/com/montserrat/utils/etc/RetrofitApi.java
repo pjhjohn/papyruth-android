@@ -1,16 +1,11 @@
 package com.montserrat.utils.etc;
 
-import com.montserrat.app.model.Autocomplete;
-import com.montserrat.app.model.Dummy_lecture;
-import com.montserrat.app.model.Evaluation;
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.Evaluations;
 import com.montserrat.app.model.Lectures;
 import com.montserrat.app.model.Statistics;
 import com.montserrat.app.model.Universities;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.RxVolley;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -66,7 +61,7 @@ public class RetrofitApi {
             @Header ("Authorization") String authorization
         );
         @GET("/lectures/dummy_autocomplete")
-        Observable<Dummy_lecture.lectures> eAuto(
+        Observable<Lectures> lecturelist(
             @Header("Authorization") String authorization
 //          ,@Query("query") String query //unused yet.
         );
