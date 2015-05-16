@@ -15,6 +15,7 @@ import com.montserrat.app.model.University;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.request.RecyclerViewFragment;
+import com.montserrat.utils.viewpager.OnPageFocus;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -53,6 +55,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(universities -> {
+                this.items.clear();
                 this.items.addAll(universities);
                 this.adapter.notifyDataSetChanged();
             })
@@ -80,6 +83,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
     @Override
     public void recyclerViewListClicked (View view, int position) {
         User.getInstance().setUniversityId(this.items.get(position).id);
+        User.getInstance().setUniversityName(this.items.get(position).name);
         if ( User.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 }

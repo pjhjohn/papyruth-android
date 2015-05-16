@@ -21,6 +21,7 @@ public class User {
     private String email;
     private Boolean is_boy;
     private Integer university_id;
+    private String university_name;
     private Integer entrance_year;
 
     private User () {
@@ -78,6 +79,12 @@ public class User {
     }
     public void setGenderIsBoy (boolean is_boy) {
         this.is_boy = is_boy;
+    }
+    public void setUniversityName(String university_name) {
+        this.university_name = university_name;
+    }
+    public String getUniversityName () {
+        return this.university_name;
     }
 
     public int getCompletionLevel() {

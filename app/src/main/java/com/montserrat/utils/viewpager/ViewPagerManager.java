@@ -30,22 +30,17 @@ public class ViewPagerManager implements ViewPagerController {
     public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, final FragmentFactory.Type fragmentType, int viewCount) {
         this.pager = pager;
         this.adapter = new Adapter(manager, fragmentType, viewCount);
-        this.listener = new ViewPager.OnPageChangeListener() {
-            @Override public void onPageScrolled (int position, float positionOffset, int positionOffsetPixels) {}
-            @Override public void onPageScrollStateChanged (int state) {}
+        this.listener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected (int position) {
-                Timber.d("onPage#%dSelected", position);
                 if (ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(currentPage);
                 ViewPagerManager.this.addToBackStack = true;
                 ViewPagerManager.this.currentPage = position;
 
-                Fragment item = manager.findFragmentByTag("android:switcher:" + ViewPagerManager.this.pager.getId() + ":" + position);
-                if (item != null && item.getView() != null && item instanceof  OnPageFocus)
-                    ((OnPageFocus) item).onPageFocused();
 
-//                final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
-//                if(target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
+                final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
+                if (target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
+
             }
         };
         this.active();
@@ -106,17 +101,12 @@ public class ViewPagerManager implements ViewPagerController {
      * @return true if override is succeed, false otherwise.
      */
     public boolean onBackPressed() {
-        if(!this.history.isEmpty()) {
+        if (!this.history.isEmpty()) {
             this.addToBackStack = false;
             this.pager.setCurrentItem(this.history.pop());
             return true;
         } return false;
     }
-
-    public Fragment getFragment(int position) {
-        return this.adapter.getFragmentAt(position);
-    }
-
 
     private static class Adapter extends FragmentStatePagerAdapter {
         private SparseArray<Fragment> fragments;
