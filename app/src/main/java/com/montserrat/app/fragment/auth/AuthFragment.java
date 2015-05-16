@@ -23,20 +23,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.montserrat.app.activity.MainActivity;
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
+import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.FragmentHelper;
-import com.montserrat.utils.request.RxVolley;
+import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.validator.RxValidator;
 import com.montserrat.utils.viewpager.ViewPagerController;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +38,12 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -91,16 +87,16 @@ public class AuthFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.subscriptions.add( Observable.combineLatest(
+        this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
             WidgetObservable.text(passwordField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
             (String emailError, String passwordError) -> {
                 emailField.setError(emailError);
                 passwordField.setError(passwordError);
-                return emailError==null && passwordError==null;
+                return emailError == null && passwordError == null;
             })
-            .startWith( false )
-            .subscribe( valid -> {
+            .startWith(false)
+            .subscribe(valid -> {
                 this.submit.getBackground().setColorFilter(getResources().getColor(
                     valid
                     ? R.color.fg_accent
@@ -110,8 +106,8 @@ public class AuthFragment extends Fragment {
             })
         );
 
-        subscriptions.add( Observable
-            .merge(
+        subscriptions.add(
+            Observable.mergeDelayError(
                 ViewObservable.clicks(this.submit).map(unused -> this.submit.isEnabled()),
                 Observable.create(observer -> this.passwordField.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
                     observer.onNext(this.submit.isEnabled());
@@ -119,45 +115,47 @@ public class AuthFragment extends Fragment {
                     return !this.submit.isEnabled();
                 }))
             )
-            .filter( trigger -> trigger )
-            .flatMap( unused -> {
-                FragmentHelper.showProgress(this.progress, true);
-                JSONObject params = new JSONObject();
-                try { params.put("email", emailField.getText().toString()).put("password", passwordField.getText().toString()); }
-                catch (JSONException ignored) {}
-                return RxVolley.createObservable(
-                    Api.url("users/sign_in"),
-                    Request.Method.POST,
-                    AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null),
-                    params
-                );
-            })
-            .subscribe(response -> {
-                FragmentHelper.showProgress(this.progress, false);
-                switch (response.optInt("status")) {
-                    case 200:
-                        if (response.optBoolean("success")) {
-                            User.getInstance().setData(response.optJSONObject("user"));
-                            User.getInstance().setAccessToken(response.optString("access_token", null)); // TODO : Check existance of access-token at setter or
-                            AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.optString("access_token", null));
-                            this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
-                            this.getActivity().finish();
-                        } else {
-                            Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                            // TODO : Implement action for signin failure
-                        }
-                        break;
-                    case 403 :
-                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                        // TODO : Implement action for signin failure
-                        break;
-                    default :
-                        Timber.e("Unexpected Status code : %d - Needs to be implemented", response.optInt("status"));
-                }
-            })
-        );
+            .filter(trigger -> trigger)
+            .subscribe(unused -> doRequest()));
 
         subscriptions.add(ViewObservable.clicks(this.signup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+    }
+
+    private void doRequest() {
+        this.progress.setVisibility(View.VISIBLE);
+        this.subscriptions.add(
+            RetrofitApi.getInstance().signin(emailField.getText().toString(), passwordField.getText().toString())
+            .map(response -> {
+                User.getInstance().update(response.user, response.access_token);
+                AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+                return response.success;
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                success -> {
+                    this.progress.setVisibility(View.GONE);
+                    if (success) {
+                        this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
+                        this.getActivity().finish();
+                    } else {
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    this.progress.setVisibility(View.GONE);
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            case 403:
+                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        }
+                    }
+                }
+            )
+        );
     }
 
     private interface ProfileQuery {

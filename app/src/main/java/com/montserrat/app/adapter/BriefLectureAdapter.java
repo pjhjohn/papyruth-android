@@ -8,6 +8,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
+import com.montserrat.app.model.Lecture;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -15,20 +16,20 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class BreifCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BriefLectureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static BreifCourseAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new BreifCourseAdapter(initItemList, listener);
+    public static BriefLectureAdapter newInstance(List<Lecture> initItemList, RecyclerViewClickListener listener) {
+        return new BriefLectureAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Holder.Data> items;
-    private BreifCourseAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private List<Lecture> items;
+    private BriefLectureAdapter (List<Lecture> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        BreifCourseAdapter.itemListener = listener;
+        BriefLectureAdapter.itemListener = listener;
     }
 
     @Override
@@ -45,7 +46,7 @@ public class BreifCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (!isPositionOfHeader(position)) {
             Holder holder = (Holder) viewHolder;
-            Holder.Data item = this.items.get(position - 1);
+            Lecture item = this.items.get(position - 1);
             holder.bind(item);
         }
     }
@@ -100,31 +101,15 @@ public class BreifCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return new Holder(parent, vSubject, vProfessor, vRating);
         }
 
-        public void bind(BreifCourseAdapter.Holder.Data item) {
-            this.subject.setText(item.subject);
+        public void bind(Lecture item) {
+            this.subject.setText(item.name);
             this.professor.setText(item.professor);
             this.rating.setRating(item.rating);
         }
 
         @Override
         public void onClick (View view) {
-            BreifCourseAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
-        }
-
-        public static class Data {
-            public int id; // lecture id
-            public int unit; // lecture unit
-            public String code; // lecture code
-            public int university_id;
-            public String subject;
-            public String professor;
-            public float rating;
-            private Data(){}
-            public Data(String subject, String professor, float rating) {
-                this.subject = subject;
-                this.professor = professor;
-                this.rating = rating;
-            }
+            BriefLectureAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
     }
 }

@@ -7,26 +7,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.montserrat.app.activity.MainActivity;
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
+import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
+import com.montserrat.app.model.Statistics;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.RxVolley;
+import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.viewpager.ViewPagerController;
-
-import org.json.JSONObject;
+import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -73,31 +71,23 @@ public class LoadingFragment extends Fragment {
 
     private boolean timerDone = false, requestDone = false;
     private Boolean hasAuth = null;
-    private Action1<JSONObject> onNextJSONResponse = response -> {
-        /* Timer Done */
-        if (response == null) this.timerDone = true;
 
-        /* Analyze Response */
+    private Action1<Statistics> viewSubscriber = statistics -> {
+        /* Timer Done */
+        if (statistics == null) this.timerDone = true;
         else {
-            final int status = response.optInt("status", -1);
-            switch(response.optInt("status")) {
-            case 200 :
-                JSONObject university = response.optJSONObject("university");
-                if (university != null) {
-                    Glide.with(this).load(university.optString("image_url", "")).into(this.vUnivIcon);
-                    this.vUnivText.setText(String.format("%s\nhas", university.optString("name")));
-                    this.vUserText.setText(String.format("%d\nstudents with", university.optInt("user_count")));
-                    this.vEvalText.setText(String.format("%d\nevaluations", university.optInt("evaluation_count")));
-                    this.hasAuth = true;
-                } else {
-                    this.vUnivText.setText(String.format("%d\nuniversities has", response.optInt("university_count", -100)));
-                    this.vUserText.setText(String.format("%d\nstudents with", response.optInt("user_count", -100)));
-                    this.vEvalText.setText(String.format("%d\nevaluations", response.optInt("evaluation_count", -100)));
-                    this.hasAuth = false;
-                } this.requestDone = true;
-                break;
-            default : Timber.e("Unexpected Status code : %d - Needs to be implemented", status);
-            }
+            if (statistics.university == null) {
+                this.vUnivText.setText(String.format("%d\nuniversities has", statistics.university_count));
+                this.vUserText.setText(String.format("%d\nstudents with", statistics.user_count));
+                this.vEvalText.setText(String.format("%d\nevaluations", statistics.evaluation_count));
+                this.hasAuth = false;
+            } else {
+                Picasso.with(this.getActivity()).load(statistics.university.image_url).into(this.vUnivIcon);
+                this.vUnivText.setText(String.format("%s\nhas", statistics.university.name));
+                this.vUserText.setText(String.format("%d\nstudents with", statistics.university.user_count));
+                this.vEvalText.setText(String.format("%d\nevaluations", statistics.university.evaluation_count));
+                this.hasAuth = true;
+            } this.requestDone = true;
         }
         if (this.timerDone&&this.requestDone) {
             if ( hasAuth == null ) return; // TODO : make it to AuthFragment when testing is done
@@ -113,34 +103,39 @@ public class LoadingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        subscriptions.add(
-            RxVolley
-                .createObservable(Api.url("users/me"), User.getInstance().getAccessToken(), new JSONObject())
-                .flatMap(userData -> {
-                    final int status = userData.optInt("status", -1);
-                    switch (status) {
-                        case 200:
-                            User.getInstance().setData(userData.optJSONObject("user"));
-                            return RxVolley.createObservable(Api.url("universities/%s", User.getInstance().getUniversityId()), User.getInstance().getAccessToken(), new JSONObject());
+        subscriptions.add(RetrofitApi.getInstance().userinfo(User.getInstance().getAccessToken()).subscribe(
+            response -> {
+                User.getInstance().update(response.user);
+                subscriptions.add(RetrofitApi.getInstance().statistics(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(viewSubscriber)
+                );
+            },
+            error -> {
+                if (error instanceof RetrofitError) {
+                    switch (((RetrofitError) error).getResponse().getStatus()) {
                         case 401:
-                            return RxVolley.createObservable(Api.url("info"), new JSONObject());
+                            subscriptions.add(RetrofitApi.getInstance().statistics()
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(viewSubscriber)
+                            );
+                            break;
                         default:
-                            Timber.e("Unexpected Status code : %d - Needs to be implemented", status);
-                            return Observable.just(null);
+                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                     }
-                })
-                .filter(chainedResponse -> chainedResponse != null) // filter nullified ( not desired ) observables.
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onNextJSONResponse)
-        );
+                }
+            }
+        ));
+
         subscriptions.add(
             Observable
                 .timer(3, TimeUnit.SECONDS)
-                .map(unused -> (JSONObject) null)
+                .map(unused -> (Statistics) null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onNextJSONResponse)
+                .subscribe(viewSubscriber)
         );
     }
 }

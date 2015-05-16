@@ -14,7 +14,7 @@ import android.widget.SeekBar;
 import com.android.volley.Request;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.RxVolley;
@@ -22,13 +22,10 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 
 import org.json.JSONObject;
 
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -80,9 +77,9 @@ public class EvaluationStep3Fragment extends Fragment {
         this.subscriptions.add( ViewObservable
             .clicks(vSubmit)
             .flatMap(unused -> {
-                Evaluation.getInstance().setDescription(this.vDescription.getText().toString());
+                EvaluationForm.getInstance().setDescription(this.vDescription.getText().toString());
 
-                JSONObject params = Evaluation.getInstance().getData();
+                JSONObject params = EvaluationForm.getInstance().getData();
                 Observable<JSONObject> ob = RxVolley.createObservable(
                         Api.url("evaluations"),
                         Request.Method.POST,
@@ -100,11 +97,11 @@ public class EvaluationStep3Fragment extends Fragment {
         return view;
     }
     public void update(){
-        vLecture.setText(Evaluation.getInstance().getLectureTitle());
-        vProfessor.setText(Evaluation.getInstance().getProfessorName());
-        vScoreOverall.setRating(Evaluation.getInstance().getScoreOverall());
-        vScoreSatisfaction.setProgress(Evaluation.getInstance().getScoreSatifaction());
-        vScoreEasiness.setProgress(Evaluation.getInstance().getScoreEasiness());
-        vScoreLectureQuality.setProgress(Evaluation.getInstance().getScoreLectureQuality());
+        vLecture.setText(EvaluationForm.getInstance().getLectureTitle());
+        vProfessor.setText(EvaluationForm.getInstance().getProfessorName());
+        vScoreOverall.setRating(EvaluationForm.getInstance().getScoreOverall());
+        vScoreSatisfaction.setProgress(EvaluationForm.getInstance().getScoreSatifaction());
+        vScoreEasiness.setProgress(EvaluationForm.getInstance().getScoreEasiness());
+        vScoreLectureQuality.setProgress(EvaluationForm.getInstance().getScoreLectureQuality());
     }
 }

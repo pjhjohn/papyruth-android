@@ -13,19 +13,15 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.montserrat.app.activity.MainActivity;
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
+import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.request.Api;
-import com.montserrat.utils.request.RxVolley;
+import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.validator.RxValidator;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,10 +29,12 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -55,6 +53,7 @@ public class SignUpStep2Fragment extends Fragment {
     @InjectView (R.id.gender) protected RadioGroup genderRadioGroup;
     @InjectView (R.id.entrance) protected Spinner entranceSpinner;
     @InjectView (R.id.submit) protected Button submit;
+    @InjectView (R.id.progress) protected View progress;
 
     private CompositeSubscription subscriptions;
 
@@ -90,35 +89,50 @@ public class SignUpStep2Fragment extends Fragment {
             })
         );
 
-        this.subscriptions.add( ViewObservable
-            .clicks(this.submit)
-            .flatMap( unused -> {
-                User.getInstance().setEmail(email.getText().toString());
-                User.getInstance().setRealname(realname.getText().toString());
-                User.getInstance().setNickName(nickname.getText().toString());
-                User.getInstance().setGenderIsBoy(((RadioButton) this.genderRadioGroup.findViewById(genderRadioGroup.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
-                User.getInstance().setEntranceYear((Integer) entranceSpinner.getSelectedItem());
-                JSONObject params = User.getInstance().getData();
-                try { params.putOpt("password", this.password.getText().toString()); }
-                catch (JSONException e) { e.printStackTrace(); }
-                return RxVolley.createObservable(Api.url("users/sign_up"), Request.Method.POST, params);
-            })
-            .subscribe(response -> {
-                switch (response.optInt("status")) {
-                    case 200:
-                        if (response.optBoolean("success")) {
-                            User.getInstance().setAccessToken(response.optString("access_token", null));
-                            AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.optString("access_token", null));
-                            SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
-                            SignUpStep2Fragment.this.getActivity().finish();
-                        } else {
-                            // TODO : Failed to Signup - Email Duplication or something...
-                        } break;
-                    default : Timber.e("Unexpected Status code : %d - Needs to be implemented", response.optInt("status"));
-                }
-            })
-        );
+        this.subscriptions.add(ViewObservable.clicks(this.submit).subscribe(unused -> register()));
         return view;
+    }
+
+    private void register () {
+        this.progress.setVisibility(View.VISIBLE);
+        this.subscriptions.add(
+            RetrofitApi.getInstance().signup(
+                this.email.getText().toString(),
+                this.password.getText().toString(),
+                this.realname.getText().toString(),
+                this.nickname.getText().toString(),
+                ((RadioButton) this.genderRadioGroup.findViewById(genderRadioGroup.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)),
+                User.getInstance().getUniversityId(),
+                (Integer) entranceSpinner.getSelectedItem()
+            )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                response -> {
+                    this.progress.setVisibility(View.GONE);
+                    if (response.success) {
+                        User.getInstance().update(response.user, response.access_token);
+                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+                        SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
+                        SignUpStep2Fragment.this.getActivity().finish();
+                    } else {
+                        // TODO : Failed to Signup - Email Duplication or something...
+                    }
+                },
+                error -> {
+                    this.progress.setVisibility(View.GONE);
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            case 403:
+                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        }
+                    }
+                }
+            )
+        );
     }
 
     @Override public void onDestroyView() {

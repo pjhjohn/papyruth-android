@@ -3,7 +3,6 @@ package com.montserrat.app.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,13 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
-import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.R;
+import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -34,7 +32,7 @@ public class EvaluationStep2Fragment extends Fragment {
     @InjectView(R.id.score_easiness) protected SeekBar vScoreEasiness;
     @InjectView(R.id.score_lecture_quality) protected SeekBar vScoreLectureQuality;
 
-    private Evaluation eval;
+    private EvaluationForm eval;
 
     @Override
     public void onAttach(Activity activity) {
@@ -64,15 +62,15 @@ public class EvaluationStep2Fragment extends Fragment {
     }
     public void next(){
         EvaluationStep3Fragment nextStep = (EvaluationStep3Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP3);
-        Evaluation.getInstance().setScoreOverall((int)vScoreOverall.getRating());
-        Evaluation.getInstance().setScoreSatifaction(vScoreSatisfaction.getProgress());
-        Evaluation.getInstance().setScoreEasiness(vScoreEasiness.getProgress());
-        Evaluation.getInstance().setScoreLectureQuality(vScoreLectureQuality.getProgress());
+        EvaluationForm.getInstance().setScoreOverall((int) vScoreOverall.getRating());
+        EvaluationForm.getInstance().setScoreSatifaction(vScoreSatisfaction.getProgress());
+        EvaluationForm.getInstance().setScoreEasiness(vScoreEasiness.getProgress());
+        EvaluationForm.getInstance().setScoreLectureQuality(vScoreLectureQuality.getProgress());
         nextStep.update();
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
     }
     public void update(){
-        vLecture.setText(Evaluation.getInstance().getLectureTitle());
-        vProfessor.setText(Evaluation.getInstance().getProfessorName());
+        vLecture.setText(EvaluationForm.getInstance().getLectureTitle());
+        vProfessor.setText(EvaluationForm.getInstance().getProfessorName());
     }
 }

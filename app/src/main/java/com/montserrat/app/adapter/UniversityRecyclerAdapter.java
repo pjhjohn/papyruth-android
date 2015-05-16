@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.montserrat.app.R;
+import com.montserrat.app.model.University;
 import com.montserrat.utils.etc.SquareImageView;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -21,14 +23,14 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     public static final class Type {
         public static final int ITEM = 1;
     }
-    public static UniversityRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
+    public static UniversityRecyclerAdapter newInstance(List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
         return new UniversityRecyclerAdapter(initItemList, listener, fragment);
     }
 
     private static RecyclerViewClickListener itemListener;
     private static Fragment fragment;
-    private List<Holder.Data> items;
-    private UniversityRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
+    private List<University> items;
+    private UniversityRecyclerAdapter (List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
         this.items = initItemList;
         UniversityRecyclerAdapter.itemListener = listener;
         UniversityRecyclerAdapter.fragment = fragment;
@@ -46,7 +48,7 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Holder holder = (Holder) viewHolder;
-        Holder.Data item = this.items.get(position);
+        University item = this.items.get(position);
         holder.bind(item);
     }
 
@@ -78,9 +80,9 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             );
         }
 
-        public void bind(UniversityRecyclerAdapter.Holder.Data item) {
-            this.vUniversityName.setText(item.universityName);
-            Glide.with(fragment).load(item.universityImageUrl).into(this.vUniversitySquareImage);
+        public void bind(University university) {
+            this.vUniversityName.setText(university.name);
+            Picasso.with(fragment.getActivity()).load(university.image_url).into(this.vUniversitySquareImage);
         }
 
         @Override
@@ -88,17 +90,6 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             UniversityRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
-        public static class Data {
-            public String universityName;
-            public String universityDomain;
-            public String universityImageUrl;
-            public int universityId;
-            public Data(String universityName, String universityDomain, String universityImageUrl, int universityId) {
-                this.universityName = universityName;
-                this.universityDomain = universityDomain;
-                this.universityImageUrl = universityImageUrl;
-                this.universityId = universityId;
-            }
-        }
+
     }
 }

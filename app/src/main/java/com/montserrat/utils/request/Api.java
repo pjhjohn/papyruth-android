@@ -4,6 +4,7 @@ package com.montserrat.utils.request;
  * Created by pjhjohn on 2015-05-04.
  *
  */
+@Deprecated
 public class Api {
     private static Api instance = null;
     /**

@@ -8,6 +8,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
+import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.model.Evaluations;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -20,13 +22,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static HomeAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    public static HomeAdapter newInstance(List<Evaluation> initItemList, RecyclerViewClickListener listener) {
         return new HomeAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Holder.Data> items;
-    private HomeAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private List<Evaluation> items;
+    private HomeAdapter (List<Evaluation> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         HomeAdapter.itemListener = listener;
     }
@@ -45,7 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (!isPositionOfHeader(position)) {
             Holder holder = (Holder) viewHolder;
-            Holder.Data item = this.items.get(position - 1);
+            Evaluation item = this.items.get(position - 1);
             holder.bind(item);
         }
     }
@@ -100,31 +102,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new Holder(parent, vSubject, vProfessor, vRating);
         }
 
-        public void bind(HomeAdapter.Holder.Data item) {
-            this.subject.setText(item.subject);
-            this.professor.setText(item.professor);
-            this.rating.setRating(item.rating);
+        public void bind(Evaluation item) {
+            this.subject.setText(item.comment);
+            this.professor.setText(item.comment);
+            this.rating.setRating(item.point_overall);
         }
 
         @Override
         public void onClick (View view) {
             HomeAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
-        }
-
-        public static class Data {
-            public int id; // lecture id
-            public int unit; // lecture unit
-            public String code; // lecture code
-            public int university_id;
-            public String subject;
-            public String professor;
-            public float rating;
-            private Data(){}
-            public Data(String subject, String professor, float rating) {
-                this.subject = subject;
-                this.professor = professor;
-                this.rating = rating;
-            }
         }
     }
 }

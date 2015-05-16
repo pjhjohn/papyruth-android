@@ -15,7 +15,7 @@ import android.widget.EditText;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
-import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.request.Api;
@@ -34,7 +34,6 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 import static rx.android.widget.WidgetObservable.text;
 
@@ -57,7 +56,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
 
     private EvaluationAdapter.Holder.Data data;
     private List<EvaluationAdapter.Holder.Data> lectures;
-    private Evaluation eval;
+    private EvaluationForm eval;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -137,8 +136,8 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @Override
     public void recyclerViewListClicked(View view, int position) {
         EvaluationAdapter.Holder.Data data = lectures.get(position);
-        Evaluation.getInstance().setLectureTitle(data.titleText);
-        Evaluation.getInstance().setProfessorName(data.profText);
+        EvaluationForm.getInstance().setLectureTitle(data.titleText);
+        EvaluationForm.getInstance().setProfessorName(data.profText);
         EvaluationStep2Fragment nextStep = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
         nextStep.update();
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
