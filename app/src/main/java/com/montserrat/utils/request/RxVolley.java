@@ -2,6 +2,7 @@ package com.montserrat.utils.request;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.montserrat.app.AppManager;
 
@@ -50,6 +51,7 @@ public class RxVolley {
                     error -> {
                         if (!observer.isUnsubscribed()) {
                             try {
+                                Timber.d(error, new String(((VolleyError)error).networkResponse.data));
                                 observer.onNext(new JSONObject().put("status", error.networkResponse.statusCode).put("message", error.toString()));
                                 observer.onCompleted();
                             } catch (JSONException e) {

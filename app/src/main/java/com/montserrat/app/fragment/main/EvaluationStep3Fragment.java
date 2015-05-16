@@ -20,13 +20,12 @@ import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.RxVolley;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Observable;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
@@ -72,9 +71,9 @@ public class EvaluationStep3Fragment extends Fragment {
 
         vScoreOverall.setStepSize((float)1);
         vScoreOverall.setMax(10);
-        vScoreSatisfaction.setMax(5);
-        vScoreEasiness.setMax(5);
-        vScoreLectureQuality.setMax(5);
+        vScoreSatisfaction.setMax(10);
+        vScoreEasiness.setMax(10);
+        vScoreLectureQuality.setMax(10);
 
 
 
@@ -84,12 +83,14 @@ public class EvaluationStep3Fragment extends Fragment {
                 Evaluation.getInstance().setDescription(this.vDescription.getText().toString());
 
                 JSONObject params = Evaluation.getInstance().getData();
-                Timber.d("--------------%s", params);
-                return RxVolley.createObservable(
+                Observable<JSONObject> ob = RxVolley.createObservable(
                         Api.url("evaluations"),
                         Request.Method.POST,
                         User.getInstance().getAccessToken(),
                         params);
+                Timber.d("--------------%s", params);
+
+                return ob;
             })
             .subscribe(
                 response -> Timber.d("response : %s", response),
