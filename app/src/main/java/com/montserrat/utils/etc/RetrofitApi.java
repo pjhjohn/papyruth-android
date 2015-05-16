@@ -1,5 +1,9 @@
 package com.montserrat.utils.etc;
 
+import com.montserrat.app.model.Autocomplete;
+import com.montserrat.app.model.Dummy_lecture;
+import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.Evaluations;
 import com.montserrat.app.model.Lectures;
 import com.montserrat.app.model.Statistics;
@@ -61,6 +65,11 @@ public class RetrofitApi {
         Observable<User.ResponseData> userinfo(
             @Header ("Authorization") String authorization
         );
+        @GET("/lectures/dummy_autocomplete")
+        Observable<Dummy_lecture.lectures> eAuto(
+            @Header("Authorization") String authorization
+//          ,@Query("query") String query //unused yet.
+        );
 
         @POST("/users/sign_in")
         Observable<User.ResponseData> signin(
@@ -77,6 +86,17 @@ public class RetrofitApi {
             @Query("is_boy") Boolean is_boy,
             @Query("university_id") Integer university_id,
             @Query("entrance_year") Integer entrance_year
+        );
+
+        @POST("/evaluations")
+        Observable<EvaluationForm> evaluationSend(
+            @Query("Authorization") String authorization,
+            @Query("course_id") int course_id,
+            @Query("score_overall") int score_overall,
+            @Query("score_satisfaction") int score_satisfaction,
+            @Query("score_easiness") int score_easiness,
+            @Query("score_lecture_quality") int score_lecture_quality,
+            @Query("description") String description
         );
     }
 

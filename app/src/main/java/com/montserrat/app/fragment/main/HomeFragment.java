@@ -118,7 +118,8 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, Evaluation> 
                 .subscribe(evaluations -> {
                         this.refresh.setRefreshing(false);
                         this.items.clear();
-                        this.items.addAll(evaluations);
+                        if( evaluations != null)
+                            this.items.addAll(evaluations);
                         this.adapter.notifyDataSetChanged();
                     }
                 )
@@ -135,7 +136,8 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, Evaluation> 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
                     this.progress.setVisibility(View.GONE);
-                    this.items.addAll(evaluations);
+                    if( evaluations != null)
+                        this.items.addAll(evaluations);
                     this.adapter.notifyDataSetChanged();
                 })
         );

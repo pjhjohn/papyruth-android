@@ -11,12 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
+import com.montserrat.app.model.Dummy_lecture;
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.User;
+import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.request.Api;
 import com.montserrat.utils.request.RxVolley;
@@ -31,9 +34,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static rx.android.widget.WidgetObservable.text;
 
@@ -54,8 +59,8 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.result_lecture) protected RecyclerView vLectureList;
     @InjectView(R.id.btn_next) protected Button btnNext;
 
-    private EvaluationAdapter.Holder.Data data;
-    private List<EvaluationAdapter.Holder.Data> lectures;
+    private Dummy_lecture.lecture data;
+    private List<Dummy_lecture.lecture> lectures;
     private EvaluationForm eval;
     private CompositeSubscription subscriptions;
 
@@ -87,41 +92,33 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(onTextChangeEvent -> {
-                    try {
-                        return RxVolley.createObservable(Api.url("lectures/dummy_autocomplete"), User.getInstance().getAccessToken(), new JSONObject().put("query", onTextChangeEvent.text().toString()));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
+                    return RetrofitApi.getInstance().eAuto(
+                            User.getInstance().getAccessToken()
+//                                    ,onTextChangeEvent.text().toString()
+                    );
                 })
-                .filter(response -> response != null) // JSONException
-                .map(response -> response.optJSONArray("lectures"))
-                .filter(jsonarray -> jsonarray != null) // Wrong Data
-                .map(jsonarray -> {
-                    lectures = new ArrayList<>();
-                    for (int i = 0; i < jsonarray.length(); i++){
-                        try {
-                            data = new EvaluationAdapter.Holder.Data(
-                                    ((JSONObject)jsonarray.opt(i)).getString("name"),
-                                    "prof",
-                                    ((JSONObject)jsonarray.opt(i)).getInt("id"),
-                                    0
-                            );
-                            lectures.add(data);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return lectures;
+                .map(response -> {
+                    return response.lectures;
+//                            return response;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     lectures -> {
+                        this.lectures = lectures;
                         EvaluationAdapter eAdapter = new EvaluationAdapter(lectures, this);
                         this.vLectureList.setAdapter(eAdapter);
 //                        this.lectureAdapter.notifyDataSetChanged();
-                    }, Throwable::printStackTrace
+                    },
+                    error -> {
+                        if (error instanceof RetrofitError) {
+                            switch (((RetrofitError) error).getResponse().getStatus()) {
+
+                                default:
+                                    Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            }
+                        }
+                    }
                 )
         );
     }
@@ -135,9 +132,9 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        EvaluationAdapter.Holder.Data data = lectures.get(position);
-        EvaluationForm.getInstance().setLectureTitle(data.titleText);
-        EvaluationForm.getInstance().setProfessorName(data.profText);
+        Dummy_lecture.lecture data = lectures.get(position);
+        EvaluationForm.getInstance().setLectureTitle(data.name);
+        EvaluationForm.getInstance().setProfessorName(data.name);
         EvaluationStep2Fragment nextStep = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
         nextStep.update();
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);

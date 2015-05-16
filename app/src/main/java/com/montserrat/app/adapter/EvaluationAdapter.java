@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
+import com.montserrat.app.model.Dummy_lecture;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -24,13 +25,13 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final class Type {
         public static final int ITEM = 1;
     }
-    public static EvaluationAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    public static EvaluationAdapter newInstance(List<Dummy_lecture.lecture> initItemList, RecyclerViewClickListener listener) {
         return new EvaluationAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Holder.Data> items;
-    public EvaluationAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private List<Dummy_lecture.lecture> items;
+    public EvaluationAdapter (List<Dummy_lecture.lecture> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         EvaluationAdapter.itemListener = listener;
     }
@@ -47,7 +48,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Holder holder = (Holder) viewHolder;
-        Holder.Data item = this.items.get(position);
+        Dummy_lecture.lecture item = this.items.get(position);
         holder.bind(item);
     }
 
@@ -81,9 +82,9 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             );
         }
 
-        public void bind(Data item) {
-            this.vTitleText.setText(item.titleText);
-            this.vProfText.setText(item.profText);
+        public void bind(Dummy_lecture.lecture item) {
+            this.vTitleText.setText(item.name);
+            this.vProfText.setText("prof");
         }
 
         @Override
@@ -91,18 +92,5 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             EvaluationAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
-
-        public static class Data {
-            public String titleText;
-            public String profText;
-            public int title_id;
-            public int prof_id;
-            public Data(String titleText, String profText, int title_id, int prof_id) {
-                this.titleText = titleText;
-                this.profText = profText;
-                this.title_id = title_id;
-                this.prof_id = prof_id;
-            }
-        }
     }
 }
