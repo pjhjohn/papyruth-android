@@ -17,6 +17,7 @@ import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.Statistics;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
+import com.montserrat.utils.viewpager.OnPageFocus;
 import com.montserrat.utils.viewpager.ViewPagerController;
 import com.squareup.picasso.Picasso;
 
@@ -36,7 +37,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class LoadingFragment extends Fragment {
+public class LoadingFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
     private ViewPagerController pagerController;
     @Override
@@ -102,6 +103,11 @@ public class LoadingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if(this.getUserVisibleHint()) onPageFocused();
+    }
+
+    @Override
+    public void onPageFocused () {
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         subscriptions.add(RetrofitApi.getInstance().userinfo(User.getInstance().getAccessToken()).subscribe(
             response -> {
