@@ -21,10 +21,10 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.validator.RxValidator;
-import com.montserrat.utils.viewpager.OnPageFocus;
-import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.rx.RxValidator;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
+import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,8 +41,8 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.montserrat.utils.validator.RxValidator.isValidRadioButton;
-import static com.montserrat.utils.validator.RxValidator.toString;
+import static com.montserrat.utils.support.rx.RxValidator.isValidRadioButton;
+import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-12.

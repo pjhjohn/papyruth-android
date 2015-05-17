@@ -81,17 +81,6 @@ public class FragmentFactory {
         return fragment;
     }
 
-    public static Fragment create(Type type, int position, JSONObject initializer) {
-        Fragment fragment = FragmentFactory.create(type, position);
-        if(fragment == null) return null;
-
-        /* Set Data in JSONObject which needs to be requested */
-        Bundle bundle = fragment.getArguments();
-        bundle.putString(AppConst.Resource.INITIALIZER, initializer.toString()); // TODO : Parse into JSONObject at Fragment-side
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     public static Fragment create(Type type, int position, Bundle bundleToUpdate) {
         Fragment fragment = FragmentFactory.create(type, position);
         if(fragment == null) return null;

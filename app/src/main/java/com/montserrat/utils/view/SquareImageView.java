@@ -1,4 +1,4 @@
-package com.montserrat.utils.etc;
+package com.montserrat.utils.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

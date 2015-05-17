@@ -3,8 +3,8 @@ package com.montserrat.app;
 import android.app.Application;
 
 import com.montserrat.app.model.User;
-import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.etc.RetrofitLogger;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.RetrofitLogger;
 import com.squareup.picasso.Picasso;
 
 import retrofit.RestAdapter;
@@ -28,7 +28,7 @@ public class MontserratApp extends Application {
 
         /* Retrofit Api */
         new RetrofitApi.Builder()
-            .setRoot("mont.izz.kr:3001")
+            .setRoot(AppConst.API_ROOT)
             .setVersion(AppConst.API_VERSION)
             .enableSSL(false)
             .setLogLevel(RestAdapter.LogLevel.FULL)

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     card_view:cardCornerRadius="0dp">
-    <com.montserrat.utils.etc.SquareImageView
+    <com.montserrat.utils.view.SquareImageView
         android:id="@+id/university_item_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

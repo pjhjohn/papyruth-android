@@ -1,4 +1,4 @@
-package com.montserrat.utils.etc;
+package com.montserrat.utils.support.retrofit;
 
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.Evaluations;

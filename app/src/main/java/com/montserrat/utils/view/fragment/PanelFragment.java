@@ -1,8 +1,7 @@
-package com.montserrat.utils.request;
+package com.montserrat.utils.view.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.support.v7.widget.Toolbar;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.fragment.nav.NavFragment;

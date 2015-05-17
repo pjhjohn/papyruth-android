@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.utils.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 

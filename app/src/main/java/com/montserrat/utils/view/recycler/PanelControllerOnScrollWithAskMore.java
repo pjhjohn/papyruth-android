@@ -1,4 +1,4 @@
-package com.montserrat.utils.recycler;
+package com.montserrat.utils.view.recycler;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 /**
  * Created by pjhjohn on 2015-04-25.
  */
-public abstract class PanelControllerOnScrollWithAskMore extends PanelControllerOnScroll {
+public abstract class PanelControllerOnScrollWithAskMore extends PanelControllerOnScroll implements RecyclerViewAskMoreListener {
     /* ItemCount to the end of current list. Triggers onAskMore when the count is lower than following constant. */
     private int numOfItemsLeftToAskMore;
     public PanelControllerOnScrollWithAskMore(int numOfItemsLeftToAskMore) {
@@ -40,6 +40,4 @@ public abstract class PanelControllerOnScrollWithAskMore extends PanelController
             onAskMore(recyclerView.getAdapter().getItemCount(), numOfItemsLeftToAskMore, iItemVisibleLast);
         }
     }
-
-    public abstract void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition);
 }

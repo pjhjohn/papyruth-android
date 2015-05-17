@@ -1,19 +1,17 @@
-package com.montserrat.utils.request;
+package com.montserrat.utils.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.melnykov.fab.FloatingActionButton;
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
-import com.montserrat.utils.recycler.PanelControllerOnScrollWithAskMore;
-import com.montserrat.utils.recycler.RecyclerViewClickListener;
+import com.montserrat.app.R;
+import com.montserrat.utils.view.recycler.PanelControllerOnScrollWithAskMore;
+import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +35,10 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
         this.hideFloatingActionButtonOnScroll = true;
     }
 
-//    final int toolbarHeight = this.vToolbar == null? 0 : this.vToolbar.getHeight();
-//    if(this.vToolbar != null) this.swipeRefreshView.setProgressViewOffset(false, PX2DP(toolbarHeight), PX2DP(toolbarHeight + 80));
     protected Observable<Boolean> getRefreshObservable(SwipeRefreshLayout view) {
-        return Observable.create( observer -> {
-            view.setOnRefreshListener(() -> {
-                observer.onNext(true);
-            });
-        });
+        return Observable.create( observer -> view.setOnRefreshListener(() -> observer.onNext(true)));
     }
+
     protected void setupSwipeRefresh(SwipeRefreshLayout view, int offset) {
         view.setProgressViewOffset(false, offset, offset + 80); // TODO : avoid hard-coding
         view.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
@@ -93,8 +86,4 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
     protected abstract ADAPTER getAdapter (List<ITEM> items);
 
     protected abstract RecyclerView.LayoutManager getRecyclerViewLayoutManager ();
-
-    public static int PX2DP(int pixels, Context context){
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pixels, context.getResources().getDisplayMetrics());
-    }
 }

@@ -18,9 +18,9 @@ import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.Lecture;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.recycler.RecyclerViewClickListener;
-import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.montserrat.utils.validator.RxValidator.toString;
+import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-26.

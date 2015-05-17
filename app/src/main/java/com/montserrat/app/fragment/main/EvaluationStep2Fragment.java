@@ -14,8 +14,8 @@ import android.widget.SeekBar;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationForm;
-import com.montserrat.utils.viewpager.OnPageFocus;
-import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
+import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

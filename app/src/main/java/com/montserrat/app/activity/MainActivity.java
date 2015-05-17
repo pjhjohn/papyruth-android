@@ -17,9 +17,9 @@ import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.fragment.FragmentFactory;
 import com.montserrat.app.fragment.nav.NavFragment;
-import com.montserrat.utils.viewpager.FlexibleViewPager;
-import com.montserrat.utils.viewpager.ViewPagerController;
-import com.montserrat.utils.viewpager.ViewPagerManager;
+import com.montserrat.utils.view.viewpager.FlexibleViewPager;
+import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.ViewPagerManager;
 
 import java.util.ArrayList;
 import java.util.List;

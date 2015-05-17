@@ -1,4 +1,4 @@
-package com.montserrat.utils.validator;
+package com.montserrat.utils.support.rx;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,6 @@ import rx.Observable;
 import rx.android.view.ViewObservable;
 import rx.android.widget.OnTextChangeEvent;
 import rx.functions.Func1;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-06.

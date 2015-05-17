@@ -15,9 +15,9 @@ import android.widget.Toast;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.etc.RetrofitApi;
-import com.montserrat.utils.viewpager.OnPageFocus;
-import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
+import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -90,8 +90,10 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 response -> {
-                    if (response.success) Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_success), Toast.LENGTH_LONG).show();
-                    else Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
+                    if (response.success)
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_success), Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
                 },
                 error -> {
                     if (error instanceof RetrofitError) {

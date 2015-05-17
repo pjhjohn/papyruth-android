@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CourseRecyclerAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
-import com.montserrat.utils.request.RecyclerViewFragment;
-import com.montserrat.utils.viewpager.ViewPagerController;
+import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
 

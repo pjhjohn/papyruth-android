@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.montserrat.app.R;
 import com.montserrat.app.model.University;
-import com.montserrat.utils.etc.SquareImageView;
-import com.montserrat.utils.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.SquareImageView;
+import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

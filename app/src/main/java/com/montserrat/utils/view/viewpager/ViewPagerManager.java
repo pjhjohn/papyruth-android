@@ -1,4 +1,4 @@
-package com.montserrat.utils.viewpager;
+package com.montserrat.utils.view.viewpager;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

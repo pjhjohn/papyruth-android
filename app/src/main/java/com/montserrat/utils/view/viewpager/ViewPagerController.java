@@ -1,4 +1,4 @@
-package com.montserrat.utils.viewpager;
+package com.montserrat.utils.view.viewpager;
 
 /**
  * Created by pjhjohn on 2015-04-17.

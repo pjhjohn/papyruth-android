@@ -1,8 +1,8 @@
-package com.montserrat.utils.viewpager;
+package com.montserrat.utils.view.viewpager;
 
 /**
  * Created by pjhjohn on 2015-05-16.
  */
 public interface OnPageFocus {
-    public void onPageFocused();
+    void onPageFocused ();
 }

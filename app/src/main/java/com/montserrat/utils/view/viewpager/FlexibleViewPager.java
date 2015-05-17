@@ -1,4 +1,4 @@
-package com.montserrat.utils.viewpager;
+package com.montserrat.utils.view.viewpager;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
