@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.User;
@@ -21,6 +21,7 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -37,14 +38,14 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
         this.pagerController = (ViewPagerController) activity;
     }
 
-    @InjectView(R.id.autotext_lecture) protected EditText vLecture;
-    @InjectView(R.id.autotext_professor) protected EditText vProfessor;
-    @InjectView(R.id.score_overall) protected RatingBar vScoreOverall;
-    @InjectView(R.id.score_satisfaction) protected SeekBar vScoreSatisfaction;
-    @InjectView(R.id.score_easiness) protected SeekBar vScoreEasiness;
-    @InjectView(R.id.score_lecture_quality) protected SeekBar vScoreLectureQuality;
-    @InjectView(R.id.description) protected EditText vDescription;
-    @InjectView(R.id.submit) protected Button vSubmit;
+    @InjectView(R.id.lecture) protected EditText lecture;
+    @InjectView(R.id.professor) protected EditText professor;
+    @InjectView(R.id.point_overall) protected RatingBar pointOverall;
+    @InjectView(R.id.point_gpa_satisfaction) protected SeekBar pointGpaSatisfaction;
+    @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
+    @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
+    @InjectView(R.id.comment) protected EditText comment;
+    @InjectView(R.id.submit) protected Button submit;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -54,38 +55,48 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
         this.subscriptions = new CompositeSubscription();
 
         /* View Initialization */
-        vLecture.setEnabled(false);
-        vProfessor.setEnabled(false);
-        vScoreOverall.setEnabled(false);
-        vScoreSatisfaction.setEnabled(false);
-        vScoreEasiness.setEnabled(false);
-        vScoreLectureQuality.setEnabled(false);
+        lecture.setEnabled(false);
+        professor.setEnabled(false);
+        pointOverall.setEnabled(false);
+        pointGpaSatisfaction.setEnabled(false);
+        pointEasiness.setEnabled(false);
+        pointClarity.setEnabled(false);
 
-        vScoreOverall.setStepSize((float) 1);
-        vScoreOverall.setMax(10);
-        vScoreSatisfaction.setMax(10);
-        vScoreEasiness.setMax(10);
-        vScoreLectureQuality.setMax(10);
+        pointOverall.setStepSize((float) 1);
+        pointOverall.setMax(10);
+        pointGpaSatisfaction.setMax(10);
+        pointEasiness.setMax(10);
+        pointClarity.setMax(10);
 
         /* Event Binding */
         this.subscriptions.add( ViewObservable
-            .clicks(vSubmit)
+            .clicks(submit)
             .flatMap(unused -> {
-                EvaluationForm.getInstance().setDescription(this.vDescription.getText().toString());
+                EvaluationForm.getInstance().setComment(this.comment.getText().toString());
                 Timber.d("-------------%s", EvaluationForm.getInstance().toString());
                 return RetrofitApi.getInstance().evaluation(
                         User.getInstance().getAccessToken(),
                         EvaluationForm.getInstance().getCourseId(),
-                        EvaluationForm.getInstance().getScoreOverall(),
-                        EvaluationForm.getInstance().getScoreSatifaction(),
-                        EvaluationForm.getInstance().getScoreEasiness(),
-                        EvaluationForm.getInstance().getScoreLectureQuality(),
-                        EvaluationForm.getInstance().getDescription().toString()
+                        EvaluationForm.getInstance().getPointOverall(),
+                        EvaluationForm.getInstance().getPointGpaSatisfaction(),
+                        EvaluationForm.getInstance().getPointEasiness(),
+                        EvaluationForm.getInstance().getPointClarity(),
+                        EvaluationForm.getInstance().getComment()
                 );
             })
             .subscribe(
-                response -> Timber.d("response : %s", response.toString()),
-                Throwable::printStackTrace
+                response -> {
+                    if(response.success) Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_success), Toast.LENGTH_LONG).show();
+                    else Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
+                },
+                error -> {
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            default:
+                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        }
+                    }
+                }
             )
         );
         return view;
@@ -100,11 +111,11 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
-        vLecture.setText(EvaluationForm.getInstance().getLectureTitle());
-        vProfessor.setText(EvaluationForm.getInstance().getProfessorName());
-        vScoreOverall.setRating(EvaluationForm.getInstance().getScoreOverall());
-        vScoreSatisfaction.setProgress(EvaluationForm.getInstance().getScoreSatifaction());
-        vScoreEasiness.setProgress(EvaluationForm.getInstance().getScoreEasiness());
-        vScoreLectureQuality.setProgress(EvaluationForm.getInstance().getScoreLectureQuality());
+        lecture.setText(EvaluationForm.getInstance().getLectureName());
+        professor.setText(EvaluationForm.getInstance().getProfessorName());
+        pointOverall.setRating(EvaluationForm.getInstance().getPointOverall());
+        pointGpaSatisfaction.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
+        pointEasiness.setProgress(EvaluationForm.getInstance().getPointEasiness());
+        pointClarity.setProgress(EvaluationForm.getInstance().getPointClarity());
     }
 }

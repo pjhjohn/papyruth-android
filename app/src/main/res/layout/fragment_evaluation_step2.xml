@@ -10,18 +10,18 @@
         android:layout_gravity="center"
         android:orientation="vertical">
         <AutoCompleteTextView
-            android:id="@+id/autotext_lecture"
+            android:id="@+id/lecture"
             android:hint="@string/hint_lecture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <AutoCompleteTextView
-            android:id="@+id/autotext_professor"
+            android:id="@+id/professor"
             android:hint="@string/hint_professor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <RatingBar
-            android:id="@+id/score_overall"
+            android:id="@+id/point_overall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:isIndicator="false"
@@ -30,17 +30,17 @@
             android:rating="0"/>
 
         <SeekBar
-            android:id="@+id/score_satisfaction"
+            android:id="@+id/point_gpa_satisfaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <SeekBar
-            android:id="@+id/score_easiness"
+            android:id="@+id/point_easiness"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <SeekBar
-            android:id="@+id/score_lecture_quality"
+            android:id="@+id/point_clarity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

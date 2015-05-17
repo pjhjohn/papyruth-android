@@ -1,127 +1,82 @@
 package com.montserrat.app.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import timber.log.Timber;
-
 /**
  * Created by pjhjohn on 2015-04-26.
  */
 public class EvaluationForm {
     private static EvaluationForm instance = null;
-
     public static synchronized EvaluationForm getInstance() {
         if( EvaluationForm.instance == null ) EvaluationForm.instance = new EvaluationForm();
         return EvaluationForm.instance;
     }
 
     /* STEP 1*/
-    private CharSequence lectureTitle;
-    private CharSequence professorName;
-    private Integer course_id;
+    private String lectureName;
+    private String professorName;
+    private Integer courseId;
 
     /* STEP 2 */
-    private Integer scoreOverall;
-    private Integer scoreSatifaction;
-    private Integer scoreEasiness;
-    private Integer scoreLectureQuality;
-
-    public CharSequence getLectureTitle() { return lectureTitle; }
-    public CharSequence getProfessorName() { return professorName; }
-    public Integer getScoreOverall() { return scoreOverall; }
-    public Integer getCourseId() { return course_id; }
-    public Integer getScoreSatifaction() { return scoreSatifaction; }
-    public Integer getScoreEasiness() { return scoreEasiness; }
-    public Integer getScoreLectureQuality() {  return scoreLectureQuality;  }
-    public CharSequence getDescription() {  return description;  }
-    public JSONObject getData(){
-        JSONObject data = new JSONObject();
-        try {
-            data.put("course_id", 1)
-                    .put("score_overall", this.scoreOverall)
-                    .put("score_satisfaction", this.scoreSatifaction)
-                    .put("score_easiness", this.scoreEasiness)
-                    .put("score_lecture_quality", this.scoreLectureQuality)
-                    .put("description", this.description);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return data;
-    }
+    private Integer pointOverall;
+    private Integer pointGpaSatisfaction;
+    private Integer pointEasiness;
+    private Integer pointClarity;
 
     /* STEP 3 */
-    private CharSequence description;
+    private String comment;
+
+    public String  getLectureName () { return lectureName; }
+    public String  getProfessorName() { return professorName; }
+    public Integer getCourseId() { return courseId; }
+    public Integer getPointOverall () { return pointOverall; }
+    public Integer getPointGpaSatisfaction () { return pointGpaSatisfaction; }
+    public Integer getPointEasiness () { return pointEasiness; }
+    public Integer getPointClarity () {  return pointClarity;  }
+    public String  getComment () {  return comment;  }
+
+    public void setLectureName (String lectureName) { this.lectureName = lectureName; }
+    public void setProfessorName (String professorName) { this.professorName = professorName; }
+    public void setCourseId (Integer courseId) { this.courseId = courseId; }
+    public void setPointOverall (Integer pointOverall) { this.pointOverall = pointOverall; }
+    public void setPointGpaSatisfaction (Integer pointGpaSatisfaction) { this.pointGpaSatisfaction = pointGpaSatisfaction; }
+    public void setPointEasiness (Integer pointEasiness) { this.pointEasiness = pointEasiness; }
+    public void setPointClarity (Integer pointClarity) { this.pointClarity = pointClarity; }
+    public void setComment (String comment) { this.comment = comment; }
 
     public void clear() {
-        this.lectureTitle       = null;
-        this.professorName      = null;
-        this.course_id          = null;
-        this.scoreOverall       = null;
-        this.scoreSatifaction   = null;
-        this.scoreEasiness      = null;
-        this.scoreLectureQuality= null;
-        this.description        = null;
-    }
-
-
-    public void setLectureTitle (CharSequence lectureTitle) {
-        this.lectureTitle = lectureTitle;
-    }
-
-    public void setProfessorName (CharSequence professorName) {
-        this.professorName = professorName;
-    }
-    public void setCourseId (Integer course_id) {
-        this.course_id = course_id;
-    }
-
-    public void setScoreOverall (Integer scoreOverall) {
-        this.scoreOverall = scoreOverall;
-    }
-
-    public void setScoreSatifaction (Integer scoreSatifaction) {
-        this.scoreSatifaction = scoreSatifaction;
-    }
-
-    public void setScoreEasiness (Integer scoreEasiness) {
-        this.scoreEasiness = scoreEasiness;
-    }
-
-    public void setScoreLectureQuality (Integer scoreLectureQuality) {
-        this.scoreLectureQuality = scoreLectureQuality;
-    }
-
-    public void setDescription (CharSequence description) {
-        this.description = description;
+        this.lectureName            = null;
+        this.professorName          = null;
+        this.courseId               = null;
+        this.pointOverall           = null;
+        this.pointGpaSatisfaction   = null;
+        this.pointEasiness          = null;
+        this.pointClarity           = null;
+        this.comment                = null;
     }
 
     /* TODO : link to Viewpager last page memorization */
     public int getCompletionLevel() {
         /* STEP 1 */
-        if ( this.lectureTitle == null || this.professorName == null ) return 0;
+        if ( this.lectureName == null || this.professorName == null ) return 0;
         /* STEP 2 */
-        if ( this.scoreOverall == null || this.scoreSatifaction == null || this.scoreEasiness == null || this.scoreLectureQuality == null ) return 1;
+        if ( this.pointOverall == null || this.pointGpaSatisfaction == null || this.pointEasiness == null || this.pointClarity == null ) return 1;
         /* STEP 3*/
-        if ( this.description == null ) return 2;
+        if ( this.comment == null ) return 2;
         return 3;
     }
 
     @Override
     public String toString() {
-        return String.format(" <title : %s>\n <professor: %s>\n < courseId: %d>\n <Overall : %d>\n <Satisfaction : %d>\n " +
-                "<Easiness : %d>\n <clarity : %d>\n <commnet : %s>"
-                , lectureTitle, professorName, course_id, scoreOverall,scoreSatifaction, scoreEasiness, scoreLectureQuality, description);
+        return String.format("<lecture:%s> <professor:%s> <course-id:%d> <overall:%d> <gpa satisfaction:%d> <easiness:%d> <clarity:%d> <comment:%s>",
+            lectureName, professorName, courseId, pointOverall, pointGpaSatisfaction, pointEasiness, pointClarity, comment);
     }
 
     public class ResponseData{
-        public Evaluation evaluation;
-        public String success;
+        public Boolean success;
         public Integer evaluation_id;
 
         @Override
         public String toString() {
-            return "success : "+success+" , evaluation_id : "+ evaluation_id;
+            return String.format("%s with evaluation_id = #%d", success? "succeed" : "failed", evaluation_id);
         }
     }
 }

@@ -62,8 +62,8 @@ public class RetrofitApi {
         );
         @GET("/lectures/dummy_autocomplete")
         Observable<Lectures> lecturelist(
-            @Header("Authorization") String authorization
-//          ,@Query("query") String query //unused yet.
+            @Header("Authorization") String authorization,
+            @Query("query") String query
         );
 
         @POST("/users/sign_in")
@@ -85,13 +85,13 @@ public class RetrofitApi {
 
         @POST("/evaluations")
         Observable<EvaluationForm.ResponseData> evaluation(
-                @Header("Authorization") String authorization,
-                @Query("course_id") Integer course_id,
-                @Query("point_overall") Integer score_overall,
-                @Query("point_gpa_satisfaction") Integer score_satisfaction,
-                @Query("point_easiness") Integer score_easiness,
-                @Query("point_clarity") Integer score_lecture_quality,
-                @Query("comment") String description
+            @Header("Authorization") String authorization,
+            @Query("course_id") Integer course_id,
+            @Query("point_overall") Integer point_overall,
+            @Query("point_gpa_satisfaction") Integer point_gpa_satisfaction,
+            @Query("point_easiness") Integer point_easiness,
+            @Query("point_clarity") Integer point_clarity,
+            @Query("comment") String comment
         );
     }
 

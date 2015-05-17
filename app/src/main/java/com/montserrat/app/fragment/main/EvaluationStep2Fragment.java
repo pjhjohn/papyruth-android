@@ -33,13 +33,13 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
         this.pagerController = (ViewPagerController) activity;
     }
 
-    @InjectView(R.id.autotext_lecture) protected EditText vLecture;
-    @InjectView(R.id.autotext_professor) protected EditText vProfessor;
-    @InjectView(R.id.score_overall) protected RatingBar vScoreOverall;
-    @InjectView(R.id.score_satisfaction) protected SeekBar vScoreSatisfaction;
-    @InjectView(R.id.score_easiness) protected SeekBar vScoreEasiness;
-    @InjectView(R.id.score_lecture_quality) protected SeekBar vScoreLectureQuality;
-    @InjectView(R.id.btn_next) protected Button vNext;
+    @InjectView(R.id.lecture) protected EditText lecture;
+    @InjectView(R.id.professor) protected EditText professor;
+    @InjectView(R.id.point_overall) protected RatingBar pointOverall;
+    @InjectView(R.id.point_gpa_satisfaction) protected SeekBar pointGpaSatisfaction;
+    @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
+    @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
+    @InjectView(R.id.btn_next) protected Button next;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -49,16 +49,22 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
         this.subscriptions = new CompositeSubscription();
 
         /* View Initialization */
-        vLecture.setEnabled(false);
-        vProfessor.setEnabled(false);
-        vScoreOverall.setStepSize((float) 1);
-        vScoreOverall.setMax(10);
-        vScoreSatisfaction.setMax(10);
-        vScoreEasiness.setMax(10);
-        vScoreLectureQuality.setMax(10);
+        lecture.setEnabled(false);
+        professor.setEnabled(false);
+        pointOverall.setStepSize((float) 1);
+        pointOverall.setMax(10);
+        pointGpaSatisfaction.setMax(10);
+        pointEasiness.setMax(10);
+        pointClarity.setMax(10);
 
         /* Event binding */
-        vNext.setOnClickListener(v -> next());
+        next.setOnClickListener(v -> {
+            EvaluationForm.getInstance().setPointOverall((int) pointOverall.getRating());
+            EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
+            EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
+            EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
+            this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
+        });
 
         return view;
     }
@@ -70,18 +76,9 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
-
-    public void next(){
-        EvaluationForm.getInstance().setScoreOverall((int) vScoreOverall.getRating());
-        EvaluationForm.getInstance().setScoreSatifaction(vScoreSatisfaction.getProgress());
-        EvaluationForm.getInstance().setScoreEasiness(vScoreEasiness.getProgress());
-        EvaluationForm.getInstance().setScoreLectureQuality(vScoreLectureQuality.getProgress());
-        this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
-    }
-
     @Override
     public void onPageFocused () {
-        vLecture.setText(EvaluationForm.getInstance().getLectureTitle());
-        vProfessor.setText(EvaluationForm.getInstance().getProfessorName());
+        lecture.setText(EvaluationForm.getInstance().getLectureName());
+        professor.setText(EvaluationForm.getInstance().getProfessorName());
     }
 }

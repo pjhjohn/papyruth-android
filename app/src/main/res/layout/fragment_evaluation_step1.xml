@@ -12,13 +12,13 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:weightSum="1">
         <EditText
-            android:id="@+id/autotext_lecture"
+            android:id="@+id/query"
             android:hint="@string/hint_lecture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.05"/>
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/result_lecture"
+            android:id="@+id/query_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.94" />

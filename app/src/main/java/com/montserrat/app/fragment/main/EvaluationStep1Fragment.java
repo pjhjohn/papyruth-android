@@ -22,7 +22,6 @@ import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.viewpager.ViewPagerController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -30,11 +29,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static rx.android.widget.WidgetObservable.text;
+import static com.montserrat.utils.validator.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -49,9 +49,9 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     }
 
     /* Bind Views */
-    @InjectView(R.id.autotext_lecture) protected EditText vLectureQuery;
-    @InjectView(R.id.result_lecture) protected RecyclerView vLectureList;
-    @InjectView(R.id.btn_next) protected Button btnNext;
+    @InjectView(R.id.query) protected EditText query;
+    @InjectView(R.id.query_result) protected RecyclerView queryResult;
+    @InjectView(R.id.btn_next) protected Button next;
 
     private List<Lecture> lectures;
     private CompositeSubscription subscriptions;
@@ -63,10 +63,10 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
         this.subscriptions = new CompositeSubscription();
 
         /* View Initialization */
-        this.vLectureList.setLayoutManager(this.getRecyclerViewLayoutManager());
+        this.queryResult.setLayoutManager(this.getRecyclerViewLayoutManager());
 
         /* Event Binding */
-        this.btnNext.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true));
+        this.next.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true));
         return view;
     }
 
@@ -81,27 +81,25 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         subscriptions.add(
-            text(vLectureQuery)
+            WidgetObservable.text(query)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(onTextChangeEvent -> RetrofitApi.getInstance().lecturelist(
-                        User.getInstance().getAccessToken()
-//                      ,onTextChangeEvent.text().toString()
-                ))
-                .map(response -> response.lectures )
+                .map(toString)
+                .map(queryStr -> (String) null) /* Temporarily nullify query to avoid querying */
+                .flatMap(queryStr -> RetrofitApi.getInstance().lecturelist(User.getInstance().getAccessToken(), queryStr))
+                .map(response -> response.lectures)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     lectures -> {
                         this.lectures = lectures;
                         EvaluationAdapter eAdapter = new EvaluationAdapter(lectures, this);
-                        this.vLectureList.setAdapter(eAdapter);
+                        this.queryResult.setAdapter(eAdapter);
 //                        this.lectureAdapter.notifyDataSetChanged();
                     },
                     error -> {
                         if (error instanceof RetrofitError) {
                             switch (((RetrofitError) error).getResponse().getStatus()) {
-
                                 default:
                                     Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                             }
@@ -114,7 +112,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @Override
     public void recyclerViewListClicked(View view, int position) {
         Lecture data = lectures.get(position);
-        EvaluationForm.getInstance().setLectureTitle(data.name);
+        EvaluationForm.getInstance().setLectureName(data.name);
         EvaluationForm.getInstance().setProfessorName("prof");
         EvaluationForm.getInstance().setCourseId(data.id);
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
