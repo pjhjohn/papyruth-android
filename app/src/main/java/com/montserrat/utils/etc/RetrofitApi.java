@@ -113,6 +113,16 @@ public class RetrofitApi {
             this.ssl_enabled = enable;
             return this;
         }
+        private RestAdapter.LogLevel logLevel = null;
+        public Builder setLogLevel (RestAdapter.LogLevel logLevel) {
+            this.logLevel = logLevel;
+            return this;
+        }
+        private RestAdapter.Log log;
+        public Builder setLog(RestAdapter.Log log) {
+            this.log = log;
+            return this;
+        }
 
         public void build () {
             RestAdapter.Builder builder = new RestAdapter.Builder().setEndpoint(String.format("%s://%s/api/%s/",
@@ -120,6 +130,8 @@ public class RetrofitApi {
                 root.isEmpty() ? "" : root.charAt(root.length() - 1) == '/' ? root.substring(0, root.length() - 1) : root,
                 version.isEmpty() ? "" : version.charAt(version.length() - 1) == '/' ? version.substring(0, root.length() - 1) : version
             ));
+            if(logLevel != null) builder.setLogLevel(logLevel);
+            if(log != null) builder.setLog(log);
             RetrofitApi.instance = new RetrofitApi(builder.build().create(Api.class));
         }
     }

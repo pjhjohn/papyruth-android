@@ -4,9 +4,11 @@ import android.app.Application;
 
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
+import com.montserrat.utils.etc.RetrofitLogger;
 import com.montserrat.utils.request.Api;
 import com.squareup.picasso.Picasso;
 
+import retrofit.RestAdapter;
 import timber.log.Timber;
 
 /**
@@ -37,6 +39,8 @@ public class MontserratApp extends Application {
             .setRoot("mont.izz.kr:3001")
             .setVersion(AppConst.API_VERSION)
             .enableSSL(false)
+            .setLogLevel(RestAdapter.LogLevel.FULL)
+            .setLog(new RetrofitLogger("RetrofitApi", "^[A\\-\\<\\{].*"))
             .build();
 
         /* Picasso Debugging flags */
