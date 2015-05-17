@@ -36,8 +36,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_home_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_home, parent, false));
+            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.cardview_header, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_evaluation_brief, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -83,28 +83,33 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /* Item of list-like recyclerview */
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView subject;
         private final TextView professor;
+        private final TextView lecture;
+        private final TextView comment;
         private final RatingBar rating;
-        private Holder(final View parent, TextView viewSubject, TextView viewProfessor, RatingBar viewRating) {
+        private Holder(final View parent, TextView professor, TextView lecture, TextView comment, RatingBar rating) {
             super(parent);
-            this.subject = viewSubject;
-            this.professor = viewProfessor;
-            this.rating = viewRating;
+            this.professor = professor;
+            this.lecture = lecture;
+            this.comment = comment;
+            this.rating = rating;
             parent.setOnClickListener(this);
         }
-
         public static RecyclerView.ViewHolder newInstance(View parent) {
-            TextView vSubject = (TextView) parent.findViewById(R.id.home_item_subject);
-            TextView vProfessor = (TextView) parent.findViewById(R.id.home_item_professor);
-            RatingBar vRating = (RatingBar) parent.findViewById(R.id.home_item_rating);
-            return new Holder(parent, vSubject, vProfessor, vRating);
+            return new Holder(
+                parent,
+                (TextView) parent.findViewById(R.id.professor),
+                (TextView) parent.findViewById(R.id.lecture),
+                (TextView) parent.findViewById(R.id.comment),
+                (RatingBar) parent.findViewById(R.id.point_overall)
+            );
         }
 
-        public void bind(Evaluation item) {
-            this.subject.setText(item.comment);
-            this.professor.setText(item.comment);
-            this.rating.setRating(item.point_overall);
+        public void bind(Evaluation evaluation) {
+            this.professor.setText(evaluation.professor_name);
+            this.lecture.setText(evaluation.lecture_name);
+            this.comment.setText(evaluation.comment);
+            this.rating.setRating(evaluation.point_overall);
         }
 
         @Override

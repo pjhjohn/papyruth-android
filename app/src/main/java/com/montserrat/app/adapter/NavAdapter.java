@@ -34,7 +34,7 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.recycler_item_nav, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_category, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
         }
     }

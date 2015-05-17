@@ -37,7 +37,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.recycler_item_home_header, parent, false));
+            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.cardview_header, parent, false));
             case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.course_eval, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
