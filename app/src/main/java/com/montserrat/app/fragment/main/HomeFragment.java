@@ -51,19 +51,18 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, Evaluation> 
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
-    private int since_id = -1, max_id = -1;
+    private Integer since = null, max = null;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
+
+        /* View Initialization */
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-
         this.refresh.setEnabled(true);
-
         this.setupRecyclerView(this.recycler);
-
         this.setupFloatingActionButton(this.fab);
 
         return view;
@@ -112,7 +111,7 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, Evaluation> 
                     this.refresh.setRefreshing(true);
                     return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
                 })
-                .map(evaluations -> evaluations.evaluation)
+                .map(evaluations -> evaluations.evaluations)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
@@ -131,7 +130,7 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, Evaluation> 
                     this.progress.setVisibility(View.VISIBLE);
                     return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
                 })
-                .map(evaluations -> evaluations.evaluation)
+                .map(evaluations -> evaluations.evaluations)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
