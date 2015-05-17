@@ -54,7 +54,6 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.btn_next) protected Button btnNext;
 
     private List<Lecture> lectures;
-    private EvaluationForm eval;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -62,11 +61,12 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
+
+        /* View Initialization */
         this.vLectureList.setLayoutManager(this.getRecyclerViewLayoutManager());
 
-        /* Bind Events */
+        /* Event Binding */
         this.btnNext.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true));
-        getFragmentManager().beginTransaction().add(this, AppConst.Tag.Evaluation.EVALUATION_STEP1);
         return view;
     }
 
@@ -111,21 +111,12 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
         );
     }
 
-    public View validate() {
-        List<View> vFailed = new ArrayList<View>();
-        View candidate;
-        // TODO : pick candidates failed to validate certain validation rule.
-        return vFailed.isEmpty() ? null : vFailed.get(0);
-    }
-
     @Override
     public void recyclerViewListClicked(View view, int position) {
         Lecture data = lectures.get(position);
         EvaluationForm.getInstance().setLectureTitle(data.name);
         EvaluationForm.getInstance().setProfessorName("prof");
         EvaluationForm.getInstance().setCourseId(data.id);
-        EvaluationStep2Fragment nextStep = (EvaluationStep2Fragment)getActivity().getFragmentManager().findFragmentByTag(AppConst.Tag.Evaluation.EVALUATION_STEP2);
-        nextStep.update();
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
     }
 
