@@ -16,6 +16,11 @@
             android:textSize="32sp"
             android:layout_marginBottom="16dp"
             android:text="@string/signup_category_account"/>
+        <Button
+            android:id="@+id/university"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/email"
             android:inputType="textEmailAddress"
@@ -25,7 +30,7 @@
             android:layout_height="wrap_content"/>
         <EditText
             android:id="@+id/password"
-            android:inputType="textVisiblePassword"
+            android:inputType="textPassword"
             android:hint="@string/hint_password"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"

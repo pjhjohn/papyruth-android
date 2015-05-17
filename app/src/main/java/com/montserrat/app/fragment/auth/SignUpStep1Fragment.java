@@ -30,11 +30,11 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecyclerAdapter, University> {
-    private ViewPagerController pageController;
+    private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pageController = (ViewPagerController) activity;
+        this.pagerController = (ViewPagerController) activity;
     }
 
     @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView recycler;
@@ -53,6 +53,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(universities -> {
+                this.items.clear();
                 this.items.addAll(universities);
                 this.adapter.notifyDataSetChanged();
             })
@@ -80,6 +81,8 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
     @Override
     public void recyclerViewListClicked (View view, int position) {
         User.getInstance().setUniversityId(this.items.get(position).id);
-        if ( User.getInstance().getCompletionLevel() >= 1 ) this.pageController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+        User.getInstance().setUniversityName(this.items.get(position).name);
+        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) this.pagerController.popCurrentPage();
+        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 }

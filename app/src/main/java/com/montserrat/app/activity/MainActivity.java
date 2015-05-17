@@ -111,9 +111,20 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     }
 
     @Override
+    public int getPreviousPage () {
+        return this.managers.get(this.drawer.getActiveCategory()).getPreviousPage();
+    }
+
+    @Override
     public void setCurrentPage (int pageNum, boolean addToBackStack) {
         this.terminate = false;
         this.managers.get(this.drawer.getActiveCategory()).setCurrentPage(pageNum, addToBackStack);
+    }
+
+    @Override
+    public void popCurrentPage () {
+        this.terminate = false;
+        this.managers.get(this.drawer.getActiveCategory()).popCurrentPage();
     }
 
 

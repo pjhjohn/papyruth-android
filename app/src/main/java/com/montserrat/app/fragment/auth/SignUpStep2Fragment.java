@@ -1,5 +1,6 @@
 package com.montserrat.app.fragment.auth;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -22,6 +23,8 @@ import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.etc.RetrofitApi;
 import com.montserrat.utils.validator.RxValidator;
+import com.montserrat.utils.viewpager.OnPageFocus;
+import com.montserrat.utils.viewpager.ViewPagerController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,7 +48,15 @@ import static com.montserrat.utils.validator.RxValidator.toString;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment {
+public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
+    private ViewPagerController pagerController;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.pagerController = (ViewPagerController) activity;
+    }
+
+    @InjectView (R.id.university) protected Button university;
     @InjectView (R.id.email) protected EditText email;
     @InjectView (R.id.password) protected EditText password;
     @InjectView (R.id.realname) protected EditText realname;
@@ -54,7 +65,6 @@ public class SignUpStep2Fragment extends Fragment {
     @InjectView (R.id.entrance) protected Spinner entranceSpinner;
     @InjectView (R.id.submit) protected Button submit;
     @InjectView (R.id.progress) protected View progress;
-
     private CompositeSubscription subscriptions;
 
     @Override
@@ -69,7 +79,7 @@ public class SignUpStep2Fragment extends Fragment {
         for(int year = todayear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(year);
         entranceSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
 
-        this.subscriptions.add( Observable.combineLatest(
+        this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
             WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
             WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
@@ -90,6 +100,7 @@ public class SignUpStep2Fragment extends Fragment {
         );
 
         this.subscriptions.add(ViewObservable.clicks(this.submit).subscribe(unused -> register()));
+        this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
         return view;
     }
 
@@ -139,5 +150,10 @@ public class SignUpStep2Fragment extends Fragment {
         super.onDestroyView();
         ButterKnife.reset(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
+
+    @Override
+    public void onPageFocused () {
+        this.university.setText(User.getInstance().getUniversityName());
     }
 }
