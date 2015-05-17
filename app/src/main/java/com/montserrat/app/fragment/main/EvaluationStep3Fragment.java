@@ -22,7 +22,9 @@ import com.montserrat.utils.viewpager.ViewPagerController;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -69,24 +71,26 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
         pointClarity.setMax(10);
 
         /* Event Binding */
-        this.subscriptions.add( ViewObservable
+        this.subscriptions.add(ViewObservable
             .clicks(submit)
-            .flatMap(unused -> {
+            .map(pass -> {
                 EvaluationForm.getInstance().setComment(this.comment.getText().toString());
-                Timber.d("-------------%s", EvaluationForm.getInstance().toString());
-                return RetrofitApi.getInstance().evaluation(
-                        User.getInstance().getAccessToken(),
-                        EvaluationForm.getInstance().getCourseId(),
-                        EvaluationForm.getInstance().getPointOverall(),
-                        EvaluationForm.getInstance().getPointGpaSatisfaction(),
-                        EvaluationForm.getInstance().getPointEasiness(),
-                        EvaluationForm.getInstance().getPointClarity(),
-                        EvaluationForm.getInstance().getComment()
-                );
+                return pass;
             })
+            .observeOn(Schedulers.io())
+            .flatMap(click -> RetrofitApi.getInstance().evaluation(
+                User.getInstance().getAccessToken(),
+                EvaluationForm.getInstance().getCourseId(),
+                EvaluationForm.getInstance().getPointOverall(),
+                EvaluationForm.getInstance().getPointGpaSatisfaction(),
+                EvaluationForm.getInstance().getPointEasiness(),
+                EvaluationForm.getInstance().getPointClarity(),
+                EvaluationForm.getInstance().getComment()
+            ))
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 response -> {
-                    if(response.success) Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_success), Toast.LENGTH_LONG).show();
+                    if (response.success) Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_success), Toast.LENGTH_LONG).show();
                     else Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
                 },
                 error -> {

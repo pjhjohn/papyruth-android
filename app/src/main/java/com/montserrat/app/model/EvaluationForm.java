@@ -76,7 +76,7 @@ public class EvaluationForm {
 
         @Override
         public String toString() {
-            return String.format("%s with evaluation_id = #%d", success? "succeed" : "failed", evaluation_id);
+            return String.format("%s with evaluation_id = #%d", success? "Succeed" : "Failed", evaluation_id);
         }
     }
 }
