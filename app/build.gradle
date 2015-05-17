@@ -44,10 +44,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
-    /* Deprecated */
-    compile "com.mcxiaoke.volley:library:1.0.15"
-    compile "com.github.bumptech.glide:glide:3.5.2"
 }
 
 /*--- RetroLambda - DO NOT MODIFY ---*/
