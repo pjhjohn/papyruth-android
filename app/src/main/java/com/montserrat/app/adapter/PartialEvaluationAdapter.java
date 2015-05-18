@@ -19,20 +19,20 @@ import butterknife.InjectView;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PartialEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static HomeAdapter newInstance(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
-        return new HomeAdapter(initItemList, listener);
+    public static PartialEvaluationAdapter newInstance(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
+        return new PartialEvaluationAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<PartialEvaluation> items;
-    private HomeAdapter (List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
+    private PartialEvaluationAdapter(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        HomeAdapter.itemListener = listener;
+        PartialEvaluationAdapter.itemListener = listener;
     }
 
     @Override
@@ -51,14 +51,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((Holder) holder).bind(this.items.get(position - 1));
     }
 
-    // old item count
-    public int getBasicItemCount() {
-        return this.items == null ? 0 : this.items.size();
-    }
-
     @Override
     public int getItemCount() {
-        return getBasicItemCount() + 1; // 1 is for header.
+        return this.items == null ? 1 : this.items.size()+1; // 1 for HEADER
     }
 
     @Override
@@ -93,7 +88,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick (View view) {
-            HomeAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            PartialEvaluationAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
     }
 }

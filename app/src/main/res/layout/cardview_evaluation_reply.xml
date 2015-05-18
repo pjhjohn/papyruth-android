@@ -26,14 +26,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="프로그래밍 교수론"
-                android:id="@+id/reply_lecTitle"
+                android:id="@+id/nickname"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="박 준호 교수"
-                android:id="@+id/reply_Contents"
+                android:id="@+id/comment"
                 android:layout_gravity="right"
                 />
             <TextView
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="like!"
-            android:id="@+id/reply_like"
+            android:id="@+id/like"
             android:layout_gravity="right"
             android:layout_weight="2"
             />

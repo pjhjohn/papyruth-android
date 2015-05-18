@@ -15,6 +15,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by pjhjohn on 2015-04-13.
  */
@@ -39,16 +42,14 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_grid_university, parent, false));
+            case Type.ITEM : return new Holder(inflater.inflate(R.layout.cardview_grid_university, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Holder holder = (Holder) viewHolder;
-        University item = this.items.get(position);
-        holder.bind(item);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ((Holder) holder).bind(this.items.get(position));
     }
 
     @Override
@@ -62,33 +63,23 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     /* Item of list-like recyclerview : WILL BE DISPLAYED AS GRIDVIEW-ELEMENT */
-    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView vUniversityName;
-        private SquareImageView vUniversitySquareImage;
-        private Holder(final View parent, TextView vUniversityName, SquareImageView vUniversitySquareImage) {
+    protected class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @InjectView (R.id.university_item_name) protected TextView name;
+        @InjectView (R.id.university_item_image) protected SquareImageView image;
+        public Holder(View parent) {
             super(parent);
-            this.vUniversityName = vUniversityName;
-            this.vUniversitySquareImage = vUniversitySquareImage;
+            ButterKnife.inject(this, parent);
             parent.setOnClickListener(this);
         }
 
-        public static RecyclerView.ViewHolder newInstance(View parent) {
-            return new Holder(parent,
-                (TextView) parent.findViewById(R.id.university_item_name),
-                (SquareImageView) parent.findViewById(R.id.university_item_image)
-            );
-        }
-
         public void bind(University university) {
-            this.vUniversityName.setText(university.name);
-            Picasso.with(fragment.getActivity()).load(university.image_url).into(this.vUniversitySquareImage);
+            this.name.setText(university.name);
+            Picasso.with(fragment.getActivity()).load(university.image_url).into(this.image);
         }
 
         @Override
         public void onClick (View view) {
             UniversityRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
-
-
     }
 }

@@ -12,6 +12,9 @@ import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by pjhjohn on 2015-04-13.
  */
@@ -34,16 +37,14 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_category, parent, false));
+            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.cardview_category, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Holder holder = (Holder) viewHolder;
-        Holder.Data item = this.items.get(position);
-        holder.bind(item);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ((Holder) holder).bind(this.items.get(position));
     }
 
     @Override
@@ -56,29 +57,19 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return Type.ITEM;
     }
 
-    /* Item of list-like recyclerview */
-
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView categoryText;
-        private final ImageView categoryIcon;
-        private Holder(final View parent, TextView viewCategoryText, ImageView viewCategoryIcon) {
+        @InjectView(R.id.nav_item_text) protected TextView category;
+        @InjectView(R.id.nav_item_icon) protected ImageView category_image;
+
+        public Holder(View parent) {
             super(parent);
-            this.categoryText = viewCategoryText;
-            this.categoryIcon = viewCategoryIcon;
+            ButterKnife.inject(this, parent);
             parent.setOnClickListener(this);
         }
 
-        public static RecyclerView.ViewHolder newInstance(View parent) {
-            return new Holder(
-                    parent,
-                    (TextView) parent.findViewById(R.id.nav_item_text),
-                    (ImageView) parent.findViewById(R.id.nav_item_icon)
-            );
-        }
-
         public void bind(NavAdapter.Holder.Data item) {
-            this.categoryText.setText(item.categoryText);
-            this.categoryIcon.setImageDrawable(this.categoryIcon.getResources().getDrawable(item.categoryIconResId));
+            this.category.setText(item.category);
+            this.category_image.setImageDrawable(this.category_image.getResources().getDrawable(item.categoryImageResId));
         }
 
         @Override
@@ -87,11 +78,11 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public static class Data {
-            public String categoryText;
-            int categoryIconResId;
-            public Data(String categoryText, int categoryIconResId) {
-                this.categoryText = categoryText;
-                this.categoryIconResId = categoryIconResId;
+            public String category;
+            int categoryImageResId;
+            public Data(String category, int categoryImageResId) {
+                this.category = category;
+                this.categoryImageResId = categoryImageResId;
             }
         }
     }

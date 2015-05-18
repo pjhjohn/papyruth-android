@@ -13,6 +13,9 @@ import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by pjhjohn on 2015-04-13.
  */
@@ -36,71 +39,42 @@ public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_course_partial, parent, false));
+            case Type.HEADER : return new Header(inflater.inflate(R.layout.cardview_header, parent, false));
+            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.cardview_course_partial, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if (!isPositionOfHeader(position)) {
-            Holder holder = (Holder) viewHolder;
-            PartialCourse item = this.items.get(position - 1);
-            holder.bind(item);
-        }
-    }
-
-    // old item count
-    public int getBasicItemCount() {
-        return this.items == null ? 0 : this.items.size();
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (position == 0) return;
+        ((Holder) holder).bind(this.items.get(position - 1));
     }
 
     @Override
     public int getItemCount() {
-        return getBasicItemCount() + 1; // 1 is for header.
+        return this.items == null ? 1 : this.items.size()+1; // 1 for HEADER
     }
 
     @Override
     public int getItemViewType(int position) {
-        return isPositionOfHeader(position)? Type.HEADER : Type.ITEM;
+        return position == 0 ? Type.HEADER : Type.ITEM;
     }
 
-    private boolean isPositionOfHeader (int position) {
-        return position == 0;
-    }
-
-
-    /* Header of list-list recyclerview */
-    public static class Header extends RecyclerView.ViewHolder {
-        private Header(View itemView) {
-            super(itemView);
-        }
-        public static RecyclerView.ViewHolder newInstance(View parent) {
-            return new Header(parent);
-        }
-    }
-
-    /* Item of list-like recyclerview */
-    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView lecture;
-        private final TextView professor;
-        private final RatingBar overall;
-        private Holder(final View parent, TextView viewSubject, TextView viewProfessor, RatingBar viewRating) {
+    protected class Header extends RecyclerView.ViewHolder {
+        public Header(View parent) {
             super(parent);
-            this.lecture = viewSubject;
-            this.professor = viewProfessor;
-            this.overall = viewRating;
-            parent.setOnClickListener(this);
         }
+    }
 
-        public static RecyclerView.ViewHolder newInstance(View parent) {
-            return new Holder(
-                parent,
-                (TextView) parent.findViewById(R.id.lecture),
-                (TextView) parent.findViewById(R.id.professor),
-                (RatingBar) parent.findViewById(R.id.point_overall)
-            );
+    protected class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @InjectView (R.id.lecture) protected TextView lecture;
+        @InjectView (R.id.professor) protected TextView professor;
+        @InjectView (R.id.point_overall) protected RatingBar overall;
+        public Holder(View parent) {
+            super(parent);
+            ButterKnife.inject(this, parent);
+            parent.setOnClickListener(this);
         }
 
         public void bind(PartialCourse item) {

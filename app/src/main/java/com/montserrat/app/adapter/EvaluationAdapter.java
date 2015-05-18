@@ -12,14 +12,13 @@ import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
  * Created by SSS on 2015-05-08.
  */
 public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    @InjectView(R.id.eval_prof) protected TextView vProfText;
-    @InjectView(R.id.eval_title) protected TextView vTitleText;
     public static final class Type {
         public static final int ITEM = 1;
     }
@@ -38,16 +37,14 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.evaluation_list_item, parent, false));
+            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.evaluation_list_item, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Holder holder = (Holder) viewHolder;
-        PartialCourse item = this.items.get(position);
-        holder.bind(item);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ((Holder) holder).bind(this.items.get(position));
     }
 
     @Override
@@ -60,29 +57,18 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return Type.ITEM;
     }
 
-    /* Item of list-like recyclerview */
-
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @InjectView(R.id.eval_title) protected TextView vTitleText;
-        @InjectView(R.id.eval_prof) protected TextView vProfText;
-        private Holder(final View parent, TextView viewTitle, TextView viewProf) {
+        @InjectView(R.id.lecture) protected TextView lecture;
+        @InjectView(R.id.professor) protected TextView professor;
+        public Holder(View parent) {
             super(parent);
-            this.vTitleText = viewTitle;
-            this.vProfText = viewProf;
+            ButterKnife.inject(this, parent);
             parent.setOnClickListener(this);
         }
 
-        public static RecyclerView.ViewHolder newInstance(View parent) {
-            return new Holder(
-                    parent,
-                    (TextView)parent.findViewById(R.id.eval_title),
-                    (TextView)parent.findViewById(R.id.eval_prof)
-            );
-        }
-
         public void bind(PartialCourse item) {
-            this.vTitleText.setText(item.name);
-            this.vProfText.setText(item.professor);
+            this.lecture.setText(item.name); // lecture represents the name of course
+            this.professor.setText(item.professor);
         }
 
         @Override

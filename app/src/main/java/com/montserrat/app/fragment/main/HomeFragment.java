@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.HomeAdapter;
+import com.montserrat.app.adapter.PartialEvaluationAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.User;
@@ -34,7 +34,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-05-09.
  * Provides latest evaluations.
  */
-public class HomeFragment extends RecyclerViewFragment<HomeAdapter, PartialEvaluation> {
+public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter, PartialEvaluation> {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -88,8 +88,8 @@ public class HomeFragment extends RecyclerViewFragment<HomeAdapter, PartialEvalu
     }
 
     @Override
-    protected HomeAdapter getAdapter (List<PartialEvaluation> evaluations) {
-        return HomeAdapter.newInstance(this.items, this);
+    protected PartialEvaluationAdapter getAdapter (List<PartialEvaluation> evaluations) {
+        return PartialEvaluationAdapter.newInstance(this.items, this);
     }
 
     @Override
