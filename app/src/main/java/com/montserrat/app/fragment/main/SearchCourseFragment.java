@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.BriefLectureAdapter;
+import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -29,7 +29,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class BriefLectureFragment extends RecyclerViewFragment<BriefLectureAdapter, PartialCourse> {
+public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -46,7 +46,7 @@ public class BriefLectureFragment extends RecyclerViewFragment<BriefLectureAdapt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_course_brief, container, false);
+        View view = inflater.inflate(R.layout.fragment_course_search, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -79,8 +79,8 @@ public class BriefLectureFragment extends RecyclerViewFragment<BriefLectureAdapt
     }
 
     @Override
-    protected BriefLectureAdapter getAdapter (List<PartialCourse> partialCourses) {
-        return BriefLectureAdapter.newInstance(this.items, this);
+    protected PartialCourseAdapter getAdapter (List<PartialCourse> partialCourses) {
+        return PartialCourseAdapter.newInstance(this.items, this);
     }
 
     @Override

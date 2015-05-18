@@ -1,7 +1,6 @@
 package com.montserrat.app.fragment;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.montserrat.app.AppConst;
@@ -10,14 +9,12 @@ import com.montserrat.app.fragment.auth.LoadingFragment;
 import com.montserrat.app.fragment.auth.SignUpStep1Fragment;
 import com.montserrat.app.fragment.auth.SignUpStep2Fragment;
 import com.montserrat.app.fragment.main.CourseFragment;
-import com.montserrat.app.fragment.main.BriefLectureFragment;
+import com.montserrat.app.fragment.main.SearchCourseFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.EvaluationStep2Fragment;
 import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SignOutFragment;
-
-import org.json.JSONObject;
 
 /**
  * Created by pjhjohn on 2015-04-09.
@@ -49,7 +46,7 @@ public class FragmentFactory {
                 } break;
             case SEARCH :
                 switch(position) {
-                    case AppConst.ViewPager.Search.BRIEF                : fragment = new BriefLectureFragment();       break;
+                    case AppConst.ViewPager.Search.BRIEF                : fragment = new SearchCourseFragment();       break;
                 } break;
             case RECOMMENDATION:
                 switch(position) {

@@ -16,20 +16,20 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public class BriefLectureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static BriefLectureAdapter newInstance(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
-        return new BriefLectureAdapter(initItemList, listener);
+    public static PartialCourseAdapter newInstance(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
+        return new PartialCourseAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<PartialCourse> items;
-    private BriefLectureAdapter (List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
+    private PartialCourseAdapter(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        BriefLectureAdapter.itemListener = listener;
+        PartialCourseAdapter.itemListener = listener;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BriefLectureAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
             case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_lecture_brief, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_course_partial, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -111,7 +111,7 @@ public class BriefLectureAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick (View view) {
-            BriefLectureAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            PartialCourseAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
     }
 }
