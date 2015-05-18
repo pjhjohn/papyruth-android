@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
+import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -21,14 +22,14 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static CourseRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    public static CourseRecyclerAdapter newInstance(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
         return new CourseRecyclerAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
 
-    private List<Holder.Data> items;
-    private CourseRecyclerAdapter(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private List<PartialEvaluation> items;
+    private CourseRecyclerAdapter(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         CourseRecyclerAdapter.itemListener = listener;
     }
@@ -38,7 +39,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
             case Type.HEADER : return Header.newInstance(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.course_eval, parent, false));
+            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_evaluation_reply, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -47,7 +48,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (!isPositionOfHeader(position)) {
             Holder holder = (Holder) viewHolder;
-            Holder.Data item = this.items.get(position - 1);
+            PartialEvaluation item = this.items.get(position - 1);
             holder.bind(item);
         }
     }
@@ -85,14 +86,14 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     /* Item of list-like recyclerview */
 
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView lecture;
-        private final TextView content;
-        private final Button like;
+        private final TextView userId;
+        private final TextView comment;
+        private final Button pointOverall;
         private Holder(final View parent, TextView viewLecture, TextView viewcontent, Button viewLike) {
             super(parent);
-            this.lecture = viewLecture;
-            this.content = viewcontent;
-            this.like = viewLike;
+            this.userId = viewLecture;
+            this.comment = viewcontent;
+            this.pointOverall = viewLike;
         }
 
         public static RecyclerView.ViewHolder newInstance(View parent) {
@@ -102,10 +103,10 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return new Holder(parent, vLecture, vContent, vLike);
         }
 
-        public void bind(CourseRecyclerAdapter.Holder.Data item) {
-            this.lecture.setText(item.lecture);
-            this.content.setText(item.content);
-            this.like.setText(item.like);
+        public void bind(PartialEvaluation item) {
+            this.userId.setText(item.user_id);
+            this.comment.setText(item.comment);
+            this.pointOverall.setText(item.point_overall);
         }
 
         @Override
@@ -113,16 +114,5 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             CourseRecyclerAdapter.itemListener.recyclerViewListClicked(v, this.getPosition());
         }
 
-        public static class Data {
-            public String lecture;
-            public String content;
-            public String like;
-            private Data(){}
-            public Data(String lecture, String content, String like) {
-                this.lecture = lecture;
-                this.content = content;
-                this.like = like;
-            }
-        }
     }
 }

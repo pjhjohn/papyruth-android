@@ -8,11 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CourseRecyclerAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
+import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
@@ -22,9 +25,17 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
-public class CourseFragment extends RecyclerViewFragment<CourseRecyclerAdapter, CourseRecyclerAdapter.Holder.Data> {
+public class CourseFragment extends RecyclerViewFragment<CourseRecyclerAdapter, PartialEvaluation> {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
+
+    @InjectView(R.id.course_title) protected EditText courseLecture;
+    @InjectView(R.id.course_professor) protected EditText courseProfessor;
+    @InjectView(R.id.point_overall) protected EditText pointOverall;
+    @InjectView(R.id.point_gpa_satisfaction) protected EditText pointGpaSatisfaction;
+    @InjectView(R.id.point_easiness) protected EditText pointEasiness;
+    @InjectView(R.id.point_clarity) protected EditText pointClarity;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -37,6 +48,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseRecyclerAdapter, 
 
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
+    private PartialCourse partialCourse;
 
     @Override
     public View onCreateView(LayoutInflater infalter, ViewGroup container, Bundle savedInstanceState) {
@@ -45,21 +57,19 @@ public class CourseFragment extends RecyclerViewFragment<CourseRecyclerAdapter, 
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        View info = (View) view.findViewById(R.id.detail_info);
-        TextView title = (TextView) info.findViewById(R.id.info_title);
-        TextView prof = (TextView) info.findViewById(R.id.info_prof);
-        CourseRecyclerAdapter.Holder.Data data = new CourseRecyclerAdapter.Holder.Data("good", "good","3");
+        TextView title = (TextView) view.findViewById(R.id.info_title);
+        TextView prof = (TextView) view.findViewById(R.id.info_prof);
+        PartialEvaluation data = new PartialEvaluation();
+
         this.setupRecyclerView(this.recycler);
-
         this.items.add(data);
-
         this.adapter.notifyDataSetChanged();
 
         return view;
     }
 
     @Override
-    protected CourseRecyclerAdapter getAdapter (List<CourseRecyclerAdapter.Holder.Data> items) {
+    protected CourseRecyclerAdapter getAdapter (List<PartialEvaluation> items) {
         return CourseRecyclerAdapter.newInstance(this.items, this);
     }
 

@@ -8,7 +8,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.Lecture;
+import com.montserrat.app.model.PartialCourse;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -21,13 +21,13 @@ public class BriefLectureAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static BriefLectureAdapter newInstance(List<Lecture> initItemList, RecyclerViewClickListener listener) {
+    public static BriefLectureAdapter newInstance(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
         return new BriefLectureAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Lecture> items;
-    private BriefLectureAdapter (List<Lecture> initItemList, RecyclerViewClickListener listener) {
+    private List<PartialCourse> items;
+    private BriefLectureAdapter (List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         BriefLectureAdapter.itemListener = listener;
     }
@@ -46,7 +46,7 @@ public class BriefLectureAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (!isPositionOfHeader(position)) {
             Holder holder = (Holder) viewHolder;
-            Lecture item = this.items.get(position - 1);
+            PartialCourse item = this.items.get(position - 1);
             holder.bind(item);
         }
     }
@@ -103,7 +103,7 @@ public class BriefLectureAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             );
         }
 
-        public void bind(Lecture item) {
+        public void bind(PartialCourse item) {
             this.lecture.setText(item.name);
             this.professor.setText(item.professor);
             this.overall.setRating(item.rating);

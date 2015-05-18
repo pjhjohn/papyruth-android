@@ -8,7 +8,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -21,13 +21,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public static final int HEADER = 1;
         public static final int ITEM = 2;
     }
-    public static HomeAdapter newInstance(List<Evaluation> initItemList, RecyclerViewClickListener listener) {
+    public static HomeAdapter newInstance(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
         return new HomeAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Evaluation> items;
-    private HomeAdapter (List<Evaluation> initItemList, RecyclerViewClickListener listener) {
+    private List<PartialEvaluation> items;
+    private HomeAdapter (List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         HomeAdapter.itemListener = listener;
     }
@@ -46,7 +46,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (!isPositionOfHeader(position)) {
             Holder holder = (Holder) viewHolder;
-            Evaluation item = this.items.get(position - 1);
+            PartialEvaluation item = this.items.get(position - 1);
             holder.bind(item);
         }
     }
@@ -105,7 +105,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             );
         }
 
-        public void bind(Evaluation evaluation) {
+        public void bind(PartialEvaluation evaluation) {
             this.professor.setText(evaluation.professor_name);
             this.lecture.setText(evaluation.lecture_name);
             this.comment.setText(evaluation.comment);

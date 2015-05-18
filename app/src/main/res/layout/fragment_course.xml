@@ -10,13 +10,52 @@
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
             android:weightSum="12">
-            <include android:id="@+id/detail_info" layout="@layout/course_info"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="0px"
+                android:layout_height="wrap_content"
+                android:background="#0000ff"
+                android:weightSum="6"
+                android:layout_weight="1"
+                >
 
-                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/course_title"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/course_professor"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/point_overall"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.5" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/point_gpa_satisfaction"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.5" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/point_easiness"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.5" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/point_clarity"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.5" />
+            </LinearLayout>
             <!--<TextView-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="match_parent"-->
@@ -26,20 +65,13 @@
 
 
 
-            <android.support.v7.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
                 android:id="@+id/detail_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:overScrollMode="never"
                 android:layout_marginTop="0px"
-                android:layout_weight="4"
-                android:scrollbars="none"/>
-            <!--<ListView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/detail_list"-->
-            <!--android:background="#ffffff"-->
-            <!--android:layout_weight="8" />-->
-            <!--<include android:id="@+id/progress_auth" layout="@layout/part_progress"/>-->
+                android:layout_weight="11"
+                android:scrollbars="none"
+                android:layout_height="0dp" />
         </LinearLayout>
     </FrameLayout>

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.Lecture;
+import com.montserrat.app.model.PartialCourse;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -23,13 +23,13 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final class Type {
         public static final int ITEM = 1;
     }
-    public static EvaluationAdapter newInstance(List<Lecture> initItemList, RecyclerViewClickListener listener) {
+    public static EvaluationAdapter newInstance(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
         return new EvaluationAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Lecture> items;
-    public EvaluationAdapter (List<Lecture> initItemList, RecyclerViewClickListener listener) {
+    private List<PartialCourse> items;
+    public EvaluationAdapter (List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         EvaluationAdapter.itemListener = listener;
     }
@@ -46,7 +46,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Holder holder = (Holder) viewHolder;
-        Lecture item = this.items.get(position);
+        PartialCourse item = this.items.get(position);
         holder.bind(item);
     }
 
@@ -80,7 +80,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             );
         }
 
-        public void bind(Lecture item) {
+        public void bind(PartialCourse item) {
             this.vTitleText.setText(item.name);
             this.vProfText.setText(item.professor);
         }

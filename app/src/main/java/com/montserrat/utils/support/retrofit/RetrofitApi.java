@@ -1,8 +1,8 @@
 package com.montserrat.utils.support.retrofit;
 
 import com.montserrat.app.model.EvaluationForm;
-import com.montserrat.app.model.Evaluations;
-import com.montserrat.app.model.Lectures;
+import com.montserrat.app.model.PartialEvaluations;
+import com.montserrat.app.model.PartialCourses;
 import com.montserrat.app.model.Statistics;
 import com.montserrat.app.model.Universities;
 import com.montserrat.app.model.User;
@@ -32,7 +32,7 @@ public class RetrofitApi {
 
     public interface Api {
         @GET ("/evaluations")
-        Observable<Evaluations> evaluations(
+        Observable<PartialEvaluations> evaluations(
             @Header ("Authorization") String authorization,
             @Query ("university_id") Integer university_id,
             @Query ("since_id") Integer since_id,
@@ -41,7 +41,7 @@ public class RetrofitApi {
         );
 
         @GET ("/lectures")
-        Observable<Lectures> lectures(
+        Observable<PartialCourses> lectures(
             @Header ("Authorization") String authorization,
             @Query ("university_id") String university_id,
             @Query ("query") String query
@@ -61,7 +61,7 @@ public class RetrofitApi {
             @Header ("Authorization") String authorization
         );
         @GET("/lectures/dummy_autocomplete")
-        Observable<Lectures> lecturelist(
+        Observable<PartialCourses> lecturelist(
             @Header("Authorization") String authorization,
             @Query("query") String query
         );

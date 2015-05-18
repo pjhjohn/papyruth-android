@@ -16,7 +16,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.model.EvaluationForm;
-import com.montserrat.app.model.Lecture;
+import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
@@ -38,7 +38,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-26.
- * Searches Lecture for Evaluation on Step 1.
+ * Searches PartialCourse for Evaluation on Step 1.
  */
 public class EvaluationStep1Fragment extends Fragment implements RecyclerViewClickListener {
     private ViewPagerController pagerController;
@@ -53,7 +53,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.query_result) protected RecyclerView queryResult;
     @InjectView(R.id.btn_next) protected Button next;
 
-    private List<Lecture> lectures;
+    private List<PartialCourse> partialCourses;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -92,7 +92,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     lectures -> {
-                        this.lectures = lectures;
+                        this.partialCourses = lectures;
                         EvaluationAdapter eAdapter = new EvaluationAdapter(lectures, this);
                         this.queryResult.setAdapter(eAdapter);
 //                        this.lectureAdapter.notifyDataSetChanged();
@@ -111,7 +111,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        Lecture data = lectures.get(position);
+        PartialCourse data = partialCourses.get(position);
         EvaluationForm.getInstance().setLectureName(data.name);
         EvaluationForm.getInstance().setProfessorName("prof");
         EvaluationForm.getInstance().setCourseId(data.id);

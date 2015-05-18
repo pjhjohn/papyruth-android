@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.melnykov.fab.FloatingActionButton;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.BriefLectureAdapter;
-import com.montserrat.app.model.Lecture;
+import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
@@ -29,7 +29,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class BriefLectureFragment extends RecyclerViewFragment<BriefLectureAdapter, Lecture> {
+public class BriefLectureFragment extends RecyclerViewFragment<BriefLectureAdapter, PartialCourse> {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -79,7 +79,7 @@ public class BriefLectureFragment extends RecyclerViewFragment<BriefLectureAdapt
     }
 
     @Override
-    protected BriefLectureAdapter getAdapter (List<Lecture> lectures) {
+    protected BriefLectureAdapter getAdapter (List<PartialCourse> partialCourses) {
         return BriefLectureAdapter.newInstance(this.items, this);
     }
 
