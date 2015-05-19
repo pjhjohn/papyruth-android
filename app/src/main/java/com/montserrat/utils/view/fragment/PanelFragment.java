@@ -24,7 +24,7 @@ public abstract class PanelFragment extends Fragment {
 
     protected void setupFloatingActionButton (FloatingActionButton fab) {
         if (fab != null) fab.setOnClickListener( unused -> {
-            if(this.navigationCallback != null) this.navigationCallback.onCategorySelected(NavFragment.Category.EVALUATION);
+            if(this.navigationCallback != null) this.navigationCallback.onCategorySelected(NavFragment.CategoryType.EVALUATION);
         });
     }
 }

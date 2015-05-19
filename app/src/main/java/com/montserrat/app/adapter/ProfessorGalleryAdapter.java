@@ -12,28 +12,31 @@ import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import java.util.List;
 
 /**
- * Created by pjhjohn on 2015-04-13.
+ * /**
+ * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
+ * Used in {@link com.montserrat.app.fragment.gallery.ProfessorGalleryFragment ProfessorGalleryFragment}
+ * as an adapter for Grid-type {@link RecyclerView} to provide pictures of professor
  */
-public class GalleryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ProfessorGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
-        public static final int ITEM = 1;
+        public static final int PROFESSOR_PICTURE = 1;
     }
-    public static GalleryRecyclerAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
-        return new GalleryRecyclerAdapter(initItemList, listener);
+    public static ProfessorGalleryAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+        return new ProfessorGalleryAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
     private List<Holder.Data> items;
-    private GalleryRecyclerAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private ProfessorGalleryAdapter(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        this.itemListener = listener;
+        ProfessorGalleryAdapter.itemListener = listener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return Holder.newInstance(inflater.inflate(R.layout.cardview_grid_university, parent, false));
+            case Type.PROFESSOR_PICTURE: return Holder.newInstance(inflater.inflate(R.layout.cardview_grid_university, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -52,10 +55,9 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemViewType(int position) {
-        return Type.ITEM;
+        return Type.PROFESSOR_PICTURE;
     }
 
-    /* Item of list-like recyclerview : WILL BE DISPLAYED AS GRIDVIEW-ELEMENT */
     public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView vUniv;
         private Holder(final View parent, TextView vUniv) {
@@ -69,19 +71,18 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             return new Holder(parent, vUniv);
         }
 
-        public void bind(GalleryRecyclerAdapter.Holder.Data item) {
+        public void bind(ProfessorGalleryAdapter.Holder.Data item) {
             this.vUniv.setText(item.univ);
         }
 
         @Override
         public void onClick (View view) {
-            GalleryRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            ProfessorGalleryAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
 
         public static class Data {
             public String univ;
             public int univCode;
-            private Data(){}
             public Data(String univ, int univCode) {
                 this.univ = univ;
                 this.univCode = univCode;

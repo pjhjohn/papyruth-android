@@ -19,30 +19,32 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by pjhjohn on 2015-04-13.
+ * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
+ * Used in {@link com.montserrat.app.fragment.auth.SignUpStep1Fragment SignUpStep1Fragment}
+ * as an adapter for Grid-type {@link RecyclerView} to provide university selection to user
  */
-public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class UniversityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
-        public static final int ITEM = 1;
+        public static final int UNIVERSITY = 1;
     }
-    public static UniversityRecyclerAdapter newInstance(List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
-        return new UniversityRecyclerAdapter(initItemList, listener, fragment);
+    public static UniversityAdapter newInstance(List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
+        return new UniversityAdapter(initItemList, listener, fragment);
     }
 
     private static RecyclerViewClickListener itemListener;
     private static Fragment fragment;
     private List<University> items;
-    private UniversityRecyclerAdapter (List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
+    private UniversityAdapter(List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
         this.items = initItemList;
-        UniversityRecyclerAdapter.itemListener = listener;
-        UniversityRecyclerAdapter.fragment = fragment;
+        UniversityAdapter.itemListener = listener;
+        UniversityAdapter.fragment = fragment;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM : return new Holder(inflater.inflate(R.layout.cardview_grid_university, parent, false));
+            case Type.UNIVERSITY: return new Holder(inflater.inflate(R.layout.cardview_grid_university, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -59,7 +61,7 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(int position) {
-        return Type.ITEM;
+        return Type.UNIVERSITY;
     }
 
     /* Item of list-like recyclerview : WILL BE DISPLAYED AS GRIDVIEW-ELEMENT */
@@ -79,7 +81,7 @@ public class UniversityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         @Override
         public void onClick (View view) {
-            UniversityRecyclerAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            UniversityAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
     }
 }

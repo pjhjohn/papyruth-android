@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.CourseRecyclerAdapter;
+import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
@@ -20,7 +20,7 @@ import java.util.List;
 
 import rx.subscriptions.CompositeSubscription;
 
-public class CourseFragment extends RecyclerViewFragment<CourseRecyclerAdapter, PartialEvaluation> {
+public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
     @Override
@@ -42,8 +42,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseRecyclerAdapter, 
     }
 
     @Override
-    protected CourseRecyclerAdapter getAdapter (List<PartialEvaluation> items) {
-        return CourseRecyclerAdapter.newInstance(this.items, this);
+    protected CourseAdapter getAdapter (List<PartialEvaluation> items) {
+        return CourseAdapter.newInstance(this.items, this);
     }
 
     @Override

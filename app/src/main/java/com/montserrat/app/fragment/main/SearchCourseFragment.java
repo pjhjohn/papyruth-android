@@ -97,7 +97,7 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
     public void onStart() {
         super.onStart();
         this.subscriptions.add(
-            getRefreshObservable(this.refresh)
+            this.getRefreshObservable(this.refresh)
             .flatMap(unused -> {
                 this.refresh.setRefreshing(true);
                 return RetrofitApi.getInstance().lectures(User.getInstance().getAccessToken(), null, null);

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.UniversityRecyclerAdapter;
+import com.montserrat.app.adapter.UniversityAdapter;
 import com.montserrat.app.model.University;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -29,7 +29,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecyclerAdapter, University> {
+public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, University> {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -69,8 +69,8 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
     }
 
     @Override
-    protected UniversityRecyclerAdapter getAdapter (List<University> universities) {
-        return UniversityRecyclerAdapter.newInstance(this.items, this, this);
+    protected UniversityAdapter getAdapter (List<University> universities) {
+        return UniversityAdapter.newInstance(this.items, this, this);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
+import com.montserrat.app.model.Category;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -16,19 +17,21 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by pjhjohn on 2015-04-13.
+ * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
+ * Used in {@link com.montserrat.app.fragment.nav.NavFragment NavFragment}
+ * as an adapter for List-type {@link RecyclerView} to provide global navigation for the application
  */
 public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
-        public static final int ITEM = 1;
+        public static final int CATEGORY = 1;
     }
-    public static NavAdapter newInstance(List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    public static NavAdapter newInstance(List<Category> initItemList, RecyclerViewClickListener listener) {
         return new NavAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Holder.Data> items;
-    private NavAdapter (List<Holder.Data> initItemList, RecyclerViewClickListener listener) {
+    private List<Category> items;
+    private NavAdapter (List<Category> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         NavAdapter.itemListener = listener;
     }
@@ -37,14 +40,14 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.cardview_category, parent, false));
+            case Type.CATEGORY: return new CategoryHolder(inflater.inflate(R.layout.cardview_category, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((Holder) holder).bind(this.items.get(position));
+        ((CategoryHolder) holder).bind(this.items.get(position));
     }
 
     @Override
@@ -54,36 +57,27 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return Type.ITEM;
+        return Type.CATEGORY;
     }
 
-    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nav_item_text) protected TextView category;
         @InjectView(R.id.nav_item_icon) protected ImageView category_image;
 
-        public Holder(View parent) {
+        public CategoryHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);
             parent.setOnClickListener(this);
         }
 
-        public void bind(NavAdapter.Holder.Data item) {
-            this.category.setText(item.category);
-            this.category_image.setImageDrawable(this.category_image.getResources().getDrawable(item.categoryImageResId));
+        public void bind(Category category) {
+            this.category.setText(category.name);
+            this.category_image.setImageDrawable(this.category_image.getResources().getDrawable(category.imgResId));
         }
 
         @Override
         public void onClick (View view) {
             NavAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
-        }
-
-        public static class Data {
-            public String category;
-            int categoryImageResId;
-            public Data(String category, int categoryImageResId) {
-                this.category = category;
-                this.categoryImageResId = categoryImageResId;
-            }
         }
     }
 }

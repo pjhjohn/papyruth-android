@@ -17,12 +17,14 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by pjhjohn on 2015-04-13.
+ * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
+ * Used in {@link com.montserrat.app.fragment.main.HomeFragment HomeFragment}
+ * as an adapter for List-type {@link RecyclerView} to provide latest evaluations to user
  */
 public class PartialEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
-        public static final int ITEM = 2;
+        public static final int PARTIAL_EVALUATION = 2;
     }
     public static PartialEvaluationAdapter newInstance(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
         return new PartialEvaluationAdapter(initItemList, listener);
@@ -40,7 +42,7 @@ public class PartialEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
             case Type.HEADER : return new Header(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.cardview_evaluation_partial, parent, false));
+            case Type.PARTIAL_EVALUATION: return new PartialEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation_partial, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -48,7 +50,7 @@ public class PartialEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position == 0) return; // Header
-        ((Holder) holder).bind(this.items.get(position - 1));
+        ((PartialEvaluationHolder) holder).bind(this.items.get(position - 1));
     }
 
     @Override
@@ -58,22 +60,20 @@ public class PartialEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? Type.HEADER : Type.ITEM;
+        return position == 0 ? Type.HEADER : Type.PARTIAL_EVALUATION;
     }
 
-    // ViewHolders
     protected class Header extends RecyclerView.ViewHolder {
         public Header(View parent) { super(parent); }
     }
 
-    /* Item of list-like recyclerview */
-    protected class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected class PartialEvaluationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView (R.id.professor) protected TextView professor;
         @InjectView (R.id.lecture) protected TextView lecture;
         @InjectView (R.id.comment) protected TextView comment;
         @InjectView (R.id.point_overall) protected RatingBar rating;
 
-        public Holder(View parent) {
+        public PartialEvaluationHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);
             parent.setOnClickListener(this);

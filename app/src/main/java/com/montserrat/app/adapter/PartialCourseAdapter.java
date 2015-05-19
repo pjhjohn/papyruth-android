@@ -17,12 +17,14 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by pjhjohn on 2015-04-13.
+ * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
+ * Used in {@link com.montserrat.app.fragment.main.SearchCourseFragment SearchCourseFragment}
+ * as an adapter for List-type {@link RecyclerView} to provide course search result
  */
 public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int HEADER = 1;
-        public static final int ITEM = 2;
+        public static final int PARTIAL_COURSE = 2;
     }
     public static PartialCourseAdapter newInstance(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
         return new PartialCourseAdapter(initItemList, listener);
@@ -40,7 +42,7 @@ public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
             case Type.HEADER : return new Header(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.cardview_course_partial, parent, false));
+            case Type.PARTIAL_COURSE: return new Holder(inflater.inflate(R.layout.cardview_course_partial, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -58,7 +60,7 @@ public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? Type.HEADER : Type.ITEM;
+        return position == 0 ? Type.HEADER : Type.PARTIAL_COURSE;
     }
 
     protected class Header extends RecyclerView.ViewHolder {
