@@ -10,6 +10,9 @@ import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
 
+import java.util.List;
+import java.util.Stack;
+
 /**
  * Activity For Authentication.
  */
@@ -32,7 +35,12 @@ public class AuthActivity extends Activity implements ViewPagerController {
     }
 
     @Override
-    public int getPreviousPage () {
+    public Stack<Integer> getHistoryCopy() {
+        return this.manager.getHistoryCopy();
+    }
+
+    @Override
+    public int getPreviousPage() {
         return this.manager.getPreviousPage();
     }
 
@@ -42,12 +50,12 @@ public class AuthActivity extends Activity implements ViewPagerController {
     }
 
     @Override
-    public void popCurrentPage () {
-        this.manager.popCurrentPage();
+    public boolean popCurrentPage () {
+        return this.manager.popCurrentPage();
     }
 
     @Override
     public void onBackPressed() {
-        if(!this.manager.onBackPressed()) super.onBackPressed();
+        if(!this.manager.popCurrentPage()) super.onBackPressed();
     }
 }

@@ -9,13 +9,14 @@ import android.view.ViewGroup;
 
 import com.montserrat.app.fragment.FragmentFactory;
 
+import java.util.List;
 import java.util.Stack;
 
 /**
  * Created by pjhjohn on 2015-04-23.
  */
 public class ViewPagerManager implements ViewPagerController {
-    public static enum Mode {
+    public enum Mode {
         STANDARD, SWIPE, MULTIPLE, SWIPE_MULTIPLE
     }
     private FlexibleViewPager pager;
@@ -39,7 +40,6 @@ public class ViewPagerManager implements ViewPagerController {
 
                 final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
                 if (target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
-
             }
         };
         this.active();
@@ -90,7 +90,12 @@ public class ViewPagerManager implements ViewPagerController {
     }
 
     @Override
-    public int getPreviousPage () {
+    public Stack<Integer> getHistoryCopy() {
+        return (Stack<Integer>)this.history.clone();
+    }
+
+    @Override
+    public int getPreviousPage() {
         return this.previousPage;
     }
 
@@ -101,21 +106,11 @@ public class ViewPagerManager implements ViewPagerController {
     }
 
     @Override
-    public void popCurrentPage() {
+    public boolean popCurrentPage() {
         if(!this.history.isEmpty()){
             final Integer previous = this.history.pop();
             this.addToBackStack = false;
             this.pager.setCurrentItem(previous);
-        }
-    }
-
-    /**
-     * @return true if override is succeed, false otherwise.
-     */
-    public boolean onBackPressed() {
-        if (!this.history.isEmpty()) {
-            this.addToBackStack = false;
-            this.pager.setCurrentItem(this.history.pop());
             return true;
         } return false;
     }

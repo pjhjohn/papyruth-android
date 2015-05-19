@@ -23,6 +23,7 @@ import com.montserrat.utils.view.viewpager.ViewPagerManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import timber.log.Timber;
 
@@ -111,7 +112,12 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     }
 
     @Override
-    public int getPreviousPage () {
+    public Stack<Integer> getHistoryCopy() {
+        return this.managers.get(this.drawer.getActiveCategory()).getHistoryCopy();
+    }
+
+    @Override
+    public int getPreviousPage() {
         return this.managers.get(this.drawer.getActiveCategory()).getPreviousPage();
     }
 
@@ -122,9 +128,9 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     }
 
     @Override
-    public void popCurrentPage () {
+    public boolean popCurrentPage () {
         this.terminate = false;
-        this.managers.get(this.drawer.getActiveCategory()).popCurrentPage();
+        return this.managers.get(this.drawer.getActiveCategory()).popCurrentPage();
     }
 
 
@@ -146,7 +152,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        if(!this.managers.get(this.drawer.getActiveCategory()).onBackPressed()) {
+        if(!this.managers.get(this.drawer.getActiveCategory()).popCurrentPage()) {
             if(terminate) super.onBackPressed();
             else {
                 Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();

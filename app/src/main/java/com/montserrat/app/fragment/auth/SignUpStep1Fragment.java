@@ -82,7 +82,9 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityRecycler
     public void recyclerViewListClicked (View view, int position) {
         User.getInstance().setUniversityId(this.items.get(position).id);
         User.getInstance().setUniversityName(this.items.get(position).name);
-        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) this.pagerController.popCurrentPage();
-        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) {
+            if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP1)) this.pagerController.popCurrentPage();
+            else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+        } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
     }
 }
