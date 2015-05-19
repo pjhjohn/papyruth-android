@@ -9,26 +9,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
-import com.montserrat.app.AppConst;
-import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.model.Statistics;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.PanelFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RetrofitError;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-19.
