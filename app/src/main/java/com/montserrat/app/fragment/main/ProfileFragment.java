@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.melnykov.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.R;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.view.fragment.PanelFragment;

@@ -33,7 +33,7 @@ dependencies {
     compile 'com.android.support:support-v13:21.0.3'
 
     /* External Libraries*/
-    compile 'com.melnykov:floatingactionbutton:1.3.0'
+    compile 'com.github.clans:fab:1.5.0'
 
     compile 'io.reactivex:rxandroid:0.24.0'
 

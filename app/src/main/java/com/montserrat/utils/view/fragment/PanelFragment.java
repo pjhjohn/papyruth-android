@@ -3,7 +3,7 @@ package com.montserrat.utils.view.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 
-import com.melnykov.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.fragment.nav.NavFragment;
 
 /**
