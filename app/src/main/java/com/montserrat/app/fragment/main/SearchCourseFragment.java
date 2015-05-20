@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> {
     private ViewPagerController pagerController;
@@ -63,12 +61,7 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypedValue tv = new TypedValue();
-        int actionbarHeight = 0;
-        if (this.getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-            actionbarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-        Timber.d("Toolbar height : %d", actionbarHeight);
-        this.setupSwipeRefresh(this.refresh, actionbarHeight);
+        this.setupSwipeRefresh(this.refresh);
     }
 
     @Override

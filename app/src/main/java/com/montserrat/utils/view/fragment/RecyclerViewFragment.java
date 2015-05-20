@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
@@ -39,7 +40,11 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
         return Observable.create( observer -> view.setOnRefreshListener(() -> observer.onNext(true)));
     }
 
-    protected void setupSwipeRefresh(SwipeRefreshLayout view, int offset) {
+    protected void setupSwipeRefresh(SwipeRefreshLayout view) {
+        int offset = 0;
+        TypedValue value = new TypedValue();
+        if (this.getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, value, true))
+            offset = TypedValue.complexToDimensionPixelSize(value.data, getResources().getDisplayMetrics());
         view.setProgressViewOffset(false, offset, offset + 80); // TODO : avoid hard-coding
         view.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
     }
