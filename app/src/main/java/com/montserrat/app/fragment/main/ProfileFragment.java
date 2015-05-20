@@ -1,6 +1,7 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -10,8 +11,8 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.User;
-import com.montserrat.utils.view.fragment.PanelFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
@@ -22,7 +23,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileFragment extends PanelFragment implements OnPageFocus {
+public class ProfileFragment extends Fragment implements OnPageFocus {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -46,7 +47,11 @@ public class ProfileFragment extends PanelFragment implements OnPageFocus {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.setupFloatingActionButton(this.fab);
+
+        this.fab.setOnClickListener(unused -> {
+            if(this.getActivity() instanceof NavFragment.OnCategoryClickListener)
+                ((NavFragment.OnCategoryClickListener)this.getActivity()).onCategorySelected(NavFragment.CategoryType.EVALUATION);
+        });
         return view;
     }
 

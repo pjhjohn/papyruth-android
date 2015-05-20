@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialCourseAdapter;
+import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -53,7 +54,10 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
 
         this.setupRecyclerView(this.recycler);
 
-        this.setupFloatingActionButton(this.fab);
+        this.fab.setOnClickListener(unused -> {
+            if(this.getActivity() instanceof NavFragment.OnCategoryClickListener)
+                ((NavFragment.OnCategoryClickListener)this.getActivity()).onCategorySelected(NavFragment.CategoryType.EVALUATION);
+        });
 
         return view;
     }

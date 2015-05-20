@@ -1,5 +1,6 @@
 package com.montserrat.utils.view.fragment;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +23,7 @@ import rx.Observable;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>, ITEM> extends PanelFragment
-    implements RecyclerViewClickListener /*TODO:Implement it*/{
+public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>, ITEM> extends Fragment implements RecyclerViewClickListener {
 
     protected ADAPTER adapter;
     protected List<ITEM> items;

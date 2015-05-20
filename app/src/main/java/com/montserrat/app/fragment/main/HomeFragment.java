@@ -64,7 +64,11 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.refresh.setEnabled(true);
         this.setupRecyclerView(this.recycler);
-        this.setupFloatingActionButton(this.fab);
+
+        this.fab.setOnClickListener(unused -> {
+            if(this.getActivity() instanceof NavFragment.OnCategoryClickListener)
+                ((NavFragment.OnCategoryClickListener)this.getActivity()).onCategorySelected(NavFragment.CategoryType.EVALUATION);
+        });
 
         return view;
     }
