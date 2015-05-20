@@ -19,12 +19,15 @@ import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -34,7 +37,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-05-09.
  * Provides latest evaluations.
  */
-public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter, PartialEvaluation> {
+public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter, PartialEvaluation> implements OnPageFocus {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -140,5 +143,20 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
                     this.adapter.notifyDataSetChanged();
                 })
         );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(this.getUserVisibleHint()) this.onPageFocused();
+    }
+
+
+    @Override
+    public void onPageFocused() {
+        this.fab.hide(false);
+        this.subscriptions.add(Observable.just(null).delay(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+            unused -> this.fab.show(true)
+        ));
     }
 }

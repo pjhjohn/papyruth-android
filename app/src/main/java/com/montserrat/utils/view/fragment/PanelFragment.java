@@ -9,6 +9,7 @@ import com.montserrat.app.fragment.nav.NavFragment;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
+@Deprecated
 public abstract class PanelFragment extends Fragment {
     private NavFragment.OnCategoryClickListener navigationCallback;
 
