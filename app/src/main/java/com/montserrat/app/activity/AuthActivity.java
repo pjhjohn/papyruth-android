@@ -3,14 +3,12 @@ package com.montserrat.app.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
-import com.montserrat.app.fragment.FragmentFactory;
+import com.montserrat.app.R;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
 
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -28,7 +26,7 @@ public class AuthActivity extends Activity implements ViewPagerController {
         this.manager = new ViewPagerManager(
                 (FlexibleViewPager) findViewById(R.id.auth_viewpager),
                 this.getFragmentManager(),
-                FragmentFactory.Type.AUTH,
+                AppConst.ViewPager.Type.AUTH,
                 AppConst.ViewPager.Auth.LENGTH
         );
         this.manager.setSwipeEnabled(false);

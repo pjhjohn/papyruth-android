@@ -17,20 +17,13 @@ import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SignOutFragment;
 
+import com.montserrat.app.AppConst.ViewPager.Type;
+
 /**
  * Created by pjhjohn on 2015-04-09.
  */
 public class FragmentFactory {
     private FragmentFactory () {}
-    /* TODO : static final integer VS enum */
-    public enum Type {
-        AUTH, HOME, SEARCH, RECOMMENDATION, EVALUAION, RANDOM, PROFILE, SIGNOUT
-    }
-
-    public static Fragment create(Type type) {
-        return FragmentFactory.create(type, 0);
-    }
-
     public static Fragment create(Type type, int position) {
         Fragment fragment = null;
         switch (type) {
@@ -53,7 +46,7 @@ public class FragmentFactory {
                 switch(position) {
                     case AppConst.ViewPager.Recommendation.DUMMY        : fragment = new DummyFragment();       break;
                 } break;
-            case EVALUAION:
+            case EVALUATION:
                 switch(position) {
                     case AppConst.ViewPager.Evaluation.EVALUATION_STEP1 :
                         fragment = new EvaluationStep1Fragment();
@@ -79,23 +72,13 @@ public class FragmentFactory {
         return fragment;
     }
 
-    public static Fragment create(Type type, int position, Bundle bundleToUpdate) {
-        Fragment fragment = FragmentFactory.create(type, position);
-        if(fragment == null) return null;
-
-        Bundle bundle = fragment.getArguments();
-        bundle.putAll(bundleToUpdate);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     public static String stringify(Type type) {
         switch(type) {
             case AUTH   : return "AUTH";
             case HOME   : return "HOME";
             case SEARCH : return "SEARCH";
             case RECOMMENDATION: return "RECOMMENDATION";
-            case EVALUAION: return "EVALUAION";
+            case EVALUATION: return "EVALUATION";
             case RANDOM : return "RANDOM";
             case PROFILE: return "PROFILE";
             case SIGNOUT: return "SIGNOUT";

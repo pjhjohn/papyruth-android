@@ -13,9 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
-import com.montserrat.app.fragment.FragmentFactory;
+import com.montserrat.app.R;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -45,13 +44,13 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
         /* Instantiate Multiple ViewPagerManagers */
         this.managers = new ArrayList<ViewPagerManager> ();
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.HOME     , AppConst.ViewPager.Home.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SEARCH   , AppConst.ViewPager.Search.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RECOMMENDATION, AppConst.ViewPager.Recommendation.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.EVALUAION, AppConst.ViewPager.Evaluation.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.RANDOM   , AppConst.ViewPager.Random.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.PROFILE  , AppConst.ViewPager.Profile.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), FragmentFactory.Type.SIGNOUT  , AppConst.ViewPager.Signout.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.HOME     , AppConst.ViewPager.Home.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SEARCH   , AppConst.ViewPager.Search.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.RECOMMENDATION, AppConst.ViewPager.Recommendation.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.RANDOM   , AppConst.ViewPager.Random.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.PROFILE  , AppConst.ViewPager.Profile.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SIGNOUT  , AppConst.ViewPager.Signout.LENGTH));
         this.managers.get(0).active();
         for(ViewPagerManager manager : this.managers) manager.setSwipeEnabled(false);
     }

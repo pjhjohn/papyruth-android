@@ -7,9 +7,9 @@ import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import com.montserrat.app.AppConst.ViewPager.Type;
 import com.montserrat.app.fragment.FragmentFactory;
 
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -27,9 +27,9 @@ public class ViewPagerManager implements ViewPagerController {
     private Adapter adapter;
     private ViewPager.OnPageChangeListener listener;
 
-    public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, final FragmentFactory.Type fragmentType, int viewCount) {
+    public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, Type type, int viewCount) {
         this.pager = pager;
-        this.adapter = new Adapter(manager, fragmentType, viewCount);
+        this.adapter = new Adapter(manager, type, viewCount);
         this.listener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected (int position) {
@@ -117,11 +117,11 @@ public class ViewPagerManager implements ViewPagerController {
 
     private static class Adapter extends FragmentStatePagerAdapter {
         private SparseArray<Fragment> fragments;
-        private final FragmentFactory.Type type;
+        private final Type type;
         private final int count;
-        public Adapter(FragmentManager manager, FragmentFactory.Type fragmentType, int viewCount) {
+        public Adapter(FragmentManager manager, Type type, int viewCount) {
             super(manager);
-            this.type = fragmentType;
+            this.type = type;
             this.count = viewCount;
             this.fragments = new SparseArray<>();
         }

@@ -19,6 +19,11 @@ public class AppConst {
      * Subclass of ViewPager should be registered as Type of FragmentFactory
      */
     public static class ViewPager {
+        /* ViewPager Type */
+        public enum Type {
+            AUTH, HOME, SEARCH, RECOMMENDATION, EVALUATION, RANDOM, PROFILE, SIGNOUT
+        }
+
         /* For Auth Activity */
         public static class Auth {
             public static final int LENGTH = 4;
