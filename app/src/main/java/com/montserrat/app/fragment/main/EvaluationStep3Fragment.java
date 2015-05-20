@@ -2,10 +2,12 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -21,6 +23,7 @@ import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnFocusChange;
 import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
@@ -32,7 +35,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
+public class EvaluationStep3Fragment extends Fragment implements OnPageFocus, View.OnFocusChangeListener{
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -70,6 +73,7 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
         pointEasiness.setMax(10);
         pointClarity.setMax(10);
 
+        comment.setOnFocusChangeListener(this);
         /* Event Binding */
         this.subscriptions.add(ViewObservable
             .clicks(submit)
@@ -123,5 +127,17 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
         pointGpaSatisfaction.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
         pointEasiness.setProgress(EvaluationForm.getInstance().getPointEasiness());
         pointClarity.setProgress(EvaluationForm.getInstance().getPointClarity());
+    }
+
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+//        if(v.getId() == comment.getId())
+//            Timber.d("focused??? %s", hasFocus);
+        if(!hasFocus) {
+            InputMethodManager imm =  (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            Timber.d("v : %s, comment : %s", v.getId(), comment.getId());
+        }
     }
 }

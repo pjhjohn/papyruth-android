@@ -3,22 +3,26 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
+import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.model.EvaluationForm;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
@@ -40,7 +44,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-04-26.
  * Searches PartialCourse for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends Fragment implements RecyclerViewClickListener {
+public class EvaluationStep1Fragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements RecyclerViewClickListener {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -53,7 +57,6 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
     @InjectView(R.id.query_result) protected RecyclerView queryResult;
     @InjectView(R.id.btn_next) protected Button next;
 
-    private List<PartialCourse> partialCourses;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -63,8 +66,8 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
         this.subscriptions = new CompositeSubscription();
 
         /* View Initialization */
-        this.queryResult.setLayoutManager(this.getRecyclerViewLayoutManager());
-
+//        this.queryResult.setLayoutManager(this.getRecyclerViewLayoutManager());
+        this.setupRecyclerView(this.queryResult);
         /* Event Binding */
         this.next.setOnClickListener(v -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true));
         return view;
@@ -91,31 +94,40 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewCli
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    lectures -> {
-                        this.partialCourses = lectures;
-                        EvaluationAdapter eAdapter = new EvaluationAdapter(lectures, this);
-                        this.queryResult.setAdapter(eAdapter);
-//                        this.lectureAdapter.notifyDataSetChanged();
-                    },
-                    error -> {
-                        if (error instanceof RetrofitError) {
-                            switch (((RetrofitError) error).getResponse().getStatus()) {
-                                default:
-                                    Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        lectures -> {
+                            this.items.addAll(lectures);
+//                        EvaluationAdapter eAdapter = new EvaluationAdapter(lectures, this);
+//                        this.queryResult.setAdapter(eAdapter);
+                            this.adapter.notifyDataSetChanged();
+                        },
+                        error -> {
+                            if (error instanceof RetrofitError) {
+                                switch (((RetrofitError) error).getResponse().getStatus()) {
+                                    default:
+                                        Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                                }
                             }
                         }
-                    }
                 )
         );
     }
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        PartialCourse data = partialCourses.get(position);
+        PartialCourse data = items.get(position);
         EvaluationForm.getInstance().setLectureName(data.name);
         EvaluationForm.getInstance().setProfessorName("prof");
         EvaluationForm.getInstance().setCourseId(data.id);
+
+        InputMethodManager imm =  (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
         this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
+    }
+
+    @Override
+    protected PartialCourseAdapter getAdapter(List<PartialCourse> partialCourses) {
+        return PartialCourseAdapter.newInstance(partialCourses, this);
     }
 
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
