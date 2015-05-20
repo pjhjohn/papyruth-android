@@ -91,13 +91,13 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
 
         /* items */
         this.items = new ArrayList<>();
-        this.items.add(new Category(this.getString(R.string.nav_item_home) , R.drawable.ic_action_view_as_grid));
-        this.items.add(new Category(this.getString(R.string.nav_item_search), R.drawable.ic_action_search));
-        this.items.add(new Category(this.getString(R.string.nav_item_recommendation), R.drawable.ic_action_location_searching));
-        this.items.add(new Category(this.getString(R.string.nav_item_evaluation), R.drawable.ic_action_edit));
-        this.items.add(new Category(this.getString(R.string.nav_item_random), R.drawable.ic_action_shuffle));
-        this.items.add(new Category(this.getString(R.string.nav_item_profile), R.drawable.ic_action_settings));
-        this.items.add(new Category(this.getString(R.string.nav_item_signout), R.drawable.ic_action_remove));
+        this.items.add(new Category(this.getString(R.string.nav_item_home) , R.drawable.ic_home));
+        this.items.add(new Category(this.getString(R.string.nav_item_search), R.drawable.ic_search));
+        this.items.add(new Category(this.getString(R.string.nav_item_recommendation), R.drawable.ic_recommend));
+        this.items.add(new Category(this.getString(R.string.nav_item_evaluation), R.drawable.ic_create));
+        this.items.add(new Category(this.getString(R.string.nav_item_random), R.drawable.ic_random));
+        this.items.add(new Category(this.getString(R.string.nav_item_profile), R.drawable.ic_setting));
+        this.items.add(new Category(this.getString(R.string.nav_item_signout), R.drawable.ic_signout));
 
         /* adapter */
         this.adapter = NavAdapter.newInstance(this.items, this);
