@@ -15,6 +15,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-04-25.
@@ -79,9 +80,9 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void bind(PartialEvaluation item) {
-            this.nickname.setText(item.user_id);   // TODO : user nickname should be contained in PartialEvaluation
+            this.nickname.setText(item.professor_name);   // TODO : user nickname should be contained in PartialEvaluation
             this.comment.setText(item.comment);
-            this.like.setText(item.point_overall); // TODO : # of likes should be contained in PartialEvaluation
+            this.like.setText(item.point_overall+""); // TODO : # of likes should be contained in PartialEvaluation
         }
 
         @Override

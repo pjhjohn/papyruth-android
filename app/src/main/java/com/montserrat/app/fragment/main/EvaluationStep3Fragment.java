@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -35,7 +36,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class EvaluationStep3Fragment extends Fragment implements OnPageFocus, View.OnFocusChangeListener{
+public class EvaluationStep3Fragment extends Fragment implements OnPageFocus{//}, View.OnFocusChangeListener, View.OnTouchListener{
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -66,6 +67,8 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus, Vi
         pointGpaSatisfaction.setEnabled(false);
         pointEasiness.setEnabled(false);
         pointClarity.setEnabled(false);
+        pointClarity.setFocusable(true);
+//        setOnFocue();
 
         pointOverall.setStepSize((float) 1);
         pointOverall.setMax(10);
@@ -73,7 +76,8 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus, Vi
         pointEasiness.setMax(10);
         pointClarity.setMax(10);
 
-        comment.setOnFocusChangeListener(this);
+//        comment.setOnFocusChangeListener(this);
+//        comment.setOnTouchListener(this);
         /* Event Binding */
         this.subscriptions.add(ViewObservable
             .clicks(submit)
@@ -128,16 +132,44 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus, Vi
         pointEasiness.setProgress(EvaluationForm.getInstance().getPointEasiness());
         pointClarity.setProgress(EvaluationForm.getInstance().getPointClarity());
     }
-
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-//        if(v.getId() == comment.getId())
-//            Timber.d("focused??? %s", hasFocus);
-        if(!hasFocus) {
-            InputMethodManager imm =  (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            Timber.d("v : %s, comment : %s", v.getId(), comment.getId());
-        }
-    }
+//    public void setOnFocue(){
+//        lecture.setOnFocusChangeListener(this);
+//        professor.setOnFocusChangeListener(this);
+//        pointOverall.setOnFocusChangeListener(this);
+//        pointEasiness.setOnFocusChangeListener(this);
+//        pointGpaSatisfaction.setOnFocusChangeListener(this);
+//        pointClarity.setOnFocusChangeListener(this);
+//
+//        lecture.setOnTouchListener(this);
+//        professor.setOnTouchListener(this);
+//        pointOverall.setOnTouchListener(this);
+//        pointEasiness.setOnTouchListener(this);
+//        pointGpaSatisfaction.setOnTouchListener(this);
+//        pointClarity.setOnTouchListener(this);
+//    }
+//
+//
+//    @Override
+//    public void onFocusChange(View v, boolean hasFocus) {
+////        if(v.getId() == comment.getId())
+////            Timber.d("focused??? %s", hasFocus);
+//        if(!hasFocus) {
+//            InputMethodManager imm =  (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//            Timber.d("losing v : %s, comment : %s", v.getId(), comment.getId());
+//        }else if(hasFocus) {
+//            Timber.d("focus v : %s, comment : %s", v.getId(), comment.getId());
+//        }
+//    }
+//
+//    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        if (v.getId() == comment.getId()){
+//            Timber.d("focus22 v : %s, comment : %s", v.getId(), comment.getId());
+//        }else{
+//            Timber.d("losing22 v : %s, comment : %s", v.getId(), comment.getId());
+//
+//        }
+//        return false;
+//    }
 }

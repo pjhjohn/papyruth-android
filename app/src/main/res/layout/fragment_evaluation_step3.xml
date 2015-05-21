@@ -10,7 +10,9 @@
         android:gravity="center"
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusableInTouchMode="true"
+        >
         <AutoCompleteTextView
             android:id="@+id/lecture"
             android:hint="@string/hint_lecture"
@@ -49,7 +51,9 @@
         <EditText
             android:id="@+id/comment"
             android:layout_width="match_parent"
-            android:layout_height="178dp"/>
+            android:layout_height="178dp"
+            android:focusableInTouchMode="true"
+            />
 
         <Button
             android:id="@+id/submit"

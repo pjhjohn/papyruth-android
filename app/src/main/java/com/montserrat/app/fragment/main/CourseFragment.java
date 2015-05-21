@@ -38,7 +38,22 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.setupRecyclerView((RecyclerView)view.findViewById(R.id.detail_recyclerview));
+        this.items.add(newev("1", "comment", 3));
+        this.items.add(newev("1", "comment", 3));
+        this.items.add(newev("1", "comment", 3));
+        this.items.add(newev("1", "comment", 3));
+        this.items.add(newev("1", "comment", 3));
+        this.items.add(newev("1", "comment", 3));
+        this.adapter.notifyDataSetChanged();
         return view;
+    }
+
+    public PartialEvaluation newev(String userid, String comment, int like){
+        PartialEvaluation ev = new PartialEvaluation();
+        ev.professor_name = userid;
+        ev.comment = comment;
+        ev.point_overall = like;
+        return ev;
     }
 
     @Override
