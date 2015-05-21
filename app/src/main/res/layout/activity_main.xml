@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.montserrat.utils.view.viewpager.FlexibleViewPager>
-        <include layout="@layout/part_toolbar"/>
+        <include layout="@layout/toolbar"/>
     </FrameLayout>
     <fragment
         android:id="@+id/drawer"

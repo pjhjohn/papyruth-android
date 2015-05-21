@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:text="@string/next"/>
     </LinearLayout>
-    <include layout="@layout/part_progress"/>
+    <include layout="@layout/progress"/>
 </FrameLayout>
 
 

@@ -65,7 +65,7 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <include layout="@layout/part_progress"/>
+    <include layout="@layout/progress"/>
 </FrameLayout>
 
 

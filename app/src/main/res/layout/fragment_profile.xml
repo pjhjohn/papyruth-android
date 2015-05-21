@@ -53,6 +53,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
-    <include layout="@layout/part_fab"/>
-    <include layout="@layout/part_progress"/>
+    <include layout="@layout/fab"/>
+    <include layout="@layout/progress"/>
 </FrameLayout>
