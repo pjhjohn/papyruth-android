@@ -1,5 +1,4 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:name="comm.montserrat.activity.AuthActivity">
@@ -90,7 +89,7 @@
             android:layout_height="wrap_content"
             android:text="@string/next"/>
     </LinearLayout>
-    <include android:id="@+id/progress" layout="@layout/part_progress"/>
+    <include layout="@layout/part_progress"/>
 </FrameLayout>
 
 
