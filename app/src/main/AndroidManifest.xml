@@ -33,10 +33,5 @@
             android:label="@string/app_name" >
         </activity>
 
-        <activity
-            android:name="com.montserrat.app.activity.ProfessorGalleryActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name">
-        </activity>
     </application>
 </manifest>
