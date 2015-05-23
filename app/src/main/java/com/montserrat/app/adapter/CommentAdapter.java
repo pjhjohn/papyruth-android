@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.model.Comment;
-import com.montserrat.app.model.PartialCourse;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import butterknife.InjectView;
  */
 public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     public static final class Type {
-        public static final int ITEM = 1;
+        public static final int ITEM = 0;
     }
     public static CommentAdapter newInstance(List<Comment> initItemList, RecyclerViewClickListener listener) {
         return new CommentAdapter(initItemList, listener);
@@ -39,14 +38,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.cardview_evaluation_reply, parent, false));
+            case Type.ITEM   : return new CommentHolder(inflater.inflate(R.layout.cardview_evaluation_reply, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((Holder) holder).bind(this.items.get(position));
+        ((CommentHolder) holder).bind(this.items.get(position));
     }
 
     @Override
@@ -59,10 +58,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return Type.ITEM;
     }
 
-    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nickname) protected TextView username;
-        @InjectView(R.id.content) protected TextView comment;
-        public Holder(View parent) {
+        @InjectView(R.id.comment) protected TextView content;
+        public CommentHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);
             parent.setOnClickListener(this);
@@ -70,7 +69,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public void bind(Comment item) {
             this.username.setText(item.user_name); // lecture represents the name of course
-            this.comment.setText(item.comment);
+            this.content.setText(item.comment);
         }
 
         @Override
