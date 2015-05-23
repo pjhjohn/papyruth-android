@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
@@ -39,7 +40,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     @InjectView(R.id.point_easiness) protected  TextView pointEasiness;
     @InjectView(R.id.point_clarity) protected  TextView pointClarity;
     @InjectView(R.id.detail_recyclerview) protected RecyclerView evaluationList;
-    protected Fragment evaluationFragment;
+    protected EvaluationFragment evaluationFragment;
 
 
     @Override
@@ -75,9 +76,14 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         this.adapter.notifyDataSetChanged();
 
         evaluationFragment = new EvaluationFragment();
+//        evaluationFragment.setArguments(this.getActivity().getIntent().getExtras());
+
+        //Evaluation 플래그먼트를 현재 위치 위에 올릴 수 있게 됨.
+        //Click 이벤트시 해당 강의평을 가져와 상단에 올리게 하면 됨
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.evaluaiton_fragment, evaluationFragment);
         Timber.d("eva frag : %s", evaluationFragment.getId());
-        ft.hide(evaluationFragment);
+//        ft.hide(evaluationFragment);
 //        ft.remove(evaluationFragment);
         ft.commit();
 

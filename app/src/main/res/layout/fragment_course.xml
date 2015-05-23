@@ -62,13 +62,20 @@
             android:background="#ffffff"
             />
     </LinearLayout>
-    <fragment
+    <!--<fragment-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="511dp"-->
+        <!--android:layout_gravity="center_horizontal|bottom"-->
+        <!--android:name="com.montserrat.app.fragment.main.EvaluationFragment"-->
+        <!--/>-->
+    <FrameLayout
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="511dp"
+        android:layout_height="match_parent"
         android:id="@+id/evaluaiton_fragment"
-        android:layout_gravity="center_horizontal|bottom"
-        android:name="com.montserrat.app.fragment.main.EvaluationFragment"
-        />
+        >
+
+     </FrameLayout>
 
 
 </FrameLayout>

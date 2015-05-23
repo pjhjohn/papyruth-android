@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="12"
+    android:id="@+id/evaluation_layout"
     >
     <ScrollView
         android:layout_width="match_parent"
@@ -24,10 +25,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/nickname"
+                    android:background="#aaaaaa"
                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#aaaaaa"
                     android:id="@+id/comment"/>
 
 

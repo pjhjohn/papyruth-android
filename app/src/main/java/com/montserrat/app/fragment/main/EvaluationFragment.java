@@ -50,12 +50,6 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         this.subscription = new CompositeSubscription();
         this.setupRecyclerView((RecyclerView)view.findViewById(R.id.comment_list));
         ButterKnife.inject(this, view);
-        this.items.add(newComment("hi", "hi"));
-        this.items.add(newComment("hi", "hi"));
-        this.items.add(newComment("hi", "hi"));
-        this.items.add(newComment("hi", "hi"));
-        this.items.add(newComment("hi", "hi"));
-        this.items.add(newComment("hi", "hi"));
         this.adapter.notifyDataSetChanged();
 
 
