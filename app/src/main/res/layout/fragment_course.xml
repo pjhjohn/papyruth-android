@@ -1,73 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="511dp"
-            android:name="com.montserrat.app.fragment.main.EvaluationFragment"
-            android:id="@+id/evaluaiton_fragment"
-            android:layout_gravity="center_horizontal|bottom" />
-
+        android:layout_marginTop="?attr/actionBarSize"
+        android:weightSum="12">
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:weightSum="12">
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0000ff"
+            android:layout_weight="4"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0000ff"
-                android:layout_weight="4"
-                >
+                android:id="@+id/course_title"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/course_title"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/course_professor"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/point_overall"
-                    android:layout_gravity="center_horizontal"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/point_gpa_satisfaction"
-                    android:layout_gravity="center_horizontal"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/point_easiness"
-                    android:layout_gravity="center_horizontal"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/point_clarity"
-                    android:layout_gravity="center_horizontal"/>
-            </LinearLayout>
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/detail_recyclerview"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0px"
-                android:layout_weight="8"
-                android:scrollbars="none"
-                android:background="#ffffff"
-                />
+                android:id="@+id/course_professor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/point_overall"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/point_gpa_satisfaction"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/point_easiness"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/point_clarity"
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/detail_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0px"
+            android:layout_weight="8"
+            android:scrollbars="none"
+            android:background="#ffffff"
+            />
+    </LinearLayout>
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="511dp"
+        android:id="@+id/evaluaiton_fragment"
+        android:layout_gravity="center_horizontal|bottom"
+        android:name="com.montserrat.app.fragment.main.EvaluationFragment"
+        />
 
 
 </FrameLayout>

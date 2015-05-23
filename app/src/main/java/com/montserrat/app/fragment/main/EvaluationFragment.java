@@ -1,7 +1,6 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CommentAdapter;
-import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Comment;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
@@ -52,12 +50,12 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         this.subscription = new CompositeSubscription();
         this.setupRecyclerView((RecyclerView)view.findViewById(R.id.comment_list));
         ButterKnife.inject(this, view);
-        this.items.add(newcommnet("hi", "hi"));
-        this.items.add(newcommnet("hi", "hi"));
-        this.items.add(newcommnet("hi", "hi"));
-        this.items.add(newcommnet("hi", "hi"));
-        this.items.add(newcommnet("hi", "hi"));
-        this.items.add(newcommnet("hi", "hi"));
+        this.items.add(newComment("hi", "hi"));
+        this.items.add(newComment("hi", "hi"));
+        this.items.add(newComment("hi", "hi"));
+        this.items.add(newComment("hi", "hi"));
+        this.items.add(newComment("hi", "hi"));
+        this.items.add(newComment("hi", "hi"));
         this.adapter.notifyDataSetChanged();
 
 
@@ -71,7 +69,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         ButterKnife.reset(this);
     }
 
-    public Comment newcommnet(String name, String content){
+    public Comment newComment(String name, String content){
         Comment comment = new Comment();
         comment.user_name = name;
         comment.comment = content;

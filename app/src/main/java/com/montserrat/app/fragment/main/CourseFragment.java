@@ -1,6 +1,7 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
@@ -24,8 +26,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
-public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> {
+public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation>{
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -35,6 +38,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     @InjectView(R.id.point_gpa_satisfaction) protected  TextView pointSatisfaction;
     @InjectView(R.id.point_easiness) protected  TextView pointEasiness;
     @InjectView(R.id.point_clarity) protected  TextView pointClarity;
+    @InjectView(R.id.detail_recyclerview) protected RecyclerView evaluationList;
+    protected Fragment evaluationFragment;
 
 
     @Override
@@ -51,24 +56,30 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         View view = infalter.inflate(R.layout.fragment_course, container, false);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.setupRecyclerView((RecyclerView)view.findViewById(R.id.detail_recyclerview));
+        evaluationList = (RecyclerView)view.findViewById(R.id.detail_recyclerview);
+        this.setupRecyclerView(evaluationList);
         ButterKnife.inject(this, view);
         update();
         this.items.clear();
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
-        this.items.add(newev("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
+        this.items.add(newEvaluation("1", "comment", 3));
         this.adapter.notifyDataSetChanged();
 
-
+        evaluationFragment = new EvaluationFragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Timber.d("eva frag : %s", evaluationFragment.getId());
+        ft.hide(evaluationFragment);
+//        ft.remove(evaluationFragment);
+        ft.commit();
 
         return view;
     }
@@ -79,7 +90,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         ButterKnife.reset(this);
     }
 
-    public PartialEvaluation newev(String userid, String comment, int like){
+    public PartialEvaluation newEvaluation(String userid, String comment, int like){
         PartialEvaluation ev = new PartialEvaluation();
         ev.professor_name = userid;
         ev.comment = comment;
@@ -94,14 +105,14 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        FragmentManager fragmentManager = getFragmentManager();
-        EvaluationFragment evaluationFragment = new EvaluationFragment();
-        Bundle bundle = new Bundle();
-        evaluationFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.evaluaiton_fragment,evaluationFragment);
-
-        fragmentTransaction.commit();
+//        FragmentManager fragmentManager = getFragmentManager();
+//        EvaluationFragment evaluationFragment = new EvaluationFragment();
+//        Bundle bundle = new Bundle();
+//        evaluationFragment.setArguments(bundle);
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.add(R.id.evaluaiton_fragment,evaluationFragment);
+//
+//        fragmentTransaction.commit();
     }
 
     @Override

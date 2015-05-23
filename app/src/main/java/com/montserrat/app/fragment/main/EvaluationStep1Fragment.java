@@ -44,7 +44,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-04-26.
  * Searches PartialCourse for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements RecyclerViewClickListener {
+public class EvaluationStep1Fragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
