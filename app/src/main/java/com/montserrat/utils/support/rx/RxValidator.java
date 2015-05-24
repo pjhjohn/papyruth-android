@@ -71,12 +71,9 @@ public class RxValidator {
                     buttons.add((RadioButton) child);
                 }
             }
-        } /* buttons has RadioButtons */
+        }
 
-        return Observable.merge(
-            Observable.defer(() -> Observable.just(group.getCheckedRadioButtonId())),
-            Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId())
-        );
+        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId()).startWith(group.getCheckedRadioButtonId());
     }
     public static Func1<Integer, Boolean> isValidRadioButton = id -> id != -1;
 
