@@ -63,6 +63,9 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.managers.get(category).active();
     }
 
+    public int getActionbarHeight(){
+        return this.getSupportActionBar().getHeight();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -151,7 +154,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        if (this.onBackPressedListener != null){
+        if (this.onBackPressedListener != null && !isExitable){
             onBackPressedListener.onBack();
         }else if(!this.managers.get(this.drawer.getActiveCategory()).popCurrentPage()) {
             if(terminate) super.onBackPressed();
@@ -167,7 +170,9 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     }
 
     private onBackPressedListener onBackPressedListener;
-    public void setOnBackPressedListener(onBackPressedListener listener){
+    private boolean isExitable = true;
+    public void setOnBackPressedListener(onBackPressedListener listener, boolean isExitable){
         onBackPressedListener = listener;
+        this.isExitable = isExitable;
     }
 }

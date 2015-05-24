@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:background="#0000ff"
             android:layout_weight="4"
+            android:id="@+id/course_info"
             >
 
             <TextView
@@ -69,7 +70,6 @@
         <!--android:name="com.montserrat.app.fragment.main.EvaluationFragment"-->
         <!--/>-->
     <FrameLayout
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/evaluaiton_fragment"
