@@ -78,8 +78,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         evaluationFragment = new EvaluationFragment();
 //        evaluationFragment.setArguments(this.getActivity().getIntent().getExtras());
 
-        //Evaluation 플래그먼트를 현재 위치 위에 올릴 수 있게 됨.
-        //Click 이벤트시 해당 강의평을 가져와 상단에 올리게 하면 됨
+        // Can Stack Evaluation Fragment on current position.
+        // Click event triggers retriving and visualize evaluation data
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.evaluaiton_fragment, evaluationFragment);
         Timber.d("eva frag : %s", evaluationFragment.getId());

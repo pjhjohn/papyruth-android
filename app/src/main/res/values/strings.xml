@@ -46,4 +46,6 @@
     <string name="confirm_exit">Press again to close application</string>
     <string name="submit_evaluation_success">Succeed to register Evaluation</string>
     <string name="submit_evaluation_fail">Failed to register Evaluation</string>
+    <string name="fab_evaulation">New Evaluation</string>
+    <string name="fab_comment">New Comment</string>
 </resources>
