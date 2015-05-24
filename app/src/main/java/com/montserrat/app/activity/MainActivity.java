@@ -151,12 +151,23 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        if(!this.managers.get(this.drawer.getActiveCategory()).popCurrentPage()) {
+        if (this.onBackPressedListener != null){
+            onBackPressedListener.onBack();
+        }else if(!this.managers.get(this.drawer.getActiveCategory()).popCurrentPage()) {
             if(terminate) super.onBackPressed();
             else {
                 Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();
                 terminate = true;
             }
         } else terminate = false;
+    }
+
+    public interface onBackPressedListener {
+        public void onBack();
+    }
+
+    private onBackPressedListener onBackPressedListener;
+    public void setOnBackPressedListener(onBackPressedListener listener){
+        onBackPressedListener = listener;
     }
 }

@@ -1,8 +1,6 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,15 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
-import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
@@ -29,7 +26,7 @@ import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation>{
+public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements MainActivity.onBackPressedListener {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -41,6 +38,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     @InjectView(R.id.point_clarity) protected  TextView pointClarity;
     @InjectView(R.id.detail_recyclerview) protected RecyclerView evaluationList;
     protected EvaluationFragment evaluationFragment;
+    private Boolean openEvaluation;
+
 
 
     @Override
@@ -48,10 +47,11 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
         this.callback = (NavFragment.OnCategoryClickListener) activity;
+        ((MainActivity)activity).setOnBackPressedListener(this);
     }
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
-
+    private FragmentTransaction transaction;
     @Override
     public View onCreateView(LayoutInflater infalter, ViewGroup container, Bundle savedInstanceState) {
         View view = infalter.inflate(R.layout.fragment_course, container, false);
@@ -74,18 +74,11 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         this.items.add(newEvaluation("1", "comment", 3));
         this.items.add(newEvaluation("1", "comment", 3));
         this.adapter.notifyDataSetChanged();
+        this.openEvaluation = false;
 
         evaluationFragment = new EvaluationFragment();
 //        evaluationFragment.setArguments(this.getActivity().getIntent().getExtras());
 
-        //Evaluation 플래그먼트를 현재 위치 위에 올릴 수 있게 됨.
-        //Click 이벤트시 해당 강의평을 가져와 상단에 올리게 하면 됨
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.evaluaiton_fragment, evaluationFragment);
-        Timber.d("eva frag : %s", evaluationFragment.getId());
-//        ft.hide(evaluationFragment);
-//        ft.remove(evaluationFragment);
-        ft.commit();
 
         return view;
     }
@@ -111,14 +104,12 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-//        FragmentManager fragmentManager = getFragmentManager();
-//        EvaluationFragment evaluationFragment = new EvaluationFragment();
-//        Bundle bundle = new Bundle();
-//        evaluationFragment.setArguments(bundle);
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.add(R.id.evaluaiton_fragment,evaluationFragment);
-//
-//        fragmentTransaction.commit();
+        transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.evaluaiton_fragment, evaluationFragment);
+        Timber.d("eva frag : %s", evaluationFragment.getId());
+        transaction.addToBackStack(null);
+        transaction.commit();
+        this.openEvaluation = true;
     }
 
     @Override
@@ -133,5 +124,17 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         pointSatisfaction.setText(10+"");
         pointEasiness.setText(10+"");
         pointClarity.setText(10+"");
+    }
+
+
+    @Override
+    public void onBack() {
+        if (openEvaluation){
+            transaction = getFragmentManager().beginTransaction();
+            transaction.remove(evaluationFragment);
+            transaction.commit();
+            this.openEvaluation = false;
+        }
+
     }
 }

@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:weightSum="12"
     android:id="@+id/evaluation_layout"
+    android:background="#ffffff"
     >
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         >
         <LinearLayout
             android:orientation="vertical"

@@ -39,6 +39,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
         this.callback = (NavFragment.OnCategoryClickListener) activity;
+
     }
 
     private CompositeSubscription subscription;
