@@ -14,6 +14,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.adapter.CommentAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Comment;
+import com.montserrat.app.model.Evaluation;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
@@ -32,7 +33,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     private NavFragment.OnCategoryClickListener callback;
 
     @InjectView(R.id.nickname) protected TextView name;
-    @InjectView(R.id.comment) protected TextView comment;
+    @InjectView(R.id.body) protected TextView body;
 
     @Override
     public void onAttach(Activity activity) {
@@ -53,7 +54,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         ButterKnife.inject(this, view);
         this.adapter.notifyDataSetChanged();
 
-
+        setEvaluation();
 
         return view;
     }
@@ -62,12 +63,18 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        Evaluation.getInstance().clear();
+    }
+
+    public void setEvaluation(){
+        this.name.setText(Evaluation.getInstance().getLecture_name());
+        this.body.setText(Evaluation.getInstance().getBody());
     }
 
     public Comment newComment(String name, String content){
         Comment comment = new Comment();
         comment.user_name = name;
-        comment.comment = content;
+        comment.body = content;
         return comment;
     }
 

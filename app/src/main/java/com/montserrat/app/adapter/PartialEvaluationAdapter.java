@@ -70,7 +70,7 @@ public class PartialEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.
     protected class PartialEvaluationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView (R.id.professor) protected TextView professor;
         @InjectView (R.id.lecture) protected TextView lecture;
-        @InjectView (R.id.comment) protected TextView comment;
+        @InjectView (R.id.body) protected TextView comment;
         @InjectView (R.id.point_overall) protected RatingBar rating;
 
         public PartialEvaluationHolder(View parent) {
@@ -82,7 +82,7 @@ public class PartialEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.
         public void bind(PartialEvaluation evaluation) {
             this.professor.setText(evaluation.professor_name);
             this.lecture.setText(evaluation.lecture_name);
-            this.comment.setText(evaluation.comment);
+            this.comment.setText(evaluation.body);
             this.rating.setRating(evaluation.point_overall);
         }
 

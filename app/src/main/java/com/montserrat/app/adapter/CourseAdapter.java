@@ -15,7 +15,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-04-25.
@@ -71,7 +70,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class PartialEvaluationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nickname) protected TextView nickname;
-        @InjectView(R.id.comment) protected TextView comment;
+        @InjectView(R.id.body) protected TextView comment;
         @InjectView(R.id.like) protected Button like;
         public PartialEvaluationHolder(View parent) {
             super(parent);
@@ -81,7 +80,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         public void bind(PartialEvaluation item) {
             this.nickname.setText(item.professor_name);   // TODO : user nickname should be contained in PartialEvaluation
-            this.comment.setText(item.comment);
+            this.comment.setText(item.body);
             this.like.setText(item.point_overall+""); // TODO : # of likes should be contained in PartialEvaluation
         }
 

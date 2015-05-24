@@ -60,7 +60,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public static class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nickname) protected TextView username;
-        @InjectView(R.id.comment) protected TextView content;
+        @InjectView(R.id.body) protected TextView content;
         public CommentHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);
@@ -69,7 +69,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public void bind(Comment item) {
             this.username.setText(item.user_name); // lecture represents the name of course
-            this.content.setText(item.comment);
+            this.content.setText(item.body);
         }
 
         @Override

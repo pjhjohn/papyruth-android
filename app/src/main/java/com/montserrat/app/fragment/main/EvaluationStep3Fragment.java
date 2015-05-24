@@ -50,7 +50,7 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus{//}
     @InjectView(R.id.point_gpa_satisfaction) protected SeekBar pointGpaSatisfaction;
     @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
     @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
-    @InjectView(R.id.comment) protected EditText comment;
+    @InjectView(R.id.body) protected EditText comment;
     @InjectView(R.id.submit) protected Button submit;
     private CompositeSubscription subscriptions;
 
@@ -151,23 +151,23 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus{//}
 //
 //    @Override
 //    public void onFocusChange(View v, boolean hasFocus) {
-////        if(v.getId() == comment.getId())
+////        if(v.getId() == body.getId())
 ////            Timber.d("focused??? %s", hasFocus);
 //        if(!hasFocus) {
 //            InputMethodManager imm =  (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 //            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//            Timber.d("losing v : %s, comment : %s", v.getId(), comment.getId());
+//            Timber.d("losing v : %s, body : %s", v.getId(), body.getId());
 //        }else if(hasFocus) {
-//            Timber.d("focus v : %s, comment : %s", v.getId(), comment.getId());
+//            Timber.d("focus v : %s, body : %s", v.getId(), body.getId());
 //        }
 //    }
 //
 //    @Override
 //    public boolean onTouch(View v, MotionEvent event) {
-//        if (v.getId() == comment.getId()){
-//            Timber.d("focus22 v : %s, comment : %s", v.getId(), comment.getId());
+//        if (v.getId() == body.getId()){
+//            Timber.d("focus22 v : %s, body : %s", v.getId(), body.getId());
 //        }else{
-//            Timber.d("losing22 v : %s, comment : %s", v.getId(), comment.getId());
+//            Timber.d("losing22 v : %s, body : %s", v.getId(), body.getId());
 //
 //        }
 //        return false;

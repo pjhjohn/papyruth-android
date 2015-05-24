@@ -66,7 +66,7 @@ public class EvaluationForm {
 
     @Override
     public String toString() {
-        return String.format("<lecture:%s> <professor:%s> <course-id:%d> <overall:%d> <gpa satisfaction:%d> <easiness:%d> <clarity:%d> <comment:%s>",
+        return String.format("<lecture:%s> <professor:%s> <course-id:%d> <overall:%d> <gpa satisfaction:%d> <easiness:%d> <clarity:%d> <body:%s>",
             lectureName, professorName, courseId, pointOverall, pointGpaSatisfaction, pointEasiness, pointClarity, comment);
     }
 

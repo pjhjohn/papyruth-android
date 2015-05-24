@@ -15,6 +15,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
+import com.montserrat.app.model.Evaluation;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -24,7 +25,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements MainActivity.onBackPressedListener {
     private ViewPagerController pagerController;
@@ -87,12 +87,13 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        ((MainActivity)this.getActivity()).setOnBackPressedListener(null);
     }
 
     public PartialEvaluation newEvaluation(String userid, String comment, int like){
         PartialEvaluation ev = new PartialEvaluation();
         ev.professor_name = userid;
-        ev.comment = comment;
+        ev.body = comment;
         ev.point_overall = like;
         return ev;
     }
@@ -104,12 +105,29 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.evaluaiton_fragment, evaluationFragment);
-        Timber.d("eva frag : %s", evaluationFragment.getId());
-        transaction.addToBackStack(null);
-        transaction.commit();
-        this.openEvaluation = true;
+        if(!openEvaluation){
+            PartialEvaluation item = items.get(position);
+            Evaluation.getInstance().setCourse_id(item.course_id);
+            Evaluation.getInstance().setBody(item.body);
+            Evaluation.getInstance().setCreated_at(item.created_at);
+            Evaluation.getInstance().setLecture_name(this.title.getText().toString());
+            Evaluation.getInstance().setId(item.id);
+            Evaluation.getInstance().setUpdated_at(item.updated_at);
+            Evaluation.getInstance().setUser_id(item.user_id);
+            Evaluation.getInstance().setCourse_id(item.course_id);
+            Evaluation.getInstance().setPoint_overall(item.point_overall);
+            Evaluation.getInstance().setPoint_easiness(item.point_easiness);
+            Evaluation.getInstance().setPoint_gpa_satisfaction(item.point_gpa_satisfaction);
+            Evaluation.getInstance().setPoint_clarity(item.point_clarity);
+            Evaluation.getInstance().setProfessor_name(item.professor_name);
+//            Evaluation.getInstance().getUser_name(item.);
+
+            transaction = getFragmentManager().beginTransaction();
+            transaction.add(R.id.evaluaiton_fragment, evaluationFragment);
+//            transaction.addToBackStack(null);
+            transaction.commit();
+            this.openEvaluation = true;
+        }
     }
 
     @Override
@@ -135,6 +153,5 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
             transaction.commit();
             this.openEvaluation = false;
         }
-
     }
 }

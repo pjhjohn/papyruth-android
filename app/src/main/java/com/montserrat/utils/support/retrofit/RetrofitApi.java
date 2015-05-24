@@ -91,7 +91,7 @@ public class RetrofitApi {
             @Query("point_gpa_satisfaction") Integer point_gpa_satisfaction,
             @Query("point_easiness") Integer point_easiness,
             @Query("point_clarity") Integer point_clarity,
-            @Query("comment") String comment
+            @Query("body") String comment
         );
     }
 

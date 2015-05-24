@@ -11,7 +11,7 @@ public class PartialEvaluation {
     public Integer point_easiness;
     public Integer point_gpa_satisfaction;
     public Integer point_clarity;
-    public String comment;
+    public String body;
     public String created_at;
     public String updated_at;
     public String professor_name;
@@ -20,8 +20,8 @@ public class PartialEvaluation {
 
     @Override
     public String toString() {
-        return String.format("eval/user/couse id:%d/%d/%d\nprofessor:%s, lecture:%s\noverall/easiness/gpa-satisfaction/clarity point:%d/%d/%d/%d\ncomment : %s",
-            id, user_id, course_id, professor_name, lecture_name, point_overall, point_easiness, point_gpa_satisfaction, point_clarity, comment
+        return String.format("eval/user/couse id:%d/%d/%d\nprofessor:%s, lecture:%s\noverall/easiness/gpa-satisfaction/clarity point:%d/%d/%d/%d\nbody : %s",
+            id, user_id, course_id, professor_name, lecture_name, point_overall, point_easiness, point_gpa_satisfaction, point_clarity, body
         );
     }
 }
