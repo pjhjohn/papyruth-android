@@ -19,7 +19,7 @@
                 android:scrollbars="none"
                 android:layout_gravity="left|top" />
             </android.support.v4.widget.SwipeRefreshLayout>
-        <include layout="@layout/fab"/>
     </FrameLayout>
+    <include layout="@layout/fam_home"/>
     <include layout="@layout/progress"/>
 </FrameLayout>

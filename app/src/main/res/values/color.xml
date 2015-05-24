@@ -3,8 +3,8 @@
     <color name="bg_normal">#607D8B</color>
     <color name="bg_accent">#90A4AE</color>
 
-    <color name="fg_normal">#00E5FF</color>
-    <color name="fg_accent">#18FFFF</color>
+    <color name="fg_normal">#1BBC9B</color>
+    <color name="fg_accent">#3BDCBB</color>
 
     <color name="transparent">#00ffffff</color>
     <color name="translucent">#8affffff</color>

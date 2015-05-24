@@ -83,12 +83,8 @@
                 android:layout_marginBottom="16dp"
                 android:id="@+id/entrance"/>
         </LinearLayout>
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/next"/>
     </LinearLayout>
+    <include layout="@layout/fab_done"/>
     <include layout="@layout/progress"/>
 </FrameLayout>
 

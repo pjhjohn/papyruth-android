@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
@@ -63,7 +64,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.nickname) protected EditText nickname;
     @InjectView (R.id.gender) protected RadioGroup genderRadioGroup;
     @InjectView (R.id.entrance) protected Spinner entranceSpinner;
-    @InjectView (R.id.submit) protected Button submit;
+    @InjectView (R.id.fab_done) protected FloatingActionButton submit;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
 
@@ -90,17 +91,19 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
                 this.password.setError(passwordError);
                 this.realname.setError(realnameError);
                 this.nickname.setError(nicknameError);
-                return emailError == null && passwordError == null && realnameError == null && nicknameError == null;
+                return emailError == null && passwordError == null && realnameError == null && nicknameError == null && validRadioGroup != null && validRadioGroup;
             })
             .startWith(false)
             .subscribe(valid -> {
-                this.submit.getBackground().setColorFilter(getResources().getColor(valid ? R.color.fg_accent : R.color.transparent), PorterDuff.Mode.MULTIPLY);
-                this.submit.setEnabled(valid);
+                boolean visible = this.submit.getVisibility() == View.VISIBLE;
+                if(visible && !valid) this.submit.hide(true);
+                else if(!visible && valid) this.submit.show(true);
             })
         );
 
         this.subscriptions.add(ViewObservable.clicks(this.submit).subscribe(unused -> register()));
         this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+
         return view;
     }
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialEvaluationAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
@@ -47,7 +48,8 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     }
 
     @InjectView (R.id.recyclerview) protected RecyclerView recycler;
-    @InjectView (R.id.fab) protected FloatingActionButton fab;
+    @InjectView (R.id.fab_evaluation) protected FloatingActionButton fab;
+    @InjectView (R.id.fam_home) protected FloatingActionMenu fam;
     @InjectView (R.id.swipe) protected SwipeRefreshLayout refresh;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
@@ -151,9 +153,9 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
 
     @Override
     public void onPageFocused() {
-        this.fab.hide(false);
-        this.subscriptions.add(Observable.just(null).delay(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> this.fab.show(true)
+        this.fam.hideMenuButton(false);
+        this.subscriptions.add(Observable.just(null).delay(400, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+            unused -> this.fam.showMenuButton(true)
         ));
     }
 }
