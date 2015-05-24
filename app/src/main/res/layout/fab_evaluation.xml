@@ -6,4 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_create"
+    fab:menu_colorNormal="@color/fg_normal"
+    fab:menu_colorPressed="@color/fg_accent"
+    fab:fab_size="mini"
     fab:fab_label="@string/fab_evaulation"/>
