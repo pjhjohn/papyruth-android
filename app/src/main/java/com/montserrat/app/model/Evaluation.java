@@ -17,6 +17,7 @@ public class Evaluation {
     private String updated_at;
     private String professor_name;
     private String lecture_name;
+    private Integer like;
 
 
     private static Evaluation instance = null;
@@ -51,6 +52,8 @@ public class Evaluation {
     public void setLecture_name(String lecture_name) { this.lecture_name = lecture_name; }
     public String getUser_name() { return user_name; }
     public void setUser_name(String user_name) { this.user_name = user_name; }
+    public Integer getLike() { return like; }
+    public void setLike(Integer like) { this.like = like; }
 
     public void clear(){
         this.id = null;
