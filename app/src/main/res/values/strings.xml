@@ -56,5 +56,6 @@
     <string name="label_point_easiness">Easiness</string>
     <string name="lecture_type_culture">Culture</string>
     <string name="lecture_type_major">Major</string>
+    <string name="like">LIKE</string>
 
 </resources>

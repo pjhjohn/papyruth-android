@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
@@ -38,6 +39,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        Timber.d("onCreateViewHolder");
         switch(viewType) {
             case Type.ITEM   : return new CommentHolder(inflater.inflate(R.layout.cardview_evaluation_comment, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
@@ -59,6 +61,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return Type.ITEM;
     }
 
+
     public static class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nickname) protected TextView username;
         @InjectView(R.id.body) protected TextView body;
@@ -68,11 +71,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             parent.setOnClickListener(this);
         }
 
+
+
         public void bind(Comment item) {
             this.username.setText(item.user_name); // lecture represents the name of course
             this.body.setText(item.body);
-            Timber.d("bind");
         }
+
+
 
         @Override
         public void onClick (View view) {

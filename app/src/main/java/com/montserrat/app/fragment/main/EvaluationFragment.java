@@ -2,7 +2,6 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +22,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 
 /**
@@ -46,17 +46,19 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
     private CompositeSubscription subscription;
 
-    @Nullable
+    private View view;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
+        this.view = inflater.inflate(R.layout.fragment_evaluation, container, false);
         this.subscription = new CompositeSubscription();
         ButterKnife.inject(this, view);
         this.setupRecyclerView(commentList);
 
         setEvaluation();
         this.items.clear();
-        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "commentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcomment"));
         this.items.add(newComment("1", "comment"));
         this.items.add(newComment("1", "comment"));
         this.items.add(newComment("1", "comment"));
@@ -76,11 +78,29 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-        Evaluation.getInstance().clear();
+    public void onResume() {
+        super.onResume();
+//        recyclerviewHeightChanged();
+        Timber.d("isnull - %s", commentList.getChildCount());
     }
+
+
+    private void recyclerviewHeightChanged() {
+             int maxHeight = 0;
+             for (int i = 0; i < commentList.getAdapter().getItemCount(); i++) {
+                 maxHeight += commentList.getChildAt(i).getHeight();
+                 Timber.d("max - %s", maxHeight);
+             }
+             commentList.setMinimumHeight(maxHeight);
+         }
+
+
+    @Override
+         public void onDestroyView() {
+             super.onDestroyView();
+             ButterKnife.reset(this);
+             Evaluation.getInstance().clear();
+         }
 
     public void setEvaluation(){
         this.name.setText(Evaluation.getInstance().getLecture_name());
@@ -91,11 +111,14 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         Comment comment = new Comment();
         comment.user_name = name;
         comment.body = content;
+
         return comment;
     }
 
+
     @Override
     protected CommentAdapter getAdapter(List<Comment> comments) {
+
         return CommentAdapter.newInstance(this.items, this);
     }
 
@@ -106,6 +129,8 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-
+//        Timber.d("hgh : %s", commentList.get);
+//        commentList.getLayoutManager().geth
+        recyclerviewHeightChanged();
     }
 }

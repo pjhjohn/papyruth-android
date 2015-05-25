@@ -56,4 +56,5 @@
     <string name="label_point_easiness">쉬움도</string>
     <string name="lecture_type_culture">교양</string>
     <string name="lecture_type_major">전공</string>
+    <string name="like">like</string>
 </resources>
