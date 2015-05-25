@@ -14,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
@@ -31,224 +33,232 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements MainActivity.onBackPressedListener {
-    private ViewPagerController pagerController;
-    private NavFragment.OnCategoryClickListener callback;
+     private ViewPagerController pagerController;
+     private NavFragment.OnCategoryClickListener callback;
 
-    @InjectView(R.id.course_title) protected TextView title;
-    @InjectView(R.id.course_professor) protected TextView professor;
-    @InjectView(R.id.point_overall) protected  TextView pointOverall;
-    @InjectView(R.id.point_gpa_satisfaction) protected  TextView pointSatisfaction;
-    @InjectView(R.id.point_easiness) protected  TextView pointEasiness;
-    @InjectView(R.id.point_clarity) protected  TextView pointClarity;
-    @InjectView(R.id.detail_recyclerview) protected RecyclerView evaluationList;
-    protected EvaluationFragment evaluationFragment;
-    private Boolean openEvaluation;
-    private View view;
+     @InjectView(R.id.course_title) protected TextView title;
+     @InjectView(R.id.course_professor) protected TextView professor;
+     @InjectView(R.id.point_overall) protected SeekBar pointOverall;
+     @InjectView(R.id.point_gpa_satisfaction) protected  SeekBar pointSatisfaction;
+     @InjectView(R.id.point_clarity) protected  SeekBar pointClarity;
+     @InjectView(R.id.point_easiness) protected  SeekBar pointEasiness;
+     @InjectView(R.id.detail_recyclerview) protected RecyclerView evaluationList;
 
+     @InjectView(R.id.professor_picture) protected ImageView professorPicture;
+     @InjectView(R.id.lecture_type) protected TextView lectureType;
 
-    @InjectView(R.id.evaluaiton_fragment) protected FrameLayout frameLayout;
-    @InjectView(R.id.course_info) protected LinearLayout courseInfo;
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
-        this.callback = (NavFragment.OnCategoryClickListener) activity;
-        ((MainActivity)activity).setOnBackPressedListener(this, true);
-    }
-    private CompositeSubscription subscriptions;
-    private Toolbar toolbar;
-    private FragmentTransaction transaction;
-    @Override
-    public View onCreateView(LayoutInflater infalter, ViewGroup container, Bundle savedInstanceState) {
-        view = infalter.inflate(R.layout.fragment_course, container, false);
+     @InjectView(R.id.tags) protected LinearLayout layoutTags;
+     protected EvaluationFragment evaluationFragment;
+     private Boolean openEvaluation;
+     private View view;
 
 
+     @InjectView(R.id.evaluaiton_fragment) protected FrameLayout frameLayout;
+     @InjectView(R.id.course_info) protected LinearLayout courseInfo;
+
+
+     @Override
+     public void onAttach(Activity activity) {
+         super.onAttach(activity);
+         this.pagerController = (ViewPagerController) activity;
+         this.callback = (NavFragment.OnCategoryClickListener) activity;
+         ((MainActivity)activity).setOnBackPressedListener(this, true);
+     }
+     private CompositeSubscription subscriptions;
+     private Toolbar toolbar;
+     private FragmentTransaction transaction;
+     @Override
+     public View onCreateView(LayoutInflater infalter, ViewGroup container, Bundle savedInstanceState) {
+         view = infalter.inflate(R.layout.fragment_course, container, false);
+
+         ButterKnife.inject(this, view);
+         pointOverall.setEnabled(false);
+         pointSatisfaction.setEnabled(false);
+         pointClarity.setEnabled(false);
+         pointEasiness.setEnabled(false);
 
 
 
-        this.subscriptions = new CompositeSubscription();
-        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        evaluationList = (RecyclerView)view.findViewById(R.id.detail_recyclerview);
-        this.setupRecyclerView(evaluationList);
-        ButterKnife.inject(this, view);
-        //set visibility to GONE
-        frameLayout.setVisibility(View.GONE);
+         this.subscriptions = new CompositeSubscription();
+         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+         evaluationList = (RecyclerView)view.findViewById(R.id.detail_recyclerview);
+         this.setupRecyclerView(evaluationList);
+         //set visibility to GONE
+         frameLayout.setVisibility(View.GONE);
 
 
-        update();
-        this.items.clear();
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.items.add(newEvaluation("1", "comment", 3));
-        this.adapter.notifyDataSetChanged();
-        this.openEvaluation = false;
+         update();
+         this.items.clear();
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.items.add(newEvaluation("1", "comment", 3));
+         this.adapter.notifyDataSetChanged();
+         this.openEvaluation = false;
 
-        actionBarHeight = 0;
+         actionBarHeight = 0;
 
-        evaluationFragment = new EvaluationFragment();
-//        evaluationFragment.setArguments(this.getActivity().getIntent().getExtras());
+         evaluationFragment = new EvaluationFragment();
+ //        evaluationFragment.setArguments(this.getActivity().getIntent().getExtras());
 
-        return view;
-    }
+         return view;
+     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-        ((MainActivity)this.getActivity()).setOnBackPressedListener(null, true);
-    }
+     @Override
+     public void onDestroyView() {
+         super.onDestroyView();
+         ButterKnife.reset(this);
+         ((MainActivity)this.getActivity()).setOnBackPressedListener(null, true);
+     }
 
-    public PartialEvaluation newEvaluation(String userid, String comment, int like){
-        PartialEvaluation ev = new PartialEvaluation();
-        ev.professor_name = userid;
-        ev.body = comment;
-        ev.point_overall = like;
-        return ev;
-    }
+     public PartialEvaluation newEvaluation(String userid, String comment, int like){
+         PartialEvaluation ev = new PartialEvaluation();
+         ev.professor_name = userid;
+         ev.body = comment;
+         ev.point_overall = like;
+         return ev;
+     }
 
-    @Override
-    protected CourseAdapter getAdapter (List<PartialEvaluation> items) {
-        return CourseAdapter.newInstance(this.items, this);
-    }
+     @Override
+     protected CourseAdapter getAdapter (List<PartialEvaluation> items) {
+         return CourseAdapter.newInstance(this.items, this);
+     }
 
-    @Override
-    public void recyclerViewListClicked (View v, int position) {
-        ((MainActivity)this.getActivity()).setOnBackPressedListener(this, openEvaluation);
-//        Timber.d("position : %s", position);
-//        Timber.d("click - posY : %s actionbar : %s", frameLayout.getY(), actionBarHeight);
-        if(!openEvaluation){
-            PartialEvaluation item = items.get(position);
-            Evaluation.getInstance().setCourse_id(item.course_id);
-            Evaluation.getInstance().setBody(item.body);
-            Evaluation.getInstance().setCreated_at(item.created_at);
-            Evaluation.getInstance().setLecture_name(this.title.getText().toString());
-            Evaluation.getInstance().setId(item.id);
-            Evaluation.getInstance().setUpdated_at(item.updated_at);
-            Evaluation.getInstance().setUser_id(item.user_id);
-            Evaluation.getInstance().setCourse_id(item.course_id);
-            Evaluation.getInstance().setPoint_overall(item.point_overall);
-            Evaluation.getInstance().setPoint_easiness(item.point_easiness);
-            Evaluation.getInstance().setPoint_gpa_satisfaction(item.point_gpa_satisfaction);
-            Evaluation.getInstance().setPoint_clarity(item.point_clarity);
-            Evaluation.getInstance().setProfessor_name(item.professor_name);
-//            Evaluation.getInstance().setLike(item.like);
-//            Evaluation.getInstance().setUser_name(item.user_name);
+     @Override
+     public void recyclerViewListClicked (View v, int position) {
+         ((MainActivity)this.getActivity()).setOnBackPressedListener(this, openEvaluation);
+ //        Timber.d("position : %s", position);
+ //        Timber.d("click - posY : %s actionbar : %s", frameLayout.getY(), actionBarHeight);
+         if(!openEvaluation){
+             PartialEvaluation item = items.get(position);
+             Evaluation.getInstance().setCourse_id(item.course_id);
+             Evaluation.getInstance().setBody(item.body);
+             Evaluation.getInstance().setCreated_at(item.created_at);
+             Evaluation.getInstance().setLecture_name(this.title.getText().toString());
+             Evaluation.getInstance().setId(item.id);
+             Evaluation.getInstance().setUpdated_at(item.updated_at);
+             Evaluation.getInstance().setUser_id(item.user_id);
+             Evaluation.getInstance().setCourse_id(item.course_id);
+             Evaluation.getInstance().setPoint_overall(item.point_overall);
+             Evaluation.getInstance().setPoint_easiness(item.point_easiness);
+             Evaluation.getInstance().setPoint_gpa_satisfaction(item.point_gpa_satisfaction);
+             Evaluation.getInstance().setPoint_clarity(item.point_clarity);
+             Evaluation.getInstance().setProfessor_name(item.professor_name);
+ //            Evaluation.getInstance().setLike(item.like);
+ //            Evaluation.getInstance().setUser_name(item.user_name);
 
-            transaction = getFragmentManager().beginTransaction();
-            transaction.add(R.id.evaluaiton_fragment, evaluationFragment);
-            expand(v);
-            transaction.commit();
-            this.openEvaluation = true;
-        }else
-            onBack();
-    }
-
-
-    //Aniamtion
-    private Integer topLine;
-    private Integer maxHeight, actionBarHeight, viewHieght;
-
-    private final long ANIMATION_SPEED = 600;
-
-    private AnimatorSet animators;
-    private void expand(View v){
-
-        this.frameLayout.setVisibility(View.VISIBLE);
-        this.actionBarHeight = (((MainActivity) this.getActivity()).getActionbarHeight());
-        this.maxHeight = this.view.getHeight();
-        this.topLine = (int)v.getY() + this.courseInfo.getHeight() + actionBarHeight;
-        this.viewHieght = v.getHeight();
-
-        //debuging message
-//        Timber.d("actionBarHeight : %s, maxH : %s , topLine : %s, bottomLine : %s, bottom : %s, top : %s, realPOSY : %s",actionBarHeight, maxHeight, topLine, bottomLine, bottom, top, v.getY());
-
-        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        final int heightSpec = View.MeasureSpec.makeMeasureSpec(this.topLine, View.MeasureSpec.UNSPECIFIED);
-        this.frameLayout.measure(widthSpec, heightSpec);
-        this.frameLayout.setY((int) v.getY());
+             transaction = getFragmentManager().beginTransaction();
+             transaction.add(R.id.evaluaiton_fragment, evaluationFragment);
+             expand(v);
+             transaction.commit();
+             this.openEvaluation = true;
+         }else
+             onBack();
+     }
 
 
-        ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
-        ValueAnimator heightAnimator = ValueAnimator.ofInt(v.getHeight(), maxHeight);
-        heightAnimator.addUpdateListener(animation-> {
-            layoutParams.height = (int) animation.getAnimatedValue();
-            frameLayout.setLayoutParams(layoutParams);
-        });
+     //Aniamtion
+     private Integer topLine;
+     private Integer maxHeight, actionBarHeight, viewHieght;
 
-        ValueAnimator positionAnimator = ValueAnimator.ofInt(topLine, actionBarHeight);
-        positionAnimator.addUpdateListener(animation-> frameLayout.setY((int) animation.getAnimatedValue()) );
+     private final long ANIMATION_SPEED = 600;
 
-        animators = new AnimatorSet();
-        animators.setDuration(ANIMATION_SPEED);
-        animators.playTogether(positionAnimator, heightAnimator);
-        animators.start();
-    }
+     private AnimatorSet animators;
+     private void expand(View v){
+
+         this.frameLayout.setVisibility(View.VISIBLE);
+         this.actionBarHeight = (((MainActivity) this.getActivity()).getActionbarHeight());
+         this.maxHeight = this.view.getHeight();
+         this.topLine = (int)v.getY() + this.courseInfo.getHeight() + actionBarHeight;
+         this.viewHieght = v.getHeight();
+
+         //debuging message
+ //        Timber.d("actionBarHeight : %s, maxH : %s , topLine : %s, bottomLine : %s, bottom : %s, top : %s, realPOSY : %s",actionBarHeight, maxHeight, topLine, bottomLine, bottom, top, v.getY());
+
+         final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+         final int heightSpec = View.MeasureSpec.makeMeasureSpec(this.topLine, View.MeasureSpec.UNSPECIFIED);
+         this.frameLayout.measure(widthSpec, heightSpec);
+         this.frameLayout.setY((int) v.getY());
 
 
-    private void collapse() {
-        ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
-        ValueAnimator heightAnimator = ValueAnimator.ofInt(this.maxHeight,this.viewHieght);
-        heightAnimator.addUpdateListener(animation-> {
-            layoutParams.height = (int) animation.getAnimatedValue();
-            frameLayout.setLayoutParams(layoutParams);
-        });
+         ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
+         ValueAnimator heightAnimator = ValueAnimator.ofInt(v.getHeight(), maxHeight);
+         heightAnimator.addUpdateListener(animation-> {
+             layoutParams.height = (int) animation.getAnimatedValue();
+             frameLayout.setLayoutParams(layoutParams);
+         });
 
-        ValueAnimator positionAnimator = ValueAnimator.ofInt(this.actionBarHeight,this.topLine);
-        positionAnimator.addUpdateListener(animation-> {
-            frameLayout.setY((int) animation.getAnimatedValue());
-        });
-        animators = new AnimatorSet();
-        animators.setDuration(ANIMATION_SPEED);
-        animators.playTogether(positionAnimator, heightAnimator);
-        animators.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                transaction = getFragmentManager().beginTransaction();
-                transaction.remove(evaluationFragment);
-                transaction.commit();
-            }
-        });
-        animators.start();
-    }
+         ValueAnimator positionAnimator = ValueAnimator.ofInt(topLine, actionBarHeight);
+         positionAnimator.addUpdateListener(animation-> frameLayout.setY((int) animation.getAnimatedValue()) );
 
-    @Override
-    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new LinearLayoutManager(this.getActivity());
-    }
+         animators = new AnimatorSet();
+         animators.setDuration(ANIMATION_SPEED);
+         animators.playTogether(positionAnimator, heightAnimator);
+         animators.start();
+     }
+
+
+     private void collapse() {
+         ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
+         ValueAnimator heightAnimator = ValueAnimator.ofInt(this.maxHeight, this.viewHieght);
+         heightAnimator.addUpdateListener(animation -> {
+             layoutParams.height = (int) animation.getAnimatedValue();
+             frameLayout.setLayoutParams(layoutParams);
+         });
+
+         ValueAnimator positionAnimator = ValueAnimator.ofInt(this.actionBarHeight,this.topLine);
+         positionAnimator.addUpdateListener(animation-> {
+             frameLayout.setY((int) animation.getAnimatedValue());
+         });
+         animators = new AnimatorSet();
+         animators.setDuration(ANIMATION_SPEED);
+         animators.playTogether(positionAnimator, heightAnimator);
+         animators.addListener(new AnimatorListenerAdapter() {
+             @Override
+             public void onAnimationEnd(Animator animation) {
+                 super.onAnimationEnd(animation);
+                 transaction = getFragmentManager().beginTransaction();
+                 transaction.remove(evaluationFragment);
+                 transaction.commit();
+             }
+         });
+         animators.start();
+     }
+
+     @Override
+     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
+         return new LinearLayoutManager(this.getActivity());
+     }
 
     public void update(){
         title.setText("computer");
         professor.setText("xxx prof");
-        pointOverall.setText(10+"");
-        pointSatisfaction.setText(10+"");
-        pointEasiness.setText(10+"");
-        pointClarity.setText(10+"");
-    }
+        pointOverall.setProgress(3);
+        pointSatisfaction.setProgress(7);
+        pointClarity.setProgress(5);
+        pointEasiness.setProgress(8);
 
+        lectureType.setText(R.string.lecture_type_major);
+    }
 
     @Override
-    public void onBack() {
-        if (openEvaluation){
-            if(animators.isRunning())
-                animators.end();
-            ((MainActivity)this.getActivity()).setOnBackPressedListener(this, openEvaluation);
-            collapse();
-            this.openEvaluation = false;
-        }
+     public void onBack() {
+         if (openEvaluation){
+             if(animators.isRunning())
+                 animators.end();
+             ((MainActivity)this.getActivity()).setOnBackPressedListener(this, openEvaluation);
+             collapse();
+             this.openEvaluation = false;
+         }
 
-    }
-}
+     }
+ }

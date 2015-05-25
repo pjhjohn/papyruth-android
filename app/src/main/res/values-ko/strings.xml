@@ -48,4 +48,12 @@
     <string name="submit_evaluation_fail">강의평 등록에 실패하였습니다</string>
     <string name="fab_evaulation">강의평 등록하기</string>
     <string name="fab_comment">덧글 달기</string>
+
+    <!--course-->
+    <string name="label_point_overall">총점</string>
+    <string name="label_point_gpa_satisfaction">학점 만족도</string>
+    <string name="label_point_clarity">강의력</string>
+    <string name="label_point_easiness">쉬움도</string>
+    <string name="lecture_type_culture">교양</string>
+    <string name="lecture_type_major">전공</string>
 </resources>

@@ -48,4 +48,13 @@
     <string name="submit_evaluation_fail">Failed to register Evaluation</string>
     <string name="fab_evaulation">New Evaluation</string>
     <string name="fab_comment">New Comment</string>
+
+    <!--course-->
+    <string name="label_point_overall">Overall</string>
+    <string name="label_point_gpa_satisfaction">Satisffaction</string>
+    <string name="label_point_clarity">Clarity</string>
+    <string name="label_point_easiness">Easiness</string>
+    <string name="lecture_type_culture">Culture</string>
+    <string name="lecture_type_major">Major</string>
+
 </resources>

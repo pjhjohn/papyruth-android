@@ -35,12 +35,13 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     @InjectView(R.id.nickname) protected TextView name;
     @InjectView(R.id.body) protected TextView body;
 
+    @InjectView(R.id.comment_list) protected RecyclerView commentList;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
         this.callback = (NavFragment.OnCategoryClickListener) activity;
-
     }
 
     private CompositeSubscription subscription;
@@ -50,11 +51,26 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
         this.subscription = new CompositeSubscription();
-        this.setupRecyclerView((RecyclerView)view.findViewById(R.id.comment_list));
         ButterKnife.inject(this, view);
-        this.adapter.notifyDataSetChanged();
+        this.setupRecyclerView(commentList);
 
         setEvaluation();
+        this.items.clear();
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.items.add(newComment("1", "comment"));
+        this.adapter.notifyDataSetChanged();
 
         return view;
     }

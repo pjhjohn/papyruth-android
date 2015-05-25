@@ -21,8 +21,7 @@ import butterknife.InjectView;
  */
 public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
-        public static final int HEADER = 1;
-        public static final int PARTIAL_EVALUATION = 2;
+        public static final int ITEM = 1;
     }
     public static CourseAdapter newInstance(List<PartialEvaluation> initItemList, RecyclerViewClickListener listener) {
         return new CourseAdapter(initItemList, listener);
@@ -40,33 +39,26 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return new Header(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.PARTIAL_EVALUATION: return new PartialEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation_reply, parent, false));
+            case Type.ITEM: return new PartialEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation_evaluation, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position == 0) return;
-        ((PartialEvaluationHolder) holder).bind(this.items.get(position - 1));
+        ((PartialEvaluationHolder) holder).bind(this.items.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return this.items == null ? 1 : this.items.size()+1; // 1 for HEADER
+        return this.items == null ? 0 : this.items.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0? Type.HEADER : Type.PARTIAL_EVALUATION;
+        return Type.ITEM;
     }
 
-    public static class Header extends RecyclerView.ViewHolder {
-        public Header(View parent) {
-            super(parent);
-        }
-    }
 
     public static class PartialEvaluationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nickname) protected TextView nickname;

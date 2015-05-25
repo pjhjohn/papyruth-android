@@ -14,6 +14,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-05-22.
@@ -38,7 +39,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return new CommentHolder(inflater.inflate(R.layout.cardview_evaluation_reply, parent, false));
+            case Type.ITEM   : return new CommentHolder(inflater.inflate(R.layout.cardview_evaluation_comment, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -60,7 +61,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public static class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nickname) protected TextView username;
-        @InjectView(R.id.body) protected TextView content;
+        @InjectView(R.id.body) protected TextView body;
         public CommentHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);
@@ -69,7 +70,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public void bind(Comment item) {
             this.username.setText(item.user_name); // lecture represents the name of course
-            this.content.setText(item.body);
+            this.body.setText(item.body);
+            Timber.d("bind");
         }
 
         @Override
