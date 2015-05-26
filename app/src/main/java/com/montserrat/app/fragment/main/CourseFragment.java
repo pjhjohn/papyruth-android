@@ -1,38 +1,44 @@
 package com.montserrat.app.fragment.main;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
+ import android.animation.AnimatorListenerAdapter;
+ import android.animation.AnimatorSet;
+ import android.animation.ValueAnimator;
+ import android.app.Activity;
+ import android.app.FragmentTransaction;
+ import android.os.Bundle;
+ import android.support.v7.widget.LinearLayoutManager;
+ import android.support.v7.widget.RecyclerView;
+ import android.support.v7.widget.Toolbar;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+ import android.widget.FrameLayout;
+ import android.widget.ImageView;
+ import android.widget.LinearLayout;
+ import android.widget.SeekBar;
+ import android.widget.TextView;
 
-import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
-import com.montserrat.app.adapter.CourseAdapter;
-import com.montserrat.app.fragment.nav.NavFragment;
-import com.montserrat.app.model.Evaluation;
-import com.montserrat.app.model.PartialEvaluation;
-import com.montserrat.utils.view.fragment.RecyclerViewFragment;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+ import com.montserrat.app.R;
+ import com.montserrat.app.activity.MainActivity;
+ import com.montserrat.app.adapter.CourseAdapter;
+ import com.montserrat.app.fragment.nav.NavFragment;
+ import com.montserrat.app.model.Evaluation;
+ import com.montserrat.app.model.PartialEvaluation;
+ import com.montserrat.app.model.User;
+ import com.montserrat.utils.support.retrofit.RetrofitApi;
+ import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+ import com.montserrat.utils.view.viewpager.ViewPagerController;
 
-import java.util.List;
+ import java.util.ArrayList;
+ import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import rx.subscriptions.CompositeSubscription;
+ import butterknife.ButterKnife;
+ import butterknife.InjectView;
+ import rx.android.schedulers.AndroidSchedulers;
+ import rx.schedulers.Schedulers;
+ import rx.subscriptions.CompositeSubscription;
+ import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements MainActivity.onBackPressedListener {
      private ViewPagerController pagerController;
@@ -85,27 +91,18 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
          this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
          evaluationList = (RecyclerView)view.findViewById(R.id.detail_recyclerview);
          this.setupRecyclerView(evaluationList);
-         //set visibility to GONE
+ //set visibility to GONE
          frameLayout.setVisibility(View.GONE);
 
 
          update();
          this.items.clear();
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.items.add(newEvaluation("1", "comment", 3));
-         this.adapter.notifyDataSetChanged();
+ //         this.adapter.notifyDataSetChanged();
+
          this.openEvaluation = false;
 
          actionBarHeight = 0;
+         getEvaluations();
 
          evaluationFragment = new EvaluationFragment();
  //        evaluationFragment.setArguments(this.getActivity().getIntent().getExtras());
@@ -116,8 +113,12 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
      @Override
      public void onDestroyView() {
          super.onDestroyView();
-         ButterKnife.reset(this);
          ((MainActivity)this.getActivity()).setOnBackPressedListener(null, true);
+         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
+         removeFragment();
+         evaluationList.setAdapter(null);
+         this.items.clear();
+         ButterKnife.reset(this);
      }
 
      public PartialEvaluation newEvaluation(String userid, String comment, int like){
@@ -165,6 +166,66 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
              onBack();
      }
 
+     private void removeFragment(){
+         transaction = getFragmentManager().beginTransaction();
+         transaction.remove(evaluationFragment);
+         transaction.commit();
+     }
+
+
+
+     @Override
+     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
+         return new LinearLayoutManager(this.getActivity());
+     }
+
+     @Override
+     public void onBack() {
+         if (openEvaluation){
+             if(animators.isRunning())
+                 animators.end();
+             ((MainActivity)this.getActivity()).setOnBackPressedListener(this, openEvaluation);
+             collapse();
+             this.openEvaluation = false;
+         }
+     }
+     public void update(){
+         title.setText("computer");
+         professor.setText("xxx prof");
+         pointOverall.setProgress(3);
+         pointSatisfaction.setProgress(7);
+         pointClarity.setProgress(5);
+         pointEasiness.setProgress(8);
+
+         lectureType.setText(R.string.lecture_type_major);
+     }
+
+
+     public void getEvaluations(){
+         subscriptions.add(
+                 RetrofitApi.getInstance().evaluations(
+                         User.getInstance().getAccessToken(),
+                         User.getInstance().getUniversityId(),
+                         null, null, null )
+                         .map(response -> response.evaluations)
+                         .subscribeOn(Schedulers.io())
+                         .observeOn(AndroidSchedulers.mainThread())
+                         .subscribe(evauations -> {
+ //                    if(evauations != null)
+//                             this.items.addAll(sampleData());
+                             this.adapter.notifyDataSetChanged();
+                             Timber.d("evaluations : %s", evauations);
+                         })
+         );
+     }
+
+     public List<PartialEvaluation> sampleData(){
+         List<PartialEvaluation> evaluations = new ArrayList<>();
+         evaluations.add(newEvaluation("1", "comment", 3));
+         evaluations.add(newEvaluation("1", "comment", 3));
+         evaluations.add(newEvaluation("1", "comment", 3));
+         return evaluations;
+     }
 
      //Aniamtion
      private Integer topLine;
@@ -181,7 +242,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
          this.topLine = (int)v.getY() + this.courseInfo.getHeight() + actionBarHeight;
          this.viewHieght = v.getHeight();
 
-         //debuging message
+ //debuging message
  //        Timber.d("actionBarHeight : %s, maxH : %s , topLine : %s, bottomLine : %s, bottom : %s, top : %s, realPOSY : %s",actionBarHeight, maxHeight, topLine, bottomLine, bottom, top, v.getY());
 
          final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -226,39 +287,9 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
              @Override
              public void onAnimationEnd(Animator animation) {
                  super.onAnimationEnd(animation);
-                 transaction = getFragmentManager().beginTransaction();
-                 transaction.remove(evaluationFragment);
-                 transaction.commit();
+                 removeFragment();
              }
          });
          animators.start();
-     }
-
-     @Override
-     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-         return new LinearLayoutManager(this.getActivity());
-     }
-
-    public void update(){
-        title.setText("computer");
-        professor.setText("xxx prof");
-        pointOverall.setProgress(3);
-        pointSatisfaction.setProgress(7);
-        pointClarity.setProgress(5);
-        pointEasiness.setProgress(8);
-
-        lectureType.setText(R.string.lecture_type_major);
-    }
-
-    @Override
-     public void onBack() {
-         if (openEvaluation){
-             if(animators.isRunning())
-                 animators.end();
-             ((MainActivity)this.getActivity()).setOnBackPressedListener(this, openEvaluation);
-             collapse();
-             this.openEvaluation = false;
-         }
-
      }
  }
