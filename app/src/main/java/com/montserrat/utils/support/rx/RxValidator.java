@@ -4,6 +4,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.SeekBar;
 
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
@@ -25,8 +27,7 @@ import rx.functions.Func1;
  */
 
 public class RxValidator {
-
-    /* Text Validation. WidgetObservable.text() emits OnTextChangeEvent */
+    /* for Text Validation. WidgetObservable.text() emits OnTextChangeEvent */
     public static Func1<OnTextChangeEvent, String> toString = text -> text.text().toString();
     public static Func1<String, Boolean> isEmpty  = text -> text.length() == 0;
     public static Func1<String, Boolean> nonEmpty = text -> text.length() > 0;
@@ -56,7 +57,7 @@ public class RxValidator {
         else return AppManager.getInstance().getString(R.string.field_invalid_nickname);
     };
 
-    /* RadioGroup Validation. */
+    /* for RadioGroup Validation. */
     public static Observable<Integer> createObservableRadioGroup(RadioGroup group) {
         List<RadioButton> buttons = new ArrayList<>();
         Queue<ViewGroup> queue = new LinkedList<>();
@@ -72,10 +73,40 @@ public class RxValidator {
                 }
             }
         }
-
         return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId()).startWith(group.getCheckedRadioButtonId());
     }
     public static Func1<Integer, Boolean> isValidRadioButton = id -> id != -1;
 
-    // TODO : Do validation on Spinner -> Is it necessary ?
+    /* for SeekBar Validation */
+    public static Func1<Integer, Boolean> isIntegerValueInRange = value -> value != null && value >= 0 && value <= 10;
+    public static Observable<Integer> createObservableSeekBar(SeekBar seekbar, Boolean fromUserOnly) {
+        return Observable.create(observer ->
+            seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if(fromUserOnly && !fromUser) return;
+                    else observer.onNext(progress);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    observer.onNext(seekBar.getProgress());
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    observer.onNext(seekBar.getProgress());
+                }
+            })
+        );
+    }
+
+    /* for RatingBar Validation */
+    public static Func1<Float, Boolean> isFloatValueInRange = value -> value != null && value >= 0 && value <= 10;
+    public static Observable<Float> createObservableRatingBar(RatingBar ratingbar, Boolean fromUserOnly) {
+        return Observable.create(observer -> ratingbar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if(fromUserOnly && !fromUser) return;
+            else observer.onNext(rating);
+        }));
+    }
 }
