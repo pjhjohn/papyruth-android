@@ -39,7 +39,7 @@ public class ViewPagerManager implements ViewPagerController {
                 ViewPagerManager.this.currentPage = position;
 
                 final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
-                if (target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
+                if (target != null && target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
             }
         };
         this.active();

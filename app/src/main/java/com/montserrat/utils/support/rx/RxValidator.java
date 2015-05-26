@@ -35,6 +35,7 @@ public class RxValidator {
     public static Func1<String, Boolean> isValidPassword = text -> nonEmpty.call(text) && text.length() > 0;
     public static Func1<String, Boolean> isValidRealname = text -> nonEmpty.call(text) && text.getBytes().length <= AppConst.MAX_REALNAME_BYTES;
     public static Func1<String, Boolean> isValidNickname = text -> nonEmpty.call(text) && text.getBytes().length <= AppConst.MAX_NICKNAME_BYTES;
+    public static Func1<String, Boolean> isValidEvaluationBody = text -> nonEmpty.call(text) && text.getBytes().length >= AppConst.MIN_EVALUATION_BODY_BYTES;
 
     public static Func1<String, String> getErrorMessageEmail = text -> {
         if (isValidEmail.call(text)) return null;

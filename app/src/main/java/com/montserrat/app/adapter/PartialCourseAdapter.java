@@ -23,25 +23,21 @@ import butterknife.InjectView;
  */
 public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
-        public static final int HEADER = 1;
-        public static final int PARTIAL_COURSE = 2;
-    }
-    public static PartialCourseAdapter newInstance(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
-        return new PartialCourseAdapter(initItemList, listener);
+        public static final int PARTIAL_COURSE = 1;
     }
 
-    private static RecyclerViewClickListener itemListener;
+    private RecyclerViewClickListener itemListener;
     private List<PartialCourse> items;
-    private PartialCourseAdapter(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
+
+    public PartialCourseAdapter(List<PartialCourse> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        PartialCourseAdapter.itemListener = listener;
+        this.itemListener = listener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return new Header(inflater.inflate(R.layout.cardview_header, parent, false));
             case Type.PARTIAL_COURSE: return new Holder(inflater.inflate(R.layout.cardview_course_partial, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
@@ -49,24 +45,17 @@ public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position == 0) return;
-        ((Holder) holder).bind(this.items.get(position - 1));
+        ((Holder) holder).bind(this.items.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return this.items == null ? 1 : this.items.size()+1; // 1 for HEADER
+        return this.items == null ? 0 : this.items.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? Type.HEADER : Type.PARTIAL_COURSE;
-    }
-
-    protected class Header extends RecyclerView.ViewHolder {
-        public Header(View parent) {
-            super(parent);
-        }
+        return Type.PARTIAL_COURSE;
     }
 
     protected class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -87,7 +76,7 @@ public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         @Override
         public void onClick (View view) {
-            PartialCourseAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            PartialCourseAdapter.this.itemListener.recyclerViewListClicked(view, this.getPosition());
         }
     }
 }

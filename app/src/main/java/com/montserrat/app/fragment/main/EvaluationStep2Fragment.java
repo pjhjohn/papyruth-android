@@ -10,15 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationForm;
+import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -33,13 +38,13 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
         this.pagerController = (ViewPagerController) activity;
     }
 
-    @InjectView(R.id.lecture) protected EditText lecture;
-    @InjectView(R.id.professor) protected EditText professor;
+    @InjectView(R.id.lecture) protected Button lecture;
+    @InjectView(R.id.professor) protected Button professor;
     @InjectView(R.id.point_overall) protected RatingBar pointOverall;
     @InjectView(R.id.point_gpa_satisfaction) protected SeekBar pointGpaSatisfaction;
     @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
     @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
-    @InjectView(R.id.btn_next) protected Button next;
+    @InjectView(R.id.fab_next) protected FloatingActionButton next;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -47,25 +52,6 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
         View view = inflater.inflate(R.layout.fragment_evaluation_step2, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-
-        /* View Initialization */
-        lecture.setEnabled(false);
-        professor.setEnabled(false);
-        pointOverall.setStepSize((float) 1);
-        pointOverall.setMax(10);
-        pointGpaSatisfaction.setMax(10);
-        pointEasiness.setMax(10);
-        pointClarity.setMax(10);
-
-        /* Event binding */
-        next.setOnClickListener(v -> {
-            EvaluationForm.getInstance().setPointOverall((int) pointOverall.getRating());
-            EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
-            EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
-            EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
-            this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
-        });
-
         return view;
     }
 
@@ -80,5 +66,38 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
     public void onPageFocused () {
         lecture.setText(EvaluationForm.getInstance().getLectureName());
         professor.setText(EvaluationForm.getInstance().getProfessorName());
+
+        this.subscriptions.add(Observable
+            .combineLatest(
+                RxValidator.createObservableRatingBar(this.pointOverall, true).map(RxValidator.isFloatValueInRange),
+                RxValidator.createObservableSeekBar(this.pointGpaSatisfaction, true).map(RxValidator.isIntegerValueInRange),
+                RxValidator.createObservableSeekBar(this.pointEasiness, true).map(RxValidator.isIntegerValueInRange),
+                RxValidator.createObservableSeekBar(this.pointClarity, true).map(RxValidator.isIntegerValueInRange),
+                (Boolean a, Boolean b, Boolean c, Boolean d) -> a&&b&&c&&d
+            )
+            .startWith(false)
+            .subscribe(valid -> {
+                boolean visible = this.next.getVisibility() == View.VISIBLE;
+                if (visible && !valid) this.next.hide(true);
+                else if (!visible && valid) this.next.show(true);
+            })
+
+        );
+
+        this.subscriptions.add(Observable
+            .merge(ViewObservable.clicks(this.lecture), ViewObservable.clicks(this.professor))
+            .subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP1, true))
+        );
+
+        this.subscriptions.add(ViewObservable
+            .clicks(this.next)
+            .subscribe(unused -> {
+                EvaluationForm.getInstance().setPointOverall((int) pointOverall.getRating());
+                EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
+                EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
+                EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
+            })
+        );
     }
 }

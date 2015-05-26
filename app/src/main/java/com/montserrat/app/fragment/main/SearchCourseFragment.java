@@ -77,7 +77,7 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
 
     @Override
     protected PartialCourseAdapter getAdapter (List<PartialCourse> partialCourses) {
-        return PartialCourseAdapter.newInstance(this.items, this);
+        return new PartialCourseAdapter(this.items, this);
     }
 
     @Override

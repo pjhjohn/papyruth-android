@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical"
-        android:focusableInTouchMode="true"
-        >
-        <AutoCompleteTextView
+        android:focusableInTouchMode="true">
+
+        <Button
             android:id="@+id/lecture"
-            android:hint="@string/hint_lecture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <AutoCompleteTextView
+
+        <Button
             android:id="@+id/professor"
-            android:hint="@string/hint_professor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -28,37 +24,40 @@
             android:id="@+id/point_overall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:isIndicator="false"
+            android:layout_gravity="center"
             android:numStars="5"
-            android:stepSize="20"
-            android:rating="0"/>
+            android:stepSize="1"
+            android:max="10"
+            android:progress="-1"/>
 
         <SeekBar
             android:id="@+id/point_gpa_satisfaction"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:progress="-1"/>
 
         <SeekBar
             android:id="@+id/point_easiness"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:progress="-1"/>
 
         <SeekBar
             android:id="@+id/point_clarity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:progress="-1"/>
 
         <EditText
             android:id="@+id/body"
             android:layout_width="match_parent"
-            android:layout_height="178dp"
-            android:focusableInTouchMode="true"
-            />
-
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/submit"/>
+            android:layout_height="match_parent"
+            android:imeOptions="actionDone"
+            android:hint="@string/hint_evaluation_body"
+            android:focusableInTouchMode="true"/>
     </LinearLayout>
+    <include layout="@layout/fab_done"/>
 </FrameLayout>

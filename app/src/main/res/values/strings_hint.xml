@@ -2,4 +2,5 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_nickname">Enter Your Nickname!</string>
+    <string name="hint_evaluation_body">Please write at least 30 letters</string>
 </resources>

@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:weightSum="1">
+        android:orientation="vertical">
         <EditText
             android:id="@+id/query"
             android:hint="@string/hint_lecture"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.05"/>
+            android:layout_height="40dp"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/query_result"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.94" />
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/next"
-            android:layout_weight="0.01"
-            />
+            android:layout_height="match_parent"
+            android:overScrollMode="never"/>
     </LinearLayout>
 </FrameLayout>

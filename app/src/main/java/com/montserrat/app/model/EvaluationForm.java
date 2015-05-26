@@ -53,17 +53,6 @@ public class EvaluationForm {
         this.comment                = null;
     }
 
-    /* TODO : link to Viewpager last page memorization */
-    public int getCompletionLevel() {
-        /* STEP 1 */
-        if ( this.lectureName == null || this.professorName == null ) return 0;
-        /* STEP 2 */
-        if ( this.pointOverall == null || this.pointGpaSatisfaction == null || this.pointEasiness == null || this.pointClarity == null ) return 1;
-        /* STEP 3*/
-        if ( this.comment == null ) return 2;
-        return 3;
-    }
-
     @Override
     public String toString() {
         return String.format("<lecture:%s> <professor:%s> <course-id:%d> <overall:%d> <gpa satisfaction:%d> <easiness:%d> <clarity:%d> <body:%s>",
