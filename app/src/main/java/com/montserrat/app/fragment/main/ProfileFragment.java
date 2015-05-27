@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.nickname) protected TextView nickname;
     @InjectView (R.id.gender) protected TextView gender;
     @InjectView (R.id.entrance) protected TextView entrance;
-    @InjectView (R.id.fab) protected FloatingActionButton fab;
+    @InjectView (R.id.fab_edit) protected FloatingActionButton fab;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 

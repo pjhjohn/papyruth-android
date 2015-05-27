@@ -94,7 +94,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.items.add(new Category(this.getString(R.string.nav_item_home) , R.drawable.ic_home));
         this.items.add(new Category(this.getString(R.string.nav_item_search), R.drawable.ic_search));
         this.items.add(new Category(this.getString(R.string.nav_item_recommendation), R.drawable.ic_recommend));
-        this.items.add(new Category(this.getString(R.string.nav_item_evaluation), R.drawable.ic_create));
+        this.items.add(new Category(this.getString(R.string.nav_item_evaluation), R.drawable.ic_new_evaluation));
         this.items.add(new Category(this.getString(R.string.nav_item_random), R.drawable.ic_random));
         this.items.add(new Category(this.getString(R.string.nav_item_profile), R.drawable.ic_setting));
         this.items.add(new Category(this.getString(R.string.nav_item_signout), R.drawable.ic_signout));

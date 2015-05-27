@@ -37,7 +37,7 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
     }
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
-    @InjectView(R.id.fab) protected FloatingActionButton fab;
+    @InjectView(R.id.fab_new_evaluation) protected FloatingActionButton fab;
     @InjectView(R.id.swipe) protected SwipeRefreshLayout refresh;
     @InjectView(R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;

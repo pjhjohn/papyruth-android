@@ -48,7 +48,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     }
 
     @InjectView (R.id.recyclerview) protected RecyclerView recycler;
-    @InjectView (R.id.fab_evaluation) protected FloatingActionButton fab;
+    @InjectView (R.id.fab_new_evaluation) protected FloatingActionButton fab;
     @InjectView (R.id.fam_home) protected FloatingActionMenu fam;
     @InjectView (R.id.swipe) protected SwipeRefreshLayout refresh;
     @InjectView (R.id.progress) protected View progress;

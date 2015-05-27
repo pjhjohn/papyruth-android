@@ -9,35 +9,49 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
-        <TextView
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="32sp"
+            android:layout_marginBottom="16dp"
             android:text="@string/signup_category_account"/>
-        <TextView
+        <EditText
             android:id="@+id/email"
+            android:hint="@string/hint_email"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <TextView
+        <EditText
             android:id="@+id/university"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <TextView
+        <EditText
             android:id="@+id/realname"
+            android:hint="@string/hint_name"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <TextView
+        <EditText
             android:id="@+id/nickname"
+            android:hint="@string/hint_nickname"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <TextView
+        <EditText
             android:id="@+id/gender"
+            android:hint="@string/hint_nickname"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <TextView
+        <EditText
             android:id="@+id/entrance"
+            android:hint="@string/hint_nickname"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
-    <include layout="@layout/fab_edit"/>
+    <include layout="@layout/fab_done"/>
     <include layout="@layout/progress"/>
 </FrameLayout>

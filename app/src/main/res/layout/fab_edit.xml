@@ -2,11 +2,13 @@
 <com.github.clans.fab.FloatingActionButton
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fab_evaluation"
+    android:id="@+id/fab_edit"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_create"
+    android:layout_gravity="bottom|right"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="8dp"
+    android:src="@drawable/ic_edit"
+    android:visibility="invisible"
     fab:fab_colorNormal="@color/fg_normal"
-    fab:fab_colorPressed="@color/fg_accent"
-    fab:fab_size="mini"
-    fab:fab_label="@string/fab_evaulation"/>
+    fab:fab_colorPressed="@color/fg_accent"/>
