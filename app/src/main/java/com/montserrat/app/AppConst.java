@@ -58,8 +58,9 @@ public class AppConst {
             public static final int DUMMY = 0;
         }
         public static class Profile {
-            public static final int LENGTH = 1;
+            public static final int LENGTH = 2;
             public static final int PROFILE = 0;
+            public static final int PROFILE_EDIT = 1;
         }
         public static class Signout {
             public static final int LENGTH = 1;

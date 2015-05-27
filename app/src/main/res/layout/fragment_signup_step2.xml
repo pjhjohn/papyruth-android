@@ -1,7 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:name="comm.montserrat.activity.AuthActivity">
+    android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/content_signup_info"
         android:layout_width="match_parent"

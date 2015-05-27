@@ -56,24 +56,36 @@ public class RetrofitApi {
         @GET ("/info")
         Observable<Statistics> statistics();
 
-        @GET ("/users/me")
-        Observable<User.ResponseData> userinfo(
-            @Header ("Authorization") String authorization
-        );
         @GET("/lectures/dummy_autocomplete")
         Observable<PartialCourses> lecturelist(
             @Header("Authorization") String authorization,
             @Query("query") String query
         );
 
+        @POST("/evaluations")
+        Observable<EvaluationForm.ResponseData> evaluation(
+                @Header("Authorization") String authorization,
+                @Query("course_id") Integer course_id,
+                @Query("point_overall") Integer point_overall,
+                @Query("point_gpa_satisfaction") Integer point_gpa_satisfaction,
+                @Query("point_easiness") Integer point_easiness,
+                @Query("point_clarity") Integer point_clarity,
+                @Query("body") String comment
+        );
+
         @POST("/users/sign_in")
-        Observable<User.ResponseData> signin(
+        Observable<User.ResponseData> user_sign_in(
             @Query("email") String email,
             @Query("password") String password
         );
 
+        @GET ("/users/me")
+        Observable<User.ResponseData> user_me(
+            @Header("Authorization") String authorization
+        );
+
         @POST ("/users/sign_up")
-        Observable<User.ResponseData> signup(
+        Observable<User.ResponseData> user_sign_up(
             @Query("email") String email,
             @Query("password") String password,
             @Query("realname") String realname,
@@ -83,15 +95,12 @@ public class RetrofitApi {
             @Query("entrance_year") Integer entrance_year
         );
 
-        @POST("/evaluations")
-        Observable<EvaluationForm.ResponseData> evaluation(
+        @POST ("/users/update")
+        Observable<User.ResponseData> user_update(
             @Header("Authorization") String authorization,
-            @Query("course_id") Integer course_id,
-            @Query("point_overall") Integer point_overall,
-            @Query("point_gpa_satisfaction") Integer point_gpa_satisfaction,
-            @Query("point_easiness") Integer point_easiness,
-            @Query("point_clarity") Integer point_clarity,
-            @Query("body") String comment
+            @Query("realname") String realname,
+            @Query("nickname") String nickname,
+            @Query("is_boy") Boolean is_boy
         );
     }
 

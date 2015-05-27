@@ -109,7 +109,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        subscriptions.add(RetrofitApi.getInstance().userinfo(User.getInstance().getAccessToken()).subscribe(
+        subscriptions.add(RetrofitApi.getInstance().user_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
                 subscriptions.add(RetrofitApi.getInstance().statistics(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())

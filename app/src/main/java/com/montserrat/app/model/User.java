@@ -88,13 +88,13 @@ public class User {
         this.update(user, null);
     }
     public void update(UserData user, String access_token) {
-        this.setEmail(user.email);
-        this.setRealname(user.realname);
-        this.setNickName(user.nickname);
-        this.setGenderIsBoy(user.is_boy);
-        this.setUniversityId(user.university_id);
-        this.setEntranceYear(user.entrance_year);
-        this.setAccessToken(access_token);
+        if(user.email != null) this.setEmail(user.email);
+        if(user.realname != null) this.setRealname(user.realname);
+        if(user.nickname != null) this.setNickName(user.nickname);
+        if(user.is_boy != null) this.setGenderIsBoy(user.is_boy);
+        if(user.university_id!=null) this.setUniversityId(user.university_id);
+        if(user.entrance_year!=null) this.setEntranceYear(user.entrance_year);
+        if(access_token!=null) this.setAccessToken(access_token);
     }
 
     @Override

@@ -124,7 +124,7 @@ public class AuthFragment extends Fragment {
     private void doRequest() {
         this.progress.setVisibility(View.VISIBLE);
         this.subscriptions.add(
-            RetrofitApi.getInstance().signin(emailField.getText().toString(), passwordField.getText().toString())
+            RetrofitApi.getInstance().user_sign_in(emailField.getText().toString(), passwordField.getText().toString())
             .map(response -> {
                 User.getInstance().update(response.user, response.access_token);
                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);

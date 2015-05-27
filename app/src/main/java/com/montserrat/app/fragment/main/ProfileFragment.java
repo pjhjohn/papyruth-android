@@ -3,21 +3,25 @@ package com.montserrat.app.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.User;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -37,21 +41,14 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.nickname) protected TextView nickname;
     @InjectView (R.id.gender) protected TextView gender;
     @InjectView (R.id.entrance) protected TextView entrance;
-    @InjectView (R.id.fab_edit) protected FloatingActionButton fab;
+    @InjectView (R.id.fab_edit) protected FloatingActionButton edit;
     private CompositeSubscription subscriptions;
-    private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-
-        this.fab.setOnClickListener(unused -> {
-            if(this.getActivity() instanceof NavFragment.OnCategoryClickListener)
-                ((NavFragment.OnCategoryClickListener)this.getActivity()).onCategorySelected(NavFragment.CategoryType.EVALUATION);
-        });
         return view;
     }
 
@@ -76,5 +73,11 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
         this.nickname.setText(User.getInstance().getNickname());
         this.gender.setText(this.getResources().getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
         this.entrance.setText(String.valueOf(User.getInstance().getAdmissionYear()));
+
+        this.subscriptions.add(Observable.just(null).delay(150, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> this.edit.show(true)));
+        this.subscriptions.add(ViewObservable
+            .clicks(this.edit)
+            .subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Profile.PROFILE_EDIT, true))
+        );
     }
 }

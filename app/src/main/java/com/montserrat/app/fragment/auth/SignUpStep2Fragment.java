@@ -3,7 +3,6 @@ package com.montserrat.app.fragment.auth;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,7 +109,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     private void register () {
         this.progress.setVisibility(View.VISIBLE);
         this.subscriptions.add(
-            RetrofitApi.getInstance().signup(
+            RetrofitApi.getInstance().user_sign_up(
                 this.email.getText().toString(),
                 this.password.getText().toString(),
                 this.realname.getText().toString(),
