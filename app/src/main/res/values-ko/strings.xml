@@ -46,7 +46,7 @@
     <string name="confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
     <string name="submit_evaluation_success">강의평 등록에 성공하였습니다</string>
     <string name="submit_evaluation_fail">강의평 등록에 실패하였습니다</string>
-    <string name="fab_evaulation">강의평 등록하기</string>
+    <string name="fab_evaluation">강의평 등록하기</string>
     <string name="fab_comment">덧글 달기</string>
 
     <!--course-->
