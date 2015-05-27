@@ -9,4 +9,4 @@
     fab:fab_colorNormal="@color/fg_normal"
     fab:fab_colorPressed="@color/fg_accent"
     fab:fab_size="mini"
-    fab:fab_label="@string/fab_evaulation"/>
+    fab:fab_label="@string/fab_evaluation"/>

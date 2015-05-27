@@ -31,12 +31,6 @@ import timber.log.Timber;
 public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Comment> {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
-
-    @InjectView(R.id.nickname) protected TextView name;
-    @InjectView(R.id.body) protected TextView body;
-
-    @InjectView(R.id.comment_list) protected RecyclerView commentList;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -44,10 +38,11 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
+    @InjectView(R.id.nickname) protected TextView name;
+    @InjectView(R.id.body) protected TextView body;
+    @InjectView(R.id.comment_list) protected RecyclerView commentList;
     private CompositeSubscription subscription;
-
     private View view;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,28 +81,28 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
 
     private void recyclerviewHeightChanged() {
-             int maxHeight = 0;
-             for (int i = 0; i < commentList.getAdapter().getItemCount(); i++) {
-                 maxHeight += commentList.getChildAt(i).getHeight();
-                 Timber.d("max - %s", maxHeight);
-             }
-             commentList.setMinimumHeight(maxHeight);
-         }
+        int maxHeight = 0;
+        for (int i = 0; i < commentList.getAdapter().getItemCount(); i++) {
+            maxHeight += commentList.getChildAt(i).getHeight();
+            Timber.d("max - %s", maxHeight);
+        }
+        commentList.setMinimumHeight(maxHeight);
+    }
 
 
     @Override
-         public void onDestroyView() {
-             super.onDestroyView();
-             ButterKnife.reset(this);
-             Evaluation.getInstance().clear();
-         }
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+        Evaluation.getInstance().clear();
+    }
 
-    public void setEvaluation(){
+    public void setEvaluation() {
         this.name.setText(Evaluation.getInstance().getLecture_name());
         this.body.setText(Evaluation.getInstance().getBody());
     }
 
-    public Comment newComment(String name, String content){
+    public Comment newComment(String name, String content) {
         Comment comment = new Comment();
         comment.user_name = name;
         comment.body = content;

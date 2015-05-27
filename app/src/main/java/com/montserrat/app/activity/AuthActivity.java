@@ -53,7 +53,12 @@ public class AuthActivity extends Activity implements ViewPagerController {
     }
 
     @Override
+    public boolean onBack() {
+        return this.manager.onBack();
+    }
+
+    @Override
     public void onBackPressed() {
-        if(!this.manager.popCurrentPage()) super.onBackPressed();
+        if(!this.manager.onBack()) super.onBackPressed();
     }
 }

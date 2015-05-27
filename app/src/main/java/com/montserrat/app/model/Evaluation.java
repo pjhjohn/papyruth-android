@@ -55,6 +55,24 @@ public class Evaluation {
     public Integer getLike() { return like; }
     public void setLike(Integer like) { this.like = like; }
 
+    public void update(PartialEvaluation evaluation) {
+        if(evaluation.id != null)                       this.id = evaluation.id;
+        if(evaluation.user_id != null)                  this.user_id = evaluation.user_id;
+        if(evaluation.course_id != null)                this.course_id = evaluation.course_id;
+        if(evaluation.point_overall != null)            this.point_overall = evaluation.point_overall;
+        if(evaluation.point_easiness != null)           this.point_easiness = evaluation.point_easiness;
+        if(evaluation.point_gpa_satisfaction != null)   this.point_gpa_satisfaction = evaluation.point_gpa_satisfaction;
+        if(evaluation.point_clarity != null)            this.point_clarity = evaluation.point_clarity;
+        if(evaluation.body != null)                     this.body = evaluation.body;
+        if(evaluation.created_at != null)               this.created_at = evaluation.created_at;
+        if(evaluation.updated_at != null)               this.updated_at = evaluation.updated_at;
+        if(evaluation.professor_name != null)           this.professor_name = evaluation.professor_name;
+        if(evaluation.lecture_name != null)             this.lecture_name = evaluation.lecture_name;
+//        if(evaluation.like != null)                     this.like = evaluation.like;
+//        if(evaluation.user_name != null)                this.user_name = evaluation.user_name;
+
+    }
+
     public void clear(){
         this.id = null;
         this.user_id = null;

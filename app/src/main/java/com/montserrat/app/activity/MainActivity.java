@@ -43,19 +43,18 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
 
         /* Instantiate Multiple ViewPagerManagers */
-        this.managers = new ArrayList<ViewPagerManager> ();
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.HOME     , AppConst.ViewPager.Home.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SEARCH   , AppConst.ViewPager.Search.LENGTH));
+        this.managers = new ArrayList<>();
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.HOME          , AppConst.ViewPager.Home.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SEARCH        , AppConst.ViewPager.Search.LENGTH));
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.RECOMMENDATION, AppConst.ViewPager.Recommendation.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.RANDOM   , AppConst.ViewPager.Random.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.PROFILE  , AppConst.ViewPager.Profile.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SIGNOUT  , AppConst.ViewPager.Signout.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.EVALUATION    , AppConst.ViewPager.Evaluation.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.RANDOM        , AppConst.ViewPager.Random.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.PROFILE       , AppConst.ViewPager.Profile.LENGTH));
+        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SIGNOUT       , AppConst.ViewPager.Signout.LENGTH));
         this.managers.get(0).active();
         for(ViewPagerManager manager : this.managers) manager.setSwipeEnabled(false);
     }
 
-    //
     @Override
     public void onCategorySelected (int category) {
         this.terminate = false;
@@ -68,11 +67,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater menuInflater = getMenuInflater();
+        MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.searchview, menu);
-
-
             MenuItem searchitem = menu.findItem(R.id.menu_search);
             SearchView searchView = (SearchView) searchitem.getActionView();
             if(searchView != null){
@@ -135,6 +131,11 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         return this.managers.get(this.drawer.getActiveCategory()).popCurrentPage();
     }
 
+    @Override
+    public boolean onBack() {
+        return this.managers.get(this.drawer.getActiveCategory()).onBack();
+    }
+
 
     //searchview Listener
     public class queryTextListner implements SearchView.OnQueryTextListener{
@@ -154,25 +155,12 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        if (this.onBackPressedListener != null && !isExitable){
-            onBackPressedListener.onBack();
-        }else if(!this.managers.get(this.drawer.getActiveCategory()).popCurrentPage()) {
+        if (!this.managers.get(this.drawer.getActiveCategory()).onBack()) {
             if(terminate) super.onBackPressed();
             else {
                 Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();
                 terminate = true;
             }
         } else terminate = false;
-    }
-
-    public interface onBackPressedListener {
-        public void onBack();
-    }
-
-    private onBackPressedListener onBackPressedListener;
-    private boolean isExitable = true;
-    public void setOnBackPressedListener(onBackPressedListener listener, boolean isExitable){
-        onBackPressedListener = listener;
-        this.isExitable = isExitable;
     }
 }

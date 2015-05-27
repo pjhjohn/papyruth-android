@@ -115,6 +115,17 @@ public class ViewPagerManager implements ViewPagerController {
         } return false;
     }
 
+    @Override
+    public boolean onBack() {
+        final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(this.currentPage);
+        if (target != null) {
+            boolean backed = false;
+            if(target instanceof OnBack) backed = ((OnBack)target).onBack();
+            if(!backed) return popCurrentPage();
+            else return true;
+        } return false;
+    }
+
     private static class Adapter extends FragmentStatePagerAdapter {
         private SparseArray<Fragment> fragments;
         private final Type type;
