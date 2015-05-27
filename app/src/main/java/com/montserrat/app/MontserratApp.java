@@ -2,7 +2,7 @@ package com.montserrat.app;
 
 import android.app.Application;
 
-import com.montserrat.app.model.User;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.retrofit.RetrofitLogger;
 import com.squareup.picasso.Picasso;

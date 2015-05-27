@@ -14,8 +14,8 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
-import com.montserrat.app.model.Statistics;
-import com.montserrat.app.model.User;
+import com.montserrat.app.model.response.StatisticsResponse;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -73,7 +73,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     private boolean timerDone = false, requestDone = false;
     private Boolean hasAuth = null;
 
-    private Action1<Statistics> viewSubscriber = statistics -> {
+    private Action1<StatisticsResponse> viewSubscriber = statistics -> {
         /* Timer Done */
         if (statistics == null) this.timerDone = true;
         else {
@@ -138,7 +138,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
         subscriptions.add(
             Observable
                 .timer(3, TimeUnit.SECONDS)
-                .map(unused -> (Statistics) null)
+                .map(unused -> (StatisticsResponse) null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(viewSubscriber)

@@ -1,4 +1,4 @@
-package com.montserrat.app.model;
+package com.montserrat.app.model.unique;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -57,15 +57,5 @@ public class EvaluationForm {
     public String toString() {
         return String.format("<lecture:%s> <professor:%s> <course-id:%d> <overall:%d> <gpa satisfaction:%d> <easiness:%d> <clarity:%d> <body:%s>",
             lectureName, professorName, courseId, pointOverall, pointGpaSatisfaction, pointEasiness, pointClarity, comment);
-    }
-
-    public class ResponseData{
-        public Boolean success;
-        public Integer evaluation_id;
-
-        @Override
-        public String toString() {
-            return String.format("%s with evaluation_id = #%d", success? "Succeed" : "Failed", evaluation_id);
-        }
     }
 }

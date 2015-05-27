@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.NavAdapter;
 import com.montserrat.app.model.Category;
-import com.montserrat.app.model.User;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.ArrayList;

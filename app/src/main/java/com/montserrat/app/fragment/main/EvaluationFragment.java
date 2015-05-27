@@ -13,7 +13,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.adapter.CommentAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Comment;
-import com.montserrat.app.model.Evaluation;
+import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 

@@ -1,4 +1,4 @@
-package com.montserrat.app.model;
+package com.montserrat.app.model.unique;
 
 /**
  * Created by SSS on 2015-05-18.

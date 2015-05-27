@@ -1,9 +1,11 @@
-package com.montserrat.app.model;
+package com.montserrat.app.model.response;
+
+import com.montserrat.app.model.University;
 
 /**
  * Created by pjhjohn on 2015-05-15.
  */
-public class Statistics {
+public class StatisticsResponse {
     public University university;
     public Integer university_count;
     public Integer user_count;

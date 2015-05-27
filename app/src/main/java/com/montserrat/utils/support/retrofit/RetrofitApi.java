@@ -1,11 +1,11 @@
 package com.montserrat.utils.support.retrofit;
 
-import com.montserrat.app.model.EvaluationForm;
-import com.montserrat.app.model.PartialEvaluations;
-import com.montserrat.app.model.PartialCourses;
-import com.montserrat.app.model.Statistics;
-import com.montserrat.app.model.Universities;
-import com.montserrat.app.model.User;
+import com.montserrat.app.model.response.EvaluationResponse;
+import com.montserrat.app.model.response.PartialEvaluationsResponse;
+import com.montserrat.app.model.response.PartialCoursesResponse;
+import com.montserrat.app.model.response.UserInfoResponse;
+import com.montserrat.app.model.response.StatisticsResponse;
+import com.montserrat.app.model.response.UniversitiesResponse;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -32,7 +32,7 @@ public class RetrofitApi {
 
     public interface Api {
         @GET ("/evaluations")
-        Observable<PartialEvaluations> evaluations(
+        Observable<PartialEvaluationsResponse> evaluations(
             @Header ("Authorization") String authorization,
             @Query ("university_id") Integer university_id,
             @Query ("since_id") Integer since_id,
@@ -41,29 +41,29 @@ public class RetrofitApi {
         );
 
         @GET ("/lectures")
-        Observable<PartialCourses> lectures(
+        Observable<PartialCoursesResponse> lectures(
             @Header ("Authorization") String authorization,
             @Query ("university_id") String university_id,
             @Query ("query") String query
         );
 
         @GET ("/universities")
-        Observable<Universities> universities();
+        Observable<UniversitiesResponse> universities();
 
         @GET ("/universities/{univ_id}")
-        Observable<Statistics> statistics(@Header ("Authorization") String authorization,@Path ("univ_id") Integer university_id);
+        Observable<StatisticsResponse> statistics(@Header ("Authorization") String authorization,@Path ("univ_id") Integer university_id);
 
         @GET ("/info")
-        Observable<Statistics> statistics();
+        Observable<StatisticsResponse> statistics();
 
         @GET("/lectures/dummy_autocomplete")
-        Observable<PartialCourses> lecturelist(
+        Observable<PartialCoursesResponse> lecturelist(
             @Header("Authorization") String authorization,
             @Query("query") String query
         );
 
         @POST("/evaluations")
-        Observable<EvaluationForm.ResponseData> evaluation(
+        Observable<EvaluationResponse> evaluation(
                 @Header("Authorization") String authorization,
                 @Query("course_id") Integer course_id,
                 @Query("point_overall") Integer point_overall,
@@ -74,18 +74,18 @@ public class RetrofitApi {
         );
 
         @POST("/users/sign_in")
-        Observable<User.ResponseData> user_sign_in(
+        Observable<UserInfoResponse> user_sign_in(
             @Query("email") String email,
             @Query("password") String password
         );
 
         @GET ("/users/me")
-        Observable<User.ResponseData> user_me(
+        Observable<UserInfoResponse> user_me(
             @Header("Authorization") String authorization
         );
 
         @POST ("/users/sign_up")
-        Observable<User.ResponseData> user_sign_up(
+        Observable<UserInfoResponse> user_sign_up(
             @Query("email") String email,
             @Query("password") String password,
             @Query("realname") String realname,
@@ -96,7 +96,7 @@ public class RetrofitApi {
         );
 
         @POST ("/users/update")
-        Observable<User.ResponseData> user_update(
+        Observable<UserInfoResponse> user_update(
             @Header("Authorization") String authorization,
             @Query("realname") String realname,
             @Query("nickname") String nickname,

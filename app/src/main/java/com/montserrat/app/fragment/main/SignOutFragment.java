@@ -7,9 +7,7 @@ import android.content.Intent;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
-import com.montserrat.app.model.User;
-
-import timber.log.Timber;
+import com.montserrat.app.model.unique.User;
 
 /**
  * Created by pjhjohn on 2015-05-07.

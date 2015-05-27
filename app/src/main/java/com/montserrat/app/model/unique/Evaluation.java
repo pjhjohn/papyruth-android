@@ -1,4 +1,6 @@
-package com.montserrat.app.model;
+package com.montserrat.app.model.unique;
+
+import com.montserrat.app.model.PartialEvaluation;
 
 /**
  * Created by SSS on 2015-05-24.
