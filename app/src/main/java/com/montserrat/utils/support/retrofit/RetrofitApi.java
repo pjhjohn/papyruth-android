@@ -1,5 +1,7 @@
 package com.montserrat.utils.support.retrofit;
 
+import com.montserrat.app.model.response.AutoCompleteResponse;
+import com.montserrat.app.model.response.AutoCompleteResultsResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.PartialEvaluationsResponse;
 import com.montserrat.app.model.response.PartialCoursesResponse;
@@ -45,6 +47,11 @@ public class RetrofitApi {
             @Header ("Authorization") String authorization,
             @Query ("university_id") String university_id,
             @Query ("query") String query
+        );
+
+        @GET ("/autocomplete")
+        Observable<AutoCompleteResultsResponse> autocomplete(
+                @Query("query") String query
         );
 
         @GET ("/universities")

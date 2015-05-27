@@ -84,27 +84,27 @@
                      android:layout_height="wrap_content"
                      android:orientation="vertical"
                      android:layout_weight="0.4">
-                     <!--<SeekBar-->
-                         <!--android:layout_width="match_parent"-->
-                         <!--android:layout_height="wrap_content"-->
-                         <!--android:id="@+id/point_gpa_satisfaction"-->
-                         <!--android:layout_gravity="center_horizontal"-->
-                         <!--android:layout_weight="1"-->
-                         <!--android:max="10"/>-->
-                     <!--<SeekBar-->
-                         <!--android:layout_width="match_parent"-->
-                         <!--android:layout_height="wrap_content"-->
-                         <!--android:id="@+id/point_clarity"-->
-                         <!--android:layout_gravity="center_horizontal"-->
-                         <!--android:layout_weight="1"-->
-                         <!--android:max="10"/>-->
-                     <!--<SeekBar-->
-                         <!--android:layout_width="match_parent"-->
-                         <!--android:layout_height="wrap_content"-->
-                         <!--android:id="@+id/point_easiness"-->
-                         <!--android:layout_gravity="center_horizontal"-->
-                         <!--android:layout_weight="1"-->
-                         <!--android:max="10"/>-->
+                     <SeekBar
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/point_gpa_satisfaction"
+                         android:layout_gravity="center_horizontal"
+                         android:layout_weight="1"
+                         android:max="10"/>
+                     <SeekBar
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/point_clarity"
+                         android:layout_gravity="center_horizontal"
+                         android:layout_weight="1"
+                         android:max="10"/>
+                     <SeekBar
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/point_easiness"
+                         android:layout_gravity="center_horizontal"
+                         android:layout_weight="1"
+                         android:max="10"/>
 
                  </LinearLayout>
              </LinearLayout>

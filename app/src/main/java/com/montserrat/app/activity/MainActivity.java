@@ -6,16 +6,25 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
+import com.montserrat.app.model.response.AutoCompleteResponse;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
@@ -23,13 +32,25 @@ import com.montserrat.utils.view.viewpager.ViewPagerManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerController {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerController, RecyclerViewClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener {
     private NavFragment drawer;
     private FlexibleViewPager viewpager;
     private List<ViewPagerManager> managers;
+
+    private CompositeSubscription subscriptions;
+    @InjectView(R.id.search_result) protected RecyclerView searchResult;
+
+    private AutoCompleteAdapter adapter;
+    private List<AutoCompleteResponse> autoCompleteResponses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
 
+        ButterKnife.inject(this);
         this.viewpager = (FlexibleViewPager) this.findViewById(R.id.main_viewpager);
         this.drawer = (NavFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
@@ -53,6 +75,14 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SIGNOUT       , AppConst.ViewPager.Signout.LENGTH));
         this.managers.get(0).active();
         for(ViewPagerManager manager : this.managers) manager.setSwipeEnabled(false);
+
+        this.subscriptions = new CompositeSubscription();
+
+        autoCompleteResponses = new ArrayList<>();
+        adapter = AutoCompleteAdapter.newInstance(autoCompleteResponses, this);
+        this.searchResult.setLayoutManager(new LinearLayoutManager(this));
+        this.searchResult.setAdapter(this.adapter);
+        viewpager.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -65,23 +95,31 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public int getActionbarHeight(){
         return this.getSupportActionBar().getHeight();
     }
+
+    private MenuItem searchitem;
+    private SearchView searchView;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.searchview, menu);
-            MenuItem searchitem = menu.findItem(R.id.menu_search);
-            SearchView searchView = (SearchView) searchitem.getActionView();
-            if(searchView != null){
-                searchView.setQueryHint("?");
+        this.searchitem = menu.findItem(R.id.menu_search);
+        this.searchView = (SearchView) searchitem.getActionView();
+        this.searchitem.expandActionView();
+        if(searchView != null){
+            searchView.setQueryHint("?");
 
-                SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-                if(searchManager != null){
-                    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-                }
-                searchView.setIconifiedByDefault(true);
-                searchView.setOnQueryTextListener(new queryTextListner());
-
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            if(searchManager != null){
+                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             }
+            searchView.setIconifiedByDefault(true);
+            searchView.setOnQueryTextListener(this);
+        }
+//        this.searchitem.setOnMenuItemClickListener(this);
+        searchitem.collapseActionView();
+//        searchView.setOnClickListener(this);
+        searchView.setOnQueryTextFocusChangeListener(this);
+        searchResult.setOnFocusChangeListener(this);
 
         if (!this.drawer.isDrawerOpen()) {
             this.getMenuInflater().inflate(R.menu.main, menu);
@@ -90,6 +128,13 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.reset(this);
+        if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
     @Override
@@ -136,20 +181,59 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         return this.managers.get(this.drawer.getActiveCategory()).onBack();
     }
 
-
     //searchview Listener
-    public class queryTextListner implements SearchView.OnQueryTextListener{
 
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-            return false;
-        }
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
-        // for text auto-completion
-        @Override
-        public boolean onQueryTextChange(String newText) {
-            return false;
-        }
+    // for text auto-completion
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        subscriptions.add(
+                RetrofitApi.getInstance().autocomplete(newText)
+                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .map(response -> response.results)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                results -> {
+                                    autoCompleteResponses.clear();
+                                    autoCompleteResponses.addAll(sampleData());
+                                    adapter.notifyDataSetChanged();
+                                    ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
+                                    param.height = 250;
+                                    searchResult.setLayoutParams(param);
+                                },
+                                error -> {
+                                    autoCompleteResponses.clear();
+                                    autoCompleteResponses.addAll(sampleData());
+                                    adapter.notifyDataSetChanged();
+                                    ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
+                                    param.height = 250;
+                                    param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
+                                    searchResult.setLayoutParams(param);
+                                }
+                        )
+        );
+
+        return false;
+    }
+    @Override
+    public void recyclerViewListClicked(View view, int position) {
+        AutoCompleteResponse item = autoCompleteResponses.get(position);
+        Timber.d("autocomplete : %s", position);
+    }
+
+    private List<AutoCompleteResponse> sampleData(){
+        List<AutoCompleteResponse> list = new ArrayList<>();
+        list.add(new AutoCompleteResponse("math", 1, null, null, null));
+        list.add(new AutoCompleteResponse(null, null, "prof", 2, null));
+        list.add(new AutoCompleteResponse("math", 1, null, null, null));
+        list.add(new AutoCompleteResponse(null, null, "prof", 2, null));
+        return list;
     }
 
     private boolean terminate = false;
@@ -163,4 +247,18 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
             }
         } else terminate = false;
     }
+
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        Timber.d("expand3 : %s?%s", v.getClass().toString(), hasFocus);
+        if(v == searchView) {
+            ViewGroup.LayoutParams param = searchResult.getLayoutParams();
+            param.height = 0;
+            searchResult.setLayoutParams(param);
+        }else if(v == searchResult){
+
+        }
+    }
+
 }

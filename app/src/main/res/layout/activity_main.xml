@@ -10,10 +10,22 @@
         android:orientation="vertical">
         <com.montserrat.utils.view.viewpager.FlexibleViewPager
             android:id="@+id/main_viewpager"
+            android:focusable="true"
+            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.montserrat.utils.view.viewpager.FlexibleViewPager>
         <include layout="@layout/toolbar"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/search_result"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="#1991ff"
+            android:layout_gravity="center_horizontal|top" />
     </FrameLayout>
     <fragment
         android:id="@+id/drawer"
