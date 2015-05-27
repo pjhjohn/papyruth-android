@@ -39,10 +39,11 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM: return new PartialEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation_evaluation, parent, false));
+            case Type.ITEM: return new PartialEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -64,6 +65,11 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @InjectView(R.id.nickname) protected TextView nickname;
         @InjectView(R.id.body) protected TextView comment;
         @InjectView(R.id.like) protected Button like;
+        @InjectView(R.id.date) protected TextView date;
+        @InjectView(R.id.point_overall) protected TextView pointOverall;
+//        @InjectView(R.id.point_gpa_satisfaction) protected SeekBar pointSatisfaction;
+//        @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
+//        @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
         public PartialEvaluationHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);
@@ -80,5 +86,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public void onClick(View v) {
             CourseAdapter.itemListener.recyclerViewListClicked(v, this.getPosition());
         }
+
     }
 }
