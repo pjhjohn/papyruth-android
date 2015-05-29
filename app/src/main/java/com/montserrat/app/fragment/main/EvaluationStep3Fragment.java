@@ -18,8 +18,11 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -73,7 +76,7 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
-        FloatingActionControl.getInstance().setButton(R.id.fab_done).hide(false);
+        FloatingActionControl.getInstance().setButton(R.layout.fab_done).hide(false);
 
         lecture.setText(EvaluationForm.getInstance().getLectureName());
         professor.setText(EvaluationForm.getInstance().getProfessorName());
@@ -88,14 +91,15 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
         );
 
         this.subscriptions.add(WidgetObservable
-            .text(body)
+            .text(this.body)
             .map(toString)
             .map(isValidEvaluationBody)
-            .startWith(false)
+            .startWith(isValidEvaluationBody.call(this.body.getText().toString()))
+            .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if (visible && !valid) FloatingActionControl.hide(true);
-                else if (!visible && valid) FloatingActionControl.show(true);
+                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
             })
         );
 

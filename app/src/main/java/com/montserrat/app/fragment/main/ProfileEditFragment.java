@@ -91,8 +91,8 @@ public class ProfileEditFragment extends Fragment implements OnPageFocus {
             })
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if (visible && !valid) FloatingActionControl.hide(true);
-                else if (!visible && valid) FloatingActionControl.show(true);
+                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
             })
         );
 

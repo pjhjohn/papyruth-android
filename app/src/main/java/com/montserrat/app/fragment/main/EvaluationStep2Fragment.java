@@ -64,25 +64,25 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
-        FloatingActionControl.getInstance().setButton(R.id.fab_next).hide(false);
+        FloatingActionControl.getInstance().setButton(R.layout.fab_next).hide(false);
 
         lecture.setText(EvaluationForm.getInstance().getLectureName());
         professor.setText(EvaluationForm.getInstance().getProfessorName());
 
         this.subscriptions.add(Observable
             .combineLatest(
-                    RxValidator.createObservableRatingBar(this.pointOverall, true).map(RxValidator.isFloatValueInRange),
-                    RxValidator.createObservableSeekBar(this.pointGpaSatisfaction, true).map(RxValidator.isIntegerValueInRange),
-                    RxValidator.createObservableSeekBar(this.pointEasiness, true).map(RxValidator.isIntegerValueInRange),
-                    RxValidator.createObservableSeekBar(this.pointClarity, true).map(RxValidator.isIntegerValueInRange),
-                    (Boolean a, Boolean b, Boolean c, Boolean d) -> a && b && c && d
+                RxValidator.createObservableRatingBar(this.pointOverall, true).map(RxValidator.isFloatValueInRange),
+                RxValidator.createObservableSeekBar(this.pointGpaSatisfaction, true).map(RxValidator.isIntegerValueInRange),
+                RxValidator.createObservableSeekBar(this.pointEasiness, true).map(RxValidator.isIntegerValueInRange),
+                RxValidator.createObservableSeekBar(this.pointClarity, true).map(RxValidator.isIntegerValueInRange),
+                (Boolean a, Boolean b, Boolean c, Boolean d) -> a && b && c && d
             )
-            .startWith(false)
+            .startWith(pagerController.getPreviousPage() == AppConst.ViewPager.Evaluation.EVALUATION_STEP3)
             .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if (visible && !valid) FloatingActionControl.hide(true);
-                else if (!visible && valid) FloatingActionControl.show(true);
+                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
             })
 
         );

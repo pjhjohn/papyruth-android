@@ -14,10 +14,13 @@ import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.PartialCourseAdapter;
+import com.montserrat.app.model.response.Candidate;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
@@ -41,7 +44,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-04-26.
  * Searches PartialCourse for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements OnPageFocus {
+public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAdapter, Candidate> implements OnPageFocus {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -71,10 +74,11 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<PartialCourseA
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        PartialCourse course = items.get(position);
-        EvaluationForm.getInstance().setLectureName(course.name);
-        EvaluationForm.getInstance().setProfessorName(course.professor);
-        EvaluationForm.getInstance().setCourseId(course.id);
+        Candidate candidate = items.get(position);
+        EvaluationForm.getInstance().setLectureName(candidate.lecture_name);
+        EvaluationForm.getInstance().setProfessorName(candidate.professor_name);
+        if(candidate.course!=null) EvaluationForm.getInstance().setCourseId(candidate.course.id);
+        else EvaluationForm.getInstance().setCourseId(0);
 
         ((InputMethodManager)this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -85,8 +89,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<PartialCourseA
     }
 
     @Override
-    protected PartialCourseAdapter getAdapter(List<PartialCourse> partialCourses) {
-        return new PartialCourseAdapter(partialCourses, this);
+    protected AutoCompleteAdapter getAdapter(List<Candidate> candidates) {
+        return new AutoCompleteAdapter(candidates, this);
     }
 
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
@@ -101,14 +105,14 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<PartialCourseA
 
     @Override
     public void onPageFocused() {
+        FloatingActionControl.getInstance().clear();
         subscriptions.add(WidgetObservable
             .text(query)
             .debounce(500, TimeUnit.MILLISECONDS)
             .subscribeOn(AndroidSchedulers.mainThread())
             .map(toString)
-            .map(queryStr -> (String) null) /* Temporarily nullify query to avoid querying */
-            .flatMap(queryStr -> RetrofitApi.getInstance().lecturelist(User.getInstance().getAccessToken(), queryStr))
-            .map(response -> response.lectures)
+            .flatMap(queryStr -> RetrofitApi.getInstance().search_autocomplete(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), queryStr))
+            .map(response -> response.candidates)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

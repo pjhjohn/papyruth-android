@@ -4,12 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.PartialEvaluation;
-import com.montserrat.app.model.response.AutoCompleteResponse;
+import com.montserrat.app.model.response.Candidate;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -24,14 +22,11 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static final class Type {
         public static final int ITEM = 1;
     }
-    public static AutoCompleteAdapter newInstance(List<AutoCompleteResponse> initItemList, RecyclerViewClickListener listener) {
-        return new AutoCompleteAdapter(initItemList, listener);
-    }
 
     private static RecyclerViewClickListener itemListener; // TODO : use if implemented.
 
-    private List<AutoCompleteResponse> items;
-    private AutoCompleteAdapter(List<AutoCompleteResponse> initItemList, RecyclerViewClickListener listener) {
+    private List<Candidate> items;
+    public AutoCompleteAdapter(List<Candidate> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         AutoCompleteAdapter.itemListener = listener;
     }
@@ -70,7 +65,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             parent.setOnClickListener(this);
         }
 
-        public void bind(AutoCompleteResponse item) {
+        public void bind(Candidate item) {
             if (item.course != null){
                 this.content.setText(item.course.name + " - " +item.course.professor);
             }else if(item.lecture_name != null)

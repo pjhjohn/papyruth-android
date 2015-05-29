@@ -113,8 +113,8 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().setMenu(R.layout.fam_home).hideMenuButton(false);
-        this.subscriptions.add(Observable.just(null).delay(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> FloatingActionControl.show(true)));
+        FloatingActionControl.getInstance().setMenu(R.layout.fam_home).hide(false);
+        this.subscriptions.add(Observable.just(null).delay(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> FloatingActionControl.getInstance().show(true)));
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_new_evaluation)

@@ -27,29 +27,25 @@
             android:layout_gravity="center"
             android:numStars="5"
             android:stepSize="1"
-            android:max="10"
-            android:progress="-1"/>
+            android:max="10"/>
 
         <SeekBar
             android:id="@+id/point_gpa_satisfaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="10"
-            android:progress="-1"/>
+            android:max="10"/>
 
         <SeekBar
             android:id="@+id/point_easiness"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="10"
-            android:progress="-1"/>
+            android:max="10"/>
 
         <SeekBar
             android:id="@+id/point_clarity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="10"
-            android:progress="-1"/>
+            android:max="10"/>
 
         <EditText
             android:id="@+id/body"

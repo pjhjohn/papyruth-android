@@ -1,13 +1,12 @@
 package com.montserrat.utils.support.retrofit;
 
-import com.montserrat.app.model.response.AutoCompleteResponse;
-import com.montserrat.app.model.response.AutoCompleteResultsResponse;
+import com.montserrat.app.model.response.CandidatesResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
-import com.montserrat.app.model.response.PartialEvaluationsResponse;
 import com.montserrat.app.model.response.PartialCoursesResponse;
-import com.montserrat.app.model.response.UserInfoResponse;
+import com.montserrat.app.model.response.PartialEvaluationsResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
+import com.montserrat.app.model.response.UserInfoResponse;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -45,13 +44,15 @@ public class RetrofitApi {
         @GET ("/lectures")
         Observable<PartialCoursesResponse> lectures(
             @Header ("Authorization") String authorization,
-            @Query ("university_id") String university_id,
+            @Query ("university_id") Integer university_id,
             @Query ("query") String query
         );
 
-        @GET ("/autocomplete")
-        Observable<AutoCompleteResultsResponse> autocomplete(
-                @Query("query") String query
+        @GET ("/search/autocomplete")
+        Observable<CandidatesResponse> search_autocomplete(
+            @Header("Authorization") String authorization,
+            @Query("university_id") Integer university_id,
+            @Query("query") String query
         );
 
         @GET ("/universities")
@@ -62,12 +63,6 @@ public class RetrofitApi {
 
         @GET ("/info")
         Observable<StatisticsResponse> statistics();
-
-        @GET("/lectures/dummy_autocomplete")
-        Observable<PartialCoursesResponse> lecturelist(
-            @Header("Authorization") String authorization,
-            @Query("query") String query
-        );
 
         @POST("/evaluations")
         Observable<EvaluationResponse> evaluation(

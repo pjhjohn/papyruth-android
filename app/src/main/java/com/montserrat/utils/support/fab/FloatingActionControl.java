@@ -43,49 +43,55 @@ public class FloatingActionControl {
         return fac.fam;
     }
     public static rx.Observable<OnClickEvent> clicks() {
-        return ViewObservable.clicks(getButton());
+        return ViewObservable.clicks(FloatingActionControl.getButton());
     }
     public static rx.Observable<OnClickEvent> clicks(int fab_id) {
-        return ViewObservable.clicks(getButton(fab_id));
+        return ViewObservable.clicks(FloatingActionControl.getButton(fab_id));
     }
 
-    public static void toggle(boolean animate) {
-        FloatingActionControl fac = FloatingActionControl.getInstance();
-        if(fac.fab != null) fac.fab.toggle(animate);
-        else if(fac.fam != null) fac.fam.toggleMenuButton(animate);
+    public FloatingActionControl toggle(boolean animate) {
+        if(this.fab != null) this.fab.toggle(animate);
+        else if(this.fam != null) this.fam.toggleMenuButton(animate);
+        return this;
     }
-    public static void show(boolean animate) {
-        FloatingActionControl fac = FloatingActionControl.getInstance();
-        if(fac.fab != null) fac.fab.show(animate);
-        else if(fac.fam != null) fac.fam.showMenuButton(animate);
+    public FloatingActionControl show(boolean animate) {
+        if(this.fab != null) this.fab.show(animate);
+        else if(this.fam != null) this.fam.showMenuButton(animate);
+        return this;
     }
-    public static void hide(boolean animate) {
-        FloatingActionControl fac = FloatingActionControl.getInstance();
-        if(fac.fab != null) fac.fab.hide(animate);
-        else if(fac.fam != null) fac.fam.hideMenuButton(animate);
+    public FloatingActionControl hide(boolean animate) {
+        if(this.fab != null) this.fab.hide(animate);
+        else if(this.fam != null) this.fam.hideMenuButton(animate);
+        return this;
     }
 
     public Type getControlType() {
         return this.fab == null ? (this.fam == null ? Type.NONE : Type.FAB) : Type.FAM;
     }
 
-    public void setContainerView(FloatingActionControlContainer container) {
+    public FloatingActionControl setContainerView(FloatingActionControlContainer container) {
         this.container = container;
+        return this;
     }
 
-    public FloatingActionButton setButton(int id) {
-        this.removeAll();
-        return this.fab = (FloatingActionButton)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
+    public FloatingActionControl setButton(int id) {
+        this.clear();
+        this.fab = (FloatingActionButton)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
+        return this;
     }
 
-    public FloatingActionMenu setMenu(int id) {
-        this.removeAll();
-        return this.fam = (FloatingActionMenu)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
+    public FloatingActionControl setMenu(int id) {
+        this.clear();
+        this.fam = (FloatingActionMenu)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
+        return this;
     }
 
-    private void removeAll() {
+    public FloatingActionControl clear() {
         if(this.fab != null) this.fab.hide(true);
         if(this.fam != null) this.fam.hideMenuButton(true);
         this.container.removeAllViews();
+        this.fab = null;
+        this.fam = null;
+        return this;
     }
 }

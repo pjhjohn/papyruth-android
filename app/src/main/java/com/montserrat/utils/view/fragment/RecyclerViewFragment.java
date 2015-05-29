@@ -67,11 +67,11 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
             if ( show_panels == null ) return null;
             if ( (boolean) show_panels ) {
                 if(toolbar != null && this.hideToolbarOnScroll) toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-                if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.hide(animateFloatingActionControl);
+                if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.getInstance().hide(animateFloatingActionControl);
                 return true;
             } else {
                 if (toolbar != null && this.hideToolbarOnScroll) toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-                if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.show(animateFloatingActionControl);
+                if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.getInstance().show(animateFloatingActionControl);
                 return false;
             }
         });

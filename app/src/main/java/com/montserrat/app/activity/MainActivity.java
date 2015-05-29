@@ -21,9 +21,10 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
-import com.montserrat.app.model.response.AutoCompleteResponse;
-import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.app.model.response.Candidate;
 import com.montserrat.app.model.unique.Search;
+import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
@@ -54,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     @InjectView(R.id.search_result_outside) protected View outsideResult;
 
     private AutoCompleteAdapter adapter;
-    private List<AutoCompleteResponse> autoCompleteResponses;
+    private List<Candidate> candidates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +84,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
         this.subscriptions = new CompositeSubscription();
 
-        autoCompleteResponses = new ArrayList<>();
-        adapter = AutoCompleteAdapter.newInstance(autoCompleteResponses, this);
+        candidates = new ArrayList<>();
+        adapter = new AutoCompleteAdapter(candidates, this);
         this.searchResult.setLayoutManager(new LinearLayoutManager(this));
         this.searchResult.setAdapter(this.adapter);
         viewpager.setOnFocusChangeListener(this);
@@ -197,28 +198,28 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     // for text auto-completion
     @Override
-    public boolean onQueryTextChange(String newText) {
+    public boolean onQueryTextChange(String query) {
         subscriptions.add(
-                RetrofitApi.getInstance().autocomplete(newText)
-                        .debounce(500, TimeUnit.MILLISECONDS)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .map(response -> response.results)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                results -> {
-                                    autoCompleteResponses.clear();
-                                    autoCompleteResponses.addAll(sampleData());
-                                    adapter.notifyDataSetChanged();
-                                    expandResult(true);
-                                },
-                                error -> {
-                                    autoCompleteResponses.clear();
-                                    autoCompleteResponses.addAll(sampleData());
-                                    adapter.notifyDataSetChanged();
-                                    expandResult(true);
-                                }
-                        )
+            RetrofitApi.getInstance().search_autocomplete(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), query)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map(response -> response.candidates)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    results -> {
+                        candidates.clear();
+                        candidates.addAll(sampleData());
+                        adapter.notifyDataSetChanged();
+                        expandResult(true);
+                    },
+                    error -> {
+                        candidates.clear();
+                        candidates.addAll(sampleData());
+                        adapter.notifyDataSetChanged();
+                        expandResult(true);
+                    }
+                )
         );
 
         return false;
@@ -252,8 +253,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        AutoCompleteResponse item = autoCompleteResponses.get(position);
-        Timber.d("autocomplete : %s", position);
+        Candidate item = candidates.get(position);
+        Timber.d("search_autocomplete : %s", position);
 
         Search.getInstance().setCourse(item.course);
         Search.getInstance().setLecture_id(item.lecture_id);
@@ -263,12 +264,12 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.onCategorySelected(NavFragment.CategoryType.SEARCH);
     }
 
-    private List<AutoCompleteResponse> sampleData(){
-        List<AutoCompleteResponse> list = new ArrayList<>();
-        list.add(new AutoCompleteResponse("math", 1, null, null, null));
-        list.add(new AutoCompleteResponse(null, null, "prof", 2, null));
-        list.add(new AutoCompleteResponse("math", 1, null, null, null));
-        list.add(new AutoCompleteResponse(null, null, "prof", 2, null));
+    private List<Candidate> sampleData(){
+        List<Candidate> list = new ArrayList<>();
+        list.add(new Candidate("math", 1, null, null, null));
+        list.add(new Candidate(null, null, "prof", 2, null));
+        list.add(new Candidate("math", 1, null, null, null));
+        list.add(new Candidate(null, null, "prof", 2, null));
         return list;
     }
 
