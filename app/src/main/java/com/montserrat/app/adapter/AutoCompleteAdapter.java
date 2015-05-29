@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.response.Candidate;
+import com.montserrat.app.model.Candidate;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;

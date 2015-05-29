@@ -1,4 +1,4 @@
-package com.montserrat.app.model.response;
+package com.montserrat.app.model;
 
 import com.montserrat.app.model.PartialCourse;
 

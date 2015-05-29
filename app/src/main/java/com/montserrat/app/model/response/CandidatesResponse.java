@@ -1,5 +1,7 @@
 package com.montserrat.app.model.response;
 
+import com.montserrat.app.model.Candidate;
+
 import java.util.List;
 
 /**

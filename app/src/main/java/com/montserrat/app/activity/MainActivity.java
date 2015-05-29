@@ -21,7 +21,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
-import com.montserrat.app.model.response.Candidate;
+import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
