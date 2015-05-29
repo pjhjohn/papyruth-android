@@ -1,14 +1,15 @@
 package com.montserrat.utils.support.fab;
 
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.montserrat.app.AppManager;
 import com.montserrat.utils.view.FloatingActionControlContainer;
+
+import rx.android.view.OnClickEvent;
+import rx.android.view.ViewObservable;
 
 /**
  * Created by pjhjohn on 2015-05-29.
@@ -28,16 +29,6 @@ public class FloatingActionControl {
         if(instance == null) FloatingActionControl.instance = new FloatingActionControl();
         return FloatingActionControl.instance;
     }
-    public static synchronized FloatingActionControl getInstance(FloatingActionButton fab) {
-        if(instance == null) FloatingActionControl.instance = new FloatingActionControl();
-        instance.setFloatingActionButton(fab);
-        return FloatingActionControl.instance;
-    }
-    public static synchronized FloatingActionControl getInstance(FloatingActionMenu fam) {
-        if(instance == null) FloatingActionControl.instance = new FloatingActionControl();
-        instance.setFloatingActionMenu(fam);
-        return FloatingActionControl.instance;
-    }
     public static FloatingActionButton getButton() {
         FloatingActionControl fac = FloatingActionControl.getInstance();
         return fac.fab;
@@ -50,6 +41,12 @@ public class FloatingActionControl {
     public static FloatingActionMenu getMenu(){
         FloatingActionControl fac = FloatingActionControl.getInstance();
         return fac.fam;
+    }
+    public static rx.Observable<OnClickEvent> observable() {
+        return ViewObservable.clicks(getButton());
+    }
+    public static rx.Observable<OnClickEvent> observable(int fab_id) {
+        return ViewObservable.clicks(getButton(fab_id));
     }
 
     public static void toggle(boolean animate) {
@@ -85,46 +82,19 @@ public class FloatingActionControl {
         this.container = container;
     }
 
-    public FloatingActionButton setFloatingActionButton(FloatingActionButton fab) {
+    public FloatingActionButton setFloatingActionButton(int id) {
         this.removeAll();
-        this.register(fab);
-
-        this.fab.hide(false);
-        this.fab.show(true);
-        return this.fab;
-    }
-    public FloatingActionButton setFloatingActionButton(int resourceId) {
-        return this.setFloatingActionButton((FloatingActionButton) this.inflater.inflate(resourceId, null));
+        return this.fab = (FloatingActionButton)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
     }
 
-    public FloatingActionMenu setFloatingActionMenu(FloatingActionMenu fam) {
+    public FloatingActionMenu setFloatingActionMenu(int id) {
         this.removeAll();
-        this.register(fam);
-
-        this.fam.hideMenuButton(false);
-        this.fam.showMenuButton(true);
-        return this.fam;
-    }
-    public FloatingActionMenu setFloatingActionMenu(int resourceId) {
-        return this.setFloatingActionMenu((FloatingActionMenu) this.inflater.inflate(resourceId, null));
+        return this.fam = (FloatingActionMenu)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
     }
 
     private void removeAll() {
         if(this.fab != null) this.fab.hide(true);
         if(this.fam != null) this.fam.hideMenuButton(true);
         this.container.removeAllViews();
-    }
-
-    private void register(FloatingActionButton fab) {
-        if(this.container==null) return;
-        if(fab==null) return;
-        this.fab = fab;
-        this.container.addView(fab);
-    }
-    private void register(FloatingActionMenu fam) {
-        if(this.container==null) return;
-        if(fam==null) return;
-        this.fam = fam;
-        this.container.addView(fam);
     }
 }

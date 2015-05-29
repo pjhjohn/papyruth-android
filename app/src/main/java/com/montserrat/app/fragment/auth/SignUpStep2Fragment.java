@@ -133,30 +133,30 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         this.university.setText(User.getInstance().getUniversityName());
-        FloatingActionButton submit = FloatingActionControl.getInstance().setFloatingActionButton(R.layout.fab_done);
+        FloatingActionControl.getInstance().setFloatingActionButton(R.layout.fab_done);
 
         this.subscriptions.add(Observable.combineLatest(
-                        WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
-                        WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
-                        WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
-                        WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
-                        RxValidator.createObservableRadioGroup(genderRadioGroup).map(isValidRadioButton),
-                        (String emailError, String passwordError, String realnameError, String nicknameError, Boolean validRadioGroup) -> {
-                            this.email.setError(emailError);
-                            this.password.setError(passwordError);
-                            this.realname.setError(realnameError);
-                            this.nickname.setError(nicknameError);
-                            return emailError == null && passwordError == null && realnameError == null && nicknameError == null && validRadioGroup != null && validRadioGroup;
-                        })
-                        .startWith(false)
-                        .subscribe(valid -> {
-                            boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                            if(visible && !valid) FloatingActionControl.getButton().hide(true);
-                            else if(!visible && valid) FloatingActionControl.getButton().show(true);
-                        })
+            WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+            WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+            WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
+            WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
+            RxValidator.createObservableRadioGroup(genderRadioGroup).map(isValidRadioButton),
+            (String emailError, String passwordError, String realnameError, String nicknameError, Boolean validRadioGroup) -> {
+                this.email.setError(emailError);
+                this.password.setError(passwordError);
+                this.realname.setError(realnameError);
+                this.nickname.setError(nicknameError);
+                return emailError == null && passwordError == null && realnameError == null && nicknameError == null && validRadioGroup != null && validRadioGroup;
+            })
+            .startWith(false)
+            .subscribe(valid -> {
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if(visible && !valid) FloatingActionControl.hide(true);
+                else if(!visible && valid) FloatingActionControl.show(true);
+            })
         );
 
-        this.subscriptions.add(ViewObservable.clicks(FloatingActionControl.getButton()).subscribe(unused -> register()));
+        this.subscriptions.add(FloatingActionControl.observable().subscribe(unused -> register()));
         this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
 
     }
