@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -41,13 +40,14 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerController, RecyclerViewClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerController, RecyclerViewClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener {
     private NavFragment drawer;
     private FlexibleViewPager viewpager;
     private List<ViewPagerManager> managers;
 
     private CompositeSubscription subscriptions;
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
+    @InjectView(R.id.search_result_outside) protected View outsideResult;
 
     private AutoCompleteAdapter adapter;
     private List<AutoCompleteResponse> autoCompleteResponses;
@@ -83,6 +83,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.searchResult.setLayoutManager(new LinearLayoutManager(this));
         this.searchResult.setAdapter(this.adapter);
         viewpager.setOnFocusChangeListener(this);
+        outsideResult.setOnFocusChangeListener(this);
+        outsideResult.setOnClickListener(this);
     }
 
     @Override
@@ -98,6 +100,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     private MenuItem searchitem;
     private SearchView searchView;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = this.getMenuInflater();
@@ -203,24 +206,46 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
                                     autoCompleteResponses.clear();
                                     autoCompleteResponses.addAll(sampleData());
                                     adapter.notifyDataSetChanged();
-                                    ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
-                                    param.height = 250;
-                                    searchResult.setLayoutParams(param);
+                                    expandResult(true);
                                 },
                                 error -> {
                                     autoCompleteResponses.clear();
                                     autoCompleteResponses.addAll(sampleData());
                                     adapter.notifyDataSetChanged();
-                                    ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
-                                    param.height = 250;
-                                    param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
-                                    searchResult.setLayoutParams(param);
+                                    expandResult(true);
                                 }
                         )
         );
 
         return false;
     }
+
+    private void expandResult(boolean expand){
+        if(expand){
+            ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
+            param.height = 250;
+            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
+            searchResult.setLayoutParams(param);
+
+            param =  outsideResult.getLayoutParams();
+            param.height = this.getResources().getDisplayMetrics().heightPixels;
+            param.width = this.getResources().getDisplayMetrics().widthPixels;
+
+            outsideResult.setLayoutParams(param);
+        }else{
+            ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
+            param.height = 0;
+            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
+            searchResult.setLayoutParams(param);
+
+            param =  outsideResult.getLayoutParams();
+            param.height = 0;
+            param.width = this.getResources().getDisplayMetrics().widthPixels;
+
+            outsideResult.setLayoutParams(param);
+        }
+    }
+
     @Override
     public void recyclerViewListClicked(View view, int position) {
         AutoCompleteResponse item = autoCompleteResponses.get(position);
@@ -253,12 +278,14 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public void onFocusChange(View v, boolean hasFocus) {
         Timber.d("expand3 : %s?%s", v.getClass().toString(), hasFocus);
         if(v == searchView) {
-            ViewGroup.LayoutParams param = searchResult.getLayoutParams();
-            param.height = 0;
-            searchResult.setLayoutParams(param);
+            expandResult(false);
         }else if(v == searchResult){
 
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        expandResult(false);
+    }
 }
