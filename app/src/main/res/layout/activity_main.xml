@@ -26,6 +26,7 @@
             android:clickable="true"
             android:background="#1991ff"
             android:layout_gravity="center_horizontal|top" />
+        <include layout="@layout/fac"/>
     </FrameLayout>
     <fragment
         android:id="@+id/drawer"

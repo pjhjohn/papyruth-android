@@ -5,11 +5,16 @@ import android.os.Bundle;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
 
 import java.util.Stack;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Activity For Authentication.
@@ -17,10 +22,14 @@ import java.util.Stack;
 public class AuthActivity extends Activity implements ViewPagerController {
     private ViewPagerManager manager;
 
+    @InjectView(R.id.fac) FloatingActionControlContainer fac;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
+        ButterKnife.inject(this);
+        FloatingActionControl.getInstance().setContainerView(this.fac);
 
         /* Set Manager for ViewPager */
         this.manager = new ViewPagerManager(
@@ -30,6 +39,11 @@ public class AuthActivity extends Activity implements ViewPagerController {
                 AppConst.ViewPager.Auth.LENGTH
         );
         this.manager.setSwipeEnabled(false);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.reset(this);
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
@@ -63,7 +64,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.nickname) protected EditText nickname;
     @InjectView (R.id.gender) protected RadioGroup genderRadioGroup;
     @InjectView (R.id.entrance) protected Spinner entranceSpinner;
-    @InjectView (R.id.fab_done) protected FloatingActionButton submit;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
 
@@ -78,30 +78,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
         int todayear = Calendar.getInstance().get(Calendar.YEAR);
         for(int year = todayear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(year);
         entranceSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
-
-        this.subscriptions.add(Observable.combineLatest(
-            WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
-            WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
-            WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
-            WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
-            RxValidator.createObservableRadioGroup(genderRadioGroup).map(isValidRadioButton),
-            (String emailError, String passwordError, String realnameError, String nicknameError, Boolean validRadioGroup) -> {
-                this.email.setError(emailError);
-                this.password.setError(passwordError);
-                this.realname.setError(realnameError);
-                this.nickname.setError(nicknameError);
-                return emailError == null && passwordError == null && realnameError == null && nicknameError == null && validRadioGroup != null && validRadioGroup;
-            })
-            .startWith(false)
-            .subscribe(valid -> {
-                boolean visible = this.submit.getVisibility() == View.VISIBLE;
-                if(visible && !valid) this.submit.hide(true);
-                else if(!visible && valid) this.submit.show(true);
-            })
-        );
-
-        this.subscriptions.add(ViewObservable.clicks(this.submit).subscribe(unused -> register()));
-        this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
 
         return view;
     }
@@ -157,5 +133,31 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         this.university.setText(User.getInstance().getUniversityName());
+        FloatingActionButton submit = FloatingActionControl.getInstance().setFloatingActionButton(R.layout.fab_done);
+
+        this.subscriptions.add(Observable.combineLatest(
+                        WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+                        WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+                        WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
+                        WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
+                        RxValidator.createObservableRadioGroup(genderRadioGroup).map(isValidRadioButton),
+                        (String emailError, String passwordError, String realnameError, String nicknameError, Boolean validRadioGroup) -> {
+                            this.email.setError(emailError);
+                            this.password.setError(passwordError);
+                            this.realname.setError(realnameError);
+                            this.nickname.setError(nicknameError);
+                            return emailError == null && passwordError == null && realnameError == null && nicknameError == null && validRadioGroup != null && validRadioGroup;
+                        })
+                        .startWith(false)
+                        .subscribe(valid -> {
+                            boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                            if(visible && !valid) FloatingActionControl.getButton().hide(true);
+                            else if(!visible && valid) FloatingActionControl.getButton().show(true);
+                        })
+        );
+
+        this.subscriptions.add(ViewObservable.clicks(FloatingActionControl.getButton()).subscribe(unused -> register()));
+        this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+
     }
 }
