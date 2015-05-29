@@ -20,6 +20,5 @@
                 android:layout_gravity="left|top" />
             </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
-    <include layout="@layout/fam_home"/>
     <include layout="@layout/progress"/>
 </FrameLayout>

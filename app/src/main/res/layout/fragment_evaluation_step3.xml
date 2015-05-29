@@ -59,5 +59,4 @@
             android:hint="@string/hint_evaluation_body"
             android:focusableInTouchMode="true"/>
     </LinearLayout>
-    <include layout="@layout/fab_done"/>
 </FrameLayout>

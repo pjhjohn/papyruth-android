@@ -12,11 +12,11 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -32,8 +32,8 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.montserrat.utils.support.rx.RxValidator.toString;
 import static com.montserrat.utils.support.rx.RxValidator.isValidEvaluationBody;
+import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -54,7 +54,6 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
     @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
     @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
     @InjectView(R.id.body) protected EditText body;
-    @InjectView(R.id.fab_done) protected FloatingActionButton submit;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -74,6 +73,8 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
+        FloatingActionControl.getInstance().setButton(R.id.fab_done).hide(false);
+
         lecture.setText(EvaluationForm.getInstance().getLectureName());
         professor.setText(EvaluationForm.getInstance().getProfessorName());
         pointOverall.setRating(EvaluationForm.getInstance().getPointOverall());
@@ -92,14 +93,14 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
             .map(isValidEvaluationBody)
             .startWith(false)
             .subscribe(valid -> {
-                boolean visible = this.submit.getVisibility() == View.VISIBLE;
-                if (visible && !valid) this.submit.hide(true);
-                else if (!visible && valid) this.submit.show(true);
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if (visible && !valid) FloatingActionControl.hide(true);
+                else if (!visible && valid) FloatingActionControl.show(true);
             })
         );
 
-        this.subscriptions.add(ViewObservable
-            .clicks(submit)
+        this.subscriptions.add(FloatingActionControl
+            .clicks()
             .map(pass -> {
                 EvaluationForm.getInstance().setComment(this.body.getText().toString());
                 return pass;

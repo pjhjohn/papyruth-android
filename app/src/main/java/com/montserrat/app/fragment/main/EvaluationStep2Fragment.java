@@ -10,10 +10,10 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.EvaluationForm;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -42,7 +42,6 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
     @InjectView(R.id.point_gpa_satisfaction) protected SeekBar pointGpaSatisfaction;
     @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
     @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
-    @InjectView(R.id.fab_next) protected FloatingActionButton next;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -62,6 +61,8 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
+        FloatingActionControl.getInstance().setButton(R.id.fab_next).hide(false);
+
         lecture.setText(EvaluationForm.getInstance().getLectureName());
         professor.setText(EvaluationForm.getInstance().getProfessorName());
 
@@ -75,9 +76,9 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
             )
             .startWith(false)
             .subscribe(valid -> {
-                boolean visible = this.next.getVisibility() == View.VISIBLE;
-                if (visible && !valid) this.next.hide(true);
-                else if (!visible && valid) this.next.show(true);
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if (visible && !valid) FloatingActionControl.hide(true);
+                else if (!visible && valid) FloatingActionControl.show(true);
             })
 
         );
@@ -87,15 +88,15 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
             .subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP1, true))
         );
 
-        this.subscriptions.add(ViewObservable
-            .clicks(this.next)
-            .subscribe(unused -> {
-                EvaluationForm.getInstance().setPointOverall((int) pointOverall.getRating());
-                EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
-                EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
-                EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
-            })
+        this.subscriptions.add(FloatingActionControl
+                        .clicks()
+                        .subscribe(unused -> {
+                            EvaluationForm.getInstance().setPointOverall((int) pointOverall.getRating());
+                            EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
+                            EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
+                            EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
+                            this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
+                        })
         );
     }
 }

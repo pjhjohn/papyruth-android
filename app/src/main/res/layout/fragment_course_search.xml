@@ -21,6 +21,5 @@
                 android:layout_gravity="left|top" />
             </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
-    <include layout="@layout/fab_new_evaluation"/>
     <include layout="@layout/progress"/>
 </FrameLayout>

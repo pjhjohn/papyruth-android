@@ -83,7 +83,6 @@
                 android:id="@+id/entrance"/>
         </LinearLayout>
     </LinearLayout>
-    <include layout="@layout/fab_done"/>
     <include layout="@layout/progress"/>
 </FrameLayout>
 

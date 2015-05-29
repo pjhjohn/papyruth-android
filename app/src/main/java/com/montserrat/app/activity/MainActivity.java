@@ -22,7 +22,9 @@ import com.montserrat.app.R;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.response.AutoCompleteResponse;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -46,6 +48,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private List<ViewPagerManager> managers;
 
     private CompositeSubscription subscriptions;
+    @InjectView(R.id.fac) FloatingActionControlContainer fac;
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
     @InjectView(R.id.search_result_outside) protected View outsideResult;
 
@@ -56,10 +59,11 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
+        FloatingActionControl.getInstance().setContainerView(this.fac);
 
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
 
-        ButterKnife.inject(this);
         this.viewpager = (FlexibleViewPager) this.findViewById(R.id.main_viewpager);
         this.drawer = (NavFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
@@ -85,6 +89,13 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         viewpager.setOnFocusChangeListener(this);
         outsideResult.setOnFocusChangeListener(this);
         outsideResult.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.reset(this);
+        if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
     @Override
@@ -132,14 +143,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
         return super.onCreateOptionsMenu(menu);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.reset(this);
-        if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

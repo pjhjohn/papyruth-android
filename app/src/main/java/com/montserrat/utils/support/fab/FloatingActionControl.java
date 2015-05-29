@@ -42,36 +42,27 @@ public class FloatingActionControl {
         FloatingActionControl fac = FloatingActionControl.getInstance();
         return fac.fam;
     }
-    public static rx.Observable<OnClickEvent> observable() {
+    public static rx.Observable<OnClickEvent> clicks() {
         return ViewObservable.clicks(getButton());
     }
-    public static rx.Observable<OnClickEvent> observable(int fab_id) {
+    public static rx.Observable<OnClickEvent> clicks(int fab_id) {
         return ViewObservable.clicks(getButton(fab_id));
     }
 
     public static void toggle(boolean animate) {
-        instance = FloatingActionControl.getInstance();
-        switch(instance.getControlType()) {
-            case FAM : instance.fam.toggleMenuButton(animate); break;
-            case FAB : instance.fab.toggle(animate);
-            case NONE : break;
-        }
+        FloatingActionControl fac = FloatingActionControl.getInstance();
+        if(fac.fab != null) fac.fab.toggle(animate);
+        else if(fac.fam != null) fac.fam.toggleMenuButton(animate);
     }
     public static void show(boolean animate) {
-        instance = FloatingActionControl.getInstance();
-        switch(instance.getControlType()) {
-            case FAM : instance.fam.showMenuButton(animate); break;
-            case FAB : instance.fab.show(animate);
-            case NONE : break;
-        }
+        FloatingActionControl fac = FloatingActionControl.getInstance();
+        if(fac.fab != null) fac.fab.show(animate);
+        else if(fac.fam != null) fac.fam.showMenuButton(animate);
     }
     public static void hide(boolean animate) {
-        instance = FloatingActionControl.getInstance();
-        switch(instance.getControlType()) {
-            case FAM : instance.fam.showMenuButton(animate); break;
-            case FAB : instance.fab.show(animate);
-            case NONE : break;
-        }
+        FloatingActionControl fac = FloatingActionControl.getInstance();
+        if(fac.fab != null) fac.fab.hide(animate);
+        else if(fac.fam != null) fac.fam.hideMenuButton(animate);
     }
 
     public Type getControlType() {
@@ -82,12 +73,12 @@ public class FloatingActionControl {
         this.container = container;
     }
 
-    public FloatingActionButton setFloatingActionButton(int id) {
+    public FloatingActionButton setButton(int id) {
         this.removeAll();
         return this.fab = (FloatingActionButton)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
     }
 
-    public FloatingActionMenu setFloatingActionMenu(int id) {
+    public FloatingActionMenu setMenu(int id) {
         this.removeAll();
         return this.fam = (FloatingActionMenu)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
     }

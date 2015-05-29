@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -41,7 +40,6 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.nickname) protected TextView nickname;
     @InjectView (R.id.gender) protected TextView gender;
     @InjectView (R.id.entrance) protected TextView entrance;
-    @InjectView (R.id.fab_edit) protected FloatingActionButton edit;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -67,6 +65,9 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
+        FloatingActionControl.getInstance().setButton(R.layout.fab_edit).hide(false);
+        this.subscriptions.add(Observable.just(null).delay(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> FloatingActionControl.show(true)));
+
         this.email.setText(User.getInstance().getEmail());
         this.university.setText(User.getInstance().getUniversityName());
         this.realname.setText(User.getInstance().getRealname());
@@ -74,9 +75,8 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
         this.gender.setText(this.getResources().getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
         this.entrance.setText(String.valueOf(User.getInstance().getAdmissionYear()));
 
-        this.subscriptions.add(Observable.just(null).delay(150, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> this.edit.show(true)));
-        this.subscriptions.add(ViewObservable
-            .clicks(this.edit)
+        this.subscriptions.add(FloatingActionControl
+            .clicks()
             .subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Profile.PROFILE_EDIT, true))
         );
     }

@@ -8,6 +8,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.main.PartialCourseFragment;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
@@ -18,7 +19,7 @@ import butterknife.InjectView;
 
 /**
  * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
- * Used in {@link com.montserrat.app.fragment.main.SearchCourseFragment SearchCourseFragment}
+ * Used in {@link PartialCourseFragment SearchCourseFragment}
  * as an adapter for List-type {@link RecyclerView} to provide course search result
  */
 public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

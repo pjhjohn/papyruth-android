@@ -12,6 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.recycler.PanelControllerOnScrollWithAskMore;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
@@ -56,7 +57,7 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
         view.setAdapter(this.adapter);
     }
 
-    protected Observable<Boolean> getRecyclerViewScrollObservable(RecyclerView view, Toolbar toolbar, FloatingActionButton fab) {
+    protected Observable<Boolean> getRecyclerViewScrollObservable(RecyclerView view, Toolbar toolbar, boolean animateFloatingActionControl) {
         return Observable.create( observer -> view.setOnScrollListener( new PanelControllerOnScrollWithAskMore(AppConst.DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE) {
             @Override public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) { observer.onNext(null); }
             @Override public void onHidePanels () { observer.onNext(false); }
@@ -66,24 +67,12 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
             if ( show_panels == null ) return null;
             if ( (boolean) show_panels ) {
                 if(toolbar != null && this.hideToolbarOnScroll) toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-                if(fab != null && this.hideFloatingActionButtonOnScroll) {
-                    //Vertical
-                    //this.vFAB.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-                    //Horizontal
-                    //this.vFAB.animate().translationX(0).setInterpolator(new DecelerateInterpolator(2)).start();
-                } return true;
+                if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.hide(animateFloatingActionControl);
+                return true;
             } else {
-                if (toolbar != null && this.hideToolbarOnScroll) {
-                    toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-                }
-                if (fab != null && this.hideFloatingActionButtonOnScroll) {
-                    //Vertical
-                    //FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.vFAB.getLayoutParams();
-                    //int fabBottomMargin = lp.bottomMargin;
-                    //this.vFAB.animate().translationY(this.vFAB.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
-                    //Horizontal
-                    //this.vFAB.animate().translationX(this.vFAB.getWidth()/2).setInterpolator(new AccelerateInterpolator(2)).start();
-                } return false;
+                if (toolbar != null && this.hideToolbarOnScroll) toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.show(animateFloatingActionControl);
+                return false;
             }
         });
     }

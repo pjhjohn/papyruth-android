@@ -10,14 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
@@ -28,16 +29,17 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> {
+public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements OnPageFocus {
     private ViewPagerController pagerController;
+    private NavFragment.OnCategoryClickListener callback;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+        this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
-    @InjectView(R.id.fab_new_evaluation) protected FloatingActionButton fab;
     @InjectView(R.id.swipe) protected SwipeRefreshLayout refresh;
     @InjectView(R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
@@ -53,11 +55,6 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
         this.refresh.setEnabled(true);
 
         this.setupRecyclerView(this.recycler);
-
-        this.fab.setOnClickListener(unused -> {
-            if(this.getActivity() instanceof NavFragment.OnCategoryClickListener)
-                ((NavFragment.OnCategoryClickListener)this.getActivity()).onCategorySelected(NavFragment.CategoryType.EVALUATION);
-        });
 
         return view;
     }
@@ -91,39 +88,53 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
+        if(this.getUserVisibleHint()) this.onPageFocused();
+    }
+
+    @Override
+    public void onPageFocused() {
+        FloatingActionControl.getInstance().setMenu(R.layout.fam_home).hideMenuButton(false);
+        FloatingActionControl.show(true);
+
+        this.subscriptions.add(FloatingActionControl
+                        .clicks(R.id.fab_new_evaluation)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(unused -> this.callback.onCategorySelected(NavFragment.CategoryType.EVALUATION))
+        );
+
         this.subscriptions.add(
             this.getRefreshObservable(this.refresh)
-            .flatMap(unused -> {
-                this.refresh.setRefreshing(true);
-                return RetrofitApi.getInstance().lectures(User.getInstance().getAccessToken(), null, null);
-            })
-            .map(response -> response.lectures)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(lectures -> {
-                this.refresh.setRefreshing(false);
-                this.items.clear();
-                this.items.addAll(lectures);
-                this.adapter.notifyDataSetChanged();
-            })
+                .flatMap(unused -> {
+                    this.refresh.setRefreshing(true);
+                    return RetrofitApi.getInstance().lectures(User.getInstance().getAccessToken(), null, null);
+                })
+                .map(response -> response.lectures)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lectures -> {
+                    this.refresh.setRefreshing(false);
+                    this.items.clear();
+                    this.items.addAll(lectures);
+                    this.adapter.notifyDataSetChanged();
+                })
         );
         this.subscriptions.add(
-            getRecyclerViewScrollObservable(this.recycler, this.toolbar, this.fab)
-            .filter(askmoreifnull -> askmoreifnull == null)
-            .flatMap(unused -> {
-                this.progress.setVisibility(View.VISIBLE);
-                return RetrofitApi.getInstance().lectures(User.getInstance().getAccessToken(), null, null);
-            })
-            .map(response -> response.lectures)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(lectures -> {
-                this.progress.setVisibility(View.GONE);
-                this.items.addAll(lectures);
-                this.adapter.notifyDataSetChanged();
-            })
+            getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
+                .filter(askmoreifnull -> askmoreifnull == null)
+                .flatMap(unused -> {
+                    this.progress.setVisibility(View.VISIBLE);
+                    return RetrofitApi.getInstance().lectures(User.getInstance().getAccessToken(), null, null);
+                })
+                .map(response -> response.lectures)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lectures -> {
+                    this.progress.setVisibility(View.GONE);
+                    this.items.addAll(lectures);
+                    this.adapter.notifyDataSetChanged();
+                })
         );
     }
 }

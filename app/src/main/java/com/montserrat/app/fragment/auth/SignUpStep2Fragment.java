@@ -15,7 +15,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
@@ -133,7 +132,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         this.university.setText(User.getInstance().getUniversityName());
-        FloatingActionControl.getInstance().setFloatingActionButton(R.layout.fab_done);
+        FloatingActionControl.getInstance().setButton(R.layout.fab_done);
 
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
@@ -156,7 +155,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
             })
         );
 
-        this.subscriptions.add(FloatingActionControl.observable().subscribe(unused -> register()));
+        this.subscriptions.add(FloatingActionControl.clicks().subscribe(unused -> register()));
         this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
 
     }

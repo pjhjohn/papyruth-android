@@ -55,5 +55,4 @@
             android:enabled="false"
             android:progress="-1"/>
     </LinearLayout>
-    <include layout="@layout/fab_next"/>
 </FrameLayout>

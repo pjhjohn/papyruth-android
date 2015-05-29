@@ -210,7 +210,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         return ((ActionBarActivity) this.getActivity()).getSupportActionBar();
     }
 
-    public static interface OnCategoryClickListener {
+    public interface OnCategoryClickListener {
         void onCategorySelected (int category);
     }
 }

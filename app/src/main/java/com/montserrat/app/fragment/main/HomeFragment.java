@@ -10,13 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialEvaluationAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
@@ -48,8 +47,6 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     }
 
     @InjectView (R.id.recyclerview) protected RecyclerView recycler;
-    @InjectView (R.id.fab_new_evaluation) protected FloatingActionButton fab;
-    @InjectView (R.id.fam_home) protected FloatingActionMenu fam;
     @InjectView (R.id.swipe) protected SwipeRefreshLayout refresh;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
@@ -66,11 +63,6 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.refresh.setEnabled(true);
         this.setupRecyclerView(this.recycler);
-
-        this.fab.setOnClickListener(unused -> {
-            if(this.getActivity() instanceof NavFragment.OnCategoryClickListener)
-                ((NavFragment.OnCategoryClickListener)this.getActivity()).onCategorySelected(NavFragment.CategoryType.EVALUATION);
-        });
 
         return view;
     }
@@ -105,57 +97,59 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     }
 
     @Override
-    public void onStart () {
-        super.onStart();
-        this.subscriptions.add(
-            getRefreshObservable(this.refresh)
-                .flatMap(unused -> {
-                    this.refresh.setRefreshing(true);
-                    return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
-                })
-                .map(evaluations -> evaluations.evaluations)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(evaluations -> {
-                        this.refresh.setRefreshing(false);
-                        this.items.clear();
-                        if( evaluations != null)
-                            this.items.addAll(evaluations);
-                        this.adapter.notifyDataSetChanged();
-                    }
-                )
-        );
-        this.subscriptions.add(
-            getRecyclerViewScrollObservable(this.recycler, this.toolbar, this.fab)
-                .filter(askmoreifnull -> askmoreifnull == null)
-                .flatMap(unused -> {
-                    this.progress.setVisibility(View.VISIBLE);
-                    return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
-                })
-                .map(evaluations -> evaluations.evaluations)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(evaluations -> {
-                    this.progress.setVisibility(View.GONE);
-                    if( evaluations != null)
-                        this.items.addAll(evaluations);
-                    this.adapter.notifyDataSetChanged();
-                })
-        );
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if(this.getUserVisibleHint()) this.onPageFocused();
     }
 
-
     @Override
     public void onPageFocused() {
-        this.fam.hideMenuButton(false);
-        this.subscriptions.add(Observable.just(null).delay(400, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> this.fam.showMenuButton(true)
-        ));
+        FloatingActionControl.getInstance().setMenu(R.layout.fam_home).hideMenuButton(false);
+
+        this.subscriptions.add(Observable
+            .just(null)
+            .delay(200, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unused -> FloatingActionControl.show(true))
+        );
+
+        this.subscriptions.add(FloatingActionControl
+            .clicks(R.id.fab_new_evaluation)
+            .subscribe(unused -> this.callback.onCategorySelected(NavFragment.CategoryType.EVALUATION))
+        );
+
+        this.subscriptions.add(super.getRefreshObservable(this.refresh)
+            .flatMap(unused -> {
+                this.refresh.setRefreshing(true);
+                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
+            })
+            .map(evaluations -> evaluations.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(evaluations -> {
+                this.refresh.setRefreshing(false);
+                this.items.clear();
+                if (evaluations != null)
+                    this.items.addAll(evaluations);
+                this.adapter.notifyDataSetChanged();
+            })
+        );
+
+        this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
+            .filter(askmoreifnull -> askmoreifnull == null)
+            .flatMap(unused -> {
+                this.progress.setVisibility(View.VISIBLE);
+                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
+            })
+            .map(evaluations -> evaluations.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(evaluations -> {
+                this.progress.setVisibility(View.GONE);
+                if (evaluations != null) this.items.addAll(evaluations);
+                this.adapter.notifyDataSetChanged();
+            })
+        );
     }
 }

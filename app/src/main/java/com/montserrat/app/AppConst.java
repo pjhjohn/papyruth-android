@@ -41,7 +41,7 @@ public class AppConst {
         }
         public static class Search {
             public static final int LENGTH = 1;
-            public static final int BRIEF = 0;
+            public static final int PARTIAL_COURSE = 0;
         }
         public static class Recommendation {
             public static final int LENGTH = 1;
