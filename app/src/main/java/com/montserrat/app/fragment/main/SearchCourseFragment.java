@@ -15,9 +15,11 @@ import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
@@ -27,9 +29,14 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
-public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> {
+public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements OnPageFocus {
     private ViewPagerController pagerController;
+    private final int COURSE = 0;
+    private final int LECTURE = 1;
+    private final int PROFESSOR = 2;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -69,6 +76,31 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(this.getUserVisibleHint()) this.onPageFocused();
+    }
+
+    @Override
+    public void onPageFocused() {
+        if (Search.isInstance()){
+            getHistory();
+        }else{
+            if(Search.getInstance().getCourse() != null){
+                searchCourse(COURSE);
+            }else if(Search.getInstance().getLecture_id() != null){
+                searchCourse(LECTURE);
+            }else if(Search.getInstance().getProfessor_id() != null){
+                searchCourse(PROFESSOR);
+            }
+        }
+    }
+
+    private void searchCourse(int type) {
+        // TODO : implement it!
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
@@ -87,6 +119,11 @@ public class SearchCourseFragment extends RecyclerViewFragment<PartialCourseAdap
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
+        // TODO : implement it!
+    }
+
+    public void getHistory(){
+        Timber.d("getHistory");
         // TODO : implement it!
     }
 
