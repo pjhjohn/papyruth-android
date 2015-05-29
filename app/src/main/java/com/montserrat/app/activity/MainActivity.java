@@ -23,6 +23,7 @@ import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.response.AutoCompleteResponse;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.app.model.unique.Search;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
@@ -253,6 +254,13 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public void recyclerViewListClicked(View view, int position) {
         AutoCompleteResponse item = autoCompleteResponses.get(position);
         Timber.d("autocomplete : %s", position);
+
+        Search.getInstance().setCourse(item.course);
+        Search.getInstance().setLecture_id(item.lecture_id);
+        Search.getInstance().setLecture_name(item.lecture_name);
+        Search.getInstance().setProfessor_id(item.professor_id);
+        Search.getInstance().setProfessor_name(item.professor_name);
+        this.onCategorySelected(NavFragment.CategoryType.SEARCH);
     }
 
     private List<AutoCompleteResponse> sampleData(){

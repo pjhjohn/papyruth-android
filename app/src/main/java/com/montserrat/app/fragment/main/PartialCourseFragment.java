@@ -14,6 +14,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -22,16 +23,24 @@ import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements OnPageFocus {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
+
+    private final int COURSE = 0;
+    private final int LECTURE = 1;
+    private final int PROFESSOR = 2;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -66,6 +75,16 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(this.getUserVisibleHint()) this.onPageFocused();
+    }
+
+    private void searchCourse(int type) {
+        // TODO : implement it!
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
@@ -87,21 +106,20 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         // TODO : implement it!
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(this.getUserVisibleHint()) this.onPageFocused();
+    public void getHistory(){
+        Timber.d("getHistory");
+        // TODO : implement it!
     }
 
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().setMenu(R.layout.fam_home).hideMenuButton(false);
-        FloatingActionControl.show(true);
+        this.subscriptions.add(Observable.just(null).delay(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> FloatingActionControl.show(true)));
 
         this.subscriptions.add(FloatingActionControl
-                        .clicks(R.id.fab_new_evaluation)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(unused -> this.callback.onCategorySelected(NavFragment.CategoryType.EVALUATION))
+            .clicks(R.id.fab_new_evaluation)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unused -> this.callback.onCategorySelected(NavFragment.CategoryType.EVALUATION))
         );
 
         this.subscriptions.add(
@@ -136,5 +154,17 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                     this.adapter.notifyDataSetChanged();
                 })
         );
+
+        if (Search.isInstance()){
+            getHistory();
+        }else{
+            if(Search.getInstance().getCourse() != null){
+                searchCourse(COURSE);
+            }else if(Search.getInstance().getLecture_id() != null){
+                searchCourse(LECTURE);
+            }else if(Search.getInstance().getProfessor_id() != null){
+                searchCourse(PROFESSOR);
+            }
+        }
     }
 }

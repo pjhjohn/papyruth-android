@@ -18,9 +18,12 @@ import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
@@ -68,13 +71,14 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
 
         this.subscriptions.add(Observable
             .combineLatest(
-                RxValidator.createObservableRatingBar(this.pointOverall, true).map(RxValidator.isFloatValueInRange),
-                RxValidator.createObservableSeekBar(this.pointGpaSatisfaction, true).map(RxValidator.isIntegerValueInRange),
-                RxValidator.createObservableSeekBar(this.pointEasiness, true).map(RxValidator.isIntegerValueInRange),
-                RxValidator.createObservableSeekBar(this.pointClarity, true).map(RxValidator.isIntegerValueInRange),
-                (Boolean a, Boolean b, Boolean c, Boolean d) -> a&&b&&c&&d
+                    RxValidator.createObservableRatingBar(this.pointOverall, true).map(RxValidator.isFloatValueInRange),
+                    RxValidator.createObservableSeekBar(this.pointGpaSatisfaction, true).map(RxValidator.isIntegerValueInRange),
+                    RxValidator.createObservableSeekBar(this.pointEasiness, true).map(RxValidator.isIntegerValueInRange),
+                    RxValidator.createObservableSeekBar(this.pointClarity, true).map(RxValidator.isIntegerValueInRange),
+                    (Boolean a, Boolean b, Boolean c, Boolean d) -> a && b && c && d
             )
             .startWith(false)
+            .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.hide(true);
@@ -89,14 +93,14 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
         );
 
         this.subscriptions.add(FloatingActionControl
-                        .clicks()
-                        .subscribe(unused -> {
-                            EvaluationForm.getInstance().setPointOverall((int) pointOverall.getRating());
-                            EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
-                            EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
-                            EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
-                            this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
-                        })
+            .clicks()
+            .subscribe(unused -> {
+                EvaluationForm.getInstance().setPointOverall((int) pointOverall.getRating());
+                EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
+                EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
+                EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
+            })
         );
     }
 }
