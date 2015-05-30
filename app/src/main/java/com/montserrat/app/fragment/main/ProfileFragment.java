@@ -65,7 +65,7 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
-        FloatingActionControl.getInstance().setButton(R.layout.fab_edit).hide(false);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_edit);
         this.subscriptions.add(Observable.just(null).delay(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> FloatingActionControl.getInstance().show(true)));
 
         this.email.setText(User.getInstance().getEmail());

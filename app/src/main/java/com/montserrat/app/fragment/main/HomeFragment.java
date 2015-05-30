@@ -104,7 +104,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().setMenu(R.layout.fam_home).hide(false);
+        FloatingActionControl.getInstance().setControl(R.layout.fam_home);
         this.subscriptions.add(Observable.just(null).delay(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> FloatingActionControl.getInstance().show(true)));
 
         this.subscriptions.add(FloatingActionControl

@@ -70,7 +70,7 @@ public class ProfileEditFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
-        FloatingActionControl.getInstance().setButton(R.layout.fab_done).hide(false);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         this.email.setText(User.getInstance().getEmail());
         this.university.setText(User.getInstance().getUniversityName());

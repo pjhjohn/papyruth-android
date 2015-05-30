@@ -62,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        FloatingActionControl.getInstance().setContainerView(this.fac);
+        FloatingActionControl.getInstance().setContainer(this.fac);
 
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
 

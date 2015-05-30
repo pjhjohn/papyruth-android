@@ -64,7 +64,7 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
-        FloatingActionControl.getInstance().setButton(R.layout.fab_next).hide(false);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
 
         lecture.setText(EvaluationForm.getInstance().getLectureName());
         professor.setText(EvaluationForm.getInstance().getProfessorName());

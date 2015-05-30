@@ -1,7 +1,8 @@
 package com.montserrat.utils.support.fab;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
+import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -15,7 +16,6 @@ import rx.android.view.ViewObservable;
  * Created by pjhjohn on 2015-05-29.
  */
 public class FloatingActionControl {
-    public enum Type { FAB, FAM, NONE }
     private static FloatingActionControl instance = null;
     private FloatingActionControlContainer container;
     private FloatingActionButton fab = null;
@@ -65,31 +65,48 @@ public class FloatingActionControl {
         return this;
     }
 
-    public Type getControlType() {
-        return this.fab == null ? (this.fam == null ? Type.NONE : Type.FAB) : Type.FAM;
-    }
-
-    public FloatingActionControl setContainerView(FloatingActionControlContainer container) {
+    public FloatingActionControl setContainer(FloatingActionControlContainer container) {
         this.container = container;
         return this;
     }
 
-    public FloatingActionControl setButton(int id) {
-        this.clear();
-        this.fab = (FloatingActionButton)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
-        return this;
+    public FloatingActionControl setControl(int layout_id) {
+        return this.setControl(layout_id, true);
     }
-
-    public FloatingActionControl setMenu(int id) {
-        this.clear();
-        this.fam = (FloatingActionMenu)((ViewGroup)this.inflater.inflate(id, this.container, true)).getChildAt(0);
+    public FloatingActionControl setControl(int layout_id, boolean animate) {
+        final int previous_id = this.container.getChildCount() > 0 ? this.container.getChildAt(0).getId() : -1;
+        final boolean hasControl = this.fab!=null || this.fam!=null;
+        View control = this.inflater.inflate(layout_id, this.container, false);
+        if(previous_id == control.getId()) {
+            if(this.fab != null) this.fab.hide(animate);
+            if(this.fam != null) this.fam.hideMenuButton(animate);
+            return this;
+        }
+        if(this.fab != null) this.fab.hide(animate);
+        if(this.fam != null) this.fam.hideMenuButton(animate);
+        if(hasControl) {
+            if(animate) new Handler().postDelayed(() -> this.container.removeView(this.container.findViewById(previous_id)), 300);
+            else this.container.removeView(this.container.findViewById(previous_id));
+        }
+        this.fab = control instanceof FloatingActionButton? (FloatingActionButton) control : null;
+        this.fam = control instanceof FloatingActionMenu? (FloatingActionMenu) control : null;
+        this.container.addView(control);
+        if(control instanceof FloatingActionButton) ((FloatingActionButton) control).hide(false);
+        else if(control instanceof FloatingActionMenu) ((FloatingActionMenu) control).hideMenuButton(false);
         return this;
     }
 
     public FloatingActionControl clear() {
-        if(this.fab != null) this.fab.hide(true);
-        if(this.fam != null) this.fam.hideMenuButton(true);
-        this.container.removeAllViews();
+        return clear(true);
+    }
+    public FloatingActionControl clear(boolean animate) {
+        final boolean hasControl = this.fab!=null || this.fam!=null;
+        if(this.fab != null) this.fab.hide(animate);
+        if(this.fam != null) this.fam.hideMenuButton(animate);
+        if(hasControl) {
+            if(animate) new Handler().postDelayed(this.container::removeAllViews, 300);
+            else this.container.removeAllViews();
+        }
         this.fab = null;
         this.fam = null;
         return this;

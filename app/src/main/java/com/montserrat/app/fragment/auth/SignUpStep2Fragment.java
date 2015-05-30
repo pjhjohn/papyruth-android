@@ -132,7 +132,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         this.university.setText(User.getInstance().getUniversityName());
-        FloatingActionControl.getInstance().setButton(R.layout.fab_done);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),

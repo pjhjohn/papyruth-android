@@ -29,7 +29,7 @@ public class AuthActivity extends Activity implements ViewPagerController {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
         ButterKnife.inject(this);
-        FloatingActionControl.getInstance().setContainerView(this.fac);
+        FloatingActionControl.getInstance().setContainer(this.fac);
 
         /* Set Manager for ViewPager */
         this.manager = new ViewPagerManager(

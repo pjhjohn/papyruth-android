@@ -11,5 +11,4 @@ public class PartialCourse {
     public String name;
     public String professor;
     public float rating;
-
 }
