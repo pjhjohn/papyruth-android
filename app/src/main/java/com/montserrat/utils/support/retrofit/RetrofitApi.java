@@ -1,5 +1,6 @@
 package com.montserrat.utils.support.retrofit;
 
+import com.montserrat.app.model.Comment;
 import com.montserrat.app.model.response.CandidatesResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.PartialCoursesResponse;
@@ -9,6 +10,7 @@ import com.montserrat.app.model.response.UniversitiesResponse;
 import com.montserrat.app.model.response.UserInfoResponse;
 
 import retrofit.RestAdapter;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
@@ -72,6 +74,26 @@ public class RetrofitApi {
 
         @GET ("/info")
         Observable<StatisticsResponse> statistics();
+
+        @GET ("/comments")
+        Observable<Comment> comments(
+                @Query("evaluation_id") Integer evaluation_id,
+                @Query("page") Integer page,
+                @Query("limit") Integer limit
+        );
+
+        @POST ("/comments")
+        Observable<Comment> comments(
+                @Header ("Authorization") String authorization,
+                @Query("evaluation_id") Integer evaluation_id,
+                @Query("body") String body
+        );
+
+        @DELETE ("/comments/{id}")
+        Observable<Comment> comments(
+                @Header ("Authorization") String authorization,
+                @Path("id") Integer comment_id
+        );
 
         @POST("/evaluations")
         Observable<EvaluationResponse> evaluation(

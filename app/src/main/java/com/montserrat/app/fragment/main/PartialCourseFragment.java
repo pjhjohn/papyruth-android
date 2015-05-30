@@ -136,11 +136,11 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         Course.getInstance().setName(item.name);
         Course.getInstance().setCode(item.code);
         Course.getInstance().setProfessor(item.professor_name);
-        Course.getInstance().setProfessor_id(item.professor_id);
-        Course.getInstance().setLecture_id(item.lecture_id);
-        Course.getInstance().setUniversity_id(User.getInstance().getUniversityId());
+        Course.getInstance().setProfessorId(item.professor_id);
+        Course.getInstance().setLectureId(item.lecture_id);
+        Course.getInstance().setUniversityId(User.getInstance().getUniversityId());
         Course.getInstance().setUnit(item.unit);
-        Course.getInstance().setPoint_overall(item.point_overall);
+        Course.getInstance().setPointOverall(item.point_overall);
         Course.getInstance().setPointEasiness(item.point_easiness);
         Course.getInstance().setPointClarity(item.point_clarity);
         Course.getInstance().setPointGpaSatisfaction(item.point_gpa_satisfaction);
