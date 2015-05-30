@@ -228,10 +228,10 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     public void onPageFocused() {
         this.title.setText(Course.getInstance().getName());
         this.professor.setText(Course.getInstance().getProfessor());
-        this.pointOverall.setProgress(Course.getInstance().getPointOverall() * 100);
-        this.pointSatisfaction.setProgress(Course.getInstance().getPointGpaSatisfaction() * 100);
-        this.pointClarity.setProgress(Course.getInstance().getPointClarity() * 100);
-        this.pointEasiness.setProgress(Course.getInstance().getPointEasiness() * 100);
+        this.pointOverall.setProgress(Course.getInstance().getPoint_overall() * 10);
+        this.pointSatisfaction.setProgress(Course.getInstance().getPointGpaSatisfaction() * 10);
+        this.pointClarity.setProgress(Course.getInstance().getPointClarity() * 10);
+        this.pointEasiness.setProgress(Course.getInstance().getPointEasiness() * 10);
         this.type.setText(R.string.lecture_type_major);
         Timber.d("progress : %s",this.pointClarity.getProgress());
 

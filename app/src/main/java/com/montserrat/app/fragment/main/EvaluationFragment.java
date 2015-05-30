@@ -110,7 +110,6 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         return comment;
     }
 
-
     @Override
     protected CommentAdapter getAdapter(List<Comment> comments) {
 

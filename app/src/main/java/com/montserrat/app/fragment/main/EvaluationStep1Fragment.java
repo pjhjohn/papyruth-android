@@ -117,6 +117,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 lectures -> {
+                    this.items.clear();
                     this.items.addAll(lectures);
                     this.adapter.notifyDataSetChanged();
                 },

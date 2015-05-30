@@ -14,10 +14,10 @@ public class Course {
     private String professor;
     private Integer professor_id;
     private Integer lecture_id;
-    private Integer pointOverall;
-    private Integer pointGpaSatisfaction;
-    private Integer pointEasiness;
-    private Integer pointClarity;
+    private Integer point_overall;
+    private Integer point_gpa_satisfaction;
+    private Integer point_easiness;
+    private Integer point_clarity;
     private List<String> tags;
 
 
@@ -33,7 +33,7 @@ public class Course {
     @Override
     public String toString() {
         return String.format("<lecture:%s> <professor:%s> <course-id:%d> <overall:%d> <gpa satisfaction:%d> <easiness:%d> <clarity:%d>",
-                name, professor, id, pointOverall, pointGpaSatisfaction, pointEasiness, pointClarity);
+                name, professor, id, point_overall, point_gpa_satisfaction, point_easiness, point_clarity);
     }
 
     public Integer getId() { return id; }
@@ -41,19 +41,19 @@ public class Course {
     public String getCode() { return code; }
     public Integer getUniversity_id() { return university_id; }
     public String getName() { return name; }
-    public Integer getPointClarity() { return pointClarity; }
+    public Integer getPointClarity() { return point_clarity; }
     public String getProfessor() { return professor; }
-    public Integer getPointOverall() { return pointOverall; }
-    public Integer getPointGpaSatisfaction() { return pointGpaSatisfaction; }
-    public Integer getPointEasiness() { return pointEasiness; }
+    public Integer getPoint_overall() { return point_overall; }
+    public Integer getPointGpaSatisfaction() { return point_gpa_satisfaction; }
+    public Integer getPointEasiness() { return point_easiness; }
     public Integer getLecture_id() { return lecture_id; }
     public Integer getProfessor_id() { return professor_id; }
     public List<String> getTags() { return tags; }
 
-    public void setPointClarity(Integer pointClarity) { this.pointClarity = pointClarity; }
-    public void setPointOverall(Integer pointOverall) { this.pointOverall = pointOverall; }
-    public void setPointGpaSatisfaction(Integer pointGpaSatisfaction) { this.pointGpaSatisfaction = pointGpaSatisfaction; }
-    public void setPointEasiness(Integer pointEasiness) { this.pointEasiness = pointEasiness; }
+    public void setPointClarity(Integer pointClarity) { this.point_clarity = pointClarity; }
+    public void setPoint_overall(Integer point_overall) { this.point_overall = point_overall; }
+    public void setPointGpaSatisfaction(Integer pointGpaSatisfaction) { this.point_gpa_satisfaction = pointGpaSatisfaction; }
+    public void setPointEasiness(Integer pointEasiness) { this.point_easiness = pointEasiness; }
     public void setId(Integer id) { this.id = id; }
     public void setUnit(Integer unit) { this.unit = unit; }
     public void setCode(String code) { this.code = code; }
