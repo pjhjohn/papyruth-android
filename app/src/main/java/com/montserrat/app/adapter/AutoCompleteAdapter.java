@@ -23,12 +23,12 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public static final int ITEM = 1;
     }
 
-    private static RecyclerViewClickListener itemListener; // TODO : use if implemented.
+    private RecyclerViewClickListener itemListener; // TODO : use if implemented.
 
     private List<Candidate> items;
     public AutoCompleteAdapter(List<Candidate> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
-        AutoCompleteAdapter.itemListener = listener;
+        this.itemListener = listener;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
 
-    public static class AutoCompleteResponseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class AutoCompleteResponseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.content) protected TextView content;
         public AutoCompleteResponseHolder(View parent) {
             super(parent);
@@ -76,7 +76,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick(View v) {
-            AutoCompleteAdapter.itemListener.recyclerViewListClicked(v, this.getPosition());
+            itemListener.recyclerViewListClicked(v, this.getPosition());
         }
 
     }

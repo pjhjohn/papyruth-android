@@ -67,6 +67,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        this.adapter = null;
+        items.clear();
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
