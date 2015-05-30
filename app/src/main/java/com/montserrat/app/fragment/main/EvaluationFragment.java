@@ -9,18 +9,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CommentAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Comment;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
+import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -51,8 +60,17 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         ButterKnife.inject(this, view);
         this.setupRecyclerView(commentList);
 
+
+        FloatingActionControl.getInstance().setControl(R.layout.fam_comment);
+        this.subscription.add(
+                Observable.just(null)
+                        .delay(200, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(unused ->
+                                        FloatingActionControl.getInstance().show(true)
+                        ));
         setEvaluation();
-        this.items.clear();
+        getComments();
         this.items.add(newComment("1", "commentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcomment"));
         this.items.add(newComment("1", "comment"));
         this.items.add(newComment("1", "comment"));
@@ -77,6 +95,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         super.onResume();
 //        recyclerviewHeightChanged();
         Timber.d("isnull - %s", commentList.getChildCount());
+
     }
 
 
@@ -100,6 +119,26 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     public void setEvaluation() {
         this.name.setText(Evaluation.getInstance().getLecture_name());
         this.body.setText(Evaluation.getInstance().getBody());
+    }
+
+    public void getComments(){
+        this.subscription.add(
+                RetrofitApi.getInstance().comments(
+                        User.getInstance().getAccessToken(),
+                        Evaluation.getInstance().getId(), null, null
+                )
+                        .map(response -> response.comments)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(comments -> {
+                            this.items.clear();
+                            this.items.addAll(comments);
+                            this.adapter.notifyDataSetChanged();
+                        },
+                        error ->{
+                            Timber.d("error : %s", error);
+                        })
+        );
     }
 
     public Comment newComment(String name, String content) {

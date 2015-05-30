@@ -23,9 +23,9 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
+import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
-import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
@@ -33,7 +33,6 @@ import com.montserrat.utils.view.viewpager.OnBack;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -113,27 +112,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
 
     }
 
-
-    private List<PartialEvaluation> sampleData() {
-        List<PartialEvaluation> evaluations = new ArrayList<>();
-        evaluations.add(newEvaluation("1", "comment", 3));
-        evaluations.add(newEvaluation("1", "comment", 3));
-        evaluations.add(newEvaluation("1", "comment", 3));
-        return evaluations;
-    }
-    private PartialEvaluation newEvaluation(String userid, String comment, int like) {
-        PartialEvaluation ev = new PartialEvaluation();
-        ev.professor_name = userid;
-        ev.body = comment;
-        ev.point_overall = like;
-        return ev;
-    }
-
-    @Override
-    protected CourseAdapter getAdapter(List<PartialEvaluation> items) {
-        return CourseAdapter.newInstance(this.items, this);
-    }
-
     @Override
     public void recyclerViewListClicked(View view, int position) {
         if (!isEvaluationOpened) {
@@ -146,8 +124,31 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     }
 
     @Override
-    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new LinearLayoutManager(this.getActivity());
+    public void onPageFocused() {
+        this.title.setText(Course.getInstance().getName());
+        this.professor.setText(Course.getInstance().getProfessor());
+        this.pointOverall.setProgress(Course.getInstance().getPointOverall() * 10);
+        this.pointSatisfaction.setProgress(Course.getInstance().getPointGpaSatisfaction() * 10);
+        this.pointClarity.setProgress(Course.getInstance().getPointClarity() * 10);
+        this.pointEasiness.setProgress(Course.getInstance().getPointEasiness() * 10);
+        this.type.setText(R.string.lecture_type_major);
+        Timber.d("progress : %s",this.pointClarity.getProgress());
+
+        this.subscriptions.add(
+                RetrofitApi.getInstance().evaluations(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        null, null, null, Course.getInstance().getId())
+                        .map(response -> response.evaluations)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(evauations -> {
+                            this.items.clear();
+                            this.items.addAll(evauations);
+                            this.adapter.notifyDataSetChanged();
+                        })
+        );
+        this.evaluationFragment = new EvaluationFragment();
     }
 
     @Override
@@ -157,6 +158,17 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         this.collapseEvaluation();
         this.isEvaluationOpened = false;
         return true;
+    }
+
+    @Override
+    protected CourseAdapter getAdapter(List<PartialEvaluation> items) {
+        return CourseAdapter.newInstance(this.items, this);
+    }
+
+
+    @Override
+    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
+        return new LinearLayoutManager(this.getActivity());
     }
 
     //Aniamtion
@@ -222,33 +234,5 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
             }
         });
         animators.start();
-    }
-
-    @Override
-    public void onPageFocused() {
-        this.title.setText(Course.getInstance().getName());
-        this.professor.setText(Course.getInstance().getProfessor());
-        this.pointOverall.setProgress(Course.getInstance().getPointOverall() * 10);
-        this.pointSatisfaction.setProgress(Course.getInstance().getPointGpaSatisfaction() * 10);
-        this.pointClarity.setProgress(Course.getInstance().getPointClarity() * 10);
-        this.pointEasiness.setProgress(Course.getInstance().getPointEasiness() * 10);
-        this.type.setText(R.string.lecture_type_major);
-        Timber.d("progress : %s",this.pointClarity.getProgress());
-
-        this.subscriptions.add(
-                RetrofitApi.getInstance().evaluations(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        null, null, null, null)
-                        .map(response -> response.evaluations)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(evauations -> {
-                            this.items.clear();
-                            this.items.addAll(evauations);
-                            this.adapter.notifyDataSetChanged();
-                        })
-        );
-        this.evaluationFragment = new EvaluationFragment();
     }
 }

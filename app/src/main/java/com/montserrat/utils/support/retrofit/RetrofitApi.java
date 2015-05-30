@@ -2,6 +2,7 @@ package com.montserrat.utils.support.retrofit;
 
 import com.montserrat.app.model.Comment;
 import com.montserrat.app.model.response.CandidatesResponse;
+import com.montserrat.app.model.response.CommentResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.PartialCoursesResponse;
 import com.montserrat.app.model.response.PartialEvaluationsResponse;
@@ -76,7 +77,8 @@ public class RetrofitApi {
         Observable<StatisticsResponse> statistics();
 
         @GET ("/comments")
-        Observable<Comment> comments(
+        Observable<CommentResponse> comments(
+                @Header ("Authorization") String authorization,
                 @Query("evaluation_id") Integer evaluation_id,
                 @Query("page") Integer page,
                 @Query("limit") Integer limit

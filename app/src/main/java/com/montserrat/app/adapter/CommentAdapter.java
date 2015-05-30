@@ -38,7 +38,6 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        Timber.d("onCreateViewHolder");
         switch(viewType) {
             case Type.ITEM   : return new CommentHolder(inflater.inflate(R.layout.cardview_evaluation_comment, parent, false));
             default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
