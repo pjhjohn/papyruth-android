@@ -84,21 +84,25 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     }
 
     private void searchCourse(int type) {
-        RetrofitApi.getInstance().search(User.getInstance().getUniversityId(),
-                Search.getInstance().getLecture_id(),
-                Search.getInstance().getProfessor_id(),
-                Search.getInstance().getQuery())
-                .map(response -> response.courses)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(courses -> {
-                    Timber.d("Search result : %s", courses);
-                    this.items.clear();
-                    this.items.addAll(courses);
-                    this.adapter.notifyDataSetChanged();
-                },error -> {
-                            Timber.d("Search error : %s", error);
-                });
+        if(type == HISTORY){
+            // TODO : (ISSUE) Shared Preferences.
+        }else {
+            RetrofitApi.getInstance().search(User.getInstance().getUniversityId(),
+                    Search.getInstance().getLecture_id(),
+                    Search.getInstance().getProfessor_id(),
+                    Search.getInstance().getQuery())
+                    .map(response -> response.courses)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(courses -> {
+                        Timber.d("Search result : %s", courses);
+                        this.items.clear();
+                        this.items.addAll(courses);
+                        this.adapter.notifyDataSetChanged();
+                    },error -> {
+                        Timber.d("Search error : %s", error);
+                    });
+        }
     }
 
     @Override
@@ -121,9 +125,25 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        Course.getInstance().clear();
-        Course.getInstance().setId(items.get(position).id);
+        setup(position);
         this.pagerController.setCurrentPage(AppConst.ViewPager.Search.COURSE, true);
+
+    }
+    public void setup(int position){
+        PartialCourse item = items.get(position);
+        Course.getInstance().clear();
+        Course.getInstance().setId(item.id);
+        Course.getInstance().setName(item.name);
+        Course.getInstance().setCode(item.code);
+        Course.getInstance().setProfessor(item.professor_name);
+        Course.getInstance().setProfessor_id(item.professor_id);
+        Course.getInstance().setLecture_id(item.lecture_id);
+        Course.getInstance().setUniversity_id(User.getInstance().getUniversityId());
+        Course.getInstance().setUnit(item.unit);
+        Course.getInstance().setPointOverall(item.point_overall);
+        Course.getInstance().setPointEasiness(item.point_easiness);
+        Course.getInstance().setPointClarity(item.point_clarity);
+        Course.getInstance().setPointGpaSatisfaction(item.point_gpa_satisfaction);
 
     }
 
@@ -136,7 +156,13 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public void onPageFocused() {
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_home);
-        this.subscriptions.add(Observable.just(null).delay(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> FloatingActionControl.getInstance().show(true)));
+        this.subscriptions.add(
+                Observable.just(null)
+                        .delay(200, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(unused ->
+                                FloatingActionControl.getInstance().show(true)
+                        ));
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_new_evaluation)
@@ -182,6 +208,9 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                     this.progress.setVisibility(View.GONE);
                     this.items.addAll(lectures);
                     this.adapter.notifyDataSetChanged();
+                },
+                error ->{
+                    Timber.d("error : %s", error);
                 })
         );
 

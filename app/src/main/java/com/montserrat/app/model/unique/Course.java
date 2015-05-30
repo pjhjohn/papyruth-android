@@ -1,5 +1,7 @@
 package com.montserrat.app.model.unique;
 
+import java.util.List;
+
 /**
  * Created by SSS on 2015-05-18.
  */
@@ -10,10 +12,13 @@ public class Course {
     private Integer university_id;
     private String name;
     private String professor;
+    private Integer professor_id;
+    private Integer lecture_id;
     private Integer pointOverall;
     private Integer pointGpaSatisfaction;
     private Integer pointEasiness;
     private Integer pointClarity;
+    private List<String> tags;
 
 
     private static Course instance = null;
@@ -41,6 +46,9 @@ public class Course {
     public Integer getPointOverall() { return pointOverall; }
     public Integer getPointGpaSatisfaction() { return pointGpaSatisfaction; }
     public Integer getPointEasiness() { return pointEasiness; }
+    public Integer getLecture_id() { return lecture_id; }
+    public Integer getProfessor_id() { return professor_id; }
+    public List<String> getTags() { return tags; }
 
     public void setPointClarity(Integer pointClarity) { this.pointClarity = pointClarity; }
     public void setPointOverall(Integer pointOverall) { this.pointOverall = pointOverall; }
@@ -52,4 +60,7 @@ public class Course {
     public void setUniversity_id(Integer university_id) { this.university_id = university_id; }
     public void setName(String name) { this.name = name; }
     public void setProfessor(String professor) { this.professor = professor; }
+    public void setLecture_id(Integer lecture_id) { this.lecture_id = lecture_id; }
+    public void setProfessor_id(Integer professor_id) { this.professor_id = professor_id; }
+    public void setTags(List<String> tags) { this.tags = tags; }
 }

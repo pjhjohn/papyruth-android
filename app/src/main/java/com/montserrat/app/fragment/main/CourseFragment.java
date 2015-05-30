@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack {
+public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack, OnPageFocus {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -109,32 +109,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     @Override
     public void onResume() {
         super.onResume();
-//        if(this.getUserVisibleHint()) this.onPageFocused();
-        /* Mock Data */
-        this.title.setText("Course Title");
-        this.professor.setText("Course Professor");
-        this.pointOverall.setProgress(3);
-        this.pointSatisfaction.setProgress(7);
-        this.pointClarity.setProgress(5);
-        this.pointEasiness.setProgress(8);
-        this.type.setText(R.string.lecture_type_major);
+        if(this.getUserVisibleHint()) this.onPageFocused();
 
-        this.subscriptions.add(
-                RetrofitApi.getInstance().evaluations(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        null, null, null, null)
-                        .map(response -> response.evaluations)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(evauations -> {
-                            this.items.clear();
-                            this.items.addAll(sampleData());
-                            this.adapter.notifyDataSetChanged();
-                        })
-        );
-
-        this.evaluationFragment = new EvaluationFragment();
     }
 
 
@@ -246,5 +222,33 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
             }
         });
         animators.start();
+    }
+
+    @Override
+    public void onPageFocused() {
+        this.title.setText(Course.getInstance().getName());
+        this.professor.setText(Course.getInstance().getProfessor());
+        this.pointOverall.setProgress(Course.getInstance().getPointOverall() * 100);
+        this.pointSatisfaction.setProgress(Course.getInstance().getPointGpaSatisfaction() * 100);
+        this.pointClarity.setProgress(Course.getInstance().getPointClarity() * 100);
+        this.pointEasiness.setProgress(Course.getInstance().getPointEasiness() * 100);
+        this.type.setText(R.string.lecture_type_major);
+        Timber.d("progress : %s",this.pointClarity.getProgress());
+
+        this.subscriptions.add(
+                RetrofitApi.getInstance().evaluations(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        null, null, null, null)
+                        .map(response -> response.evaluations)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(evauations -> {
+                            this.items.clear();
+                            this.items.addAll(evauations);
+                            this.adapter.notifyDataSetChanged();
+                        })
+        );
+        this.evaluationFragment = new EvaluationFragment();
     }
 }
