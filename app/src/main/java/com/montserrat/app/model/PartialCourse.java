@@ -4,11 +4,22 @@ package com.montserrat.app.model;
  * Created by pjhjohn on 2015-05-03.
  */
 public class PartialCourse {
-    public int id; // lecture id
-    public int unit; // lecture unit
+    public Integer id; // lecture id
+    public Integer unit; // lecture unit
     public String code; // lecture code
-    public int university_id;
+    public Integer university_id;
+    public Integer lecture_id;
+    public Integer professor_id;
     public String name;
-    public String professor;
-    public float rating;
+    public String professor_name;
+    public Float rating;
+    public Integer evaluation_count;
+    public Integer point_overall;
+    public Integer point_gpa_satisfaction;
+    public Integer point_easiness;
+    public Integer point_clarity;
+    public String created_at;
+    public String updated_at;
+
+
 }

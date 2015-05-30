@@ -36,8 +36,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_alignParentLeft="true"
-                    android:textSize="16sp"
-                    android:layout_alignBottom="@+id/home_item_rating"/>
+                    android:textSize="16sp"/>
                 <!--style="?android:ratingBarStyleIndicator"-->
                 <!--style="@style/MainRatingBar"-->
                 <RatingBar

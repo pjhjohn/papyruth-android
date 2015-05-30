@@ -38,7 +38,8 @@ public class RetrofitApi {
             @Query ("university_id") Integer university_id,
             @Query ("since_id") Integer since_id,
             @Query ("max_id") Integer max_id,
-            @Query ("limit") Integer limit
+            @Query ("limit") Integer limit,
+            @Query ("course_id") Integer course_id
         );
 
         @GET ("/lectures")
@@ -53,6 +54,14 @@ public class RetrofitApi {
             @Header("Authorization") String authorization,
             @Query("university_id") Integer university_id,
             @Query("query") String query
+        );
+
+        @GET ("/search/search")
+        Observable<PartialCoursesResponse> search(
+                @Query("university_id") Integer university_id,
+                @Query("lecture_id") Integer lecture_id,
+                @Query("professor_id") Integer professor_id,
+                @Query("query") String query
         );
 
         @GET ("/universities")

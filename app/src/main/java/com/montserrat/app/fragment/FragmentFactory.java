@@ -41,6 +41,7 @@ public class FragmentFactory {
             case SEARCH :
                 switch(position) {
                     case AppConst.ViewPager.Search.PARTIAL_COURSE       : fragment = new PartialCourseFragment();   break;
+                    case AppConst.ViewPager.Search.COURSE               : fragment = new CourseFragment(); break;
                 } break;
             case RECOMMENDATION:
                 switch(position) {
@@ -56,7 +57,7 @@ public class FragmentFactory {
                 } break;
             case RANDOM :
                 switch(position) {
-                    case AppConst.ViewPager.Random.DUMMY                : fragment = new CourseFragment();          break;
+                    case AppConst.ViewPager.Random.DUMMY                : fragment = new DummyFragment();          break;
                 } break;
             case PROFILE :
                 switch(position) {

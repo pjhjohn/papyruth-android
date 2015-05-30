@@ -193,7 +193,14 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+
+        Search.getInstance().clear();
+
+        Search.getInstance().setQuery(query);
+        expandResult(false);
+        this.onCategorySelected(NavFragment.CategoryType.SEARCH);
         return false;
+
     }
 
     // for text auto-completion
@@ -209,15 +216,13 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
                 .subscribe(
                     results -> {
                         candidates.clear();
-                        candidates.addAll(sampleData());
+                        candidates.addAll(results);
                         adapter.notifyDataSetChanged();
                         expandResult(true);
+
                     },
                     error -> {
                         candidates.clear();
-                        candidates.addAll(sampleData());
-                        adapter.notifyDataSetChanged();
-                        expandResult(true);
                     }
                 )
         );
@@ -255,12 +260,13 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public void recyclerViewListClicked(View view, int position) {
         Candidate item = candidates.get(position);
         Timber.d("search_autocomplete : %s", position);
-
+        Search.getInstance().clear();
         Search.getInstance().setCourse(item.course);
         Search.getInstance().setLecture_id(item.lecture_id);
         Search.getInstance().setLecture_name(item.lecture_name);
         Search.getInstance().setProfessor_id(item.professor_id);
         Search.getInstance().setProfessor_name(item.professor_name);
+        expandResult(false);
         this.onCategorySelected(NavFragment.CategoryType.SEARCH);
     }
 

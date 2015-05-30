@@ -71,8 +71,8 @@ public class PartialCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public void bind(PartialCourse item) {
             this.lecture.setText(item.name);
-            this.professor.setText(item.professor);
-            this.overall.setRating(item.rating);
+            this.professor.setText(item.professor_name);
+            this.overall.setRating(item.point_overall);
         }
 
         @Override

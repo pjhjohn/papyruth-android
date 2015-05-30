@@ -115,7 +115,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
         this.subscriptions.add(super.getRefreshObservable(this.refresh)
             .flatMap(unused -> {
                 this.refresh.setRefreshing(true);
-                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
+                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
             })
             .map(evaluations -> evaluations.evaluations)
             .subscribeOn(Schedulers.io())
@@ -133,7 +133,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
             .filter(askmoreifnull -> askmoreifnull == null)
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
-                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null);
+                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
             })
             .map(evaluations -> evaluations.evaluations)
             .subscribeOn(Schedulers.io())

@@ -67,7 +67,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public void bind(Candidate item) {
             if (item.course != null){
-                this.content.setText(item.course.name + " - " +item.course.professor);
+                this.content.setText(item.course.name + " - " +item.course.professor_name);
             }else if(item.lecture_name != null)
                 this.content.setText(item.lecture_name);
             else if(item.professor_name != null)

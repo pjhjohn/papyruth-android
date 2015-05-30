@@ -68,7 +68,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public void bind(PartialCourse item) {
             this.lecture.setText(item.name); // lecture represents the name of course
-            this.professor.setText(item.professor);
+            this.professor.setText(item.professor_name);
         }
 
         @Override

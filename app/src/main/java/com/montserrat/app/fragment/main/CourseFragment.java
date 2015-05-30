@@ -23,6 +23,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.User;
@@ -42,7 +43,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack, OnPageFocus {
+public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack {
     private ViewPagerController pagerController;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -90,6 +91,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         this.setupRecyclerView(evaluations);
         this.isEvaluationOpened = false;
 
+
         return view;
     }
 
@@ -99,18 +101,15 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         if (this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
 
         // Generates : java.lang.RuntimeException: Unable to destroy activity {com.montserrat.main/com.montserrat.app.activity.MainActivity}: java.lang.IllegalStateException: Activity has been destroyed
-        CourseFragment.this.getFragmentManager().beginTransaction().remove(evaluationFragment).commit();
+        if(isEvaluationOpened)
+            this.getFragmentManager().beginTransaction().remove(evaluationFragment).commit();
         ButterKnife.reset(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(this.getUserVisibleHint()) this.onPageFocused();
-    }
-
-    @Override
-    public void onPageFocused() {
+//        if(this.getUserVisibleHint()) this.onPageFocused();
         /* Mock Data */
         this.title.setText("Course Title");
         this.professor.setText("Course Professor");
@@ -121,22 +120,23 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         this.type.setText(R.string.lecture_type_major);
 
         this.subscriptions.add(
-            RetrofitApi.getInstance().evaluations(
-                User.getInstance().getAccessToken(),
-                User.getInstance().getUniversityId(),
-                null, null, null)
-                    .map(response -> response.evaluations)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(evauations -> {
-                    this.items.clear();
-                    this.items.addAll(sampleData());
-                    this.adapter.notifyDataSetChanged();
-                })
+                RetrofitApi.getInstance().evaluations(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        null, null, null, null)
+                        .map(response -> response.evaluations)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(evauations -> {
+                            this.items.clear();
+                            this.items.addAll(sampleData());
+                            this.adapter.notifyDataSetChanged();
+                        })
         );
 
         this.evaluationFragment = new EvaluationFragment();
     }
+
 
     private List<PartialEvaluation> sampleData() {
         List<PartialEvaluation> evaluations = new ArrayList<>();

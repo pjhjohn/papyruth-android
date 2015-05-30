@@ -11,6 +11,7 @@ public class Search {
     private String lecture_name;
     private Integer lecture_id;
     private PartialCourse course;
+    private String query;
 
     public String getProfessor_name() { return professor_name; }
     public void setProfessor_name(String professor_name) { this.professor_name = professor_name; }
@@ -22,6 +23,8 @@ public class Search {
     public void setLecture_id(Integer lecture_id) { this.lecture_id = lecture_id; }
     public PartialCourse getCourse() { return course; }
     public void setCourse(PartialCourse course) { this.course = course; }
+    public String getQuery() { return query; }
+    public void setQuery(String query) { this.query = query; }
 
     private static Search instance = null;
     public static synchronized Search getInstance() {
