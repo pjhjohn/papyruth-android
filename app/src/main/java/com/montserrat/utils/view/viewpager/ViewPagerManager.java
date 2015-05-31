@@ -12,8 +12,6 @@ import com.montserrat.app.fragment.FragmentFactory;
 
 import java.util.Stack;
 
-import timber.log.Timber;
-
 /**
  * Created by pjhjohn on 2015-04-23.
  */
@@ -35,7 +33,6 @@ public class ViewPagerManager implements ViewPagerController {
         this.listener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected (int position) {
-                Timber.d("onPage#%dSelected", position);
                 if (ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(current);
                 ViewPagerManager.this.previous = ViewPagerManager.this.current;
                 ViewPagerManager.this.current = position;

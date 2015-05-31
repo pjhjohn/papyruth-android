@@ -29,7 +29,6 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
     private boolean addToBackStack;
 
     public ViewPagerContainerManager(FlexibleViewPager viewpager, FragmentManager fragment_manager) {
-        Timber.d("Constructor");
         this.viewpager = viewpager;
         this.fragment_manager = fragment_manager;
         this.container = new HashMap<>();
@@ -66,20 +65,17 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
 
     @Override
     public Stack<Page> getHistoryCopy() {
-        Timber.d("getHistoryCopy");
         return (Stack<Page>) this.history.clone();
     }
 
     @Override
     public Page getPreviousPage() {
-        Timber.d("getPreviousPage");
         return this.previous;
     }
 
     @Override
     public void setCurrentPage(Page page, boolean addToBackStack) {
-        Timber.d("MOVE TO %s", page);
-        Timber.d("%s + [%s]", this.history, addToBackStack? this.current : "");
+        Timber.d("<ENTER:%s> %s + [%s]", page, this.history, addToBackStack? this.current : "");
         this.addToBackStack = addToBackStack;
         if(current == null) this.activate(page.category, true);
         else if(current.category == page.category) this.container.get(page.category).setCurrentPage(page.index, addToBackStack);
@@ -93,8 +89,7 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
 
     @Override
     public boolean popCurrentPage() {
-        Timber.d("POPPING %s", this.current);
-        Timber.d("%s - [%s]", this.history, this.history.isEmpty()? "" : this.history.peek());
+        Timber.d("<LEAVE:%s> %s - [%s]", this.current, this.history, this.history.isEmpty()? "" : this.history.peek());
         if(!this.history.isEmpty()) {
             final Page popped = this.history.pop();
             this.activate(popped.category).popCurrentPage();
@@ -106,29 +101,22 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
 
     @Override
     public boolean onBack() {
-        Timber.d("onBack");
         final Fragment target = ((ViewPagerManager.Adapter)this.viewpager.getAdapter()).getFragmentAt(this.current.index);
         if (target != null) {
             boolean backed = false;
             if(FloatingActionControl.getMenu()!=null && FloatingActionControl.getMenu().isOpened()) {
-                Timber.d("Close Control");
                 FloatingActionControl.getMenu().close(true);
                 backed = true;
             }
-            if(!backed && target instanceof OnBack) {
-                backed = ((OnBack) target).onBack();
-            }
-            if(!backed) {
-                backed = this.popCurrentPage();
-            }
-            Timber.d("=> %s, current:%s", this.history, this.current);
+            if(!backed && target instanceof OnBack) backed = ((OnBack) target).onBack();
+            if(!backed) backed = this.popCurrentPage();
             return backed;
         } return false;
     }
 
     @Override
     public void onPageSelected (int position) {
-        Timber.d("onPageSelected with %d", position);
+        Timber.d("onPage#%dSelected", position);
         if (this.addToBackStack) this.history.push(current);
         this.previous = this.current;
         this.current = Page.at(this.currentCategory, position);
