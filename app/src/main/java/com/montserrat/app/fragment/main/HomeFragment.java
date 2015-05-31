@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialEvaluationAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
@@ -19,14 +20,14 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -36,13 +37,13 @@ import rx.subscriptions.CompositeSubscription;
  * Provides latest evaluations.
  */
 public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter, PartialEvaluation> implements OnPageFocus {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     private NavFragment.OnCategoryClickListener callback;
 
     @Override
     public void onAttach (Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
         this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
@@ -108,7 +109,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_new_evaluation)
-            .subscribe(unused -> this.callback.onCategorySelected(NavFragment.CategoryType.EVALUATION))
+            .subscribe(unused -> this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1), true))
         );
 
         this.subscriptions.add(super.getRefreshObservable(this.refresh)
@@ -128,7 +129,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
             })
         );
 
-        this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
+        this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recycler, this.toolbar, true)
             .filter(askmoreifnull -> askmoreifnull == null)
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);

@@ -78,6 +78,5 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void onClick(View v) {
             itemListener.recyclerViewListClicked(v, this.getPosition());
         }
-
     }
 }

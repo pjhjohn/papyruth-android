@@ -19,7 +19,8 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,11 +43,11 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  */
 
 public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
     }
 
     @InjectView(R.id.lecture) protected Button lecture;
@@ -86,7 +87,7 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
 
         this.subscriptions.add(Observable
             .merge(ViewObservable.clicks(this.lecture), ViewObservable.clicks(this.professor))
-            .subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP1, true))
+            .subscribe(unused -> this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1), true))
         );
 
         this.subscriptions.add(WidgetObservable

@@ -17,7 +17,7 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,11 +38,11 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-05-19.
  */
 public class ProfileEditFragment extends Fragment implements OnPageFocus {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
     }
 
     @InjectView (R.id.email) protected TextView email;
@@ -86,7 +86,6 @@ public class ProfileEditFragment extends Fragment implements OnPageFocus {
             (String realnameError, String nicknameError, Boolean validRadioGroup) -> {
                 this.realname.setError(realnameError);
                 this.nickname.setError(nicknameError);
-                Timber.d("realname : %s, nickname : %s, radiogroup valid : %b", realnameError, nicknameError, validRadioGroup);
                 return realnameError == null && nicknameError == null && validRadioGroup != null && validRadioGroup;
             })
             .subscribe(valid -> {
@@ -112,7 +111,7 @@ public class ProfileEditFragment extends Fragment implements OnPageFocus {
                 response -> {
                     if (response.success) {
                         User.getInstance().update(response.user, response.access_token);
-                        this.pagerController.popCurrentPage();
+                        this.controller.popCurrentPage();
                     } else {
                         // TODO : Failed to Update User Profile
                     }

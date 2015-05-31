@@ -33,12 +33,11 @@ public class AuthActivity extends Activity implements ViewPagerController {
 
         /* Set Manager for ViewPager */
         this.manager = new ViewPagerManager(
-                (FlexibleViewPager) findViewById(R.id.auth_viewpager),
-                this.getFragmentManager(),
-                AppConst.ViewPager.Type.AUTH,
-                AppConst.ViewPager.Auth.LENGTH
+            (FlexibleViewPager) findViewById(R.id.auth_viewpager),
+            this.getFragmentManager(),
+            AppConst.ViewPager.Type.AUTH,
+            AppConst.ViewPager.Auth.LENGTH
         );
-        this.manager.setSwipeEnabled(false);
     }
     @Override
     public void onDestroy() {

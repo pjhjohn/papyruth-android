@@ -9,7 +9,7 @@ import android.view.MotionEvent;
  * Created by pjhjohn on 2015-04-17.
  */
 public class FlexibleViewPager extends ViewPager {
-    private boolean mIsEnabledSwipe = true;
+    private boolean mIsEnabledSwipe = false;
 
     public FlexibleViewPager (Context context) {
         super(context);

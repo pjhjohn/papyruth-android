@@ -22,21 +22,21 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements OnPageFocus {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     private NavFragment.OnCategoryClickListener callback;
 
     private final int COURSE = 0;
@@ -47,7 +47,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
         this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
@@ -126,7 +126,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     @Override
     public void recyclerViewListClicked (View view, int position) {
         setup(position);
-        this.pagerController.setCurrentPage(AppConst.ViewPager.Search.COURSE, true);
+        this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.COURSE), true);
 
     }
     public void setup(int position){
