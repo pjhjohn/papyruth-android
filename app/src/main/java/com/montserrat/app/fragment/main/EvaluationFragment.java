@@ -25,6 +25,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.viewpager.Page;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
@@ -85,35 +86,35 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
         this.subscriptions.add(FloatingActionControl
-                        .clicks(R.id.fab_new_evaluation)
-                        .subscribe(unused -> {
-                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                        },
-                                error -> Timber.d("error : %s", error))
+            .clicks(R.id.fab_new_evaluation)
+            .subscribe(unused -> {
+                EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+            }, error -> Timber.d("error : %s", error))
         );
         this.subscriptions.add(FloatingActionControl
-                        .clicks(R.id.fab_comment)
-                        .subscribe(unused -> {
-                                    addComment(this.getView().getHeight());
-                                },
-                                error -> Timber.d("error : %s", error))
+            .clicks(R.id.fab_comment)
+            .subscribe(
+                unused -> addComment(this.getView().getHeight()),
+                error -> Timber.d("error : %s", error)
+            )
         );
-        this.subscriptions.add(
-                ViewObservable.clicks(newCommentSubmit)
+        this.subscriptions.add(ViewObservable
+            .clicks(newCommentSubmit)
+            .subscribe(unused -> RetrofitApi.getInstance()
+                .comments(
+                    User.getInstance().getAccessToken(),
+                    Evaluation.getInstance().getId(),
+                    this.newCommentBody.getText().toString())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        unused -> RetrofitApi.getInstance()
-                                .comments(
-                                        User.getInstance().getAccessToken(),
-                                        Evaluation.getInstance().getId(),
-                                        this.newCommentBody.getText().toString())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(response -> Timber.d("success : %s", response),
-                                error -> Timber.d("error : %s", error))
+                    response -> Timber.d("success : %s", response),
+                    error -> Timber.d("error : %s", error)
                 )
+            )
         );
     }
 
@@ -136,13 +137,13 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         Evaluation.getInstance().clear();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
         subscriptions.add(FloatingActionControl
-                        .clicks(R.id.fab_new_evaluation)
-                        .subscribe(unused -> {
-                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                        })
+            .clicks(R.id.fab_new_evaluation)
+            .subscribe(unused -> {
+                EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+            })
         );
     }
 
@@ -163,12 +164,12 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                    comments -> {
-                        this.items.clear();
-                        this.items.addAll(comments);
-                        this.adapter.notifyDataSetChanged();
-                    },
-                    error -> Timber.d("error : %s", error)
+                comments -> {
+                    this.items.clear();
+                    this.items.addAll(comments);
+                    this.adapter.notifyDataSetChanged();
+                },
+                error -> Timber.d("error : %s", error)
             )
         );
     }
