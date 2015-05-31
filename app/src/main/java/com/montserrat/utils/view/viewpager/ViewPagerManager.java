@@ -12,6 +12,8 @@ import com.montserrat.app.fragment.FragmentFactory;
 
 import java.util.Stack;
 
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-04-23.
  */
@@ -33,13 +35,14 @@ public class ViewPagerManager implements ViewPagerController {
         this.listener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected (int position) {
+                Timber.d("onPage#%dSelected", position);
                 if (ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(current);
-                ViewPagerManager.this.addToBackStack = true;
                 ViewPagerManager.this.previous = ViewPagerManager.this.current;
                 ViewPagerManager.this.current = position;
 
                 final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
-                if (container != null) container.onPageSelected(position);
+                if (ViewPagerManager.this.addToBackStack && container != null) container.onPageSelected(position);
+                ViewPagerManager.this.addToBackStack = true;
                 if (target != null && target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
             }
         };
@@ -81,6 +84,7 @@ public class ViewPagerManager implements ViewPagerController {
             final Integer popped = this.history.pop();
             this.addToBackStack = false;
             this.pager.setCurrentItem(popped);
+            this.current = popped;
             return true;
         } return false;
     }
