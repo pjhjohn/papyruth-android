@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout
+ <FrameLayout
      xmlns:android="http://schemas.android.com/apk/res/android"
      android:orientation="vertical"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
-     android:weightSum="12"
      android:id="@+id/evaluation_layout"
      android:background="#ffffff"
      >
@@ -124,4 +123,25 @@
                  />
          </LinearLayout>
      </ScrollView>
- </LinearLayout>
+    <LinearLayout
+        android:id="@+id/new_comment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="2"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.8"
+            android:id="@+id/new_comment_body" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/submit"
+            android:id="@+id/new_comment_submit"/>
+        </LinearLayout>
+
+</FrameLayout>

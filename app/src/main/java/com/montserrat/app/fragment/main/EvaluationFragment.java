@@ -7,23 +7,33 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CommentAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Comment;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
+import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -45,6 +55,9 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     @InjectView(R.id.nickname) protected TextView name;
     @InjectView(R.id.body) protected TextView body;
     @InjectView(R.id.comment_list) protected RecyclerView commentList;
+    @InjectView(R.id.new_comment_layout) protected LinearLayout newCommentLayout;
+    @InjectView(R.id.new_comment_submit) protected Button newCommentSubmit;
+    @InjectView(R.id.new_comment_body) protected EditText newCommentBody;
     private CompositeSubscription subscriptions;
     private View view;
 
@@ -57,31 +70,51 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
         setEvaluation();
         getComments();
-        this.items.add(newComment("1", "commentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcomment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.items.add(newComment("1", "comment"));
-        this.adapter.notifyDataSetChanged();
 
         return view;
+    }
+    public void addComment(Integer height){
+        Timber.d("call by course %s", height);
+        ViewGroup.LayoutParams layoutParams = newCommentLayout.getLayoutParams();
+        layoutParams.height = (int)(height * 0.08);
+        newCommentLayout.setLayoutParams(layoutParams);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        recyclerviewHeightChanged();
-        Timber.d("isnull - %s", commentList.getChildCount());
-
+        FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
+        this.subscriptions.add(FloatingActionControl
+                        .clicks(R.id.fab_new_evaluation)
+                        .subscribe(unused -> {
+                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                        },
+                                error -> Timber.d("error : %s", error))
+        );
+        this.subscriptions.add(FloatingActionControl
+                        .clicks(R.id.fab_comment)
+                        .subscribe(unused -> {
+                                    addComment(this.getView().getHeight());
+                                },
+                                error -> Timber.d("error : %s", error))
+        );
+        this.subscriptions.add(
+                ViewObservable.clicks(newCommentSubmit)
+                .subscribe(
+                        unused -> RetrofitApi.getInstance()
+                                .comments(
+                                        User.getInstance().getAccessToken(),
+                                        Evaluation.getInstance().getId(),
+                                        this.newCommentBody.getText().toString())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> Timber.d("success : %s", response),
+                                error -> Timber.d("error : %s", error))
+                )
+        );
     }
 
 
@@ -99,7 +132,18 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        Timber.d("is gone!");
         Evaluation.getInstance().clear();
+        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
+        subscriptions.add(FloatingActionControl
+                        .clicks(R.id.fab_new_evaluation)
+                        .subscribe(unused -> {
+                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                        })
+        );
     }
 
     public void setEvaluation() {
@@ -119,12 +163,12 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                comments -> {
-                    this.items.clear();
-                    this.items.addAll(comments);
-                    this.adapter.notifyDataSetChanged();
-                },
-                error -> Timber.d("error : %s", error)
+                    comments -> {
+                        this.items.clear();
+                        this.items.addAll(comments);
+                        this.adapter.notifyDataSetChanged();
+                    },
+                    error -> Timber.d("error : %s", error)
             )
         );
     }
@@ -150,8 +194,6 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-//        Timber.d("hgh : %s", commentList.get);
-//        commentList.getLayoutManager().geth
         recyclerviewHeightChanged();
     }
 }

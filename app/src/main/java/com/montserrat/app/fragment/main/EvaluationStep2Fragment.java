@@ -23,10 +23,12 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.http.HEAD;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -84,6 +86,8 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+            }, error -> {
+                Timber.d("error : %s", error);
             })
         );
 

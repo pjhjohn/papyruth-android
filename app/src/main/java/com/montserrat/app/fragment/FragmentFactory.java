@@ -42,6 +42,8 @@ public class FragmentFactory {
                 switch(position) {
                     case AppConst.ViewPager.Search.PARTIAL_COURSE       : fragment = new PartialCourseFragment();   break;
                     case AppConst.ViewPager.Search.COURSE               : fragment = new CourseFragment(); break;
+                    case AppConst.ViewPager.Search.EVALUATION_STEP2     : fragment = new EvaluationStep2Fragment(); break;
+                    case AppConst.ViewPager.Search.EVALUATION_STEP3     : fragment = new EvaluationStep3Fragment(); break;
                 } break;
             case RECOMMENDATION:
                 switch(position) {
