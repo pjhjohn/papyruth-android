@@ -26,6 +26,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -83,13 +84,18 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+            },error ->{
+                Timber.d("error : %s", error);
             })
 
         );
 
         this.subscriptions.add(Observable
             .merge(ViewObservable.clicks(this.lecture), ViewObservable.clicks(this.professor))
-            .subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP1, true))
+            .subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP1, true),
+                    error ->{
+                Timber.d("error : %s", error);
+            })
         );
 
         this.subscriptions.add(FloatingActionControl
@@ -100,6 +106,8 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
                 EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
                 EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
                 this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP3, true);
+            },error ->{
+                Timber.d("error : %s", error);
             })
         );
     }

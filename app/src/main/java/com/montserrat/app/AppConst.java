@@ -40,9 +40,11 @@ public class AppConst {
             public static final int HOME = 0;
         }
         public static class Search {
-            public static final int LENGTH = 2;
+            public static final int LENGTH = 4;
             public static final int PARTIAL_COURSE = 0;
             public static final int COURSE = 1;
+            public static final int EVALUATION_STEP2 = 2;
+            public static final int EVALUATION_STEP3 = 3;
         }
         public static class Recommendation {
             public static final int LENGTH = 1;
