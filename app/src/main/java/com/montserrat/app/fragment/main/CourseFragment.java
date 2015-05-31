@@ -27,6 +27,7 @@ import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnBack;
@@ -34,9 +35,11 @@ import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -125,6 +128,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
 
     @Override
     public void onPageFocused() {
+        FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
+
         this.title.setText(Course.getInstance().getName());
         this.professor.setText(Course.getInstance().getProfessor());
         this.pointOverall.setProgress(Course.getInstance().getPointOverall() * 10);

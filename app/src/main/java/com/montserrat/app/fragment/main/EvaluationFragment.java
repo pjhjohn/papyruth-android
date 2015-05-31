@@ -9,25 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionMenu;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CommentAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Comment;
-import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
-import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -50,25 +45,16 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     @InjectView(R.id.nickname) protected TextView name;
     @InjectView(R.id.body) protected TextView body;
     @InjectView(R.id.comment_list) protected RecyclerView commentList;
-    private CompositeSubscription subscription;
+    private CompositeSubscription subscriptions;
     private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.view = inflater.inflate(R.layout.fragment_evaluation, container, false);
-        this.subscription = new CompositeSubscription();
+        this.subscriptions = new CompositeSubscription();
         ButterKnife.inject(this, view);
         this.setupRecyclerView(commentList);
 
-
-        FloatingActionControl.getInstance().setControl(R.layout.fam_comment);
-        this.subscription.add(
-                Observable.just(null)
-                        .delay(200, TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(unused ->
-                                        FloatingActionControl.getInstance().show(true)
-                        ));
         setEvaluation();
         getComments();
         this.items.add(newComment("1", "commentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcommentcomment"));
@@ -122,22 +108,24 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     }
 
     public void getComments(){
-        this.subscription.add(
-                RetrofitApi.getInstance().comments(
-                        User.getInstance().getAccessToken(),
-                        Evaluation.getInstance().getId(), null, null
-                )
-                        .map(response -> response.comments)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(comments -> {
-                            this.items.clear();
-                            this.items.addAll(comments);
-                            this.adapter.notifyDataSetChanged();
-                        },
-                        error ->{
-                            Timber.d("error : %s", error);
-                        })
+        this.subscriptions.add(
+            RetrofitApi.getInstance().comments(
+                User.getInstance().getAccessToken(),
+                Evaluation.getInstance().getId(),
+                null,
+                null
+            )
+            .map(response -> response.comments)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                comments -> {
+                    this.items.clear();
+                    this.items.addAll(comments);
+                    this.adapter.notifyDataSetChanged();
+                },
+                error -> Timber.d("error : %s", error)
+            )
         );
     }
 

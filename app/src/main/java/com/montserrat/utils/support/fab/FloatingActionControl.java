@@ -9,8 +9,13 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.montserrat.app.AppManager;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by pjhjohn on 2015-05-29.
@@ -54,14 +59,29 @@ public class FloatingActionControl {
         else if(this.fam != null) this.fam.toggleMenuButton(animate);
         return this;
     }
+    public FloatingActionControl toggle(boolean animate, int delay, TimeUnit unit) {
+        if (delay <= 0) return this.toggle(animate);
+        Observable.just(null).delay(delay, unit).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> this.toggle(animate));
+        return this;
+    }
     public FloatingActionControl show(boolean animate) {
         if(this.fab != null) this.fab.show(animate);
         else if(this.fam != null) this.fam.showMenuButton(animate);
         return this;
     }
+    public FloatingActionControl show(boolean animate, int delay, TimeUnit unit) {
+        if (delay <= 0) return this.show(animate);
+        Observable.just(null).delay(delay, unit).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> this.show(animate));
+        return this;
+    }
     public FloatingActionControl hide(boolean animate) {
         if(this.fab != null) this.fab.hide(animate);
         else if(this.fam != null) this.fam.hideMenuButton(animate);
+        return this;
+    }
+    public FloatingActionControl hide(boolean animate, int delay, TimeUnit unit) {
+        if (delay <= 0) return this.hide(animate);
+        Observable.just(null).delay(delay, unit).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> this.hide(animate));
         return this;
     }
 

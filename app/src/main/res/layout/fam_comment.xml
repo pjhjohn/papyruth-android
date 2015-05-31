@@ -2,7 +2,7 @@
 <com.github.clans.fab.FloatingActionMenu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fam_home"
+    android:id="@+id/fam_comment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"

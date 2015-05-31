@@ -18,7 +18,6 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
-import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
