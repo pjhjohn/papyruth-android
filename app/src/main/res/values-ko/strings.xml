@@ -58,4 +58,8 @@
     <string name="lecture_type_culture">교양</string>
     <string name="lecture_type_major">전공</string>
     <string name="like">like</string>
+
+    <!--comment-->
+    <string name="submit_comment_success">댓글을 등록했습니다</string>
+    <string name="submit_comment_fail">댓글 등록에 실패했습니다</string>
 </resources>

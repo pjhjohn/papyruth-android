@@ -1,5 +1,6 @@
 package com.montserrat.app.fragment.main;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,11 +34,17 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
+import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import static com.montserrat.utils.support.rx.RxValidator.isValidEvaluationBody;
+import static com.montserrat.utils.support.rx.RxValidator.nonEmpty;
+import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 
 /**
@@ -60,12 +67,14 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     @InjectView(R.id.new_comment_close) protected Button newCommentClose;
     @InjectView(R.id.new_comment_body) protected EditText newCommentBody;
     private CompositeSubscription subscriptions;
+    private CompositeSubscription subscriptionsFAB;
     private View view;
-
+    private final long ANIMATION_SPEED = 600;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.view = inflater.inflate(R.layout.fragment_evaluation, container, false);
         this.subscriptions = new CompositeSubscription();
+        this.subscriptionsFAB = new CompositeSubscription();
         ButterKnife.inject(this, view);
         this.setupRecyclerView(commentList);
 
@@ -77,22 +86,38 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     public void addComment(Integer width, Integer height){
         changeFAB(COMMENT);
         ViewGroup.LayoutParams layoutParams = newCommentLayout.getLayoutParams();
-        layoutParams.width = (int)(width * 0.8);
-        layoutParams.height = (int)(height * 0.4);
-        newCommentLayout.setLayoutParams(layoutParams);
+        ValueAnimator animator = ValueAnimator.ofInt(0, (int)(height*0.4));
+        animator.setDuration(ANIMATION_SPEED);
+        animator.addUpdateListener(animation ->{
+            layoutParams.width = (int)(width * 0.8);
+            layoutParams.height = (int) animation.getAnimatedValue();
+            newCommentLayout.setLayoutParams(layoutParams);
+            newCommentLayout.setY(this.getView().getHeight() - (int) animation.getAnimatedValue());
+        });
+        animator.start();
+
         this.subscriptions.add(
                 ViewObservable.clicks(newCommentClose)
                         .subscribe(
                                 unused -> {
-                                    ViewGroup.LayoutParams params = newCommentLayout.getLayoutParams();
-                                    params.height = 0;
-                                    newCommentLayout.setLayoutParams(params);
                                     changeFAB(EVALUATION);
+                                    ViewGroup.LayoutParams params = newCommentLayout.getLayoutParams();
+                                    ValueAnimator animators = ValueAnimator.ofInt(newCommentLayout.getHeight(), 0);
+                                    animators.setDuration(ANIMATION_SPEED);
+                                    float y = newCommentLayout.getY();
+                                    float h = newCommentLayout.getHeight();
+                                    animators.addUpdateListener(animation -> {
+                                        params.height = (int) animation.getAnimatedValue();
+                                        newCommentLayout.setLayoutParams(params);
+                                        newCommentLayout.setY(y + (h - (int) animation.getAnimatedValue()));
+                                    });
+                                    animators.start();
                                 }, error ->
                                         Timber.d("new Comment Close error : %s", error)
                         )
         );
     }
+
 
     private final int COMMENT = 0;
     private final int EVALUATION = 1;
@@ -101,30 +126,45 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     public void changeFAB(Integer type){
         switch (type){
             case COMMENT :
-                FloatingActionControl.getInstance().setControl(R.layout.fab_done).show(true, 200, TimeUnit.MILLISECONDS);
-                this.subscriptions.add(
-                        FloatingActionControl.clicks(R.id.fab_done)
+                FloatingActionControl.getInstance().setControl(R.layout.fab_done);
+
+                this.subscriptions.add(WidgetObservable
+                                .text(this.newCommentBody)
+                                .map(toString)
+                                .map(nonEmpty)
+                                .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                                .subscribe(valid -> {
+                                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                                })
+                );
+                this.subscriptionsFAB.add(FloatingActionControl
+                            .clicks()
                             .observeOn(Schedulers.io())
-                            .map(click ->
-                                    RetrofitApi.getInstance().comments(
-                                            User.getInstance().getAccessToken(),
-                                            Evaluation.getInstance().getId(),
-                                            this.newCommentBody.getText().toString()
-                                    )
+                            .flatMap(click ->
+                                            RetrofitApi.getInstance().comments(
+                                                    User.getInstance().getAccessToken(),
+                                                    Evaluation.getInstance().getId(),
+                                                    this.newCommentBody.getText().toString()
+                                            )
                             )
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(pass ->{
-                                        Timber.d("success : %s", pass);
+                            .subscribe(response ->{
+                                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_success), Toast.LENGTH_LONG).show();
+                                        this.newCommentBody.setText("");
+                                        getComments();
                                     },
                                     error -> {
+                                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
                                         Timber.d("call add Comment error : %s", error);
-                                        error.printStackTrace();})
+                                        })
                             );
                 break;
 
             case EVALUATION :
                 FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
-                this.subscriptions.add(FloatingActionControl
+                this.subscriptionsFAB.add(FloatingActionControl
                                 .clicks(R.id.fab_new_evaluation)
                                 .subscribe(unused -> {
                                             EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
@@ -134,7 +174,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                         },
                                         error -> Timber.d("add FAC fab_new_evaluation error : %s", error))
                 );
-                this.subscriptions.add(FloatingActionControl
+                this.subscriptionsFAB.add(FloatingActionControl
                                 .clicks(R.id.fab_comment)
                                 .subscribe(unused -> {
                                             addComment(this.getView().getWidth(),this.getView().getHeight());
@@ -145,7 +185,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
             case COURSE :
                 FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-                subscriptions.add(FloatingActionControl
+                subscriptionsFAB.add(FloatingActionControl
                                 .clicks(R.id.fab_new_evaluation)
                                 .subscribe(unused -> {
                                     EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
@@ -158,7 +198,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                 break;
             default:
                 FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
-                this.subscriptions.add(FloatingActionControl
+                this.subscriptionsFAB.add(FloatingActionControl
                                 .clicks(R.id.fab_new_evaluation)
                                 .subscribe(unused -> {
                                             EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
@@ -168,7 +208,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                         },
                                         error -> Timber.d("add FAC fab_new_evaluation error : %s", error))
                 );
-                this.subscriptions.add(FloatingActionControl
+                this.subscriptionsFAB.add(FloatingActionControl
                                 .clicks(R.id.fab_comment)
                                 .subscribe(unused -> {
                                             addComment(this.getView().getWidth(),this.getView().getHeight());
@@ -230,6 +270,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                     error -> Timber.d("get comments error : %s", error)
             )
         );
+
     }
 
     public Comment newComment(String name, String content) {

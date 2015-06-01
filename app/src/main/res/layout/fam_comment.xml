@@ -15,6 +15,6 @@
     fab:menu_colorNormal="@color/fg_normal"
     fab:menu_colorPressed="@color/fg_accent"
     fab:menu_backgroundColor="#ccffffff">
-    <include layout="@layout/fab_new_evaluation"/>
     <include layout="@layout/fab_comment"/>
+    <include layout="@layout/fab_new_evaluation"/>
 </com.github.clans.fab.FloatingActionMenu>

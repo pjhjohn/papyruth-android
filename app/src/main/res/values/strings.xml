@@ -59,4 +59,7 @@
     <string name="lecture_type_major">Major</string>
     <string name="like">LIKE</string>
 
+    <!--comment-->
+    <string name="submit_comment_success">Succeed to register Comment</string>
+    <string name="submit_comment_fail">Failed to register Comment</string>
 </resources>
