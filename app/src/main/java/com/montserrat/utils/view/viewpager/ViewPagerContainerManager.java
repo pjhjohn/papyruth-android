@@ -52,7 +52,7 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
             this.currentCategory = category;
             this.current = Page.at(category, 0);
             manager.setCurrentPage(0, false);
-        } else {
+        } else if(category != this.currentCategory) {
             this.viewpager.setAdapter(manager.adapter);
             this.viewpager.setOnPageChangeListener(manager.listener);
             this.currentCategory = category;
