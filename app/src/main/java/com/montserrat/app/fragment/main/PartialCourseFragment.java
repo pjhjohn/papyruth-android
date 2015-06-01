@@ -127,8 +127,8 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public void recyclerViewListClicked (View view, int position) {
         setup(position);
         this.pagerController.setCurrentPage(AppConst.ViewPager.Search.COURSE, true);
-
     }
+
     public void setup(int position){
         PartialCourse item = items.get(position);
         Course.getInstance().clear();
@@ -147,11 +147,15 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
 
     }
 
-    public void getHistory(){
+    public List<PartialCourse> getHistory(){
         Timber.d("getHistory");
         // TODO : implement it!
+        return null;
     }
-
+    public boolean addHistory(PartialCourse item){
+        Timber.d("getHistory");
+        return false;
+    }
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);

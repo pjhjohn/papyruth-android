@@ -85,7 +85,7 @@ public class RetrofitApi {
         );
 
         @POST ("/comments")
-        Observable<Comment> comments(
+        Observable<CommentResponse> comments(
                 @Header ("Authorization") String authorization,
                 @Query("evaluation_id") Integer evaluation_id,
                 @Query("body") String body

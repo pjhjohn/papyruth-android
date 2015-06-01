@@ -127,21 +127,20 @@
         android:id="@+id/new_comment_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:weightSum="2"
+        android:orientation="vertical"
         android:layout_marginBottom="?attr/actionBarSize"
         android:layout_gravity="center_horizontal|bottom">
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.8"
-            android:id="@+id/new_comment_body" />
         <Button
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/close"
+           android:layout_gravity="right"
+            android:id="@+id/new_comment_close"/>
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.2"
-            android:text="@string/submit"
-            android:id="@+id/new_comment_submit"/>
+            android:id="@+id/new_comment_body" />
         </LinearLayout>
 
 </FrameLayout>

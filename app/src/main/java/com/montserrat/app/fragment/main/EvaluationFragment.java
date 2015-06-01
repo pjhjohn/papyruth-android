@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -56,7 +56,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     @InjectView(R.id.body) protected TextView body;
     @InjectView(R.id.comment_list) protected RecyclerView commentList;
     @InjectView(R.id.new_comment_layout) protected LinearLayout newCommentLayout;
-    @InjectView(R.id.new_comment_submit) protected Button newCommentSubmit;
+    @InjectView(R.id.new_comment_close) protected Button newCommentClose;
     @InjectView(R.id.new_comment_body) protected EditText newCommentBody;
     private CompositeSubscription subscriptions;
     private View view;
@@ -73,48 +73,115 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
         return view;
     }
-    public void addComment(Integer height){
-        Timber.d("call by course %s", height);
+    public void addComment(Integer width, Integer height){
+        changeFAB(COMMENT);
         ViewGroup.LayoutParams layoutParams = newCommentLayout.getLayoutParams();
-        layoutParams.height = (int)(height * 0.08);
+        layoutParams.width = (int)(width * 0.8);
+        layoutParams.height = (int)(height * 0.4);
         newCommentLayout.setLayoutParams(layoutParams);
+        this.subscriptions.add(
+                ViewObservable.clicks(newCommentClose)
+                        .subscribe(
+                                unused -> {
+                                    ViewGroup.LayoutParams params = newCommentLayout.getLayoutParams();
+                                    params.height = 0;
+                                    newCommentLayout.setLayoutParams(params);
+                                    changeFAB(EVALUATION);
+                                }, error ->
+                                        Timber.d("new Comment Close error : %s", error)
+                        )
+        );
+    }
+
+    private final int COMMENT = 0;
+    private final int EVALUATION = 1;
+    private final int COURSE = 2;
+
+    public void changeFAB(Integer type){
+        switch (type){
+            case COMMENT :
+                FloatingActionControl.getInstance().setControl(R.layout.fab_done).show(true, 200, TimeUnit.MILLISECONDS);
+                this.subscriptions.add(
+                        FloatingActionControl.clicks(R.id.fab_done)
+                            .observeOn(Schedulers.io())
+                            .map(click ->
+                                    RetrofitApi.getInstance().comments(
+                                            User.getInstance().getAccessToken(),
+                                            Evaluation.getInstance().getId(),
+                                            this.newCommentBody.getText().toString()
+                                    )
+                            )
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(pass ->{
+                                        Timber.d("success : %s", pass);
+                                    },
+                                    error -> {
+                                        Timber.d("call add Comment error : %s", error);
+                                        error.printStackTrace();})
+                            );
+                break;
+
+            case EVALUATION :
+                FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
+                this.subscriptions.add(FloatingActionControl
+                                .clicks(R.id.fab_new_evaluation)
+                                .subscribe(unused -> {
+                                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                                        },
+                                        error -> Timber.d("add FAC fab_new_evaluation error : %s", error))
+                );
+                this.subscriptions.add(FloatingActionControl
+                                .clicks(R.id.fab_comment)
+                                .subscribe(unused -> {
+                                            addComment(this.getView().getWidth(),this.getView().getHeight());
+                                        },
+                                        error -> Timber.d("add FAC fab_comment error : %s", error))
+                );
+                break;
+
+            case COURSE :
+                FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
+                subscriptions.add(FloatingActionControl
+                                .clicks(R.id.fab_new_evaluation)
+                                .subscribe(unused -> {
+                                    EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                                    EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                                    EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                                    pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                                }, error ->
+                                        Timber.d("destroy view error : %s", error))
+                );
+                break;
+            default:
+                FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
+                this.subscriptions.add(FloatingActionControl
+                                .clicks(R.id.fab_new_evaluation)
+                                .subscribe(unused -> {
+                                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                                        },
+                                        error -> Timber.d("add FAC fab_new_evaluation error : %s", error))
+                );
+                this.subscriptions.add(FloatingActionControl
+                                .clicks(R.id.fab_comment)
+                                .subscribe(unused -> {
+                                            addComment(this.getView().getWidth(),this.getView().getHeight());
+                                        },
+                                        error -> Timber.d("add FAC fab_comment error : %s", error))
+                );
+                break;
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
-        this.subscriptions.add(FloatingActionControl
-                        .clicks(R.id.fab_new_evaluation)
-                        .subscribe(unused -> {
-                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                        },
-                                error -> Timber.d("error : %s", error))
-        );
-        this.subscriptions.add(FloatingActionControl
-                        .clicks(R.id.fab_comment)
-                        .subscribe(unused -> {
-                                    addComment(this.getView().getHeight());
-                                },
-                                error -> Timber.d("error : %s", error))
-        );
-        this.subscriptions.add(
-                ViewObservable.clicks(newCommentSubmit)
-                .subscribe(
-                        unused -> RetrofitApi.getInstance()
-                                .comments(
-                                        User.getInstance().getAccessToken(),
-                                        Evaluation.getInstance().getId(),
-                                        this.newCommentBody.getText().toString())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(response -> Timber.d("success : %s", response),
-                                error -> Timber.d("error : %s", error))
-                )
-        );
+        changeFAB(EVALUATION);
     }
 
 
@@ -134,16 +201,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         ButterKnife.reset(this);
         Timber.d("is gone!");
         Evaluation.getInstance().clear();
-        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-        subscriptions.add(FloatingActionControl
-                        .clicks(R.id.fab_new_evaluation)
-                        .subscribe(unused -> {
-                            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                        })
-        );
+        changeFAB(COURSE);
     }
 
     public void setEvaluation() {
@@ -168,7 +226,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                         this.items.addAll(comments);
                         this.adapter.notifyDataSetChanged();
                     },
-                    error -> Timber.d("error : %s", error)
+                    error -> Timber.d("get comments error : %s", error)
             )
         );
     }

@@ -31,6 +31,7 @@
     <string name="next">다음</string>
     <string name="submit">전송</string>
     <string name="pending">다른 요청이 처리중입니다</string>
+    <string name="close">닫기</string>
 
     <!--menu-->
     <string name="menu_search">메뉴검색</string>

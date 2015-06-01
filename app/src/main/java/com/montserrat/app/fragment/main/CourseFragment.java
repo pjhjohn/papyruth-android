@@ -74,6 +74,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     @InjectView(R.id.evaluaiton_fragment_container)           protected FrameLayout frameLayout;
 
     private EvaluationFragment evaluationFragment;
+
     private Boolean isEvaluationOpened;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
@@ -115,7 +116,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         super.onResume();
         this.evaluationFragment = new EvaluationFragment();
         if(this.getUserVisibleHint()) this.onPageFocused();
-
     }
 
     @Override
@@ -181,7 +181,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
             this.subscriptions.add(FloatingActionControl
                             .clicks(R.id.fab_comment)
                             .subscribe(unused -> {
-                                evaluationFragment.addComment(this.getView().getHeight());
+                                evaluationFragment.addComment(this.getView().getWidth(),this.getView().getHeight());
                             },error ->{
                                         Timber.d("error : %s", error);
                                     })

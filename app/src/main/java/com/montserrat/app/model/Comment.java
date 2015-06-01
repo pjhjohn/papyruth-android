@@ -7,7 +7,7 @@ public class Comment {
     public Integer id;
     public Integer user_id;
     public String user_name;
-    public String evaluation_id;
+    public Integer evaluation_id;
     public String body;
     public String created_at;
     public String updated_at;

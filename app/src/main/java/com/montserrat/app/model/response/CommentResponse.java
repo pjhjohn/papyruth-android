@@ -8,6 +8,7 @@ import java.util.List;
  * Created by SSS on 2015-05-31.
  */
 public class CommentResponse {
+    public Boolean success;
     public List<Comment> comments;
 
     @Override
