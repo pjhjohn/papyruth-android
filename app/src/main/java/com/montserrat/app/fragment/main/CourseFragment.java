@@ -185,7 +185,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
             this.subscriptions.add(FloatingActionControl
                             .clicks(R.id.fab_comment)
                             .subscribe(unused -> {
-                                evaluationFragment.addComment(this.getView().getWidth(),this.getView().getHeight());
+                                evaluationFragment.addComment();
                             },error ->{
                                         Timber.d("error : %s", error);
                                     })

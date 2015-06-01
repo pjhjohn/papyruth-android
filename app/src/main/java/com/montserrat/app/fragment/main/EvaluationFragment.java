@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CommentAdapter;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Comment;
@@ -35,9 +36,11 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -79,43 +82,50 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
         this.setupRecyclerView(commentList);
 
         setEvaluation();
-        getComments();
 
         return view;
     }
-    public void addComment(Integer width, Integer height){
+    public void addComment(){
         changeFAB(COMMENT);
-        ViewGroup.LayoutParams layoutParams = newCommentLayout.getLayoutParams();
-        ValueAnimator animator = ValueAnimator.ofInt(0, (int)(height*0.4));
-        animator.setDuration(ANIMATION_SPEED);
-        animator.addUpdateListener(animation ->{
-            layoutParams.width = (int)(width * 0.8);
-            layoutParams.height = (int) animation.getAnimatedValue();
-            newCommentLayout.setLayoutParams(layoutParams);
-            newCommentLayout.setY(this.getView().getHeight() - (int) animation.getAnimatedValue());
-        });
-        animator.start();
+        commentWindow(true);
 
         this.subscriptions.add(
                 ViewObservable.clicks(newCommentClose)
                         .subscribe(
                                 unused -> {
                                     changeFAB(EVALUATION);
-                                    ViewGroup.LayoutParams params = newCommentLayout.getLayoutParams();
-                                    ValueAnimator animators = ValueAnimator.ofInt(newCommentLayout.getHeight(), 0);
-                                    animators.setDuration(ANIMATION_SPEED);
-                                    float y = newCommentLayout.getY();
-                                    float h = newCommentLayout.getHeight();
-                                    animators.addUpdateListener(animation -> {
-                                        params.height = (int) animation.getAnimatedValue();
-                                        newCommentLayout.setLayoutParams(params);
-                                        newCommentLayout.setY(y + (h - (int) animation.getAnimatedValue()));
-                                    });
-                                    animators.start();
+                                    commentWindow(false);
                                 }, error ->
                                         Timber.d("new Comment Close error : %s", error)
                         )
         );
+    }
+
+    public void commentWindow(boolean open){
+        if(open){
+            ViewGroup.LayoutParams layoutParams = newCommentLayout.getLayoutParams();
+            ValueAnimator animator = ValueAnimator.ofInt(0, (int)(this.getView().getHeight()*0.4));
+            animator.setDuration(ANIMATION_SPEED);
+            animator.addUpdateListener(animation ->{
+                layoutParams.width = (int)(this.getView().getWidth() * 0.8);
+                layoutParams.height = (int) animation.getAnimatedValue();
+                newCommentLayout.setLayoutParams(layoutParams);
+                newCommentLayout.setY(this.getView().getHeight() - (int) animation.getAnimatedValue());
+            });
+            animator.start();
+        }else{
+            ViewGroup.LayoutParams params = newCommentLayout.getLayoutParams();
+            ValueAnimator animators = ValueAnimator.ofInt(newCommentLayout.getHeight(), 0);
+            animators.setDuration(ANIMATION_SPEED);
+            float y = newCommentLayout.getY();
+            float h = newCommentLayout.getHeight();
+            animators.addUpdateListener(animation -> {
+                params.height = (int) animation.getAnimatedValue();
+                newCommentLayout.setLayoutParams(params);
+                newCommentLayout.setY(y + (h - (int) animation.getAnimatedValue()));
+            });
+            animators.start();
+        }
     }
 
 
@@ -150,7 +160,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                             )
                             )
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(response ->{
+                            .subscribe(response -> {
                                         Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_success), Toast.LENGTH_LONG).show();
                                         this.newCommentBody.setText("");
                                         getComments();
@@ -158,7 +168,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                     error -> {
                                         Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
                                         Timber.d("call add Comment error : %s", error);
-                                        })
+                                    })
                             );
                 break;
 
@@ -177,7 +187,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                 this.subscriptionsFAB.add(FloatingActionControl
                                 .clicks(R.id.fab_comment)
                                 .subscribe(unused -> {
-                                            addComment(this.getView().getWidth(),this.getView().getHeight());
+                                            addComment();
                                         },
                                         error -> Timber.d("add FAC fab_comment error : %s", error))
                 );
@@ -211,7 +221,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                 this.subscriptionsFAB.add(FloatingActionControl
                                 .clicks(R.id.fab_comment)
                                 .subscribe(unused -> {
-                                            addComment(this.getView().getWidth(),this.getView().getHeight());
+                                            addComment();
                                         },
                                         error -> Timber.d("add FAC fab_comment error : %s", error))
                 );
@@ -223,17 +233,10 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     public void onResume() {
         super.onResume();
         changeFAB(EVALUATION);
+        Timber.d("onResume");
+        getComments();
     }
 
-
-    private void recyclerviewHeightChanged() {
-        int maxHeight = 0;
-        for (int i = 0; i < commentList.getAdapter().getItemCount(); i++) {
-            maxHeight += commentList.getChildAt(i).getHeight();
-            Timber.d("max - %s", maxHeight);
-        }
-        commentList.setMinimumHeight(maxHeight);
-    }
 
 
     @Override
@@ -252,33 +255,37 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
     public void getComments(){
         this.subscriptions.add(
-            RetrofitApi.getInstance().comments(
-                User.getInstance().getAccessToken(),
-                Evaluation.getInstance().getId(),
-                null,
-                null
-            )
-            .map(response -> response.comments)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                    comments -> {
-                        this.items.clear();
-                        this.items.addAll(comments);
-                        this.adapter.notifyDataSetChanged();
-                    },
-                    error -> Timber.d("get comments error : %s", error)
-            )
+                RetrofitApi.getInstance().comments(
+                        User.getInstance().getAccessToken(),
+                        Evaluation.getInstance().getId(),
+                        null,
+                        null
+                )
+                        .map(response -> response.comments)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                comments -> {
+                                    this.items.clear();
+                                    this.items.addAll(comments);
+                                    this.adapter.notifyDataSetChanged();
+                                    Observable.timer(400, TimeUnit.MILLISECONDS)
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribeOn(Schedulers.io())
+                                            .subscribe(unused-> {
+                                                        int maxHeight = 0;
+                                                        for (int i = 0; i < commentList.getAdapter().getItemCount(); i++) {
+                                                            maxHeight += commentList.getChildAt(i).getHeight();
+                                                        }
+                                                        ViewGroup.LayoutParams layoutParams = commentList.getLayoutParams();
+                                                        layoutParams.height = maxHeight+((MainActivity) this.getActivity()).getActionbarHeight();
+                                                        commentList.setLayoutParams(layoutParams);
+                                                    }, error -> Timber.d("commentList error :%s",error)
+                                    );
+                                },
+                                error -> Timber.d("get comments error : %s", error)
+                        )
         );
-
-    }
-
-    public Comment newComment(String name, String content) {
-        Comment comment = new Comment();
-        comment.user_name = name;
-        comment.body = content;
-
-        return comment;
     }
 
     @Override
@@ -294,6 +301,5 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        recyclerviewHeightChanged();
     }
 }
