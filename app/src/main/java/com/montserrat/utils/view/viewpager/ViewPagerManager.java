@@ -16,29 +16,30 @@ import java.util.Stack;
  * Created by pjhjohn on 2015-04-23.
  */
 public class ViewPagerManager implements ViewPagerController {
-    public enum Mode {
-        STANDARD, SWIPE, MULTIPLE, SWIPE_MULTIPLE
-    }
-    private FlexibleViewPager pager;
-    private Stack<Integer> history;
-    private boolean addToBackStack;
-    private int currentPage;
-    private int previousPage;
-    private Adapter adapter;
-    private ViewPager.OnPageChangeListener listener;
+    FlexibleViewPager pager;
+    Stack<Integer> history;
+    boolean addToBackStack;
+    int current;
+    int previous;
+    Adapter adapter;
+    ViewPager.OnPageChangeListener listener;
 
     public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, Type type, int viewCount) {
+        this(pager, manager, type, viewCount, null);
+    }
+    public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, Type type, int viewCount, ViewPager.SimpleOnPageChangeListener container) {
         this.pager = pager;
         this.adapter = new Adapter(manager, type, viewCount);
         this.listener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected (int position) {
-                if (ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(currentPage);
-                ViewPagerManager.this.addToBackStack = true;
-                ViewPagerManager.this.previousPage = ViewPagerManager.this.currentPage;
-                ViewPagerManager.this.currentPage = position;
+                if (ViewPagerManager.this.addToBackStack) ViewPagerManager.this.history.push(current);
+                ViewPagerManager.this.previous = ViewPagerManager.this.current;
+                ViewPagerManager.this.current = position;
 
                 final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
+                if (ViewPagerManager.this.addToBackStack && container != null) container.onPageSelected(position);
+                ViewPagerManager.this.addToBackStack = true;
                 if (target != null && target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
             }
         };
@@ -54,49 +55,18 @@ public class ViewPagerManager implements ViewPagerController {
     public void reset() {
         this.history = new Stack<>();
         this.addToBackStack = true;
-        this.currentPage = 0;
-        this.setCurrentPage(this.currentPage, false);
-    }
-
-    public void setMode(Mode mode) {
-        switch(mode) {
-            case STANDARD:
-                this.setSwipeEnabled(false);
-                this.setAdjacentPagesVisible(false);
-            case SWIPE:
-                this.setSwipeEnabled(true);
-                this.setAdjacentPagesVisible(false);
-            case MULTIPLE:
-                this.setSwipeEnabled(false);
-                this.setAdjacentPagesVisible(true);
-            case SWIPE_MULTIPLE:
-                this.setSwipeEnabled(true);
-                this.setAdjacentPagesVisible(true);
-        }
-    }
-
-    public void setSwipeEnabled(boolean swipable) {
-        this.pager.setSwipeEnabled(swipable);
-    }
-    
-    public void setAdjacentPagesVisible(boolean visible){
-        this.pager.setPadding(
-            visible ? 20 : 0,
-            0,
-            visible ? 20 : 0,
-            0
-        );
-        this.pager.setClipToPadding(visible);
+        this.current = 0;
+        this.setCurrentPage(this.current, false);
     }
 
     @Override
     public Stack<Integer> getHistoryCopy() {
-        return (Stack<Integer>)this.history.clone();
+        return (Stack<Integer>) this.history.clone();
     }
 
     @Override
     public int getPreviousPage() {
-        return this.previousPage;
+        return this.previous;
     }
 
     @Override
@@ -108,16 +78,17 @@ public class ViewPagerManager implements ViewPagerController {
     @Override
     public boolean popCurrentPage() {
         if(!this.history.isEmpty()){
-            final Integer previous = this.history.pop();
+            final Integer popped = this.history.pop();
             this.addToBackStack = false;
-            this.pager.setCurrentItem(previous);
+            this.pager.setCurrentItem(popped);
+            this.current = popped;
             return true;
         } return false;
     }
 
     @Override
     public boolean onBack() {
-        final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(this.currentPage);
+        final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(this.current);
         if (target != null) {
             boolean backed = false;
             if(target instanceof OnBack) backed = ((OnBack)target).onBack();
@@ -126,7 +97,7 @@ public class ViewPagerManager implements ViewPagerController {
         } return false;
     }
 
-    private static class Adapter extends FragmentStatePagerAdapter {
+    static class Adapter extends FragmentStatePagerAdapter {
         private SparseArray<Fragment> fragments;
         private final Type type;
         private final int count;

@@ -34,27 +34,27 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnBack;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack, OnPageFocus {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     private NavFragment.OnCategoryClickListener callback;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
         this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
@@ -132,18 +132,18 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
         this.subscriptions.add(FloatingActionControl
-                .clicks(R.id.fab_new_evaluation)
-                .subscribe(unused -> {
-                    EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                    EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                    EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                    pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                }, error ->{
-                    EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                    EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                    EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                    pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                }));
+            .clicks(R.id.fab_new_evaluation)
+            .subscribe(unused -> {
+                EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+            }, error -> {
+                EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+            }));
 
         this.title.setText(Course.getInstance().getName());
         this.professor.setText(Course.getInstance().getProfessor());
@@ -154,29 +154,33 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         this.type.setText(R.string.lecture_type_major);
 
         this.subscriptions.add(
-                RetrofitApi.getInstance().evaluations(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        null, null, null, Course.getInstance().getId())
-                        .map(response -> response.evaluations)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(evauations -> {
-                            this.items.clear();
-                            this.items.addAll(evauations);
-                            this.adapter.notifyDataSetChanged();
-                        })
+            RetrofitApi.getInstance().evaluations(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                null,
+                null,
+                null,
+                Course.getInstance().getId()
+            )
+            .map(response -> response.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(evauations -> {
+                this.items.clear();
+                this.items.addAll(evauations);
+                this.adapter.notifyDataSetChanged();
+            })
         );
         if(isEvaluationOpened){
             FloatingActionControl.getInstance().setControl(R.layout.fam_comment).show(true, 200, TimeUnit.MILLISECONDS);
             this.subscriptions.add(FloatingActionControl
-                            .clicks(R.id.fab_new_evaluation)
-                            .subscribe(unused -> {
-                                EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                                EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                                EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                                pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                            })
+                .clicks(R.id.fab_new_evaluation)
+                .subscribe(unused -> {
+                    EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                    EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                    EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                    this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+                })
             );
             this.subscriptions.add(FloatingActionControl
                             .clicks(R.id.fab_comment)
@@ -189,13 +193,13 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
         }else{
             FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
             subscriptions.add(FloatingActionControl
-                    .clicks(R.id.fab_new_evaluation)
-                    .subscribe(unused -> {
-                        EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-                        EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-                        EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                        pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-                    }));
+                .clicks(R.id.fab_new_evaluation)
+                .subscribe(unused -> {
+                    EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                    EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                    EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                    this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+                }));
         }
     }
 
@@ -290,13 +294,13 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
                 frameLayout.setVisibility(View.GONE);
                 FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 //                subscriptions.add(FloatingActionControl
-//                                .clicks(R.id.fab_new_evaluation)
-//                                .subscribe(unused -> {
-//                                    EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-//                                    EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-//                                    EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-//                                    pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
-//                                })
+//                    .clicks(R.id.fab_new_evaluation)
+//                    .subscribe(unused -> {
+//                        EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+//                        EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+//                        EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+//                        CourseFragment.this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+//                    })
 //                );
             }
         });

@@ -25,7 +25,8 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,12 +44,12 @@ import timber.log.Timber;
  * Created by SSS on 2015-05-22.
  */
 public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Comment> {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     private NavFragment.OnCategoryClickListener callback;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
         this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
@@ -129,7 +130,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                             EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
                                             EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
                                             EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                                            this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
                                         },
                                         error -> Timber.d("add FAC fab_new_evaluation error : %s", error))
                 );
@@ -150,7 +151,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                     EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
                                     EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
                                     EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                                    pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                                    this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
                                 }, error ->
                                         Timber.d("destroy view error : %s", error))
                 );
@@ -163,7 +164,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                             EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
                                             EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
                                             EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                                            pagerController.setCurrentPage(AppConst.ViewPager.Search.EVALUATION_STEP2, true);
+                                            this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
                                         },
                                         error -> Timber.d("add FAC fab_new_evaluation error : %s", error))
                 );

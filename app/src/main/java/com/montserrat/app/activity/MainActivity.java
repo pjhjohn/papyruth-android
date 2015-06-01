@@ -29,8 +29,9 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
-import com.montserrat.utils.view.viewpager.ViewPagerManager;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +45,10 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerController, RecyclerViewClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerContainerController, RecyclerViewClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener {
     private NavFragment drawer;
     private FlexibleViewPager viewpager;
-    private List<ViewPagerManager> managers;
+    private ViewPagerContainerManager container;
 
     private CompositeSubscription subscriptions;
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
@@ -71,16 +72,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
 
         /* Instantiate Multiple ViewPagerManagers */
-        this.managers = new ArrayList<>();
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.HOME          , AppConst.ViewPager.Home.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SEARCH        , AppConst.ViewPager.Search.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.RECOMMENDATION, AppConst.ViewPager.Recommendation.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.EVALUATION    , AppConst.ViewPager.Evaluation.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.RANDOM        , AppConst.ViewPager.Random.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.PROFILE       , AppConst.ViewPager.Profile.LENGTH));
-        this.managers.add(new ViewPagerManager(this.viewpager, this.getFragmentManager(), AppConst.ViewPager.Type.SIGNOUT       , AppConst.ViewPager.Signout.LENGTH));
-        this.managers.get(0).active();
-        for(ViewPagerManager manager : this.managers) manager.setSwipeEnabled(false);
+        this.container = ViewPagerContainerManager.newInstance(this.viewpager, this.getFragmentManager());
+        this.container.setCurrentPage(Page.at(AppConst.ViewPager.Type.HOME, AppConst.ViewPager.Home.HOME), false);
 
         this.subscriptions = new CompositeSubscription();
 
@@ -104,10 +97,10 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public void onCategorySelected (int category) {
         this.terminate = false;
         this.drawer.setActiveCategory(category);
-        this.managers.get(category).active();
+        this.container.activate(AppConst.ViewPager.int2Type(category), true);
     }
 
-    public int getActionbarHeight(){
+    public int getActionbarHeight() {
         return this.getSupportActionBar().getHeight();
     }
 
@@ -163,30 +156,30 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     }
 
     @Override
-    public Stack<Integer> getHistoryCopy() {
-        return this.managers.get(this.drawer.getActiveCategory()).getHistoryCopy();
+    public Stack<Page> getHistoryCopy() {
+        return this.container.getHistoryCopy();
     }
 
     @Override
-    public int getPreviousPage() {
-        return this.managers.get(this.drawer.getActiveCategory()).getPreviousPage();
+    public Page getPreviousPage() {
+        return this.container.getPreviousPage();
     }
 
     @Override
-    public void setCurrentPage (int pageNum, boolean addToBackStack) {
+    public void setCurrentPage(Page page, boolean addToBackStack) {
         this.terminate = false;
-        this.managers.get(this.drawer.getActiveCategory()).setCurrentPage(pageNum, addToBackStack);
+        this.container.setCurrentPage(page, addToBackStack);
     }
 
     @Override
     public boolean popCurrentPage () {
         this.terminate = false;
-        return this.managers.get(this.drawer.getActiveCategory()).popCurrentPage();
+        return this.container.popCurrentPage();
     }
 
     @Override
     public boolean onBack() {
-        return this.managers.get(this.drawer.getActiveCategory()).onBack();
+        return this.container.onBack();
     }
 
     //searchview Listener
@@ -282,7 +275,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        if (!this.managers.get(this.drawer.getActiveCategory()).onBack()) {
+        if (!this.container.onBack()) {
             if(terminate) super.onBackPressed();
             else {
                 Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();

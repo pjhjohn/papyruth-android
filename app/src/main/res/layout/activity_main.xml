@@ -8,25 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <com.montserrat.utils.view.viewpager.FlexibleViewPager
             android:id="@+id/main_viewpager"
             android:focusable="true"
             android:clickable="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.montserrat.utils.view.viewpager.FlexibleViewPager>
+            android:layout_height="match_parent"/>
+
         <RelativeLayout
             android:id="@+id/search_result_outside"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#ccc"
+            android:background="@color/translucent"
             android:visibility="visible"
-            android:alpha="0.7"
             android:focusable="true"
             android:clickable="true" />
-
-        <include layout="@layout/toolbar"/>
-
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -36,7 +33,10 @@
             android:clickable="true"
             android:background="#bbb"
             android:layout_gravity="center_horizontal|top" />
+
         <include layout="@layout/fac"/>
+        <include layout="@layout/toolbar"/>
+
     </FrameLayout>
     <fragment
         android:id="@+id/drawer"

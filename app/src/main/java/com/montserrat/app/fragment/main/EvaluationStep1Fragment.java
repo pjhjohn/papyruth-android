@@ -22,7 +22,8 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,11 +44,11 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Searches PartialCourse for Evaluation on Step 1.
  */
 public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAdapter, Candidate> implements OnPageFocus {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
     }
 
     @InjectView(R.id.query) protected EditText query;
@@ -82,10 +83,11 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
 
         ((InputMethodManager)this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Evaluation.EVALUATION_STEP2 || this.pagerController.getPreviousPage() == AppConst.ViewPager.Evaluation.EVALUATION_STEP3 ) {
-            if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Evaluation.EVALUATION_STEP1)) this.pagerController.popCurrentPage();
-            else this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
-        } else this.pagerController.setCurrentPage(AppConst.ViewPager.Evaluation.EVALUATION_STEP2, true);
+        if (Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2).equals(this.controller.getPreviousPage()) ||
+            Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP3).equals(this.controller.getPreviousPage())) {
+            if (this.controller.getHistoryCopy().contains(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1))) this.controller.popCurrentPage();
+            else this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
+        } else this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
     }
 
     @Override

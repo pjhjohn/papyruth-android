@@ -13,25 +13,24 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.viewpager.Page;
+import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-05-19.
  */
 public class ProfileFragment extends Fragment implements OnPageFocus {
-    private ViewPagerController pagerController;
+    private ViewPagerContainerController controller;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.controller = (ViewPagerContainerController) activity;
     }
 
     @InjectView (R.id.email) protected TextView email;
@@ -76,7 +75,7 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
 
         this.subscriptions.add(FloatingActionControl
             .clicks()
-            .subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Profile.PROFILE_EDIT, true))
+            .subscribe(unused -> controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.PROFILE, AppConst.ViewPager.Profile.PROFILE_EDIT), true))
         );
     }
 }

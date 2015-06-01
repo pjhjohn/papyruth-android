@@ -24,6 +24,31 @@ public class AppConst {
         public enum Type {
             AUTH, HOME, SEARCH, RECOMMENDATION, EVALUATION, RANDOM, PROFILE, SIGNOUT
         }
+        public static Type int2Type(int category) {
+            switch(category) {
+                case 0 : return Type.HOME;
+                case 1 : return Type.SEARCH;
+                case 2 : return Type.RECOMMENDATION;
+                case 3 : return Type.EVALUATION;
+                case 4 : return Type.RANDOM;
+                case 5 : return Type.PROFILE;
+                case 6 : return Type.SIGNOUT;
+                default: return null;
+            }
+        }
+        public static String type2Str(Type type) {
+            switch(type) {
+                case AUTH : return "AUTH";
+                case HOME : return "HOME";
+                case SEARCH : return "SEARCH";
+                case RECOMMENDATION : return "RECOMMENDATION";
+                case EVALUATION : return "EVALUATION";
+                case RANDOM : return "RANDOM";
+                case PROFILE : return "PROFILE";
+                case SIGNOUT : return "SIGNOUT";
+                default : return "";
+            }
+        }
 
         /* For Auth Activity */
         public static class Auth {
