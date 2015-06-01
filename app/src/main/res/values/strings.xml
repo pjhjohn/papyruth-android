@@ -30,6 +30,7 @@
     <!--common-->
     <string name="next">Next</string>
     <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
     <string name="pending">Pending Another Request</string>
     <string name="close">Close</string>
 
@@ -62,4 +63,6 @@
     <!--comment-->
     <string name="submit_comment_success">Succeed to register Comment</string>
     <string name="submit_comment_fail">Failed to register Comment</string>
+    <string name="dialog_title_confirm_submit">Confirm Submission</string>
+    <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
 </resources>

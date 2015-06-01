@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
@@ -150,12 +151,25 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
             .startWith(false)
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if(visible && !valid) FloatingActionControl.getInstance().hide(true);
-                else if(!visible && valid) FloatingActionControl.getInstance().show(true);
+                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
             })
         );
 
-        this.subscriptions.add(FloatingActionControl.clicks().subscribe(unused -> register()));
+        this.subscriptions.add(FloatingActionControl.clicks().subscribe(unused ->
+            new MaterialDialog.Builder(this.getActivity())
+                .title(R.string.dialog_title_confirm_submit)
+                .content(R.string.dialog_content_configm_submit)
+                .positiveText(R.string.submit)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        SignUpStep2Fragment.this.register();
+                    }
+                })
+                .show()
+        ));
         this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
 
     }
