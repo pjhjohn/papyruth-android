@@ -17,20 +17,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 /**
  * Created by mrl on 2015-04-07.
  */
-public class AuthFragment extends Fragment {
+public class AuthFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
     private ViewPagerController pagerController;
     @Override
@@ -62,11 +64,11 @@ public class AuthFragment extends Fragment {
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-    @InjectView (R.id.email) protected AutoCompleteTextView emailField;
-    @InjectView (R.id.password) protected EditText passwordField;
+    @InjectView (R.id.email) protected MaterialAutoCompleteTextView emailField;
+    @InjectView (R.id.password) protected MaterialEditText passwordField;
     @InjectView (R.id.progress) protected View progress;
-    @InjectView (R.id.submit) protected Button submit;
-    @InjectView (R.id.signup) protected Button signup;
+    @InjectView (R.id.sign_in) protected ButtonFlat submit;
+    @InjectView (R.id.sign_up) protected ButtonFlat signup;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -82,43 +84,6 @@ public class AuthFragment extends Fragment {
         super.onDestroyView();
         ButterKnife.reset(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        this.subscriptions.add(Observable.combineLatest(
-            WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
-            WidgetObservable.text(passwordField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
-            (String emailError, String passwordError) -> {
-                emailField.setError(emailError);
-                passwordField.setError(passwordError);
-                return emailError == null && passwordError == null;
-            })
-            .startWith(false)
-            .subscribe(valid -> {
-                this.submit.getBackground().setColorFilter(getResources().getColor(
-                    valid
-                    ? R.color.fg_accent
-                    : R.color.transparent
-                ), PorterDuff.Mode.MULTIPLY);
-                this.submit.setEnabled(valid);
-            })
-        );
-
-        subscriptions.add(
-            Observable.mergeDelayError(
-                ViewObservable.clicks(this.submit).map(unused -> this.submit.isEnabled()),
-                Observable.create(observer -> this.passwordField.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    observer.onNext(this.submit.isEnabled());
-                    observer.onCompleted();
-                    return !this.submit.isEnabled();
-                }))
-            )
-            .filter(trigger -> trigger)
-            .subscribe(unused -> doRequest()));
-
-        subscriptions.add(ViewObservable.clicks(this.signup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
     }
 
     private void doRequest() {
@@ -156,6 +121,43 @@ public class AuthFragment extends Fragment {
                 }
             )
         );
+    }
+
+    @Override
+    public void onPageFocused() {
+        FloatingActionControl.getInstance().clear();
+        this.subscriptions.add(Observable.combineLatest(
+            WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+            WidgetObservable.text(passwordField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+            (String emailError, String passwordError) -> {
+                emailField.setError(emailError);
+                passwordField.setError(passwordError);
+                return emailError == null && passwordError == null;
+            })
+            .startWith(false)
+            .subscribe(valid -> {
+                this.submit.getBackground().setColorFilter(getResources().getColor(
+                    valid
+                        ? R.color.fg_accent
+                        : R.color.white
+                ), PorterDuff.Mode.MULTIPLY);
+                this.submit.setEnabled(valid);
+            })
+        );
+
+        subscriptions.add(
+            Observable.mergeDelayError(
+                ViewObservable.clicks(this.submit).map(unused -> this.submit.isEnabled()),
+                Observable.create(observer -> this.passwordField.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                    observer.onNext(this.submit.isEnabled());
+                    observer.onCompleted();
+                    return !this.submit.isEnabled();
+                }))
+            )
+            .filter(trigger -> trigger)
+            .subscribe(unused -> doRequest()));
+
+        subscriptions.add(ViewObservable.clicks(this.signup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
     }
 
     private interface ProfileQuery {
