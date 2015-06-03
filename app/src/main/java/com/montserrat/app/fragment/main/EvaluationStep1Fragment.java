@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -53,6 +54,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
 
     @InjectView(R.id.query) protected EditText query;
     @InjectView(R.id.query_result) protected RecyclerView queryResult;
+    @InjectView(R.id.course_list) protected RecyclerView courseList;
+    @InjectView(R.id.query_result_outside) protected RelativeLayout resultOutside;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -75,19 +78,27 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        Candidate candidate = items.get(position);
-        EvaluationForm.getInstance().setLectureName(candidate.lecture_name);
-        EvaluationForm.getInstance().setProfessorName(candidate.professor_name);
-        if(candidate.course!=null) EvaluationForm.getInstance().setCourseId(candidate.course.id);
-        else EvaluationForm.getInstance().setCourseId(0);
+        Timber.d("view : %s %s", ((RecyclerView)view.getParent()).getId(), queryResult.getId());
 
-        ((InputMethodManager)this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if(view.getId() == queryResult.getId()) {
+            Candidate candidate = items.get(position);
+            EvaluationForm.getInstance().setLectureName(candidate.lecture_name);
+            EvaluationForm.getInstance().setProfessorName(candidate.professor_name);
+            if (candidate.course != null)
+                EvaluationForm.getInstance().setCourseId(candidate.course.id);
+            else EvaluationForm.getInstance().setCourseId(0);
 
-        if (Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2).equals(this.controller.getPreviousPage()) ||
-            Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP3).equals(this.controller.getPreviousPage())) {
-            if (this.controller.getHistoryCopy().contains(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1))) this.controller.popCurrentPage();
-            else this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
-        } else this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
+            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            if (Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2).equals(this.controller.getPreviousPage()) ||
+                    Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP3).equals(this.controller.getPreviousPage())) {
+                if (this.controller.getHistoryCopy().contains(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1)))
+                    this.controller.popCurrentPage();
+                else
+                    this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
+            } else
+                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
+        }
     }
 
     @Override
@@ -105,6 +116,33 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         if(this.getUserVisibleHint()) this.onPageFocused();
     }
 
+    private void expandResult(boolean expand){
+        Timber.d("%s", expand);
+        if(expand){
+            ViewGroup.LayoutParams param =  queryResult.getLayoutParams();
+            param.height = 1700;
+            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
+            queryResult.setLayoutParams(param);
+
+//            param =  resultOutside.getLayoutParams();
+//            param.height = this.getResources().getDisplayMetrics().heightPixels;
+//            param.width = this.getResources().getDisplayMetrics().widthPixels;
+            Timber.d("height %s %s %s", queryResult.getLayoutParams().height, queryResult.getY(), queryResult.getX());
+
+//            resultOutside.setLayoutParams(param);
+        }else{
+            ViewGroup.LayoutParams param =  queryResult.getLayoutParams();
+            param.height = 0;
+            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
+            queryResult.setLayoutParams(param);
+
+            param =  resultOutside.getLayoutParams();
+            param.height = 0;
+            param.width = this.getResources().getDisplayMetrics().widthPixels;
+
+            resultOutside.setLayoutParams(param);
+        }
+    }
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().clear();
@@ -122,6 +160,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
                     this.items.clear();
                     this.items.addAll(lectures);
                     this.adapter.notifyDataSetChanged();
+                    expandResult(true);
                 },
                 error -> {
                     if (error instanceof RetrofitError) {

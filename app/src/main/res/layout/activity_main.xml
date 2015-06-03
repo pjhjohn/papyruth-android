@@ -17,7 +17,7 @@
             android:layout_height="match_parent"/>
 
         <RelativeLayout
-            android:id="@+id/search_result_outside"
+            android:id="@+id/query_result_outside"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/translucent"

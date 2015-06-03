@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:paddingTop="?attr/actionBarSize">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/course_list"
+        android:layout_width="match_parent"
+        android:layout_height="448dp"
+        android:overScrollMode="never"
+
+        android:layout_gravity="center_horizontal|bottom" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,10 +24,19 @@
             android:singleLine="true"
             android:imeOptions="actionSearch"/>
 
+        <RelativeLayout
+            android:id="@+id/query_result_outside"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/translucent"
+            android:visibility="visible"
+            android:focusable="true"
+            android:clickable="true" />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/query_result"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
             android:overScrollMode="never"/>
     </LinearLayout>
 </FrameLayout>
