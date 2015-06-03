@@ -31,6 +31,7 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-09.
@@ -130,7 +131,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
         );
 
         this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recycler, this.toolbar, true)
-            .filter(askmoreifnull -> askmoreifnull == null)
+            .filter(askmoreifnull -> askmoreifnull == null && this.progress.getVisibility() != View.VISIBLE)
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
                 return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
