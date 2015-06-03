@@ -38,7 +38,6 @@ import timber.log.Timber;
  */
 
 public class LoadingFragment extends Fragment implements OnPageFocus {
-    /* Set PageController */
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -46,7 +45,6 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
         this.pagerController = (ViewPagerController) activity;
     }
 
-    /* Inflate Fragment View */
     @InjectView (R.id.loading_university_text) protected TextView vUnivText;
     @InjectView (R.id.loading_users_text) protected TextView vUserText;
     @InjectView (R.id.loading_evaluations_text) protected TextView vEvalText;
@@ -54,7 +52,6 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.loading_users_image) protected ImageView vUserIcon;
     @InjectView (R.id.loading_evaluations_image) protected ImageView vEvalIcon;
     private CompositeSubscription subscriptions;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_loading, container, false);
@@ -69,36 +66,8 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
-
-    private boolean timerDone = false, requestDone = false;
-    private Boolean hasAuth = null;
-
-    private Action1<StatisticsResponse> viewSubscriber = statistics -> {
-        /* Timer Done */
-        if (statistics == null) this.timerDone = true;
-        else {
-            if (statistics.university == null) {
-                this.vUnivText.setText(String.format("%d\nuniversities has", statistics.university_count));
-                this.vUserText.setText(String.format("%d\nstudents with", statistics.user_count));
-                this.vEvalText.setText(String.format("%d\nevaluations", statistics.evaluation_count));
-                this.hasAuth = false;
-            } else {
-                Picasso.with(this.getActivity()).load(statistics.university.image_url).into(this.vUnivIcon);
-                this.vUnivText.setText(String.format("%s\nhas", statistics.university.name));
-                this.vUserText.setText(String.format("%d\nstudents with", statistics.university.user_count));
-                this.vEvalText.setText(String.format("%d\nevaluations", statistics.university.evaluation_count));
-                this.hasAuth = true;
-            } this.requestDone = true;
-        }
-        if (this.timerDone&&this.requestDone) {
-            if ( hasAuth == null ) return; // TODO : make it to AuthFragment when testing is done
-            if (!hasAuth ) this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
-            else {
-                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                this.getActivity().finish();
-            }
-        }
-    };
+    private boolean timerFinished = false, responseActionFinished = false;
+    private Boolean validAuthorization = null;
 
     @Override
     public void onResume() {
@@ -109,23 +78,23 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        subscriptions.add(RetrofitApi.getInstance().user_me(User.getInstance().getAccessToken()).subscribe(
+        this.subscriptions.add(RetrofitApi.getInstance().user_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
-                subscriptions.add(RetrofitApi.getInstance().statistics(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(viewSubscriber)
+                this.subscriptions.add(RetrofitApi.getInstance().statistics(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this.actionWithStatistics)
                 );
             },
             error -> {
                 if (error instanceof RetrofitError) {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
                         case 401:
-                            subscriptions.add(RetrofitApi.getInstance().statistics()
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(viewSubscriber)
+                            this.subscriptions.add(RetrofitApi.getInstance().statistics()
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this.actionWithStatistics)
                             );
                             break;
                         default:
@@ -141,7 +110,33 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                 .map(unused -> (StatisticsResponse) null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(viewSubscriber)
+                .subscribe(actionWithStatistics)
         );
     }
+
+    private Action1<StatisticsResponse> actionWithStatistics = statistics -> {
+        if (statistics == null) this.timerFinished = true;
+        else {
+            if (statistics.university == null) {
+                this.vUnivText.setText(String.format("%d\nuniversities has", statistics.university_count));
+                this.vUserText.setText(String.format("%d\nstudents with", statistics.user_count));
+                this.vEvalText.setText(String.format("%d\nevaluations", statistics.evaluation_count));
+                this.validAuthorization = false;
+            } else {
+                Picasso.with(this.getActivity()).load(statistics.university.image_url).into(this.vUnivIcon);
+                this.vUnivText.setText(String.format("%s\nhas", statistics.university.name));
+                this.vUserText.setText(String.format("%d\nstudents with", statistics.university.user_count));
+                this.vEvalText.setText(String.format("%d\nevaluations", statistics.university.evaluation_count));
+                this.validAuthorization = true;
+            } this.responseActionFinished = true;
+        }
+        if (this.timerFinished && this.responseActionFinished) {
+            if ( validAuthorization == null ) return;
+            if (!validAuthorization) this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
+            else {
+                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+                this.getActivity().finish();
+            }
+        }
+    };
 }

@@ -13,8 +13,10 @@ import com.montserrat.app.R;
 import com.montserrat.app.adapter.UniversityAdapter;
 import com.montserrat.app.model.University;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.List;
@@ -29,7 +31,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, University> {
+public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, University> implements OnPageFocus {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -66,6 +68,11 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         super.onDestroyView();
         ButterKnife.reset(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
+
+    @Override
+    public void onPageFocused() {
+        FloatingActionControl.getInstance().clear();
     }
 
     @Override

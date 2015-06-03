@@ -42,7 +42,8 @@
     <string name="hint_name">Name</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
-    <string name="prompt_spinner">Admission Year</string>
+    <string name="entrance_prompt">Please select entrance year</string>
+    <string name="entrance_postfix"/>
     <string name="hint_lecture">Lecture Title</string>
     <string name="hint_professor">Professor Name</string>
     <string name="confirm_exit">Press again to close application</string>
@@ -65,4 +66,5 @@
     <string name="submit_comment_fail">Failed to register Comment</string>
     <string name="dialog_title_confirm_submit">Confirm Submission</string>
     <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
+    <string name="dialog_title_entrance_year">Please select your entrance year</string>
 </resources>

@@ -42,7 +42,8 @@
     <string name="hint_name">이름</string>
     <string name="gender_male">남자</string>
     <string name="gender_female">여자</string>
-    <string name="prompt_spinner">입학 년도</string>
+    <string name="entrance_prompt">입학 년도를 선택해 주세요</string>
+    <string name="entrance_postfix">  학번</string>
     <string name="hint_lecture">강좌 제목</string>
     <string name="hint_professor">교수님 성함</string>
     <string name="confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
@@ -58,11 +59,12 @@
     <string name="label_point_easiness">쉬움도</string>
     <string name="lecture_type_culture">교양</string>
     <string name="lecture_type_major">전공</string>
-    <string name="like">like</string>
+    <string name="like">좋아요</string>
 
     <!--comment-->
     <string name="submit_comment_success">댓글을 등록했습니다</string>
     <string name="submit_comment_fail">댓글 등록에 실패했습니다</string>
     <string name="dialog_title_confirm_submit">양식 제출 확인</string>
     <string name="dialog_content_configm_submit">양식을 제출하시겠습니까?</string>
+    <string name="dialog_title_entrance_year">입학 년도를 선택해주세요</string>
 </resources>

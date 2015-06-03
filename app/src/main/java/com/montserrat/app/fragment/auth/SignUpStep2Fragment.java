@@ -7,15 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
@@ -26,8 +23,8 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -57,29 +54,36 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
         this.pagerController = (ViewPagerController) activity;
     }
 
-    @InjectView (R.id.university) protected Button university;
-    @InjectView (R.id.email) protected EditText email;
-    @InjectView (R.id.password) protected EditText password;
-    @InjectView (R.id.realname) protected EditText realname;
-    @InjectView (R.id.nickname) protected EditText nickname;
+    @InjectView (R.id.email) protected MaterialEditText email;
+    @InjectView (R.id.password) protected MaterialEditText password;
+    @InjectView (R.id.realname) protected MaterialEditText realname;
+    @InjectView (R.id.nickname) protected MaterialEditText nickname;
     @InjectView (R.id.gender) protected RadioGroup genderRadioGroup;
-    @InjectView (R.id.entrance) protected Spinner entranceSpinner;
+    @InjectView (R.id.university) protected ButtonFlat university;
+    @InjectView (R.id.entrance) protected ButtonFlat entrance;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
+    private Integer entranceYear;
+    private MaterialDialog entranceYearDialog;
+    private Observable<Integer> entranceYearObservable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-
-        /* set entrance-year spinner */
-        ArrayList<Integer> list = new ArrayList<>();
-        int todayear = Calendar.getInstance().get(Calendar.YEAR);
-        for(int year = todayear; year >= AppConst.MIN_ADMISSION_YEAR; year --) list.add(year);
-        entranceSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, list));
-
+        this.entranceYear = null;
+        this.university.setRippleSpeed(50.0f);
+        this.entrance.setRippleSpeed(50.0f);
+        this.entranceYearObservable = this.buildEntranceYearDialog();
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     private void register () {
@@ -92,7 +96,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
                 this.nickname.getText().toString(),
                 ((RadioButton) this.genderRadioGroup.findViewById(genderRadioGroup.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)),
                 User.getInstance().getUniversityId(),
-                (Integer) entranceSpinner.getSelectedItem()
+                this.entranceYear
             )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -105,14 +109,15 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
                         SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
                         SignUpStep2Fragment.this.getActivity().finish();
                     } else {
-                        // TODO : Failed to Signup - Email Duplication or something...
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> {
                     this.progress.setVisibility(View.GONE);
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 403:
+                            case 400: // Invalid field or lack of required field.
+                            case 403: // Failed to SignUp
                                 Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                                 break;
                             default:
@@ -124,29 +129,29 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
         );
     }
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
-    }
+
 
     @Override
     public void onPageFocused () {
-        this.university.setText(User.getInstance().getUniversityName());
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
+        this.university.setText(User.getInstance().getUniversityName());
 
+        this.subscriptions.add(ViewObservable.clicks(this.entrance).filter(unused -> !this.entranceYearDialog.isShowing()).subscribe(unused -> this.entranceYearDialog.show()));
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
             WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
             WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
             WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
             RxValidator.createObservableRadioGroup(genderRadioGroup).map(isValidRadioButton),
-            (String emailError, String passwordError, String realnameError, String nicknameError, Boolean validRadioGroup) -> {
+            this.entranceYearObservable.startWith((Integer) null),
+            (String emailError, String passwordError, String realnameError, String nicknameError, Boolean validRadioGroup, Integer entranceYear) -> {
                 this.email.setError(emailError);
                 this.password.setError(passwordError);
                 this.realname.setError(realnameError);
                 this.nickname.setError(nicknameError);
-                return emailError == null && passwordError == null && realnameError == null && nicknameError == null && validRadioGroup != null && validRadioGroup;
+                return emailError == null && passwordError == null && realnameError == null && nicknameError == null &&
+                    validRadioGroup != null && validRadioGroup &&
+                    entranceYear != null && AppConst.MIN_ADMISSION_YEAR <= entranceYear && entranceYear <= Calendar.getInstance().get(Calendar.YEAR);
             })
             .startWith(false)
             .subscribe(valid -> {
@@ -171,6 +176,22 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
                 .show()
         ));
         this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+    }
 
+    private Observable<Integer> buildEntranceYearDialog() {
+        final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ADMISSION_YEAR + 1;
+        String[] years = new String[length];
+        for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
+        return Observable.create(observer -> this.entranceYearDialog = new MaterialDialog.Builder(this.getActivity())
+            .title(R.string.dialog_title_entrance_year)
+            .negativeText(R.string.cancel)
+            .items(years)
+            .itemsCallback((dialog, view, which, text) -> {
+                this.entrance.setText(text.toString() + getResources().getString(R.string.entrance_postfix));
+                this.entranceYear = Integer.parseInt(text.toString());
+                observer.onNext(this.entranceYear);
+            })
+            .build()
+        );
     }
 }

@@ -120,7 +120,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         Timber.d("%s", expand);
         if(expand){
             ViewGroup.LayoutParams param =  queryResult.getLayoutParams();
-            param.height = 1700;
+            param.height = 700;
             param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
             queryResult.setLayoutParams(param);
 
