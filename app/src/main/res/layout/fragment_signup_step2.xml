@@ -3,24 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
     <LinearLayout
         android:id="@+id/content_signup_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:text="@string/signup_category_account"/>
-        <com.gc.materialdesign.views.ButtonFlat
-            android:id="@+id/university"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/fg_normal"
-            android:text=""/>
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/email"
             android:layout_width="match_parent"
@@ -29,16 +20,6 @@
             android:hint="@string/hint_email"
             app:met_floatingLabel="highlight"
             app:met_floatingLabelText="@string/hint_email"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_singleLineEllipsis="true"/>
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/hint_password"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_password"
             app:met_primaryColor="@color/fg_accent"
             app:met_singleLineEllipsis="true"/>
         <com.rengwuxian.materialedittext.MaterialEditText
@@ -61,6 +42,15 @@
             app:met_floatingLabelText="@string/hint_nickname"
             app:met_primaryColor="@color/fg_accent"
             app:met_singleLineEllipsis="true"/>
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="@string/hint_password"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelText="@string/hint_password"
+            app:met_primaryColor="@color/fg_accent"/>
         <RadioGroup
             android:id="@+id/gender"
             android:layout_width="match_parent"
@@ -79,12 +69,25 @@
                 android:text="@string/gender_female"
                 android:id="@+id/radio_female"/>
         </RadioGroup>
-        <com.gc.materialdesign.views.ButtonFlat
-            android:id="@+id/entrance"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/entrance_prompt"
-            android:background="@color/fg_normal"/>
+            android:orientation="horizontal">
+            <com.gc.materialdesign.views.ButtonFlat
+                android:id="@+id/university"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:background="@color/fg_normal"
+                android:text=""/>
+            <com.gc.materialdesign.views.ButtonFlat
+                android:id="@+id/entrance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/entrance_prompt"
+                android:background="@color/fg_normal"/>
+        </LinearLayout>
     </LinearLayout>
     <include layout="@layout/progress"/>
 </FrameLayout>

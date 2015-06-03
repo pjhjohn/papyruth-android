@@ -43,6 +43,7 @@
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="entrance_prompt">Please select entrance year</string>
+    <string name="entrance_postfix"/>
     <string name="hint_lecture">Lecture Title</string>
     <string name="hint_professor">Professor Name</string>
     <string name="confirm_exit">Press again to close application</string>

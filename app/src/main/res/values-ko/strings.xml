@@ -43,6 +43,7 @@
     <string name="gender_male">남자</string>
     <string name="gender_female">여자</string>
     <string name="entrance_prompt">입학 년도를 선택해 주세요</string>
+    <string name="entrance_postfix">  학번</string>
     <string name="hint_lecture">강좌 제목</string>
     <string name="hint_professor">교수님 성함</string>
     <string name="confirm_exit">한번 더 누르면 앱이 종료됩니다</string>

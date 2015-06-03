@@ -61,13 +61,12 @@ public class AuthFragment extends Fragment implements OnPageFocus {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
-        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     @InjectView (R.id.email) protected MaterialAutoCompleteTextView emailField;
     @InjectView (R.id.password) protected MaterialEditText passwordField;
     @InjectView (R.id.progress) protected View progress;
-    @InjectView (R.id.sign_in) protected ButtonFlat submit;
+    @InjectView (R.id.sign_in) protected ButtonFlat signin;
     @InjectView (R.id.sign_up) protected ButtonFlat signup;
     private CompositeSubscription subscriptions;
 
@@ -77,6 +76,8 @@ public class AuthFragment extends Fragment implements OnPageFocus {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.initEmailAutoComplete();
+        this.signin.setRippleSpeed(50.0f);
+        this.signup.setRippleSpeed(50.0f);
         return view;
     }
     @Override
@@ -136,22 +137,18 @@ public class AuthFragment extends Fragment implements OnPageFocus {
             })
             .startWith(false)
             .subscribe(valid -> {
-                this.submit.getBackground().setColorFilter(getResources().getColor(
-                    valid
-                        ? R.color.fg_accent
-                        : R.color.white
-                ), PorterDuff.Mode.MULTIPLY);
-                this.submit.setEnabled(valid);
+                this.signin.getBackground().setColorFilter(getResources().getColor(valid? R.color.fg_accent : R.color.white), PorterDuff.Mode.MULTIPLY);
+                this.signin.setEnabled(valid);
             })
         );
 
         subscriptions.add(
             Observable.mergeDelayError(
-                ViewObservable.clicks(this.submit).map(unused -> this.submit.isEnabled()),
+                ViewObservable.clicks(this.signin).map(unused -> this.signin.isEnabled()),
                 Observable.create(observer -> this.passwordField.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    observer.onNext(this.submit.isEnabled());
+                    observer.onNext(this.signin.isEnabled());
                     observer.onCompleted();
-                    return !this.submit.isEnabled();
+                    return !this.signin.isEnabled();
                 }))
             )
             .filter(trigger -> trigger)
