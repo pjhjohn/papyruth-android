@@ -10,12 +10,12 @@
         android:layout_height="448dp"
         android:overScrollMode="never"
 
-        android:layout_gravity="center_horizontal|bottom" />
+        android:layout_gravity="center_horizontal|top" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        >
         <EditText
             android:id="@+id/query"
             android:hint="@string/hint_lecture"
@@ -28,7 +28,7 @@
             android:id="@+id/query_result_outside"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/translucent"
+            android:background="#aaaaff"
             android:visibility="visible"
             android:focusable="true"
             android:clickable="true" />
@@ -36,7 +36,7 @@
             android:id="@+id/query_result"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal|top"
             android:overScrollMode="never"/>
-    </LinearLayout>
+    </FrameLayout>
 </FrameLayout>
