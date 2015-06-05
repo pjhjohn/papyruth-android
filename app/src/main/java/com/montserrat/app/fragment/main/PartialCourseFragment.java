@@ -90,8 +90,8 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
             RetrofitApi.getInstance().search_search(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
-                Search.getInstance().getLecture_id(),
-                Search.getInstance().getProfessor_id(),
+                Search.getInstance().getLectureId(),
+                Search.getInstance().getProfessorId(),
                 Search.getInstance().getQuery())
                     .map(response -> response.courses)
                     .subscribeOn(Schedulers.io())
@@ -176,8 +176,8 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                     return RetrofitApi.getInstance().search_search(
                         User.getInstance().getAccessToken(),
                         User.getInstance().getUniversityId(),
-                        Search.getInstance().getLecture_id(),
-                        Search.getInstance().getProfessor_id(),
+                        Search.getInstance().getLectureId(),
+                        Search.getInstance().getProfessorId(),
                         Search.getInstance().getQuery());
                 })
                 .map(response -> response.courses)
@@ -216,16 +216,16 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                 })
         );
 
-        if (!Search.isInstance()){
+        if (Search.getInstance().isEmpty()) {
             getHistory();
-        }else{
-            if(Search.getInstance().getCourse() != null){
+        } else {
+            if(Search.getInstance().getCourse() != null) {
                 searchCourse(COURSE);
-            }else if(Search.getInstance().getLecture_id() != null){
+            } else if(Search.getInstance().getLectureId() != null) {
                 searchCourse(LECTURE);
-            }else if(Search.getInstance().getProfessor_id() != null){
+            } else if(Search.getInstance().getProfessorId() != null) {
                 searchCourse(PROFESSOR);
-            }else if(Search.getInstance().getQuery() != null) {
+            } else if(Search.getInstance().getQuery() != null) {
                 searchCourse(HISTORY);
             }
         }

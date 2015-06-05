@@ -6,6 +6,15 @@ import com.montserrat.app.model.PartialCourse;
  * Created by SSS on 2015-05-30.
  */
 public class Search {
+    private static Search instance = null;
+    private Search() {
+        clear();
+    }
+    public static synchronized Search getInstance() {
+        if(Search.instance == null) Search.instance = new Search();
+        return Search.instance;
+    }
+
     private String professor_name;
     private Integer professor_id;
     private String lecture_name;
@@ -13,32 +22,66 @@ public class Search {
     private PartialCourse course;
     private String query;
 
-    public String getProfessor_name() { return professor_name; }
-    public void setProfessor_name(String professor_name) { this.professor_name = professor_name; }
-    public Integer getProfessor_id() { return professor_id; }
-    public void setProfessor_id(Integer professor_id) { this.professor_id = professor_id; }
-    public String getLecture_name() { return lecture_name; }
-    public void setLecture_name(String lecture_name) { this.lecture_name = lecture_name; }
-    public Integer getLecture_id() { return lecture_id; }
-    public void setLecture_id(Integer lecture_id) { this.lecture_id = lecture_id; }
-    public PartialCourse getCourse() { return course; }
-    public void setCourse(PartialCourse course) { this.course = course; }
-    public String getQuery() { return query; }
-    public void setQuery(String query) { this.query = query; }
+    public String getProfessorName() {
+        return professor_name;
+    }
+    public Search setProfessorName(String professor_name) {
+        this.professor_name = professor_name;
+        return this;
+    }
+    public Integer getProfessorId() { return professor_id;
 
-    private static Search instance = null;
-    public static synchronized Search getInstance() {
-        if( Search.instance == null ) Search.instance = new Search();
-        return Search.instance;
+    }
+    public Search setProfessorId(Integer professor_id) {
+        this.professor_id = professor_id;
+        return this;
+    }
+    public String getLectureName() {
+        return lecture_name;
+    }
+    public Search setLectureName(String lecture_name) {
+        this.lecture_name = lecture_name;
+        return this;
+    }
+    public Integer getLectureId() {
+        return lecture_id;
+    }
+    public Search setLectureId(Integer lecture_id) {
+        this.lecture_id = lecture_id;
+        return this;
+    }
+    public PartialCourse getCourse() {
+        return course;
+    }
+    public Search setCourse(PartialCourse course) {
+        this.course = course;
+        return this;
+    }
+    public String getQuery() {
+        return query;
+    }
+    public Search setQuery(String query) {
+        this.query = query;
+        return this;
     }
 
-    public static synchronized boolean isInstance(){
-        if( Search.instance == null )
-            return false;
-        else
-            return true;
+    public Search clear(){
+        this.professor_name = null;
+        this.professor_id = null;
+        this.lecture_name = null;
+        this.lecture_id = null;
+        this.course = null;
+        this.query = null;
+        return this;
     }
-    public void clear(){
-        if( Search.instance != null) Search.instance = null;
+
+    public boolean isEmpty() {
+        return
+            this.professor_name == null &&
+            this.professor_id == null &&
+            this.lecture_name == null &&
+            this.lecture_id == null &&
+            this.course == null &&
+            this.query == null;
     }
 }
