@@ -25,8 +25,7 @@
                     android:id="@+id/loading_university_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="24sp"/>
+                    android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
@@ -42,8 +41,7 @@
                     android:id="@+id/loading_users_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="24sp"/>
+                    android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
@@ -59,8 +57,7 @@
                     android:id="@+id/loading_evaluations_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="24sp"/>
+                    android:gravity="center"/>
             </LinearLayout>
         </GridLayout>
     </LinearLayout>

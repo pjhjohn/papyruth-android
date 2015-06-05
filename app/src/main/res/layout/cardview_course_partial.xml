@@ -24,7 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:textSize="24sp"
                 android:gravity="start"/>
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -35,8 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:layout_alignParentLeft="true"
-                    android:textSize="16sp"/>
+                    android:layout_alignParentLeft="true"/>
                 <!--style="?android:ratingBarStyleIndicator"-->
                 <!--style="@style/MainRatingBar"-->
                 <RatingBar
