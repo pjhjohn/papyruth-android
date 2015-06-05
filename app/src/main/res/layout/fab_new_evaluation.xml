@@ -5,7 +5,7 @@
     android:id="@+id/fab_new_evaluation"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_new_evaluation"
+    android:src="@drawable/ic_light_new_evaluation"
     fab:fab_colorNormal="@color/fg_normal"
     fab:fab_colorPressed="@color/fg_accent"
     fab:fab_size="mini"

@@ -5,7 +5,7 @@
     android:id="@+id/fab_edit_profile"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_edit"
+    android:src="@drawable/ic_light_edit"
     fab:fab_colorNormal="@color/fg_normal"
     fab:fab_colorPressed="@color/fg_accent"
     fab:fab_size="mini"
