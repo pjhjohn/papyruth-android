@@ -9,6 +9,7 @@ import com.montserrat.app.fragment.auth.SignUpStep1Fragment;
 import com.montserrat.app.fragment.auth.SignUpStep2Fragment;
 import com.montserrat.app.fragment.main.CourseFragment;
 import com.montserrat.app.fragment.main.ProfileEditFragment;
+import com.montserrat.app.fragment.main.ProfileEditPasswordFragment;
 import com.montserrat.app.fragment.main.ProfileFragment;
 import com.montserrat.app.fragment.main.PartialCourseFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
@@ -65,6 +66,7 @@ public class FragmentFactory {
                 switch(position) {
                     case AppConst.ViewPager.Profile.PROFILE             : fragment = new ProfileFragment();         break;
                     case AppConst.ViewPager.Profile.PROFILE_EDIT        : fragment = new ProfileEditFragment();     break;
+                    case AppConst.ViewPager.Profile.PROFILE_EDIT_PASSWORD:fragment = new ProfileEditPasswordFragment(); break;
                 } break;
             case SIGNOUT :
                 switch(position) {

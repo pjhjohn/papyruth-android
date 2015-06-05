@@ -67,7 +67,7 @@ public class User {
     public void setUniversityId (Integer university_id) {
         this.university_id = university_id;
     }
-    public Integer getAdmissionYear() {
+    public Integer getEntranceYear() {
         return this.entrance_year;
     }
     public void setEntranceYear (Integer admission_year) {

@@ -1,6 +1,12 @@
 <resources>
     <string name="hint_email">이메일</string>
     <string name="hint_password">비밀번호</string>
+    <string name="hint_old_password">기존 비밀번호</string>
+    <string name="hint_new_password">새 비밀번호</string>
     <string name="hint_nickname">닉네임</string>
     <string name="hint_evaluation_body">강의평은 최소 10자이상 적어주시기 바랍니다.</string>
+    <string name="hint_realname">이름</string>
+    <string name="hint_gender">성별</string>
+    <string name="hint_university">학교</string>
+    <string name="hint_entrance">입학년도</string>
 </resources>

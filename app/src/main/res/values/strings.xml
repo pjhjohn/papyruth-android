@@ -39,7 +39,6 @@
     <string name="email_default">--NO-EMAIL-ASSIGNED--</string>
     <string name="signup_category_account">Account</string>
     <string name="signup_category_info">Additional</string>
-    <string name="hint_name">Name</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
     <string name="entrance_prompt">Please select entrance year</string>
@@ -67,4 +66,7 @@
     <string name="dialog_title_confirm_submit">Confirm Submission</string>
     <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
     <string name="dialog_title_entrance_year">Please select your entrance year</string>
+    <string name="fab_edit_password">Change Password</string>
+    <string name="fab_edit_profile">Edit Profile</string>
+    <string name="failed_passwd">Failed to change password</string>
 </resources>

@@ -1,6 +1,12 @@
 <resources>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_old_password">Current Password</string>
+    <string name="hint_new_password">New Password</string>
     <string name="hint_nickname">Enter Your Nickname!</string>
     <string name="hint_evaluation_body">Please write at least 30 letters</string>
+    <string name="hint_realname">Name</string>
+    <string name="hint_gender">Gender</string>
+    <string name="hint_university">University</string>
+    <string name="hint_entrance">Entrance Year</string>
 </resources>
