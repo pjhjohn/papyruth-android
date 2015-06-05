@@ -89,7 +89,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
     private void register () {
         this.progress.setVisibility(View.VISIBLE);
         this.subscriptions.add(
-            RetrofitApi.getInstance().user_sign_up(
+            RetrofitApi.getInstance().users_sign_up(
                 this.email.getText().toString(),
                 this.password.getText().toString(),
                 this.realname.getText().toString(),

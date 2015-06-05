@@ -87,10 +87,12 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         if(type == HISTORY){
             // TODO : (ISSUE) Shared Preferences.
         }else {
-            RetrofitApi.getInstance().search(User.getInstance().getUniversityId(),
-                    Search.getInstance().getLecture_id(),
-                    Search.getInstance().getProfessor_id(),
-                    Search.getInstance().getQuery())
+            RetrofitApi.getInstance().search_search(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                Search.getInstance().getLecture_id(),
+                Search.getInstance().getProfessor_id(),
+                Search.getInstance().getQuery())
                     .map(response -> response.courses)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -171,10 +173,12 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
             this.getRefreshObservable(this.refresh)
                 .flatMap(unused -> {
                     this.refresh.setRefreshing(true);
-                    return RetrofitApi.getInstance().search(User.getInstance().getUniversityId(),
-                            Search.getInstance().getLecture_id(),
-                            Search.getInstance().getProfessor_id(),
-                            Search.getInstance().getQuery());
+                    return RetrofitApi.getInstance().search_search(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        Search.getInstance().getLecture_id(),
+                        Search.getInstance().getProfessor_id(),
+                        Search.getInstance().getQuery());
                 })
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
@@ -197,7 +201,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                 .filter(askmoreifnull -> askmoreifnull == null)
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
-                    return RetrofitApi.getInstance().lectures(User.getInstance().getAccessToken(), null, null);
+                    return RetrofitApi.getInstance().search_search(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, "");
                 })
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())

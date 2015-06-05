@@ -15,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,7 +89,7 @@ public class AuthFragment extends Fragment implements OnPageFocus {
     private void doRequest() {
         this.progress.setVisibility(View.VISIBLE);
         this.subscriptions.add(
-            RetrofitApi.getInstance().user_sign_in(emailField.getText().toString(), passwordField.getText().toString())
+            RetrofitApi.getInstance().users_sign_in(emailField.getText().toString(), passwordField.getText().toString())
             .map(response -> {
                 User.getInstance().update(response.user, response.access_token);
                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);

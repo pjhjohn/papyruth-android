@@ -1,17 +1,17 @@
 package com.montserrat.utils.support.retrofit;
 
-import com.montserrat.app.model.Comment;
 import com.montserrat.app.model.response.CandidatesResponse;
 import com.montserrat.app.model.response.CommentResponse;
+import com.montserrat.app.model.response.CourseResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.PartialCoursesResponse;
 import com.montserrat.app.model.response.PartialEvaluationsResponse;
+import com.montserrat.app.model.response.SuccessFlag;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
 import com.montserrat.app.model.response.UserInfoResponse;
 
 import retrofit.RestAdapter;
-import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
@@ -35,92 +35,84 @@ public class RetrofitApi {
     }
 
     public interface Api {
-        @GET ("/evaluations")
+        @GET("/comments")
+        Observable<CommentResponse> comments(
+            @Header("Authorization") String authorization,
+            @Query("evaluation_id") Integer evaluation_id,
+            @Query("page") Integer page,
+            @Query("limit") Integer limit
+        );
+
+        @POST("/comments")
+        Observable<CommentResponse> comments(
+            @Header("Authorization") String authorization,
+            @Query("evaluation_id") Integer evaluation_id,
+            @Query("body") String body
+        );
+
+        @GET("/courses/{id}")
+        Observable<CourseResponse> courses (
+            @Header("Authorization") String authorization,
+            @Path("id") Integer id
+        );
+
+        @GET("/evaluations")
         Observable<PartialEvaluationsResponse> evaluations(
-            @Header ("Authorization") String authorization,
-            @Query ("university_id") Integer university_id,
-            @Query ("since_id") Integer since_id,
-            @Query ("max_id") Integer max_id,
-            @Query ("limit") Integer limit,
-            @Query ("course_id") Integer course_id
+            @Header("Authorization") String authorization,
+            @Query("university_id") Integer university_id,
+            @Query("since_id") Integer since_id,
+            @Query("max_id") Integer max_id,
+            @Query("limit") Integer limit,
+            @Query("course_id") Integer course_id
         );
 
-        @GET ("/lectures")
-        Observable<PartialCoursesResponse> lectures(
-            @Header ("Authorization") String authorization,
-            @Query ("university_id") Integer university_id,
-            @Query ("query") String query
+        @POST("/evaluations")
+        Observable<EvaluationResponse> evaluation(
+            @Header("Authorization") String authorization,
+            @Query("course_id") Integer course_id,
+            @Query("point_overall") Integer point_overall,
+            @Query("point_gpa_satisfaction") Integer point_gpa_satisfaction,
+            @Query("point_easiness") Integer point_easiness,
+            @Query("point_clarity") Integer point_clarity,
+            @Query("body") String comment
         );
 
-        @GET ("/search/autocomplete")
+        @GET("/evaluations/{id}")
+        Observable<EvaluationResponse> evaluations(
+            @Header("Authorization") String authorization,
+            @Path("id") Integer id
+        );
+
+        @GET("/info")
+        Observable<StatisticsResponse> info();
+
+        @GET("/search/autocomplete")
         Observable<CandidatesResponse> search_autocomplete(
             @Header("Authorization") String authorization,
             @Query("university_id") Integer university_id,
             @Query("query") String query
         );
 
-        @GET ("/search/search")
-        Observable<PartialCoursesResponse> search(
-                @Query("university_id") Integer university_id,
-                @Query("lecture_id") Integer lecture_id,
-                @Query("professor_id") Integer professor_id,
-                @Query("query") String query
+        @GET("/search/search")
+        Observable<PartialCoursesResponse> search_search(
+            @Header("Authorization") String authorization,
+            @Query("university_id") Integer university_id,
+            @Query("lecture_id") Integer lecture_id,
+            @Query("professor_id") Integer professor_id,
+            @Query("query") String query
         );
 
-        @GET ("/universities")
+        @GET("/universities")
         Observable<UniversitiesResponse> universities();
 
-        @GET ("/universities/{univ_id}")
-        Observable<StatisticsResponse> statistics(@Header ("Authorization") String authorization,@Path ("univ_id") Integer university_id);
-
-        @GET ("/info")
-        Observable<StatisticsResponse> statistics();
-
-        @GET ("/comments")
-        Observable<CommentResponse> comments(
-                @Header ("Authorization") String authorization,
-                @Query("evaluation_id") Integer evaluation_id,
-                @Query("page") Integer page,
-                @Query("limit") Integer limit
+        @GET("/universities/{id}")
+        Observable<StatisticsResponse> universities(
+            @Header("Authorization") String authorization,
+            @Path("id") Integer id
         );
 
-        @POST ("/comments")
-        Observable<CommentResponse> comments(
-                @Header ("Authorization") String authorization,
-                @Query("evaluation_id") Integer evaluation_id,
-                @Query("body") String body
-        );
-
-        @DELETE ("/comments/{id}")
-        Observable<Comment> comments(
-                @Header ("Authorization") String authorization,
-                @Path("id") Integer comment_id
-        );
-
-        @POST("/evaluations")
-        Observable<EvaluationResponse> evaluation(
-                @Header("Authorization") String authorization,
-                @Query("course_id") Integer course_id,
-                @Query("point_overall") Integer point_overall,
-                @Query("point_gpa_satisfaction") Integer point_gpa_satisfaction,
-                @Query("point_easiness") Integer point_easiness,
-                @Query("point_clarity") Integer point_clarity,
-                @Query("body") String comment
-        );
-
-        @POST("/users/sign_in")
-        Observable<UserInfoResponse> user_sign_in(
-            @Query("email") String email,
-            @Query("password") String password
-        );
-
-        @GET ("/users/me")
-        Observable<UserInfoResponse> user_me(
-            @Header("Authorization") String authorization
-        );
-
-        @POST ("/users/sign_up")
-        Observable<UserInfoResponse> user_sign_up(
+        @POST("/users/sign_up")
+        Observable<UserInfoResponse> users_sign_up(
             @Query("email") String email,
             @Query("password") String password,
             @Query("realname") String realname,
@@ -130,11 +122,30 @@ public class RetrofitApi {
             @Query("entrance_year") Integer entrance_year
         );
 
-        @POST ("/users/update")
-        Observable<UserInfoResponse> user_update(
+        @POST("/users/sign_in")
+        Observable<UserInfoResponse> users_sign_in(
+            @Query("email") String email,
+            @Query("password") String password
+        );
+
+        @GET("/users/me")
+        Observable<UserInfoResponse> users_me(
+            @Header("Authorization") String authorization
+        );
+
+        @POST("/users/me/passwd")
+        Observable<SuccessFlag> users_me_passwd(
             @Header("Authorization") String authorization,
-            @Query("realname") String realname,
+            @Query("old_password") String old_password,
+            @Query("new_password") String new_password
+        );
+
+        @POST("/users/me/edit")
+        Observable<UserInfoResponse> users_me_edit(
+            @Header("Authorization") String authorization,
+            @Query("email") String email,
             @Query("nickname") String nickname,
+            @Query("realname") String realname,
             @Query("is_boy") Boolean is_boy
         );
     }

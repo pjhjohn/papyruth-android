@@ -94,11 +94,12 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         if(((RecyclerView)view.getParent()).getId() == queryResult.getId()) {
             Candidate candidate = items.get(position);
             this.subscriptions.add(
-                    RetrofitApi.getInstance().search(
-                            User.getInstance().getUniversityId(),
-                            candidate.lecture_id,
-                            candidate.professor_id,
-                            null
+                    RetrofitApi.getInstance().search_search(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        candidate.lecture_id,
+                        candidate.professor_id,
+                        null
                     )
                     .map(response -> response.courses)
                     .subscribeOn(Schedulers.io())

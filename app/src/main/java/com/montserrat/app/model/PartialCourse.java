@@ -1,5 +1,7 @@
 package com.montserrat.app.model;
 
+import java.util.List;
+
 /**
  * Created by pjhjohn on 2015-05-03.
  */
@@ -20,6 +22,5 @@ public class PartialCourse {
     public Integer point_clarity;
     public String created_at;
     public String updated_at;
-
-
+    public List<String> tag;
 }

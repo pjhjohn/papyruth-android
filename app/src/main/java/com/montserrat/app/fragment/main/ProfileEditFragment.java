@@ -99,8 +99,9 @@ public class ProfileEditFragment extends Fragment implements OnPageFocus {
             .clicks()
             .observeOn(Schedulers.io())
             .flatMap(unused ->
-                RetrofitApi.getInstance().user_update(
+                RetrofitApi.getInstance().users_me_edit(
                     User.getInstance().getAccessToken(),
+                    this.email.getText().toString(),
                     this.realname.getText().toString(),
                     this.nickname.getText().toString(),
                     ((RadioButton) this.gender.findViewById(gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male))

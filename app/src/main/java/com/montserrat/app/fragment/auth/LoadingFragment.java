@@ -78,10 +78,10 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        this.subscriptions.add(RetrofitApi.getInstance().user_me(User.getInstance().getAccessToken()).subscribe(
+        this.subscriptions.add(RetrofitApi.getInstance().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
-                this.subscriptions.add(RetrofitApi.getInstance().statistics(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
+                this.subscriptions.add(RetrofitApi.getInstance().universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this.actionWithStatistics)
@@ -91,7 +91,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                 if (error instanceof RetrofitError) {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
                         case 401:
-                            this.subscriptions.add(RetrofitApi.getInstance().statistics()
+                            this.subscriptions.add(RetrofitApi.getInstance().info()
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(this.actionWithStatistics)
