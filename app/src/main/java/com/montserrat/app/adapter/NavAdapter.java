@@ -1,5 +1,7 @@
 package com.montserrat.app.adapter;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,9 @@ import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.model.Category;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -25,13 +29,12 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
         public static final int CATEGORY = 1;
     }
-    public static NavAdapter newInstance(List<Category> initItemList, RecyclerViewClickListener listener) {
-        return new NavAdapter(initItemList, listener);
-    }
 
     private static RecyclerViewClickListener itemListener;
     private List<Category> items;
-    private NavAdapter (List<Category> initItemList, RecyclerViewClickListener listener) {
+    private Context context;
+    public NavAdapter (Context context, List<Category> initItemList, RecyclerViewClickListener listener) {
+        this.context = context;
         this.items = initItemList;
         NavAdapter.itemListener = listener;
     }
@@ -60,19 +63,21 @@ public class NavAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return Type.CATEGORY;
     }
 
-    public static class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @InjectView(R.id.nav_item_icon) protected ImageView icon;
         @InjectView(R.id.nav_item_text) protected TextView category;
-        @InjectView(R.id.nav_item_icon) protected ImageView category_image;
 
+        private int filter;
         public CategoryHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);
             parent.setOnClickListener(this);
+            filter = NavAdapter.this.context.getResources().getColor(R.color.nav_filter);
         }
 
         public void bind(Category category) {
+            Picasso.with(NavAdapter.this.context).load(category.imgResId).transform(new ColorFilterTransformation(this.filter)).into(this.icon);
             this.category.setText(category.name);
-            this.category_image.setImageDrawable(this.category_image.getResources().getDrawable(category.imgResId));
         }
 
         @Override

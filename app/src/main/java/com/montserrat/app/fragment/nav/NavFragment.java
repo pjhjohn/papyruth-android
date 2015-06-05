@@ -4,6 +4,7 @@ package com.montserrat.app.fragment.nav;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.res.Configuration;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -26,6 +27,9 @@ import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class NavFragment extends Fragment implements RecyclerViewClickListener{
     private int iActiveCategory;
     private OnCategoryClickListener callback;
@@ -35,22 +39,6 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
     private RecyclerView recyclerView;
     private NavAdapter adapter;
     private List<Category> items;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        /* Initially, with no SharedPreference used, set drawer initial index to ZERO */
-        /*
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        this.isUserLeardedNav = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
-        if (savedInstanceState != null) {
-            this.currentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            this.fromSavedInstanceState = true;
-        }
-        */
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -83,11 +71,16 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         public static final int SIGNOUT = 6;
     }
 
+    @InjectView(R.id.subtitle_nickname) protected TextView subtitle_nickname;
+    @InjectView(R.id.subtitle_email) protected TextView subtitle_email;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nav, container, false);
+        ButterKnife.inject(this, view);
         /* views */
-        ((TextView) view.findViewById(R.id.user_email)).setText(User.getInstance().getEmail() == null ? this.getResources().getString(R.string.email_default) : User.getInstance().getEmail());
+        this.subtitle_nickname.setText(User.getInstance().getNickname());
+        this.subtitle_nickname.setPaintFlags(this.subtitle_nickname.getPaintFlags()|Paint.FAKE_BOLD_TEXT_FLAG);
+        this.subtitle_email.setText(User.getInstance().getEmail());
 
         /* items */
         this.items = new ArrayList<>();
@@ -100,7 +93,7 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.items.add(new Category(this.getString(R.string.nav_item_signout), R.drawable.ic_light_signout));
 
         /* adapter */
-        this.adapter = NavAdapter.newInstance(this.items, this);
+        this.adapter = new NavAdapter(this.getActivity(), this.items, this);
 
         /* recyclerview */
         this.recyclerView = (RecyclerView) view.findViewById(R.id.nav_recyclerview);

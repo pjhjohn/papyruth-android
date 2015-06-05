@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent">
-<LinearLayout
-    android:id="@+id/itemLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="48dp"
-    android:background="?android:attr/activatedBackgroundIndicator"
-    android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-        <ImageView
-            android:id="@+id/nav_item_icon"
-            android:layout_marginRight="16dp"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical">
-        </ImageView>
-        <TextView
-            android:id="@+id/nav_item_text"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceLarge">
-        </TextView>
-    </LinearLayout>
-</LinearLayout>
-</RelativeLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_height_item">
+    <ImageView
+        android:id="@+id/nav_item_icon"
+        android:layout_width="@dimen/nav_icon_length"
+        android:layout_height="@dimen/nav_icon_length"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/nav_horizontal_keyline_icon"
+        android:layout_marginLeft="@dimen/nav_horizontal_keyline_icon"/>
+    <TextView
+        android:id="@+id/nav_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/nav_horizontal_keyline_text"
+        android:layout_marginLeft="@dimen/nav_horizontal_keyline_text"/>
+</FrameLayout>

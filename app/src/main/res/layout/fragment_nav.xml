@@ -2,22 +2,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/bg_normal">
+    android:background="@color/white">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:background="@drawable/nav_dummy">
-        <TextView
-            android:id="@+id/user_email"
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:textSize="24sp"
-            android:layout_gravity="bottom|left"/>
+            android:layout_height="@dimen/nav_height_subtitle"
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingLeft="@dimen/nav_horizontal_space"
+            android:paddingRight="@dimen/nav_horizontal_space"
+            android:layout_marginBottom="@dimen/nav_height_between_content_area">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/subtitle_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/subtitle_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </FrameLayout>
     </FrameLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/nav_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none"/>
+        android:paddingTop="@dimen/nav_height_between_content_area"
+        android:overScrollMode="never"/>
 </LinearLayout>
