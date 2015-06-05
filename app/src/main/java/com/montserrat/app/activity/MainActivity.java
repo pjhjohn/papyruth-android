@@ -53,7 +53,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private CompositeSubscription subscriptions;
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
-    @InjectView(R.id.search_result_outside) protected View outsideResult;
+    @InjectView(R.id.query_result_outside) protected View outsideResult;
 
     private AutoCompleteAdapter adapter;
     private List<Candidate> candidates;
