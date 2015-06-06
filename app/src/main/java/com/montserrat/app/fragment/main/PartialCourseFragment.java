@@ -37,7 +37,6 @@ import timber.log.Timber;
 
 public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements OnPageFocus {
     private ViewPagerContainerController controller;
-    private NavFragment.OnCategoryClickListener callback;
 
     private final int COURSE = 0;
     private final int LECTURE = 1;
@@ -48,7 +47,6 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.controller = (ViewPagerContainerController) activity;
-        this.callback = (NavFragment.OnCategoryClickListener) activity;
     }
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
@@ -166,7 +164,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_new_evaluation)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(unused -> this.callback.onCategorySelected(NavFragment.CategoryType.EVALUATION))
+            .subscribe(unused -> this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1), true))
         );
 
         this.subscriptions.add(
