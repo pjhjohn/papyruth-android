@@ -8,19 +8,18 @@ import com.montserrat.app.model.UserInfo;
  */
 public class User {
     private static User instance = null;
-
     public static synchronized User getInstance () {
         if ( User.instance == null ) User.instance = new User();
         return User.instance;
     }
 
-    private String access_token;
-    private String realname;
-    private String nickname;
-    private String email;
+    private String  access_token;
+    private String  realname;
+    private String  nickname;
+    private String  email;
     private Boolean is_boy;
     private Integer university_id;
-    private String university_name;
+    private String  university_name;
     private Integer entrance_year;
 
     private User () {
@@ -28,13 +27,14 @@ public class User {
     }
 
     public void clear() {
-        this.access_token  = null;
-        this.realname      = null;
-        this.nickname      = null;
-        this.email         = null;
-        this.is_boy        = null;
-        this.university_id = null;
-        this.entrance_year = null;
+        this.access_token    = null;
+        this.realname        = null;
+        this.nickname        = null;
+        this.email           = null;
+        this.is_boy          = null;
+        this.university_id   = null;
+        this.university_name = null;
+        this.entrance_year   = null;
     }
 
     public String getAccessToken () {
@@ -67,6 +67,12 @@ public class User {
     public void setUniversityId (Integer university_id) {
         this.university_id = university_id;
     }
+    public String getUniversityName () {
+        return this.university_name;
+    }
+    public void setUniversityName(String university_name) {
+        this.university_name = university_name;
+    }
     public Integer getEntranceYear() {
         return this.entrance_year;
     }
@@ -79,12 +85,6 @@ public class User {
     public void setGenderIsBoy (boolean is_boy) {
         this.is_boy = is_boy;
     }
-    public void setUniversityName(String university_name) {
-        this.university_name = university_name;
-    }
-    public String getUniversityName () {
-        return this.university_name;
-    }
 
     public void update(UserInfo user) {
         this.update(user, null);
@@ -94,13 +94,14 @@ public class User {
         if(user.realname != null) this.setRealname(user.realname);
         if(user.nickname != null) this.setNickName(user.nickname);
         if(user.is_boy != null) this.setGenderIsBoy(user.is_boy);
-        if(user.university_id!=null) this.setUniversityId(user.university_id);
-        if(user.entrance_year!=null) this.setEntranceYear(user.entrance_year);
+        if(user.university_id != null) this.setUniversityId(user.university_id);
+        if(user.entrance_year != null) this.setEntranceYear(user.entrance_year);
+        if(user.university_name != null) this.setUniversityName(user.university_name);
         if(access_token!=null) this.setAccessToken(access_token);
     }
 
     @Override
     public String toString() {
-        return String.format("<access_token : %s>\n <realname : %s>\n <nickname : %s>\n <email : %s>\n <university_id : %d>\n <entrance_year : %d>\n <is_boy : %b>\n", this.access_token, this.realname, this.nickname, this.email, this.university_id, this.entrance_year, this.is_boy);
+        return String.format("[%s][%s][%s][%s][%d][%s][%d][%s]", this.access_token, this.realname, this.nickname, this.email, this.university_id, this.university_name, this.entrance_year, this.is_boy? "male" : "female");
     }
 }
