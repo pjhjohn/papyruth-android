@@ -27,6 +27,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.FloatingActionControlContainer;
+import com.montserrat.utils.view.Search.AutoCompletableSearchView;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.Page;
@@ -57,6 +58,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     private AutoCompleteAdapter adapter;
     private List<Candidate> candidates;
+    private AutoCompletableSearchView autoCompletableSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +78,12 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.container.setCurrentPage(Page.at(AppConst.ViewPager.Type.HOME, AppConst.ViewPager.Home.HOME), false);
 
         this.subscriptions = new CompositeSubscription();
+        this.candidates = new ArrayList<>();
 
-        candidates = new ArrayList<>();
-        adapter = new AutoCompleteAdapter(candidates, this);
-        this.searchResult.setLayoutManager(new LinearLayoutManager(this));
-        this.searchResult.setAdapter(this.adapter);
+        this.autoCompletableSearchView = new AutoCompletableSearchView(this, this);
+        autoCompletableSearchView.autoCompleteSetup(searchResult, outsideResult);
+
         viewpager.setOnFocusChangeListener(this);
-        outsideResult.setOnFocusChangeListener(this);
-        outsideResult.setOnClickListener(this);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     @Override
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
-        expandResult(false);
+        autoCompletableSearchView.expandResult(false);
         this.onCategorySelected(NavFragment.CategoryType.SEARCH);
         return false;
 
@@ -205,10 +205,11 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     results -> {
-                        candidates.clear();
-                        candidates.addAll(results);
-                        adapter.notifyDataSetChanged();
-                        expandResult(true);
+//                        candidates.clear();
+//                        candidates.addAll(results);
+//                        adapter.notifyDataSetChanged();
+                        this.autoCompletableSearchView.notifyAutocompleteChanged(results);
+                        autoCompletableSearchView.expandResult(true);
 
                     },
                     error -> {
@@ -220,31 +221,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         return false;
     }
 
-    private void expandResult(boolean expand){
-        if(expand){
-            ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
-            param.height = 250;
-            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
-            searchResult.setLayoutParams(param);
-
-            param =  outsideResult.getLayoutParams();
-            param.height = this.getResources().getDisplayMetrics().heightPixels;
-            param.width = this.getResources().getDisplayMetrics().widthPixels;
-
-            outsideResult.setLayoutParams(param);
-        }else{
-            ViewGroup.LayoutParams param =  searchResult.getLayoutParams();
-            param.height = 0;
-            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
-            searchResult.setLayoutParams(param);
-
-            param =  outsideResult.getLayoutParams();
-            param.height = 0;
-            param.width = this.getResources().getDisplayMetrics().widthPixels;
-
-            outsideResult.setLayoutParams(param);
-        }
-    }
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
@@ -256,17 +232,8 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
             .setLectureName(item.lecture_name)
             .setProfessorId(item.professor_id)
             .setProfessorName(item.professor_name);
-        expandResult(false);
+        autoCompletableSearchView.expandResult(false);
         this.onCategorySelected(NavFragment.CategoryType.SEARCH);
-    }
-
-    private List<Candidate> sampleData(){
-        List<Candidate> list = new ArrayList<>();
-        list.add(new Candidate("math", 1, null, null, null));
-        list.add(new Candidate(null, null, "prof", 2, null));
-        list.add(new Candidate("math", 1, null, null, null));
-        list.add(new Candidate(null, null, "prof", 2, null));
-        return list;
     }
 
     private boolean terminate = false;
@@ -286,7 +253,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public void onFocusChange(View v, boolean hasFocus) {
         Timber.d("expand3 : %s?%s", v.getClass().toString(), hasFocus);
         if(v == searchView) {
-            expandResult(false);
+            autoCompletableSearchView.expandResult(false);
         }else if(v == searchResult){
 
         }
@@ -294,6 +261,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     @Override
     public void onClick(View v) {
-        expandResult(false);
+        autoCompletableSearchView.expandResult(false);
     }
 }
