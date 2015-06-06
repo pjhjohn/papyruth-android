@@ -1,7 +1,10 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialCourseAdapter;
@@ -128,6 +132,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     @Override
     public void recyclerViewListClicked (View view, int position) {
         setup(position);
+        getHistory();
         this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.COURSE), true);
 
     }
@@ -153,6 +158,13 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public List<PartialCourse> getHistory(){
         Timber.d("getHistory");
         // TODO : implement it!
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
+
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson data = new Gson();
+        String json = data.toJson(items.get(0));
+        Timber.d("json : %s", json);
+
         return null;
     }
     public boolean addHistory(PartialCourse item){
@@ -217,7 +229,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         );
 
         if (Search.getInstance().isEmpty()) {
-            getHistory();
+//            getHistory();
         } else {
             if(Search.getInstance().getCourse() != null) {
                 searchCourse(COURSE);
