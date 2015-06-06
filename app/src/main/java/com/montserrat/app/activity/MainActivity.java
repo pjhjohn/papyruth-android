@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
@@ -36,19 +37,24 @@ import com.montserrat.utils.view.viewpager.Page;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerManager;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
+import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerContainerController, RecyclerViewClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerContainerController, RecyclerViewClickListener, View.OnFocusChangeListener, View.OnClickListener {
     private NavFragment drawer;
     private FlexibleViewPager viewpager;
     private ViewPagerContainerManager container;
@@ -109,6 +115,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     private MenuItem searchitem;
     private SearchView searchView;
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = this.getMenuInflater();
@@ -124,7 +131,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
                 searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             }
             searchView.setIconifiedByDefault(true);
-            searchView.setOnQueryTextListener(this);
+//            searchView.setOnQueryTextListener(this);
         }
 //        this.searchitem.setOnMenuItemClickListener(this);
         searchitem.collapseActionView();
@@ -186,37 +193,10 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     //searchview Listener
 
-    @Override
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
         autoCompletableSearchView.expandResult(false);
         this.onCategorySelected(NavFragment.CategoryType.SEARCH);
-        return false;
-
-    }
-
-    // for text auto-completion
-    @Override
-    public boolean onQueryTextChange(String query) {
-        subscriptions.add(
-            RetrofitApi.getInstance().search_autocomplete(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), query)
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .map(response -> response.candidates)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    results -> {
-                        this.autoCompletableSearchView.notifyAutocompleteChanged(results);
-                        autoCompletableSearchView.expandResult(true);
-
-                    },
-                    error -> {
-                        candidates.clear();
-                    }
-                )
-        );
-
         return false;
     }
 
@@ -248,6 +228,31 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         }else if(v == searchResult){
 
         }
+        this.subscriptions.add(WidgetObservable
+                .text((TextView)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text))
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map(listener -> listener.text().toString())
+                .flatMap(query -> RetrofitApi.getInstance().search_autocomplete(
+                                User.getInstance().getAccessToken(),
+                                User.getInstance().getUniversityId(),
+                                query
+                        )
+                )
+                .map(response -> response.candidates)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        results -> {
+                            this.autoCompletableSearchView.notifyAutocompleteChanged(results);
+                            autoCompletableSearchView.expandResult(true);
+                        },
+                        error -> {
+                            candidates.clear();
+                        }
+                )
+
+        );
     }
 
     @Override
