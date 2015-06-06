@@ -10,6 +10,7 @@ public class UserInfo {
     public Boolean confirmed;
     public String realname;
     public String nickname;
+    public String university_name;
     public String email;
     public Integer entrance_year;
 

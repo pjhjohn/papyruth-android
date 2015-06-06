@@ -6,7 +6,7 @@ import com.montserrat.app.model.response.CourseResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.PartialCoursesResponse;
 import com.montserrat.app.model.response.PartialEvaluationsResponse;
-import com.montserrat.app.model.response.SuccessFlag;
+import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
 import com.montserrat.app.model.response.UserInfoResponse;
@@ -134,7 +134,7 @@ public class RetrofitApi {
         );
 
         @POST("/users/me/passwd")
-        Observable<SuccessFlag> users_me_passwd(
+        Observable<SimpleResponse> users_me_passwd(
             @Header("Authorization") String authorization,
             @Query("old_password") String old_password,
             @Query("new_password") String new_password
