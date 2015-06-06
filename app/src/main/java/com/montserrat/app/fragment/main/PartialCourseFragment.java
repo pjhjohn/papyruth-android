@@ -150,7 +150,6 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         Course.getInstance().setPointEasiness(item.point_easiness);
         Course.getInstance().setPointClarity(item.point_clarity);
         Course.getInstance().setPointGpaSatisfaction(item.point_gpa_satisfaction);
-
     }
 
     public List<PartialCourse> getHistory(){
@@ -195,7 +194,6 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lectures -> {
                     this.refresh.setRefreshing(false);
-
                     this.items.clear();
                     this.items.addAll(lectures);
                     this.adapter.notifyDataSetChanged();

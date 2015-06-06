@@ -1,20 +1,27 @@
 package com.montserrat.utils.view.Search;
 
 import android.content.Context;
+import android.hardware.input.InputManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.unique.Search;
+import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -78,6 +85,14 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     @Override
     public void recyclerViewListClicked(View view, int position) {
 
+        Candidate item = candidates.get(position);
+        Search.getInstance().clear()
+            .setCourse(item.course)
+            .setLectureId(item.lecture_id)
+            .setLectureName(item.lecture_name)
+            .setProfessorId(item.professor_id)
+            .setProfessorName(item.professor_name);
+        this.expandResult(false);
     }
 
     public void expandResult(boolean expand){
@@ -105,8 +120,5 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
             outsideView.setLayoutParams(param);
         }
     }
-    //NEED
-    //layoutmanager
-    //setAdapter
 
 }

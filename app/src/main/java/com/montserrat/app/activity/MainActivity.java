@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
+import com.montserrat.app.fragment.FragmentFactory;
+import com.montserrat.app.fragment.main.PartialCourseFragment;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.unique.Search;
@@ -205,9 +207,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     results -> {
-//                        candidates.clear();
-//                        candidates.addAll(results);
-//                        adapter.notifyDataSetChanged();
                         this.autoCompletableSearchView.notifyAutocompleteChanged(results);
                         autoCompletableSearchView.expandResult(true);
 
@@ -221,19 +220,11 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         return false;
     }
 
-
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        Candidate item = candidates.get(position);
-        Timber.d("search_autocomplete : %s", position);
-        Search.getInstance().clear()
-            .setCourse(item.course)
-            .setLectureId(item.lecture_id)
-            .setLectureName(item.lecture_name)
-            .setProfessorId(item.professor_id)
-            .setProfessorName(item.professor_name);
-        autoCompletableSearchView.expandResult(false);
-        this.onCategorySelected(NavFragment.CategoryType.SEARCH);
+        this.autoCompletableSearchView.recyclerViewListClicked(view, position);
+        if(!this.container.getCurrentPage().equals(AppConst.ViewPager.Type.SEARCH))
+            this.onCategorySelected(NavFragment.CategoryType.SEARCH);
     }
 
     private boolean terminate = false;

@@ -34,6 +34,7 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
         this.container = new HashMap<>();
         this.clear();
     }
+
     public void clear() {
         Timber.d("Clear");
         this.current = null;
@@ -41,6 +42,10 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
         this.history = new Stack<>();
         this.currentCategory = null;
         this.addToBackStack = true;
+    }
+
+    public Page getCurrentPage(){
+        return this.current;
     }
 
     public ViewPagerManager activate(Type category, boolean clear) {
