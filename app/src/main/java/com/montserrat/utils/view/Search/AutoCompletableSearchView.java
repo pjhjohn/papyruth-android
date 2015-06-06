@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.PartialCourseAdapter;
@@ -19,8 +20,15 @@ import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
+import rx.android.widget.WidgetObservable;
+import rx.functions.Action0;
+import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -77,9 +85,52 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
         this.partialCourseAdapter.notifyDataSetChanged();
     }
 
+    public Subscription autoComplete(TextView textView){
+        return WidgetObservable
+                        .text(textView)
+                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .map(listener -> listener.text().toString())
+                        .flatMap(query -> {
+                                    if (query.length() < 1) {
+                                        return null;    // history
+                                    }
+                                    return RetrofitApi.getInstance().search_autocomplete(
+                                            User.getInstance().getAccessToken(),
+                                            User.getInstance().getUniversityId(),
+                                            query
+                                    );
+                                }
+                        )
+                        .map(response -> response.candidates)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                results -> {
+                                    this.notifyAutocompleteChanged(results);
+                                    expandResult(true);
+                                },
+                                error -> {
+                                    candidates.clear();
+                                }
+                        );
+    }
+
+    public Subscription submit(View view, String query){
+        return ViewObservable
+                        .clicks(view)
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .map(click -> query)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> Timber.d("submit query : %s", result),
+                                error -> Timber.d("submit error : %s", error)
+                        );
+    }
+
     @Override
     public void onClick(View v) {
-        Timber.d("click!!");
+        expandResult(false);
     }
 
     @Override

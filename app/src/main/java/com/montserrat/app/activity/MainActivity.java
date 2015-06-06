@@ -10,11 +10,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +59,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerContainerController, RecyclerViewClickListener, View.OnFocusChangeListener, View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerContainerController, RecyclerViewClickListener, View.OnFocusChangeListener {
     private NavFragment drawer;
     private FlexibleViewPager viewpager;
     private ViewPagerContainerManager container;
@@ -131,7 +136,16 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
                 searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             }
             searchView.setIconifiedByDefault(true);
-//            searchView.setOnQueryTextListener(this);
+            ((EditText)searchView.findViewById(R.id.search_src_text)).setOnEditorActionListener(
+                    (v, actionId, event) -> {
+                        if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                                onQueryTextSubmit(searchView.getQuery().toString());
+                                return true;
+                            }
+                            return false;
+                    }
+            );
+
         }
 //        this.searchitem.setOnMenuItemClickListener(this);
         searchitem.collapseActionView();
@@ -195,7 +209,11 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
-        autoCompletableSearchView.expandResult(false);
+        Timber.d("submit query2 : %s", query);
+//        ((EditText)searchView.findViewById(R.id.search_src_text)).focus
+        searchView.clearFocus();
+        searchResult.clearFocus();
+        this.autoCompletableSearchView.expandResult(false);
         this.onCategorySelected(NavFragment.CategoryType.SEARCH);
         return false;
     }
@@ -228,35 +246,11 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         }else if(v == searchResult){
 
         }
-        this.subscriptions.add(WidgetObservable
-                .text((TextView)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text))
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .map(listener -> listener.text().toString())
-                .flatMap(query -> RetrofitApi.getInstance().search_autocomplete(
-                                User.getInstance().getAccessToken(),
-                                User.getInstance().getUniversityId(),
-                                query
-                        )
+        this.subscriptions.add(
+                this.autoCompletableSearchView.autoComplete(
+                        (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)
                 )
-                .map(response -> response.candidates)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        results -> {
-                            this.autoCompletableSearchView.notifyAutocompleteChanged(results);
-                            autoCompletableSearchView.expandResult(true);
-                        },
-                        error -> {
-                            candidates.clear();
-                        }
-                )
-
         );
     }
 
-    @Override
-    public void onClick(View v) {
-        autoCompletableSearchView.expandResult(false);
-    }
 }
