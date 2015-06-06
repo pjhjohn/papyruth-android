@@ -71,13 +71,14 @@ public class ProfileEditPasswordFragment extends Fragment implements OnPageFocus
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         this.subscriptions.add(Observable.combineLatest(
-            WidgetObservable.text(this.old_password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).startWith("").map(RxValidator.getErrorMessagePassword),
-            WidgetObservable.text(this.old_password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).startWith("").map(RxValidator.getErrorMessagePassword),
+            WidgetObservable.text(this.old_password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+            WidgetObservable.text(this.old_password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
             (String oldPasswordError, String newPasswordError) -> {
                 this.old_password.setError(oldPasswordError);
                 this.new_password.setError(newPasswordError);
                 return oldPasswordError == null && newPasswordError == null;
             })
+            .startWith(false)
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.getInstance().hide(true);
