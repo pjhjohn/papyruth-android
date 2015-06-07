@@ -30,8 +30,23 @@ public class Course {
         if( Course.instance == null ) Course.instance = new Course();
         return Course.instance;
     }
-    public void clear(){
-        if( Course.instance != null) Course.instance = null;
+    public Course clear(){
+        this.id = null;
+        this.unit = null;
+        this.code = null;
+        this.universityId = null;
+        this.name = null;
+        this.professor = null;
+        this.professorId = null;
+        this.lectureId = null;
+        this.pointOverall = null;
+        this.pointGpaSatisfaction = null;
+        this.pointEasiness = null;
+        this.pointClarity = null;
+        this.evaluation_count = null;
+        this.date = null;
+        this.tags = null;
+        return this;
     }
 
     @Override
@@ -74,19 +89,78 @@ public class Course {
     public Integer getEvaluation_count() { return evaluation_count; }
     public String getDate() { return date; }
 
-    public void setPointClarity(Integer pointClarity) { this.pointClarity = pointClarity; }
-    public void setPointOverall(Integer pointOverall) { this.pointOverall = pointOverall; }
-    public void setPointGpaSatisfaction(Integer pointGpaSatisfaction) { this.pointGpaSatisfaction = pointGpaSatisfaction; }
-    public void setPointEasiness(Integer pointEasiness) { this.pointEasiness = pointEasiness; }
-    public void setId(Integer id) { this.id = id; }
-    public void setUnit(Integer unit) { this.unit = unit; }
-    public void setCode(String code) { this.code = code; }
-    public void setUniversityId(Integer universityId) { this.universityId = universityId; }
-    public void setName(String name) { this.name = name; }
-    public void setProfessor(String professor) { this.professor = professor; }
-    public void setLectureId(Integer lectureId) { this.lectureId = lectureId; }
-    public void setProfessorId(Integer professorId) { this.professorId = professorId; }
-    public void setTags(List<String> tags) { this.tags = tags; }
-    public void setEvaluation_count(Integer evaluation_count) { this.evaluation_count = evaluation_count; }
-    public void setDate(String date) { this.date = date; }
+    public Course setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public Course setUnit(Integer unit) {
+        this.unit = unit;
+        return this;
+    }
+
+    public Course setCode(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public Course setUniversityId(Integer universityId) {
+        this.universityId = universityId;
+        return this;
+    }
+
+    public Course setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Course setProfessor(String professor) {
+        this.professor = professor;
+        return this;
+    }
+
+    public Course setProfessorId(Integer professorId) {
+        this.professorId = professorId;
+        return this;
+    }
+
+    public Course setLectureId(Integer lectureId) {
+        this.lectureId = lectureId;
+        return this;
+    }
+
+    public Course setPointOverall(Integer pointOverall) {
+        this.pointOverall = pointOverall;
+        return this;
+    }
+
+    public Course setPointGpaSatisfaction(Integer pointGpaSatisfaction) {
+        this.pointGpaSatisfaction = pointGpaSatisfaction;
+        return this;
+    }
+
+    public Course setPointEasiness(Integer pointEasiness) {
+        this.pointEasiness = pointEasiness;
+        return this;
+    }
+
+    public Course setPointClarity(Integer pointClarity) {
+        this.pointClarity = pointClarity;
+        return this;
+    }
+
+    public Course setEvaluation_count(Integer evaluation_count) {
+        this.evaluation_count = evaluation_count;
+        return this;
+    }
+
+    public Course setDate(String date) {
+        this.date = date;
+        return this;
+    }
+
+    public Course setTags(List<String> tags) {
+        this.tags = tags;
+        return this;
+    }
 }
