@@ -1,9 +1,9 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,18 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialCourseAdapter;
-import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.Search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.Page;
@@ -58,6 +59,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     @InjectView(R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
+    private AutoCompletableSearchView search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +69,9 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
         this.refresh.setEnabled(true);
+        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext());
+        this.search.courseSetup(this.recycler);
+        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         this.setupRecyclerView(this.recycler);
 
@@ -99,10 +104,8 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(courses -> {
-                        Timber.d("Search result : %s", courses);
-                        this.items.clear();
-                        this.items.addAll(courses);
-                        this.adapter.notifyDataSetChanged();
+                        Timber.d("Search : %s", courses);
+                        this.search.notifycourseChanged(courses);
                     },error -> {
                         Timber.d("Search error : %s", error);
                     });
@@ -130,26 +133,15 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     @Override
     public void recyclerViewListClicked (View view, int position) {
         setup(position);
-        getHistory();
+        this.search.recyclerViewListClicked(view, position);
+//        getHistory();
         this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.COURSE), true);
-
     }
 
     public void setup(int position){
         PartialCourse item = items.get(position);
         Course.getInstance().clear();
-        Course.getInstance().setId(item.id);
-        Course.getInstance().setName(item.name);
-        Course.getInstance().setCode(item.code);
-        Course.getInstance().setProfessor(item.professor_name);
-        Course.getInstance().setProfessorId(item.professor_id);
-        Course.getInstance().setLectureId(item.lecture_id);
-        Course.getInstance().setUniversityId(User.getInstance().getUniversityId());
-        Course.getInstance().setUnit(item.unit);
-        Course.getInstance().setPointOverall(item.point_overall);
-        Course.getInstance().setPointEasiness(item.point_easiness);
-        Course.getInstance().setPointClarity(item.point_clarity);
-        Course.getInstance().setPointGpaSatisfaction(item.point_gpa_satisfaction);
+        Course.getInstance().fromPartailCourse(item);
     }
 
     public List<PartialCourse> getHistory(){

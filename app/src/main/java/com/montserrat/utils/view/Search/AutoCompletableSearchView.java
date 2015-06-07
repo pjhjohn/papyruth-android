@@ -1,12 +1,10 @@
 package com.montserrat.utils.view.Search;
 
 import android.content.Context;
-import android.hardware.input.InputManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.montserrat.app.adapter.AutoCompleteAdapter;
@@ -22,16 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
-import rx.functions.Action0;
-import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-06-06.
@@ -47,6 +40,10 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     private AutoCompleteAdapter autoCompleteAdapter;
     private RecyclerViewClickListener itemListener;
     private Context context;
+
+    public enum Type{
+        TOOLBAR, SEARCH
+    }
 
     public AutoCompletableSearchView(RecyclerViewClickListener listener, Context context){
         this.courses = new ArrayList<>();
@@ -71,8 +68,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
         this.autoCompleteAdapter.notifyDataSetChanged();
     }
 
-    public void courseSetup(List<PartialCourse> courses, RecyclerView courseListView){
-        this.courses.addAll(courses);
+    public void courseSetup(RecyclerView courseListView){
         this.courseListView = courseListView;
         this.partialCourseAdapter = new PartialCourseAdapter(this.courses, this.itemListener);
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
@@ -116,16 +112,8 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
                         );
     }
 
-    public Subscription submit(View view, String query){
-        return ViewObservable
-                        .clicks(view)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .map(click -> query)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> Timber.d("submit query : %s", result),
-                                error -> Timber.d("submit error : %s", error)
-                        );
+    public void submit(String query){
+        Search.getInstance().clear().setQuery(query);
     }
 
     @Override
@@ -135,15 +123,12 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
+        if(((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
+            Search.getInstance().fromCandidate(candidates.get(position));
+            this.expandResult(false);
+        }else if(((RecyclerView)view.getParent()).getId() == courseListView.getId()){
 
-        Candidate item = candidates.get(position);
-        Search.getInstance().clear()
-            .setCourse(item.course)
-            .setLectureId(item.lecture_id)
-            .setLectureName(item.lecture_name)
-            .setProfessorId(item.professor_id)
-            .setProfessorName(item.professor_name);
-        this.expandResult(false);
+        }
     }
 
     public void expandResult(boolean expand){

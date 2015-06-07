@@ -6,34 +6,23 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.AutoCompleteAdapter;
-import com.montserrat.app.fragment.FragmentFactory;
-import com.montserrat.app.fragment.main.PartialCourseFragment;
 import com.montserrat.app.fragment.nav.NavFragment;
-import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.unique.Search;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.Search.AutoCompletableSearchView;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
@@ -42,20 +31,10 @@ import com.montserrat.utils.view.viewpager.Page;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerManager;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
-import rx.android.widget.WidgetObservable;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -69,9 +48,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
     @InjectView(R.id.query_result_outside) protected View outsideResult;
 
-    private AutoCompleteAdapter adapter;
-    private List<Candidate> candidates;
-    private AutoCompletableSearchView autoCompletableSearchView;
+    private AutoCompletableSearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +68,9 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         this.container.setCurrentPage(Page.at(AppConst.ViewPager.Type.HOME, AppConst.ViewPager.Home.HOME), false);
 
         this.subscriptions = new CompositeSubscription();
-        this.candidates = new ArrayList<>();
 
-        this.autoCompletableSearchView = new AutoCompletableSearchView(this, this);
-        autoCompletableSearchView.autoCompleteSetup(searchResult, outsideResult);
+        this.search = new AutoCompletableSearchView(this, this);
+        this.search.autoCompleteSetup(this.searchResult, this.outsideResult);
 
         viewpager.setOnFocusChangeListener(this);
     }
@@ -210,17 +186,19 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
         Timber.d("submit query2 : %s", query);
+        this.search.submit(query);
+
 //        ((EditText)searchView.findViewById(R.id.search_src_text)).focus
         searchView.clearFocus();
         searchResult.clearFocus();
-        this.autoCompletableSearchView.expandResult(false);
+        this.search.expandResult(false);
         this.onCategorySelected(NavFragment.CategoryType.SEARCH);
         return false;
     }
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        this.autoCompletableSearchView.recyclerViewListClicked(view, position);
+        this.search.recyclerViewListClicked(view, position);
         if(!this.container.getCurrentPage().equals(AppConst.ViewPager.Type.SEARCH))
             this.onCategorySelected(NavFragment.CategoryType.SEARCH);
     }
@@ -242,12 +220,12 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public void onFocusChange(View v, boolean hasFocus) {
         Timber.d("expand3 : %s?%s", v.getClass().toString(), hasFocus);
         if(v == searchView) {
-            autoCompletableSearchView.expandResult(false);
+            search.expandResult(false);
         }else if(v == searchResult){
 
         }
         this.subscriptions.add(
-                this.autoCompletableSearchView.autoComplete(
+                this.search.autoComplete(
                         (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)
                 )
         );

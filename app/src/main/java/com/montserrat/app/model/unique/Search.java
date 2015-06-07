@@ -1,5 +1,6 @@
 package com.montserrat.app.model.unique;
 
+import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.PartialCourse;
 
 /**
@@ -73,6 +74,15 @@ public class Search {
         this.course = null;
         this.query = null;
         return this;
+    }
+
+    public void fromCandidate(Candidate candidate){
+        clear()
+                .setCourse(candidate.course)
+                .setLectureId(candidate.lecture_id)
+                .setLectureName(candidate.lecture_name)
+                .setProfessorId(candidate.professor_id)
+                .setProfessorName(candidate.professor_name);
     }
 
     public boolean isEmpty() {
