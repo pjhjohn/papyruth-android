@@ -43,11 +43,6 @@ import timber.log.Timber;
 public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> implements OnPageFocus {
     private ViewPagerContainerController controller;
 
-    private final int COURSE = 0;
-    private final int LECTURE = 1;
-    private final int PROFESSOR = 2;
-    private final int HISTORY = 3;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -71,9 +66,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         this.refresh.setEnabled(true);
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext());
         this.search.courseSetup(this.recycler);
-        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-        this.setupRecyclerView(this.recycler);
+        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;
     }
@@ -88,28 +81,6 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public void onResume() {
         super.onResume();
         if(this.getUserVisibleHint()) this.onPageFocused();
-    }
-
-    private void searchCourse(int type) {
-        if(type == HISTORY){
-            // TODO : (ISSUE) Shared Preferences.
-        }else {
-            RetrofitApi.getInstance().search_search(
-                User.getInstance().getAccessToken(),
-                User.getInstance().getUniversityId(),
-                Search.getInstance().getLectureId(),
-                Search.getInstance().getProfessorId(),
-                Search.getInstance().getQuery())
-                    .map(response -> response.courses)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(courses -> {
-                        Timber.d("Search : %s", courses);
-                        this.search.notifycourseChanged(courses);
-                    },error -> {
-                        Timber.d("Search error : %s", error);
-                    });
-        }
     }
 
     @Override
@@ -132,34 +103,10 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
 
     @Override
     public void recyclerViewListClicked (View view, int position) {
-        setup(position);
         this.search.recyclerViewListClicked(view, position);
-//        getHistory();
         this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.COURSE), true);
     }
 
-    public void setup(int position){
-        PartialCourse item = items.get(position);
-        Course.getInstance().clear();
-        Course.getInstance().fromPartailCourse(item);
-    }
-
-    public List<PartialCourse> getHistory(){
-        Timber.d("getHistory");
-        // TODO : implement it!
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
-
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson data = new Gson();
-        String json = data.toJson(items.get(0));
-        Timber.d("json : %s", json);
-
-        return null;
-    }
-    public boolean addHistory(PartialCourse item){
-        Timber.d("getHistory");
-        return false;
-    }
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
@@ -184,11 +131,9 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lectures -> {
+                .subscribe(courses -> {
                     this.refresh.setRefreshing(false);
-                    this.items.clear();
-                    this.items.addAll(lectures);
-                    this.adapter.notifyDataSetChanged();
+                    this.search.notifycourseChanged(courses);
                 },
                 error ->{
                     Timber.d("search error : %s", error);
@@ -206,28 +151,20 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lectures -> {
+                .subscribe(courses -> {
                     this.progress.setVisibility(View.GONE);
-                    this.items.addAll(lectures);
-                    this.adapter.notifyDataSetChanged();
+                    this.search.notifycourseChanged(courses);
                 },
                 error ->{
                     Timber.d("error : %s", error);
                 })
         );
+        Timber.d("search : %s", Search.getInstance().toString());
 
         if (Search.getInstance().isEmpty()) {
-//            getHistory();
+            this.search.searchCourse(AutoCompletableSearchView.Type.HISTORY);
         } else {
-            if(Search.getInstance().getCourse() != null) {
-                searchCourse(COURSE);
-            } else if(Search.getInstance().getLectureId() != null) {
-                searchCourse(LECTURE);
-            } else if(Search.getInstance().getProfessorId() != null) {
-                searchCourse(PROFESSOR);
-            } else if(Search.getInstance().getQuery() != null) {
-                searchCourse(HISTORY);
-            }
+            this.search.searchCourse(AutoCompletableSearchView.Type.SEARCH);
         }
     }
 }

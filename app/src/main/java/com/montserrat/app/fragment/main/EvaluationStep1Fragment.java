@@ -115,14 +115,14 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
                             )
             );
             expandResult(false);
-            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
+            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         }else{
             PartialCourse course = itemList.get(position);
             EvaluationForm.getInstance().setLectureName(course.name);
             EvaluationForm.getInstance().setProfessorName(course.professor_name);
             EvaluationForm.getInstance().setCourseId(course.id);
 
-            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
+            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
             if (Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2).equals(this.controller.getPreviousPage()) ||
                     Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP3).equals(this.controller.getPreviousPage())) {

@@ -1,16 +1,21 @@
 package com.montserrat.utils.view.Search;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -25,6 +30,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-06-06.
@@ -42,7 +48,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     private Context context;
 
     public enum Type{
-        TOOLBAR, SEARCH
+        TOOLBAR, SEARCH, HISTORY
     }
 
     public AutoCompletableSearchView(RecyclerViewClickListener listener, Context context){
@@ -116,18 +122,58 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
         Search.getInstance().clear().setQuery(query);
     }
 
+    public void searchCourse(Type type) {
+        if (type == Type.HISTORY){
+
+        }else {
+            RetrofitApi.getInstance().search_search(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    Search.getInstance().getLectureId(),
+                    Search.getInstance().getProfessorId(),
+                    Search.getInstance().getQuery())
+                    .map(response -> response.courses)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        this::notifycourseChanged
+                    , error -> {
+                        Timber.d("Search error : %s", error);
+                    });
+        }
+    }
+
+
+    public List<PartialCourse> getHistory(){
+        Timber.d("getHistory");
+        // TODO : implement it!
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson data = new Gson();
+        String json = data.toJson(courses.get(0));
+        Timber.d("json : %s", json);
+
+        return null;
+    }
+    public boolean addHistory(PartialCourse item){
+        Timber.d("getHistory");
+        return false;
+    }
     @Override
     public void onClick(View v) {
         expandResult(false);
     }
 
+
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        if(((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
+        ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
+        if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
             Search.getInstance().fromCandidate(candidates.get(position));
             this.expandResult(false);
-        }else if(((RecyclerView)view.getParent()).getId() == courseListView.getId()){
-
+        }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
+            Course.getInstance().clear().fromPartailCourse(courses.get(position));
         }
     }
 

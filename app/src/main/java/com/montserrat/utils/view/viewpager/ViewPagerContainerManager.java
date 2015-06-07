@@ -2,7 +2,9 @@ package com.montserrat.utils.view.viewpager;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppConst.ViewPager.Type;
@@ -81,6 +83,7 @@ public class ViewPagerContainerManager extends ViewPager.SimpleOnPageChangeListe
     @Override
     public void setCurrentPage(Page page, boolean addToBackStack) {
         Timber.d("<ENTER:%s> %s + [%s]", page, this.history, addToBackStack? this.current : "");
+
         this.addToBackStack = addToBackStack;
         if(current == null) this.activate(page.category, true);
         else if(current.category == page.category) this.container.get(page.category).setCurrentPage(page.index, addToBackStack);

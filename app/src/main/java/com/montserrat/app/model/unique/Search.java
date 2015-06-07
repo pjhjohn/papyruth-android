@@ -94,4 +94,10 @@ public class Search {
             this.course == null &&
             this.query == null;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Search/lecture : %s, %d professor : %s %d query : %s",
+                this.lecture_name, this.lecture_id, this.professor_name, this.professor_id, this.query);
+    }
 }
