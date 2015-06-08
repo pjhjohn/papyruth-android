@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
@@ -48,7 +49,11 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     private Context context;
 
     public enum Type{
-        TOOLBAR, SEARCH, HISTORY
+        TOOLBAR, SEARCH, HISTORY, EVALUATION
+    }
+
+    public enum History{
+
     }
 
     public AutoCompletableSearchView(RecyclerViewClickListener listener, Context context){
@@ -121,10 +126,32 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     public void submit(String query){
         Search.getInstance().clear().setQuery(query);
     }
+    private Candidate evaluationCandidate;
+
+    public void setEvaluationCandidate(int position) {
+        this.evaluationCandidate = candidates.get(position);
+    }
 
     public void searchCourse(Type type) {
-        if (type == Type.HISTORY){
-
+        if (type == Type.EVALUATION){
+            this.subscription.add(
+                    RetrofitApi.getInstance().search_search(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        evaluationCandidate.lecture_id,
+                        evaluationCandidate.professor_id,
+                        null
+                    )
+                    .map(response -> response.courses)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(courses ->{
+                                this.notifycourseChanged(courses);
+                            }, error -> {
+                                Timber.d("search course error : %s %s", error);
+                            }
+                            )
+            );
         }else {
             RetrofitApi.getInstance().search_search(
                     User.getInstance().getAccessToken(),
@@ -143,28 +170,37 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
         }
     }
 
-
     public List<PartialCourse> getHistory(){
         Timber.d("getHistory");
         // TODO : implement it!
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
 
-        SharedPreferences.Editor editor = preferences.edit();
         Gson data = new Gson();
-        String json = data.toJson(courses.get(0));
-        Timber.d("json : %s", json);
+        String json = preferences.getString("object1", "");
+        PartialCourse course = new PartialCourse();
+        course = data.fromJson(json, PartialCourse.class);
 
         return null;
     }
+
     public boolean addHistory(PartialCourse item){
         Timber.d("getHistory");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
+
+        List<PartialCourse> list = getHistory();
+
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson data = new Gson();
+        String json = data.toJson(courses.get(0));
+        editor.putString("object1", json);
+        editor.apply();
         return false;
     }
+
     @Override
     public void onClick(View v) {
         expandResult(false);
     }
-
 
     @Override
     public void recyclerViewListClicked(View view, int position) {

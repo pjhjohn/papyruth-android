@@ -19,10 +19,12 @@ import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.Search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.Page;
@@ -61,19 +63,18 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @InjectView(R.id.course_list) protected RecyclerView courseList;
     @InjectView(R.id.query_result_outside) protected RelativeLayout resultOutside;
     private CompositeSubscription subscriptions;
-    private PartialCourseAdapter partialCourseAdapter;
-    private List<PartialCourse> itemList;
+
+    private AutoCompletableSearchView search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-        this.setupRecyclerView(this.queryResult);
-        this.itemList = new ArrayList<>();
-        this.partialCourseAdapter = new PartialCourseAdapter(itemList, this);
-        this.courseList.setLayoutManager(new LinearLayoutManager(this.getActivity().getBaseContext()));
-        this.courseList.setAdapter(this.partialCourseAdapter);
+
+        search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext());
+        search.autoCompleteSetup(queryResult, resultOutside);
+        search.courseSetup(courseList);
 
         return view;
     }
@@ -83,7 +84,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         super.onDestroyView();
         ButterKnife.reset(this);
         this.adapter = null;
-        items.clear();
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
@@ -92,35 +92,16 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         Timber.d("view : %s %s", ((RecyclerView)view.getParent()).getId(), queryResult.getId());
 
         if(((RecyclerView)view.getParent()).getId() == queryResult.getId()) {
-            Candidate candidate = items.get(position);
-            this.subscriptions.add(
-                    RetrofitApi.getInstance().search_search(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        candidate.lecture_id,
-                        candidate.professor_id,
-                        null
-                    )
-                    .map(response -> response.courses)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(courses ->{
-                                this.itemList.clear();
-                                this.itemList.addAll(courses);
-                                Timber.d("running well");
-                                this.partialCourseAdapter.notifyDataSetChanged();
-                            }, error -> {
-                                Timber.d("search course error : %s %s", error);
-                            }
-                            )
-            );
-            expandResult(false);
+            this.search.setEvaluationCandidate(position);
+            this.search.searchCourse(AutoCompletableSearchView.Type.EVALUATION);
+            this.search.expandResult(false);
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         }else{
-            PartialCourse course = itemList.get(position);
-            EvaluationForm.getInstance().setLectureName(course.name);
-            EvaluationForm.getInstance().setProfessorName(course.professor_name);
-            EvaluationForm.getInstance().setCourseId(course.id);
+//            PartialCourse course = itemList.get(position);
+            this.search.recyclerViewListClicked(view, position);
+            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
 
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
@@ -150,38 +131,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         if(this.getUserVisibleHint()) this.onPageFocused();
     }
 
-    private void expandResult(boolean expand){
-        Timber.d("%s", expand);
-        if(expand){
-            ViewGroup.LayoutParams param =  queryResult.getLayoutParams();
-            param.height = 700;
-            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
-            queryResult.setLayoutParams(param);
-            queryResult.setY(query.getY() + query.getLayoutParams().height);
-
-
-            param =  resultOutside.getLayoutParams();
-            param.height = this.getResources().getDisplayMetrics().heightPixels;
-            param.width = this.getResources().getDisplayMetrics().widthPixels;
-            resultOutside.setY(query.getY()+query.getLayoutParams().height);
-            Timber.d("height %s %s %s %s", queryResult.getLayoutParams().height, queryResult.getY(), resultOutside.getY(), query.getY());
-
-            resultOutside.setLayoutParams(param);
-        }else{
-            ViewGroup.LayoutParams param =  queryResult.getLayoutParams();
-            param.height = 0;
-            param.width = (int)(this.getResources().getDisplayMetrics().widthPixels * 0.8);
-            queryResult.setLayoutParams(param);
-
-            param =  resultOutside.getLayoutParams();
-            param.height = 0;
-            param.width = this.getResources().getDisplayMetrics().widthPixels;
-            resultOutside.setY(query.getY()+query.getLayoutParams().height);
-
-            resultOutside.setLayoutParams(param);
-        }
-    }
-
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().clear();
@@ -197,10 +146,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 lectures -> {
-                                    this.items.clear();
-                                    this.items.addAll(lectures);
-                                    this.adapter.notifyDataSetChanged();
-                                    expandResult(true);
+                                    this.search.notifyAutocompleteChanged(lectures);
+                                    this.search.expandResult(true);
                                 },
                                 error -> {
                                     if (error instanceof RetrofitError) {
@@ -217,7 +164,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
                 .clicks(resultOutside)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unused ->
-                                expandResult(false)
+                            this.search.expandResult(false)
                 )
 
         );
