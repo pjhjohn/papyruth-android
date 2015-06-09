@@ -72,7 +72,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
 
-        search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext());
+        search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.EVALUATION);
         search.autoCompleteSetup(queryResult, resultOutside);
         search.courseSetup(courseList);
 
@@ -97,7 +97,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
             this.search.expandResult(false);
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         }else{
-//            PartialCourse course = itemList.get(position);
             this.search.recyclerViewListClicked(view, position);
             EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
             EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
@@ -134,39 +133,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().clear();
-        subscriptions.add(WidgetObservable
-                        .text(query)
-                        .debounce(500, TimeUnit.MILLISECONDS)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .map(toString)
-                        .flatMap(queryStr -> RetrofitApi.getInstance().search_autocomplete(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), queryStr))
-                        .map(response -> response.candidates)
-                        .filter(candidates -> candidates.size() > 0)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                lectures -> {
-                                    this.search.notifyAutocompleteChanged(lectures);
-                                    this.search.expandResult(true);
-                                },
-                                error -> {
-                                    if (error instanceof RetrofitError) {
-                                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                                            default:
-                                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                                        }
-                                    }
-                                }
-                        )
-        );
+        this.search.autoComplete(query);
         courseList.setY(query.getY()+query.getLayoutParams().height);
-        this.subscriptions.add(ViewObservable
-                .clicks(resultOutside)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(unused ->
-                            this.search.expandResult(false)
-                )
-
-        );
     }
 }

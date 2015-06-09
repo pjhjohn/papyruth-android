@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import retrofit.RetrofitError;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,19 +50,21 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     private Context context;
 
     public enum Type{
-        TOOLBAR, SEARCH, HISTORY, EVALUATION
+        TOOLBAR, SEARCH, COURSE, HISTORY, EVALUATION
     }
 
     public enum History{
 
     }
+    private Type type;
 
-    public AutoCompletableSearchView(RecyclerViewClickListener listener, Context context){
+    public AutoCompletableSearchView(RecyclerViewClickListener listener, Context context, Type type){
         this.courses = new ArrayList<>();
         this.candidates = new ArrayList<>();
         this.subscription = new CompositeSubscription();
         this.itemListener = listener;
         this.context = context;
+        this.type = type;
     }
 
     public void autoCompleteSetup(RecyclerView autocompleteView, View outsideView){
@@ -99,7 +102,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .map(listener -> listener.text().toString())
                         .flatMap(query -> {
-                                    if (query.length() < 1) {
+                                    if ( !(type == Type.EVALUATION) && query.length() < 1) {
                                         return null;    // history
                                     }
                                     return RetrofitApi.getInstance().search_autocomplete(
@@ -118,7 +121,13 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
                                     expandResult(true);
                                 },
                                 error -> {
-                                    candidates.clear();
+                                    if (error instanceof RetrofitError) {
+                                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                                            default:
+                                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                                        }
+                                    }else
+                                        candidates.clear();
                                 }
                         );
     }
@@ -145,11 +154,11 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
                     .map(response -> response.courses)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(courses ->{
-                                this.notifycourseChanged(courses);
-                            }, error -> {
-                                Timber.d("search course error : %s %s", error);
-                            }
+                    .subscribe(
+                            this::notifycourseChanged
+                            , error ->
+                                Timber.d("search course error : %s %s", error)
+
                             )
             );
         }else {
@@ -164,9 +173,9 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         this::notifycourseChanged
-                    , error -> {
-                        Timber.d("Search error : %s", error);
-                    });
+                    , error ->
+                        Timber.d("Search error : %s", error)
+                    );
         }
     }
 

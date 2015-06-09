@@ -64,7 +64,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
         this.refresh.setEnabled(true);
-        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext());
+        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.COURSE);
         this.search.courseSetup(this.recycler);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 

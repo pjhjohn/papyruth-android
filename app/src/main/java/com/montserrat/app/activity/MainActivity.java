@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
         this.subscriptions = new CompositeSubscription();
 
-        this.search = new AutoCompletableSearchView(this, this);
+        this.search = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.TOOLBAR);
         this.search.autoCompleteSetup(this.searchResult, this.outsideResult);
 
         viewpager.setOnFocusChangeListener(this);
