@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.model.Candidate;
@@ -89,7 +90,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        Timber.d("view : %s %s", ((RecyclerView)view.getParent()).getId(), queryResult.getId());
 
         if(((RecyclerView)view.getParent()).getId() == queryResult.getId()) {
             this.search.setEvaluationCandidate(position);
@@ -134,6 +134,5 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     public void onPageFocused() {
         FloatingActionControl.getInstance().clear();
         this.search.autoComplete(query);
-        courseList.setY(query.getY()+query.getLayoutParams().height);
     }
 }

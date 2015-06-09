@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -48,6 +49,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     private AutoCompleteAdapter autoCompleteAdapter;
     private RecyclerViewClickListener itemListener;
     private Context context;
+    private EditText editText;
 
     public enum Type{
         TOOLBAR, SEARCH, COURSE, HISTORY, EVALUATION
@@ -65,6 +67,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
         this.itemListener = listener;
         this.context = context;
         this.type = type;
+        this.editText = null;
     }
 
     public void autoCompleteSetup(RecyclerView autocompleteView, View outsideView){
@@ -96,6 +99,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     }
 
     public Subscription autoComplete(TextView textView){
+        editText = (EditText) textView;
         return WidgetObservable
                         .text(textView)
                         .debounce(500, TimeUnit.MILLISECONDS)
@@ -223,19 +227,25 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     }
 
     public void expandResult(boolean expand){
+        ViewGroup.LayoutParams param;
         if(expand){
-            ViewGroup.LayoutParams param =  autocompleteView.getLayoutParams();
-            param.height = 250;
+            if(type == Type.EVALUATION) {
+                param =  courseListView.getLayoutParams();
+                param.height = this.context.getResources().getDisplayMetrics().heightPixels - this.editText.getHeight();
+                courseListView.setLayoutParams(param);
+            }
+
+            param =  autocompleteView.getLayoutParams();
+            param.height = 500;
             param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
             autocompleteView.setLayoutParams(param);
 
             param =  outsideView.getLayoutParams();
             param.height = this.context.getResources().getDisplayMetrics().heightPixels;
             param.width = this.context.getResources().getDisplayMetrics().widthPixels;
-
             outsideView.setLayoutParams(param);
         }else{
-            ViewGroup.LayoutParams param =  autocompleteView.getLayoutParams();
+            param =  autocompleteView.getLayoutParams();
             param.height = 0;
             param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
             autocompleteView.setLayoutParams(param);
