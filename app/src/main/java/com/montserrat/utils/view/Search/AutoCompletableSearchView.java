@@ -207,6 +207,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
         String json = data.toJson(courses.get(0));
         editor.putString("object1", json);
         editor.apply();
+
         return false;
     }
 
