@@ -28,13 +28,28 @@ public class FragmentNavigator implements Navigator {
     }
 
     @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType) {
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
+        if(clear) this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment fragment = this.instantiateFragment(target);
-
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
         if(addToBackStack) transaction.addToBackStack(fragment.getClass().getName());
         transaction.replace(this.containerViewId, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
+        this.navigate(target, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, false);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType) {
+        this.navigate(target, addToBackStack, animatorType, false);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
+        this.navigate(target, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, false);
     }
 
     @Override
@@ -44,13 +59,8 @@ public class FragmentNavigator implements Navigator {
     }
 
     @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
-        this.navigate(target, addToBackStack, AnimatorType.SLIDE_TO_RIGHT);
-    }
-
-    @Override
     public boolean back() {
-        if(this.manager.getBackStackEntryCount() <= 0) return false;
+        if(this.manager.getBackStackEntryCount() <= 1) return false; // 1 for top fragment
         this.manager.popBackStack();
         return true;
     }

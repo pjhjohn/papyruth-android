@@ -208,6 +208,16 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     }
 
     @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
+        this.navigator.navigate(target, addToBackStack, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType, boolean clear) {
+        this.navigator.navigate(target, addToBackStack, animatorType, clear);
+    }
+
+    @Override
     public String getBackStackNameAt(int index) {
         return this.navigator.getBackStackNameAt(index);
     }

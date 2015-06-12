@@ -8,6 +8,8 @@ import android.app.Fragment;
 public interface Navigator {
     void navigate(Class<? extends Fragment> target, boolean addToBackStack);
     void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType);
+    void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear);
+    void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType, boolean clear);
     String getBackStackNameAt(int index);
     boolean back();
 }
