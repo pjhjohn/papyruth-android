@@ -33,7 +33,6 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnBack;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.Page;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
@@ -47,7 +46,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack, OnPageFocus {
+public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack {
     private ViewPagerContainerController controller;
     private NavFragment.OnCategoryClickListener callback;
 
@@ -112,13 +111,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        this.evaluationFragment = new EvaluationFragment();
-        if(this.getUserVisibleHint()) this.onPageFocused();
-    }
-
-    @Override
     public void recyclerViewListClicked(View view, int position) {
         if (!isEvaluationOpened) {
             Evaluation.getInstance().update(items.get(position));
@@ -129,7 +121,9 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     }
 
     @Override
-    public void onPageFocused() {
+    public void onResume() {
+        super.onResume();
+        this.evaluationFragment = new EvaluationFragment();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_new_evaluation)

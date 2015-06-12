@@ -36,16 +36,13 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.montserrat.utils.support.rx.RxValidator.isValidEvaluationBody;
 import static com.montserrat.utils.support.rx.RxValidator.nonEmpty;
 import static com.montserrat.utils.support.rx.RxValidator.toString;
 

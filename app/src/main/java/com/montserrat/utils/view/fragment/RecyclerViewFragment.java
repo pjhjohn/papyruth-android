@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.utils.support.fab.FloatingActionControl;

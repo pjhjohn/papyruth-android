@@ -6,18 +6,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
@@ -32,18 +28,17 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.montserrat.utils.support.rx.RxValidator.isValidRadioButton;
 import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileEditPasswordFragment extends Fragment implements OnPageFocus {
-    private ViewPagerContainerController controller;
+public class ProfileEditPasswordFragment extends Fragment {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView (R.id.old_password) protected MaterialEditText old_password;
@@ -67,7 +62,8 @@ public class ProfileEditPasswordFragment extends Fragment implements OnPageFocus
     }
 
     @Override
-    public void onPageFocused () {
+    public void onResume() {
+        super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         this.subscriptions.add(Observable.combineLatest(
@@ -105,7 +101,7 @@ public class ProfileEditPasswordFragment extends Fragment implements OnPageFocus
                 response -> {
                     this.progress.setVisibility(View.GONE);
                     if (response.success) {
-                        this.controller.popCurrentPage();
+                        this.navigator.back();
                     } else {
                         Toast.makeText(this.getActivity(), getResources().getString(R.string.failed_passwd), Toast.LENGTH_SHORT).show();
                     }

@@ -10,20 +10,16 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.rx.RxValidator;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.Page;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.navigator.Navigator;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.http.HEAD;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
@@ -34,12 +30,12 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-26.
  */
 
-public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
-    private ViewPagerContainerController controller;
+public class EvaluationStep2Fragment extends Fragment {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView(R.id.lecture) protected Button lecture;
@@ -66,7 +62,8 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
     }
 
     @Override
-    public void onPageFocused () {
+    public void onResume() {
+        super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
 
         lecture.setText(EvaluationForm.getInstance().getLectureName());
@@ -80,7 +77,7 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
                 RxValidator.createObservableSeekBar(this.pointClarity, true).map(RxValidator.isIntegerValueInRange),
                 (Boolean a, Boolean b, Boolean c, Boolean d) -> a && b && c && d
             )
-            .startWith(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP3).equals(controller.getPreviousPage()))
+            .startWith(EvaluationStep3Fragment.class.getName().equals(this.navigator.getBackStackNameAt(1)))
             .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
@@ -93,7 +90,7 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
 
         this.subscriptions.add(Observable
             .merge(ViewObservable.clicks(this.lecture), ViewObservable.clicks(this.professor))
-            .subscribe(unused -> this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1), true))
+            .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
         );
 
         this.subscriptions.add(FloatingActionControl
@@ -103,7 +100,7 @@ public class EvaluationStep2Fragment extends Fragment implements OnPageFocus {
                 EvaluationForm.getInstance().setPointGpaSatisfaction(pointGpaSatisfaction.getProgress());
                 EvaluationForm.getInstance().setPointEasiness(pointEasiness.getProgress());
                 EvaluationForm.getInstance().setPointClarity(pointClarity.getProgress());
-                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP3), true);
+                this.navigator.navigate(EvaluationStep3Fragment.class, true);
             })
         );
     }
