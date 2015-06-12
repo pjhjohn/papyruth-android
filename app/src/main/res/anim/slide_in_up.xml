@@ -2,8 +2,8 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
         android:interpolator="@android:anim/linear_interpolator"
-        android:valueFrom="0"
-        android:valueTo="1.0"
-        android:propertyName="xFraction"
+        android:valueFrom="1.0"
+        android:valueTo="0"
+        android:propertyName="yFraction"
         android:duration="@android:integer/config_shortAnimTime" />
 </set>

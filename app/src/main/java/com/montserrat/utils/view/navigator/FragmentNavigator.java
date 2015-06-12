@@ -59,8 +59,8 @@ public class FragmentNavigator implements Navigator {
         switch(animatorType) {
             case SLIDE_TO_RIGHT : transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right); break;
             case SLIDE_TO_LEFT  : transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left); break;
-            case SLIDE_TO_DOWN  : transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left); break;
-            case SLIDE_TO_UP    : transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left); break;
+            case SLIDE_TO_DOWN  : transaction.setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_up, R.anim.slide_in_up, R.anim.slide_out_down); break;
+            case SLIDE_TO_UP    : transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_down, R.anim.slide_out_up); break;
         } return transaction;
     }
 
