@@ -17,6 +17,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 
 import java.util.List;
@@ -97,7 +98,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_new_evaluation)
-            .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
+            .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN))
         );
 
         this.subscriptions.add(super.getRefreshObservable(this.refresh)

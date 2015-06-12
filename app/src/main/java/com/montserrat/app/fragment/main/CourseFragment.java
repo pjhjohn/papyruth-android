@@ -32,6 +32,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
 import com.montserrat.utils.view.viewpager.Page;
 import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
@@ -47,14 +48,11 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack {
-    private ViewPagerContainerController controller;
-    private NavFragment.OnCategoryClickListener callback;
-
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
-        this.callback = (NavFragment.OnCategoryClickListener) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView(R.id.course_info)                   protected LinearLayout courseInfo;
@@ -131,12 +129,12 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
                 EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
                 EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
                 EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+                this.navigator.navigate(EvaluationStep2Fragment.class, true);
             }, error -> {
                 EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
                 EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
                 EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+                this.navigator.navigate(EvaluationStep2Fragment.class, true);
             }));
 
         this.title.setText(Course.getInstance().getName());
@@ -173,16 +171,15 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
                     EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
                     EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
                     EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                    this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+                    this.navigator.navigate(EvaluationStep2Fragment.class, true);
                 })
             );
             this.subscriptions.add(FloatingActionControl
-                            .clicks(R.id.fab_comment)
-                            .subscribe(unused -> {
-                                evaluationFragment.addComment();
-                            },error ->{
-                                        Timber.d("error : %s", error);
-                                    })
+                .clicks(R.id.fab_comment)
+                .subscribe(
+                    unused -> evaluationFragment.addComment(),
+                    error -> Timber.d("error : %s", error)
+                )
             );
         }else{
             FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
@@ -192,7 +189,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
                     EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
                     EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
                     EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-                    this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
+                    this.navigator.navigate(EvaluationStep2Fragment.class, true);
                 }));
         }
     }

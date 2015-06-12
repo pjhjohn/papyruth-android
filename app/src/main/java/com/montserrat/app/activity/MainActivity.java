@@ -21,14 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.DummyFragment;
+import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.fragment.main.PartialCourseFragment;
+import com.montserrat.app.fragment.main.ProfileFragment;
+import com.montserrat.app.fragment.main.SignOutFragment;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.Search.AutoCompletableSearchView;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
-import com.montserrat.utils.view.navigator.NavigatableFrameLayout;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
@@ -37,7 +41,7 @@ import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnClickCategory, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
     private NavFragment drawer;
     private FragmentNavigator navigator;
 
@@ -75,13 +79,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         super.onDestroy();
         ButterKnife.reset(this);
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
-    }
-
-    @Override
-    public void onCategorySelected (int category) {
-        this.terminate = false;
-        this.drawer.setActiveCategory(category);
-//        this.container.activate(AppConst.ViewPager.int2Type(category), true);
     }
 
     public int getActionbarHeight() {
@@ -158,7 +155,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         searchView.clearFocus();
         searchResult.clearFocus();
         this.search.expandResult(false);
-        this.onCategorySelected(NavFragment.CategoryType.SEARCH);
         return false;
     }
 
@@ -166,7 +162,7 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
     public void recyclerViewListClicked(View view, int position) {
         this.search.recyclerViewListClicked(view, position);
 //        if(!this.container.getCurrentPage().equals(AppConst.ViewPager.Type.SEARCH))
-//            this.onCategorySelected(NavFragment.CategoryType.SEARCH);
+//            this.onClickCategory(NavFragment.CategoryType.SEARCH);
     }
 
     private boolean terminate = false;
@@ -197,6 +193,26 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         );
     }
 
+    @Override
+    public void onClickCategory(int category) {
+        this.onClickCategory(category, false);
+    }
+    @Override
+    public void onClickCategory(int category, boolean fromUser) {
+        this.terminate = false;
+        this.drawer.setActiveCategory(category);
+        switch(category) {
+            case NavFragment.CategoryType.HOME          : this.navigate(           HomeFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.SEARCH        : this.navigate(  PartialCourseFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.RECOMMENDATION: this.navigate(          DummyFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.EVALUATION    : this.navigate(EvaluationStep1Fragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.RANDOM        : this.navigate(          DummyFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.PROFILE       : this.navigate(        ProfileFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.SIGNOUT       : this.navigate(        SignOutFragment.class, true, fromUser); break;
+        }
+    }
+
+    /* Map Navigator methods to this.navigator */
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
         this.navigator.navigate(target, addToBackStack);

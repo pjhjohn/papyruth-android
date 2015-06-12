@@ -39,7 +39,7 @@ public class FragmentNavigator implements Navigator {
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
-        this.navigate(target, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, false);
+        this.navigate(target, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, clear);
     }
 
     @Override
