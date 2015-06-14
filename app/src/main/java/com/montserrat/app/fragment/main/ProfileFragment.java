@@ -7,13 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.Page;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
@@ -25,12 +22,12 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileFragment extends Fragment implements OnPageFocus {
-    private ViewPagerContainerController controller;
+public class ProfileFragment extends Fragment {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView (R.id.email) protected MaterialEditText email;
@@ -65,11 +62,6 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
     @Override
     public void onResume() {
         super.onResume();
-        if(this.getUserVisibleHint()) onPageFocused();
-    }
-
-    @Override
-    public void onPageFocused () {
         final int ANIMATION_DELAY = 200;
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, ANIMATION_DELAY, TimeUnit.MILLISECONDS);
 
@@ -82,12 +74,12 @@ public class ProfileFragment extends Fragment implements OnPageFocus {
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_profile)
-            .subscribe(unused -> controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.PROFILE, AppConst.ViewPager.Profile.PROFILE_EDIT), true))
+            .subscribe(unused -> this.navigator.navigate(ProfileEditFragment.class, true))
         );
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_password)
-            .subscribe(unused -> controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.PROFILE, AppConst.ViewPager.Profile.PROFILE_EDIT_PASSWORD), true))
+            .subscribe(unused -> this.navigator.navigate(ProfileEditPasswordFragment.class, true))
         );
     }
 }

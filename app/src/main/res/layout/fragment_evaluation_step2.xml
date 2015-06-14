@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.montserrat.utils.view.navigator.NavigatableFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="?attr/actionBarSize">
@@ -47,4 +48,4 @@
             android:layout_height="wrap_content"
             android:max="10"/>
     </LinearLayout>
-</FrameLayout>
+</com.montserrat.utils.view.navigator.NavigatableFrameLayout>

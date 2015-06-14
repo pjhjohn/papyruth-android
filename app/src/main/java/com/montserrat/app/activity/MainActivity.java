@@ -1,5 +1,6 @@
 package com.montserrat.app.activity;
 
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,36 +16,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.DummyFragment;
+import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
+import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.fragment.main.PartialCourseFragment;
+import com.montserrat.app.fragment.main.ProfileFragment;
+import com.montserrat.app.fragment.main.SignOutFragment;
 import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.Search.AutoCompletableSearchView;
+import com.montserrat.utils.view.navigator.FragmentNavigator;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
-import com.montserrat.utils.view.viewpager.FlexibleViewPager;
-import com.montserrat.utils.view.viewpager.Page;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerManager;
-
-import java.util.Stack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavFragment.OnCategoryClickListener, ViewPagerContainerController, RecyclerViewClickListener, View.OnFocusChangeListener {
+public class MainActivity extends ActionBarActivity implements NavFragment.OnClickCategory, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
     private NavFragment drawer;
-    private FlexibleViewPager viewpager;
-    private ViewPagerContainerManager container;
+    private FragmentNavigator navigator;
 
     private CompositeSubscription subscriptions;
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
+    @InjectView(R.id.main_navigator) FrameLayout navigatorContainer;
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
     @InjectView(R.id.query_result_outside) protected View outsideResult;
 
@@ -59,20 +62,16 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
 
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
 
-        this.viewpager = (FlexibleViewPager) this.findViewById(R.id.main_viewpager);
         this.drawer = (NavFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         this.drawer.setUp(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout));
 
         /* Instantiate Multiple ViewPagerManagers */
-        this.container = ViewPagerContainerManager.newInstance(this.viewpager, this.getFragmentManager());
-        this.container.setCurrentPage(Page.at(AppConst.ViewPager.Type.HOME, AppConst.ViewPager.Home.HOME), false);
+        this.navigator = new FragmentNavigator(R.id.main_navigator, this.getFragmentManager(), HomeFragment.class);
 
         this.subscriptions = new CompositeSubscription();
 
         this.search = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.TOOLBAR);
         this.search.autoCompleteSetup(this.searchResult, this.outsideResult);
-
-        viewpager.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -80,13 +79,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         super.onDestroy();
         ButterKnife.reset(this);
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
-    }
-
-    @Override
-    public void onCategorySelected (int category) {
-        this.terminate = false;
-        this.drawer.setActiveCategory(category);
-        this.container.activate(AppConst.ViewPager.int2Type(category), true);
     }
 
     public int getActionbarHeight() {
@@ -154,35 +146,6 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         actionBar.setTitle("");
     }
 
-    @Override
-    public Stack<Page> getHistoryCopy() {
-        return this.container.getHistoryCopy();
-    }
-
-    @Override
-    public Page getPreviousPage() {
-        return this.container.getPreviousPage();
-    }
-
-    @Override
-    public void setCurrentPage(Page page, boolean addToBackStack) {
-        this.terminate = false;
-        this.container.setCurrentPage(page, addToBackStack);
-    }
-
-    @Override
-    public boolean popCurrentPage () {
-        this.terminate = false;
-        return this.container.popCurrentPage();
-    }
-
-    @Override
-    public boolean onBack() {
-        return this.container.onBack();
-    }
-
-    //searchview Listener
-
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
         Timber.d("submit query2 : %s", query);
@@ -192,21 +155,20 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         searchView.clearFocus();
         searchResult.clearFocus();
         this.search.expandResult(false);
-        this.onCategorySelected(NavFragment.CategoryType.SEARCH);
         return false;
     }
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
         this.search.recyclerViewListClicked(view, position);
-        if(!this.container.getCurrentPage().equals(AppConst.ViewPager.Type.SEARCH))
-            this.onCategorySelected(NavFragment.CategoryType.SEARCH);
+//        if(!this.container.getCurrentPage().equals(AppConst.ViewPager.Type.SEARCH))
+//            this.onClickCategory(NavFragment.CategoryType.SEARCH);
     }
 
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        if (!this.container.onBack()) {
+        if (!this.navigator.back()) {
             if(terminate) super.onBackPressed();
             else {
                 Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();
@@ -231,4 +193,53 @@ public class MainActivity extends ActionBarActivity implements NavFragment.OnCat
         );
     }
 
+    @Override
+    public void onClickCategory(int category) {
+        this.onClickCategory(category, false);
+    }
+    @Override
+    public void onClickCategory(int category, boolean fromUser) {
+        this.terminate = false;
+        this.drawer.setActiveCategory(category);
+        switch(category) {
+            case NavFragment.CategoryType.HOME          : this.navigate(           HomeFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.SEARCH        : this.navigate(  PartialCourseFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.RECOMMENDATION: this.navigate(          DummyFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.EVALUATION    : this.navigate(EvaluationStep1Fragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.RANDOM        : this.navigate(          DummyFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.PROFILE       : this.navigate(        ProfileFragment.class, true, fromUser); break;
+            case NavFragment.CategoryType.SIGNOUT       : this.navigate(        SignOutFragment.class, true, fromUser); break;
+        }
+    }
+
+    /* Map Navigator methods to this.navigator */
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
+        this.navigator.navigate(target, addToBackStack);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType) {
+        this.navigator.navigate(target, addToBackStack, animatorType);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
+        this.navigator.navigate(target, addToBackStack, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType, boolean clear) {
+        this.navigator.navigate(target, addToBackStack, animatorType, clear);
+    }
+
+    @Override
+    public String getBackStackNameAt(int index) {
+        return this.navigator.getBackStackNameAt(index);
+    }
+
+    @Override
+    public boolean back() {
+        return this.navigator.back();
+    }
 }

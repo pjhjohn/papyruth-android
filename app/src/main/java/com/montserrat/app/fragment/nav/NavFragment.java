@@ -30,56 +30,32 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class NavFragment extends Fragment implements RecyclerViewClickListener{
-    private int iActiveCategory;
-    private OnCategoryClickListener callback;
-    private View fragmentContainerView;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
-    private RecyclerView recyclerView;
-    private NavAdapter adapter;
-    private List<Category> items;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.setHasOptionsMenu(true);
-    }
-
-    /**
-     * TODO : Synchronize Category with Data initializatio in onCreateView
-     */
-    public static String stringify(int category) {
-        switch(category) {
-            case CategoryType.HOME : return "HOME";
-            case CategoryType.SEARCH : return "SEARCH";
-            case CategoryType.SUGGEST : return "RECOMMENDATION";
-            case CategoryType.EVALUATION: return "EVALUAION";
-            case CategoryType.RANDOM : return "RANDOM";
-            case CategoryType.PROFILE : return "PROFILE";
-            case CategoryType.SIGNOUT : return "SIGNOUT";
-            default : return "<UNASSIGNED>";
-        }
-    }
-    public static final class CategoryType {
-        public static final int HOME    = 0;
-        public static final int SEARCH  = 1;
-        public static final int SUGGEST = 2;
-        public static final int EVALUATION = 3;
-        public static final int RANDOM  = 4;
-        public static final int PROFILE = 5;
-        public static final int SIGNOUT = 6;
+public class NavFragment extends Fragment implements RecyclerViewClickListener {
+    private int activeCategory;
+    public static class CategoryType {
+        public static final int HOME            = 0;
+        public static final int SEARCH          = 1;
+        public static final int RECOMMENDATION  = 2;
+        public static final int EVALUATION      = 3;
+        public static final int RANDOM          = 4;
+        public static final int PROFILE         = 5;
+        public static final int SIGNOUT         = 6;
     }
 
     @InjectView(R.id.subtitle_nickname) protected TextView subtitle_nickname;
     @InjectView(R.id.subtitle_email) protected TextView subtitle_email;
+    @InjectView(R.id.nav_recyclerview) protected RecyclerView recyclerView;
+    private NavAdapter adapter;
+    private List<Category> items;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nav, container, false);
         ButterKnife.inject(this, view);
+
         /* views */
         this.subtitle_nickname.setText(User.getInstance().getNickname());
-        this.subtitle_nickname.setPaintFlags(this.subtitle_nickname.getPaintFlags()|Paint.FAKE_BOLD_TEXT_FLAG);
+        this.subtitle_nickname.setPaintFlags(this.subtitle_nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.subtitle_email.setText(User.getInstance().getEmail());
 
         /* items */
@@ -96,39 +72,39 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         this.adapter = new NavAdapter(this.getActivity(), this.items, this);
 
         /* recyclerview */
-        this.recyclerView = (RecyclerView) view.findViewById(R.id.nav_recyclerview);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         this.recyclerView.setAdapter(this.adapter);
 
         return view;
     }
 
-    public void setActiveCategory(int category) {
-        this.iActiveCategory = category;
-    }
-
-    public int getActiveCategory() {
-        return this.iActiveCategory;
-    }
-
     @Override
-    public void recyclerViewListClicked (View view, int position) {
-        this.iActiveCategory = position;
-        if (this.drawerLayout != null) this.drawerLayout.closeDrawer(this.fragmentContainerView);
-        if (this.callback != null) this.callback.onCategorySelected(position);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.setHasOptionsMenu(true);
     }
 
-    public boolean isDrawerOpen() {
-        return this.drawerLayout != null && this.drawerLayout.isDrawerOpen(this.fragmentContainerView);
+    private OnClickCategory callback;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.callback = (OnClickCategory) activity;
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.callback = null;
     }
 
+    private View container;
+    private DrawerLayout navLayout;
+    private ActionBarDrawerToggle navToggle;
     public void setUp(int fragment_id, DrawerLayout drawerLayout) {
-        this.fragmentContainerView = this.getActivity().findViewById(fragment_id);
-        this.drawerLayout = drawerLayout;
-        ActionBar actionBar = this.getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        this.drawerToggle = new ActionBarDrawerToggle(this.getActivity(), drawerLayout, R.string.app_name, R.string.app_name) {
+        this.container = this.getActivity().findViewById(fragment_id);
+        this.navLayout = drawerLayout;
+        this.getActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getActionBar().setHomeButtonEnabled(true);
+        this.navToggle = new ActionBarDrawerToggle(this.getActivity(), drawerLayout, R.string.app_name, R.string.app_name) {
             @Override
             public void onDrawerClosed(View navView) {
                 super.onDrawerClosed(navView);
@@ -141,37 +117,35 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
                 if (NavFragment.this.isAdded()) NavFragment.this.getActivity().invalidateOptionsMenu();
             }
         };
+        this.navLayout.post(this.navToggle::syncState);
+        this.navLayout.setDrawerListener(this.navToggle);
+    }
 
-        this.drawerLayout.post(this.drawerToggle::syncState);
-        this.drawerLayout.setDrawerListener(this.drawerToggle);
+    public void setActiveCategory(int category) {
+        this.activeCategory = category;
+        // TODO : Background highlighting or something else
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            this.callback = (OnCategoryClickListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavCallback.");
-        }
+    public void recyclerViewListClicked (View view, int position) {
+        this.activeCategory = position;
+        if (this.navLayout != null) this.navLayout.closeDrawer(this.container);
+        if (this.callback != null) this.callback.onClickCategory(position, true);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.callback = null;
+    public boolean isDrawerOpen() {
+        return this.navLayout != null && this.navLayout.isDrawerOpen(this.container);
     }
 
+    /* Menu */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        this.drawerToggle.onConfigurationChanged(newConfig);
+        this.navToggle.onConfigurationChanged(newConfig);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // navigation first
-        if (this.drawerToggle.onOptionsItemSelected(item)) return true;
-        // actionbar second
+        if (this.navToggle.onOptionsItemSelected(item)) return true;
         switch (item.getItemId()) {
             case R.id.menu_search:
                 // TODO : Transition to editText on ActionBar
@@ -180,17 +154,6 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-////        if (this.drawerLayout != null && this.isDrawerOpen()) {
-////            inflater.inflate(R.menu.global, menu);
-////            this.showGlobalContextActionBar();
-////        }
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-
-
 
     /** Per the navigation drawer design guidelines, updates the action bar to show the global app 'context', rather than just what's in the current screen. */
     private void showGlobalContextActionBar() {
@@ -203,7 +166,8 @@ public class NavFragment extends Fragment implements RecyclerViewClickListener{
         return ((ActionBarActivity) this.getActivity()).getSupportActionBar();
     }
 
-    public interface OnCategoryClickListener {
-        void onCategorySelected (int category);
+    public interface OnClickCategory {
+        void onClickCategory(int category);
+        void onClickCategory(int category, boolean fromUser);
     }
 }

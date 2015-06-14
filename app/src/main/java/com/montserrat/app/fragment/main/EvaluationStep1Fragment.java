@@ -13,50 +13,32 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
-import com.montserrat.app.adapter.PartialCourseAdapter;
 import com.montserrat.app.model.Candidate;
-import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.EvaluationForm;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.Search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.Page;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.navigator.Navigator;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RetrofitError;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
-import rx.android.widget.WidgetObservable;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
-
-import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-26.
  * Searches PartialCourse for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAdapter, Candidate> implements OnPageFocus {
-    private ViewPagerContainerController controller;
+public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAdapter, Candidate> {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView(R.id.query) protected EditText query;
@@ -104,14 +86,11 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
 
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
-            if (Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2).equals(this.controller.getPreviousPage()) ||
-                    Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP3).equals(this.controller.getPreviousPage())) {
-                if (this.controller.getHistoryCopy().contains(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1)))
-                    this.controller.popCurrentPage();
-                else
-                    this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
-            } else
-                this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP2), true);
+            this.navigator.navigate(EvaluationStep2Fragment.class, true);
+//            if(EvaluationStep2Fragment.class.getName().equals(this.navigator.getBackStackNameAt(1)) ||
+//               EvaluationStep3Fragment.class.getName().equals(this.navigator.getBackStackNameAt(2))) {
+//                if(!this.navigator.getManager.popBackStack(SOME_FLAG)) this.navigator.navigate(EvaluationStep2Fragment.class, true);
+//            } else this.navigator.navigate(EvaluationStep2Fragment.class, true);
         }
     }
 
@@ -127,11 +106,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @Override
     public void onResume() {
         super.onResume();
-        if(this.getUserVisibleHint()) this.onPageFocused();
-    }
-
-    @Override
-    public void onPageFocused() {
         FloatingActionControl.getInstance().clear();
         this.search.autoComplete(query);
     }

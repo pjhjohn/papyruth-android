@@ -15,8 +15,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
@@ -37,12 +36,12 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileEditFragment extends Fragment implements OnPageFocus {
-    private ViewPagerContainerController controller;
+public class ProfileEditFragment extends Fragment {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView (R.id.email) protected MaterialEditText email;
@@ -72,7 +71,8 @@ public class ProfileEditFragment extends Fragment implements OnPageFocus {
     }
 
     @Override
-    public void onPageFocused () {
+    public void onResume() {
+        super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         this.email.setText(User.getInstance().getEmail());
@@ -120,7 +120,7 @@ public class ProfileEditFragment extends Fragment implements OnPageFocus {
                     this.progress.setVisibility(View.GONE);
                     if (response.success) {
                         User.getInstance().update(response.user, response.access_token);
-                        this.controller.popCurrentPage();
+                        this.navigator.back();
                     } else {
                         // TODO : Failed to Update User Profile
                     }

@@ -9,8 +9,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.montserrat.utils.view.viewpager.FlexibleViewPager
-            android:id="@+id/main_viewpager"
+        <FrameLayout
+            android:id="@+id/main_navigator"
             android:focusable="true"
             android:clickable="true"
             android:layout_width="match_parent"

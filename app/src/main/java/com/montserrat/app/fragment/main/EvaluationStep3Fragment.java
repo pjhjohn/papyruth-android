@@ -12,15 +12,12 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.Page;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.navigator.Navigator;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,12 +39,12 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
-    private ViewPagerContainerController controller;
+public class EvaluationStep3Fragment extends Fragment {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView(R.id.lecture) protected Button lecture;
@@ -75,7 +72,8 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
     }
 
     @Override
-    public void onPageFocused () {
+    public void onResume() {
+        super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         lecture.setText(EvaluationForm.getInstance().getLectureName());
@@ -87,7 +85,7 @@ public class EvaluationStep3Fragment extends Fragment implements OnPageFocus {
 
         this.subscriptions.add(Observable
             .merge(ViewObservable.clicks(this.lecture), ViewObservable.clicks(this.professor))
-            .subscribe(unused -> this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1), true))
+            .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
         );
 
         this.subscriptions.add(WidgetObservable

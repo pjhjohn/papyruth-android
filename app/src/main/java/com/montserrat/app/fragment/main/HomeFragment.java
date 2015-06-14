@@ -10,18 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.PartialEvaluationAdapter;
-import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.Page;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
+import com.montserrat.utils.view.navigator.FragmentNavigator;
+import com.montserrat.utils.view.navigator.Navigator;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,21 +28,17 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-09.
  * Provides latest evaluations.
  */
-public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter, PartialEvaluation> implements OnPageFocus {
-    private ViewPagerContainerController controller;
-    private NavFragment.OnCategoryClickListener callback;
-
+public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter, PartialEvaluation> {
+    private Navigator navigator;
     @Override
     public void onAttach (Activity activity) {
         super.onAttach(activity);
-        this.controller = (ViewPagerContainerController) activity;
-        this.callback = (NavFragment.OnCategoryClickListener) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView (R.id.recyclerview) protected RecyclerView recycler;
@@ -65,22 +58,16 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.refresh.setEnabled(true);
         this.setupRecyclerView(this.recycler);
+        this.setupSwipeRefresh(this.refresh);
 
         return view;
-    }
-
-    @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.setupSwipeRefresh(this.refresh);
     }
 
     @Override
     public void onDestroyView () {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if (this.subscriptions != null && !this.subscriptions.isUnsubscribed())
-            this.subscriptions.unsubscribe();
+        if (this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     @Override
@@ -101,16 +88,11 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     @Override
     public void onResume() {
         super.onResume();
-        if(this.getUserVisibleHint()) this.onPageFocused();
-    }
-
-    @Override
-    public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_new_evaluation)
-            .subscribe(unused -> this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.EVALUATION, AppConst.ViewPager.Evaluation.EVALUATION_STEP1), true))
+            .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN))
         );
 
         this.subscriptions.add(super.getRefreshObservable(this.refresh)
