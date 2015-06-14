@@ -1,4 +1,4 @@
-package com.montserrat.utils.view.Search;
+package com.montserrat.utils.view.search;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.RetrofitError;
-import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;

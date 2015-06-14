@@ -5,6 +5,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
 import com.montserrat.app.R;
+import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.viewpager.OnBack;
+import com.montserrat.utils.view.viewpager.ViewPagerManager;
+
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-10.
@@ -29,11 +34,14 @@ public class FragmentNavigator implements Navigator {
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
+        final Fragment current = this.manager.findFragmentById(this.containerViewId);
+        Timber.d("%s", current);
+        if(current != null && current.getClass().getName().equals(target.getName())) return;
         if(clear) this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Fragment fragment = this.instantiateFragment(target);
+        Fragment next = this.instantiateFragment(target);
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
-        if(addToBackStack) transaction.addToBackStack(fragment.getClass().getName());
-        transaction.replace(this.containerViewId, fragment);
+        if(addToBackStack) transaction.addToBackStack(next.getClass().getName());
+        transaction.replace(this.containerViewId, next);
         transaction.commit();
     }
 
@@ -60,9 +68,19 @@ public class FragmentNavigator implements Navigator {
 
     @Override
     public boolean back() {
-        if(this.manager.getBackStackEntryCount() <= 1) return false; // 1 for top fragment
-        this.manager.popBackStack();
-        return true;
+        final Fragment current = this.manager.findFragmentById(this.containerViewId);
+        if (current != null) {
+            boolean backed = false;
+            if(FloatingActionControl.getMenu() != null && FloatingActionControl.getMenu().isOpened()) {
+                FloatingActionControl.getMenu().close(true);
+                backed = true;
+            }
+            if(!backed && current instanceof OnBack) backed = ((OnBack) current).onBack();
+            if(!backed && this.manager.getBackStackEntryCount() > 1) {
+                this.manager.popBackStack();
+                backed = true;
+            } return backed;
+        } return false;
     }
 
     private FragmentTransaction setCustomAnimator(FragmentTransaction transaction, AnimatorType animatorType) {

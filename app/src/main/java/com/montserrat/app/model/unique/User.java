@@ -1,5 +1,9 @@
 package com.montserrat.app.model.unique;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import com.montserrat.app.R;
 import com.montserrat.app.model.UserInfo;
 
 /**
@@ -21,6 +25,7 @@ public class User {
     private Integer university_id;
     private String  university_name;
     private Integer entrance_year;
+    private String  avatar_url;
 
     private User () {
         this.clear();
@@ -35,6 +40,7 @@ public class User {
         this.university_id   = null;
         this.university_name = null;
         this.entrance_year   = null;
+        this.avatar_url      = null;
     }
 
     public String getAccessToken () {
@@ -84,6 +90,12 @@ public class User {
     }
     public void setGenderIsBoy (boolean is_boy) {
         this.is_boy = is_boy;
+    }
+    public String getAvatarUrl() {
+        return avatar_url;
+    }
+    public void setAvatarUrl(String url) {
+        this.avatar_url = url;;
     }
 
     public void update(UserInfo user) {

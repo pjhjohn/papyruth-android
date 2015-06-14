@@ -1,4 +1,4 @@
-package com.montserrat.utils.view.Search;
+package com.montserrat.utils.view.search;
 
 import android.content.Context;
 import android.content.SharedPreferences;

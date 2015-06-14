@@ -19,11 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CourseAdapter;
-import com.montserrat.app.fragment.nav.NavFragment;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
@@ -34,8 +32,6 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
-import com.montserrat.utils.view.viewpager.Page;
-import com.montserrat.utils.view.viewpager.ViewPagerContainerController;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

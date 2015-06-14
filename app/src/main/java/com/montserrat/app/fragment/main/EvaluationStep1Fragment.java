@@ -19,7 +19,7 @@ import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.view.Search.AutoCompletableSearchView;
+import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 
