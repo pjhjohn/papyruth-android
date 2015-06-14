@@ -58,22 +58,16 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.refresh.setEnabled(true);
         this.setupRecyclerView(this.recycler);
+        this.setupSwipeRefresh(this.refresh);
 
         return view;
-    }
-
-    @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.setupSwipeRefresh(this.refresh);
     }
 
     @Override
     public void onDestroyView () {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if (this.subscriptions != null && !this.subscriptions.isUnsubscribed())
-            this.subscriptions.unsubscribe();
+        if (this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     @Override
