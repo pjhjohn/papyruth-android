@@ -43,22 +43,22 @@ public class AppManager {
 
     /* Mapping SharedPreferences methods */
     public void putBoolean(String key, boolean value) {
-        this.pref.edit().putBoolean(key, value).commit();
+        this.pref.edit().putBoolean(key, value).apply();
     }
     public void putInt(String key, int value) {
-        this.pref.edit().putInt(key, value).commit();
+        this.pref.edit().putInt(key, value).apply();
     }
     public void putLong(String key, long value) {
-        this.pref.edit().putLong(key, value).commit();
+        this.pref.edit().putLong(key, value).apply();
     }
     public void putFloat(String key, float value) {
-        this.pref.edit().putFloat(key, value).commit();
+        this.pref.edit().putFloat(key, value).apply();
     }
     public void putString(String key, String value) {
-        this.pref.edit().putString(key, value).commit();
+        this.pref.edit().putString(key, value).apply();
     }
     public void putStringSet(String key, Set<String> value) {
-        this.pref.edit().putStringSet(key, value).commit();
+        this.pref.edit().putStringSet(key, value).apply();
     }
 
     public boolean getBoolean(String key, boolean fallback) {
@@ -84,10 +84,10 @@ public class AppManager {
     }
 
     public void remove(String key) {
-        this.pref.edit().remove(key).commit();
+        this.pref.edit().remove(key).apply();
     }
 
     public void clear() {
-        this.pref.edit().clear().commit();
+        this.pref.edit().clear().apply();
     }
 }
