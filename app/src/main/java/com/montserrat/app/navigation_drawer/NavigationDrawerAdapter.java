@@ -23,13 +23,13 @@ import butterknife.InjectView;
  * as an adapter for List-type {@link RecyclerView} to provide global navigation for the application
  */
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.ViewHolder> {
-    private List<Category> mData;
+    private List<NavigationDrawerItem> mData;
     private NavigationDrawerCallback mNavigationDrawerCallback;
     private View mSelectedView;
     private int mSelectedPosition;
     private Context mContext;
 
-    public NavigationDrawerAdapter(Context context, List<Category> data) {
+    public NavigationDrawerAdapter(Context context, List<NavigationDrawerItem> data) {
         mData = data;
         mContext = context;
     }
@@ -44,7 +44,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
     @Override
     public NavigationDrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_category, parent, false));
+        final ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
         viewHolder.itemView.setClickable(true);
         viewHolder.itemView.setOnClickListener(view -> {
             if (mSelectedView != null) mSelectedView.setSelected(false);
@@ -90,9 +90,9 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             this.colorFilter = mContext.getResources().getColor(R.color.nav_filter);
         }
 
-        public void bind(Category category) {
-            Picasso.with(mContext).load(category.getResourceId()).transform(new ColorFilterTransformation(colorFilter)).into(icon);
-            text.setText(category.getText());
+        public void bind(NavigationDrawerItem navigationDrawerItem) {
+            Picasso.with(mContext).load(navigationDrawerItem.getDrawableResourceId()).transform(new ColorFilterTransformation(colorFilter)).into(icon);
+            text.setText(navigationDrawerItem.getText());
         }
     }
 }

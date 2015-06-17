@@ -47,22 +47,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
     }
 
-    public static class CategoryType {
-        public static final int HOME            = 0;
-        public static final int SEARCH          = 1;
-        public static final int RECOMMENDATION  = 2;
-        public static final int EVALUATION      = 3;
-        public static final int RANDOM          = 4;
-        public static final int PROFILE         = 5;
-        public static final int SIGNOUT         = 6;
-    }
-
-    @InjectView(R.id.subtitle_nickname) protected TextView subtitleNickname;
-    @InjectView(R.id.subtitle_email) protected TextView subtitleEmail;
-    @InjectView(R.id.subtitle_avatar) protected ImageView subtitleAvatar;
+    @InjectView(R.id.subtitle_nickname) protected TextView mSubtitleNickname;
+    @InjectView(R.id.subtitle_email) protected TextView mSubtitleEmail;
+    @InjectView(R.id.subtitle_avatar) protected ImageView mSubtitleAvatar;
     @InjectView(R.id.nav_recyclerview) protected RecyclerView mDrawerList;
     private NavigationDrawerAdapter mNavigationDrawerAdapter;
-    private List<Category> categories;
+    private List<NavigationDrawerItem> mNavigationDrawerItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,25 +60,25 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         ButterKnife.inject(this, view);
 
         /* items */
-        this.categories = new ArrayList<>();
-        this.categories.add(new Category(this.getString(R.string.nav_item_home), R.drawable.ic_light_home));
-        this.categories.add(new Category(this.getString(R.string.nav_item_search), R.drawable.ic_light_search));
-        this.categories.add(new Category(this.getString(R.string.nav_item_recommendation), R.drawable.ic_light_recommend));
-        this.categories.add(new Category(this.getString(R.string.nav_item_evaluation), R.drawable.ic_light_new_evaluation));
-        this.categories.add(new Category(this.getString(R.string.nav_item_random), R.drawable.ic_light_random));
-        this.categories.add(new Category(this.getString(R.string.nav_item_profile), R.drawable.ic_light_setting));
-        this.categories.add(new Category(this.getString(R.string.nav_item_signout), R.drawable.ic_light_signout));
+        mNavigationDrawerItems = new ArrayList<>();
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_home), R.drawable.ic_light_home));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_search), R.drawable.ic_light_search));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_recommendation), R.drawable.ic_light_recommend));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_evaluation), R.drawable.ic_light_new_evaluation));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_random), R.drawable.ic_light_random));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_profile), R.drawable.ic_light_setting));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_signout), R.drawable.ic_light_signout));
 
         /* adapter */
-        this.mNavigationDrawerAdapter = new NavigationDrawerAdapter(this.getActivity(), this.categories);
-        this.mNavigationDrawerAdapter.setClickCategoryCallback(this);
+        mNavigationDrawerAdapter = new NavigationDrawerAdapter(this.getActivity(), this.mNavigationDrawerItems);
+        mNavigationDrawerAdapter.setClickCategoryCallback(this);
 
         /* recyclerview */
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        this.mDrawerList.setLayoutManager(layoutManager);
-        this.mDrawerList.setHasFixedSize(true);
-        this.mDrawerList.setAdapter(this.mNavigationDrawerAdapter);
+        mDrawerList.setLayoutManager(layoutManager);
+        mDrawerList.setHasFixedSize(true);
+        mDrawerList.setAdapter(this.mNavigationDrawerAdapter);
         this.select(mCurrentSelectedPosition, false);
 
         return view;
@@ -169,7 +159,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         if (mDrawerList.getAdapter() != null) ((NavigationDrawerAdapter) mDrawerList.getAdapter()).selectPosition(position);
     }
     public boolean isOpened() {
-        return this.mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
     public void open() {
         mDrawerLayout.openDrawer(mFragmentContainerView);
@@ -178,12 +168,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerLayout.closeDrawer(mFragmentContainerView);
     }
     public void update() {
-        this.subtitleNickname.setText(User.getInstance().getNickname());
-        this.subtitleNickname.setPaintFlags(this.subtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.subtitleEmail.setText(User.getInstance().getEmail());
+        mSubtitleNickname.setText(User.getInstance().getNickname());
+        mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mSubtitleEmail.setText(User.getInstance().getEmail());
         final String avatarUrl = User.getInstance().getAvatarUrl();
-        if (avatarUrl != null) Picasso.with(this.getActivity()).load(avatarUrl).transform(new CircleTransformation()).into(this.subtitleAvatar);
-        else Picasso.with(this.getActivity()).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(this.subtitleAvatar);
+        if (avatarUrl != null) Picasso.with(this.getActivity()).load(avatarUrl).transform(new CircleTransformation()).into(mSubtitleAvatar);
+        else Picasso.with(this.getActivity()).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(mSubtitleAvatar);
     }
 
     /* Menu */
