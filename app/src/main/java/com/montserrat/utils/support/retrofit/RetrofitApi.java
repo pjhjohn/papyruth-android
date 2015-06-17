@@ -50,10 +50,26 @@ public class RetrofitApi {
             @Query("body") String body
         );
 
+        @GET("/courses")
+        Observable<CourseResponse> courses(
+            @Header("Authorization") String authorization,
+            @Query("university_id") Integer university_id,
+            @Query("page") Integer page,
+            @Query("limit") Integer limit,
+            @Query("recommend") Boolean recommend
+        );
+
         @GET("/courses/{id}")
-        Observable<CourseResponse> courses (
+        Observable<CourseResponse> course(
             @Header("Authorization") String authorization,
             @Path("id") Integer id
+        );
+
+        @GET("/courses/{id}")
+        Observable<CourseResponse> course_favorite(
+            @Header("Authorization") String authorization,
+            @Path("id") Integer id,
+            @Query("favorite") Boolean favorite
         );
 
         @GET("/evaluations")
@@ -78,7 +94,7 @@ public class RetrofitApi {
         );
 
         @GET("/evaluations/{id}")
-        Observable<EvaluationResponse> evaluations(
+        Observable<EvaluationResponse> evaluation(
             @Header("Authorization") String authorization,
             @Path("id") Integer id
         );
@@ -147,6 +163,12 @@ public class RetrofitApi {
             @Query("nickname") String nickname,
             @Query("realname") String realname,
             @Query("is_boy") Boolean is_boy
+        );
+
+        @GET("/users/me/favorites")
+        Observable<PartialCoursesResponse> users_me_favorites(
+            @Header("Authorization") String authorization,
+            @Query("page") Integer page
         );
     }
 
