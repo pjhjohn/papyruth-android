@@ -29,6 +29,8 @@ import com.montserrat.app.fragment.main.ProfileFragment;
 import com.montserrat.app.fragment.main.SignOutFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.model.unique.Search;
+import com.montserrat.app.navigation_drawer.NavigationDrawerItem;
+import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
@@ -197,15 +199,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onNavigationDrawerItemSelected(int position, boolean fromUser) {
         this.terminate = false;
-        switch(position) {
-            case NavigationDrawerFragment.CategoryType.HOME          : this.navigate(           HomeFragment.class, true, fromUser); break;
-            case NavigationDrawerFragment.CategoryType.SEARCH        : this.navigate(  PartialCourseFragment.class, true, fromUser); break;
-            case NavigationDrawerFragment.CategoryType.RECOMMENDATION: this.navigate(          DummyFragment.class, true, fromUser); break;
-            case NavigationDrawerFragment.CategoryType.EVALUATION    : this.navigate(EvaluationStep1Fragment.class, true, fromUser); break;
-            case NavigationDrawerFragment.CategoryType.RANDOM        : this.navigate(          DummyFragment.class, true, fromUser); break;
-            case NavigationDrawerFragment.CategoryType.PROFILE       : this.navigate(        ProfileFragment.class, true, fromUser); break;
-            case NavigationDrawerFragment.CategoryType.SIGNOUT       : this.navigate(        SignOutFragment.class, true, fromUser); break;
-        }
+        this.navigate(NavigationDrawerUtils.getFragmentClassOf(position), true, fromUser);
     }
 
     /* Map Navigator methods to this.navigator */
