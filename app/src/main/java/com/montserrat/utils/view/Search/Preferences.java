@@ -6,7 +6,9 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.response.PartialCoursesResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,9 +32,36 @@ public class Preferences {
 
     public List<PartialCourse> getHistory(){
         String data = preferences.getString("history", "");
-        List list = gson.fromJson(data, List.class);
-        List<PartialCourse> partialCourseList = list;
+        PartialCoursesResponse partialCourseList = gson.fromJson(data, PartialCoursesResponse.class);
 
-        return null;
+        return partialCourseList.courses;
+    }
+    public boolean addHistory(PartialCourse course){
+        PartialCoursesResponse partialCoursesResponse = new PartialCoursesResponse();
+        List<PartialCourse> partialCourseList = getHistory();
+
+        if(partialCourseList == null){
+            partialCourseList = new ArrayList<>();
+        }else {
+            partialCourseList.remove(0);
+        }
+        partialCourseList.add(course);
+        partialCoursesResponse.courses.addAll(partialCourseList);
+
+        editor = this.preferences.edit();
+        String json = gson.toJson(partialCoursesResponse);
+        editor.putString(HISTORY, json);
+        editor.apply();
+
+        return true;
+    }
+    public boolean clear(Type type){
+        if(preferences.contains(HISTORY)){
+            editor = this.preferences.edit();
+            editor.remove(HISTORY);
+            editor.apply();
+            return true;
+        }
+        return false;
     }
 }
