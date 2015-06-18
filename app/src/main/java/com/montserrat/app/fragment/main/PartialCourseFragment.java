@@ -74,7 +74,6 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        Search.getInstance().clear();
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -97,6 +96,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     @Override
     public void onResume() {
         super.onResume();
+
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
         this.subscriptions.add(FloatingActionControl

@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -119,9 +120,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mFragmentContainerView = (View) this.getActivity().findViewById(fragment_id).getParent();
         mDrawerLayout = drawerLayout;
         mDrawerLayout.setStatusBarBackground(R.color.bg_normal);
-//        this.getActionBar().setDisplayHomeAsUpEnabled(true);
-//        this.getActionBar().setHomeButtonEnabled(true);
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this.getActivity(), drawerLayout, toolbar, R.string.app_name, R.string.app_name) {
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this.getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerClosed(View navView) {
                 super.onDrawerClosed(navView);
@@ -145,6 +144,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         mDrawerLayout.post(mActionBarDrawerToggle::syncState);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+    }
+
+    public ActionBarDrawerToggle getActionBarDrawerToggle() {
+        return mActionBarDrawerToggle;
     }
 
     /* Drawer Actions */

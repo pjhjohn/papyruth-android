@@ -105,5 +105,6 @@ public class AppConst {
         /* Keys */
         public static final String AUTO_SIGNIN = "auto_signin";
         public static final String ACCESS_TOKEN = "access_token";
+        public static final String HISTORY = "history";
     }
 }

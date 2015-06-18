@@ -37,7 +37,7 @@ import timber.log.Timber;
 /**
  * Created by SSS on 2015-06-06.
  */
-public class AutoCompletableSearchView implements View.OnClickListener, RecyclerViewClickListener{
+public class AutoCompletableSearchView implements RecyclerViewClickListener {
     private CompositeSubscription subscription;
     private RecyclerView autocompleteView;
     private RecyclerView courseListView;
@@ -75,7 +75,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
         this.autocompleteView.setLayoutManager(new LinearLayoutManager(context));
         this.autocompleteView.setAdapter(this.autoCompleteAdapter);
         this.outsideView = outsideView;
-        this.outsideView.setOnClickListener(this);
+        this.outsideView.setOnClickListener(view -> showCandidates(false));
     }
 
     public void notifyAutocompleteChanged(List <Candidate> candidates){
@@ -100,39 +100,35 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     public Subscription autoComplete(TextView textView){
         editText = (EditText) textView;
         return WidgetObservable
-                        .text(textView)
-                        .debounce(500, TimeUnit.MILLISECONDS)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .map(listener -> listener.text().toString())
-                        .flatMap(query -> {
-                                    if ( !(type == Type.EVALUATION) && query.length() < 1) {
-                                        return null;    // history
-                                    }
-                                    return RetrofitApi.getInstance().search_autocomplete(
-                                            User.getInstance().getAccessToken(),
-                                            User.getInstance().getUniversityId(),
-                                            query
-                                    );
-                                }
-                        )
-                        .map(response -> response.candidates)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                results -> {
-                                    this.notifyAutocompleteChanged(results);
-                                    expandResult(true);
-                                },
-                                error -> {
-                                    if (error instanceof RetrofitError) {
-                                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                                            default:
-                                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                                        }
-                                    }else
-                                        candidates.clear();
-                                }
-                        );
+            .text(textView)
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .map(listener -> listener.text().toString())
+            .flatMap(query -> {
+                if ( type != Type.EVALUATION && query.isEmpty()) return null; // history
+                return RetrofitApi.getInstance().search_autocomplete(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    query
+                );
+            })
+            .map(response -> response.candidates)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                results -> {
+                    this.notifyAutocompleteChanged(results);
+                    showCandidates(true);
+                },
+                error -> {
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            default : Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        }
+                    }else
+                        candidates.clear();
+                }
+            );
     }
 
     public void submit(String query){
@@ -147,38 +143,38 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     public void searchCourse(Type type) {
         if (type == Type.EVALUATION){
             this.subscription.add(
-                    RetrofitApi.getInstance().search_search(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        evaluationCandidate.lecture_id,
-                        evaluationCandidate.professor_id,
-                        null
-                    )
-                    .map(response -> response.courses)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            this::notifycourseChanged
-                            , error ->
-                                Timber.d("search course error : %s %s", error)
-
-                            )
+                RetrofitApi.getInstance().search_search(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    evaluationCandidate.lecture_id,
+                    evaluationCandidate.professor_id,
+                    null
+                )
+                .map(response -> response.courses)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    this::notifycourseChanged,
+                    error -> Timber.d("search course error : %s %s", error)
+                )
             );
-        }else {
-            RetrofitApi.getInstance().search_search(
+        } else {
+            RetrofitApi
+                .getInstance()
+                .search_search(
                     User.getInstance().getAccessToken(),
                     User.getInstance().getUniversityId(),
                     Search.getInstance().getLectureId(),
                     Search.getInstance().getProfessorId(),
-                    Search.getInstance().getQuery())
-                    .map(response -> response.courses)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        this::notifycourseChanged
-                    , error ->
-                        Timber.d("Search error : %s", error)
-                    );
+                    Search.getInstance().getQuery()
+                )
+                .map(response -> response.courses)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    this::notifycourseChanged,
+                    error -> Timber.d("Search error : %s", error)
+                );
         }
     }
 
@@ -211,24 +207,20 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
     }
 
     @Override
-    public void onClick(View v) {
-        expandResult(false);
-    }
-
-    @Override
     public void recyclerViewListClicked(View view, int position) {
         ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
+            Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
-            this.expandResult(false);
+            this.showCandidates(false);
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().fromPartailCourse(courses.get(position));
         }
     }
 
-    public void expandResult(boolean expand){
+    public void showCandidates(boolean show){
         ViewGroup.LayoutParams param;
-        if(expand){
+        if(show){
             if(type == Type.EVALUATION) {
                 param =  courseListView.getLayoutParams();
                 param.height = this.context.getResources().getDisplayMetrics().heightPixels - this.editText.getHeight();
@@ -244,7 +236,7 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
             param.height = this.context.getResources().getDisplayMetrics().heightPixels;
             param.width = this.context.getResources().getDisplayMetrics().widthPixels;
             outsideView.setLayoutParams(param);
-        }else{
+        } else {
             param =  autocompleteView.getLayoutParams();
             param.height = 0;
             param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
@@ -257,5 +249,4 @@ public class AutoCompletableSearchView implements View.OnClickListener, Recycler
             outsideView.setLayoutParams(param);
         }
     }
-
 }

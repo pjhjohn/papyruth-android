@@ -280,15 +280,15 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
                 Timber.d("animate end");
                 frameLayout.setVisibility(View.GONE);
                 FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-//                subscriptions.add(FloatingActionControl
-//                    .clicks(R.id.fab_new_evaluation)
-//                    .subscribe(unused -> {
-//                        EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-//                        EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-//                        EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
-//                        CourseFragment.this.controller.setCurrentPage(Page.at(AppConst.ViewPager.Type.SEARCH, AppConst.ViewPager.Search.EVALUATION_STEP2), true);
-//                    })
-//                );
+                subscriptions.add(FloatingActionControl
+                    .clicks(R.id.fab_new_evaluation)
+                    .subscribe(unused -> {
+                        EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+                        EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+                        EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+                        CourseFragment.this.navigator.navigate(EvaluationStep2Fragment.class, true);
+                    })
+                );
             }
         });
         animators.start();
