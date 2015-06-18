@@ -35,7 +35,6 @@ public class AuthActivity extends Activity implements ViewPagerController {
         this.manager = new ViewPagerManager(
             (FlexibleViewPager) findViewById(R.id.auth_viewpager),
             this.getFragmentManager(),
-            AppConst.ViewPager.Type.AUTH,
             AppConst.ViewPager.Auth.LENGTH
         );
     }

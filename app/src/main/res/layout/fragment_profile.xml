@@ -81,6 +81,12 @@
                 app:met_primaryColor="@color/fg_accent"
                 app:met_hideUnderline="true"/>
         </LinearLayout>
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/fg_normal"
+            android:text="나가기"/>
     </LinearLayout>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>
 

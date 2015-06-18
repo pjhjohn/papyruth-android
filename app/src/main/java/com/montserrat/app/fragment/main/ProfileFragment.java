@@ -2,12 +2,17 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gc.materialdesign.views.ButtonFlat;
+import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -17,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -36,6 +42,7 @@ public class ProfileFragment extends Fragment {
     @InjectView (R.id.nickname) protected MaterialEditText nickname;
     @InjectView (R.id.gender) protected MaterialEditText gender;
     @InjectView (R.id.entrance) protected MaterialEditText entrance;
+    @InjectView (R.id.sign_out) protected ButtonFlat signout;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -80,6 +87,16 @@ public class ProfileFragment extends Fragment {
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_password)
             .subscribe(unused -> this.navigator.navigate(ProfileEditPasswordFragment.class, true))
+        );
+
+        this.subscriptions.add(ViewObservable
+            .clicks(signout)
+            .subscribe(unused -> {
+                AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
+                User.getInstance().clear();
+                this.getActivity().startActivity(new Intent(this.getActivity(), AuthActivity.class));
+                this.getActivity().finish();
+            })
         );
     }
 }
