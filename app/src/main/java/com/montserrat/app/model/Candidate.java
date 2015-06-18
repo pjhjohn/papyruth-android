@@ -1,7 +1,5 @@
 package com.montserrat.app.model;
 
-import com.montserrat.app.model.PartialCourse;
-
 /**
  * Created by pjhjohn on 2015-05-27.
  */

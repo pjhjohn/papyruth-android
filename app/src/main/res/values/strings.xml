@@ -69,4 +69,6 @@
     <string name="fab_edit_password">Change Password</string>
     <string name="fab_edit_profile">Edit Profile</string>
     <string name="failed_passwd">Failed to change password</string>
+    <string name="navigation_drawer_open"/>
+    <string name="navigation_drawer_close"/>
 </resources>

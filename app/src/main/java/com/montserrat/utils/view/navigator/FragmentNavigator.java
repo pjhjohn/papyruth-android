@@ -3,6 +3,7 @@ package com.montserrat.utils.view.navigator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Bundle;
 
 import com.montserrat.app.R;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -28,21 +29,31 @@ public class FragmentNavigator implements Navigator {
         Fragment fragment = this.instantiateFragment(initialFragment);
         this.manager.beginTransaction()
             .add(this.containerViewId, fragment)
-            .addToBackStack(fragment.getClass().getName())
+            .addToBackStack(fragment.getClass().getSimpleName())
             .commit();
     }
 
     @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
         final Fragment current = this.manager.findFragmentById(this.containerViewId);
-        Timber.d("%s", current);
-        if(current != null && current.getClass().getName().equals(target.getName())) return;
+        if(bundle != null) current.setArguments(bundle);
+        if(current != null && current.getClass().getSimpleName().equals(target.getSimpleName())) return;
         if(clear) this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment next = this.instantiateFragment(target);
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
-        if(addToBackStack) transaction.addToBackStack(next.getClass().getName());
+        if(addToBackStack) transaction.addToBackStack(next.getClass().getSimpleName());
         transaction.replace(this.containerViewId, next);
         transaction.commit();
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
+        this.navigate(target, null, addToBackStack, animatorType, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, boolean clear) {
+        this.navigate(target, bundle, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, clear);
     }
 
     @Override
@@ -51,13 +62,23 @@ public class FragmentNavigator implements Navigator {
     }
 
     @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType) {
+        this.navigate(target, bundle, addToBackStack, animatorType, false);
+    }
+
+    @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType) {
-        this.navigate(target, addToBackStack, animatorType, false);
+        this.navigate(target, null, addToBackStack, animatorType, false);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack) {
+        this.navigate(target, bundle, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, false);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
-        this.navigate(target, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, false);
+        this.navigate(target, null, addToBackStack, AnimatorType.SLIDE_TO_RIGHT, false);
     }
 
     @Override

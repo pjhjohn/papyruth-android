@@ -69,4 +69,6 @@
     <string name="fab_edit_password">비밀번호 변경</string>
     <string name="fab_edit_profile">프로필 수정</string>
     <string name="failed_passwd">비밀번호 변경에 실패하였습니다</string>
+    <string name="navigation_drawer_open"/>
+    <string name="navigation_drawer_close"/>
 </resources>

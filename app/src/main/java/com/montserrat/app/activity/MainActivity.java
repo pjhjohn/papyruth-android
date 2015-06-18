@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,15 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.DummyFragment;
-import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
-import com.montserrat.app.fragment.main.PartialCourseFragment;
-import com.montserrat.app.fragment.main.ProfileFragment;
-import com.montserrat.app.fragment.main.SignOutFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.model.unique.Search;
-import com.montserrat.app.navigation_drawer.NavigationDrawerItem;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
@@ -45,16 +40,16 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
-    private NavigationDrawerFragment drawer;
-    private FragmentNavigator navigator;
+    private NavigationDrawerFragment mNavigationDrawer;
+    private FragmentNavigator mNavigator;
 
-    private CompositeSubscription subscriptions;
+    private CompositeSubscription mCompositeSubscription;
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
     @InjectView(R.id.main_navigator) FrameLayout navigatorContainer;
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
     @InjectView(R.id.query_result_outside) protected View outsideResult;
-
-    private AutoCompletableSearchView search;
+    private Toolbar mToolbar;
+    private AutoCompletableSearchView mAutoCompletableSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,30 +57,41 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(this.fac);
-        this.subscriptions = new CompositeSubscription();
+        mCompositeSubscription = new CompositeSubscription();
+        mToolbar = (Toolbar) this.findViewById(R.id.toolbar);
+        mToolbar.inflateMenu(R.menu.main);
 
-        this.setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
+        this.setSupportActionBar(mToolbar);
+        if(this.getSupportActionBar() != null) {
+            this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            this.getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
-        this.navigator = new FragmentNavigator(R.id.main_navigator, this.getFragmentManager(), HomeFragment.class);
+        mNavigator = new FragmentNavigator(R.id.main_navigator, this.getFragmentManager(), HomeFragment.class);
 
-        this.drawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
-        this.drawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), (Toolbar) this.findViewById(R.id.toolbar));
-        this.drawer.update();
+        mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
+        mNavigationDrawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), mToolbar);
+        mNavigationDrawer.update();
 
         /* Instantiate Multiple ViewPagerManagers */
-        this.search = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.TOOLBAR);
-        this.search.autoCompleteSetup(this.searchResult, this.outsideResult);
+        mAutoCompletableSearch = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.TOOLBAR);
+        mAutoCompletableSearch.autoCompleteSetup(this.searchResult, this.outsideResult);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.reset(this);
-        if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     public int getActionbarHeight() {
-        return this.getSupportActionBar().getHeight();
+        int height = 0;
+        TypedValue value = new TypedValue();
+        if (this.getTheme().resolveAttribute(android.R.attr.actionBarSize, value, true))
+            height = TypedValue.complexToDimensionPixelSize(value.data, getResources().getDisplayMetrics());
+        return height;
     }
 
     private MenuItem searchitem;
@@ -101,18 +107,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
         Timber.d("submit query2 : %s", query);
-        this.search.submit(query);
+        this.mAutoCompletableSearch.submit(query);
 
 //        ((EditText)searchView.findViewById(R.id.search_src_text)).focus
         searchView.clearFocus();
         searchResult.clearFocus();
-        this.search.expandResult(false);
+        this.mAutoCompletableSearch.showCandidates(false);
         return false;
     }
 
     @Override
     public void recyclerViewListClicked(View view, int position) {
-        this.search.recyclerViewListClicked(view, position);
+        this.mAutoCompletableSearch.recyclerViewListClicked(view, position);
 //        if(!this.container.getCurrentPage().equals(AppConst.ViewPager.Type.SEARCH))
 //            this.onNavigationDrawerItemSelected(NavFragment.CategoryType.SEARCH);
     }
@@ -120,8 +126,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        if (this.drawer.isOpened()) this.drawer.close();
-        else if (this.navigator.back()) terminate = false;
+        if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
+        else if (this.mNavigator.back()) terminate = false;
         else if (terminate) super.onBackPressed();
         else {
             Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();
@@ -133,12 +139,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public void onFocusChange(View view, boolean hasFocus) {
         Timber.d("expand3 : %s?%s", view.getClass().toString(), hasFocus);
         if(view == searchView) {
-            search.expandResult(false);
+            mAutoCompletableSearch.showCandidates(false);
         }else if(view == searchResult){
             // TODO : implement it!
         }
-        this.subscriptions.add(
-            this.search.autoComplete(
+        this.mCompositeSubscription.add(
+            this.mAutoCompletableSearch.autoComplete(
                 (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)
             )
         );
@@ -177,7 +183,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         searchView.setOnQueryTextFocusChangeListener(this);
         searchResult.setOnFocusChangeListener(this);
 
-        if (!this.drawer.isOpened()) {
+        if (!this.mNavigationDrawer.isOpened()) {
             this.getMenuInflater().inflate(R.menu.main, menu);
             this.restoreActionBar();
             return true;
@@ -189,7 +195,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_search){
-            Timber.i("Ready to user searchView");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -205,31 +210,51 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     /* Map Navigator methods to this.navigator */
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
-        this.navigator.navigate(target, addToBackStack);
+        this.mNavigator.navigate(target, addToBackStack);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType) {
-        this.navigator.navigate(target, addToBackStack, animatorType);
+        this.mNavigator.navigate(target, addToBackStack, animatorType);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
-        this.navigator.navigate(target, addToBackStack, clear);
+        this.mNavigator.navigate(target, addToBackStack, clear);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType, boolean clear) {
-        this.navigator.navigate(target, addToBackStack, animatorType, clear);
+        this.mNavigator.navigate(target, addToBackStack, animatorType, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack) {
+        this.mNavigator.navigate(target, bundle, addToBackStack);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType) {
+        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, boolean clear) {
+        this.mNavigator.navigate(target, bundle, addToBackStack, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType, boolean clear) {
+        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType, clear);
     }
 
     @Override
     public String getBackStackNameAt(int index) {
-        return this.navigator.getBackStackNameAt(index);
+        return this.mNavigator.getBackStackNameAt(index);
     }
 
     @Override
     public boolean back() {
-        return this.navigator.back();
+        return this.mNavigator.back();
     }
 }
