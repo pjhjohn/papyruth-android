@@ -38,15 +38,15 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     @Override
     public void onAttach (Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
+        navigator = (Navigator) activity;
     }
 
-    @InjectView (R.id.recyclerview) protected RecyclerView recycler;
-    @InjectView (R.id.swipe) protected SwipeRefreshLayout refresh;
+    @InjectView (R.id.recyclerview) protected RecyclerView evaluationOverview;
+    @InjectView (R.id.swipe) protected SwipeRefreshLayout swipeRefresh;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
-    private Integer since = null, max = null;
+    private Integer sinceId = null, maxId = null;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,10 +55,10 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
         this.subscriptions = new CompositeSubscription();
 
         /* View Initialization */
-        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.refresh.setEnabled(true);
-        this.setupRecyclerView(this.recycler);
-        this.setupSwipeRefresh(this.refresh);
+        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        this.swipeRefresh.setEnabled(true);
+        this.setupRecyclerView(this.evaluationOverview);
+        this.setupSwipeRefresh(this.swipeRefresh);
 
         return view;
     }
@@ -67,7 +67,8 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     public void onDestroyView () {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if (this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if (subscriptions == null || subscriptions.isUnsubscribed()) return;
+        subscriptions.unsubscribe();
     }
 
     @Override
@@ -95,16 +96,16 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
             .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN))
         );
 
-        this.subscriptions.add(super.getRefreshObservable(this.refresh)
+        this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
             .flatMap(unused -> {
-                this.refresh.setRefreshing(true);
+                this.swipeRefresh.setRefreshing(true);
                 return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
             })
             .map(evaluations -> evaluations.evaluations)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(evaluations -> {
-                this.refresh.setRefreshing(false);
+                this.swipeRefresh.setRefreshing(false);
                 this.items.clear();
                 if (evaluations != null)
                     this.items.addAll(evaluations);
@@ -112,11 +113,13 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
             })
         );
 
-        this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recycler, this.toolbar, true)
-            .filter(askmoreifnull -> askmoreifnull == null && this.progress.getVisibility() != View.VISIBLE)
+        this.subscriptions.add(super.getRecyclerViewScrollObservable(this.evaluationOverview, this.toolbar, true)
+            .startWith((Boolean) null)
+            .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
-                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
+                // TODO : handle the case for max_id == 0 : prefer not to request to server
+                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, sinceId == null ? null : sinceId - 1, null, null);
             })
             .map(evaluations -> evaluations.evaluations)
             .subscribeOn(Schedulers.io())
@@ -125,6 +128,14 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
                 this.progress.setVisibility(View.GONE);
                 if (evaluations != null) this.items.addAll(evaluations);
                 this.adapter.notifyDataSetChanged();
+                // TODO : Implement Better Algorithm
+                for (PartialEvaluation evaluation : evaluations) {
+                    final int id = evaluation.id;
+                    if (maxId == null) maxId = id;
+                    else if (maxId < id) maxId = id;
+                    if (sinceId == null) sinceId = id;
+                    else if (sinceId > id) sinceId = id;
+                }
             })
         );
     }

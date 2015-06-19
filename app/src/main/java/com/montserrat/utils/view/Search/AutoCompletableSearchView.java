@@ -12,8 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.PartialCourseAdapter;
+import com.montserrat.app.fragment.main.PartialCourseFragment;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.PartialCourse;
 import com.montserrat.app.model.unique.Course;
@@ -45,6 +48,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     private List<Candidate> candidates;
     private List<PartialCourse> courses;
     private PartialCourseAdapter partialCourseAdapter;
+    private PartialCourseFragment partialCourseFragment;
     private AutoCompleteAdapter autoCompleteAdapter;
     private RecyclerViewClickListener itemListener;
     private Context context;
@@ -67,6 +71,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.context = context;
         this.type = type;
         this.editText = null;
+        this.partialCourseFragment = null;
     }
 
     public void autoCompleteSetup(RecyclerView autocompleteView, View outsideView){
@@ -105,29 +110,30 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             .subscribeOn(AndroidSchedulers.mainThread())
             .map(listener -> listener.text().toString())
             .flatMap(query -> {
-                if ( type != Type.EVALUATION && query.isEmpty()) return null; // history
+                if (type != Type.EVALUATION && query.isEmpty()) return null; // history
                 return RetrofitApi.getInstance().search_autocomplete(
-                    User.getInstance().getAccessToken(),
-                    User.getInstance().getUniversityId(),
-                    query
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        query
                 );
             })
             .map(response -> response.candidates)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                results -> {
-                    this.notifyAutocompleteChanged(results);
-                    showCandidates(true);
-                },
-                error -> {
-                    if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            default : Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                        }
-                    }else
-                        candidates.clear();
-                }
+                    results -> {
+                        this.notifyAutocompleteChanged(results);
+                        showCandidates(true);
+                    },
+                    error -> {
+                        if (error instanceof RetrofitError) {
+                            switch (((RetrofitError) error).getResponse().getStatus()) {
+                                default:
+                                    Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            }
+                        } else
+                            candidates.clear();
+                    }
             );
     }
 
@@ -138,6 +144,9 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
 
     public void setEvaluationCandidate(int position) {
         this.evaluationCandidate = candidates.get(position);
+    }
+    public void setPartialCourseFragment(PartialCourseFragment fragment){
+        this.partialCourseFragment = fragment;
     }
 
     public void searchCourse(Type type) {
@@ -154,56 +163,28 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    this::notifycourseChanged,
-                    error -> Timber.d("search course error : %s %s", error)
+                        this::notifycourseChanged,
+                        error -> Timber.d("search course error : %s %s", error)
                 )
             );
         } else {
             RetrofitApi
                 .getInstance()
                 .search_search(
-                    User.getInstance().getAccessToken(),
-                    User.getInstance().getUniversityId(),
-                    Search.getInstance().getLectureId(),
-                    Search.getInstance().getProfessorId(),
-                    Search.getInstance().getQuery()
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        Search.getInstance().getLectureId(),
+                        Search.getInstance().getProfessorId(),
+                        Search.getInstance().getQuery()
                 )
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    this::notifycourseChanged,
-                    error -> Timber.d("Search error : %s", error)
+                        this::notifycourseChanged,
+                        error -> Timber.d("Search error : %s", error)
                 );
         }
-    }
-
-    public List<PartialCourse> getHistory(){
-        Timber.d("getHistory");
-        // TODO : implement it!
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
-
-        Gson data = new Gson();
-        String json = preferences.getString("object1", "");
-        PartialCourse course = new PartialCourse();
-        course = data.fromJson(json, PartialCourse.class);
-
-        return null;
-    }
-
-    public boolean addHistory(PartialCourse item){
-        Timber.d("getHistory");
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
-
-        List<PartialCourse> list = getHistory();
-
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson data = new Gson();
-        String json = data.toJson(courses.get(0));
-        editor.putString("object1", json);
-        editor.apply();
-
-        return false;
     }
 
     @Override
@@ -213,6 +194,8 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
             this.showCandidates(false);
+            if(this.partialCourseFragment != null)
+                partialCourseFragment.refresh();
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().fromPartailCourse(courses.get(position));
         }

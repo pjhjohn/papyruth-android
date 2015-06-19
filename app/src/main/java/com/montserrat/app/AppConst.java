@@ -20,36 +20,6 @@ public class AppConst {
      * Subclass of ViewPager should be registered as Type of FragmentFactory
      */
     public static class ViewPager {
-        /* ViewPager Type */
-        public enum Type {
-            AUTH, HOME, SEARCH, RECOMMENDATION, EVALUATION, RANDOM, PROFILE, SIGNOUT
-        }
-        public static Type int2Type(int category) {
-            switch(category) {
-                case 0 : return Type.HOME;
-                case 1 : return Type.SEARCH;
-                case 2 : return Type.RECOMMENDATION;
-                case 3 : return Type.EVALUATION;
-                case 4 : return Type.RANDOM;
-                case 5 : return Type.PROFILE;
-                case 6 : return Type.SIGNOUT;
-                default: return null;
-            }
-        }
-        public static String type2Str(Type type) {
-            switch(type) {
-                case AUTH : return "AUTH";
-                case HOME : return "HOME";
-                case SEARCH : return "SEARCH";
-                case RECOMMENDATION : return "RECOMMENDATION";
-                case EVALUATION : return "EVALUATION";
-                case RANDOM : return "RANDOM";
-                case PROFILE : return "PROFILE";
-                case SIGNOUT : return "SIGNOUT";
-                default : return "";
-            }
-        }
-
         /* For Auth Activity */
         public static class Auth {
             public static final int LENGTH = 4;
@@ -57,43 +27,6 @@ public class AppConst {
             public static final int AUTH = 1;
             public static final int SIGNUP_STEP1 = 2;
             public static final int SIGNUP_STEP2 = 3;
-        }
-
-        /* For Main Activity : Subclasses are 1 : 1 mapped to navigation category */
-        public static class Home {
-            public static final int LENGTH = 1;
-            public static final int HOME = 0;
-        }
-        public static class Search {
-            public static final int LENGTH = 4;
-            public static final int PARTIAL_COURSE = 0;
-            public static final int COURSE = 1;
-            public static final int EVALUATION_STEP2 = 2;
-            public static final int EVALUATION_STEP3 = 3;
-        }
-        public static class Recommendation {
-            public static final int LENGTH = 1;
-            public static final int DUMMY = 0;
-        }
-        public static class Evaluation {
-            public static final int LENGTH = 3;
-            public static final int EVALUATION_STEP1 = 0;
-            public static final int EVALUATION_STEP2 = 1;
-            public static final int EVALUATION_STEP3 = 2;
-        }
-        public static class Random {
-            public static final int LENGTH = 1;
-            public static final int DUMMY = 0;
-        }
-        public static class Profile {
-            public static final int LENGTH = 3;
-            public static final int PROFILE = 0;
-            public static final int PROFILE_EDIT = 1;
-            public static final int PROFILE_EDIT_PASSWORD = 2;
-        }
-        public static class Signout {
-            public static final int LENGTH = 1;
-            public static final int DUMMY = 0;
         }
     }
 

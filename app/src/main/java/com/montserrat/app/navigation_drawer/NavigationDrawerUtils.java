@@ -19,8 +19,6 @@ public class NavigationDrawerUtils {
         public static final int RECOMMENDATION  = 2;
         public static final int EVALUATION      = 3;
         public static final int RANDOM          = 4;
-        public static final int PROFILE         = 5;
-        public static final int SIGNOUT         = 6;
     }
     public int getNavigationDrawerPositionOf(Class<? extends Fragment> fragment) {
         switch(fragment.getSimpleName()) {
@@ -34,8 +32,6 @@ public class NavigationDrawerUtils {
             case ItemType.RECOMMENDATION: return DummyFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;
             case ItemType.RANDOM        : return DummyFragment.class;
-            case ItemType.PROFILE       : return ProfileFragment.class;
-            case ItemType.SIGNOUT       : return SignOutFragment.class;
             default: return null;
         }
     }

@@ -53,6 +53,6 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:name="com.montserrat.app.navigation_drawer.NavigationDrawerFragment"
-            app:layout="@layout/fragment_nav"/>
+            app:layout="@layout/fragment_navigation_drawer"/>
     </com.montserrat.utils.view.ScrimInsetsFrameLayout>
 </android.support.v4.widget.DrawerLayout>
