@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CommentAdapter;
 import com.montserrat.app.model.Comment;
 import com.montserrat.app.model.unique.Course;
@@ -24,6 +23,7 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 
@@ -266,7 +266,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
                                     maxHeight += commentList.getChildAt(i).getHeight();
                                 }
                                 ViewGroup.LayoutParams layoutParams = commentList.getLayoutParams();
-                                layoutParams.height = maxHeight + ((MainActivity) this.getActivity()).getActionbarHeight();
+                                layoutParams.height = maxHeight + MetricUtil.getPixels(this.getActivity(), R.attr.actionBarSize);
                                 commentList.setLayoutParams(layoutParams);
                             }, error -> Timber.d("commentList error :%s", error)
                         );

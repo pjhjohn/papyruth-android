@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.MetricUtil;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.recycler.PanelControllerOnScrollWithAskMore;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
@@ -41,11 +40,8 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
     }
 
     protected void setupSwipeRefresh(SwipeRefreshLayout view) {
-        int offset = 0;
-        TypedValue value = new TypedValue();
-        if (this.getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, value, true))
-            offset = TypedValue.complexToDimensionPixelSize(value.data, getResources().getDisplayMetrics());
-        view.setProgressViewOffset(false, offset, offset + 80); // TODO : avoid hard-coding
+        final int toolbarHeight = MetricUtil.getPixels(this.getActivity(), R.attr.actionBarSize);
+        view.setProgressViewOffset(false, 0, 2 * toolbarHeight);
         view.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
     }
 
@@ -65,11 +61,11 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
         .map( show_panels -> {
             if ( show_panels == null ) return null;
             if ( (boolean) show_panels ) {
-                if(toolbar != null && this.hideToolbarOnScroll) toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+                if(this.hideToolbarOnScroll) ToolbarUtil.show(toolbar);
                 if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.getInstance().show(animateFloatingActionControl);
                 return true;
             } else {
-                if (toolbar != null && this.hideToolbarOnScroll) toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                if (this.hideToolbarOnScroll) ToolbarUtil.hide(toolbar);
                 if(this.hideFloatingActionButtonOnScroll) FloatingActionControl.getInstance().hide(animateFloatingActionControl);
                 return false;
             }

@@ -86,14 +86,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mCompositeSubscription.unsubscribe();
     }
 
-    public int getActionbarHeight() {
-        int height = 0;
-        TypedValue value = new TypedValue();
-        if (this.getTheme().resolveAttribute(android.R.attr.actionBarSize, value, true))
-            height = TypedValue.complexToDimensionPixelSize(value.data, getResources().getDisplayMetrics());
-        return height;
-    }
-
     private MenuItem searchitem;
     private SearchView searchView;
 

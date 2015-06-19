@@ -20,7 +20,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.model.PartialEvaluation;
 import com.montserrat.app.model.unique.Course;
@@ -29,6 +28,7 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
@@ -218,7 +218,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     private void expandEvaluation(View view) {
 
         this.frameLayout.setVisibility(View.VISIBLE);
-        this.actionBarHeight = (((MainActivity) this.getActivity()).getActionbarHeight());
+        this.actionBarHeight = MetricUtil.getPixels(this.getActivity(), R.attr.actionBarSize);;
         this.maxHeight = this.getView().getHeight();
         this.topLine = (int) view.getY() + this.courseInfo.getHeight() + actionBarHeight;
         this.viewHieght = view.getHeight();
