@@ -59,6 +59,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         this.refresh.setEnabled(true);
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.COURSE);
         this.search.courseSetup(this.recycler);
+        this.search.setPartialCourseFragment(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;
@@ -74,7 +75,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        Search.getInstance().clear();
+        this.search.setPartialCourseFragment(null);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -94,9 +95,29 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         this.navigator.navigate(CourseFragment.class, true);
     }
 
+    public void refresh(){
+        Timber.d("refresh!!!");
+        RetrofitApi.getInstance().search_search(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                Search.getInstance().getLectureId(),
+                Search.getInstance().getProfessorId(),
+                Search.getInstance().getQuery())
+                .map(response -> response.courses)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        courses -> {
+                            this.refresh.setRefreshing(false);
+                            this.search.notifycourseChanged(courses);
+                        },
+                        error -> Timber.d("search error : %s", error)
+                );
+    }
     @Override
     public void onResume() {
         super.onResume();
+
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
         this.subscriptions.add(FloatingActionControl
@@ -104,47 +125,48 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
         );
+        this.subscriptions.add(
+                this.getRefreshObservable(this.refresh)
+                        .flatMap(unused -> {
+                            this.refresh.setRefreshing(true);
+                            return RetrofitApi.getInstance().search_search(
+                                    User.getInstance().getAccessToken(),
+                                    User.getInstance().getUniversityId(),
+                                    Search.getInstance().getLectureId(),
+                                    Search.getInstance().getProfessorId(),
+                                    Search.getInstance().getQuery());
+                        })
+                        .map(response -> response.courses)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                courses -> {
+                                    this.refresh.setRefreshing(false);
+                                    this.search.notifycourseChanged(courses);
+                                },
+                                error -> Timber.d("search error : %s", error)
+                        )
+        );
 
         this.subscriptions.add(
-            this.getRefreshObservable(this.refresh)
-                .flatMap(unused -> {
-                    this.refresh.setRefreshing(true);
-                    return RetrofitApi.getInstance().search_search(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        Search.getInstance().getLectureId(),
-                        Search.getInstance().getProfessorId(),
-                        Search.getInstance().getQuery());
-                })
-                .map(response -> response.courses)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    courses -> {
-                        this.refresh.setRefreshing(false);
-                        this.search.notifycourseChanged(courses);
-                    },
-                    error -> Timber.d("search error : %s", error)
-                )
+                getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
+                        .filter(askmoreifnull -> askmoreifnull == null)
+                        .flatMap(unused -> {
+                            this.progress.setVisibility(View.VISIBLE);
+                            return RetrofitApi.getInstance().search_search(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, "");
+                        })
+                        .map(response -> response.courses)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(courses -> {
+                                    this.progress.setVisibility(View.GONE);
+                                    this.search.notifycourseChanged(courses);
+                                },
+                                error ->{
+                                    Timber.d("error : %s", error);
+                                })
         );
-        this.subscriptions.add(
-            getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
-                .filter(askmoreifnull -> askmoreifnull == null)
-                .flatMap(unused -> {
-                    this.progress.setVisibility(View.VISIBLE);
-                    return RetrofitApi.getInstance().search_search(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, "");
-                })
-                .map(response -> response.courses)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(courses -> {
-                    this.progress.setVisibility(View.GONE);
-                    this.search.notifycourseChanged(courses);
-                },
-                error ->{
-                    Timber.d("error : %s", error);
-                })
-        );
+
         Timber.d("search : %s", Search.getInstance().toString());
 
         if (Search.getInstance().isEmpty()) {

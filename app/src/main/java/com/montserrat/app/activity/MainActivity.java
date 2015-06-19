@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.fragment.main.PartialCourseFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
@@ -42,6 +43,7 @@ import timber.log.Timber;
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
+
 
     private CompositeSubscription mCompositeSubscription;
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
@@ -111,8 +113,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void recyclerViewListClicked(View view, int position) {
         this.mAutoCompletableSearch.recyclerViewListClicked(view, position);
-//        if(!this.container.getCurrentPage().equals(AppConst.ViewPager.Type.SEARCH))
-//            this.onNavigationDrawerItemSelected(NavFragment.CategoryType.SEARCH);
+        this.navigate(PartialCourseFragment.class, true);
     }
 
     private boolean terminate = false;
@@ -167,7 +168,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                     return false;
                 }
             );
-
         }
 //        this.searchitem.setOnMenuItemClickListener(this);
         searchitem.collapseActionView();

@@ -90,4 +90,8 @@ public class AppManager {
     public void clear() {
         this.pref.edit().clear().apply();
     }
+
+    public boolean contains(String key){
+        return this.pref.contains(key);
+    }
 }
