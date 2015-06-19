@@ -74,6 +74,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_home), R.drawable.ic_light_home));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_search), R.drawable.ic_light_search));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_recommendation), R.drawable.ic_light_recommend));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_bookmark), R.drawable.ic_light_bookmark));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_evaluation), R.drawable.ic_light_new_evaluation));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_random), R.drawable.ic_light_random));
 
@@ -151,6 +152,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         mDrawerLayout.post(mActionBarDrawerToggle::syncState);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        /* setup Subtitle */
+        mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText);
+        User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText);
     }
 
     public ActionBarDrawerToggle getActionBarDrawerToggle() {
@@ -178,9 +184,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerLayout.closeDrawer(mFragmentContainerView);
     }
     public void update() {
-        mSubtitleNickname.setText(User.getInstance().getNickname());
-        mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        mSubtitleEmail.setText(User.getInstance().getEmail());
         final String avatarUrl = User.getInstance().getAvatarUrl();
         if (avatarUrl != null) Picasso.with(this.getActivity()).load(avatarUrl).transform(new CircleTransformation()).into(mSubtitleAvatar);
         else Picasso.with(this.getActivity()).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(mSubtitleAvatar);
