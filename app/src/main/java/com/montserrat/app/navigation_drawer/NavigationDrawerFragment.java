@@ -152,6 +152,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         mDrawerLayout.post(mActionBarDrawerToggle::syncState);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        /* setup Subtitle */
+        mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText);
+        User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText);
     }
 
     public ActionBarDrawerToggle getActionBarDrawerToggle() {
@@ -179,9 +184,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerLayout.closeDrawer(mFragmentContainerView);
     }
     public void update() {
-        mSubtitleNickname.setText(User.getInstance().getNickname());
-        mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        mSubtitleEmail.setText(User.getInstance().getEmail());
         final String avatarUrl = User.getInstance().getAvatarUrl();
         if (avatarUrl != null) Picasso.with(this.getActivity()).load(avatarUrl).transform(new CircleTransformation()).into(mSubtitleAvatar);
         else Picasso.with(this.getActivity()).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(mSubtitleAvatar);

@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import com.montserrat.app.R;
 import com.montserrat.app.model.UserInfo;
 
+import rx.Observable;
+import rx.subjects.BehaviorSubject;
+
 /**
  * Created by pjhjohn on 2015-04-17.
  * Used for passing data during sign up process.
@@ -26,9 +29,15 @@ public class User {
     private String  university_name;
     private Integer entrance_year;
     private String  avatar_url;
+    private BehaviorSubject<String> bsNickname;
+    private BehaviorSubject<String> bsEmail;
+    private BehaviorSubject<String> bsAvatarUrl;
 
     private User () {
         this.clear();
+        this.bsNickname = BehaviorSubject.create(this.nickname);
+        this.bsEmail    = BehaviorSubject.create(this.email);
+        this.bsAvatarUrl= BehaviorSubject.create(this.avatar_url);
     }
 
     public void clear() {
@@ -60,12 +69,14 @@ public class User {
     }
     public void setNickName(String nickname) {
         this.nickname = nickname;
+        this.bsNickname.onNext(nickname);
     }
     public String getEmail() {
         return this.email;
     }
     public void setEmail(String email) {
         this.email = email;
+        this.bsEmail.onNext(email);
     }
     public Integer getUniversityId() {
         return this.university_id;
@@ -95,7 +106,8 @@ public class User {
         return avatar_url;
     }
     public void setAvatarUrl(String url) {
-        this.avatar_url = url;;
+        this.avatar_url = url;
+        this.bsAvatarUrl.onNext(url);
     }
 
     public void update(UserInfo user) {
@@ -110,6 +122,16 @@ public class User {
         if(user.entrance_year != null) this.setEntranceYear(user.entrance_year);
         if(user.university_name != null) this.setUniversityName(user.university_name);
         if(access_token!=null) this.setAccessToken(access_token);
+    }
+
+    public Observable<String> getNicknameObservable() {
+        return this.bsNickname;
+    }
+    public Observable<String> getEmailObservable() {
+        return this.bsEmail;
+    }
+    public Observable<String> getAvatarUrlObservable() {
+        return this.bsAvatarUrl;
     }
 
     @Override
