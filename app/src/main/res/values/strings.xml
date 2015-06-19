@@ -6,10 +6,9 @@
     <string name="nav_item_home">Home</string>
     <string name="nav_item_search">Search</string>
     <string name="nav_item_recommendation">Recommendation</string>
+    <string name="nav_item_bookmark">Bookmark</string>
     <string name="nav_item_evaluation">Evaluation</string>
     <string name="nav_item_random">Random</string>
-    <string name="nav_item_profile">Profile</string>
-    <string name="nav_item_signout">Sign Out</string>
 
     <!--toolbar-->
 
