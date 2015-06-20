@@ -31,7 +31,7 @@ import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-04-26.
- * Searches PartialCourse for Evaluation on Step 1.
+ * Searches SimpleCourse for Evaluation on Step 1.
  */
 public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAdapter, Candidate> {
     private Navigator navigator;

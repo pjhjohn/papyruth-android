@@ -3,7 +3,7 @@ package com.montserrat.app.model;
 /**
  * Created by pjhjohn on 2015-05-28.
  */
-public class UserInfo {
+public class UserData {
     public Integer id;
     public Boolean is_boy;
     public Integer university_id;

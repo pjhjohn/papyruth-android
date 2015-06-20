@@ -1,13 +1,13 @@
 package com.montserrat.app.model.response;
 
-import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.CourseData;
 
 /**
  * Created by pjhjohn on 2015-06-05.
  */
 public class CourseResponse {
     public Boolean success;
-    public PartialCourse course;
+    public CourseData course;
 
     @Override
     public String toString() {

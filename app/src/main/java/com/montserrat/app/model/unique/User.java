@@ -1,10 +1,6 @@
 package com.montserrat.app.model.unique;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.montserrat.app.R;
-import com.montserrat.app.model.UserInfo;
+import com.montserrat.app.model.UserData;
 
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -110,10 +106,10 @@ public class User {
         this.bsAvatarUrl.onNext(url);
     }
 
-    public void update(UserInfo user) {
+    public void update(UserData user) {
         this.update(user, null);
     }
-    public void update(UserInfo user, String access_token) {
+    public void update(UserData user, String access_token) {
         if(user.email != null) this.setEmail(user.email);
         if(user.realname != null) this.setRealname(user.realname);
         if(user.nickname != null) this.setNickName(user.nickname);

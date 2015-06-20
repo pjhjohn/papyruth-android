@@ -1,6 +1,6 @@
 package com.montserrat.app.model.unique;
 
-import com.montserrat.app.model.PartialEvaluation;
+import com.montserrat.app.model.EvaluationData;
 
 /**
  * Created by SSS on 2015-05-24.
@@ -57,7 +57,7 @@ public class Evaluation {
     public Integer getLike() { return like; }
     public void setLike(Integer like) { this.like = like; }
 
-    public void update(PartialEvaluation evaluation) {
+    public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;
         if(evaluation.user_id != null)                  this.user_id = evaluation.user_id;
         if(evaluation.course_id != null)                this.course_id = evaluation.course_id;

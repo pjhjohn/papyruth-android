@@ -1,14 +1,10 @@
 package com.montserrat.utils.view.search;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
-import com.montserrat.app.model.PartialCourse;
-import com.montserrat.app.model.response.PartialCoursesResponse;
+import com.montserrat.app.model.CourseData;
+import com.montserrat.app.model.response.SimpleCoursesResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,25 +23,25 @@ public class Preferences {
         gson = new Gson();
     }
 
-    public List<PartialCourse> getHistory(){
+    public List<CourseData> getHistory(){
         String data = AppManager.getInstance().getString(AppConst.Preference.HISTORY, "");
-        PartialCoursesResponse partialCourseList = gson.fromJson(data, PartialCoursesResponse.class);
+        SimpleCoursesResponse simpleCoursesResponse = gson.fromJson(data, SimpleCoursesResponse.class);
 
-        return partialCourseList.courses;
+        return simpleCoursesResponse.courses;
     }
-    public boolean addHistory(PartialCourse course){
-        PartialCoursesResponse partialCoursesResponse = new PartialCoursesResponse();
-        List<PartialCourse> partialCourseList = getHistory();
+    public boolean addHistory(CourseData course){
+        SimpleCoursesResponse simpleCoursesResponse = new SimpleCoursesResponse();
+        List<CourseData> courseDataList = getHistory();
 
-        if(partialCourseList == null){
-            partialCourseList = new ArrayList<>();
+        if(courseDataList == null){
+            courseDataList = new ArrayList<>();
         }else {
-            partialCourseList.remove(0);
+            courseDataList.remove(0);
         }
-        partialCourseList.add(course);
-        partialCoursesResponse.courses.addAll(partialCourseList);
+        courseDataList.add(course);
+        simpleCoursesResponse.courses.addAll(courseDataList);
 
-        String json = gson.toJson(partialCoursesResponse);
+        String json = gson.toJson(simpleCoursesResponse);
         AppManager.getInstance().putString(AppConst.Preference.HISTORY, json);
 
         return true;

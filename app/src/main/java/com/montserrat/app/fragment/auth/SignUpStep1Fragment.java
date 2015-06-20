@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.UniversityAdapter;
-import com.montserrat.app.model.University;
+import com.montserrat.app.model.UniversityData;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -31,7 +31,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, University> implements OnPageFocus {
+public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -76,7 +76,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     }
 
     @Override
-    protected UniversityAdapter getAdapter (List<University> universities) {
+    protected UniversityAdapter getAdapter (List<UniversityData> universities) {
         return UniversityAdapter.newInstance(this.items, this, this);
     }
 

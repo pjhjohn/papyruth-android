@@ -7,14 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.Comment;
+import com.montserrat.app.model.CommentData;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-05-22.
@@ -23,14 +22,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static final class Type {
         public static final int ITEM = 0;
     }
-    public static CommentAdapter newInstance(List<Comment> initItemList, RecyclerViewClickListener listener) {
+    public static CommentAdapter newInstance(List<CommentData> initItemList, RecyclerViewClickListener listener) {
         return new CommentAdapter(initItemList, listener);
     }
 
     private static RecyclerViewClickListener itemListener;
-    private List<Comment> items;
+    private List<CommentData> items;
 
-    public CommentAdapter (List<Comment> initItemList, RecyclerViewClickListener listener) {
+    public CommentAdapter (List<CommentData> initItemList, RecyclerViewClickListener listener) {
         this.items = initItemList;
         CommentAdapter.itemListener = listener;
     }
@@ -71,7 +70,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
 
-        public void bind(Comment item) {
+        public void bind(CommentData item) {
             this.username.setText(item.user_name); // lecture represents the name of course
             this.body.setText(item.body);
         }

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.University;
+import com.montserrat.app.model.UniversityData;
 import com.montserrat.utils.view.SquareImageView;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import com.squareup.picasso.Picasso;
@@ -27,14 +27,14 @@ public class UniversityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final class Type {
         public static final int UNIVERSITY = 1;
     }
-    public static UniversityAdapter newInstance(List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
+    public static UniversityAdapter newInstance(List<UniversityData> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
         return new UniversityAdapter(initItemList, listener, fragment);
     }
 
     private static RecyclerViewClickListener itemListener;
     private static Fragment fragment;
-    private List<University> items;
-    private UniversityAdapter(List<University> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
+    private List<UniversityData> items;
+    private UniversityAdapter(List<UniversityData> initItemList, RecyclerViewClickListener listener, Fragment fragment) {
         this.items = initItemList;
         UniversityAdapter.itemListener = listener;
         UniversityAdapter.fragment = fragment;
@@ -74,9 +74,9 @@ public class UniversityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             parent.setOnClickListener(this);
         }
 
-        public void bind(University university) {
-            this.name.setText(university.name);
-            Picasso.with(fragment.getActivity()).load(university.image_url).into(this.image);
+        public void bind(UniversityData universityData) {
+            this.name.setText(universityData.name);
+            Picasso.with(fragment.getActivity()).load(universityData.image_url).into(this.image);
         }
 
         @Override

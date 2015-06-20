@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +22,7 @@ import android.widget.Toast;
 
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.HomeFragment;
-import com.montserrat.app.fragment.main.PartialCourseFragment;
+import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
@@ -113,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void recyclerViewListClicked(View view, int position) {
         this.mAutoCompletableSearch.recyclerViewListClicked(view, position);
-        this.navigate(PartialCourseFragment.class, true);
+        this.navigate(SimpleCourseFragment.class, true);
     }
 
     private boolean terminate = false;

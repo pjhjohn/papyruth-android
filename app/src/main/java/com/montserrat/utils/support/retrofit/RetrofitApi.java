@@ -4,8 +4,8 @@ import com.montserrat.app.model.response.CandidatesResponse;
 import com.montserrat.app.model.response.CommentResponse;
 import com.montserrat.app.model.response.CourseResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
-import com.montserrat.app.model.response.PartialCoursesResponse;
-import com.montserrat.app.model.response.PartialEvaluationsResponse;
+import com.montserrat.app.model.response.SimpleCoursesResponse;
+import com.montserrat.app.model.response.SimpleEvaluationsResponse;
 import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
@@ -73,7 +73,7 @@ public class RetrofitApi {
         );
 
         @GET("/evaluations")
-        Observable<PartialEvaluationsResponse> evaluations(
+        Observable<SimpleEvaluationsResponse> evaluations(
             @Header("Authorization") String authorization,
             @Query("university_id") Integer university_id,
             @Query("since_id") Integer since_id,
@@ -110,7 +110,7 @@ public class RetrofitApi {
         );
 
         @GET("/search/search")
-        Observable<PartialCoursesResponse> search_search(
+        Observable<SimpleCoursesResponse> search_search(
             @Header("Authorization") String authorization,
             @Query("university_id") Integer university_id,
             @Query("lecture_id") Integer lecture_id,
@@ -166,7 +166,7 @@ public class RetrofitApi {
         );
 
         @GET("/users/me/favorites")
-        Observable<PartialCoursesResponse> users_me_favorites(
+        Observable<SimpleCoursesResponse> users_me_favorites(
             @Header("Authorization") String authorization,
             @Query("page") Integer page
         );

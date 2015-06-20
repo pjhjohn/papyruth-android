@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by pjhjohn on 2015-05-03.
  */
-public class PartialCourse {
+public class CourseData {
     public Integer id; // lecture id
     public Integer unit; // lecture unit
     public String code; // lecture code

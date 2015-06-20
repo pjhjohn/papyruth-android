@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.PartialEvaluationAdapter;
-import com.montserrat.app.model.PartialEvaluation;
+import com.montserrat.app.adapter.SimpleEvaluationAdapter;
+import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -33,7 +33,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-05-09.
  * Provides latest evaluations.
  */
-public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter, PartialEvaluation> {
+public class HomeFragment extends RecyclerViewFragment<SimpleEvaluationAdapter, EvaluationData> {
     private Navigator navigator;
     @Override
     public void onAttach (Activity activity) {
@@ -72,8 +72,8 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
     }
 
     @Override
-    protected PartialEvaluationAdapter getAdapter (List<PartialEvaluation> evaluations) {
-        return PartialEvaluationAdapter.newInstance(this.items, this);
+    protected SimpleEvaluationAdapter getAdapter (List<EvaluationData> evaluations) {
+        return SimpleEvaluationAdapter.newInstance(this.items, this);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class HomeFragment extends RecyclerViewFragment<PartialEvaluationAdapter,
                 if (evaluations != null) this.items.addAll(evaluations);
                 this.adapter.notifyDataSetChanged();
                 // TODO : Implement Better Algorithm
-                for (PartialEvaluation evaluation : evaluations) {
+                for (EvaluationData evaluation : evaluations) {
                     final int id = evaluation.id;
                     if (maxId == null) maxId = id;
                     else if (maxId < id) maxId = id;

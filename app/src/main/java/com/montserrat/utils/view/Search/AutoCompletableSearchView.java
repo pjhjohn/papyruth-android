@@ -1,8 +1,6 @@
 package com.montserrat.utils.view.search;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,14 +9,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.montserrat.app.AppConst;
-import com.montserrat.app.AppManager;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
-import com.montserrat.app.adapter.PartialCourseAdapter;
-import com.montserrat.app.fragment.main.PartialCourseFragment;
+import com.montserrat.app.adapter.SimpleCourseAdapter;
+import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.model.Candidate;
-import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
@@ -46,9 +41,9 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     private RecyclerView courseListView;
     private View outsideView;
     private List<Candidate> candidates;
-    private List<PartialCourse> courses;
-    private PartialCourseAdapter partialCourseAdapter;
-    private PartialCourseFragment partialCourseFragment;
+    private List<CourseData> courses;
+    private SimpleCourseAdapter simpleCourseAdapter;
+    private SimpleCourseFragment simpleCourseFragment;
     private AutoCompleteAdapter autoCompleteAdapter;
     private RecyclerViewClickListener itemListener;
     private Context context;
@@ -71,7 +66,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.context = context;
         this.type = type;
         this.editText = null;
-        this.partialCourseFragment = null;
+        this.simpleCourseFragment = null;
     }
 
     public void autoCompleteSetup(RecyclerView autocompleteView, View outsideView){
@@ -91,15 +86,15 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
 
     public void courseSetup(RecyclerView courseListView){
         this.courseListView = courseListView;
-        this.partialCourseAdapter = new PartialCourseAdapter(this.courses, this.itemListener);
+        this.simpleCourseAdapter = new SimpleCourseAdapter(this.courses, this.itemListener);
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
-        this.courseListView.setAdapter(this.partialCourseAdapter);
+        this.courseListView.setAdapter(this.simpleCourseAdapter);
     }
 
-    public void notifycourseChanged(List<PartialCourse> courses){
+    public void notifycourseChanged(List<CourseData> courses){
         this.courses.clear();
         this.courses.addAll(courses);
-        this.partialCourseAdapter.notifyDataSetChanged();
+        this.simpleCourseAdapter.notifyDataSetChanged();
     }
 
     public Subscription autoComplete(TextView textView){
@@ -145,8 +140,8 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     public void setEvaluationCandidate(int position) {
         this.evaluationCandidate = candidates.get(position);
     }
-    public void setPartialCourseFragment(PartialCourseFragment fragment){
-        this.partialCourseFragment = fragment;
+    public void setSimpleCourseFragment(SimpleCourseFragment fragment){
+        this.simpleCourseFragment = fragment;
     }
 
     public void searchCourse(Type type) {
@@ -194,8 +189,8 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
             this.showCandidates(false);
-            if(this.partialCourseFragment != null)
-                partialCourseFragment.refresh();
+            if(this.simpleCourseFragment != null)
+                simpleCourseFragment.refresh();
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().fromPartailCourse(courses.get(position));
         }

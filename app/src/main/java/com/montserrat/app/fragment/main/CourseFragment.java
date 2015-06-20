@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CourseAdapter;
-import com.montserrat.app.model.PartialEvaluation;
+import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialEvaluation> implements OnBack {
+public class CourseFragment extends RecyclerViewFragment<CourseAdapter, EvaluationData> implements OnBack {
     private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
@@ -200,7 +200,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, PartialE
     }
 
     @Override
-    protected CourseAdapter getAdapter(List<PartialEvaluation> items) {
+    protected CourseAdapter getAdapter(List<EvaluationData> items) {
         return CourseAdapter.newInstance(this.items, this);
     }
 

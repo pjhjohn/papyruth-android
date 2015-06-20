@@ -8,9 +8,9 @@ public class Candidate {
     public Integer professor_id;
     public String lecture_name;
     public Integer lecture_id;
-    public PartialCourse course;
+    public CourseData course;
 
-    public Candidate(String lecture_name, Integer lecture_id, String professor_name, Integer professor_id, PartialCourse course){
+    public Candidate(String lecture_name, Integer lecture_id, String professor_name, Integer professor_id, CourseData course){
         this.professor_name = professor_name;
         this.professor_id = professor_id;
         this.lecture_name = lecture_name;

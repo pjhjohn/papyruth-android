@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CommentAdapter;
-import com.montserrat.app.model.Comment;
+import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
@@ -47,7 +47,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 /**
  * Created by SSS on 2015-05-22.
  */
-public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Comment> {
+public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, CommentData> {
     private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
@@ -277,7 +277,7 @@ public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, Com
     }
 
     @Override
-    protected CommentAdapter getAdapter(List<Comment> comments) {
+    protected CommentAdapter getAdapter(List<CommentData> commentDatas) {
         return CommentAdapter.newInstance(this.items, this);
     }
 

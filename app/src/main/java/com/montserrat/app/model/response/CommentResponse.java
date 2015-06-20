@@ -1,6 +1,6 @@
 package com.montserrat.app.model.response;
 
-import com.montserrat.app.model.Comment;
+import com.montserrat.app.model.CommentData;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class CommentResponse {
     public Boolean success;
-    public List<Comment> comments;
+    public List<CommentData> comments;
 
     @Override
     public String toString() {

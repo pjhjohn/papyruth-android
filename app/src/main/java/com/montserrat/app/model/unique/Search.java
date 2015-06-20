@@ -1,7 +1,7 @@
 package com.montserrat.app.model.unique;
 
 import com.montserrat.app.model.Candidate;
-import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.CourseData;
 
 /**
  * Created by SSS on 2015-05-30.
@@ -20,7 +20,7 @@ public class Search {
     private Integer professor_id;
     private String lecture_name;
     private Integer lecture_id;
-    private PartialCourse course;
+    private CourseData course;
     private String query;
 
     public String getProfessorName() {
@@ -51,10 +51,10 @@ public class Search {
         this.lecture_id = lecture_id;
         return this;
     }
-    public PartialCourse getCourse() {
+    public CourseData getCourse() {
         return course;
     }
-    public Search setCourse(PartialCourse course) {
+    public Search setCourse(CourseData course) {
         this.course = course;
         return this;
     }

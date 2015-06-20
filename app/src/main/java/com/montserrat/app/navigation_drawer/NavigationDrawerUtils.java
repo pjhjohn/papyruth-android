@@ -5,9 +5,7 @@ import android.app.Fragment;
 import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
-import com.montserrat.app.fragment.main.PartialCourseFragment;
-import com.montserrat.app.fragment.main.ProfileFragment;
-import com.montserrat.app.fragment.main.SignOutFragment;
+import com.montserrat.app.fragment.main.SimpleCourseFragment;
 
 /**
  * Created by pjhjohn on 2015-06-16.
@@ -29,7 +27,7 @@ public class NavigationDrawerUtils {
     public static Class<? extends Fragment> getFragmentClassOf(int position) {
         switch(position) {
             case ItemType.HOME          : return HomeFragment.class;
-            case ItemType.SEARCH        : return PartialCourseFragment.class;
+            case ItemType.SEARCH        : return SimpleCourseFragment.class;
             case ItemType.RECOMMENDATION: return DummyFragment.class;
             case ItemType.BOOKMARK      : return DummyFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;

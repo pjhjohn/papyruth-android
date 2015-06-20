@@ -3,7 +3,7 @@ package com.montserrat.app.model;
 /**
  * Created by pjhjohn on 2015-05-10.
  */
-public class PartialEvaluation {
+public class EvaluationData {
     public Integer id;
     public Integer user_id;
     public Integer course_id;

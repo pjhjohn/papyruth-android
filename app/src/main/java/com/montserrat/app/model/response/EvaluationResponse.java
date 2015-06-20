@@ -1,6 +1,6 @@
 package com.montserrat.app.model.response;
 
-import com.montserrat.app.model.PartialEvaluation;
+import com.montserrat.app.model.EvaluationData;
 
 /**
  * Created by pjhjohn on 2015-05-28.
@@ -8,7 +8,7 @@ import com.montserrat.app.model.PartialEvaluation;
 public class EvaluationResponse {
     public Boolean success;
     public Integer evaluation_id;
-    public PartialEvaluation evaluation;
+    public EvaluationData evaluation;
 
     @Override
     public String toString() {

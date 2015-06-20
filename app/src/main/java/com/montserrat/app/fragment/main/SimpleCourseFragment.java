@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.PartialCourseAdapter;
-import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.adapter.SimpleCourseAdapter;
+import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -33,7 +33,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAdapter, PartialCourse> {
+public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapter, CourseData> {
     private Navigator navigator;
 
     @Override
@@ -59,7 +59,7 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
         this.refresh.setEnabled(true);
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.COURSE);
         this.search.courseSetup(this.recycler);
-        this.search.setPartialCourseFragment(this);
+        this.search.setSimpleCourseFragment(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;
@@ -75,13 +75,13 @@ public class PartialCourseFragment extends RecyclerViewFragment<PartialCourseAda
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        this.search.setPartialCourseFragment(null);
+        this.search.setSimpleCourseFragment(null);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     @Override
-    protected PartialCourseAdapter getAdapter (List<PartialCourse> partialCourses) {
-        return new PartialCourseAdapter(this.items, this);
+    protected SimpleCourseAdapter getAdapter (List<CourseData> courseDatas) {
+        return new SimpleCourseAdapter(this.items, this); // TODO : why not using input value rather tha this.items??
     }
 
     @Override

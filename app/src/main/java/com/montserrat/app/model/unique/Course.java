@@ -1,6 +1,6 @@
 package com.montserrat.app.model.unique;
 
-import com.montserrat.app.model.PartialCourse;
+import com.montserrat.app.model.CourseData;
 
 import java.util.List;
 
@@ -55,22 +55,22 @@ public class Course {
                 name, professor, id, pointOverall, pointGpaSatisfaction, pointEasiness, pointClarity);
     }
 
-    public void fromPartailCourse(PartialCourse partialCourse){
-        this.setId(partialCourse.id);
-        this.setProfessor(partialCourse.professor_name);
-        this.setName(partialCourse.name);
-        this.setLectureId(partialCourse.lecture_id);
-        this.setProfessorId(partialCourse.professor_id);
-        this.setUnit(partialCourse.unit);
-        this.setCode(partialCourse.code);
-        this.setUniversityId(partialCourse.university_id);
-        this.setEvaluation_count(partialCourse.evaluation_count);
-        this.setPointOverall(partialCourse.point_overall);
-        this.setPointEasiness(partialCourse.point_easiness);
-        this.setPointGpaSatisfaction(partialCourse.point_gpa_satisfaction);
-        this.setPointClarity(partialCourse.point_clarity);
-        this.setDate(partialCourse.created_at);
-        this.setTags(partialCourse.tag);
+    public void fromPartailCourse(CourseData courseData){
+        this.setId(courseData.id);
+        this.setProfessor(courseData.professor_name);
+        this.setName(courseData.name);
+        this.setLectureId(courseData.lecture_id);
+        this.setProfessorId(courseData.professor_id);
+        this.setUnit(courseData.unit);
+        this.setCode(courseData.code);
+        this.setUniversityId(courseData.university_id);
+        this.setEvaluation_count(courseData.evaluation_count);
+        this.setPointOverall(courseData.point_overall);
+        this.setPointEasiness(courseData.point_easiness);
+        this.setPointGpaSatisfaction(courseData.point_gpa_satisfaction);
+        this.setPointClarity(courseData.point_clarity);
+        this.setDate(courseData.created_at);
+        this.setTags(courseData.tag);
     }
 
     public Integer getId() { return id; }
