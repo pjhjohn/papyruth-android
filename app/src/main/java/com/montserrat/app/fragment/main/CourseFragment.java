@@ -43,6 +43,12 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
+/**
+ * Course Fragment
+ * - Course Contents as a HEADER
+ * - List of items containing each Evaluation Overview
+ * - Expands Evaluation view( = EvaluationFragment ) using animation
+ */
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, EvaluationData> implements OnBack {
     private Navigator navigator;
     @Override

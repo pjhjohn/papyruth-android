@@ -46,6 +46,10 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by SSS on 2015-05-22.
+ * Evaluation Fragment
+ * - Evaluation contents as a HEADER of recycler view
+ * - List of items containing each Comment
+ * - Has ability to receive comment input
  */
 public class EvaluationFragment extends RecyclerViewFragment<CommentAdapter, CommentData> {
     private Navigator navigator;

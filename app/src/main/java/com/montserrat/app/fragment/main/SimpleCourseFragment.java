@@ -33,6 +33,11 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
+/**
+ * Simple Course Fragment for listing limited contents for Course
+ * TODO : should be able to expand when clicking recyclerview item to show evaluation data in detail
+ */
+
 public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapter, CourseData> {
     private Navigator navigator;
 
