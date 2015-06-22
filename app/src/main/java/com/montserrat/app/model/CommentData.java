@@ -5,10 +5,10 @@ package com.montserrat.app.model;
  */
 public class CommentData {
     public Integer id;
-    public Integer user_id;
-    public String user_name;
     public Integer evaluation_id;
+    public Integer user_id;
     public String body;
     public String created_at;
     public String updated_at;
+    public String user_nickname;
 }

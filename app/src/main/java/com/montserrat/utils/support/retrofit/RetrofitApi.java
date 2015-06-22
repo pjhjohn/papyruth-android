@@ -9,7 +9,7 @@ import com.montserrat.app.model.response.SimpleEvaluationsResponse;
 import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
-import com.montserrat.app.model.response.UserInfoResponse;
+import com.montserrat.app.model.response.UserDataResponse;
 
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -128,7 +128,7 @@ public class RetrofitApi {
         );
 
         @POST("/users/sign_up")
-        Observable<UserInfoResponse> users_sign_up(
+        Observable<UserDataResponse> users_sign_up(
             @Query("email") String email,
             @Query("password") String password,
             @Query("realname") String realname,
@@ -139,13 +139,13 @@ public class RetrofitApi {
         );
 
         @POST("/users/sign_in")
-        Observable<UserInfoResponse> users_sign_in(
+        Observable<UserDataResponse> users_sign_in(
             @Query("email") String email,
             @Query("password") String password
         );
 
         @GET("/users/me")
-        Observable<UserInfoResponse> users_me(
+        Observable<UserDataResponse> users_me(
             @Header("Authorization") String authorization
         );
 
@@ -157,7 +157,7 @@ public class RetrofitApi {
         );
 
         @POST("/users/me/edit")
-        Observable<UserInfoResponse> users_me_edit(
+        Observable<UserDataResponse> users_me_edit(
             @Header("Authorization") String authorization,
             @Query("email") String email,
             @Query("nickname") String nickname,

@@ -229,7 +229,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
                 ((SimpleCourseFragment)this.simpleCourseFragment).refresh();
             }
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
-            Course.getInstance().clear().fromPartailCourse(courses.get(position));
+            Course.getInstance().clear().update(courses.get(position));
             preferences.addHistory(courses.get(position));
         }
     }

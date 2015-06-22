@@ -1,6 +1,5 @@
 package com.montserrat.app.model.unique;
 
-import com.montserrat.app.R;
 import com.montserrat.app.model.CourseData;
 
 import java.util.List;
@@ -9,9 +8,7 @@ import java.util.List;
  * Created by SSS on 2015-05-18.
  */
 public class Course {
-    private Integer id; // course id
-    private Integer unit; // lecture unit
-    private String code; // lecture code
+    private Integer id;
     private Integer universityId;
     private String name;
     private String professor;
@@ -33,8 +30,6 @@ public class Course {
     }
     public Course clear(){
         this.id = null;
-        this.unit = null;
-        this.code = null;
         this.universityId = null;
         this.name = null;
         this.professor = null;
@@ -56,14 +51,12 @@ public class Course {
                 name, professor, id, pointOverall, pointGpaSatisfaction, pointEasiness, pointClarity);
     }
 
-    public void fromPartailCourse(CourseData courseData){
+    public void update(CourseData courseData){
         this.setId(courseData.id);
         this.setProfessor(courseData.professor_name);
         this.setName(courseData.name);
         this.setLectureId(courseData.lecture_id);
         this.setProfessorId(courseData.professor_id);
-        this.setUnit(courseData.unit);
-        this.setCode(courseData.code);
         this.setUniversityId(courseData.university_id);
         this.setEvaluation_count(courseData.evaluation_count);
         this.setPointOverall(courseData.point_overall);
@@ -71,12 +64,10 @@ public class Course {
         this.setPointGpaSatisfaction(courseData.point_gpa_satisfaction);
         this.setPointClarity(courseData.point_clarity);
         this.setDate(courseData.created_at);
-        this.setTags(courseData.tag);
+        this.setTags(courseData.tags);
     }
 
     public Integer getId() { return id; }
-    public Integer getUnit() { return unit; }
-    public String getCode() { return code; }
     public Integer getUniversityId() { return universityId; }
     public String getName() { return name; }
     public Integer getPointClarity() { return pointClarity; }
@@ -92,16 +83,6 @@ public class Course {
 
     public Course setId(Integer id) {
         this.id = id;
-        return this;
-    }
-
-    public Course setUnit(Integer unit) {
-        this.unit = unit;
-        return this;
-    }
-
-    public Course setCode(String code) {
-        this.code = code;
         return this;
     }
 

@@ -91,10 +91,9 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onResume() {
         super.onResume();
-        this.initDefaultFloatingActionControl();
     }
 
-    private void initDefaultFloatingActionControl() {
+    public void setEvaluationFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
         this.subscriptions.add(RetrofitApi
             .getInstance()
@@ -117,11 +116,11 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
         this.subscriptions.add(FloatingActionControl
             .clicks()
-            .subscribe(unused -> revealCommentInputWindow())
+            .subscribe(unused -> showCommentInputWindow())
         );
     }
 
-    private void revealCommentInputWindow() {
+    private void showCommentInputWindow() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         this.commentInputWindow.setVisibility(View.VISIBLE);
         this.commentInputWindow.requestFocus();
@@ -152,7 +151,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(commentResponse -> {
                 this.commentInputWindow.setVisibility(View.GONE);
-                initDefaultFloatingActionControl();
+                setEvaluationFloatingActionControl();
             })
         );
     }

@@ -62,7 +62,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     @InjectView(R.id.course_recyclerview) protected RecyclerView courseRecyclerView;
     @InjectView(R.id.evaluation_container) protected FrameLayout evaluationContainer;
     private Toolbar toolbar;
-    private Fragment evaluationDetail;
+    private EvaluationFragment evaluationDetail;
     private Boolean isEvaluationDetailOpened;
     private CompositeSubscription subscriptions;
     @Override
@@ -186,6 +186,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 isEvaluationDetailOpened = true;
+                evaluationDetail.setEvaluationFloatingActionControl();
             }
         });
         animators.start();
