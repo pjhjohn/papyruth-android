@@ -192,6 +192,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         });
         animators.start();
     }
+
     private void closeEvaluation() {
         ViewGroup.LayoutParams lpEvaluationContainer = this.evaluationContainer.getLayoutParams();
         ValueAnimator animHeight = ValueAnimator.ofInt(this.screenHeight, this.itemHeight);

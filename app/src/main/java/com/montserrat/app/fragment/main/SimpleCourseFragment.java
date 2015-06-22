@@ -121,6 +121,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
                         error -> Timber.d("search error : %s", error)
                 );
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -155,24 +156,24 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
                         )
         );
 
-        this.subscriptions.add(
-                getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
-                        .filter(askmoreifnull -> askmoreifnull == null)
-                        .flatMap(unused -> {
-                            this.progress.setVisibility(View.VISIBLE);
-                            return RetrofitApi.getInstance().search_search(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, "");
-                        })
-                        .map(response -> response.courses)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(courses -> {
-                                    this.progress.setVisibility(View.GONE);
-                                    this.search.notifycourseChanged(courses);
-                                },
-                                error ->{
-                                    Timber.d("error : %s", error);
-                                })
-        );
+//        this.subscriptions.add(
+//                getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
+//                        .filter(askmoreifnull -> askmoreifnull == null)
+//                        .flatMap(unused -> {
+//                            this.progress.setVisibility(View.VISIBLE);
+//                            return RetrofitApi.getInstance().search_search(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, "");
+//                        })
+//                        .map(response -> response.courses)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(courses -> {
+//                                    this.progress.setVisibility(View.GONE);
+//                                    this.search.notifycourseChanged(courses);
+//                                },
+//                                error ->{
+//                                    Timber.d("error : %s", error);
+//                                })
+//        );
 
         Timber.d("search : %s", Search.getInstance().toString());
 

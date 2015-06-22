@@ -26,7 +26,7 @@ public class Preferences {
     }
 
     public List<CourseData> getHistory(){
-        if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
+        if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
             return null;
         }
         String data = AppManager.getInstance().getString(AppConst.Preference.HISTORY, "");
@@ -38,22 +38,32 @@ public class Preferences {
     public boolean addHistory(CourseData course){
         List<CourseData> courseDataList;
         SimpleCoursesResponse simpleCoursesResponse = new SimpleCoursesResponse();
+        simpleCoursesResponse.courses = new ArrayList<>();
 
-        if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
+        if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
             courseDataList = new ArrayList<>();
         }else {
             courseDataList  = getHistory();
-            courseDataList.remove(0);
         }
-        courseDataList.add(course);
+
+        if(courseDataList.contains(course)) {
+            courseDataList.remove(course);
+            courseDataList.add(course);
+        }else if (courseDataList.size() > 4) {
+            courseDataList.remove(0);
+            courseDataList.add(course);
+        }else{
+            courseDataList.add(course);
+        }
         simpleCoursesResponse.courses.addAll(courseDataList);
 
         String json = gson.toJson(simpleCoursesResponse);
         AppManager.getInstance().putString(AppConst.Preference.HISTORY, json);
-        Timber.d("json : %d", json);
+        Timber.d("json : %s", json);
 
         return true;
     }
+
 
     public boolean clear(Type type){
         if(type == Type.History) {

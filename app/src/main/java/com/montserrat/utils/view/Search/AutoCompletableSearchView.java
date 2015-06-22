@@ -49,6 +49,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     private RecyclerViewClickListener itemListener;
     private Context context;
     private EditText editText;
+    private Preferences preferences;
 
     public enum Type{
         TOOLBAR, SEARCH, COURSE, HISTORY, EVALUATION
@@ -68,6 +69,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.type = type;
         this.editText = null;
         this.simpleCourseFragment = null;
+        this.preferences = new Preferences();
     }
 
     public void autoCompleteSetup(RecyclerView autocompleteView, View outsideView){
@@ -148,7 +150,37 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     }
 
     public void searchCourse(Type type) {
-        if (type == Type.EVALUATION){
+        if(type == Type.HISTORY){
+            if (this.preferences.getHistory() != null) {
+                List<CourseData> courseList = this.preferences.getHistory();
+                this.courses.clear();
+                for (int i = 0; i < courseList.size(); i++) {
+                    this.subscription.add(
+                            RetrofitApi.getInstance().search_search(
+                                    User.getInstance().getAccessToken(),
+                                    User.getInstance().getUniversityId(),
+                                    courseList.get(i).lecture_id,
+                                    courseList.get(i).professor_id,
+                                    null
+                                    )
+                            .map(response -> response.courses)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    course -> {
+                                        this.courses.addAll(course);
+                                        this.simpleCourseAdapter.notifyDataSetChanged();
+
+                                    },
+                                    error -> Timber.d("serch history error : %s", error)
+                            )
+                    );
+                }
+            }else{
+                //TODO : implement it!!
+            }
+
+        }else if (type == Type.EVALUATION){
             this.subscription.add(
                 RetrofitApi.getInstance().search_search(
                     User.getInstance().getAccessToken(),
@@ -194,11 +226,11 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             this.showCandidates(false);
             Timber.d("isnull : %s", this.simpleCourseFragment);
             if(this.simpleCourseFragment != null) {
-                Timber.d("refresh-view");
                 ((SimpleCourseFragment)this.simpleCourseFragment).refresh();
             }
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().fromPartailCourse(courses.get(position));
+            preferences.addHistory(courses.get(position));
         }
     }
 
