@@ -1,5 +1,6 @@
 package com.montserrat.utils.view.search;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,7 +44,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     private List<Candidate> candidates;
     private List<CourseData> courses;
     private SimpleCourseAdapter simpleCourseAdapter;
-    private SimpleCourseFragment simpleCourseFragment;
+    private Fragment simpleCourseFragment;
     private AutoCompleteAdapter autoCompleteAdapter;
     private RecyclerViewClickListener itemListener;
     private Context context;
@@ -140,8 +141,10 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     public void setEvaluationCandidate(int position) {
         this.evaluationCandidate = candidates.get(position);
     }
-    public void setSimpleCourseFragment(SimpleCourseFragment fragment){
+
+    public void setSimpleCourseFragment(Fragment fragment){
         this.simpleCourseFragment = fragment;
+        Timber.d("setfragemnt %s", fragment);
     }
 
     public void searchCourse(Type type) {
@@ -189,8 +192,11 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
             this.showCandidates(false);
-            if(this.simpleCourseFragment != null)
-                simpleCourseFragment.refresh();
+            Timber.d("isnull : %s", this.simpleCourseFragment);
+            if(this.simpleCourseFragment != null) {
+                Timber.d("refresh-view");
+                ((SimpleCourseFragment)this.simpleCourseFragment).refresh();
+            }
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().fromPartailCourse(courses.get(position));
         }

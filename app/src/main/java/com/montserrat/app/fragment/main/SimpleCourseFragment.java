@@ -1,6 +1,7 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.unique.Search;
@@ -64,7 +66,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         this.refresh.setEnabled(true);
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.COURSE);
         this.search.courseSetup(this.recycler);
-        this.search.setSimpleCourseFragment(this);
+        ((MainActivity)this.getActivity()).setAutoCompletableSearchFragment(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;

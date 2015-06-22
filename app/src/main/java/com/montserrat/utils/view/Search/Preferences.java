@@ -9,6 +9,8 @@ import com.montserrat.app.model.response.SimpleCoursesResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by SSS on 2015-06-10.
  */
@@ -24,18 +26,23 @@ public class Preferences {
     }
 
     public List<CourseData> getHistory(){
+        if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
+            return null;
+        }
         String data = AppManager.getInstance().getString(AppConst.Preference.HISTORY, "");
         SimpleCoursesResponse simpleCoursesResponse = gson.fromJson(data, SimpleCoursesResponse.class);
 
         return simpleCoursesResponse.courses;
     }
-    public boolean addHistory(CourseData course){
-        SimpleCoursesResponse simpleCoursesResponse = new SimpleCoursesResponse();
-        List<CourseData> courseDataList = getHistory();
 
-        if(courseDataList == null){
+    public boolean addHistory(CourseData course){
+        List<CourseData> courseDataList;
+        SimpleCoursesResponse simpleCoursesResponse = new SimpleCoursesResponse();
+
+        if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
             courseDataList = new ArrayList<>();
         }else {
+            courseDataList  = getHistory();
             courseDataList.remove(0);
         }
         courseDataList.add(course);
@@ -43,9 +50,11 @@ public class Preferences {
 
         String json = gson.toJson(simpleCoursesResponse);
         AppManager.getInstance().putString(AppConst.Preference.HISTORY, json);
+        Timber.d("json : %d", json);
 
         return true;
     }
+
     public boolean clear(Type type){
         if(type == Type.History) {
             if (AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {

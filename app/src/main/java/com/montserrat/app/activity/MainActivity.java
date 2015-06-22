@@ -248,4 +248,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public boolean back() {
         return this.mNavigator.back();
     }
+
+
+    public void setAutoCompletableSearchFragment(Fragment fragment){
+        this.mAutoCompletableSearch.setSimpleCourseFragment(fragment);
+    }
 }
