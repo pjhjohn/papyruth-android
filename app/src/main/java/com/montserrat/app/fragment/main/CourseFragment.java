@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.montserrat.app.R;
@@ -148,7 +149,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     // Animation
     private Integer top, bottom;
     private Integer screenHeight, itemHeight;
-    private static final long ANIMATION_DURATION = 500;
+    private static final long ANIMATION_DURATION = 400;
     private AnimatorSet animators;
     private void openEvaluation(View view) {
         this.evaluationContainer.setVisibility(View.VISIBLE);
@@ -163,9 +164,11 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
+        animHeight.setInterpolator(new AccelerateDecelerateInterpolator());
 
         ValueAnimator animTop = ValueAnimator.ofInt(top, 0);
         animTop.addUpdateListener(animator -> this.evaluationContainer.setY((int) animator.getAnimatedValue()));
+        animTop.setInterpolator(new AccelerateDecelerateInterpolator());
 
         ValueAnimator animToolbar = ToolbarUtil.getHideAnimator(this.toolbar);
 
@@ -195,9 +198,11 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
+        animHeight.setInterpolator(new AccelerateDecelerateInterpolator());
 
         ValueAnimator animTop = ValueAnimator.ofInt(0, this.top);
         animTop.addUpdateListener(animator -> this.evaluationContainer.setY((int) animator.getAnimatedValue()));
+        animTop.setInterpolator(new AccelerateDecelerateInterpolator());
 
         ValueAnimator animToolbar = ToolbarUtil.getShowAnimator(this.toolbar);
 
