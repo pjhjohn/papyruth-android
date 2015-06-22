@@ -23,8 +23,6 @@ import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 
-import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
@@ -71,7 +69,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     }
 
     @Override
-    public void recyclerViewListClicked(View view, int position) {
+    public void onRecyclerViewItemClick(View view, int position) {
 
         if(((RecyclerView)view.getParent()).getId() == queryResult.getId()) {
             this.search.setEvaluationCandidate(position);
@@ -79,7 +77,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
             this.search.showCandidates(false);
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         }else{
-            this.search.recyclerViewListClicked(view, position);
+            this.search.onRecyclerViewItemClick(view, position);
             EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
             EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
             EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());

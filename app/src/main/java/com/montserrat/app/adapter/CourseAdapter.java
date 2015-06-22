@@ -132,7 +132,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View view) {
-            evaluationItemClickListener.recyclerViewListClicked(view, this.getAdapterPosition() - 2);
+            evaluationItemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition() - 2);
         }
     }
 }

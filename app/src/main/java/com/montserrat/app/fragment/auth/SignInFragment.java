@@ -53,7 +53,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 /**
  * Created by mrl on 2015-04-07.
  */
-public class AuthFragment extends Fragment implements OnPageFocus {
+public class SignInFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
     private ViewPagerController pagerController;
     @Override
@@ -101,7 +101,7 @@ public class AuthFragment extends Fragment implements OnPageFocus {
                 success -> {
                     this.progress.setVisibility(View.GONE);
                     if (success) {
-                        this.getActivity().startActivity(new Intent(AuthFragment.this.getActivity(), MainActivity.class));
+                        this.getActivity().startActivity(new Intent(SignInFragment.this.getActivity(), MainActivity.class));
                         this.getActivity().finish();
                     } else {
                         Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
@@ -170,7 +170,7 @@ public class AuthFragment extends Fragment implements OnPageFocus {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 return new CursorLoader(
-                    AuthFragment.this.getActivity(),
+                    SignInFragment.this.getActivity(),
                     Uri.withAppendedPath(
                         ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY
@@ -192,7 +192,7 @@ public class AuthFragment extends Fragment implements OnPageFocus {
                 }
                 /* Add to Emails View */
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    AuthFragment.this.getActivity(),
+                    SignInFragment.this.getActivity(),
                     android.R.layout.simple_dropdown_item_1line,
                     emails
                 );

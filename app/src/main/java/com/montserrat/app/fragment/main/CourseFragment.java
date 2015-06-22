@@ -93,7 +93,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     }
 
     @Override
-    public void recyclerViewListClicked(View view, int position) {
+    public void onRecyclerViewItemClick(View view, int position) {
         Timber.d("clicked %s @ %d", view, position);
         if(isEvaluationDetailOpened) return;
         Evaluation.getInstance().update(this.items.get(position));
@@ -156,11 +156,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.itemHeight = view.getHeight();
         this.top = (int) view.getY();
         this.bottom = this.top + this.itemHeight;
-
-        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        final int heightSpec = View.MeasureSpec.makeMeasureSpec(this.top, View.MeasureSpec.UNSPECIFIED);
-        this.evaluationContainer.measure(widthSpec, heightSpec);
-        this.evaluationContainer.setY((int) view.getY());
 
         ViewGroup.LayoutParams lpEvaluationContainer = evaluationContainer.getLayoutParams();
         ValueAnimator animHeight = ValueAnimator.ofInt(view.getHeight(), screenHeight);

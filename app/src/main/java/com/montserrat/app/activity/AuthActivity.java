@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.auth.AuthFragmentFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
@@ -35,6 +36,7 @@ public class AuthActivity extends Activity implements ViewPagerController {
         this.manager = new ViewPagerManager(
             (FlexibleViewPager) findViewById(R.id.auth_viewpager),
             this.getFragmentManager(),
+            AuthFragmentFactory.getInstance(),
             AppConst.ViewPager.Auth.LENGTH
         );
     }

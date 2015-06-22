@@ -84,7 +84,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     }
 
     @Override
-    public void recyclerViewListClicked(View view, int position) {
+    public void onRecyclerViewItemClick(View view, int position) {
         // Comment has been clicked
     }
 
@@ -116,8 +116,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         );
 
         this.subscriptions.add(FloatingActionControl
-                .clicks()
-                .subscribe(unused -> revealCommentInputWindow())
+            .clicks()
+            .subscribe(unused -> revealCommentInputWindow())
         );
     }
 

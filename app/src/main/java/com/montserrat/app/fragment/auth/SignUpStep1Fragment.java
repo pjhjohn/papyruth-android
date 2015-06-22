@@ -19,8 +19,6 @@ import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
-import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
@@ -38,8 +36,13 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
     }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.pagerController = null;
+    }
 
-    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView recycler;
+    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView universityList;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -47,7 +50,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-        this.setupRecyclerView(this.recycler);
+        this.setupRecyclerView(this.universityList);
 
         this.subscriptions.add(
             RetrofitApi.getInstance().universities()
@@ -77,7 +80,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     protected UniversityAdapter getAdapter () {
-        return UniversityAdapter.newInstance(this.items, this, this);
+        return new UniversityAdapter(this.items, this);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     }
 
     @Override
-    public void recyclerViewListClicked (View view, int position) {
+    public void onRecyclerViewItemClick(View view, int position) {
         User.getInstance().setUniversityId(this.items.get(position).id);
         User.getInstance().setUniversityName(this.items.get(position).name);
         if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) {

@@ -40,7 +40,6 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((AutoCompleteResponseHolder) holder).bind(this.items.get(position));
@@ -76,7 +75,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick(View v) {
-            itemListener.recyclerViewListClicked(v, this.getPosition());
+            itemListener.onRecyclerViewItemClick(v, this.getPosition());
         }
     }
 }

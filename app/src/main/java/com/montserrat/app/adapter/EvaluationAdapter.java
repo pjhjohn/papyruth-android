@@ -75,6 +75,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void bind(Evaluation evaluation) {
+
         }
 
     }
@@ -93,7 +94,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void onClick(View view) {
-            commentItemClickListener.recyclerViewListClicked(view, this.getAdapterPosition() - 2);
+            commentItemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition() - 2);
         }
     }
 }

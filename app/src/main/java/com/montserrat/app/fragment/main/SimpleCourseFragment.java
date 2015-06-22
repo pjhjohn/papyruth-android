@@ -25,7 +25,6 @@ import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -97,8 +96,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     }
 
     @Override
-    public void recyclerViewListClicked (View view, int position) {
-        this.search.recyclerViewListClicked(view, position);
+    public void onRecyclerViewItemClick(View view, int position) {
+        this.search.onRecyclerViewItemClick(view, position);
         this.navigator.navigate(CourseFragment.class, true);
     }
 
