@@ -2,6 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_evaluation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -10,34 +11,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
         android:orientation="vertical">
-        <RelativeLayout
+        <!--android:background="?android:attr/activatedBackgroundIndicator"-->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:elevation="15dp">
+            <ImageView
+                android:id="@+id/evaluation_user_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/evaluation_user_nickname"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/professor"
-                android:layout_alignParentLeft="true"/>
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="start"/>
+            <RelativeLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lecture"
-                android:layout_toRightOf="@+id/professor"/>
-            <RatingBar
-                style="?android:ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/point_overall"
-                android:layout_alignParentRight="true"
-                android:numStars="5"
-                android:max="10"/>
-        </RelativeLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/body"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/evaluation_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentLeft="true"/>
+                <!--style="?android:ratingBarStyleIndicator"-->
+                <!--style="@style/MainRatingBar"-->
+                <RatingBar
+                    style="?android:ratingBarStyleSmall"
+                    android:id="@+id/evaluation_point_overall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:numStars="5"
+                    android:stepSize="1.0"/>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

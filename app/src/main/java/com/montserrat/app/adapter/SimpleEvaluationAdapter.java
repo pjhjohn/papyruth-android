@@ -42,7 +42,7 @@ public class SimpleEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.V
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
             case Type.HEADER : return new Header(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.SIMPLE_EVALUATION: return new SimpleEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation_simple, parent, false));
+            case Type.SIMPLE_EVALUATION: return new SimpleEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation_less_simple, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
@@ -70,8 +70,8 @@ public class SimpleEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.V
     protected class SimpleEvaluationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView (R.id.professor) protected TextView professor;
         @InjectView (R.id.lecture) protected TextView lecture;
-        @InjectView (R.id.body) protected TextView comment;
-        @InjectView (R.id.point_overall) protected RatingBar rating;
+        @InjectView (R.id.evaluation_body) protected TextView comment;
+        @InjectView (R.id.point_overall) protected RatingBar overall;
 
         public SimpleEvaluationHolder(View parent) {
             super(parent);
@@ -83,7 +83,7 @@ public class SimpleEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.professor.setText(evaluation.professor_name);
             this.lecture.setText(evaluation.lecture_name);
             this.comment.setText(evaluation.body);
-            this.rating.setRating(evaluation.point_overall);
+            this.overall.setRating(evaluation.point_overall);
         }
 
         @Override

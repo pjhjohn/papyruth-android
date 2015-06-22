@@ -61,7 +61,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public static class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.nickname) protected TextView username;
-        @InjectView(R.id.body) protected TextView body;
+        @InjectView(R.id.evaluation_body) protected TextView body;
         public CommentHolder(View parent) {
             super(parent);
             ButterKnife.inject(this, parent);

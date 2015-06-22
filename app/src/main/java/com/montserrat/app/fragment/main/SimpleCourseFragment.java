@@ -85,8 +85,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     }
 
     @Override
-    protected SimpleCourseAdapter getAdapter (List<CourseData> courseDatas) {
-        return new SimpleCourseAdapter(this.items, this); // TODO : why not using input value rather tha this.items??
+    protected SimpleCourseAdapter getAdapter () {
+        return new SimpleCourseAdapter(this.items, this);
     }
 
     @Override

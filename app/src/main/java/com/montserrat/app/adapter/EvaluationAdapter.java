@@ -4,77 +4,96 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.model.CourseData;
+import com.montserrat.app.model.CommentData;
+import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by SSS on 2015-05-08.
  */
 public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final class Type {
-        public static final int ITEM = 1;
-    }
-    public static EvaluationAdapter newInstance(List<CourseData> initItemList, RecyclerViewClickListener listener) {
-        return new EvaluationAdapter(initItemList, listener);
+        public static final int HEADER = 0;
+        public static final int EVALUATION = 1;
+        public static final int COMMENT = 2;
     }
 
-    private static RecyclerViewClickListener itemListener;
-    private List<CourseData> items;
-    public EvaluationAdapter (List<CourseData> initItemList, RecyclerViewClickListener listener) {
-        this.items = initItemList;
-        EvaluationAdapter.itemListener = listener;
+    private RecyclerViewClickListener commentItemClickListener;
+    private List<CommentData> comments;
+    public EvaluationAdapter(List<CommentData> initialComments, RecyclerViewClickListener listener) {
+        this.comments = initialComments;
+        this.commentItemClickListener = listener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.ITEM   : return new Holder(inflater.inflate(R.layout.evaluation_list_item, parent, false));
-            default : throw new RuntimeException("There is no type that matches the type " + viewType + " + make sure you're using types correctly");
+            case Type.HEADER : return new HeaderViewHolder(inflater.inflate(R.layout.cardview_header, parent, false));
+            case Type.EVALUATION : return new EvaluationViewHolder(inflater.inflate(R.layout.cardview_evaluation, parent, false));
+            case Type.COMMENT : return new CommentViewHolder(inflater.inflate(R.layout.cardview_comment, parent, false));
+            default : throw new RuntimeException("There is no ViewHolder availiable for type#" + viewType + " Make sure you're using valid type");
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((Holder) holder).bind(this.items.get(position));
+        if (position <= 0) return;
+        else if (position == 1) ((EvaluationViewHolder) holder).bind(Evaluation.getInstance());
+        else ((CommentViewHolder) holder).bind(this.comments.get(position - 2));
     }
 
     @Override
     public int getItemCount() {
-        return this.items == null ? 0 : this.items.size();
+        return 2 + (this.comments == null ? 0 : this.comments.size());
     }
 
     @Override
     public int getItemViewType(int position) {
-        return Type.ITEM;
+        if (position <= 0) return Type.HEADER;
+        else if (position == 1) return Type.EVALUATION;
+        else return Type.COMMENT;
     }
 
-    public static class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @InjectView(R.id.lecture) protected TextView lecture;
-        @InjectView(R.id.professor) protected TextView professor;
-        public Holder(View parent) {
-            super(parent);
-            ButterKnife.inject(this, parent);
-            parent.setOnClickListener(this);
+    protected class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    protected class EvaluationViewHolder extends RecyclerView.ViewHolder {
+        //@InjectView(something) protected Something something;
+        public EvaluationViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
         }
 
-        public void bind(CourseData item) {
-            this.lecture.setText(item.name); // lecture represents the name of course
-            this.professor.setText(item.professor_name);
+        public void bind(Evaluation evaluation) {
+        }
+
+    }
+
+    protected class CommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        //@InjectView(something) protected Something something;
+        public CommentViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(CommentData comment) {
+
         }
 
         @Override
-        public void onClick (View view) {
-            EvaluationAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+        public void onClick(View view) {
+            commentItemClickListener.recyclerViewListClicked(view, this.getAdapterPosition() - 2);
         }
-
     }
 }

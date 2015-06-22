@@ -95,8 +95,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     }
 
     @Override
-    protected AutoCompleteAdapter getAdapter(List<Candidate> candidates) {
-        return new AutoCompleteAdapter(candidates, this);
+    protected AutoCompleteAdapter getAdapter() {
+        return new AutoCompleteAdapter(this.items, this);
     }
 
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {

@@ -53,7 +53,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @InjectView(R.id.point_gpa_satisfaction) protected SeekBar pointGpaSatisfaction;
     @InjectView(R.id.point_easiness) protected SeekBar pointEasiness;
     @InjectView(R.id.point_clarity) protected SeekBar pointClarity;
-    @InjectView(R.id.body) protected EditText body;
+    @InjectView(R.id.evaluation_body) protected EditText body;
     private CompositeSubscription subscriptions;
 
     @Override

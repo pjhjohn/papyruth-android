@@ -5,8 +5,10 @@
     android:id="@+id/fab_comment"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="bottom|right"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="8dp"
     android:src="@drawable/ic_light_comment"
+    android:visibility="invisible"
     fab:fab_colorNormal="@color/fg_normal"
-    fab:fab_colorPressed="@color/fg_accent"
-    fab:fab_size="mini"
-    fab:fab_label="@string/fab_comment"/>
+    fab:fab_colorPressed="@color/fg_accent"/>

@@ -76,7 +76,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     }
 
     @Override
-    protected UniversityAdapter getAdapter (List<UniversityData> universities) {
+    protected UniversityAdapter getAdapter () {
         return UniversityAdapter.newInstance(this.items, this, this);
     }
 

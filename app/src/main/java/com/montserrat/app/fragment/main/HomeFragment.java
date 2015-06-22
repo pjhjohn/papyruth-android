@@ -72,7 +72,7 @@ public class HomeFragment extends RecyclerViewFragment<SimpleEvaluationAdapter, 
     }
 
     @Override
-    protected SimpleEvaluationAdapter getAdapter (List<EvaluationData> evaluations) {
+    protected SimpleEvaluationAdapter getAdapter () {
         return SimpleEvaluationAdapter.newInstance(this.items, this);
     }
 

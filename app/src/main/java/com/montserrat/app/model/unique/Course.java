@@ -1,5 +1,6 @@
 package com.montserrat.app.model.unique;
 
+import com.montserrat.app.R;
 import com.montserrat.app.model.CourseData;
 
 import java.util.List;
