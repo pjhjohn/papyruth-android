@@ -110,8 +110,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     @Override
-    public void recyclerViewListClicked(View view, int position) {
-        this.mAutoCompletableSearch.recyclerViewListClicked(view, position);
+    public void onRecyclerViewItemClick(View view, int position) {
+        this.mAutoCompletableSearch.onRecyclerViewItemClick(view, position);
         this.navigate(SimpleCourseFragment.class, true);
     }
 

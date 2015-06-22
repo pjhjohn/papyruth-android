@@ -73,7 +73,7 @@ public class HomeFragment extends RecyclerViewFragment<SimpleEvaluationAdapter, 
 
     @Override
     protected SimpleEvaluationAdapter getAdapter () {
-        return SimpleEvaluationAdapter.newInstance(this.items, this);
+        return new SimpleEvaluationAdapter(this.items, this);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class HomeFragment extends RecyclerViewFragment<SimpleEvaluationAdapter, 
     }
 
     @Override
-    public void recyclerViewListClicked (View view, int position) {
+    public void onRecyclerViewItemClick(View view, int position) {
         // TODO : implement it!
     }
 
@@ -116,6 +116,7 @@ public class HomeFragment extends RecyclerViewFragment<SimpleEvaluationAdapter, 
         this.subscriptions.add(super.getRecyclerViewScrollObservable(this.evaluationOverview, this.toolbar, true)
             .startWith((Boolean) null)
             .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
+            .observeOn(AndroidSchedulers.mainThread())
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
                 // TODO : handle the case for max_id == 0 : prefer not to request to server

@@ -93,7 +93,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     }
 
     @Override
-    public void recyclerViewListClicked(View view, int position) {
+    public void onRecyclerViewItemClick(View view, int position) {
         Timber.d("clicked %s @ %d", view, position);
         if(isEvaluationDetailOpened) return;
         Evaluation.getInstance().update(this.items.get(position));

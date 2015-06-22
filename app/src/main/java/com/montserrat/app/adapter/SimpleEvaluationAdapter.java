@@ -26,36 +26,33 @@ public class SimpleEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.V
         public static final int HEADER = 1;
         public static final int SIMPLE_EVALUATION = 2;
     }
-    public static SimpleEvaluationAdapter newInstance(List<EvaluationData> initItemList, RecyclerViewClickListener listener) {
-        return new SimpleEvaluationAdapter(initItemList, listener);
-    }
 
-    private static RecyclerViewClickListener itemListener;
-    private List<EvaluationData> items;
-    private SimpleEvaluationAdapter(List<EvaluationData> initItemList, RecyclerViewClickListener listener) {
-        this.items = initItemList;
-        SimpleEvaluationAdapter.itemListener = listener;
+    private RecyclerViewClickListener simpleEvaluationItemClickListener;
+    private List<EvaluationData> evaluations;
+    public SimpleEvaluationAdapter(List<EvaluationData> initialEvaluations, RecyclerViewClickListener listener) {
+        this.evaluations = initialEvaluations;
+        this.simpleEvaluationItemClickListener = listener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch(viewType) {
-            case Type.HEADER : return new Header(inflater.inflate(R.layout.cardview_header, parent, false));
-            case Type.SIMPLE_EVALUATION: return new SimpleEvaluationHolder(inflater.inflate(R.layout.cardview_evaluation_less_simple, parent, false));
+            case Type.HEADER : return new HeaderViewHolder(inflater.inflate(R.layout.cardview_header, parent, false));
+            case Type.SIMPLE_EVALUATION : return new SimpleEvaluationViewHolder(inflater.inflate(R.layout.cardview_evaluation_less_simple, parent, false));
             default : throw new RuntimeException("There is no type that matche the type " + viewType + " + make sure you're using types correctly");
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position == 0) return; // Header
-        ((SimpleEvaluationHolder) holder).bind(this.items.get(position - 1));
+        if (position <= 0) return;
+        ((SimpleEvaluationViewHolder) holder).bind(this.evaluations.get(position - 1));
     }
 
     @Override
     public int getItemCount() {
-        return this.items == null ? 1 : this.items.size()+1; // 1 for HEADER
+        return 1 + (this.evaluations == null ? 0 : this.evaluations.size());
     }
 
     @Override
@@ -63,20 +60,22 @@ public class SimpleEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.V
         return position == 0 ? Type.HEADER : Type.SIMPLE_EVALUATION;
     }
 
-    protected class Header extends RecyclerView.ViewHolder {
-        public Header(View parent) { super(parent); }
+    protected class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 
-    protected class SimpleEvaluationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected class SimpleEvaluationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView (R.id.professor) protected TextView professor;
         @InjectView (R.id.lecture) protected TextView lecture;
         @InjectView (R.id.evaluation_body) protected TextView comment;
         @InjectView (R.id.point_overall) protected RatingBar overall;
 
-        public SimpleEvaluationHolder(View parent) {
-            super(parent);
-            ButterKnife.inject(this, parent);
-            parent.setOnClickListener(this);
+        public SimpleEvaluationViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(EvaluationData evaluation) {
@@ -88,7 +87,7 @@ public class SimpleEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @Override
         public void onClick (View view) {
-            SimpleEvaluationAdapter.itemListener.recyclerViewListClicked(view, this.getPosition());
+            simpleEvaluationItemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition() - 1);
         }
     }
 }

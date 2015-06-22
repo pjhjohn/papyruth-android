@@ -183,7 +183,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     }
 
     @Override
-    public void recyclerViewListClicked(View view, int position) {
+    public void onRecyclerViewItemClick(View view, int position) {
         ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
             Search.getInstance().clear();
