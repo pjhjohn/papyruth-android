@@ -10,6 +10,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
@@ -146,12 +148,11 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
 
     public void setSimpleCourseFragment(Fragment fragment){
         this.simpleCourseFragment = fragment;
-        Timber.d("setfragemnt %s", fragment);
     }
 
     public void searchCourse(Type type) {
         if(type == Type.HISTORY){
-            if (this.preferences.getHistory() != null) {
+            if (AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
                 List<CourseData> courseList = this.preferences.getHistory();
                 this.courses.clear();
                 for (int i = 0; i < courseList.size(); i++) {
@@ -224,7 +225,6 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
             this.showCandidates(false);
-            Timber.d("isnull : %s", this.simpleCourseFragment);
             if(this.simpleCourseFragment != null) {
                 ((SimpleCourseFragment)this.simpleCourseFragment).refresh();
             }

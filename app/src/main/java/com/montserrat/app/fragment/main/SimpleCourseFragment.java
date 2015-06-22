@@ -103,7 +103,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     }
 
     public void refresh(){
-        Timber.d("refresh!!!");
         RetrofitApi.getInstance().search_search(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
@@ -134,26 +133,28 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
             .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
         );
         this.subscriptions.add(
-                this.getRefreshObservable(this.refresh)
-                        .flatMap(unused -> {
-                            this.refresh.setRefreshing(true);
-                            return RetrofitApi.getInstance().search_search(
-                                    User.getInstance().getAccessToken(),
-                                    User.getInstance().getUniversityId(),
-                                    Search.getInstance().getLectureId(),
-                                    Search.getInstance().getProfessorId(),
-                                    Search.getInstance().getQuery());
-                        })
-                        .map(response -> response.courses)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                courses -> {
-                                    this.refresh.setRefreshing(false);
-                                    this.search.notifycourseChanged(courses);
-                                },
-                                error -> Timber.d("search error : %s", error)
-                        )
+            this.getRefreshObservable(this.refresh)
+//                .sub(unused -> {
+//                    this.refresh.setRefreshing(true);
+//                    Timber.d("refresh 2!");
+//                    return RetrofitApi.getInstance().search_search(
+//                        User.getInstance().getAccessToken(),
+//                        User.getInstance().getUniversityId(),
+//                        Search.getInstance().getLectureId(),
+//                        Search.getInstance().getProfessorId(),
+//                        Search.getInstance().getQuery());
+//                })
+//                .map(response -> response.courses)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    courses -> {
+                        this.refresh.setRefreshing(false);
+//                        this.search.notifycourseChanged(courses);
+                        this.search.searchCourse(AutoCompletableSearchView.Type.HISTORY);
+                    },
+                    error -> Timber.d("search error : %s", error)
+                )
         );
 
 //        this.subscriptions.add(
@@ -175,7 +176,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
 //                                })
 //        );
 
-        Timber.d("search : %s", Search.getInstance().toString());
 
         if (Search.getInstance().isEmpty()) {
             this.search.searchCourse(AutoCompletableSearchView.Type.HISTORY);

@@ -18,8 +18,9 @@ public class Preferences {
     private Gson gson;
 
     public enum Type{
-        History
+        HISTORY
     }
+    public static final int HISTORY_SIZE = 5;
 
     public Preferences(){
         gson = new Gson();
@@ -32,6 +33,7 @@ public class Preferences {
         String data = AppManager.getInstance().getString(AppConst.Preference.HISTORY, "");
         SimpleCoursesResponse simpleCoursesResponse = gson.fromJson(data, SimpleCoursesResponse.class);
 
+        Timber.d("get History : %s", data);
         return simpleCoursesResponse.courses;
     }
 
@@ -45,13 +47,16 @@ public class Preferences {
         }else {
             courseDataList  = getHistory();
         }
-
-        if(courseDataList.contains(course)) {
-            courseDataList.remove(course);
+        int index;
+        if((index = CourseDataContains(courseDataList, course)) >= 0) {
+            courseDataList.remove(index);
             courseDataList.add(course);
-        }else if (courseDataList.size() > 4) {
+        }else if (courseDataList.size() > HISTORY_SIZE - 1) {
             courseDataList.remove(0);
             courseDataList.add(course);
+            while(courseDataList.size() > HISTORY_SIZE - 1){
+                courseDataList.remove(0);
+            }
         }else{
             courseDataList.add(course);
         }
@@ -59,14 +64,21 @@ public class Preferences {
 
         String json = gson.toJson(simpleCoursesResponse);
         AppManager.getInstance().putString(AppConst.Preference.HISTORY, json);
-        Timber.d("json : %s", json);
 
         return true;
     }
 
+    public int CourseDataContains(List<CourseData> list, CourseData course){
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).id.equals(course.id))
+                return i;
+        }
+        return -1;
+    }
 
-    public boolean clear(Type type){
-        if(type == Type.History) {
+
+    public static boolean clear(Type type){
+        if(type == Type.HISTORY) {
             if (AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
                 AppManager.getInstance().remove(AppConst.Preference.HISTORY);
                 return true;
