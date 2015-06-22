@@ -157,11 +157,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.top = (int) view.getY();
         this.bottom = this.top + this.itemHeight;
 
-        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        final int heightSpec = View.MeasureSpec.makeMeasureSpec(this.top, View.MeasureSpec.UNSPECIFIED);
-        this.evaluationContainer.measure(widthSpec, heightSpec);
-        this.evaluationContainer.setY((int) view.getY());
-
         ViewGroup.LayoutParams lpEvaluationContainer = evaluationContainer.getLayoutParams();
         ValueAnimator animHeight = ValueAnimator.ofInt(view.getHeight(), screenHeight);
         animHeight.addUpdateListener(animator -> {

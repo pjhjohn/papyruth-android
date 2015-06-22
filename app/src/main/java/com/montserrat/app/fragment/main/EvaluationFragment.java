@@ -116,8 +116,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         );
 
         this.subscriptions.add(FloatingActionControl
-                .clicks()
-                .subscribe(unused -> revealCommentInputWindow())
+            .clicks()
+            .subscribe(unused -> revealCommentInputWindow())
         );
     }
 
