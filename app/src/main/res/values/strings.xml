@@ -70,4 +70,5 @@
     <string name="failed_passwd">Failed to change password</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
+    <string name="toolbar_title_new_comment">New Comment</string>
 </resources>

@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +17,6 @@ import android.widget.FrameLayout;
 
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CourseAdapter;
-import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
@@ -111,52 +109,52 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             .subscribe(unused -> jumpToEvaluationStep2())
         );
         this.subscriptions.add(RetrofitApi
-                .getInstance()
-                .evaluations(
-                    User.getInstance().getAccessToken(),
-                    User.getInstance().getUniversityId(),
-                    null,
-                    null,
-                    null,
-                    Course.getInstance().getId()
-                )
-                .map(response -> response.evaluations)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(evaluations -> {
-                    this.items.clear();
-                    this.items.addAll(evaluations);
-                    this.adapter.notifyDataSetChanged();
-                })
+            .getInstance()
+            .evaluations(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                null,
+                null,
+                null,
+                Course.getInstance().getId()
+            )
+            .map(response -> response.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(evaluations -> {
+                this.items.clear();
+                this.items.addAll(evaluations);
+                this.adapter.notifyDataSetChanged();
+            })
         );
     }
 
     private void jumpToEvaluationStep2() {
-        Evaluation.getInstance().setCourseId(Course.getInstance().getId());
-        Evaluation.getInstance().setLectureName(Course.getInstance().getName());
-        Evaluation.getInstance().setProfessorName(Course.getInstance().getProfessor());
+        EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
+        EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
+        EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
         this.navigator.navigate(EvaluationStep2Fragment.class, true);
     }
 
     @Override
     public boolean onBack() {
-        if (!isEvaluationDetailOpened) return false;
-        if (animators.isRunning()) animators.end();
-        this.closeEvaluation();
+        if (!isEvaluationDetailOpened && animators != null && !animators.isRunning()) return false;
+        if (!isEvaluationDetailOpened && animators != null) animators.cancel();
+        else if(animators != null && animators.isRunning()) animators.end();
+        else if(!evaluationDetail.onBack()) this.closeEvaluation();
         return true;
     }
 
     // Animation
-    private Integer top, bottom;
-    private Integer screenHeight, itemHeight;
+    private Integer itemTop, itemHeight, screenHeight;
     private static final long ANIMATION_DURATION = 400;
     private AnimatorSet animators;
+    private Boolean isAnimationCanceled;
     private void openEvaluation(View view) {
         this.evaluationContainer.setVisibility(View.VISIBLE);
         if(this.getView() != null) this.screenHeight = this.getView().getHeight();
         this.itemHeight = view.getHeight();
-        this.top = (int) view.getY();
-        this.bottom = this.top + this.itemHeight;
+        this.itemTop = (int) view.getY();
 
         ViewGroup.LayoutParams lpEvaluationContainer = evaluationContainer.getLayoutParams();
         ValueAnimator animHeight = ValueAnimator.ofInt(view.getHeight(), screenHeight);
@@ -166,7 +164,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         });
         animHeight.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        ValueAnimator animTop = ValueAnimator.ofInt(top, 0);
+        ValueAnimator animTop = ValueAnimator.ofInt(itemTop, 0);
         animTop.addUpdateListener(animator -> this.evaluationContainer.setY((int) animator.getAnimatedValue()));
         animTop.setInterpolator(new AccelerateDecelerateInterpolator());
 
@@ -180,11 +178,20 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 getFragmentManager().beginTransaction().add(R.id.evaluation_container, evaluationDetail).commit();
+                isAnimationCanceled = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                getFragmentManager().beginTransaction().remove(evaluationDetail).commit();
+                isAnimationCanceled = true;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                if(isAnimationCanceled) return;
                 isEvaluationDetailOpened = true;
                 evaluationDetail.setEvaluationFloatingActionControl();
             }
@@ -201,7 +208,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         });
         animHeight.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        ValueAnimator animTop = ValueAnimator.ofInt(0, this.top);
+        ValueAnimator animTop = ValueAnimator.ofInt(0, this.itemTop);
         animTop.addUpdateListener(animator -> this.evaluationContainer.setY((int) animator.getAnimatedValue()));
         animTop.setInterpolator(new AccelerateDecelerateInterpolator());
 

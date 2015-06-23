@@ -20,8 +20,10 @@ import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.CommentInputWindow;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.view.viewpager.OnBack;
 
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +43,7 @@ import static com.montserrat.utils.support.rx.RxValidator.nonEmpty;
  * - List of items containing each Comment
  * - Has ability to receive comment input
  */
-public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, CommentData> {
+public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, CommentData> implements OnBack {
     private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
@@ -56,7 +58,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
     @InjectView(R.id.evaluation_recyclerview) protected RecyclerView evaluationRecyclerView;
     @InjectView(R.id.toolbar_evaluation) protected Toolbar evaluationToolbar;
-    @InjectView(R.id.new_comment) protected TextView commentInputWindow;
+    @InjectView(R.id.comment_window) protected CommentInputWindow commentInputWindow;
+    private boolean isCommentInputWindowOpened;
     private CompositeSubscription subscriptions;
     private Integer page = null;
 
@@ -67,8 +70,11 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         this.subscriptions = new CompositeSubscription();
         this.setupRecyclerView(evaluationRecyclerView);
         this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_clear);
+        this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
         this.evaluationToolbar.setTitle(Course.getInstance().getName());
         this.evaluationToolbar.inflateMenu(R.menu.evaluation);
+        this.commentInputWindow.setOnBackListener(this);
+        this.isCommentInputWindowOpened = false;
         return view;
     }
     @Override
@@ -126,15 +132,22 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         );
     }
 
+    @Override
+    public boolean onBack() {
+        if (!isCommentInputWindowOpened) return false;
+        this.hideCommentInputWindow();
+        return true;
+    }
+
     private void showCommentInputWindow() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_done);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_done, false);
         this.commentInputWindow.setVisibility(View.VISIBLE);
-        this.commentInputWindow.requestFocus();
+        this.commentInputWindow.getCommentInputEditText().requestFocus();
         final InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(this.commentInputWindow, InputMethodManager.SHOW_FORCED);
+        imm.showSoftInput(this.commentInputWindow.getCommentInputEditText(), InputMethodManager.SHOW_FORCED);
 
         this.subscriptions.add(WidgetObservable
-            .text(this.commentInputWindow)
+            .text(this.commentInputWindow.getCommentInputEditText())
             .map(toString)
             .map(nonEmpty)
             .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -147,14 +160,14 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
         this.subscriptions.add(FloatingActionControl
             .clicks()
-            .filter(unused -> !this.commentInputWindow.getText().toString().isEmpty())
+            .filter(unused -> !this.commentInputWindow.getCommentInputEditText().getText().toString().isEmpty())
             .observeOn(Schedulers.io())
             .flatMap(unused -> RetrofitApi
-                .getInstance()
-                .comments(
-                    User.getInstance().getAccessToken(),
-                    Evaluation.getInstance().getId(),
-                    this.commentInputWindow.getText().toString()
+                    .getInstance()
+                    .comments(
+                        User.getInstance().getAccessToken(),
+                        Evaluation.getInstance().getId(),
+                        this.commentInputWindow.getCommentInputEditText().getText().toString()
                 )
             )
             .observeOn(AndroidSchedulers.mainThread())
@@ -163,5 +176,14 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 setEvaluationFloatingActionControl();
             })
         );
+        this.isCommentInputWindowOpened = true;
+    }
+
+    private void hideCommentInputWindow() {
+        final InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(this.commentInputWindow.getWindowToken(), 0);
+        this.commentInputWindow.setVisibility(View.GONE);
+        this.setEvaluationFloatingActionControl();
+        this.isCommentInputWindowOpened = false;
     }
 }
