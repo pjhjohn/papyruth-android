@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +17,9 @@ import android.widget.FrameLayout;
 
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CourseAdapter;
-import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
-import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -111,23 +108,23 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             .subscribe(unused -> jumpToEvaluationStep2())
         );
         this.subscriptions.add(RetrofitApi
-                .getInstance()
-                .evaluations(
-                    User.getInstance().getAccessToken(),
-                    User.getInstance().getUniversityId(),
-                    null,
-                    null,
-                    null,
-                    Course.getInstance().getId()
-                )
-                .map(response -> response.evaluations)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(evaluations -> {
-                    this.items.clear();
-                    this.items.addAll(evaluations);
-                    this.adapter.notifyDataSetChanged();
-                })
+            .getInstance()
+            .evaluations(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                null,
+                null,
+                null,
+                Course.getInstance().getId()
+            )
+            .map(response -> response.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(evaluations -> {
+                this.items.clear();
+                this.items.addAll(evaluations);
+                this.adapter.notifyDataSetChanged();
+            })
         );
     }
 
@@ -141,6 +138,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     @Override
     public boolean onBack() {
         if (!isEvaluationDetailOpened) return false;
+        else if (evaluationDetail.onBack()) return true;
         if (animators.isRunning()) animators.end();
         this.closeEvaluation();
         return true;
