@@ -1,7 +1,6 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
@@ -63,8 +63,13 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
         this.refresh.setEnabled(true);
-        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.COURSE);
-        this.search.courseSetup(this.recycler);
+        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.SEARCH);
+        Bundle bundle = this.getArguments();
+//        if(bundle.containsKey(AppConst.Preference.SEARCH))
+        this.search.initCourse(this.recycler, bundle);
+//        else
+//            this.search.initCourse(this.recycler, false);
+
         ((MainActivity)this.getActivity()).setAutoCompletableSearchFragment(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
@@ -102,22 +107,24 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     }
 
     public void refresh(){
-        RetrofitApi.getInstance().search_search(
-                User.getInstance().getAccessToken(),
-                User.getInstance().getUniversityId(),
-                Search.getInstance().getLectureId(),
-                Search.getInstance().getProfessorId(),
-                Search.getInstance().getQuery())
-                .map(response -> response.courses)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        courses -> {
-                            this.refresh.setRefreshing(false);
-                            this.search.notifycourseChanged(courses);
-                        },
-                        error -> Timber.d("search error : %s", error)
-                );
+//        RetrofitApi.getInstance().search_search(
+//                User.getInstance().getAccessToken(),
+//                User.getInstance().getUniversityId(),
+//                Search.getInstance().getLectureId(),
+//                Search.getInstance().getProfessorId(),
+//                Search.getInstance().getQuery())
+//                .map(response -> response.courses)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        courses -> {
+//                            this.refresh.setRefreshing(false);
+//                            this.search.notifyChangedCourse(courses);
+//                        },
+//                        error -> Timber.d("search error : %s", error)
+//                );
+        this.search.searchCourse();
+        this.refresh.setRefreshing(false);
     }
 
     @Override
@@ -133,53 +140,17 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         );
         this.subscriptions.add(
             this.getRefreshObservable(this.refresh)
-//                .sub(unused -> {
-//                    this.refresh.setRefreshing(true);
-//                    Timber.d("refresh 2!");
-//                    return RetrofitApi.getInstance().search_search(
-//                        User.getInstance().getAccessToken(),
-//                        User.getInstance().getUniversityId(),
-//                        Search.getInstance().getLectureId(),
-//                        Search.getInstance().getProfessorId(),
-//                        Search.getInstance().getQuery());
-//                })
-//                .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     courses -> {
                         this.refresh.setRefreshing(false);
-//                        this.search.notifycourseChanged(courses);
-                        this.search.searchCourse(AutoCompletableSearchView.Type.HISTORY);
+                        this.search.searchCourse();
                     },
                     error -> Timber.d("search error : %s", error)
                 )
         );
 
-//        this.subscriptions.add(
-//                getRecyclerViewScrollObservable(this.recycler, this.toolbar, false)
-//                        .filter(askmoreifnull -> askmoreifnull == null)
-//                        .flatMap(unused -> {
-//                            this.progress.setVisibility(View.VISIBLE);
-//                            return RetrofitApi.getInstance().search_search(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, "");
-//                        })
-//                        .map(response -> response.courses)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(courses -> {
-//                                    this.progress.setVisibility(View.GONE);
-//                                    this.search.notifycourseChanged(courses);
-//                                },
-//                                error ->{
-//                                    Timber.d("error : %s", error);
-//                                })
-//        );
-
-
-        if (Search.getInstance().isEmpty()) {
-            this.search.searchCourse(AutoCompletableSearchView.Type.HISTORY);
-        } else {
-            this.search.searchCourse(AutoCompletableSearchView.Type.SEARCH);
-        }
+        this.search.searchCourse();
     }
 }

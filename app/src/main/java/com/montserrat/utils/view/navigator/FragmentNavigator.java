@@ -36,10 +36,10 @@ public class FragmentNavigator implements Navigator {
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
         final Fragment current = this.manager.findFragmentById(this.containerViewId);
-        if(bundle != null) current.setArguments(bundle);
+        Fragment next = this.instantiateFragment(target);
+        if(bundle != null) next.setArguments(bundle);
         if(current != null && current.getClass().getSimpleName().equals(target.getSimpleName())) return;
         if(clear) this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Fragment next = this.instantiateFragment(target);
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
         if(addToBackStack) transaction.addToBackStack(next.getClass().getSimpleName());
         transaction.replace(this.containerViewId, next);

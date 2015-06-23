@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
@@ -75,8 +76,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mNavigationDrawer.update();
 
         /* Instantiate Multiple ViewPagerManagers */
-        mAutoCompletableSearch = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.TOOLBAR);
-        mAutoCompletableSearch.autoCompleteSetup(this.searchResult, this.outsideResult);
+        mAutoCompletableSearch = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.SEARCH);
+        mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
     }
 
     @Override
@@ -112,7 +113,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         this.mAutoCompletableSearch.onRecyclerViewItemClick(view, position);
-        this.navigate(SimpleCourseFragment.class, true);
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(AppConst.Preference.SEARCH, true);
+
+        this.navigate(SimpleCourseFragment.class, bundle, true);
     }
 
     private boolean terminate = false;

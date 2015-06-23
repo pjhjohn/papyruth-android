@@ -2,6 +2,7 @@ package com.montserrat.utils.view.search;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
-import com.montserrat.app.AppManager;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
@@ -39,42 +39,48 @@ import timber.log.Timber;
  * Created by SSS on 2015-06-06.
  */
 public class AutoCompletableSearchView implements RecyclerViewClickListener {
-    private CompositeSubscription subscription;
+    private EditText editText;
     private RecyclerView autocompleteView;
     private RecyclerView courseListView;
     private View outsideView;
+    private Fragment simpleCourseFragment;
+
+    private RecyclerViewClickListener itemListener;
+
+    private AutoCompleteAdapter autoCompleteAdapter;
+    private SimpleCourseAdapter simpleCourseAdapter;
+
+    private Preferences preferences;
+    private CompositeSubscription subscription;
+    private Context context;
+
     private List<Candidate> candidates;
     private List<CourseData> courses;
-    private SimpleCourseAdapter simpleCourseAdapter;
-    private Fragment simpleCourseFragment;
-    private AutoCompleteAdapter autoCompleteAdapter;
-    private RecyclerViewClickListener itemListener;
-    private Context context;
-    private EditText editText;
-    private Preferences preferences;
+
+    private Type type;
+    private boolean isSearch;
 
     public enum Type{
-        TOOLBAR, SEARCH, COURSE, HISTORY, EVALUATION
+        SEARCH, EVALUATION
     }
 
-    public enum History{
-
-    }
-    private Type type;
 
     public AutoCompletableSearchView(RecyclerViewClickListener listener, Context context, Type type){
         this.courses = new ArrayList<>();
         this.candidates = new ArrayList<>();
         this.subscription = new CompositeSubscription();
+        this.preferences = new Preferences();
+
         this.itemListener = listener;
         this.context = context;
         this.type = type;
+
+        this.isSearch = false;
         this.editText = null;
         this.simpleCourseFragment = null;
-        this.preferences = new Preferences();
     }
 
-    public void autoCompleteSetup(RecyclerView autocompleteView, View outsideView){
+    public void initAutoComplete(RecyclerView autocompleteView, View outsideView){
         this.autocompleteView = autocompleteView;
         this.autoCompleteAdapter = new AutoCompleteAdapter(this.candidates, this.itemListener);
         this.autocompleteView.setLayoutManager(new LinearLayoutManager(context));
@@ -83,20 +89,27 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.outsideView.setOnClickListener(view -> showCandidates(false));
     }
 
-    public void notifyAutocompleteChanged(List <Candidate> candidates){
-        this.candidates.clear();
-        this.candidates.addAll(candidates);
-        this.autoCompleteAdapter.notifyDataSetChanged();
-    }
-
-    public void courseSetup(RecyclerView courseListView){
+    public void initCourse(RecyclerView courseListView){
         this.courseListView = courseListView;
         this.simpleCourseAdapter = new SimpleCourseAdapter(this.courses, this.itemListener);
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
         this.courseListView.setAdapter(this.simpleCourseAdapter);
     }
 
-    public void notifycourseChanged(List<CourseData> courses){
+    public void initCourse(RecyclerView courseListView, Bundle bundle){
+        this.initCourse(courseListView);
+        if(bundle != null && bundle.containsKey(AppConst.Preference.SEARCH)){
+            this.isSearch = bundle.getBoolean(AppConst.Preference.SEARCH);
+        }
+    }
+
+    public void notifyChangedAutocomplete(List<Candidate> candidates){
+        this.candidates.clear();
+        this.candidates.addAll(candidates);
+        this.autoCompleteAdapter.notifyDataSetChanged();
+    }
+
+    public void notifyChangedCourse(List<CourseData> courses){
         this.courses.clear();
         this.courses.addAll(courses);
         this.simpleCourseAdapter.notifyDataSetChanged();
@@ -122,7 +135,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                     results -> {
-                        this.notifyAutocompleteChanged(results);
+                        this.notifyChangedAutocomplete(results);
                         showCandidates(true);
                     },
                     error -> {
@@ -150,72 +163,67 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.simpleCourseFragment = fragment;
     }
 
-    public void searchCourse(Type type) {
-        if(type == Type.HISTORY){
-            if (AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
-                List<CourseData> courseList = this.preferences.getHistory();
-                this.courses.clear();
-                for (int i = 0; i < courseList.size(); i++) {
-                    this.subscription.add(
-                            RetrofitApi.getInstance().search_search(
-                                    User.getInstance().getAccessToken(),
-                                    User.getInstance().getUniversityId(),
-                                    courseList.get(i).lecture_id,
-                                    courseList.get(i).professor_id,
-                                    null
-                                    )
-                            .map(response -> response.courses)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    course -> {
-                                        this.courses.addAll(course);
-                                        this.simpleCourseAdapter.notifyDataSetChanged();
-
-                                    },
-                                    error -> Timber.d("serch history error : %s", error)
-                            )
-                    );
-                }
-            }else{
-                //TODO : implement it!!
-            }
-
-        }else if (type == Type.EVALUATION){
+    public void searchHistory(){
+        List<CourseData> courseList = this.preferences.getHistory();
+        this.courses.clear();
+        for (int i = 0; i < courseList.size(); i++) {
             this.subscription.add(
                 RetrofitApi.getInstance().search_search(
                     User.getInstance().getAccessToken(),
                     User.getInstance().getUniversityId(),
-                    evaluationCandidate.lecture_id,
-                    evaluationCandidate.professor_id,
+                    courseList.get(i).lecture_id,
+                    courseList.get(i).professor_id,
                     null
                 )
-                .map(response -> response.courses)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        this::notifycourseChanged,
-                        error -> Timber.d("search course error : %s %s", error)
-                )
+                    .map(response -> response.courses)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        course -> {
+                            this.courses.addAll(course);
+                            this.simpleCourseAdapter.notifyDataSetChanged();
+
+                        },
+                        error -> Timber.d("serch history error : %s", error)
+                    )
             );
-        } else {
-            RetrofitApi
-                .getInstance()
-                .search_search(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        Search.getInstance().getLectureId(),
-                        Search.getInstance().getProfessorId(),
-                        Search.getInstance().getQuery()
-                )
-                .map(response -> response.courses)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        this::notifycourseChanged,
-                        error -> Timber.d("Search error : %s", error)
-                );
         }
+    }
+
+    public void searchCourse() {
+        Timber.d("isHistory? : %s", isSearch);
+        Integer lectureId, professorId;
+        String query;
+
+        if (this.type == Type.EVALUATION){
+            lectureId = evaluationCandidate.lecture_id;
+            professorId = evaluationCandidate.professor_id;
+            query = null;
+        } else if(isSearch) {
+            lectureId = Search.getInstance().getLectureId();
+            professorId = Search.getInstance().getProfessorId();
+            query = Search.getInstance().getQuery();
+        }else{
+            searchHistory();
+            return;
+        }
+
+        this.subscription.add(
+            RetrofitApi.getInstance().search_search(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                lectureId,
+                professorId,
+                query
+            )
+            .map(response -> response.courses)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                this::notifyChangedCourse,
+                error -> Timber.d("search course error : %s %s", error)
+            )
+        );
     }
 
     @Override
