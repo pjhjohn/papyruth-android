@@ -39,7 +39,7 @@ public class CommentInputWindow extends RelativeLayout {
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.comment, this, true);
         ButterKnife.inject(this);
-        this.toolbar.setTitle("µ¡±Û¾²±â");
+        this.toolbar.setTitle(R.string.toolbar_title_new_comment);
     }
 
     public EditText getCommentInputEditText() {

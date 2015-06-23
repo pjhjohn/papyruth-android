@@ -70,4 +70,5 @@
     <string name="failed_passwd">비밀번호 변경에 실패하였습니다</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
+    <string name="toolbar_title_new_comment">덧글 쓰기</string>
 </resources>
