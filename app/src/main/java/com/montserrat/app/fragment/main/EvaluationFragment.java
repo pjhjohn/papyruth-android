@@ -105,8 +105,9 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         super.onResume();
     }
 
-    public void setEvaluationFloatingActionControl() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
+    public void setEvaluationFloatingActionControl(boolean animate) {
+        if(animate) FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
+        else FloatingActionControl.getInstance().setControl(R.layout.fab_comment, false).show(false);
         this.subscriptions.add(RetrofitApi
             .getInstance()
             .comments(
@@ -140,7 +141,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     }
 
     private void showCommentInputWindow() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_done);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_done, false);
         this.commentInputWindow.setVisibility(View.VISIBLE);
         this.commentInputWindow.getCommentInputEditText().requestFocus();
         final InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -173,7 +174,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(commentResponse -> {
                 this.commentInputWindow.setVisibility(View.GONE);
-                setEvaluationFloatingActionControl();
+                setEvaluationFloatingActionControl(true);
             })
         );
         this.isCommentInputWindowOpened = true;
@@ -183,7 +184,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         final InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(this.commentInputWindow.getWindowToken(), 0);
         this.commentInputWindow.setVisibility(View.GONE);
-        this.setEvaluationFloatingActionControl();
+        this.setEvaluationFloatingActionControl(true);
         this.isCommentInputWindowOpened = false;
     }
 }
