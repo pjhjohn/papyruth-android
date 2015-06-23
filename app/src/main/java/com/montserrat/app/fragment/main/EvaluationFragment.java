@@ -1,6 +1,7 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,11 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.model.CommentData;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -63,6 +66,9 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.setupRecyclerView(evaluationRecyclerView);
+        this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_clear);
+        this.evaluationToolbar.setTitle(Course.getInstance().getName());
+        this.evaluationToolbar.inflateMenu(R.menu.evaluation);
         return view;
     }
     @Override
@@ -124,6 +130,9 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         this.commentInputWindow.setVisibility(View.VISIBLE);
         this.commentInputWindow.requestFocus();
+        final InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(this.commentInputWindow, InputMethodManager.SHOW_FORCED);
+
         this.subscriptions.add(WidgetObservable
             .text(this.commentInputWindow)
             .map(toString)
