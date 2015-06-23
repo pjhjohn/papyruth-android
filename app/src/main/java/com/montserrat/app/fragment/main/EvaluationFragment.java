@@ -105,9 +105,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         super.onResume();
     }
 
-    public void setEvaluationFloatingActionControl(boolean animate) {
-        if(animate) FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
-        else FloatingActionControl.getInstance().setControl(R.layout.fab_comment, false).show(false);
+    public void setEvaluationFloatingActionControl() {
+        FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
         this.subscriptions.add(RetrofitApi
             .getInstance()
             .comments(
@@ -174,7 +173,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(commentResponse -> {
                 this.commentInputWindow.setVisibility(View.GONE);
-                setEvaluationFloatingActionControl(true);
+                setEvaluationFloatingActionControl();
             })
         );
         this.isCommentInputWindowOpened = true;
@@ -184,7 +183,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         final InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(this.commentInputWindow.getWindowToken(), 0);
         this.commentInputWindow.setVisibility(View.GONE);
-        this.setEvaluationFloatingActionControl(true);
+        this.setEvaluationFloatingActionControl();
         this.isCommentInputWindowOpened = false;
     }
 }

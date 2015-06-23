@@ -193,7 +193,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 super.onAnimationEnd(animation);
                 if(isAnimationCanceled) return;
                 isEvaluationDetailOpened = true;
-                evaluationDetail.setEvaluationFloatingActionControl(true);
+                evaluationDetail.setEvaluationFloatingActionControl();
             }
         });
         animators.start();
