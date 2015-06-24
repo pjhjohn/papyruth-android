@@ -54,6 +54,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
     private AutoCompletableSearchView search;
+    private Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,11 +65,13 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
 
         this.refresh.setEnabled(true);
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.SEARCH);
-        Bundle bundle = this.getArguments();
-//        if(bundle.containsKey(AppConst.Preference.SEARCH))
-        this.search.initCourse(this.recycler, bundle);
-//        else
-//            this.search.initCourse(this.recycler, false);
+        this.bundle = this.getArguments();
+        if(this.bundle != null)
+            Timber.d("isSearch in fragement : %s", this.bundle.getBoolean(AppConst.Preference.SEARCH));
+        else
+            Timber.d("isSearch in fragement : %s", this.bundle);
+
+        this.search.initCourse(this.recycler, this.bundle);
 
         ((MainActivity)this.getActivity()).setAutoCompletableSearchFragment(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
@@ -107,22 +110,10 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     }
 
     public void refresh(){
-//        RetrofitApi.getInstance().search_search(
-//                User.getInstance().getAccessToken(),
-//                User.getInstance().getUniversityId(),
-//                Search.getInstance().getLectureId(),
-//                Search.getInstance().getProfessorId(),
-//                Search.getInstance().getQuery())
-//                .map(response -> response.courses)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        courses -> {
-//                            this.refresh.setRefreshing(false);
-//                            this.search.notifyChangedCourse(courses);
-//                        },
-//                        error -> Timber.d("search error : %s", error)
-//                );
+        this.bundle = new Bundle();
+        this.bundle.putBoolean(AppConst.Preference.SEARCH, true);
+        this.onSaveInstanceState(bundle);
+        this.search.initCourse(this.recycler, this.bundle);
         this.search.searchCourse();
         this.refresh.setRefreshing(false);
     }

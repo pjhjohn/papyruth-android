@@ -58,7 +58,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     private List<CourseData> courses;
 
     private Type type;
-    private boolean isSearch;
+    public boolean isSearch;
 
     public enum Type{
         SEARCH, EVALUATION
@@ -167,6 +167,8 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         List<CourseData> courseList = this.preferences.getHistory();
         this.courses.clear();
         for (int i = 0; i < courseList.size(); i++) {
+            final int j = courseList.size()-i-1;
+            this.courses.add(CourseData.Sample());
             this.subscription.add(
                 RetrofitApi.getInstance().search_search(
                     User.getInstance().getAccessToken(),
@@ -175,23 +177,22 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
                     courseList.get(i).professor_id,
                     null
                 )
-                    .map(response -> response.courses)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        course -> {
-                            this.courses.addAll(course);
-                            this.simpleCourseAdapter.notifyDataSetChanged();
-
-                        },
-                        error -> Timber.d("serch history error : %s", error)
-                    )
+                .map(response -> response.courses)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    course -> {
+                        this.courses.set(j, course.get(0));
+                        this.simpleCourseAdapter.notifyDataSetChanged();
+                    },
+                    error -> Timber.d("serch history error : %s", error)
+                )
             );
         }
     }
 
     public void searchCourse() {
-        Timber.d("isHistory? : %s", isSearch);
+        Timber.d("***isHistory? : %s", isSearch);
         Integer lectureId, professorId;
         String query;
 

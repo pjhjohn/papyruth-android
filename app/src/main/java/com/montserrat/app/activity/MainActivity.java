@@ -100,7 +100,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
-        Timber.d("submit query2 : %s", query);
         this.mAutoCompletableSearch.submit(query);
 
 //        ((EditText)searchView.findViewById(R.id.search_src_text)).focus
@@ -134,7 +133,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public void onFocusChange(View view, boolean hasFocus) {
-        Timber.d("expand3 : %s?%s", view.getClass().toString(), hasFocus);
         if(view == searchView) {
             mAutoCompletableSearch.showCandidates(false);
         }else if(view == searchResult){
