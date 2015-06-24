@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
