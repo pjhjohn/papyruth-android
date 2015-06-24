@@ -12,7 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.montserrat.app.R;
@@ -24,6 +25,7 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -95,6 +97,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     public void onRecyclerViewItemClick(View view, int position) {
         Timber.d("clicked %s @ %d", view, position);
         if(isEvaluationDetailOpened) return;
+        if(animators != null && animators.isRunning()) return;
         Evaluation.getInstance().update(this.items.get(position));
         this.openEvaluation(view);
     }
@@ -138,14 +141,16 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public boolean onBack() {
-        if (!isEvaluationDetailOpened && animators != null && !animators.isRunning()) return false;
-        if (!isEvaluationDetailOpened && animators != null) animators.cancel();
-        else if(animators != null && animators.isRunning()) animators.end();
+        if (!isEvaluationDetailOpened && animators == null) return false;
+        if (!isEvaluationDetailOpened && !animators.isRunning()) return false;
+        if (!isEvaluationDetailOpened ) animators.cancel();
+        else if(animators.isRunning()) animators.end();
         else if(!evaluationDetail.onBack()) this.closeEvaluation();
         return true;
     }
 
     // Animation
+    public static final float ANIM_INTERPOLATOR_FACTOR = 1.0f;
     private Integer itemTop, itemHeight, screenHeight;
     private static final long ANIMATION_DURATION = 400;
     private AnimatorSet animators;
@@ -162,17 +167,20 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
-        animHeight.setInterpolator(new AccelerateDecelerateInterpolator());
+        animHeight.setInterpolator(new DecelerateInterpolator(ANIM_INTERPOLATOR_FACTOR));
 
         ValueAnimator animTop = ValueAnimator.ofInt(itemTop, 0);
-        animTop.addUpdateListener(animator -> this.evaluationContainer.setY((int) animator.getAnimatedValue()));
-        animTop.setInterpolator(new AccelerateDecelerateInterpolator());
-
-        ValueAnimator animToolbar = ToolbarUtil.getHideAnimator(this.toolbar);
+        animTop.addUpdateListener(animator -> {
+            final int itemTop = (int) animator.getAnimatedValue();
+            this.evaluationContainer.setY(itemTop);
+            final int toolbarTop = itemTop - MetricUtil.getPixels(toolbar.getContext(), R.attr.actionBarSize);
+            this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
+        });
+        animTop.setInterpolator(new DecelerateInterpolator(ANIM_INTERPOLATOR_FACTOR));
 
         animators = new AnimatorSet();
         animators.setDuration(ANIMATION_DURATION);
-        animators.playTogether(animHeight, animTop, animToolbar);
+        animators.playTogether(animHeight, animTop);
         animators.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -191,9 +199,11 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                if(isAnimationCanceled) return;
-                isEvaluationDetailOpened = true;
-                evaluationDetail.setEvaluationFloatingActionControl();
+                if (isAnimationCanceled) toolbar.setY(0);
+                else {
+                    isEvaluationDetailOpened = true;
+                    evaluationDetail.setEvaluationFloatingActionControl();
+                }
             }
         });
         animators.start();
@@ -206,17 +216,20 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
-        animHeight.setInterpolator(new AccelerateDecelerateInterpolator());
+        animHeight.setInterpolator(new AccelerateInterpolator(ANIM_INTERPOLATOR_FACTOR));
 
         ValueAnimator animTop = ValueAnimator.ofInt(0, this.itemTop);
-        animTop.addUpdateListener(animator -> this.evaluationContainer.setY((int) animator.getAnimatedValue()));
-        animTop.setInterpolator(new AccelerateDecelerateInterpolator());
-
-        ValueAnimator animToolbar = ToolbarUtil.getShowAnimator(this.toolbar);
+        animTop.addUpdateListener(animator -> {
+            final int itemTop = (int) animator.getAnimatedValue();
+            this.evaluationContainer.setY(itemTop);
+            final int toolbarTop = itemTop - MetricUtil.getPixels(toolbar.getContext(), R.attr.actionBarSize);
+            this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
+        });
+        animTop.setInterpolator(new AccelerateInterpolator(ANIM_INTERPOLATOR_FACTOR));
 
         animators = new AnimatorSet();
         animators.setDuration(ANIMATION_DURATION);
-        animators.playTogether(animHeight, animTop, animToolbar);
+        animators.playTogether(animHeight, animTop);
         animators.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
