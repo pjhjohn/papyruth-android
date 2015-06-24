@@ -128,7 +128,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             .subscribe(evaluations -> {
                 this.items.clear();
                 this.items.addAll(evaluations);
-                this.adapter.notifyDataSetChanged();
+                this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
             })
         );
     }

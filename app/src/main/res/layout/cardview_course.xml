@@ -30,22 +30,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/app_name"/><!--TODO : specify attribute definition of this 'contentDescription'-->
-        <SeekBar
-            android:id="@+id/course_point_overall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <SeekBar
-            android:id="@+id/course_point_gpa_satisfaction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <SeekBar
-            android:id="@+id/course_point_clarity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <SeekBar
-            android:id="@+id/course_point_easiness"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <com.github.mikephil.charting.charts.HorizontalBarChart
+            android:id="@+id/course_chart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"/>
         <LinearLayout
             android:id="@+id/course_tags"
             android:layout_width="match_parent"

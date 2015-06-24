@@ -10,9 +10,11 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
+import com.montserrat.utils.support.mpandroidchart.ChartUtil;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -82,10 +84,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @InjectView(R.id.course_professor) protected TextView professor;
         @InjectView(R.id.course_category) protected TextView category;
         @InjectView(R.id.course_thumbnail) protected ImageView thumbnail;
-        @InjectView(R.id.course_point_overall) protected SeekBar overall;
-        @InjectView(R.id.course_point_gpa_satisfaction) protected SeekBar satisfaction;
-        @InjectView(R.id.course_point_clarity) protected SeekBar clarity;
-        @InjectView(R.id.course_point_easiness) protected SeekBar easiness;
+        @InjectView(R.id.course_chart) protected HorizontalBarChart chart;
         @InjectView(R.id.course_tags) protected LinearLayout tags;
         public CourseViewHolder(View itemView) {
             super(itemView);
@@ -97,17 +96,10 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             this.professor.setText(course.getProfessor());
             this.category.setText(""); // TODO : define it!
 //            Picasso.with(this.itemView.getContext()).load("").transform(new CircleTransformation()).into(this.thumbnail);
-            this.overall.setProgress(course.getPointOverall());
-            this.satisfaction.setProgress(course.getPointGpaSatisfaction());
-            this.clarity.setProgress(course.getPointClarity());
-            this.easiness.setProgress(course.getPointEasiness());
+            ChartUtil.init(this.chart);
+            ChartUtil.bindData(this.chart, course);
+            this.chart.animateY(1000);
             // TODO : tag
-
-            this.overall.setEnabled(false);
-            this.satisfaction.setEnabled(false);
-            this.clarity.setEnabled(false);
-            this.easiness.setEnabled(false);
-
         }
     }
 

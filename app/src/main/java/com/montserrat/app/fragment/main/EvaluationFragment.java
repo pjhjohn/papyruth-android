@@ -124,7 +124,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 this.page = 0;
                 this.items.clear();
                 this.items.addAll(comments);
-                this.adapter.notifyDataSetChanged();
+                this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
             })
         );
 
