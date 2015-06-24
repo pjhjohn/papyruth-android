@@ -3,10 +3,4 @@
     android:id="@+id/toolbar_evaluation"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/bg_normal"
-    />
-    <!--android:background="?attr/colorPrimary"-->
-    <!--following properties are used for setting custom toolbar style-->
-    <!--app:theme="@style/CustomToolBarTheme"-->
-    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"-->
-
+    android:background="@color/bg_normal"/>

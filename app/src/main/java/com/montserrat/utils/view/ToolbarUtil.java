@@ -1,5 +1,6 @@
 package com.montserrat.utils.view;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
@@ -35,5 +36,13 @@ public class ToolbarUtil {
         animTop.setInterpolator(new AccelerateInterpolator(2));
         animTop.addUpdateListener(animator -> toolbar.setY((int) animator.getAnimatedValue()));
         return animTop;
+    }
+    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int fromColor, int toColor) {
+        if(toolbar == null) return null;
+        ValueAnimator animColor = new ValueAnimator();
+        animColor.setIntValues(fromColor, toColor);
+        animColor.setEvaluator(new ArgbEvaluator());
+        animColor.addUpdateListener(animator -> toolbar.setBackgroundColor((int) animator.getAnimatedValue()));
+        return animColor;
     }
 }

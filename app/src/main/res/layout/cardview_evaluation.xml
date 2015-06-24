@@ -29,27 +29,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:gravity="start"/>
-            <RelativeLayout
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/evaluation_body"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/evaluation_body"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_alignParentLeft="true"/>
-                <!--style="?android:ratingBarStyleIndicator"-->
-                <!--style="@style/MainRatingBar"-->
-                <RatingBar
-                    style="?android:ratingBarStyleSmall"
-                    android:id="@+id/evaluation_point_overall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:numStars="5"
-                    android:stepSize="1.0"/>
-            </RelativeLayout>
+                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"/>
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/evaluation_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

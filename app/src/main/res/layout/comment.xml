@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/toolbar_comment"/>
     <EditText
         android:id="@+id/comment_input"
         android:layout_marginTop="?attr/actionBarSize"

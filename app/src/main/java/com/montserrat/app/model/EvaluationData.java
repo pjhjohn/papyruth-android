@@ -18,7 +18,7 @@ public class EvaluationData {
     public String updated_at;
     public String professor_name;
     public String lecture_name;
-    public String user_name;
+    public String user_nickname;
     public List<CommentData> comments;
 
     @Override

@@ -16,6 +16,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.CourseAdapter;
 import com.montserrat.app.model.EvaluationData;
@@ -152,7 +153,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     // Animation
     public static final float ANIM_INTERPOLATOR_FACTOR = 1.0f;
     private Integer itemTop, itemHeight, screenHeight;
-    private static final long ANIMATION_DURATION = 400;
     private AnimatorSet animators;
     private Boolean isAnimationCanceled;
     private void openEvaluation(View view) {
@@ -179,7 +179,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         animTop.setInterpolator(new DecelerateInterpolator(ANIM_INTERPOLATOR_FACTOR));
 
         animators = new AnimatorSet();
-        animators.setDuration(ANIMATION_DURATION);
+        animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
         animators.playTogether(animHeight, animTop);
         animators.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -228,7 +228,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         animTop.setInterpolator(new AccelerateInterpolator(ANIM_INTERPOLATOR_FACTOR));
 
         animators = new AnimatorSet();
-        animators.setDuration(ANIMATION_DURATION);
+        animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
         animators.playTogether(animHeight, animTop);
         animators.addListener(new AnimatorListenerAdapter() {
             @Override

@@ -8,7 +8,7 @@ import com.montserrat.app.model.EvaluationData;
 public class Evaluation {
     private Integer id;
     private Integer user_id;
-    private String user_name;
+    private String user_nickname;
     private Integer course_id;
     private Integer point_overall;
     private Integer point_easiness;
@@ -52,8 +52,8 @@ public class Evaluation {
     public void setProfessorName(String professor_name) { this.professor_name = professor_name; }
     public String getLectureName() { return lecture_name; }
     public void setLectureName(String lecture_name) { this.lecture_name = lecture_name; }
-    public String getUserName() { return user_name; }
-    public void setUserName(String user_name) { this.user_name = user_name; }
+    public String getUserNickname() { return user_nickname; }
+    public void setUserNickname(String user_nickname) { this.user_nickname = user_nickname; }
     public Integer getLike() { return like; }
     public void setLike(Integer like) { this.like = like; }
 
@@ -71,14 +71,14 @@ public class Evaluation {
         if(evaluation.professor_name != null)           this.professor_name = evaluation.professor_name;
         if(evaluation.lecture_name != null)             this.lecture_name = evaluation.lecture_name;
 //        if(evaluation.like != null)                     this.like = evaluation.like;
-//        if(evaluation.user_name != null)                this.user_name = evaluation.user_name;
+        if(evaluation.user_nickname != null)            this.user_nickname = evaluation.user_nickname;
 
     }
 
     public void clear(){
         this.id = null;
         this.user_id = null;
-        this.user_name = null;
+        this.user_nickname = null;
         this.course_id = null;
         this.point_overall = null;
         this.point_clarity = null;
