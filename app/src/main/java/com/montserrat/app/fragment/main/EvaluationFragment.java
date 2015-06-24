@@ -21,6 +21,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.CommentInputWindow;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
@@ -68,11 +69,11 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
+
+        EvaluationFragment.TOOLBAR_COLOR_EVALUATION = getResources().getColor(R.color.bg_normal);
+        EvaluationFragment.TOOLBAR_COLOR_COMMENT = getResources().getColor(R.color.bg_accent);
         this.setupRecyclerView(evaluationRecyclerView);
-        this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_clear);
-        this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
-        this.evaluationToolbar.setTitle(Course.getInstance().getName());
-        this.evaluationToolbar.inflateMenu(R.menu.evaluation);
+        this.setEvaluationToolbar(false);
         this.commentInputWindow.setOnBackListener(this);
         this.isCommentInputWindowOpened = false;
         return view;
@@ -163,20 +164,18 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .filter(unused -> !this.commentInputWindow.getCommentInputEditText().getText().toString().isEmpty())
             .observeOn(Schedulers.io())
             .flatMap(unused -> RetrofitApi
-                    .getInstance()
-                    .comments(
-                        User.getInstance().getAccessToken(),
-                        Evaluation.getInstance().getId(),
-                        this.commentInputWindow.getCommentInputEditText().getText().toString()
+                .getInstance()
+                .comments(
+                    User.getInstance().getAccessToken(),
+                    Evaluation.getInstance().getId(),
+                    this.commentInputWindow.getCommentInputEditText().getText().toString()
                 )
             )
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(commentResponse -> {
-                this.commentInputWindow.setVisibility(View.GONE);
-                setEvaluationFloatingActionControl();
-            })
+            .subscribe(commentResponse -> hideCommentInputWindow())
         );
         this.isCommentInputWindowOpened = true;
+        this.setCommentToolbar(true);
     }
 
     private void hideCommentInputWindow() {
@@ -185,5 +184,23 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         this.commentInputWindow.setVisibility(View.GONE);
         this.setEvaluationFloatingActionControl();
         this.isCommentInputWindowOpened = false;
+        this.setEvaluationToolbar(true);
+    }
+
+    private static int TOOLBAR_COLOR_EVALUATION;
+    private static int TOOLBAR_COLOR_COMMENT;
+    private void setEvaluationToolbar(boolean animate) {
+        this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_clear);
+        this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
+        this.evaluationToolbar.setTitle(Course.getInstance().getName());
+        this.evaluationToolbar.inflateMenu(R.menu.evaluation);
+        if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_COMMENT, TOOLBAR_COLOR_EVALUATION).start();
+    }
+    private void setCommentToolbar(boolean animate) {
+        this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_back);
+        this.evaluationToolbar.setNavigationOnClickListener(unused -> this.onBack());
+        this.evaluationToolbar.setTitle(R.string.toolbar_title_new_comment);
+        this.evaluationToolbar.getMenu().clear();
+        if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_EVALUATION, TOOLBAR_COLOR_COMMENT).start();
     }
 }
