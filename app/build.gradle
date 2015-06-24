@@ -49,7 +49,12 @@ dependencies {
     compile 'com.afollestad:material-dialogs:0.7.5.1'
     compile 'com.rengwuxian.materialedittext:library:2.1.3'
     compile 'com.klinkerapps:android-chips:1.0.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.0'
 }
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 
 /*--- RetroLambda - DO NOT MODIFY ---*/
 buildscript {

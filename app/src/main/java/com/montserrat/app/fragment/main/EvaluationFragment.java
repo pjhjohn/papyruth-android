@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.model.CommentData;
@@ -194,13 +195,13 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
         this.evaluationToolbar.setTitle(Course.getInstance().getName());
         this.evaluationToolbar.inflateMenu(R.menu.evaluation);
-        if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_COMMENT, TOOLBAR_COLOR_EVALUATION).start();
+        if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_COMMENT, TOOLBAR_COLOR_EVALUATION).setDuration(AppConst.ANIM_DURATION_SHORT).start();
     }
     private void setCommentToolbar(boolean animate) {
         this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_back);
         this.evaluationToolbar.setNavigationOnClickListener(unused -> this.onBack());
         this.evaluationToolbar.setTitle(R.string.toolbar_title_new_comment);
         this.evaluationToolbar.getMenu().clear();
-        if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_EVALUATION, TOOLBAR_COLOR_COMMENT).start();
+        if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_EVALUATION, TOOLBAR_COLOR_COMMENT).setDuration(AppConst.ANIM_DURATION_SHORT).start();
     }
 }

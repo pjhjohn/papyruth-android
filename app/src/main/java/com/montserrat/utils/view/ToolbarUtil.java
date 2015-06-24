@@ -43,7 +43,6 @@ public class ToolbarUtil {
         animColor.setIntValues(fromColor, toColor);
         animColor.setEvaluator(new ArgbEvaluator());
         animColor.addUpdateListener(animator -> toolbar.setBackgroundColor((int) animator.getAnimatedValue()));
-        animColor.setDuration(400); // TODO : avoid using hard-coded value
         return animColor;
     }
 }

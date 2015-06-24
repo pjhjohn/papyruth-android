@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/user_nickname"
+            android:id="@+id/comment_user_nickname"
             android:layout_alignParentLeft="true"/>
         <TextView
             android:layout_width="match_parent"
