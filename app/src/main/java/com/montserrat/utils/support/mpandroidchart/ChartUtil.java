@@ -74,7 +74,11 @@ public class ChartUtil {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setSpaceBetweenLabels(0);
         xAxis.setDrawGridLines(false);
-        chart.getAxisLeft().setDrawGridLines(false);
+//        chart.getXAxis().setDrawGridLines(false);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setDrawGridLines(false);
+        chart.getAxisRight().setGridColor(Color.WHITE);
+        chart.getAxisRight().setAxisMaxValue(11.0f);
         chart.getLegend().setEnabled(false);
     }
 }

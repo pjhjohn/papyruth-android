@@ -20,7 +20,7 @@ public class Course {
     private Integer pointClarity;
     private Integer evaluation_count;
     private String date;
-    private List<String> tags;
+    private List<String> hashtags;
 
 
     private static Course instance = null;
@@ -41,7 +41,7 @@ public class Course {
         this.pointClarity = null;
         this.evaluation_count = null;
         this.date = null;
-        this.tags = null;
+        this.hashtags = null;
         return this;
     }
 
@@ -58,13 +58,13 @@ public class Course {
         this.setLectureId(courseData.lecture_id);
         this.setProfessorId(courseData.professor_id);
         this.setUniversityId(courseData.university_id);
-        this.setEvaluation_count(courseData.evaluation_count);
+        this.setEvaluationCount(courseData.evaluation_count);
         this.setPointOverall(courseData.point_overall);
         this.setPointEasiness(courseData.point_easiness);
         this.setPointGpaSatisfaction(courseData.point_gpa_satisfaction);
         this.setPointClarity(courseData.point_clarity);
         this.setDate(courseData.created_at);
-        this.setTags(courseData.tags);
+        this.setHashtags(courseData.hashtags);
     }
 
     public Integer getId() { return id; }
@@ -77,8 +77,8 @@ public class Course {
     public Integer getPointEasiness() { return pointEasiness; }
     public Integer getLectureId() { return lectureId; }
     public Integer getProfessorId() { return professorId; }
-    public List<String> getTags() { return tags; }
-    public Integer getEvaluation_count() { return evaluation_count; }
+    public List<String> getHashtags() { return hashtags; }
+    public Integer getEvaluationCount() { return evaluation_count; }
     public String getDate() { return date; }
 
     public Course setId(Integer id) {
@@ -131,7 +131,7 @@ public class Course {
         return this;
     }
 
-    public Course setEvaluation_count(Integer evaluation_count) {
+    public Course setEvaluationCount(Integer evaluation_count) {
         this.evaluation_count = evaluation_count;
         return this;
     }
@@ -141,8 +141,8 @@ public class Course {
         return this;
     }
 
-    public Course setTags(List<String> tags) {
-        this.tags = tags;
+    public Course setHashtags(List<String> hashtags) {
+        this.hashtags = hashtags;
         return this;
     }
 }

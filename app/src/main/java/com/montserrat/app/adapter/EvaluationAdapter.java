@@ -1,6 +1,5 @@
 package com.montserrat.app.adapter;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,17 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.montserrat.app.R;
 import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.utils.support.mpandroidchart.ChartUtil;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;

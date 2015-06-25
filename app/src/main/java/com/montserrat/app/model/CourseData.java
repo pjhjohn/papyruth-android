@@ -19,7 +19,8 @@ public class CourseData {
     public String updated_at;
     public String name;
     public String professor_name;
-    public List<String> tags;
+    public List<String> hashtags;
+    public Boolean is_favorite;
 
     public static CourseData Sample(){
         CourseData courseData = new CourseData();

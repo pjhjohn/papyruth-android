@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -15,6 +14,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.utils.support.mpandroidchart.ChartUtil;
+import com.montserrat.utils.view.Hashtag;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 
 import java.util.List;
@@ -85,7 +85,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @InjectView(R.id.course_category) protected TextView category;
         @InjectView(R.id.course_thumbnail) protected ImageView thumbnail;
         @InjectView(R.id.course_chart) protected HorizontalBarChart chart;
-        @InjectView(R.id.course_tags) protected LinearLayout tags;
+        @InjectView(R.id.course_hashtags) protected LinearLayout hashtags;
         public CourseViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
@@ -99,7 +99,11 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ChartUtil.init(this.chart);
             ChartUtil.bindData(this.chart, course);
             this.chart.animateY(1000);
-            // TODO : tag
+            for(String hashtag : course.getHashtags()) {
+                Hashtag vHashtag = new Hashtag(this.itemView.getContext());
+                vHashtag.setText(hashtag);
+                this.hashtags.addView(vHashtag);
+            }
         }
     }
 
