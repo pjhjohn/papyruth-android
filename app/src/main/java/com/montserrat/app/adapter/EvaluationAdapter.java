@@ -1,5 +1,6 @@
 package com.montserrat.app.adapter;
 
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.utils.support.mpandroidchart.ChartUtil;
+import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -80,10 +83,11 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public EvaluationViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         }
 
         public void bind(Evaluation evaluation) {
-            // TODO : set avatar
+            Picasso.with(this.itemView.getContext()).load(R.drawable.avatar_dummy/*evaluation.getUserAvatarUrl()*/).transform(new CircleTransformation()).into(this.avatar);
             this.nickname.setText(evaluation.getUserNickname());
             this.body.setText(evaluation.getBody());
             ChartUtil.init(this.chart);
@@ -93,15 +97,18 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     protected class CommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @InjectView (R.id.comment_user_avatar) protected ImageView avatar;
         @InjectView (R.id.comment_user_nickname) protected TextView nickname;
         @InjectView (R.id.comment_body) protected TextView body;
         public CommentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             itemView.setOnClickListener(this);
+            this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         }
 
         public void bind(CommentData comment) {
+            Picasso.with(this.itemView.getContext()).load(R.drawable.avatar_dummy/*comment.user_avatar_url*/).transform(new CircleTransformation()).into(this.avatar);
             this.nickname.setText(comment.user_nickname);
             this.body.setText(comment.body);
         }

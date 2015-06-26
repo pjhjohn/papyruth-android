@@ -37,8 +37,9 @@
 
         <include layout="@layout/fac"/>
         <include layout="@layout/toolbar"/>
-
     </FrameLayout>
+
+    <!--Navigation Drawer-->
     <com.montserrat.utils.view.ScrimInsetsFrameLayout
         android:id="@+id/drawer_container"
         android:layout_width="@dimen/navigation_drawer_width"

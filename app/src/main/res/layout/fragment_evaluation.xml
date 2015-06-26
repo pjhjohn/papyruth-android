@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fg_accent">
+    android:background="@color/bg_accent">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/evaluation_recyclerview"
         android:layout_width="match_parent"
@@ -15,4 +15,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
+    <include layout="@layout/progress"/>
 </FrameLayout>

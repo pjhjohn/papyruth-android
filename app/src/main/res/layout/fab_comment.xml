@@ -10,5 +10,5 @@
     android:layout_marginRight="10dp"
     android:src="@drawable/ic_light_comment"
     android:visibility="invisible"
-    fab:fab_colorNormal="@color/fg_normal"
-    fab:fab_colorPressed="@color/fg_accent"/>
+    fab:fab_colorNormal="@color/bg_normal"
+    fab:fab_colorPressed="@color/bg_accent"/>
