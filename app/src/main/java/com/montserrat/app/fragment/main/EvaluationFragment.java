@@ -2,6 +2,7 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,8 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
 import com.montserrat.app.model.CommentData;
+import com.montserrat.app.model.EvaluationData;
+import com.montserrat.app.model.response.CommentResponse;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
@@ -35,6 +38,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static com.montserrat.utils.support.rx.RxValidator.toString;
 import static com.montserrat.utils.support.rx.RxValidator.nonEmpty;
@@ -61,9 +65,11 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @InjectView(R.id.evaluation_recyclerview) protected RecyclerView evaluationRecyclerView;
     @InjectView(R.id.toolbar_evaluation) protected Toolbar evaluationToolbar;
     @InjectView(R.id.comment_window) protected CommentInputWindow commentInputWindow;
+    @InjectView(R.id.progress) protected View progress;
     private boolean isCommentInputWindowOpened;
     private CompositeSubscription subscriptions;
     private Integer page = null;
+    private boolean moreCommentsAvailiable = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,28 +115,40 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
     public void setEvaluationFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
-        this.subscriptions.add(RetrofitApi
-            .getInstance()
-            .comments(
-                User.getInstance().getAccessToken(),
-                Evaluation.getInstance().getId(),
-                0,
-                null
-            )
+        this.subscriptions.add(FloatingActionControl
+            .clicks()
+            .subscribe(unused -> showCommentInputWindow())
+        );
+
+        this.subscriptions.add(this.getRecyclerViewScrollObservable(this.evaluationRecyclerView, this.evaluationToolbar, true)
+            .startWith((Boolean) null)
+            .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
+            .observeOn(AndroidSchedulers.mainThread())
+            .filter(unused -> this.moreCommentsAvailiable)
+            .flatMap(unused -> {
+                this.progress.setVisibility(View.VISIBLE);
+                return RetrofitApi
+                    .getInstance()
+                    .comments(
+                        User.getInstance().getAccessToken(),
+                        Evaluation.getInstance().getId(),
+                        this.page == null ? 0 : this.page + 1,
+                        null
+                    );
+            })
             .map(response -> response.comments)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(comments -> {
-                this.page = 0;
-                this.items.clear();
+                this.progress.setVisibility(View.GONE);
+                if (comments.size() == 0) {
+                    this.moreCommentsAvailiable = false;
+                    return;
+                }
+                this.page = this.page == null ? 0 : this.page + 1;
                 this.items.addAll(comments);
-                this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
+                this.adapter.notifyItemRangeInserted(this.adapter.getItemCount(), comments.size());
             })
-        );
-
-        this.subscriptions.add(FloatingActionControl
-            .clicks()
-            .subscribe(unused -> showCommentInputWindow())
         );
     }
 
@@ -193,15 +211,19 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     private void setEvaluationToolbar(boolean animate) {
         this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_clear);
         this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
-        this.evaluationToolbar.setTitle(Course.getInstance().getName());
+        this.evaluationToolbar.setTitle(R.string.toolbar_title_evaluation);
+        this.evaluationToolbar.setTitleTextColor(Color.WHITE);
         this.evaluationToolbar.inflateMenu(R.menu.evaluation);
         if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_COMMENT, TOOLBAR_COLOR_EVALUATION).setDuration(AppConst.ANIM_DURATION_SHORT).start();
+        else this.evaluationToolbar.setY(0);
     }
     private void setCommentToolbar(boolean animate) {
         this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_back);
         this.evaluationToolbar.setNavigationOnClickListener(unused -> this.onBack());
         this.evaluationToolbar.setTitle(R.string.toolbar_title_new_comment);
+        this.evaluationToolbar.setTitleTextColor(Color.WHITE);
         this.evaluationToolbar.getMenu().clear();
         if(animate) ToolbarUtil.getColorTransitionAnimator(this.evaluationToolbar, TOOLBAR_COLOR_EVALUATION, TOOLBAR_COLOR_COMMENT).setDuration(AppConst.ANIM_DURATION_SHORT).start();
+        else this.evaluationToolbar.setY(0);
     }
 }

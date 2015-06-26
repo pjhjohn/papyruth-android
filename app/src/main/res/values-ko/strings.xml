@@ -52,7 +52,7 @@
 
     <!--course-->
     <string name="label_point_overall">총점</string>
-    <string name="label_point_gpa_satisfaction">학점 만족도</string>
+    <string name="label_point_gpa_satisfaction">학점만족</string>
     <string name="label_point_clarity">강의력</string>
     <string name="label_point_easiness">쉬움도</string>
     <string name="lecture_type_culture">교양</string>
@@ -71,4 +71,5 @@
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
     <string name="toolbar_title_new_comment">덧글 쓰기</string>
+    <string name="toolbar_title_evaluation">강의평</string>
 </resources>
