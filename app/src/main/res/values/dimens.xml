@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="navigation_drawer_width">304dp</dimen>
+    <dimen name="nav_horizontal_space">16dp</dimen>
+    <dimen name="nav_horizontal_keyline_icon">16dp</dimen>
+    <dimen name="nav_horizontal_keyline_text">72dp</dimen>
+    <dimen name="nav_height_between_content_area">8dp</dimen>
+    <dimen name="nav_height_list_start">8dp</dimen>
+    <dimen name="nav_height_subtitle">56dp</dimen>
+    <dimen name="nav_height_item">48dp</dimen>
+    <dimen name="nav_icon_length">24dp</dimen>
+
+    <dimen name="cardview_image_side_length">72dp</dimen>
+    <dimen name="cardview_image_padding">16dp</dimen>
+    <dimen name="cardview_min_height_default">72dp</dimen>
+
+    <dimen name="baseline_x1">8dp</dimen>
+    <dimen name="baseline_x2">16dp</dimen>
+    <dimen name="baseline_x3">24dp</dimen>
+    <dimen name="baseline_x4">32dp</dimen>
+    <dimen name="baseline_x5">40dp</dimen>
+    <dimen name="baseline_x6">48dp</dimen>
+    <dimen name="baseline_x7">56dp</dimen>
 </resources>
