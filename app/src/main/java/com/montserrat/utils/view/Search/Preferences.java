@@ -33,7 +33,7 @@ public class Preferences {
         String data = AppManager.getInstance().getString(AppConst.Preference.HISTORY, "");
         SimpleCoursesResponse simpleCoursesResponse = gson.fromJson(data, SimpleCoursesResponse.class);
 
-        Timber.d("get History : %s", data);
+        Timber.d("***get History");
         return simpleCoursesResponse.courses;
     }
 

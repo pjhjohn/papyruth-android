@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.viewpager.OnBack;
@@ -42,7 +43,8 @@ public class FragmentNavigator implements Navigator {
         if(clear) this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
         if(addToBackStack) transaction.addToBackStack(next.getClass().getSimpleName());
-        transaction.replace(this.containerViewId, next);
+        transaction.replace(this.containerViewId, next, AppConst.Tag.FRAGMENT);
+
         transaction.commit();
     }
 

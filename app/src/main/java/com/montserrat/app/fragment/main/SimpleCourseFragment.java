@@ -17,10 +17,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
 import com.montserrat.app.model.CourseData;
-import com.montserrat.app.model.unique.Search;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -46,6 +43,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.navigator = (Navigator) activity;
+        Timber.d("***now attach!");
     }
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
@@ -54,7 +52,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
     private AutoCompletableSearchView search;
-    private Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,18 +59,16 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-
         this.refresh.setEnabled(true);
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.SEARCH);
-        this.bundle = this.getArguments();
-        if(this.bundle != null)
-            Timber.d("isSearch in fragement : %s", this.bundle.getBoolean(AppConst.Preference.SEARCH));
-        else
-            Timber.d("isSearch in fragement : %s", this.bundle);
+//        this.getFragmentManager().beginTransaction().add(this, AppConst.Tag.FRAGMENT).commit();
+        if(this.getArguments() != null && this.getArguments().containsKey(AppConst.Preference.SEARCH))
+            this.search.setIsSearch(this.getArguments().getBoolean(AppConst.Preference.SEARCH));
+        Timber.d("***now onCreate");
 
-        this.search.initCourse(this.recycler, this.bundle);
-
-        ((MainActivity)this.getActivity()).setAutoCompletableSearchFragment(this);
+        this.search.initCourse(this.recycler);
+        ((MainActivity)this.getActivity()).setAutoCompletableSearchViewFragment(this);
+//        ((MainActivity)this.getActivity()).setAutoCompletableSearchViewFragment(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;
@@ -89,7 +84,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        this.search.setSimpleCourseFragment(null);
+
+        ((MainActivity)this.getActivity()).setAutoCompletableSearchViewFragment(null);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -110,17 +106,28 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     }
 
     public void refresh(){
-        this.bundle = new Bundle();
-        this.bundle.putBoolean(AppConst.Preference.SEARCH, true);
-        this.onSaveInstanceState(bundle);
-        this.search.initCourse(this.recycler, this.bundle);
-        this.search.searchCourse();
-        this.refresh.setRefreshing(false);
+//        this.bundle = new Bundle();
+//        this.bundle.putBoolean(AppConst.Preference.SEARCH, true);
+//        this.onSaveInstanceState(bundle);
+////        this.search.initCourse(this.recycler, this.bundle);
+//        this.search.searchCourse();
+//        this.refresh.setRefreshing(false);
+
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        Fragment fragment = this;
+//        Bundle bundle = new Bundle();
+//        bundle.putBoolean(AppConst.Preference.SEARCH, true);
+//        fragment.setArguments(bundle);
+//        transaction.detach(fragment);
+//        transaction.attach(fragment);
+//        transaction.commit();
+        ((MainActivity)this.getActivity()).refresh();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Timber.d("***now resume");
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 

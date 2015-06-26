@@ -1,6 +1,7 @@
 package com.montserrat.app.activity;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -38,7 +39,6 @@ import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
@@ -112,11 +112,29 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         this.mAutoCompletableSearch.onRecyclerViewItemClick(view, position);
-
         Bundle bundle = new Bundle();
         bundle.putBoolean(AppConst.Preference.SEARCH, true);
-
         this.navigate(SimpleCourseFragment.class, bundle, true);
+
+    }
+    public void setAutoCompletableSearchViewFragment(Fragment fragment){
+        this.mAutoCompletableSearch.setMenuSearchFragment(fragment);
+    }
+    public void refresh(){
+        Fragment fragment;
+        Fragment active = this.getFragmentManager().findFragmentByTag(AppConst.Tag.FRAGMENT);
+
+        if(active!=null && active.getClass() == SimpleCourseFragment.class)
+            fragment = new SimpleCourseFragment();
+        else
+            fragment = new SimpleCourseFragment(); // temporary assign
+
+        FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(AppConst.Preference.SEARCH, true);
+//
+        fragment.setArguments(bundle);
+        transaction.replace(this.navigatorContainer.getId(), fragment, AppConst.Tag.FRAGMENT).commit();
     }
 
     private boolean terminate = false;
@@ -253,7 +271,4 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
 
-    public void setAutoCompletableSearchFragment(Fragment fragment){
-        this.mAutoCompletableSearch.setSimpleCourseFragment(fragment);
-    }
 }
