@@ -2,7 +2,6 @@ package com.montserrat.utils.view.search;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
@@ -58,7 +56,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     private List<CourseData> courses;
 
     private Type type;
-    private boolean isSearch;
+    private boolean searchMode;
 
     public enum Type{
         SEARCH, EVALUATION
@@ -75,7 +73,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.context = context;
         this.type = type;
 
-        this.isSearch = false;
+        this.searchMode = false;
         this.editText = null;
         this.simpleCourseFragment = null;
     }
@@ -94,10 +92,6 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.simpleCourseAdapter = new SimpleCourseAdapter(this.courses, this.itemListener);
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
         this.courseListView.setAdapter(this.simpleCourseAdapter);
-    }
-
-    public void setIsSearch(boolean isSearch){
-        this.isSearch = isSearch;
     }
 
     public void notifyChangedAutocomplete(List<Candidate> candidates){
@@ -200,7 +194,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             lectureId = evaluationCandidate.lecture_id;
             professorId = evaluationCandidate.professor_id;
             query = null;
-        } else if(isSearch) {
+        } else if(searchMode) {
             lectureId = Search.getInstance().getLectureId();
             professorId = Search.getInstance().getProfessorId();
             query = Search.getInstance().getQuery();
@@ -235,12 +229,16 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
             Search.getInstance().fromCandidate(candidates.get(position));
             this.showCandidates(false);
             if(this.simpleCourseFragment != null){
-                ((SimpleCourseFragment)this.simpleCourseFragment).refresh();
+                ((SimpleCourseFragment)this.simpleCourseFragment).reloadFragment();
             }
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().update(courses.get(position));
             preferences.addHistory(courses.get(position));
         }
+    }
+
+    public void setSearchMode(boolean searchMode){
+        this.searchMode = searchMode;
     }
 
     public void showCandidates(boolean show){

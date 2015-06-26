@@ -117,12 +117,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.navigate(SimpleCourseFragment.class, bundle, true);
 
     }
-    public void setAutoCompletableSearchViewFragment(Fragment fragment){
+    public void setFragmentAutoCompletableSearchView(Fragment fragment){
         this.mAutoCompletableSearch.setMenuSearchFragment(fragment);
     }
-    public void refresh(){
+    public void reloadFragment(){
         Fragment fragment;
-        Fragment active = this.getFragmentManager().findFragmentByTag(AppConst.Tag.FRAGMENT);
+        Fragment active = this.getFragmentManager().findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
 
         if(active!=null && active.getClass() == SimpleCourseFragment.class)
             fragment = new SimpleCourseFragment();
@@ -134,7 +134,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         bundle.putBoolean(AppConst.Preference.SEARCH, true);
 //
         fragment.setArguments(bundle);
-        transaction.replace(this.navigatorContainer.getId(), fragment, AppConst.Tag.FRAGMENT).commit();
+        transaction.replace(this.navigatorContainer.getId(), fragment, AppConst.Tag.ACTIVE_FRAGMENT).commit();
     }
 
     private boolean terminate = false;

@@ -48,6 +48,6 @@ public class AppConst {
 
     }
     public static class Tag{
-        public static final String FRAGMENT = "FRAGMENT";
+        public static final String ACTIVE_FRAGMENT = "FRAGMENT";
     }
 }

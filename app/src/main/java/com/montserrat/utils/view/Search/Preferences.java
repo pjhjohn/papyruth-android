@@ -20,7 +20,7 @@ public class Preferences {
     public enum Type{
         HISTORY
     }
-    public static final int HISTORY_SIZE = 5;
+    public static final int HISTORY_SIZE = 10;
 
     public Preferences(){
         gson = new Gson();

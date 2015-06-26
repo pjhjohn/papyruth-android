@@ -43,7 +43,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.navigator = (Navigator) activity;
-        Timber.d("***now attach!");
     }
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
@@ -61,14 +60,11 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.refresh.setEnabled(true);
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.SEARCH);
-//        this.getFragmentManager().beginTransaction().add(this, AppConst.Tag.FRAGMENT).commit();
         if(this.getArguments() != null && this.getArguments().containsKey(AppConst.Preference.SEARCH))
-            this.search.setIsSearch(this.getArguments().getBoolean(AppConst.Preference.SEARCH));
-        Timber.d("***now onCreate");
+            this.search.setSearchMode(this.getArguments().getBoolean(AppConst.Preference.SEARCH));
 
         this.search.initCourse(this.recycler);
-        ((MainActivity)this.getActivity()).setAutoCompletableSearchViewFragment(this);
-//        ((MainActivity)this.getActivity()).setAutoCompletableSearchViewFragment(this);
+        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;
@@ -85,7 +81,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         super.onDestroyView();
         ButterKnife.reset(this);
 
-        ((MainActivity)this.getActivity()).setAutoCompletableSearchViewFragment(null);
+        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(null);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -105,29 +101,13 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         this.navigator.navigate(CourseFragment.class, true);
     }
 
-    public void refresh(){
-//        this.bundle = new Bundle();
-//        this.bundle.putBoolean(AppConst.Preference.SEARCH, true);
-//        this.onSaveInstanceState(bundle);
-////        this.search.initCourse(this.recycler, this.bundle);
-//        this.search.searchCourse();
-//        this.refresh.setRefreshing(false);
-
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        Fragment fragment = this;
-//        Bundle bundle = new Bundle();
-//        bundle.putBoolean(AppConst.Preference.SEARCH, true);
-//        fragment.setArguments(bundle);
-//        transaction.detach(fragment);
-//        transaction.attach(fragment);
-//        transaction.commit();
-        ((MainActivity)this.getActivity()).refresh();
+    public void reloadFragment(){
+        ((MainActivity)this.getActivity()).reloadFragment();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Timber.d("***now resume");
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
