@@ -20,6 +20,12 @@ public class AppConst {
     public static final int ANIM_DURATION_MEDIUM = 400;
     public static final int ANIM_DURATION_LONG = 600;
 
+    /* DateTime String Format*/
+    public static class DateFormat {
+        public static final String API = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // TODO : Z stands for TimeZone, but seems not working now
+        public static final String SIMPLE = "yyyy.MM.dd";
+    }
+
     /**
      * Hierachy of ViewPager is directly mapped to FragmentFactory & ViewPagerManager
      * Subclass of ViewPager should be registered as Type of FragmentFactory

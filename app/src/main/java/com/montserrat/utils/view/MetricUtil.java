@@ -17,4 +17,8 @@ public class MetricUtil {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (dp * density);
     }
+    public static float toPixels(Context context, float dp) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return dp * density;
+    }
 }

@@ -71,7 +71,7 @@
         <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/evaluation_chart"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/baseline_x8"
+            android:layout_height="@dimen/baseline_x10"
             android:layout_marginBottom="@dimen/baseline_x1"
             android:layout_marginRight="@dimen/baseline_x2"
             android:layout_marginEnd="@dimen/baseline_x2"
@@ -95,13 +95,13 @@
     <LinearLayout
         android:id="@+id/evaluation_footer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/baseline_x4"
+        android:layout_height="@dimen/baseline_x6"
         android:orientation="horizontal"
         android:gravity="end"
         android:background="@color/white"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/baseline_x1"
+        android:paddingBottom="@dimen/baseline_x2"
         android:paddingLeft="@dimen/baseline_x2"
         android:paddingRight="@dimen/baseline_x2"
         android:layout_below="@+id/evaluation_content">
@@ -111,8 +111,8 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/evaluation_up_vote_icon"
-                android:layout_width="@dimen/baseline_x3"
-                android:layout_height="@dimen/baseline_x3"
+                android:layout_width="@dimen/baseline_x4"
+                android:layout_height="@dimen/baseline_x4"
                 android:contentDescription="@string/empty"
                 android:layout_marginLeft="@dimen/baseline_x2"
                 android:layout_marginRight="@dimen/baseline_x1"
@@ -134,8 +134,8 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/evaluation_down_vote_icon"
-                android:layout_width="@dimen/baseline_x3"
-                android:layout_height="@dimen/baseline_x3"
+                android:layout_width="@dimen/baseline_x4"
+                android:layout_height="@dimen/baseline_x4"
                 android:contentDescription="@string/empty"
                 android:layout_marginLeft="@dimen/baseline_x2"
                 android:layout_marginRight="@dimen/baseline_x1"
@@ -157,8 +157,8 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/evaluation_comment_icon"
-                android:layout_width="@dimen/baseline_x3"
-                android:layout_height="@dimen/baseline_x3"
+                android:layout_width="@dimen/baseline_x4"
+                android:layout_height="@dimen/baseline_x4"
                 android:contentDescription="@string/empty"
                 android:layout_marginLeft="@dimen/baseline_x2"
                 android:layout_marginRight="@dimen/baseline_x1"
