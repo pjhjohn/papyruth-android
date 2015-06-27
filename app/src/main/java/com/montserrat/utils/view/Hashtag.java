@@ -3,43 +3,31 @@ package com.montserrat.utils.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.TableRow;
 import android.widget.TextView;
+
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-25.
  */
 public class Hashtag extends TextView {
-    public Hashtag(Context context) {
+    public Hashtag(Context context, String value) {
         super(context);
+        this.setup(context);
+        this.setText("#"+value);
     }
-    public Hashtag(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.setupAttrs(context, attrs);
-    }
-    public Hashtag(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        this.setupAttrs(context, attrs);
+    private void setup(Context context) {
+        this.setGravity(Gravity.CENTER_HORIZONTAL);
+        this.setTextColor(Color.BLUE);
+        this.setPaintFlags(super.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        this.setPadding(4, 4, 4, 4);
     }
     private void setupAttrs(Context context, AttributeSet attrs) {
-        super.setGravity(Gravity.CENTER_HORIZONTAL);
-        super.setLayoutParams(new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-    }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        final String txtOriginal = this.getText().toString();
-        final String txtDraw = "#" + txtOriginal;
-
-        super.setText(txtDraw);
-        super.setTextColor(Color.BLUE);
-        getPaint().setFakeBoldText(true);
-        super.onDraw(canvas);
-        super.setText(txtOriginal);
     }
 }

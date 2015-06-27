@@ -99,11 +99,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ChartUtil.init(this.chart);
             ChartUtil.bindData(this.chart, course);
             this.chart.animateY(1000);
-            for(String hashtag : course.getHashtags()) {
-                Hashtag vHashtag = new Hashtag(this.itemView.getContext());
-                vHashtag.setText(hashtag);
-                this.hashtags.addView(vHashtag);
-            }
+            for(String hashtag : course.getHashtags()) this.hashtags.addView(new Hashtag(this.itemView.getContext(), hashtag));
         }
     }
 

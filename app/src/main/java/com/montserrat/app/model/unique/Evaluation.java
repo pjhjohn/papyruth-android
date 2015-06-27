@@ -1,6 +1,9 @@
 package com.montserrat.app.model.unique;
 
+import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.EvaluationData;
+
+import java.util.List;
 
 /**
  * Created by SSS on 2015-05-24.
@@ -19,8 +22,7 @@ public class Evaluation {
     private String updated_at;
     private String professor_name;
     private String lecture_name;
-    private Integer like;
-
+    private List<CommentData> comments;
 
     private static Evaluation instance = null;
     public synchronized static Evaluation getInstance(){
@@ -54,8 +56,8 @@ public class Evaluation {
     public void setLectureName(String lecture_name) { this.lecture_name = lecture_name; }
     public String getUserNickname() { return user_nickname; }
     public void setUserNickname(String user_nickname) { this.user_nickname = user_nickname; }
-    public Integer getLike() { return like; }
-    public void setLike(Integer like) { this.like = like; }
+    public List<CommentData> getComments() { return comments; }
+    public void setComments(List<CommentData> comments) { this.comments = comments; }
 
     public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;
@@ -70,9 +72,8 @@ public class Evaluation {
         if(evaluation.updated_at != null)               this.updated_at = evaluation.updated_at;
         if(evaluation.professor_name != null)           this.professor_name = evaluation.professor_name;
         if(evaluation.lecture_name != null)             this.lecture_name = evaluation.lecture_name;
-//        if(evaluation.like != null)                     this.like = evaluation.like;
         if(evaluation.user_nickname != null)            this.user_nickname = evaluation.user_nickname;
-
+        if(evaluation.comments != null)                 this.comments = evaluation.comments;
     }
 
     public void clear(){

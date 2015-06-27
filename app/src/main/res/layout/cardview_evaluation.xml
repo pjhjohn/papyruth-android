@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     android:id="@+id/cardview_evaluation"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/cardview_min_height_default"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:layout_marginTop="@dimen/baseline_x1"
+    android:layout_marginBottom="@dimen/baseline_x1">
     <RelativeLayout
+        android:id="@+id/evaluation_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/baseline_x6"
+        android:background="@color/white"
+        android:layout_alignParentTop="true"
+        android:paddingTop="@dimen/baseline_x2"
+        android:paddingLeft="@dimen/baseline_x2"
+        android:paddingRight="@dimen/baseline_x2">
+        <TextView
+            android:id="@+id/evaluation_lecture_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="24sp"/>
+        <TextView
+            android:id="@+id/evaluation_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/evaluation_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp">
+        android:layout_below="@+id/evaluation_header">
         <ImageView
             android:id="@+id/evaluation_user_avatar"
             android:layout_width="@dimen/cardview_image_side_length"
             android:layout_height="@dimen/cardview_image_side_length"
             android:padding="@dimen/cardview_image_padding"
-            android:contentDescription=""
+            android:contentDescription="@string/empty"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
@@ -35,7 +62,7 @@
             android:id="@+id/evaluation_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/baseline_x2"
+            android:layout_marginBottom="@dimen/baseline_x1"
             android:layout_marginRight="@dimen/baseline_x2"
             android:layout_marginEnd="@dimen/baseline_x2"
             android:layout_below="@+id/evaluation_user_nickname"
@@ -44,19 +71,108 @@
         <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/evaluation_chart"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="100dp"
-            android:layout_marginBottom="@dimen/baseline_x2"
+            android:layout_height="@dimen/baseline_x8"
+            android:layout_marginBottom="@dimen/baseline_x1"
             android:layout_marginRight="@dimen/baseline_x2"
             android:layout_marginEnd="@dimen/baseline_x2"
             android:layout_below="@+id/evaluation_body"
             android:layout_toRightOf="@+id/evaluation_user_avatar"
             android:layout_toEndOf="@+id/evaluation_user_avatar"/>
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/evaluation_hashtags"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:textColor="#FF0000"
-            android:text="TODO : TimeStamp, LectureName, UpVote, DownVote, #ofComments Hashtag"/>
+            android:orientation="horizontal"
+            android:minHeight="@dimen/baseline_x3"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/baseline_x1"
+            android:layout_marginRight="@dimen/baseline_x2"
+            android:layout_marginEnd="@dimen/baseline_x2"
+            android:layout_below="@+id/evaluation_chart">
+        </LinearLayout>
     </RelativeLayout>
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/evaluation_footer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/baseline_x4"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:background="@color/white"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="@dimen/baseline_x1"
+        android:paddingLeft="@dimen/baseline_x2"
+        android:paddingRight="@dimen/baseline_x2"
+        android:layout_below="@+id/evaluation_content">
+        <RelativeLayout
+            android:id="@+id/evaluation_up_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/evaluation_up_vote_icon"
+                android:layout_width="@dimen/baseline_x3"
+                android:layout_height="@dimen/baseline_x3"
+                android:contentDescription="@string/empty"
+                android:layout_marginLeft="@dimen/baseline_x2"
+                android:layout_marginRight="@dimen/baseline_x1"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"/>
+            <TextView
+                android:id="@+id/evaluation_up_vote_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/baseline_x1"
+                android:layout_toRightOf="@+id/evaluation_up_vote_icon"
+                android:layout_toEndOf="@+id/evaluation_up_vote_icon"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/evaluation_down_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/evaluation_down_vote_icon"
+                android:layout_width="@dimen/baseline_x3"
+                android:layout_height="@dimen/baseline_x3"
+                android:contentDescription="@string/empty"
+                android:layout_marginLeft="@dimen/baseline_x2"
+                android:layout_marginRight="@dimen/baseline_x1"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"/>
+            <TextView
+                android:id="@+id/evaluation_down_vote_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/baseline_x1"
+                android:layout_toRightOf="@+id/evaluation_down_vote_icon"
+                android:layout_toEndOf="@+id/evaluation_down_vote_icon"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/evaluation_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/evaluation_comment_icon"
+                android:layout_width="@dimen/baseline_x3"
+                android:layout_height="@dimen/baseline_x3"
+                android:contentDescription="@string/empty"
+                android:layout_marginLeft="@dimen/baseline_x2"
+                android:layout_marginRight="@dimen/baseline_x1"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"/>
+            <TextView
+                android:id="@+id/evaluation_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/baseline_x1"
+                android:layout_toRightOf="@+id/evaluation_comment_icon"
+                android:layout_toEndOf="@+id/evaluation_comment_icon"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

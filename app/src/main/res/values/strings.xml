@@ -72,4 +72,5 @@
     <string name="navigation_drawer_close"/>
     <string name="toolbar_title_new_comment">New Comment</string>
     <string name="toolbar_title_evaluation">Evaluation</string>
+    <string name="empty"/>
 </resources>

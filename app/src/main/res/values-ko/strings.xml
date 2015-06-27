@@ -72,4 +72,5 @@
     <string name="navigation_drawer_close"/>
     <string name="toolbar_title_new_comment">덧글 쓰기</string>
     <string name="toolbar_title_evaluation">강의평</string>
+    <string name="empty"/>
 </resources>
