@@ -16,10 +16,16 @@
 package com.montserrat.utils.support.picasso;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
+import com.montserrat.app.AppManager;
+import com.montserrat.utils.view.MetricUtil;
 import com.squareup.picasso.Transformation;
 
 /**
@@ -27,8 +33,10 @@ import com.squareup.picasso.Transformation;
  */
 public class CircleWithBorderTransformation implements Transformation {
     private int borderColor;
-    public CircleWithBorderTransformation(int borderColor) {
+    private int drawableResourceId;
+    public CircleWithBorderTransformation(int borderColor, int drawableResourceId) {
         this.borderColor = borderColor;
+        this.drawableResourceId = drawableResourceId;
     }
 
     @Override
@@ -51,9 +59,21 @@ public class CircleWithBorderTransformation implements Transformation {
         canvas.drawCircle(r, r, r, pClip);
 
         Paint pBorder = new Paint();
-        pBorder.setStrokeWidth(2f);
+        pBorder.setStyle(Paint.Style.STROKE);
+        pBorder.setColor(borderColor);
+        pBorder.setStrokeWidth(0.1f * r);
         pBorder.setAntiAlias(true);
-        canvas.drawCircle(r, r, r, pBorder);
+        canvas.drawCircle(r, r, 0.95f * r, pBorder);
+
+        pBorder.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(1.5f * r, 1.5f * r, 0.5f * r, pBorder);
+        Bitmap icon = BitmapFactory.decodeResource(AppManager.getInstance().getContext().getResources(), drawableResourceId);
+        canvas.drawBitmap(
+            icon,
+            new Rect(0, 0, icon.getWidth(), icon.getHeight()),
+            new Rect((int)r, (int)r, 2*(int)r, 2*(int)r),
+            null
+        );
 
         squaredBitmap.recycle();
         return bitmap;
@@ -61,6 +81,6 @@ public class CircleWithBorderTransformation implements Transformation {
 
     @Override
     public String key() {
-        return "circle_with_border";
+        return String.format("circle_color_%d_icon_%d", borderColor, drawableResourceId);
     }
 }
