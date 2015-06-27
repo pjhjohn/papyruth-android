@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
@@ -21,6 +22,7 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.view.search.ToolbarSearch;
 
 import java.util.concurrent.TimeUnit;
 
@@ -59,12 +61,14 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.refresh.setEnabled(true);
-        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.SEARCH);
-        if(this.getArguments() != null && this.getArguments().containsKey(AppConst.Preference.SEARCH))
-            this.search.setSearchMode(this.getArguments().getBoolean(AppConst.Preference.SEARCH));
+//        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.SEARCH);
+        this.search = ToolbarSearch.getInstance().getAutoCompletableSearchView();
+//        if(this.getArguments() != null && this.getArguments().containsKey(AppConst.Preference.SEARCH))
+//            this.search.setSearchMode(this.getArguments().getBoolean(AppConst.Preference.SEARCH));
+        this.search.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
 
         this.search.initCourse(this.recycler);
-        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(this);
+//        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;
@@ -81,7 +85,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
         super.onDestroyView();
         ButterKnife.reset(this);
 
-        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(null);
+//        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(null);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -98,12 +102,13 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         this.search.onRecyclerViewItemClick(view, position);
+        Timber.d("***go Course");
         this.navigator.navigate(CourseFragment.class, true);
     }
 
-    public void reloadFragment(){
-        ((MainActivity)this.getActivity()).reloadFragment();
-    }
+//    public void reloadFragment(){
+//        ((MainActivity)this.getActivity()).reloadFragment();
+//    }
 
     @Override
     public void onResume() {

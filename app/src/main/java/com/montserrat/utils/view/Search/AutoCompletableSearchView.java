@@ -1,6 +1,5 @@
 package com.montserrat.utils.view.search;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +9,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.adapter.AutoCompleteAdapter;
 import com.montserrat.app.adapter.SimpleCourseAdapter;
-import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.unique.Course;
@@ -36,14 +36,15 @@ import timber.log.Timber;
 /**
  * Created by SSS on 2015-06-06.
  */
-public class AutoCompletableSearchView implements RecyclerViewClickListener {
+public class AutoCompletableSearchView {
     private EditText editText;
     private RecyclerView autocompleteView;
     private RecyclerView courseListView;
     private View outsideView;
-    private Fragment simpleCourseFragment;
+//    private Fragment simpleCourseFragment;
 
-    private RecyclerViewClickListener itemListener;
+    private RecyclerViewClickListener autoCompleteListener;
+//    private RecyclerViewClickListener courseListener;
 
     private AutoCompleteAdapter autoCompleteAdapter;
     private SimpleCourseAdapter simpleCourseAdapter;
@@ -69,18 +70,18 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.subscription = new CompositeSubscription();
         this.preferences = new Preferences();
 
-        this.itemListener = listener;
+        this.autoCompleteListener = listener;
         this.context = context;
         this.type = type;
 
-        this.searchMode = false;
+        this.searchMode = true;
         this.editText = null;
-        this.simpleCourseFragment = null;
+//        this.simpleCourseFragment = null;
     }
 
     public void initAutoComplete(RecyclerView autocompleteView, View outsideView){
         this.autocompleteView = autocompleteView;
-        this.autoCompleteAdapter = new AutoCompleteAdapter(this.candidates, this.itemListener);
+        this.autoCompleteAdapter = new AutoCompleteAdapter(this.candidates, this.autoCompleteListener);
         this.autocompleteView.setLayoutManager(new LinearLayoutManager(context));
         this.autocompleteView.setAdapter(this.autoCompleteAdapter);
         this.outsideView = outsideView;
@@ -89,9 +90,14 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
 
     public void initCourse(RecyclerView courseListView){
         this.courseListView = courseListView;
-        this.simpleCourseAdapter = new SimpleCourseAdapter(this.courses, this.itemListener);
+        this.simpleCourseAdapter = new SimpleCourseAdapter(this.courses, this.autoCompleteListener);
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
         this.courseListView.setAdapter(this.simpleCourseAdapter);
+//        this.courseListener = this.autoCompleteListener;
+    }
+    public void initCourse(RecyclerView courseListView, RecyclerViewClickListener listener){
+        this.initCourse(courseListView);
+//        this.courseListener = listener;
     }
 
     public void notifyChangedAutocomplete(List<Candidate> candidates){
@@ -150,9 +156,9 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         this.evaluationCandidate = candidates.get(position);
     }
 
-    public void setMenuSearchFragment(Fragment fragment){
-        this.simpleCourseFragment = fragment;
-    }
+//    public void setMenuSearchFragment(Fragment fragment){
+//        this.simpleCourseFragment = fragment;
+//    }
 
     public void searchHistory(){
         List<CourseData> courseList = this.preferences.getHistory();
@@ -189,6 +195,7 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
     public void searchCourse() {
         Integer lectureId, professorId;
         String query;
+        this.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
 
         if (this.type == Type.EVALUATION){
             lectureId = evaluationCandidate.lecture_id;
@@ -221,25 +228,31 @@ public class AutoCompletableSearchView implements RecyclerViewClickListener {
         );
     }
 
-    @Override
+//    @Override
     public void onRecyclerViewItemClick(View view, int position) {
         ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
+            Timber.d("***autocomplete Cilck");
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
             this.showCandidates(false);
-            if(this.simpleCourseFragment != null){
-                ((SimpleCourseFragment)this.simpleCourseFragment).reloadFragment();
-            }
+//            if(this.simpleCourseFragment != null){
+//                ((SimpleCourseFragment)this.simpleCourseFragment).reloadFragment();
+//            }
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
+            Timber.d("***course Cilck");
             Course.getInstance().clear().update(courses.get(position));
             preferences.addHistory(courses.get(position));
+            Timber.d("***course Cilck2");
+
         }
     }
 
     public void setSearchMode(boolean searchMode){
         this.searchMode = searchMode;
+        Timber.d("searchMode : %s", this.searchMode);
     }
+
 
     public void showCandidates(boolean show){
         ViewGroup.LayoutParams param;
