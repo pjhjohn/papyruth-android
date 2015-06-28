@@ -69,8 +69,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @InjectView(R.id.progress) protected View progress;
     private boolean isCommentInputWindowOpened;
     private CompositeSubscription subscriptions;
-    private Integer page = null;
-    private boolean moreCommentsAvailiable = true;
+    private Integer page;
+    private boolean moreCommentsAvailiable;
     private MaterialMenuDrawable materialNavigationDrawable;
 
     @Override
@@ -81,12 +81,15 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
         EvaluationFragment.TOOLBAR_COLOR_EVALUATION = getResources().getColor(R.color.bg_normal);
         EvaluationFragment.TOOLBAR_COLOR_COMMENT = getResources().getColor(R.color.bg_accent);
+
         this.setupRecyclerView(evaluationRecyclerView);
         this.materialNavigationDrawable = new MaterialMenuDrawable(this.getActivity(), Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
         this.evaluationToolbar.setNavigationIcon(materialNavigationDrawable);
         this.setEvaluationToolbar(false);
         this.commentInputWindow.setOnBackListener(this);
         this.isCommentInputWindowOpened = false;
+        this.page = null;
+        this.moreCommentsAvailiable = true;
         return view;
     }
     @Override
@@ -195,7 +198,10 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 )
             )
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(commentResponse -> hideCommentInputWindow())
+            .subscribe(commentResponse -> {
+                this.commentInputWindow.getCommentInputEditText().setText("");
+                hideCommentInputWindow();
+            })
         );
         this.isCommentInputWindowOpened = true;
         this.setCommentToolbar(true);
