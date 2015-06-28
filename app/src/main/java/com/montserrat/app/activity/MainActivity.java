@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.balysv.materialmenu.MaterialMenuIcon;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.HomeFragment;
@@ -50,8 +54,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @InjectView(R.id.main_navigator) FrameLayout navigatorContainer;
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
     @InjectView(R.id.query_result_outside) protected View outsideResult;
-    private Toolbar mToolbar;
+    @InjectView(R.id.toolbar) protected Toolbar mToolbar;
     private AutoCompletableSearchView mAutoCompletableSearch;
+    private MaterialMenuDrawable mMaterialMenuDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,20 +65,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(this.fac);
         mCompositeSubscription = new CompositeSubscription();
-        mToolbar = (Toolbar) this.findViewById(R.id.toolbar);
-        mToolbar.inflateMenu(R.menu.main);
-
-        this.setSupportActionBar(mToolbar);
-        if(this.getSupportActionBar() != null) {
-            this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            this.getSupportActionBar().setHomeButtonEnabled(true);
-        }
-
-        mNavigator = new FragmentNavigator(R.id.main_navigator, this.getFragmentManager(), HomeFragment.class);
+        mToolbar.inflateMenu(R.menu.searchview);
+        mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        mToolbar.setNavigationIcon(mMaterialMenuDrawable);
 
         mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         mNavigationDrawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), mToolbar);
         mNavigationDrawer.update();
+
+        mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER);
 
         /* Instantiate Multiple ViewPagerManagers */
         mAutoCompletableSearch = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.SEARCH);
@@ -90,13 +90,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private MenuItem searchitem;
     private SearchView searchView;
-
-    public void restoreActionBar() {
-        ActionBar actionBar = this.getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("");
-    }
 
     public boolean onQueryTextSubmit(String query) {
         Search.getInstance().clear().setQuery(query);
@@ -172,7 +165,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.searchView = (SearchView) searchitem.getActionView();
         this.searchitem.expandActionView();
         if(searchView != null){
-            searchView.setQueryHint("?");
+            searchView.setQueryHint("Input Search Query");
 
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             if(searchManager != null){
@@ -194,12 +187,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 //        searchView.setOnClickListener(this);
         searchView.setOnQueryTextFocusChangeListener(this);
         searchResult.setOnFocusChangeListener(this);
-
-        if (!this.mNavigationDrawer.isOpened()) {
-            this.getMenuInflater().inflate(R.menu.main, menu);
-            this.restoreActionBar();
-            return true;
-        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -226,7 +213,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType) {
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType) {
         this.mNavigator.navigate(target, addToBackStack, animatorType);
     }
 
@@ -236,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType, boolean clear) {
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
         this.mNavigator.navigate(target, addToBackStack, animatorType, clear);
     }
 
@@ -246,7 +233,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     @Override
-    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType) {
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType) {
         this.mNavigator.navigate(target, bundle, addToBackStack, animatorType);
     }
 
@@ -256,7 +243,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     @Override
-    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, FragmentNavigator.AnimatorType animatorType, boolean clear) {
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
         this.mNavigator.navigate(target, bundle, addToBackStack, animatorType, clear);
     }
 

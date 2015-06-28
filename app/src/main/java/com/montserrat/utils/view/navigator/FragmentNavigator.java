@@ -5,10 +5,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.viewpager.OnBack;
+
 
 /**
  * Created by pjhjohn on 2015-06-10.
@@ -16,13 +19,17 @@ import com.montserrat.utils.view.viewpager.OnBack;
 public class FragmentNavigator implements Navigator {
     int containerViewId;
     FragmentManager manager;
-    public enum AnimatorType {
-        SLIDE_TO_RIGHT, SLIDE_TO_LEFT, SLIDE_TO_UP, SLIDE_TO_DOWN
-    }
+    MaterialMenuDrawable materialMenuDrawable;
+    MaterialMenuDrawable.IconState materialMenuDrawableState;
+    NavigationDrawerFragment navigationDrawer;
 
-    public FragmentNavigator(int containerViewId, FragmentManager manager, Class<? extends Fragment> initialFragment) {
+    public FragmentNavigator(NavigationDrawerFragment drawer, FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment, MaterialMenuDrawable materialMenuDrawable, MaterialMenuDrawable.IconState initialMaterialMenuDrawableState) {
         this.containerViewId = containerViewId;
         this.manager = manager;
+        this.materialMenuDrawable = materialMenuDrawable;
+        this.materialMenuDrawableState = initialMaterialMenuDrawableState;
+        this.materialMenuDrawable.setIconState(initialMaterialMenuDrawableState);
+        this.navigationDrawer = drawer;
 
         Fragment fragment = this.instantiateFragment(initialFragment);
         this.manager.beginTransaction()
@@ -37,12 +44,17 @@ public class FragmentNavigator implements Navigator {
         Fragment next = this.instantiateFragment(target);
         if(bundle != null) next.setArguments(bundle);
         if(current != null && current.getClass().getSimpleName().equals(target.getSimpleName())) return;
-        if(clear) this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if(clear) {
+            this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+            if(navigationDrawer != null) navigationDrawer.setOnNavigationIconClickListener(null);
+        } else {
+            if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+            if(materialMenuDrawable != null) navigationDrawer.setOnNavigationIconClickListener(view -> navigationDrawer.getActivity().onBackPressed());
+        }
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
         if(addToBackStack) transaction.addToBackStack(next.getClass().getSimpleName());
-        transaction.replace(this.containerViewId, next, AppConst.Tag.ACTIVE_FRAGMENT);
-
-        transaction.commit();
+        transaction.replace(this.containerViewId, next, AppConst.Tag.ACTIVE_FRAGMENT).commit();
     }
 
     @Override
@@ -96,9 +108,20 @@ public class FragmentNavigator implements Navigator {
                 backed = true;
             }
             if(!backed && current instanceof OnBack) backed = ((OnBack) current).onBack();
-            if(!backed && this.manager.getBackStackEntryCount() > 1) {
-                this.manager.popBackStack();
-                backed = true;
+            if(!backed) {
+                if(this.manager.getBackStackEntryCount() > 2) {
+                    this.manager.popBackStack();
+                    backed = true;
+                } else if(this.manager.getBackStackEntryCount() == 2) {
+                    this.manager.popBackStack();
+                    materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+                    navigationDrawer.setOnNavigationIconClickListener(null);
+                    backed = true;
+                } if(this.manager.getBackStackEntryCount() == 1){
+                    materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+                    navigationDrawer.setOnNavigationIconClickListener(null);
+                    backed = false;
+                }
             } return backed;
         } return false;
     }

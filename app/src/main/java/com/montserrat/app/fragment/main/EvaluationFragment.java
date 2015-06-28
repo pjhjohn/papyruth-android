@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.adapter.EvaluationAdapter;
@@ -70,6 +71,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     private CompositeSubscription subscriptions;
     private Integer page = null;
     private boolean moreCommentsAvailiable = true;
+    private MaterialMenuDrawable materialNavigationDrawable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +82,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         EvaluationFragment.TOOLBAR_COLOR_EVALUATION = getResources().getColor(R.color.bg_normal);
         EvaluationFragment.TOOLBAR_COLOR_COMMENT = getResources().getColor(R.color.bg_accent);
         this.setupRecyclerView(evaluationRecyclerView);
+        this.materialNavigationDrawable = new MaterialMenuDrawable(this.getActivity(), Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        this.evaluationToolbar.setNavigationIcon(materialNavigationDrawable);
         this.setEvaluationToolbar(false);
         this.commentInputWindow.setOnBackListener(this);
         this.isCommentInputWindowOpened = false;
@@ -209,7 +213,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     private static int TOOLBAR_COLOR_EVALUATION;
     private static int TOOLBAR_COLOR_COMMENT;
     private void setEvaluationToolbar(boolean animate) {
-        this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_clear);
+        this.materialNavigationDrawable.animateIconState(MaterialMenuDrawable.IconState.X);
         this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
         this.evaluationToolbar.setTitle(R.string.toolbar_title_evaluation);
         this.evaluationToolbar.setTitleTextColor(Color.WHITE);
@@ -218,7 +222,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         else this.evaluationToolbar.setY(0);
     }
     private void setCommentToolbar(boolean animate) {
-        this.evaluationToolbar.setNavigationIcon(R.drawable.ic_light_back);
+        this.materialNavigationDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
         this.evaluationToolbar.setNavigationOnClickListener(unused -> this.onBack());
         this.evaluationToolbar.setTitle(R.string.toolbar_title_new_comment);
         this.evaluationToolbar.setTitleTextColor(Color.WHITE);

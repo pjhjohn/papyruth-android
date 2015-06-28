@@ -20,6 +20,9 @@ public class AppConst {
     public static final int ANIM_DURATION_MEDIUM = 400;
     public static final int ANIM_DURATION_LONG = 600;
 
+    public static final int ANIM_ACCELERATION = 5;
+    public static final int ANIM_DECELERATION = 5;
+
     /* DateTime String Format*/
     public static class DateFormat {
         public static final String API = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // TODO : Z stands for TimeZone, but seems not working now

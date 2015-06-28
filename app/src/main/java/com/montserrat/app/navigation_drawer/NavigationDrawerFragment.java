@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +23,6 @@ import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.ProfileFragment;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.CircleTransformation;
-import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +38,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private View.OnClickListener mNavigationPriorClickListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,37 +120,35 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mNavigator = null;
     }
 
-    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private boolean isDrawerOpened;
     private DrawerLayout mDrawerLayout;
+    private DrawerLayout.DrawerListener mDrawerListener;
     private View mFragmentContainerView;
     public void setup(int fragment_id, DrawerLayout drawerLayout, Toolbar toolbar) {
         mFragmentContainerView = (View) this.getActivity().findViewById(fragment_id).getParent();
         mDrawerLayout = drawerLayout;
         mDrawerLayout.setStatusBarBackground(R.color.bg_normal);
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this.getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        mDrawerListener = new DrawerLayout.SimpleDrawerListener() {
             @Override
-            public void onDrawerClosed(View navView) {
-                super.onDrawerClosed(navView);
-                if (!NavigationDrawerFragment.this.isAdded()) return;
-                NavigationDrawerFragment.this.getActivity().invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerOpened(View navView) {
-                super.onDrawerClosed(navView);
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
                 if (!NavigationDrawerFragment.this.isAdded()) return;
                 if (!mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
                     AppManager.getInstance().putBoolean(PREF_USER_LEARNED_DRAWER, true);
                 }
-                NavigationDrawerFragment.this.getActivity().invalidateOptionsMenu();
             }
         };
 
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) mDrawerLayout.openDrawer(mFragmentContainerView);
+        else mDrawerLayout.closeDrawer(mFragmentContainerView);
 
-        mDrawerLayout.post(mActionBarDrawerToggle::syncState);
-        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+        toolbar.setNavigationOnClickListener(view -> {
+            if(mNavigationPriorClickListener == null) {
+                if (isDrawerOpened) this.close();
+                else this.open();
+            } else if(!isDrawerOpened) mNavigationPriorClickListener.onClick(view);
+        });
 
         /* setup Subtitle */
         mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
@@ -159,8 +156,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText);
     }
 
-    public ActionBarDrawerToggle getActionBarDrawerToggle() {
-        return mActionBarDrawerToggle;
+    public void setOnNavigationIconClickListener(View.OnClickListener listener) {
+        mNavigationPriorClickListener = listener;
     }
 
     /* Drawer Actions */
@@ -191,13 +188,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     /* Menu */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
-    }
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) return true;
         switch (item.getItemId()) {
             case R.id.menu_search:
                 // TODO : Transition to editText on ActionBar
