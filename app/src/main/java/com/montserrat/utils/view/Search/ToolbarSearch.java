@@ -26,7 +26,7 @@ public class ToolbarSearch {
     private FragmentManager fragmentManager;
 
     private static ToolbarSearch instance;
-    public ToolbarSearch(){
+    private ToolbarSearch(){
         searchView = null;
     }
     public static synchronized ToolbarSearch getInstance(){

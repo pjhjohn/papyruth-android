@@ -7,12 +7,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,11 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
-import com.balysv.materialmenu.MaterialMenuIcon;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.main.CourseFragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
@@ -46,7 +42,6 @@ import com.montserrat.utils.view.search.ToolbarSearch;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
@@ -69,9 +64,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(this.fac);
         mCompositeSubscription = new CompositeSubscription();
-        mToolbar.inflateMenu(R.menu.searchview);
         mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        mToolbar.inflateMenu(R.menu.searchview);
         mToolbar.setNavigationIcon(mMaterialMenuDrawable);
+        mToolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.menu_search) return true;
+            return super.onOptionsItemSelected(item);
+        });
+        this.onInitializeMenuOnToolbar(mToolbar.getMenu());
 
         mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         mNavigationDrawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), mToolbar);
@@ -157,10 +157,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     /* Menu */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = this.getMenuInflater();
-        menuInflater.inflate(R.menu.searchview, menu);
+    private boolean onInitializeMenuOnToolbar(Menu menu) {
         this.searchitem = menu.findItem(R.id.menu_search);
         this.searchView = (SearchView) searchitem.getActionView();
         this.searchitem.expandActionView();
@@ -168,9 +165,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             searchView.setQueryHint("Input Search Query");
 
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            if(searchManager != null){
-                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            }
+            if(searchManager != null) searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(true);
             ((EditText)searchView.findViewById(R.id.search_src_text)).setOnEditorActionListener(
                 (v, actionId, event) -> {
@@ -182,21 +177,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
             );
         }
-//        this.searchitem.setOnMenuItemClickListener(this);
         searchitem.collapseActionView();
-//        searchView.setOnClickListener(this);
         searchView.setOnQueryTextFocusChangeListener(this);
         searchResult.setOnFocusChangeListener(this);
-
         return super.onCreateOptionsMenu(menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menu_search){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /* Click Callbacks for Navigation Drawer */
@@ -258,6 +242,4 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public boolean back() {
         return this.mNavigator.back();
     }
-
-
 }
