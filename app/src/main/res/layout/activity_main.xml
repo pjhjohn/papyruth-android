@@ -21,7 +21,7 @@
             android:id="@+id/query_result_outside"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#aaddff"
+            android:background="#eee"
             android:visibility="visible"
             android:focusable="true"
             android:clickable="true" />
@@ -32,7 +32,8 @@
             android:layout_marginTop="?attr/actionBarSize"
             android:focusable="true"
             android:clickable="true"
-            android:background="#bbb"
+            android:background="#eee"
+            android:alpha="0.9"
             android:layout_gravity="center_horizontal|top" />
 
         <include layout="@layout/fac"/>

@@ -93,9 +93,9 @@ public class ProfileFragment extends Fragment {
         this.subscriptions.add(ViewObservable
             .clicks(signout)
             .subscribe(unused -> {
+                Preferences.clear(Preferences.Type.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
                 User.getInstance().clear();
-                Preferences.clear(Preferences.Type.HISTORY);
                 this.getActivity().startActivity(new Intent(this.getActivity(), AuthActivity.class));
                 this.getActivity().finish();
 

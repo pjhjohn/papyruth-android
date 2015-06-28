@@ -26,7 +26,9 @@ import android.widget.Toast;
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.balysv.materialmenu.MaterialMenuIcon;
 import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.main.CourseFragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
@@ -39,10 +41,12 @@ import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.search.ToolbarSearch;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
@@ -76,7 +80,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER);
 
         /* Instantiate Multiple ViewPagerManagers */
-        mAutoCompletableSearch = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.SEARCH);
+//        mAutoCompletableSearch = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.SEARCH);
+        mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
+        ToolbarSearch.getInstance().setActivityComponent(this);
         mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
     }
 
@@ -95,7 +101,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         Search.getInstance().clear().setQuery(query);
         this.mAutoCompletableSearch.submit(query);
 
-//        ((EditText)searchView.findViewById(R.id.search_src_text)).focus
         searchView.clearFocus();
         searchResult.clearFocus();
         this.mAutoCompletableSearch.showCandidates(false);
@@ -104,16 +109,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        this.mAutoCompletableSearch.onRecyclerViewItemClick(view, position);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(AppConst.Preference.SEARCH, true);
-        this.navigate(SimpleCourseFragment.class, bundle, true);
+        if(searchResult != null && ((RecyclerView)view.getParent()).getId() == searchResult.getId())
+            ToolbarSearch.getInstance().onRecyclerViewClicked(view, position, true);
+        else
+            ToolbarSearch.getInstance().onRecyclerViewClicked(view, position, false);
+    }
 
-    }
-    public void setFragmentAutoCompletableSearchView(Fragment fragment){
-        this.mAutoCompletableSearch.setMenuSearchFragment(fragment);
-    }
-    public void reloadFragment(){
+
+    public void reloadFragment(Bundle bundle){
         Fragment fragment;
         Fragment active = this.getFragmentManager().findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
 
@@ -123,9 +126,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             fragment = new SimpleCourseFragment(); // temporary assign
 
         FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(AppConst.Preference.SEARCH, true);
-//
         fragment.setArguments(bundle);
         transaction.replace(this.navigatorContainer.getId(), fragment, AppConst.Tag.ACTIVE_FRAGMENT).commit();
     }
@@ -203,6 +203,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onNavigationDrawerItemSelected(int position, boolean fromUser) {
         this.terminate = false;
+        if(position == NavigationDrawerUtils.ItemType.SEARCH)
+            AppManager.getInstance().putBoolean(AppConst.Preference.SEARCH, false);
         this.navigate(NavigationDrawerUtils.getFragmentClassOf(position), true, fromUser);
     }
 
