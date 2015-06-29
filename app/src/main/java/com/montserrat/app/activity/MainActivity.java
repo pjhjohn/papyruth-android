@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -36,14 +35,14 @@ import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 import com.montserrat.utils.view.search.ToolbarSearch;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewClickListener, View.OnFocusChangeListener, Navigator {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, View.OnFocusChangeListener, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
 

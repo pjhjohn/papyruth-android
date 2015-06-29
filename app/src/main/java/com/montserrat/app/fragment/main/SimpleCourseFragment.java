@@ -15,8 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
-import com.montserrat.app.adapter.SimpleCourseAdapter;
+import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
@@ -38,7 +37,7 @@ import timber.log.Timber;
  * TODO : should be able to expand when clicking recyclerview item to show evaluation data in detail
  */
 
-public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapter, CourseData> {
+public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapter, CourseData> {
     private Navigator navigator;
 
     @Override
@@ -90,8 +89,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<SimpleCourseAdapt
     }
 
     @Override
-    protected SimpleCourseAdapter getAdapter () {
-        return new SimpleCourseAdapter(this.items, this);
+    protected CourseItemsAdapter getAdapter () {
+        return new CourseItemsAdapter(this.items, this);
     }
 
     @Override

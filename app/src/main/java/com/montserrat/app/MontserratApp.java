@@ -3,6 +3,7 @@ package com.montserrat.app;
 import android.app.Application;
 
 import com.montserrat.app.model.unique.User;
+import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.retrofit.RetrofitLogger;
 import com.squareup.picasso.Picasso;
@@ -25,6 +26,7 @@ public class MontserratApp extends Application {
         /* AppManager Context */
         AppManager.getInstance().setContext(this.getApplicationContext());
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
+        ViewHolderFactory.getInstance().setContext(this.getApplicationContext());
 
         /* Retrofit Api */
         new RetrofitApi.Builder()

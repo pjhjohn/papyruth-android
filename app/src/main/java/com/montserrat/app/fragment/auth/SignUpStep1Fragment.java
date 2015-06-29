@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.UniversityAdapter;
+import com.montserrat.app.recyclerview.adapter.UniversityAdapter;
 import com.montserrat.app.model.UniversityData;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;

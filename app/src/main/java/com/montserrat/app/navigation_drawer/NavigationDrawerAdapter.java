@@ -22,7 +22,7 @@ import butterknife.InjectView;
  * Used in {@link NavigationDrawerFragment NavFragment}
  * as an adapter for List-type {@link RecyclerView} to provide global navigation for the application
  */
-public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.ViewHolder> {
+public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.NavigationDrawerItemViewHolder> {
     private List<NavigationDrawerItem> mData;
     private NavigationDrawerCallback mNavigationDrawerCallback;
     private View mSelectedView;
@@ -43,8 +43,8 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     @Override
-    public NavigationDrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
+    public NavigationDrawerItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final NavigationDrawerItemViewHolder viewHolder = new NavigationDrawerItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
         viewHolder.itemView.setClickable(true);
         viewHolder.itemView.setOnClickListener(view -> {
             if (mSelectedView != null) mSelectedView.setSelected(false);
@@ -59,7 +59,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     @Override
-    public void onBindViewHolder(NavigationDrawerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(NavigationDrawerItemViewHolder holder, int position) {
         holder.bind(mData.get(position));
         if (mSelectedPosition == position) {
             if (mSelectedView != null) mSelectedView.setSelected(false);
@@ -79,12 +79,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         return mData != null ? mData.size() : 0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class NavigationDrawerItemViewHolder extends RecyclerView.ViewHolder {
         @InjectView(R.id.nav_item_icon) protected ImageView icon;
         @InjectView(R.id.nav_item_text) protected TextView text;
         private int colorFilter;
 
-        public ViewHolder(View itemView) {
+        public NavigationDrawerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             this.colorFilter = mContext.getResources().getColor(R.color.nav_filter);

@@ -4,16 +4,14 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
-import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.fragment.main.CourseFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import timber.log.Timber;
 
@@ -34,7 +32,7 @@ public class ToolbarSearch {
         return ToolbarSearch.instance;
     }
 
-    public AutoCompletableSearchView newSearchView(RecyclerViewClickListener listener, Context context, AutoCompletableSearchView.Type type){
+    public AutoCompletableSearchView newSearchView(RecyclerViewItemClickListener listener, Context context, AutoCompletableSearchView.Type type){
         searchView = new AutoCompletableSearchView(listener, context, type);
         return searchView;
     }

@@ -12,7 +12,7 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.recycler.PanelControllerOnScrollWithAskMore;
-import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import rx.Observable;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>, ITEM> extends Fragment implements RecyclerViewClickListener {
+public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>, ITEM> extends Fragment implements RecyclerViewItemClickListener {
 
     protected ADAPTER adapter;
     protected List<ITEM> items;

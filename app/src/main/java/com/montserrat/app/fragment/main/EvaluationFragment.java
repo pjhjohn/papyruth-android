@@ -11,16 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.EvaluationAdapter;
+import com.montserrat.app.recyclerview.adapter.EvaluationAdapter;
 import com.montserrat.app.model.CommentData;
-import com.montserrat.app.model.EvaluationData;
-import com.montserrat.app.model.response.CommentResponse;
-import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -39,7 +35,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 import static com.montserrat.utils.support.rx.RxValidator.toString;
 import static com.montserrat.utils.support.rx.RxValidator.nonEmpty;

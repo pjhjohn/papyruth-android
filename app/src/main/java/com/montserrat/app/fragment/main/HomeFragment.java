@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.SimpleEvaluationAdapter;
+import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -32,7 +32,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-05-09.
  * Provides latest evaluations.
  */
-public class HomeFragment extends RecyclerViewFragment<SimpleEvaluationAdapter, EvaluationData> {
+public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdapter, EvaluationData> {
     private Navigator navigator;
     @Override
     public void onAttach (Activity activity) {
@@ -71,8 +71,8 @@ public class HomeFragment extends RecyclerViewFragment<SimpleEvaluationAdapter, 
     }
 
     @Override
-    protected SimpleEvaluationAdapter getAdapter () {
-        return new SimpleEvaluationAdapter(this.items, this);
+    protected EvaluationItemsDetailAdapter getAdapter () {
+        return new EvaluationItemsDetailAdapter(this.items, this);
     }
 
     @Override

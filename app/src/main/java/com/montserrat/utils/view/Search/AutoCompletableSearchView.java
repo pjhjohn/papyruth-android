@@ -11,15 +11,15 @@ import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
-import com.montserrat.app.adapter.AutoCompleteAdapter;
-import com.montserrat.app.adapter.SimpleCourseAdapter;
+import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
+import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
-import com.montserrat.utils.view.recycler.RecyclerViewClickListener;
+import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +43,11 @@ public class AutoCompletableSearchView {
     private View outsideView;
 //    private Fragment simpleCourseFragment;
 
-    private RecyclerViewClickListener autoCompleteListener;
+    private RecyclerViewItemClickListener autoCompleteListener;
 //    private RecyclerViewClickListener courseListener;
 
     private AutoCompleteAdapter autoCompleteAdapter;
-    private SimpleCourseAdapter simpleCourseAdapter;
+    private CourseItemsAdapter courseItemsAdapter;
 
     private Preferences preferences;
     private CompositeSubscription subscription;
@@ -64,7 +64,7 @@ public class AutoCompletableSearchView {
     }
 
 
-    public AutoCompletableSearchView(RecyclerViewClickListener listener, Context context, Type type){
+    public AutoCompletableSearchView(RecyclerViewItemClickListener listener, Context context, Type type){
         this.courses = new ArrayList<>();
         this.candidates = new ArrayList<>();
         this.subscription = new CompositeSubscription();
@@ -90,12 +90,12 @@ public class AutoCompletableSearchView {
 
     public void initCourse(RecyclerView courseListView){
         this.courseListView = courseListView;
-        this.simpleCourseAdapter = new SimpleCourseAdapter(this.courses, this.autoCompleteListener);
+        this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener);
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
-        this.courseListView.setAdapter(this.simpleCourseAdapter);
+        this.courseListView.setAdapter(this.courseItemsAdapter);
 //        this.courseListener = this.autoCompleteListener;
     }
-    public void initCourse(RecyclerView courseListView, RecyclerViewClickListener listener){
+    public void initCourse(RecyclerView courseListView, RecyclerViewItemClickListener listener){
         this.initCourse(courseListView);
 //        this.courseListener = listener;
     }
@@ -109,7 +109,7 @@ public class AutoCompletableSearchView {
     public void notifyChangedCourse(List<CourseData> courses){
         this.courses.clear();
         this.courses.addAll(courses);
-        this.simpleCourseAdapter.notifyDataSetChanged();
+        this.courseItemsAdapter.notifyDataSetChanged();
     }
 
     public Subscription autoComplete(TextView textView){
@@ -183,7 +183,7 @@ public class AutoCompletableSearchView {
                         .subscribe(
                             course -> {
                                 this.courses.set(j, course.get(0));
-                                this.simpleCourseAdapter.notifyDataSetChanged();
+                                this.courseItemsAdapter.notifyDataSetChanged();
                             },
                             error -> Timber.d("serch history error : %s", error)
                         )

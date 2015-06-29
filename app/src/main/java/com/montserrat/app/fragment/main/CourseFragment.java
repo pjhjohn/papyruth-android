@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.adapter.CourseAdapter;
+import com.montserrat.app.recyclerview.adapter.CourseAdapter;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
@@ -27,7 +27,6 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.MetricUtil;
-import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;

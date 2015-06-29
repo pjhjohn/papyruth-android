@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * Created by pjhjohn on 2015-04-17.
  */
-public interface RecyclerViewClickListener {
+public interface RecyclerViewItemClickListener {
     /**
      * Callback function for item click within RecyclerView
      * @param view view of clicked item
