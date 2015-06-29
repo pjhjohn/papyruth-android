@@ -26,7 +26,6 @@ public class MontserratApp extends Application {
         /* AppManager Context */
         AppManager.getInstance().setContext(this.getApplicationContext());
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        ViewHolderFactory.getInstance().setContext(this.getApplicationContext());
 
         /* Retrofit Api */
         new RetrofitApi.Builder()

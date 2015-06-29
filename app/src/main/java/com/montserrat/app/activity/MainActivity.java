@@ -29,6 +29,7 @@ import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
+import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
@@ -84,7 +85,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         ToolbarSearch.getInstance().setActivityComponent(this);
         mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        ViewHolderFactory.getInstance().setContext(this);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
