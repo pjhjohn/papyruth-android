@@ -19,10 +19,19 @@ import java.util.List;
 public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RecyclerViewItemClickListener courseItemClickListener;
     private List<CourseData> courses;
+    private int head;
 
     public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener) {
         this.courses = initialCourses;
         this.courseItemClickListener = listener;
+        head = 0;
+    }
+
+    public void setHead(boolean isHead){
+        if(isHead)
+            head = 0;
+        else
+            head = 0;
     }
 
     @Override
@@ -33,12 +42,12 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        ((CourseItemViewHolder) holder).bind(this.courses.get(position - 1));
+        ((CourseItemViewHolder) holder).bind(this.courses.get(position - head));
     }
 
     @Override
     public int getItemCount() {
-        return 1 + (this.courses == null ? 0 : this.courses.size());
+        return head + (this.courses == null ? 0 : this.courses.size());
     }
 
     @Override

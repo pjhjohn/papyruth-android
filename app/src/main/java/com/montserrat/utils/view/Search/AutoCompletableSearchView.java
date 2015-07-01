@@ -89,6 +89,11 @@ public class AutoCompletableSearchView {
     public void initCourse(RecyclerView courseListView){
         this.courseListView = courseListView;
         this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener);
+        if(type == Type.EVALUATION){
+            this.courseItemsAdapter.setHead(false);
+        }else{
+            this.courseItemsAdapter.setHead(true);
+        }
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
         this.courseListView.setAdapter(this.courseItemsAdapter);
     }
@@ -105,13 +110,11 @@ public class AutoCompletableSearchView {
         this.courseItemsAdapter.notifyDataSetChanged();
     }
     public void setAutoCompleteViewOpen(boolean isOpen){
-        Timber.d("***open changed %s", isOpen);
         this.isAutoCompleteViewOpen = isOpen;
     }
 
     public void autoComplete(TextView textView){
         this.editText = (EditText) textView;
-        Timber.d("***autocompleted");
         this.subscription.add(
             WidgetObservable
                 .text(this.editText)
@@ -156,15 +159,36 @@ public class AutoCompletableSearchView {
         );
     }
 
+    public void submit(){
+        this.submit(this.editText.getText().toString());
+        this.showCandidates(false);
+    }
+
     public void submit(String query){
-        Timber.d("submit click");
-        Search.getInstance().clear().setQuery(query);
+        Timber.d("***submit");
+        if(this.type == Type.EVALUATION){
+            this.setEvaluationCandidate(query);
+            this.searchCourse();
+        }else if(this.type == Type.SEARCH) {
+            Timber.d("submit click");
+            Search.getInstance().clear().setQuery(query);
+        }
         this.editText.clearFocus();
     }
     private Candidate evaluationCandidate;
+    private String evaluationQuery;
 
     public void setEvaluationCandidate(int position) {
+        this.evaluationCandidate.clear();
+        this.evaluationQuery = null;
         this.evaluationCandidate = candidates.get(position);
+    }
+    public void setEvaluationCandidate(String query){
+        if(this.evaluationCandidate != null)
+            this.evaluationCandidate.clear();
+        else
+            this.evaluationCandidate = new Candidate();
+        this.evaluationQuery = query;
     }
 
     public void searchHistory(){
@@ -200,15 +224,16 @@ public class AutoCompletableSearchView {
     }
 
     public void searchCourse() {
+        Timber.d("***searchCourse");
         Integer lectureId, professorId;
         String query;
         this.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
         this.setAutoCompleteViewOpen(false);
 
         if (this.type == Type.EVALUATION){
-            lectureId = evaluationCandidate.lecture_id;
-            professorId = evaluationCandidate.professor_id;
-            query = null;
+            lectureId = this.evaluationCandidate.lecture_id;
+            professorId = this.evaluationCandidate.professor_id;
+            query = this.evaluationQuery;
         } else if(searchMode) {
             lectureId = Search.getInstance().getLectureId();
             professorId = Search.getInstance().getProfessorId();
@@ -245,15 +270,13 @@ public class AutoCompletableSearchView {
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().update(courses.get(position));
             preferences.addHistory(courses.get(position));
-
         }
     }
 
     public void setSearchMode(boolean searchMode){
         this.searchMode = searchMode;
-        Timber.d("searchMode : %s", this.searchMode);
+        Timber.d("***searchMode : %s", this.searchMode);
     }
-
 
     public void showCandidates(boolean show){
         Timber.d("***autocomplete %s", show);

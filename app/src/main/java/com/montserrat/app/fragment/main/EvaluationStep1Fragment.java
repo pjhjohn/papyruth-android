@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.view.search.ToolbarSearch;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -56,6 +59,18 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.EVALUATION);
         search.initAutoComplete(queryResult, resultOutside);
         search.initCourse(courseList);
+        query.setOnKeyListener((v,keycode,e) ->{
+            if(e.getAction() == KeyEvent.ACTION_DOWN) {
+                Timber.d("***keydown %s", keycode);
+                if (keycode == KeyEvent.KEYCODE_ENTER) {
+                    Timber.d("***searchBtn");
+                    this.search.showCandidates(false);
+                    this.onQueryTextSubmit();
+                    return true;
+                }
+            }
+            return false;
+        });
 
         return view;
     }
@@ -68,13 +83,19 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
+    public void onQueryTextSubmit() {
+//        this.query.clearFocus();
+//        this.search.submit(query);
+//        this.search.setEvaluationCandidate();
+        this.search.submit();
+    }
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
 
         if(((RecyclerView)view.getParent()).getId() == queryResult.getId()) {
             this.search.setEvaluationCandidate(position);
             this.search.searchCourse();
-//            this.search.showCandidates(false);
+            this.search.onRecyclerViewItemClick(view, position);
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         }else{
             this.search.onRecyclerViewItemClick(view, position);
@@ -85,10 +106,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
             this.navigator.navigate(EvaluationStep2Fragment.class, true);
-//            if(EvaluationStep2Fragment.class.getName().equals(this.navigator.getBackStackNameAt(1)) ||
-//               EvaluationStep3Fragment.class.getName().equals(this.navigator.getBackStackNameAt(2))) {
-//                if(!this.navigator.getManager.popBackStack(SOME_FLAG)) this.navigator.navigate(EvaluationStep2Fragment.class, true);
-//            } else this.navigator.navigate(EvaluationStep2Fragment.class, true);
+
         }
     }
 
@@ -105,6 +123,10 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     public void onResume() {
         super.onResume();
         FloatingActionControl.getInstance().clear();
+        this.query.clearFocus();
         this.search.autoComplete(query);
+    }
+    public void back(){
+        this.search.showCandidates(false);
     }
 }

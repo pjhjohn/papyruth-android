@@ -25,10 +25,10 @@ import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
-import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -105,19 +105,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
-//        searchResult.clearFocus();
         mAutoCompletableSearch.submit(query);
         ToolbarSearch.getInstance().search(true);
-//        this.mAutoCompletableSearch.showCandidates(false);
         return false;
     }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         if(searchResult != null && ((RecyclerView)view.getParent()).getId() == searchResult.getId())
-            ToolbarSearch.getInstance().onRecyclerViewClicked(view, position, true);
+            ToolbarSearch.getInstance().recyclerViewClicked(view, position, true);
         else
-            ToolbarSearch.getInstance().onRecyclerViewClicked(view, position, false);
+            ToolbarSearch.getInstance().recyclerViewClicked(view, position, false);
     }
 
 
@@ -262,6 +260,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public boolean back() {
+        this.mAutoCompletableSearch.showCandidates(false);
+        Fragment current = this.getFragmentManager().findFragmentById(this.navigatorContainer.getId());
+        if(current instanceof EvaluationStep1Fragment){
+            ((EvaluationStep1Fragment)current).back();
+        }
         return this.mNavigator.back();
     }
 }

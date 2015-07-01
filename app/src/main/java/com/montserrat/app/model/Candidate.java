@@ -10,11 +10,26 @@ public class Candidate {
     public Integer lecture_id;
     public CourseData course;
 
+    public Candidate(){
+        this.professor_id = null;
+        this.professor_name = null;
+        this.lecture_id = null;
+        this.lecture_name = null;
+        this.course = null;
+    }
+
     public Candidate(String lecture_name, Integer lecture_id, String professor_name, Integer professor_id, CourseData course){
         this.professor_name = professor_name;
         this.professor_id = professor_id;
         this.lecture_name = lecture_name;
         this.lecture_id = lecture_id;
         this.course = course;
+    }
+    public void clear(){
+        this.professor_id = null;
+        this.professor_name = null;
+        this.lecture_id = null;
+        this.lecture_name = null;
+        this.course = null;
     }
 }

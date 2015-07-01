@@ -46,7 +46,7 @@ public class ToolbarSearch {
         this.fragmentManager = activity.getFragmentManager();
     }
 
-    public void onRecyclerViewClicked(View view, int position, boolean isAutoComplete){
+    public void recyclerViewClicked(View view, int position, boolean isAutoComplete){
         this.searchView.onRecyclerViewItemClick(view, position);
         this.search(isAutoComplete);
     }
