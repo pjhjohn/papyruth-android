@@ -23,12 +23,10 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.search.ToolbarSearch;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -42,7 +40,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         this.navigator = (Navigator) activity;
     }
 
-    @InjectView(R.id.query) protected EditText query;
+    @InjectView(R.id.queryTextView) protected EditText queryTextView;
     @InjectView(R.id.query_result) protected RecyclerView queryResult;
     @InjectView(R.id.course_list) protected RecyclerView courseList;
     @InjectView(R.id.query_result_outside) protected RelativeLayout resultOutside;
@@ -56,14 +54,12 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
 
-        search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.EVALUATION);
-        search.initAutoComplete(queryResult, resultOutside);
-        search.initCourse(courseList);
-        query.setOnKeyListener((v,keycode,e) ->{
-            if(e.getAction() == KeyEvent.ACTION_DOWN) {
-                Timber.d("***keydown %s", keycode);
+        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.EVALUATION);
+        this.search.initAutoComplete(this.queryResult, this.resultOutside);
+        this.search.initCourse(this.courseList);
+        this.queryTextView.setOnKeyListener((v, keycode, e) -> {
+            if (e.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keycode == KeyEvent.KEYCODE_ENTER) {
-                    Timber.d("***searchBtn");
                     this.search.showCandidates(false);
                     this.onQueryTextSubmit();
                     return true;
@@ -84,15 +80,12 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     }
 
     public void onQueryTextSubmit() {
-//        this.query.clearFocus();
-//        this.search.submit(query);
-//        this.search.setEvaluationCandidate();
         this.search.submit();
     }
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
 
-        if(((RecyclerView)view.getParent()).getId() == queryResult.getId()) {
+        if(((RecyclerView)view.getParent()).getId() == this.queryResult.getId()) {
             this.search.setEvaluationCandidate(position);
             this.search.searchCourse();
             this.search.onRecyclerViewItemClick(view, position);
@@ -106,7 +99,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
             this.navigator.navigate(EvaluationStep2Fragment.class, true);
-
         }
     }
 
@@ -123,8 +115,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     public void onResume() {
         super.onResume();
         FloatingActionControl.getInstance().clear();
-        this.query.clearFocus();
-        this.search.autoComplete(query);
+        this.search.autoComplete(this.queryTextView);
     }
     public void back(){
         this.search.showCandidates(false);

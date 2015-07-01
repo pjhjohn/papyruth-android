@@ -4,13 +4,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:paddingTop="?attr/actionBarSize">
 
     <EditText
-        android:id="@+id/query"
+        android:id="@+id/queryTextView"
         android:hint="@string/hint_lecture"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+
         android:singleLine="true"
         android:imeOptions="actionSearch"/>
     <FrameLayout

@@ -89,11 +89,13 @@ public class AutoCompletableSearchView {
     public void initCourse(RecyclerView courseListView){
         this.courseListView = courseListView;
         this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener);
+
         if(type == Type.EVALUATION){
             this.courseItemsAdapter.setHead(false);
         }else{
             this.courseItemsAdapter.setHead(true);
         }
+
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
         this.courseListView.setAdapter(this.courseItemsAdapter);
     }
@@ -115,9 +117,11 @@ public class AutoCompletableSearchView {
 
     public void autoComplete(TextView textView){
         this.editText = (EditText) textView;
+        this.editText.clearFocus();
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
             Timber.d("***hasFocus, %s", hasFocus);
-            this.showCandidates(true);
+            if(hasFocus)
+                this.showCandidates(true);
         });
         this.subscription.add(
             WidgetObservable
@@ -272,7 +276,7 @@ public class AutoCompletableSearchView {
     }
 
     public void onRecyclerViewItemClick(View view, int position) {
-        this.showCandidates(false);
+//        this.showCandidates(false);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
