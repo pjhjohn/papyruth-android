@@ -11,6 +11,8 @@ import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
  * Used in {@link SimpleCourseFragment SearchCourseFragment}
@@ -18,20 +20,21 @@ import java.util.List;
  */
 public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RecyclerViewItemClickListener courseItemClickListener;
-    private List<CourseData> courses;
+    private List<CourseData> items;
     private int head;
 
     public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener) {
-        this.courses = initialCourses;
+        this.items = initialCourses;
         this.courseItemClickListener = listener;
         head = 0;
     }
 
     public void setHead(boolean isHead){
         if(isHead)
-            head = 0;
+            this.head = 1;
         else
-            head = 0;
+            this.head = 0;
+        Timber.d("***head : %d %s", this.head, isHead);
     }
 
     @Override
@@ -41,17 +44,18 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position <= 0) return;
-        ((CourseItemViewHolder) holder).bind(this.courses.get(position - head));
+        if (this.head > 0 && position <= 0) return;
+        ((CourseItemViewHolder) holder).setHead(this.head);
+        ((CourseItemViewHolder) holder).bind(this.items.get(position - head));
     }
 
     @Override
     public int getItemCount() {
-        return head + (this.courses == null ? 0 : this.courses.size());
+        return head + (this.items == null ? 0 : this.items.size());
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position <= 0 ? ViewHolderFactory.ViewType.HEADER : ViewHolderFactory.ViewType.COURSE_ITEM;
+        return (this.head > 0 && position <= 0) ? ViewHolderFactory.ViewType.HEADER : ViewHolderFactory.ViewType.COURSE_ITEM;
     }
 }

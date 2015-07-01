@@ -115,6 +115,10 @@ public class AutoCompletableSearchView {
 
     public void autoComplete(TextView textView){
         this.editText = (EditText) textView;
+        this.editText.setOnFocusChangeListener((v, hasFocus) -> {
+            Timber.d("***hasFocus, %s", hasFocus);
+            this.showCandidates(true);
+        });
         this.subscription.add(
             WidgetObservable
                 .text(this.editText)
@@ -179,7 +183,10 @@ public class AutoCompletableSearchView {
     private String evaluationQuery;
 
     public void setEvaluationCandidate(int position) {
-        this.evaluationCandidate.clear();
+        if(this.evaluationCandidate != null)
+            this.evaluationCandidate.clear();
+        else
+            this.evaluationCandidate = new Candidate();
         this.evaluationQuery = null;
         this.evaluationCandidate = candidates.get(position);
     }
@@ -254,6 +261,9 @@ public class AutoCompletableSearchView {
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnCompleted(() -> {
+                    this.showCandidates(false);
+                })
                 .subscribe(
                     this::notifyChangedCourse,
                     error -> Timber.d("search course error : %s", error)
@@ -262,7 +272,6 @@ public class AutoCompletableSearchView {
     }
 
     public void onRecyclerViewItemClick(View view, int position) {
-        ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         this.showCandidates(false);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
             Search.getInstance().clear();
@@ -308,6 +317,8 @@ public class AutoCompletableSearchView {
             param.width = this.context.getResources().getDisplayMetrics().widthPixels;
 
             outsideView.setLayoutParams(param);
+
+            ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.editText.getWindowToken(), 2);
         }
     }
 }

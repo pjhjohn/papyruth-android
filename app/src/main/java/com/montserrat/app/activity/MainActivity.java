@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, View.OnFocusChangeListener, Navigator {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
 
@@ -145,21 +145,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
     }
 
-    @Override
-    public void onFocusChange(View view, boolean hasFocus) {
-//        if(view == searchView) {
-            mAutoCompletableSearch.showCandidates(false);
-//        }else if(view == searchResult){
-//            // TODO : implement it!
-//        }
-//        if(hasFocus) {
-////        this.mCompositeSubscription.add(
-//            this.mAutoCompletableSearch.autoComplete(
-//                (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)
-//            );
-////            )
-//        }
-    }
 
     /* Menu */
     private boolean onInitializeMenuOnToolbar(Menu menu) {
@@ -185,21 +170,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.mAutoCompletableSearch.autoComplete(
             (TextView) this.searchView.findViewById(R.id.search_src_text)
         );
-//        searchitem.collapseActionView();
-//        searchView.setOnQueryTextFocusChangeListener(this);
-//        this.searchView.setOnCloseListener(() -> {
-//            this.mAutoCompletableSearch.showCandidates(false);
-////            this.searchitem.collapseActionView();
-//            this.searchView.setIconified(true);
-//            return true;
-//        });
+
         ImageView closeBtn = (ImageView) this.searchView.findViewById(R.id.search_close_btn);
         closeBtn.setOnClickListener(view -> {
             this.mAutoCompletableSearch.showCandidates(false);
-//            this.searchitem.collapseActionView();
             this.searchView.setIconified(true);
         });
-        searchResult.setOnFocusChangeListener(this);
         return super.onCreateOptionsMenu(menu);
     }
 
