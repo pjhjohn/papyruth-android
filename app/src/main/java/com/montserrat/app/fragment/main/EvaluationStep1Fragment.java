@@ -68,6 +68,9 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
             return false;
         });
 
+        if(this.search.hasData())
+            this.search.searchCourse();
+
         return view;
     }
 

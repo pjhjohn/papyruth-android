@@ -92,6 +92,7 @@ public class AutoCompletableSearchView {
 
         if(type == Type.EVALUATION){
             this.courseItemsAdapter.setHead(false);
+            this.evaluationCandidate = new Candidate();
         }else{
             this.courseItemsAdapter.setHead(true);
         }
@@ -187,19 +188,24 @@ public class AutoCompletableSearchView {
     private String evaluationQuery;
 
     public void setEvaluationCandidate(int position) {
-        if(this.evaluationCandidate != null)
-            this.evaluationCandidate.clear();
-        else
-            this.evaluationCandidate = new Candidate();
+        this.evaluationCandidate.clear();
+
         this.evaluationQuery = null;
         this.evaluationCandidate = candidates.get(position);
     }
     public void setEvaluationCandidate(String query){
-        if(this.evaluationCandidate != null)
-            this.evaluationCandidate.clear();
-        else
-            this.evaluationCandidate = new Candidate();
+        this.evaluationCandidate.clear();
         this.evaluationQuery = query;
+    }
+
+    public boolean hasData(){
+        if(this.type == Type.SEARCH){
+            return true;
+        }else if(this.type == Type.EVALUATION){
+            if (this.evaluationCandidate.lecture_id != null || this.evaluationCandidate.professor_id != null || this.evaluationQuery != null)
+                return true;
+        }
+        return false;
     }
 
     public void searchHistory(){
