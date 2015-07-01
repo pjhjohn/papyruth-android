@@ -60,14 +60,11 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.refresh.setEnabled(true);
-//        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.SEARCH);
+
         this.search = ToolbarSearch.getInstance().getAutoCompletableSearchView();
-//        if(this.getArguments() != null && this.getArguments().containsKey(AppConst.Preference.SEARCH))
-//            this.search.setSearchMode(this.getArguments().getBoolean(AppConst.Preference.SEARCH));
         this.search.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
 
         this.search.initCourse(this.recycler);
-//        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(this);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
 
         return view;
@@ -84,7 +81,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         super.onDestroyView();
         ButterKnife.reset(this);
 
-//        ((MainActivity)this.getActivity()).setFragmentAutoCompletableSearchView(null);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -104,10 +100,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         Timber.d("***go Course");
         this.navigator.navigate(CourseFragment.class, true);
     }
-
-//    public void reloadFragment(){
-//        ((MainActivity)this.getActivity()).reloadFragment();
-//    }
 
     @Override
     public void onResume() {

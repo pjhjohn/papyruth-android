@@ -48,19 +48,18 @@ public class ToolbarSearch {
 
     public void onRecyclerViewClicked(View view, int position, boolean isAutoComplete){
         this.searchView.onRecyclerViewItemClick(view, position);
-
+        this.search(isAutoComplete);
+    }
+    public void search(boolean isAutoComplete){
         if(isAutoComplete) {
-            this.searchView.onRecyclerViewItemClick(view, position);
             AppManager.getInstance().putBoolean(AppConst.Preference.SEARCH, true);
-            Fragment active = this.fragmentManager.findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
 
+            Fragment active = this.fragmentManager.findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
             if (active != null && active.getClass() == SimpleCourseFragment.class)
                 this.searchView.searchCourse();
             else
                 this.navigator.navigate(SimpleCourseFragment.class, true);
         }else{
-            this.searchView.onRecyclerViewItemClick(view, position);
-            Timber.d("***go Course");
             this.navigator.navigate(CourseFragment.class, true);
         }
     }

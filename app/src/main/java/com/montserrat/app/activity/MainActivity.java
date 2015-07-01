@@ -71,7 +71,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             if (item.getItemId() == R.id.menu_search) return true;
             return super.onOptionsItemSelected(item);
         });
-        this.onInitializeMenuOnToolbar(mToolbar.getMenu());
 
         mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         mNavigationDrawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), mToolbar);
@@ -84,6 +83,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
         ToolbarSearch.getInstance().setActivityComponent(this);
         mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
+
+        this.onInitializeMenuOnToolbar(mToolbar.getMenu());
     }
     @Override
     public void onResume() {
@@ -102,11 +103,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private SearchView searchView;
 
     public boolean onQueryTextSubmit(String query) {
-        Search.getInstance().clear().setQuery(query);
-        this.mAutoCompletableSearch.submit(query);
-
         searchView.clearFocus();
-        searchResult.clearFocus();
+//        searchResult.clearFocus();
+        mAutoCompletableSearch.submit(query);
+        ToolbarSearch.getInstance().search(true);
         this.mAutoCompletableSearch.showCandidates(false);
         return false;
     }
@@ -148,16 +148,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public void onFocusChange(View view, boolean hasFocus) {
-        if(view == searchView) {
+//        if(view == searchView) {
             mAutoCompletableSearch.showCandidates(false);
-        }else if(view == searchResult){
-            // TODO : implement it!
-        }
-        this.mCompositeSubscription.add(
-            this.mAutoCompletableSearch.autoComplete(
-                (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)
-            )
-        );
+//        }else if(view == searchResult){
+//            // TODO : implement it!
+//        }
+//        if(hasFocus) {
+////        this.mCompositeSubscription.add(
+//            this.mAutoCompletableSearch.autoComplete(
+//                (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)
+//            );
+////            )
+//        }
     }
 
     /* Menu */
@@ -181,6 +183,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
             );
         }
+        this.mAutoCompletableSearch.autoComplete(
+            (TextView) this.searchView.findViewById(R.id.search_src_text)
+        );
         searchitem.collapseActionView();
         searchView.setOnQueryTextFocusChangeListener(this);
         searchResult.setOnFocusChangeListener(this);

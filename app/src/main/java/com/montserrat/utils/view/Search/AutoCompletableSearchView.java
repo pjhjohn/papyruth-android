@@ -29,7 +29,7 @@ import retrofit.RetrofitError;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
-import rx.schedulers.Schedulers;
+import rx.functions.Action1;import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -41,10 +41,7 @@ public class AutoCompletableSearchView {
     private RecyclerView autocompleteView;
     private RecyclerView courseListView;
     private View outsideView;
-//    private Fragment simpleCourseFragment;
-
     private RecyclerViewItemClickListener autoCompleteListener;
-//    private RecyclerViewClickListener courseListener;
 
     private AutoCompleteAdapter autoCompleteAdapter;
     private CourseItemsAdapter courseItemsAdapter;
@@ -58,6 +55,7 @@ public class AutoCompletableSearchView {
 
     private Type type;
     private boolean searchMode;
+    private boolean isAutoCompleteViewOpen;
 
     public enum Type{
         SEARCH, EVALUATION
@@ -76,7 +74,7 @@ public class AutoCompletableSearchView {
 
         this.searchMode = true;
         this.editText = null;
-//        this.simpleCourseFragment = null;
+        this.isAutoCompleteViewOpen = false;
     }
 
     public void initAutoComplete(RecyclerView autocompleteView, View outsideView){
@@ -93,11 +91,6 @@ public class AutoCompletableSearchView {
         this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener);
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
         this.courseListView.setAdapter(this.courseItemsAdapter);
-//        this.courseListener = this.autoCompleteListener;
-    }
-    public void initCourse(RecyclerView courseListView, RecyclerViewItemClickListener listener){
-        this.initCourse(courseListView);
-//        this.courseListener = listener;
     }
 
     public void notifyChangedAutocomplete(List<Candidate> candidates){
@@ -111,54 +104,69 @@ public class AutoCompletableSearchView {
         this.courses.addAll(courses);
         this.courseItemsAdapter.notifyDataSetChanged();
     }
+    public void setAutoCompleteViewOpen(boolean isOpen){
+        Timber.d("***open changed %s", isOpen);
+        this.isAutoCompleteViewOpen = isOpen;
+    }
 
-    public Subscription autoComplete(TextView textView){
-        editText = (EditText) textView;
-        return WidgetObservable
-            .text(textView)
-            .debounce(500, TimeUnit.MILLISECONDS)
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .map(listener -> listener.text().toString())
-            .flatMap(query -> {
-                if (type != Type.EVALUATION && query.isEmpty()) return null; // history
-                return RetrofitApi.getInstance().search_autocomplete(
-                    User.getInstance().getAccessToken(),
-                    User.getInstance().getUniversityId(),
-                    query
-                );
-            })
-            .map(response -> response.candidates)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                results -> {
-                    this.notifyChangedAutocomplete(results);
-                    showCandidates(true);
-                },
-                error -> {
-                    if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                        }
-                    } else
-                        candidates.clear();
-                }
-            );
+    public void autoComplete(TextView textView){
+        this.editText = (EditText) textView;
+        Timber.d("***autocompleted");
+        this.subscription.add(
+            WidgetObservable
+                .text(this.editText)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(unused -> this.setAutoCompleteViewOpen(true))
+
+        );
+        this.subscription.add(
+            WidgetObservable
+                .text(this.editText)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map(listener -> listener.text().toString())
+                .flatMap(query -> {
+                    if (type != Type.EVALUATION && query.isEmpty()) return null; // history
+                    return RetrofitApi.getInstance().search_autocomplete(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        query
+                    );
+                })
+                .map(response -> response.candidates)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    results -> {
+                        this.showCandidates(isAutoCompleteViewOpen);
+                        this.notifyChangedAutocomplete(results);
+                    },
+                    error -> {
+                        this.showCandidates(false);
+                        if (error instanceof RetrofitError) {
+                            switch (((RetrofitError) error).getResponse().getStatus()) {
+                                default:
+                                    Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            }
+                        } else
+                            candidates.clear();
+                    }
+                )
+        );
     }
 
     public void submit(String query){
+        Timber.d("submit click");
         Search.getInstance().clear().setQuery(query);
+        this.setAutoCompleteViewOpen(false);
+        this.editText.clearFocus();
     }
     private Candidate evaluationCandidate;
 
     public void setEvaluationCandidate(int position) {
         this.evaluationCandidate = candidates.get(position);
     }
-
-//    public void setMenuSearchFragment(Fragment fragment){
-//        this.simpleCourseFragment = fragment;
-//    }
 
     public void searchHistory(){
         List<CourseData> courseList = this.preferences.getHistory();
@@ -196,6 +204,7 @@ public class AutoCompletableSearchView {
         Integer lectureId, professorId;
         String query;
         this.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
+        this.setAutoCompleteViewOpen(false);
 
         if (this.type == Type.EVALUATION){
             lectureId = evaluationCandidate.lecture_id;
@@ -228,22 +237,15 @@ public class AutoCompletableSearchView {
         );
     }
 
-//    @Override
     public void onRecyclerViewItemClick(View view, int position) {
         ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
-            Timber.d("***autocomplete Cilck");
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
             this.showCandidates(false);
-//            if(this.simpleCourseFragment != null){
-//                ((SimpleCourseFragment)this.simpleCourseFragment).reloadFragment();
-//            }
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
-            Timber.d("***course Cilck");
             Course.getInstance().clear().update(courses.get(position));
             preferences.addHistory(courses.get(position));
-            Timber.d("***course Cilck2");
 
         }
     }
@@ -255,6 +257,7 @@ public class AutoCompletableSearchView {
 
 
     public void showCandidates(boolean show){
+        Timber.d("***autocomplete %s", show);
         ViewGroup.LayoutParams param;
         if(show){
             if(type == Type.EVALUATION) {
