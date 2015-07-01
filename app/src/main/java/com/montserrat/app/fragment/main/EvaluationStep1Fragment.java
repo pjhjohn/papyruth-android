@@ -74,7 +74,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         if(((RecyclerView)view.getParent()).getId() == queryResult.getId()) {
             this.search.setEvaluationCandidate(position);
             this.search.searchCourse();
-            this.search.showCandidates(false);
+//            this.search.showCandidates(false);
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         }else{
             this.search.onRecyclerViewItemClick(view, position);

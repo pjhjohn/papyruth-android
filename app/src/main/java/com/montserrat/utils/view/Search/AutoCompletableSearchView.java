@@ -159,7 +159,6 @@ public class AutoCompletableSearchView {
     public void submit(String query){
         Timber.d("submit click");
         Search.getInstance().clear().setQuery(query);
-        this.setAutoCompleteViewOpen(false);
         this.editText.clearFocus();
     }
     private Candidate evaluationCandidate;
@@ -239,10 +238,10 @@ public class AutoCompletableSearchView {
 
     public void onRecyclerViewItemClick(View view, int position) {
         ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
+        this.showCandidates(false);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
-            this.showCandidates(false);
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().update(courses.get(position));
             preferences.addHistory(courses.get(position));

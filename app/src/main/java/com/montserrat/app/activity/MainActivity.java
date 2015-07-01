@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -107,7 +108,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 //        searchResult.clearFocus();
         mAutoCompletableSearch.submit(query);
         ToolbarSearch.getInstance().search(true);
-        this.mAutoCompletableSearch.showCandidates(false);
+//        this.mAutoCompletableSearch.showCandidates(false);
         return false;
     }
 
@@ -186,8 +187,20 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.mAutoCompletableSearch.autoComplete(
             (TextView) this.searchView.findViewById(R.id.search_src_text)
         );
-        searchitem.collapseActionView();
-        searchView.setOnQueryTextFocusChangeListener(this);
+//        searchitem.collapseActionView();
+//        searchView.setOnQueryTextFocusChangeListener(this);
+//        this.searchView.setOnCloseListener(() -> {
+//            this.mAutoCompletableSearch.showCandidates(false);
+////            this.searchitem.collapseActionView();
+//            this.searchView.setIconified(true);
+//            return true;
+//        });
+        ImageView closeBtn = (ImageView) this.searchView.findViewById(R.id.search_close_btn);
+        closeBtn.setOnClickListener(view -> {
+            this.mAutoCompletableSearch.showCandidates(false);
+//            this.searchitem.collapseActionView();
+            this.searchView.setIconified(true);
+        });
         searchResult.setOnFocusChangeListener(this);
         return super.onCreateOptionsMenu(menu);
     }
