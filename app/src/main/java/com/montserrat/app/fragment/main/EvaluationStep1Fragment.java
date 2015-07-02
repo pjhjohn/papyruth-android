@@ -85,6 +85,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     public void onQueryTextSubmit() {
         this.search.submit();
     }
+
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
 

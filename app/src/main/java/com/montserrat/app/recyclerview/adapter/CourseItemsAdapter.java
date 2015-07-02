@@ -26,7 +26,7 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener) {
         this.items = initialCourses;
         this.courseItemClickListener = listener;
-        head = 0;
+        head = 1;
     }
 
     public void setHead(boolean isHead){
