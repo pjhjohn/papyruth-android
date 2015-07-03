@@ -50,6 +50,7 @@ public class ToolbarSearch {
         this.searchView.onRecyclerViewItemClick(view, position);
         this.search(isAutoComplete);
     }
+
     public void search(boolean isAutoComplete){
         if(isAutoComplete) {
             AppManager.getInstance().putBoolean(AppConst.Preference.SEARCH, true);

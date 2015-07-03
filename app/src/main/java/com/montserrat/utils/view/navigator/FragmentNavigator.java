@@ -12,6 +12,8 @@ import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.viewpager.OnBack;
 
+import timber.log.Timber;
+
 
 /**
  * Created by pjhjohn on 2015-06-10.
@@ -94,8 +96,8 @@ public class FragmentNavigator implements Navigator {
 
     @Override
     public String getBackStackNameAt(int index) {
-        if(this.manager.getBackStackEntryCount() <= index + 1) return null;
-        return this.manager.getBackStackEntryAt(this.manager.getBackStackEntryCount() - index).getName();
+        if(this.manager.getBackStackEntryCount() < index + 1) return null;
+        return this.manager.getBackStackEntryAt(this.manager.getBackStackEntryCount() - index - 1).getName();
     }
 
     @Override

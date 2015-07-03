@@ -112,29 +112,33 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             .clicks(R.id.fab_new_evaluation)
             .subscribe(unused -> jumpToEvaluationStep2())
         );
-        this.subscriptions.add(RetrofitApi
-            .getInstance()
-            .evaluations(
-                User.getInstance().getAccessToken(),
-                User.getInstance().getUniversityId(),
-                null,
-                null,
-                null,
-                Course.getInstance().getId()
-            )
-            .map(response -> response.evaluations)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(evaluations -> {
-                this.items.clear();
-                this.items.addAll(evaluations);
-                this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
-            })
+        this.subscriptions.add(
+            RetrofitApi
+                .getInstance()
+                .evaluations(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    null,
+                    null,
+                    null,
+                    Course.getInstance().getId()
+                )
+                .map(response -> response.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.items.clear();
+                    this.items.addAll(evaluations);
+                    this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
+                    Timber.d("###is working? %s %s", this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName()),  this.navigator.getBackStackNameAt(0));
+                    if(this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName())){
+                        Bundle bundle = this.getArguments();
+                        Timber.d("###call by home %s", bundle.getInt("evaluationid"));
+                        this.selectEvaluation(bundle.getInt("evaluationid"));
+                    }
+
+                })
         );
-//        if(this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getName())){
-//            Timber.d("");
-//        }
-        Timber.d("this fragment from %s", this.navigator.getBackStackNameAt(0));
     }
 
     private void jumpToEvaluationStep2() {
@@ -142,6 +146,17 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
         this.navigator.navigate(EvaluationStep2Fragment.class, true);
+    }
+
+    private void selectEvaluation(Integer evaluationId){
+        Timber.d("###size : %d", this.items.size());
+        for(int i = 0; i < items.size(); i++){
+            Timber.d("###evaluation id : %d", this.items.get(i).id);
+            if(this.items.get(i).id.equals(evaluationId)){
+                onRecyclerViewItemClick(this.courseRecyclerView, i);
+                break;
+            }
+        }
     }
 
     @Override
