@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.montserrat.app.R;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.User;
@@ -27,6 +28,7 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-09.
@@ -83,6 +85,24 @@ public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdap
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         // TODO : implement it!
+        this.getCourse(this.items.get(position).course_id);
+    }
+
+    public void getCourse(Integer courseId){
+        this.subscriptions.add(
+            RetrofitApi.getInstance().course(
+                User.getInstance().getAccessToken(),
+                courseId
+            ).map(response -> response.course)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                course -> {
+                    Course.getInstance().clear().update(course);
+                    this.navigator.navigate(CourseFragment.class, true);
+                }, error-> Timber.d("error getCourse : %s", error)
+            )
+        );
     }
 
     @Override

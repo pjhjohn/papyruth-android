@@ -72,14 +72,15 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.isEvaluationDetailOpened = false;
-        this.setupRecyclerView(courseRecyclerView);
+        this.setupRecyclerView(this.courseRecyclerView);
         return view;
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if(this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
-        if(this.getActivity() != null && isEvaluationDetailOpened) this.getFragmentManager().beginTransaction().remove(evaluationDetail).commit();
+        if(this.getActivity() != null && this.isEvaluationDetailOpened) this.getFragmentManager().beginTransaction().remove(evaluationDetail).commit();
         ButterKnife.reset(this);
     }
 
@@ -130,6 +131,10 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
             })
         );
+//        if(this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getName())){
+//            Timber.d("");
+//        }
+        Timber.d("this fragment from %s", this.navigator.getBackStackNameAt(0));
     }
 
     private void jumpToEvaluationStep2() {
