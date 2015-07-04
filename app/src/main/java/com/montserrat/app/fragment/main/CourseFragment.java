@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -109,8 +110,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.evaluationDetail = new EvaluationFragment();
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         this.subscriptions.add(FloatingActionControl
-            .clicks(R.id.fab_new_evaluation)
-            .subscribe(unused -> jumpToEvaluationStep2())
+                .clicks(R.id.fab_new_evaluation)
+                .subscribe(unused -> jumpToEvaluationStep2())
         );
         this.subscriptions.add(
             RetrofitApi
@@ -130,14 +131,11 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     this.items.clear();
                     this.items.addAll(evaluations);
                     this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
-                    Timber.d("###is working? %s %s", this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName()),  this.navigator.getBackStackNameAt(0));
-                    if(this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName())){
-                        Bundle bundle = this.getArguments();
-                        Timber.d("###call by home %s", bundle.getInt("evaluationid"));
-                        this.selectEvaluation(bundle.getInt("evaluationid"));
+                    if (this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName())) {
+                        this.selectEvaluation();
                     }
-
-                })
+                }, error -> Timber.d("get Evaluation Error %s", error)
+                )
         );
     }
 
@@ -148,12 +146,22 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.navigator.navigate(EvaluationStep2Fragment.class, true);
     }
 
-    private void selectEvaluation(Integer evaluationId){
-        Timber.d("###size : %d", this.items.size());
+    private void selectEvaluation(){
+        Bundle bundle = this.getArguments();
+        Integer evaluationId = bundle.getInt("evaluationid");
         for(int i = 0; i < items.size(); i++){
-            Timber.d("###evaluation id : %d", this.items.get(i).id);
             if(this.items.get(i).id.equals(evaluationId)){
-                onRecyclerViewItemClick(this.courseRecyclerView, i);
+                final int position = i;
+                this.subscriptions.add(
+                    Observable
+                        .timer(1000, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(un ->
+                                onRecyclerViewItemClick(this.courseRecyclerView.getChildAt(position+2), position),
+                            error -> Timber.d("evaluation open error : %s", error)
+                        )
+                );
                 break;
             }
         }
@@ -187,11 +195,11 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         });
         animHeight.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_DECELERATION));
 
-        ValueAnimator animTop = ValueAnimator.ofInt(itemTop, 0);
+        ValueAnimator animTop = ValueAnimator.ofInt(this.itemTop, 0);
         animTop.addUpdateListener(animator -> {
             final int itemTop = (int) animator.getAnimatedValue();
             this.evaluationContainer.setY(itemTop);
-            final int toolbarTop = itemTop - MetricUtil.getPixels(toolbar.getContext(), R.attr.actionBarSize);
+            final int toolbarTop = itemTop - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize);
             this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
         });
         animTop.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_DECELERATION));
@@ -223,6 +231,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     evaluationDetail.setEvaluationFloatingActionControl();
                 }
             }
+
         });
         animators.start();
     }

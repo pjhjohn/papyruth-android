@@ -65,6 +65,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder {
         this.downCount.setTextColor(negativeColor);
         this.downCount.setText("7");//TODO : evaluation.getUpVoteCount()
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(Color.BLACK)).into(this.commentIcon);
-        this.commentCount.setText("" + evaluation.getComments().size());
+        this.commentCount.setText("" + (evaluation.getComments() == null ? 0 : evaluation.getComments().size()));
     }
 }
