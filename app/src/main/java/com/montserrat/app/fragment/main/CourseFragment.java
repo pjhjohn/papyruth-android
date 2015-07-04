@@ -101,6 +101,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         if(isEvaluationDetailOpened) return;
         if(animators != null && animators.isRunning()) return;
         Evaluation.getInstance().update(this.items.get(position));
+        ((LinearLayoutManager)this.courseRecyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+
         this.openEvaluation(view);
     }
 
