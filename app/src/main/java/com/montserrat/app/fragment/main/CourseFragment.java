@@ -112,32 +112,31 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.evaluationDetail = new EvaluationFragment();
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         this.subscriptions.add(FloatingActionControl
-                .clicks(R.id.fab_new_evaluation)
-                .subscribe(unused -> jumpToEvaluationStep2())
+            .clicks(R.id.fab_new_evaluation)
+            .subscribe(unused -> jumpToEvaluationStep2())
         );
-        this.subscriptions.add(
-            RetrofitApi
-                .getInstance()
-                .get_evaluations(
-                    User.getInstance().getAccessToken(),
-                    User.getInstance().getUniversityId(),
-                    null,
-                    null,
-                    null,
-                    Course.getInstance().getId()
-                )
-                .map(response -> response.evaluations)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(evaluations -> {
-                    this.items.clear();
-                    this.items.addAll(evaluations);
-                    this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
-                    if (this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName())) {
-                        this.selectEvaluation();
-                    }
-                }, error -> Timber.d("get Evaluation Error %s", error)
-                )
+        this.subscriptions.add(RetrofitApi
+            .getInstance()
+            .get_evaluations(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                null,
+                null,
+                null,
+                Course.getInstance().getId()
+            )
+            .map(response -> response.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(evaluations -> {
+                this.items.clear();
+                this.items.addAll(evaluations);
+                this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
+                if (this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName())) {
+                    this.selectEvaluation();
+                }
+            }, error -> Timber.d("get Evaluation Error %s", error)
+            )
         );
     }
 

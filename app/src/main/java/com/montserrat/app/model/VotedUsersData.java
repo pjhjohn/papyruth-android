@@ -1,7 +1,5 @@
 package com.montserrat.app.model;
 
-import com.montserrat.app.model.UserData;
-
 import java.util.List;
 
 /**

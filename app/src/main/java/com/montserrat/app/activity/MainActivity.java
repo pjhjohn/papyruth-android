@@ -118,21 +118,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             ToolbarSearch.getInstance().recyclerViewClicked(view, position, false);
     }
 
-
-    public void reloadFragment(Bundle bundle){
-        Fragment fragment;
-        Fragment active = this.getFragmentManager().findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
-
-        if(active!=null && active.getClass() == SimpleCourseFragment.class)
-            fragment = new SimpleCourseFragment();
-        else
-            fragment = new SimpleCourseFragment(); // temporary assign
-
-        FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
-        fragment.setArguments(bundle);
-        transaction.replace(this.navigatorContainer.getId(), fragment, AppConst.Tag.ACTIVE_FRAGMENT).commit();
-    }
-
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
@@ -144,7 +129,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             terminate = true;
         }
     }
-
 
     /* Menu */
     private boolean onInitializeMenuOnToolbar(Menu menu) {

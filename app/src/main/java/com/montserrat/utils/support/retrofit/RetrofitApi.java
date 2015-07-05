@@ -6,10 +6,9 @@ import com.montserrat.app.model.response.CommentsResponse;
 import com.montserrat.app.model.response.CourseResponse;
 import com.montserrat.app.model.response.CoursesResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
+import com.montserrat.app.model.response.EvaluationsResponse;
 import com.montserrat.app.model.response.FavoriteCoursesResponse;
 import com.montserrat.app.model.response.HashtagsResponse;
-import com.montserrat.app.model.response.SimpleCoursesResponse;
-import com.montserrat.app.model.response.EvaluationsResponse;
 import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
@@ -28,7 +27,6 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
-import retrofit.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -225,7 +223,7 @@ public class RetrofitApi {
             @Query("query") String query
         );
         @GET("/search/search")
-        Observable<SimpleCoursesResponse> search_search(
+        Observable<CoursesResponse> search_search(
             @Header("Authorization") String authorization,
             @Query("university_id") Integer university_id,
             @Query("lecture_id") Integer lecture_id,
