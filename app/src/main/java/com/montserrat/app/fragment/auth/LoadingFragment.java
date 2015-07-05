@@ -91,7 +91,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                 if (error instanceof RetrofitError) {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
                         case 401:
-                            this.subscriptions.add(RetrofitApi.getInstance().info()
+                            this.subscriptions.add(RetrofitApi.getInstance().get_info()
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(this.actionWithStatistics)

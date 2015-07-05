@@ -108,7 +108,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 return pass;
             })
             .observeOn(Schedulers.io())
-            .flatMap(click -> RetrofitApi.getInstance().evaluation(
+            .flatMap(click -> RetrofitApi.getInstance().post_evaluation(
                 User.getInstance().getAccessToken(),
                 EvaluationForm.getInstance().getCourseId(),
                 EvaluationForm.getInstance().getPointOverall(),

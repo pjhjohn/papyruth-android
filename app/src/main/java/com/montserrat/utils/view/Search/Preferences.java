@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.model.CourseData;
-import com.montserrat.app.model.response.SimpleCoursesResponse;
+import com.montserrat.app.model.CoursesData;
+import com.montserrat.app.model.response.CoursesResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +32,16 @@ public class Preferences {
             return null;
         }
         String data = AppManager.getInstance().getString(AppConst.Preference.HISTORY, "");
-        SimpleCoursesResponse simpleCoursesResponse = gson.fromJson(data, SimpleCoursesResponse.class);
+        CoursesData coursesData = gson.fromJson(data, CoursesData.class);
 
         Timber.d("***get History");
-        return simpleCoursesResponse.courses;
+        return coursesData.courses;
     }
 
     public boolean addHistory(CourseData course){
         List<CourseData> courseDataList;
-        SimpleCoursesResponse simpleCoursesResponse = new SimpleCoursesResponse();
-        simpleCoursesResponse.courses = new ArrayList<>();
+        CoursesData coursesData = new CoursesData();
+        coursesData.courses = new ArrayList<>();
 
         if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
             courseDataList = new ArrayList<>();
@@ -60,9 +61,9 @@ public class Preferences {
         }else{
             courseDataList.add(course);
         }
-        simpleCoursesResponse.courses.addAll(courseDataList);
+        coursesData.courses.addAll(courseDataList);
 
-        String json = gson.toJson(simpleCoursesResponse);
+        String json = gson.toJson(coursesData);
         AppManager.getInstance().putString(AppConst.Preference.HISTORY, json);
 
         return true;

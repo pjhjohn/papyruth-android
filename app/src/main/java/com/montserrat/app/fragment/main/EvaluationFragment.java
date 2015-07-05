@@ -79,6 +79,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
         this.setupRecyclerView(evaluationRecyclerView);
         this.materialNavigationDrawable = new MaterialMenuDrawable(this.getActivity(), Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        this.materialNavigationDrawable.setIconState(MaterialMenuDrawable.IconState.X);
         this.evaluationToolbar.setNavigationIcon(materialNavigationDrawable);
         this.setEvaluationToolbar(false);
         this.commentInputWindow.setOnBackListener(this);
@@ -131,7 +132,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 this.progress.setVisibility(View.VISIBLE);
                 return RetrofitApi
                     .getInstance()
-                    .comments(
+                    .get_comments(
                         User.getInstance().getAccessToken(),
                         Evaluation.getInstance().getId(),
                         this.page == null ? 0 : this.page + 1,
@@ -186,7 +187,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .observeOn(Schedulers.io())
             .flatMap(unused -> RetrofitApi
                 .getInstance()
-                .comments(
+                .post_comment(
                     User.getInstance().getAccessToken(),
                     Evaluation.getInstance().getId(),
                     this.commentInputWindow.getCommentInputEditText().getText().toString()

@@ -92,7 +92,7 @@ public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdap
         Integer courseId = this.items.get(position).course_id;
         Integer evaluationId = this.items.get(position).id;
         this.subscriptions.add(
-            RetrofitApi.getInstance().course(
+            RetrofitApi.getInstance().get_course(
                 User.getInstance().getAccessToken(),
                 courseId
             ).map(response -> response.course)
@@ -123,7 +123,7 @@ public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdap
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
             .flatMap(unused -> {
                 this.swipeRefresh.setRefreshing(true);
-                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
+                return RetrofitApi.getInstance().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
             })
             .map(evaluations -> evaluations.evaluations)
             .subscribeOn(Schedulers.io())
@@ -144,7 +144,7 @@ public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdap
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
                 // TODO : handle the case for max_id == 0 : prefer not to request to server
-                return RetrofitApi.getInstance().evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, sinceId == null ? null : sinceId - 1, null, null);
+                return RetrofitApi.getInstance().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, sinceId == null ? null : sinceId - 1, null, null);
             })
             .map(evaluations -> evaluations.evaluations)
             .subscribeOn(Schedulers.io())

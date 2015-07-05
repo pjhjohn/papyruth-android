@@ -20,16 +20,11 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView (R.id.professor) protected TextView professor;
     @InjectView (R.id.point_overall) protected RatingBar overall;
     RecyclerViewItemClickListener itemClickListener;
-    private int head;
     public CourseItemViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
         itemView.setOnClickListener(this);
         itemClickListener = listener;
-        this.head = 1;
-    }
-    public void setHead(int head){
-        this.head = head;
     }
 
     public void bind(CourseData item) {
@@ -40,6 +35,6 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick (View view) {
-        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition() - head);
+        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition() - 1);
     }
 }

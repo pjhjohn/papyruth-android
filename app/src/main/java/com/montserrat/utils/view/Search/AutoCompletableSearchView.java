@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
+import com.montserrat.app.R;
 import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.app.model.Candidate;
@@ -61,7 +62,6 @@ public class AutoCompletableSearchView {
         SEARCH, EVALUATION
     }
 
-
     public AutoCompletableSearchView(RecyclerViewItemClickListener listener, Context context, Type type){
         this.courses = new ArrayList<>();
         this.candidates = new ArrayList<>();
@@ -88,14 +88,10 @@ public class AutoCompletableSearchView {
 
     public void initCourse(RecyclerView courseListView){
         this.courseListView = courseListView;
-        this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener);
-
-        if(type == Type.EVALUATION){
-            this.courseItemsAdapter.setHead(false);
+        if (type == Type.EVALUATION) {
+            this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener, R.layout.cardview_header_height_zero);
             this.evaluationCandidate = new Candidate();
-        }else{
-            this.courseItemsAdapter.setHead(true);
-        }
+        } else this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener);
 
         this.courseListView.setLayoutManager(new LinearLayoutManager(context));
         this.courseListView.setAdapter(this.courseItemsAdapter);

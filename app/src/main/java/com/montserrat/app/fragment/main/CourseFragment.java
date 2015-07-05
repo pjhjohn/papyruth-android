@@ -118,7 +118,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.subscriptions.add(
             RetrofitApi
                 .getInstance()
-                .evaluations(
+                .get_evaluations(
                     User.getInstance().getAccessToken(),
                     User.getInstance().getUniversityId(),
                     null,
