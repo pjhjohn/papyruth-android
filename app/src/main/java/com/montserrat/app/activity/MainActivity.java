@@ -43,6 +43,7 @@ import com.montserrat.utils.view.search.ToolbarSearch;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
@@ -122,6 +123,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onBackPressed() {
         if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
+        else if(this.mAutoCompletableSearch.onBack()) ;
         else if (this.mNavigator.back()) terminate = false;
         else if (terminate) super.onBackPressed();
         else {
@@ -154,10 +156,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.mAutoCompletableSearch.autoComplete(
             (TextView) this.searchView.findViewById(R.id.search_src_text)
         );
-
         ImageView closeBtn = (ImageView) this.searchView.findViewById(R.id.search_close_btn);
         closeBtn.setOnClickListener(view -> {
-            this.mAutoCompletableSearch.showCandidates(false);
+            if(!(((EditText)searchView.findViewById(R.id.search_src_text)).getText().toString().length() > 0)) {
+                this.mAutoCompletableSearch.showCandidates(false);
+            }
             this.searchView.setIconified(true);
         });
         return super.onCreateOptionsMenu(menu);
@@ -220,7 +223,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public boolean back() {
-        this.mAutoCompletableSearch.showCandidates(false);
         Fragment current = this.getFragmentManager().findFragmentById(this.navigatorContainer.getId());
         if(current instanceof EvaluationStep1Fragment){
             ((EvaluationStep1Fragment)current).back();

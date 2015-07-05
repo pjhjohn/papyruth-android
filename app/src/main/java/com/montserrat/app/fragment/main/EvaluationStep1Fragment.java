@@ -60,8 +60,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         this.queryTextView.setOnKeyListener((v, keycode, e) -> {
             if (e.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keycode == KeyEvent.KEYCODE_ENTER) {
-                    this.search.showCandidates(false);
-                    this.onQueryTextSubmit();
+                    this.search.submit();
                     return true;
                 }
             }
@@ -82,9 +81,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
-    public void onQueryTextSubmit() {
-        this.search.submit();
-    }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
@@ -122,6 +118,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         this.search.autoComplete(this.queryTextView);
     }
     public void back(){
-        this.search.showCandidates(false);
+        this.search.onBack();
     }
 }

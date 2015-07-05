@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="#eee"
+            android:alpha="1"
             android:visibility="visible"
             android:focusable="true"
             android:clickable="true" />
@@ -33,7 +34,7 @@
             android:focusable="true"
             android:clickable="true"
             android:background="#eee"
-            android:alpha="0.9"
+            android:alpha="1"
             android:layout_gravity="center_horizontal|top" />
 
         <include layout="@layout/fac"/>
