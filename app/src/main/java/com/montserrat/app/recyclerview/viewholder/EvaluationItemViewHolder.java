@@ -38,6 +38,6 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
 
     @Override
     public void onClick(View view) {
-        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition() - 2);
+        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition());
     }
 }

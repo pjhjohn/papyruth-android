@@ -55,7 +55,7 @@ public class ViewHolderFactory {
         if(inflater == null) throw new Resources.NotFoundException("LayoutInflater Not Found. Must set at some point");
         switch(viewType) {
             case ViewType.HEADER                 : return new               HeaderViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_header                , parent, false));
-            case ViewType.INFORM                 : return new               InformViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_inform                , parent, false));
+            case ViewType.INFORM                 : return new               InformViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_inform                , parent, false), listener);
             case ViewType.COURSE                 : return new               CourseViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course                , parent, false));
             case ViewType.EVALUATION             : return new           EvaluationViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation            , parent, false));
             case ViewType.COURSE_ITEM            : return new           CourseItemViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course_item           , parent, false), listener);

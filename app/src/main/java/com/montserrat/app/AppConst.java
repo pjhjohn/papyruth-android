@@ -20,8 +20,8 @@ public class AppConst {
     public static final int ANIM_DURATION_MEDIUM = 400;
     public static final int ANIM_DURATION_LONG = 600;
 
-    public static final int ANIM_ACCELERATION = 5;
-    public static final int ANIM_DECELERATION = 5;
+    public static final int ANIM_ACCELERATION = 1;
+    public static final int ANIM_DECELERATION = 1;
 
     /* DateTime String Format*/
     public static class DateFormat {

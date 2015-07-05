@@ -73,4 +73,7 @@
     <string name="toolbar_title_new_comment">덧글 쓰기</string>
     <string name="toolbar_title_evaluation">강의평</string>
     <string name="empty"/>
+    <string name="confirm_positive">확인</string>
+    <string name="confirm_optional">다시보지 않기</string>
+    <string name="inform_course">강의 통계와 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
 </resources>

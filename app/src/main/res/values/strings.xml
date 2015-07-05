@@ -73,4 +73,7 @@
     <string name="toolbar_title_new_comment">New Comment</string>
     <string name="toolbar_title_evaluation">Evaluation</string>
     <string name="empty"/>
+    <string name="confirm_positive">AGREE</string>
+    <string name="confirm_optional">DON\'T SHOW AGAIN</string>
+    <string name="inform_course"/>
 </resources>

@@ -16,16 +16,13 @@ public class DateTimeUtil {
         return DateTimeUtil.convert(in, AppConst.DateFormat.API, AppConst.DateFormat.SIMPLE);
     }
     public static String convert(String in, String in_format, String out_format) {
-        Timber.d(in + "\n" + in_format + "\n" + out_format);
         SimpleDateFormat dateFormat = new SimpleDateFormat(in_format);
         Date date = null;
         try {
             date = dateFormat.parse(in);
-            Timber.d("%s", date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Timber.d("%s", date);
         dateFormat.applyPattern(out_format);
         return dateFormat.format(date);
     }

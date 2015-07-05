@@ -102,7 +102,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         if(animators != null && animators.isRunning()) return;
         Evaluation.getInstance().update(this.items.get(position));
         ((LinearLayoutManager)this.courseRecyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
-
         this.openEvaluation(view);
     }
 
@@ -194,7 +193,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
-        animHeight.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_DECELERATION));
+        animHeight.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_DECELERATION));
 
         ValueAnimator animTop = ValueAnimator.ofInt(this.itemTop, 0);
         animTop.addUpdateListener(animator -> {
@@ -203,10 +202,10 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             final int toolbarTop = itemTop - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize);
             this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
         });
-        animTop.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_DECELERATION));
+        animTop.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_DECELERATION));
 
         animators = new AnimatorSet();
-        animators.setDuration(AppConst.ANIM_DURATION_LONG);
+        animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
         animators.playTogether(animHeight, animTop);
         animators.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -244,7 +243,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
-        animHeight.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_ACCELERATION));
+        animHeight.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_ACCELERATION));
 
         ValueAnimator animTop = ValueAnimator.ofInt(0, this.itemTop);
         animTop.addUpdateListener(animator -> {
@@ -253,10 +252,10 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             final int toolbarTop = itemTop - MetricUtil.getPixels(toolbar.getContext(), R.attr.actionBarSize);
             this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
         });
-        animTop.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_ACCELERATION));
+        animTop.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_ACCELERATION));
 
         animators = new AnimatorSet();
-        animators.setDuration(AppConst.ANIM_DURATION_LONG);
+        animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
         animators.playTogether(animHeight, animTop);
         animators.addListener(new AnimatorListenerAdapter() {
             @Override
