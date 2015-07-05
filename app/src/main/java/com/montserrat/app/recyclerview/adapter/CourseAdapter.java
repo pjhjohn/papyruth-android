@@ -20,57 +20,49 @@ import java.util.List;
 public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RecyclerViewItemClickListener evaluationItemClickListener; // TODO : use if implemented.
     private List<EvaluationData> evaluations;
-    private boolean isInformEnabled;
+    private boolean userLearnedInform;
     public CourseAdapter(List<EvaluationData> initialEvaluations, RecyclerViewItemClickListener listener) {
         this.evaluations = initialEvaluations;
         this.evaluationItemClickListener = listener;
-        isInformEnabled = true;
+        userLearnedInform = false;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-            if(isInformEnabled) {
-                if (position == 1) {
-                    this.notifyItemRemoved(position);
-                    this.isInformEnabled = false;
-                } else evaluationItemClickListener.onRecyclerViewItemClick(view, position - 3);
-            } else evaluationItemClickListener.onRecyclerViewItemClick(view, position - 2);
+            if(!userLearnedInform && position == 1) {
+                this.notifyItemRemoved(position);
+                this.userLearnedInform = true;
+            } else evaluationItemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
         });
     }
 
     /**
      * @param holder
-     * @param position 0 for header, 1 for course, 2+ for evaluations
+     * @param position HEADER / INFORM(if not learned) / COURSE / EVALUATIONs
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        if(isInformEnabled) {
-            if(position == 1) ((InformViewHolder) holder).bind(R.string.inform_course);
-            else if(position == 2) ((CourseViewHolder) holder).bind(Course.getInstance());
-            else ((EvaluationItemViewHolder) holder).bind(this.evaluations.get(position - 3));
-        } else {
-            if (position == 1) ((CourseViewHolder) holder).bind(Course.getInstance());
-            else ((EvaluationItemViewHolder) holder).bind(this.evaluations.get(position - 2));
-        }
+        if (position == (userLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_course);
+        else if (position == 1 + (userLearnedInform ? 0 : 1)) ((CourseViewHolder) holder).bind(Course.getInstance());
+        else ((EvaluationItemViewHolder) holder).bind(this.evaluations.get(position - getItemOffset()));
     }
 
     @Override
     public int getItemCount() {
-        return 2 + (isInformEnabled? 1 : 0) + (this.evaluations == null ? 0 : this.evaluations.size());
+        return getItemOffset() + (this.evaluations == null ? 0 : this.evaluations.size());
+    }
+
+    public int getItemOffset() {
+        return 2 + (userLearnedInform ? 0 : 1);
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
-        if(isInformEnabled) {
-            if (position == 1) return ViewHolderFactory.ViewType.INFORM;
-            else if (position == 2) return ViewHolderFactory.ViewType.COURSE;
-            else return ViewHolderFactory.ViewType.EVALUATION_ITEM;
-        } else {
-            if (position == 1) return ViewHolderFactory.ViewType.COURSE;
-            else return ViewHolderFactory.ViewType.EVALUATION_ITEM;
-        }
+        if (position == (userLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
+        else if (position == 1 + (userLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.COURSE;
+        else return ViewHolderFactory.ViewType.EVALUATION_ITEM;
     }
 }

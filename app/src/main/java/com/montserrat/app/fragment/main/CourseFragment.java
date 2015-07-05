@@ -95,13 +95,15 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         return new LinearLayoutManager(this.getActivity());
     }
 
+    /**
+     * Position is synchronized to that of EvaluationList in adapter.
+     */
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         Timber.d("clicked %s @ %d", view, position);
         if(isEvaluationDetailOpened) return;
         if(animators != null && animators.isRunning()) return;
         Evaluation.getInstance().update(this.items.get(position));
-        ((LinearLayoutManager)this.courseRecyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
         this.openEvaluation(view);
     }
 
@@ -130,10 +132,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             .subscribe(evaluations -> {
                 this.items.clear();
                 this.items.addAll(evaluations);
-                this.adapter.notifyItemRangeChanged(2, this.adapter.getItemCount() - 2);
-                if (this.navigator.getBackStackNameAt(1).equals(HomeFragment.class.getSimpleName())) {
-                    this.selectEvaluation();
-                }
+                final int offset = this.adapter.getItemOffset();
+                this.adapter.notifyItemRangeChanged(offset, this.adapter.getItemCount() - offset);
             }, error -> Timber.d("get Evaluation Error %s", error)
             )
         );
@@ -144,27 +144,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
         this.navigator.navigate(EvaluationStep2Fragment.class, true);
-    }
-
-    private void selectEvaluation(){
-        Bundle bundle = this.getArguments();
-        Integer evaluationId = bundle.getInt("evaluationid");
-        for(int i = 0; i < items.size(); i++){
-            if(this.items.get(i).id.equals(evaluationId)){
-                final int position = i;
-                this.subscriptions.add(
-                    Observable
-                        .timer(1000, TimeUnit.MILLISECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(un ->
-                                onRecyclerViewItemClick(this.courseRecyclerView.getChildAt(position+2), position),
-                            error -> Timber.d("evaluation open error : %s", error)
-                        )
-                );
-                break;
-            }
-        }
     }
 
     @Override
@@ -188,12 +167,12 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.itemTop = (int) view.getY();
 
         ViewGroup.LayoutParams lpEvaluationContainer = evaluationContainer.getLayoutParams();
+
         ValueAnimator animHeight = ValueAnimator.ofInt(view.getHeight(), screenHeight);
         animHeight.addUpdateListener(animator -> {
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
-        animHeight.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_DECELERATION));
 
         ValueAnimator animTop = ValueAnimator.ofInt(this.itemTop, 0);
         animTop.addUpdateListener(animator -> {
@@ -202,11 +181,17 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             final int toolbarTop = itemTop - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize);
             this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
         });
-        animTop.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_DECELERATION));
+
+        ValueAnimator animAlpha = ValueAnimator.ofFloat(0f, 1f);
+        animAlpha.addUpdateListener(animator -> {
+            final float alpha = (float) animator.getAnimatedValue();
+            this.evaluationContainer.setAlpha(alpha);
+        });
 
         animators = new AnimatorSet();
         animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
-        animators.playTogether(animHeight, animTop);
+        animators.playTogether(animHeight, animTop, animAlpha);
+        animators.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_DECELERATION));
         animators.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -238,12 +223,12 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     private void closeEvaluation() {
         ViewGroup.LayoutParams lpEvaluationContainer = this.evaluationContainer.getLayoutParams();
+
         ValueAnimator animHeight = ValueAnimator.ofInt(this.screenHeight, this.itemHeight);
         animHeight.addUpdateListener(animator -> {
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.evaluationContainer.setLayoutParams(lpEvaluationContainer);
         });
-        animHeight.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_ACCELERATION));
 
         ValueAnimator animTop = ValueAnimator.ofInt(0, this.itemTop);
         animTop.addUpdateListener(animator -> {
@@ -252,11 +237,17 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             final int toolbarTop = itemTop - MetricUtil.getPixels(toolbar.getContext(), R.attr.actionBarSize);
             this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
         });
-        animTop.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_ACCELERATION));
+
+        ValueAnimator animAlpha = ValueAnimator.ofFloat(1f, 0f);
+        animAlpha.addUpdateListener(animator -> {
+            final float alpha = (float) animator.getAnimatedValue();
+            this.evaluationContainer.setAlpha(alpha);
+        });
 
         animators = new AnimatorSet();
         animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
-        animators.playTogether(animHeight, animTop);
+        animators.playTogether(animHeight, animTop, animAlpha);
+        animators.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_ACCELERATION));
         animators.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

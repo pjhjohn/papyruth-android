@@ -85,29 +85,6 @@ public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdap
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         // TODO : implement it!
-        this.getCourse(position);
-    }
-
-    public void getCourse(int position){
-        Integer courseId = this.items.get(position).course_id;
-        Integer evaluationId = this.items.get(position).id;
-        this.subscriptions.add(
-            RetrofitApi.getInstance().get_course(
-                User.getInstance().getAccessToken(),
-                courseId
-            ).map(response -> response.course)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                course -> {
-                    Course.getInstance().clear().update(course);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("evaluationid", evaluationId);
-
-                    this.navigator.navigate(CourseFragment.class, bundle,true);
-                }, error-> Timber.d("error getCourse : %s", error)
-            )
-        );
     }
 
     @Override
