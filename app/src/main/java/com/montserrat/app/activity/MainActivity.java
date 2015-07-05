@@ -38,6 +38,7 @@ import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
+import com.montserrat.utils.view.search.CustomSearchView;
 import com.montserrat.utils.view.search.ToolbarSearch;
 
 import butterknife.ButterKnife;
@@ -102,7 +103,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     private MenuItem searchitem;
-    private SearchView searchView;
+    private CustomSearchView searchView;
 
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
@@ -122,6 +123,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
+        Timber.d("Back!! Pressed!!");
         if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
         else if(this.mAutoCompletableSearch.onBack()) ;
         else if (this.mNavigator.back()) terminate = false;
@@ -135,8 +137,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     /* Menu */
     private boolean onInitializeMenuOnToolbar(Menu menu) {
         this.searchitem = menu.findItem(R.id.menu_search);
-        this.searchView = (SearchView) searchitem.getActionView();
+        this.searchView = (CustomSearchView) searchitem.getActionView();
         this.searchitem.expandActionView();
+        this.searchView.setOnBackListener(()->{
+            this.mAutoCompletableSearch.onBack();
+            return true;
+        });
         if(searchView != null){
             searchView.setQueryHint("Input Search Query");
 

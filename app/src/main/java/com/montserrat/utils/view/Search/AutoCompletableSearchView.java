@@ -21,6 +21,7 @@ import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
+import com.montserrat.utils.view.viewpager.OnBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,8 +121,6 @@ public class AutoCompletableSearchView {
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
             if(hasFocus)
                 this.showCandidates(true);
-            else
-                this.onBack();
         });
         this.subscription.add(
             WidgetObservable
@@ -301,6 +300,8 @@ public class AutoCompletableSearchView {
                 param.height = this.context.getResources().getDisplayMetrics().heightPixels - this.editText.getHeight();
                 courseListView.setLayoutParams(param);
             }
+            if(this.editText.getText().toString().length() == 0)
+                this.candidates.clear();
 
             param =  autocompleteView.getLayoutParams();
 
@@ -339,6 +340,7 @@ public class AutoCompletableSearchView {
             this.showCandidates(false);
             return true;
         }
+
         return false;
     }
 }

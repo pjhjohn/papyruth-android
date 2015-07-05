@@ -30,7 +30,6 @@
             android:id="@+id/query_result_outside"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#aaaaff"
             android:visibility="visible"
             android:focusable="true"
             android:clickable="true" />
