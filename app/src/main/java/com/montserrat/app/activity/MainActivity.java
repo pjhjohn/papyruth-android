@@ -1,7 +1,6 @@
 package com.montserrat.app.activity;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Color;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +25,6 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
-import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
@@ -169,6 +166,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             }
             this.searchView.setIconified(true);
         });
+
+        this.searchView.setTextStrokeColor(0xffffffff);
+
         return super.onCreateOptionsMenu(menu);
     }
 

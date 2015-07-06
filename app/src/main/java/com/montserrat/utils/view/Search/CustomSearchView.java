@@ -1,6 +1,9 @@
 package com.montserrat.utils.view.search;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -26,11 +29,24 @@ public class CustomSearchView extends SearchView {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setTextBorderColor(){
+    public void setTextStrokeColor(int color){
         EditText editText = (EditText)this.findViewById(R.id.search_src_text);
-//        getResources().getDrawable(R.drawable.backgroud_edittext, Resources.Theme);
-        editText.setBackgroundResource(R.drawable.backgroud_edittext);
+        ShapeDrawable sd = new ShapeDrawable();
+        sd.getPaint().setStyle(Paint.Style.STROKE);
+        sd.getPaint().setColor(color);
+        sd.getPaint().setStrokeWidth(3);
+
+        editText.setBackgroundDrawable(sd);
     }
+
+    public void setTextFillColor(int color){
+        EditText editText = (EditText)this.findViewById(R.id.search_src_text);
+        ShapeDrawable sd = new ShapeDrawable();
+        sd.getPaint().setStyle(Paint.Style.FILL);
+        sd.getPaint().setColor(color);
+        editText.setBackgroundDrawable(sd);
+    }
+
 
     public void setOnBackListener(OnBack onBack){
         this.onBackListener = onBack;
