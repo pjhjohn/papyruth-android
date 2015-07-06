@@ -18,11 +18,15 @@ import butterknife.InjectView;
 public class InformViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.inform_body) protected TextView body;
     @InjectView(R.id.inform_btn_positive) protected ButtonFlat positiveButton;
+    @InjectView(R.id.inform_btn_optional) protected ButtonFlat optionalButton;
     public InformViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
         positiveButton.setOnClickListener(view -> {
-            if (listener != null) listener.onRecyclerViewItemClick(itemView, this.getAdapterPosition());
+            if (listener != null) listener.onRecyclerViewItemClick(view, this.getAdapterPosition());
+        });
+        optionalButton.setOnClickListener(view -> {
+            if (listener != null) listener.onRecyclerViewItemClick(view, this.getAdapterPosition());
         });
     }
 
