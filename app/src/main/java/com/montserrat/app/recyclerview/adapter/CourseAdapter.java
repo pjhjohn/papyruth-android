@@ -3,6 +3,7 @@ package com.montserrat.app.recyclerview.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
@@ -14,25 +15,35 @@ import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by SSS on 2015-04-25.
  */
 public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private RecyclerViewItemClickListener evaluationItemClickListener; // TODO : use if implemented.
+    private static final String USER_LEARNED_INFORM = "CourseAdapter.userLearnedInform"; // Inform is UNIQUE per Adapter.
+    private RecyclerViewItemClickListener evaluationItemClickListener;
     private List<EvaluationData> evaluations;
     private boolean userLearnedInform;
     public CourseAdapter(List<EvaluationData> initialEvaluations, RecyclerViewItemClickListener listener) {
         this.evaluations = initialEvaluations;
         this.evaluationItemClickListener = listener;
-        userLearnedInform = false;
+        userLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
             if(!userLearnedInform && position == 1) {
-                this.notifyItemRemoved(position);
-                this.userLearnedInform = true;
+                switch(view.getId()) {
+                    case R.id.inform_btn_optional :
+                        AppManager.getInstance().putBoolean(USER_LEARNED_INFORM, true);
+                    case R.id.inform_btn_positive :
+                        this.notifyItemRemoved(position);
+                        this.userLearnedInform = true;
+                        break;
+                    default : Timber.d("Unexpected view id %d", view.getId());
+                }
             } else evaluationItemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
         });
     }
