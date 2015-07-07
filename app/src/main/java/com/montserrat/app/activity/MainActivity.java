@@ -5,9 +5,11 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +39,8 @@ import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 import com.montserrat.utils.view.search.CustomSearchView;
 import com.montserrat.utils.view.search.ToolbarSearch;
+
+import java.lang.reflect.Field;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -168,9 +172,26 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         });
 
         this.searchView.setTextStrokeColor(0xffffffff);
+        this.removeCrossBtn();
 
         return super.onCreateOptionsMenu(menu);
     }
+
+
+    public void removeCrossBtn(){
+        try {
+            Field field = SearchView.class.getDeclaredField("mCloseButton");
+            field.setAccessible(true);
+            ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.searchitem));
+//            img.setEnabled(false);
+            img.setImageDrawable(getResources().getDrawable(R.drawable.ic_dark_next));
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /* Click Callbacks for Navigation Drawer */
     @Override
