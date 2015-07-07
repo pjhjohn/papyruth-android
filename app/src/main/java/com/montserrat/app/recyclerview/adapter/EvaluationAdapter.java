@@ -25,7 +25,9 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolderFactory.getInstance().create(parent, viewType, commentItemClickListener);
+        return ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
+            commentItemClickListener.onRecyclerViewItemClick(view, position - 2);
+        });
     }
 
     @Override

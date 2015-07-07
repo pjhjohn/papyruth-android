@@ -75,5 +75,5 @@
     <string name="empty"/>
     <string name="confirm_positive">AGREE</string>
     <string name="confirm_optional">DON\'T SHOW AGAIN</string>
-    <string name="inform_course"/>
+    <string name="inform_course">Overall statistics for course and list of evaluations are provided.\n\nYou can open evaluation detail window by clicking the item.</string>
 </resources>

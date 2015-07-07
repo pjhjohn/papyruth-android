@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,11 +61,11 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder {
         final int positiveColor = Color.rgb(50, 250, 200), negativeColor = Color.rgb(250, 50, 50);
         Picasso.with(this.itemView.getContext()).load(R.drawable.avatar_dummy).transform(new CircleWithBorderTransformation(positiveColor, R.drawable.ic_light_add)).into(this.upIcon);
         this.upCount.setTextColor(positiveColor);
-        this.upCount.setText("7");//TODO : evaluation.getUpVoteCount()
+        this.upCount.setText(String.valueOf(evaluation.getUpVoteCount() == null ? 0 : evaluation.getUpVoteCount()));
         Picasso.with(this.itemView.getContext()).load(R.drawable.avatar_dummy).transform(new CircleWithBorderTransformation(negativeColor, R.drawable.ic_light_clear)).into(this.downIcon);
         this.downCount.setTextColor(negativeColor);
-        this.downCount.setText("7");//TODO : evaluation.getUpVoteCount()
+        this.downCount.setText(String.valueOf(evaluation.getDownVoteCount() == null ? 0 : evaluation.getDownVoteCount()));
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(Color.BLACK)).into(this.commentIcon);
-        this.commentCount.setText("" + (evaluation.getComments() == null ? 0 : evaluation.getComments().size()));
+        this.commentCount.setText(String.valueOf(evaluation.getCommentCount() == null ? 0 : evaluation.getCommentCount()));
     }
 }

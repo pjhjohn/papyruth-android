@@ -22,7 +22,9 @@ public class Evaluation {
     private String updated_at;
     private String professor_name;
     private String lecture_name;
-    private List<CommentData> comments;
+    private Integer up_vote_count;
+    private Integer down_vote_count;
+    private Integer comment_count;
 
     private static Evaluation instance = null;
     public synchronized static Evaluation getInstance(){
@@ -56,8 +58,12 @@ public class Evaluation {
     public void setLectureName(String lecture_name) { this.lecture_name = lecture_name; }
     public String getUserNickname() { return user_nickname; }
     public void setUserNickname(String user_nickname) { this.user_nickname = user_nickname; }
-    public List<CommentData> getComments() { return comments; }
-    public void setComments(List<CommentData> comments) { this.comments = comments; }
+    public Integer getUpVoteCount() { return up_vote_count; }
+    public void setUpVoteCount(Integer up_vote_count) { this.up_vote_count = up_vote_count; }
+    public Integer getDownVoteCount() { return down_vote_count; }
+    public void setDownVoteCount(Integer down_vote_count) { this.down_vote_count = down_vote_count; }
+    public Integer getCommentCount() { return comment_count; }
+    public void setCommentCount(Integer comment_count) { this.comment_count = comment_count; }
 
     public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;
@@ -73,7 +79,9 @@ public class Evaluation {
         if(evaluation.professor_name != null)           this.professor_name = evaluation.professor_name;
         if(evaluation.lecture_name != null)             this.lecture_name = evaluation.lecture_name;
         if(evaluation.user_nickname != null)            this.user_nickname = evaluation.user_nickname;
-        if(evaluation.comments != null)                 this.comments = evaluation.comments;
+        if(evaluation.up_vote_count != null)            this.up_vote_count = evaluation.up_vote_count;
+        if(evaluation.down_vote_count != null)          this.down_vote_count = evaluation.down_vote_count;
+        if(evaluation.comment_count != null)            this.comment_count = evaluation.comment_count;
     }
 
     public void clear(){
@@ -90,5 +98,8 @@ public class Evaluation {
         this.updated_at = null;
         this.professor_name = null;
         this.lecture_name = null;
+        this.up_vote_count = null;
+        this.down_vote_count = null;
+        this.comment_count = null;
     }
 }
