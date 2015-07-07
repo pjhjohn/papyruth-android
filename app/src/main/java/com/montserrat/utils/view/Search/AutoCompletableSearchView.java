@@ -59,10 +59,11 @@ public class AutoCompletableSearchView {
     private boolean setOpen;
     private boolean isAutocompleteViewOpen;
 
+    private SearchViewListener searchViewListener;
 
     public enum Type{
         SEARCH, EVALUATION
-    }
+}
 
     public AutoCompletableSearchView(RecyclerViewItemClickListener listener, Context context, Type type){
         this.courses = new ArrayList<>();
@@ -78,6 +79,13 @@ public class AutoCompletableSearchView {
         this.editText = null;
         this.setOpen = false;
         this.isAutocompleteViewOpen = false;
+    }
+
+    public interface SearchViewListener{
+        public void onTextChange(String query);
+    }
+    public void setSearchViewListener(SearchViewListener listener){
+        this.searchViewListener = listener;
     }
 
     public void initAutoComplete(RecyclerView autocompleteView, View outsideView){
@@ -133,9 +141,14 @@ public class AutoCompletableSearchView {
         this.subscription.add(
             WidgetObservable
                 .text(this.editText)
+                .map(listener -> {
+                    if (searchViewListener != null) {
+                        searchViewListener.onTextChange(listener.text().toString());
+                    }
+                    return listener.text().toString();
+                })
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .map(listener -> listener.text().toString())
                 .flatMap(query -> {
                     if (type != Type.EVALUATION && query.isEmpty()) return null; // history
                     return RetrofitApi.getInstance().search_autocomplete(
@@ -155,6 +168,7 @@ public class AutoCompletableSearchView {
                     error -> {
 //                        this.showCandidates(false);
                         this.showCandidates(setOpen);
+                        Timber.d("get Candidates error : %s", error);
                         if (error instanceof RetrofitError) {
                             switch (((RetrofitError) error).getResponse().getStatus()) {
                                 default:
@@ -305,7 +319,13 @@ public class AutoCompletableSearchView {
 
             param =  autocompleteView.getLayoutParams();
 
-            param.height = (int)(240 * this.context.getResources().getDisplayMetrics().density);
+            if(this.candidates.size() < 5){
+                param.height = (int)(48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
+            }else{
+                param.height = (int)(240 * this.context.getResources().getDisplayMetrics().density);
+            }
+
+
 //            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
             autocompleteView.setLayoutParams(param);
 

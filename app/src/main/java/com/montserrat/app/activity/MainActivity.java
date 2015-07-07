@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
@@ -47,7 +49,7 @@ import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
 
@@ -87,6 +89,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
         ToolbarSearch.getInstance().setActivityComponent(this);
         mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
+        mAutoCompletableSearch.setSearchViewListener(this);
 
         this.onInitializeMenuOnToolbar(mToolbar.getMenu());
     }
@@ -105,6 +108,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private MenuItem searchitem;
     private CustomSearchView searchView;
+    private EditText editText;
 
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
@@ -144,47 +148,58 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             this.mAutoCompletableSearch.onBack();
             return true;
         });
-        if(searchView != null){
+        if(searchView != null) {
+            this.editText = (EditText) searchView.findViewById(R.id.search_src_text);
             searchView.setQueryHint("Input Search Query");
 
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            if(searchManager != null) searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            if (searchManager != null)
+                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(true);
-            ((EditText)searchView.findViewById(R.id.search_src_text)).setOnEditorActionListener(
+            this.editText.setOnEditorActionListener(
                 (v, actionId, event) -> {
-                    if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                         onQueryTextSubmit(searchView.getQuery().toString());
                         return true;
                     }
                     return false;
                 }
             );
+            this.mAutoCompletableSearch.autoComplete(
+                this.editText
+            );
+            ImageView closeBtn = (ImageView) this.searchView.findViewById(R.id.search_close_btn);
+            closeBtn.setOnClickListener(view -> {
+//                if (!(this.editText.getText().toString().length() > 0)) {
+                if (!TextUtils.isEmpty(this.editText.getText())) {
+                    this.mAutoCompletableSearch.showCandidates(false);
+                    this.searchView.setIconified(true);
+                } else {
+                    this.editText.setText(" ");
+//                    this.mAutoCompletableSearch.showCandidates(false);
+                    this.searchView.setIconified(true);
+                    this.editText.setText("");
+//                    this.navigate(DummyFragment.class, true);
+                }
+            });
+
+//            this.searchView.setTextStrokeColor(0xffffffff);
+            this.removeCrossBtn(true);
+
         }
-        this.mAutoCompletableSearch.autoComplete(
-            (TextView) this.searchView.findViewById(R.id.search_src_text)
-        );
-        ImageView closeBtn = (ImageView) this.searchView.findViewById(R.id.search_close_btn);
-        closeBtn.setOnClickListener(view -> {
-            if(!(((EditText)searchView.findViewById(R.id.search_src_text)).getText().toString().length() > 0)) {
-                this.mAutoCompletableSearch.showCandidates(false);
-            }
-            this.searchView.setIconified(true);
-        });
-
-        this.searchView.setTextStrokeColor(0xffffffff);
-        this.removeCrossBtn();
-
         return super.onCreateOptionsMenu(menu);
     }
 
 
-    public void removeCrossBtn(){
+    public void removeCrossBtn(boolean remove){
         try {
             Field field = SearchView.class.getDeclaredField("mCloseButton");
             field.setAccessible(true);
             ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.searchitem));
-//            img.setEnabled(false);
-            img.setImageDrawable(getResources().getDrawable(R.drawable.ic_dark_next));
+            if(remove)
+                img.setImageDrawable(getResources().getDrawable(R.drawable.background_transparent));
+            else
+                img.setImageDrawable(getResources().getDrawable(R.drawable.ic_dark_clear));
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -255,5 +270,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             ((EvaluationStep1Fragment)current).back();
         }
         return this.mNavigator.back();
+    }
+
+    @Override
+    public void onTextChange(String query) {
+        if (TextUtils.isEmpty(query)){
+            removeCrossBtn(true);
+        }else
+            removeCrossBtn(false);
     }
 }
