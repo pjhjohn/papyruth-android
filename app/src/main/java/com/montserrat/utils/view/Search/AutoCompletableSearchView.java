@@ -84,6 +84,7 @@ public class AutoCompletableSearchView {
 
     public interface SearchViewListener{
         public void onTextChange(String query);
+        public void onShowChange(boolean show);
     }
     public void setSearchViewListener(SearchViewListener listener){
         this.searchViewListener = listener;
@@ -340,6 +341,8 @@ public class AutoCompletableSearchView {
             param.width = this.context.getResources().getDisplayMetrics().widthPixels;
             this.outsideView.setLayoutParams(param);
             this.isAutocompleteViewOpen = true;
+
+            this.searchViewListener.onShowChange(true);
         } else {
             param =  this.autocompleteView.getLayoutParams();
             param.height = 0;
@@ -355,6 +358,8 @@ public class AutoCompletableSearchView {
             this.editText.clearFocus();
             ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.editText.getWindowToken(), 2);
             this.isAutocompleteViewOpen = false;
+
+            this.searchViewListener.onShowChange(false);
 
             this.setOpen = false;
         }

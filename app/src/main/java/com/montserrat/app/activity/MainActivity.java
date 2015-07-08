@@ -170,14 +170,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             closeBtn.setOnClickListener(view -> {
 //                if (!(this.editText.getText().toString().length() > 0)) {
                 if (!TextUtils.isEmpty(this.editText.getText())) {
-                    this.mAutoCompletableSearch.showCandidates(false);
-                    this.searchView.setIconified(true);
+                    this.editText.setText("");
+                    this.mAutoCompletableSearch.showCandidates(true);
                 } else {
                     this.editText.setText(" ");
-//                    this.mAutoCompletableSearch.showCandidates(false);
                     this.searchView.setIconified(true);
                     this.editText.setText("");
-//                    this.navigate(DummyFragment.class, true);
                 }
             });
 
@@ -276,7 +274,20 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public void onTextChange(String query) {
         if (TextUtils.isEmpty(query)){
             showCrossBtn(true);
-        }else
+        }else {
             showCrossBtn(false);
+        }
+
+    }
+
+    @Override
+    public void onShowChange(boolean show) {
+        if(show) {
+            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+        }else{
+            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+            this.editText.setText("");
+//            this.searchView.setIconified(true);
+        }
     }
 }
