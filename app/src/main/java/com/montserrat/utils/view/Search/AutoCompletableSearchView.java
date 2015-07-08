@@ -1,6 +1,7 @@
 package com.montserrat.utils.view.search;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -112,6 +113,7 @@ public class AutoCompletableSearchView {
         this.candidates.clear();
         this.candidates.addAll(candidates);
         this.autoCompleteAdapter.notifyDataSetChanged();
+        this.showCandidates(true);
     }
 
     public void notifyChangedCourse(List<CourseData> courses){
@@ -151,6 +153,7 @@ public class AutoCompletableSearchView {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(query -> {
                     if (type != Type.EVALUATION && query.isEmpty()) return null; // history
+                    Timber.d("query : %s", query);
                     return RetrofitApi.getInstance().search_autocomplete(
                         User.getInstance().getAccessToken(),
                         User.getInstance().getUniversityId(),
@@ -327,24 +330,27 @@ public class AutoCompletableSearchView {
 
 
 //            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
-            autocompleteView.setLayoutParams(param);
+            this.autocompleteView.setLayoutParams(param);
 
-            param =  outsideView.getLayoutParams();
+            this.outsideView.setAlpha((float) 0.7);
+            this.outsideView.setBackgroundColor(Color.GRAY);
+
+            param =  this.outsideView.getLayoutParams();
             param.height = this.context.getResources().getDisplayMetrics().heightPixels;
             param.width = this.context.getResources().getDisplayMetrics().widthPixels;
-            outsideView.setLayoutParams(param);
+            this.outsideView.setLayoutParams(param);
             this.isAutocompleteViewOpen = true;
         } else {
-            param =  autocompleteView.getLayoutParams();
+            param =  this.autocompleteView.getLayoutParams();
             param.height = 0;
 //            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
-            autocompleteView.setLayoutParams(param);
+            this.autocompleteView.setLayoutParams(param);
 
             param =  outsideView.getLayoutParams();
             param.height = 0;
             param.width = this.context.getResources().getDisplayMetrics().widthPixels;
 
-            outsideView.setLayoutParams(param);
+            this.outsideView.setLayoutParams(param);
 
             this.editText.clearFocus();
             ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.editText.getWindowToken(), 2);

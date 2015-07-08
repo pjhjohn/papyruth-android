@@ -19,14 +19,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
@@ -184,22 +182,24 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             });
 
 //            this.searchView.setTextStrokeColor(0xffffffff);
-            this.removeCrossBtn(true);
+            this.showCrossBtn(true);
 
         }
         return super.onCreateOptionsMenu(menu);
     }
 
 
-    public void removeCrossBtn(boolean remove){
+    public void showCrossBtn(boolean remove){
         try {
             Field field = SearchView.class.getDeclaredField("mCloseButton");
             field.setAccessible(true);
             ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.searchitem));
-            if(remove)
+            if(remove) {
                 img.setImageDrawable(getResources().getDrawable(R.drawable.background_transparent));
-            else
+//                this.mAutoCompletableSearch.showCandidates(true);
+            }else {
                 img.setImageDrawable(getResources().getDrawable(R.drawable.ic_dark_clear));
+            }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -275,8 +275,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onTextChange(String query) {
         if (TextUtils.isEmpty(query)){
-            removeCrossBtn(true);
+            showCrossBtn(true);
         }else
-            removeCrossBtn(false);
+            showCrossBtn(false);
     }
 }
