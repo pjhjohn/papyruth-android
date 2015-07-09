@@ -126,7 +126,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
-        Timber.d("Back!! Pressed!!");
         if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
         else if(this.mAutoCompletableSearch.onBack()) ;
         else if (this.mNavigator.back()) terminate = false;
@@ -279,15 +278,23 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
 
     }
-
+    private View.OnClickListener tempListener;
     @Override
     public void onShowChange(boolean show) {
         if(show) {
             this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+            mToolbar.setNavigationOnClickListener(view -> {
+                mAutoCompletableSearch.showCandidates(false);
+                this.editText.setText("");
+                this.searchView.setIconified(true);
+            });
         }else{
             this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
             this.editText.setText("");
-//            this.searchView.setIconified(true);
+            mToolbar.setNavigationOnClickListener(
+                mNavigationDrawer::onClick
+            );
+
         }
     }
 }

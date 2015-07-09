@@ -143,17 +143,22 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) mDrawerLayout.openDrawer(mFragmentContainerView);
         else mDrawerLayout.closeDrawer(mFragmentContainerView);
 
-        toolbar.setNavigationOnClickListener(view -> {
-            if(mNavigationPriorClickListener == null) {
-                if (isDrawerOpened) this.close();
-                else this.open();
-            } else if(!isDrawerOpened) mNavigationPriorClickListener.onClick(view);
-        });
+        toolbar.setNavigationOnClickListener(
+            this::onClick
+        );
 
         /* setup Subtitle */
         mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText);
         User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText);
+    }
+
+    public void onClick(View view){
+        if(mNavigationPriorClickListener == null) {
+            if (isDrawerOpened) this.close();
+            else this.open();
+        } else if(!isDrawerOpened) mNavigationPriorClickListener.onClick(view);
+
     }
 
     public void setOnNavigationIconClickListener(View.OnClickListener listener) {
