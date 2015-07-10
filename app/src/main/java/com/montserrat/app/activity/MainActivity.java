@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
         ToolbarSearch.getInstance().setActivityComponent(this);
         mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
-        mAutoCompletableSearch.setSearchViewListener(this);
+        ToolbarSearch.getInstance().setSearchViewListener(this);
 
         this.onInitializeMenuOnToolbar(mToolbar.getMenu());
     }
@@ -127,7 +127,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onBackPressed() {
         if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
-        else if(this.mAutoCompletableSearch.onBack()) ;
+//        else if(this.mAutoCompletableSearch.onBack()) ;
+        else if(ToolbarSearch.getInstance().onBack()) ;
         else if (this.mNavigator.back()) terminate = false;
         else if (terminate) super.onBackPressed();
         else {
@@ -142,7 +143,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.searchView = (CustomSearchView) searchitem.getActionView();
         this.searchitem.expandActionView();
         this.searchView.setOnBackListener(()->{
-            this.mAutoCompletableSearch.onBack();
+//            this.mAutoCompletableSearch.onBack();
+            ToolbarSearch.getInstance().onBack();
             return true;
         });
         if(searchView != null) {
@@ -276,9 +278,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }else {
             showCrossBtn(false);
         }
-
     }
-    private View.OnClickListener tempListener;
     @Override
     public void onShowChange(boolean show) {
         if(show) {
@@ -288,9 +288,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 this.editText.setText("");
                 this.searchView.setIconified(true);
             });
+//            ToolbarSearch.getInstance().toolbarIconClick(true);
         }else{
             this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
             this.editText.setText("");
+            this.searchView.setIconified(true);
             mToolbar.setNavigationOnClickListener(
                 mNavigationDrawer::onClick
             );

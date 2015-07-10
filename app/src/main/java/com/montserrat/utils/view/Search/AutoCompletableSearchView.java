@@ -311,6 +311,7 @@ public class AutoCompletableSearchView {
     }
 
     public void showCandidates(boolean show){
+        Timber.d("showCandidates %s", show);
         ViewGroup.LayoutParams param;
         if(show){
             if(type == Type.EVALUATION) {
@@ -328,7 +329,6 @@ public class AutoCompletableSearchView {
             }else{
                 param.height = (int)(240 * this.context.getResources().getDisplayMetrics().density);
             }
-
 
 //            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
             this.autocompleteView.setLayoutParams(param);

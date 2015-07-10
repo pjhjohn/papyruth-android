@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.fragment.main.CourseFragment;
@@ -22,6 +24,7 @@ public class ToolbarSearch {
     private AutoCompletableSearchView searchView;
     private Navigator navigator;
     private FragmentManager fragmentManager;
+    private AutoCompletableSearchView.SearchViewListener searchViewListener;
 
     private static ToolbarSearch instance;
     private ToolbarSearch(){
@@ -35,6 +38,11 @@ public class ToolbarSearch {
     public AutoCompletableSearchView newSearchView(RecyclerViewItemClickListener listener, Context context, AutoCompletableSearchView.Type type){
         searchView = new AutoCompletableSearchView(listener, context, type);
         return searchView;
+    }
+
+    public void setSearchViewListener(AutoCompletableSearchView.SearchViewListener listener){
+        this.searchViewListener = listener;
+        this.searchView.setSearchViewListener(searchViewListener);
     }
 
     public AutoCompletableSearchView getAutoCompletableSearchView(){
@@ -51,17 +59,24 @@ public class ToolbarSearch {
         this.search(isAutoComplete);
     }
 
+
     public void search(boolean isAutoComplete){
         if(isAutoComplete) {
             AppManager.getInstance().putBoolean(AppConst.Preference.SEARCH, true);
 
             Fragment active = this.fragmentManager.findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
-            if (active != null && active.getClass() == SimpleCourseFragment.class)
+            if (active != null && active.getClass() == SimpleCourseFragment.class) {
                 this.searchView.searchCourse();
-            else
+            }else {
                 this.navigator.navigate(SimpleCourseFragment.class, true);
+                this.searchViewListener.onShowChange(true);
+            }
         }else{
             this.navigator.navigate(CourseFragment.class, true);
         }
+    }
+
+    public boolean onBack(){
+        return this.searchView.onBack();
     }
 }
