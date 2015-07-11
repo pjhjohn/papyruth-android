@@ -15,7 +15,7 @@ import com.montserrat.app.model.response.UniversitiesResponse;
 import com.montserrat.app.model.response.UserDataResponse;
 import com.montserrat.app.model.response.VoidResponse;
 import com.montserrat.app.model.response.VoteResponse;
-import com.montserrat.app.model.response.VotedUsersResponse;
+import com.montserrat.app.model.response.VotersResponse;
 
 import java.util.List;
 
@@ -82,7 +82,7 @@ public class RetrofitApi {
             @Path("id") Integer id
         );
         @GET("/comments/{id}/vote")
-        Observable<VotedUsersResponse> get_comment_vote(
+        Observable<VotersResponse> get_comment_vote(
             @Header("Authorization") String authorization,
             @Path("id") Integer id
         );
@@ -176,7 +176,7 @@ public class RetrofitApi {
             @Path("id") Integer id
         );
         @GET("/evaluations/{id}/vote")
-        Observable<VotedUsersResponse> get_evaluation_vote(
+        Observable<VotersResponse> get_evaluation_vote(
             @Header("Authorization") String authorization,
             @Path("id") Integer id
         );

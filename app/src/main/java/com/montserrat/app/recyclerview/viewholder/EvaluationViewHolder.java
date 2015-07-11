@@ -7,15 +7,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.materialdialog.VotersDialog;
 import com.montserrat.utils.support.mpandroidchart.ChartUtil;
 import com.montserrat.utils.support.picasso.CircleTransformation;
-import com.montserrat.utils.support.picasso.CircleWithBorderTransformation;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -134,15 +133,17 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                     });
                 break;
             case R.id.evaluation_up_vote_count:
-                // TODO : Show dialog with up-voted users
-                Toast.makeText(view.getContext(), "준비중입니다", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.evaluation_down_vote_count:
-                // TODO : Show dialog with down-voted users
-                Toast.makeText(view.getContext(), "준비중입니다", Toast.LENGTH_SHORT).show();
+                RetrofitApi.getInstance()
+                    .get_evaluation_vote(User.getInstance().getAccessToken(), this.id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> VotersDialog.show(
+                        view.getContext(),
+                        view.getId() == R.id.evaluation_up_vote_count ? "UP" : "DOWN",
+                        view.getId() == R.id.evaluation_up_vote_count ? response.up : response.down
+                    ));
                 break;
-            default:
-                Timber.d("Clicked view : %s", view);
+            default : Timber.d("Clicked view : %s", view);
         }
     }
 }

@@ -31,5 +31,5 @@ public class UserData {
     public String created_at;
     public String updated_at;
     public String university_name;
-    public String icon_url;
+    public String avatar_url;
 }
