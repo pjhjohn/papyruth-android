@@ -12,6 +12,7 @@ import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.support.picasso.CircleWithBorderTransformation;
+import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.DateTimeUtil;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
@@ -58,10 +59,10 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     private void setStatus(VoteStatus newStatus) {
         this.status = newStatus;
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.avatar_dummy).transform(new CircleWithBorderTransformation(status == VoteStatus.UP?colorPositive:colorNeutral, R.drawable.ic_light_add)).into(this.upIcon);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(status == VoteStatus.UP ? colorPositive : colorNeutral)).into(this.upIcon);
         this.upCount.setTextColor(status == VoteStatus.UP ? colorPositive : colorNeutral);
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.avatar_dummy).transform(new CircleWithBorderTransformation(status == VoteStatus.DOWN?colorNegative:colorNeutral, R.drawable.ic_light_clear)).into(this.downIcon);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(status == VoteStatus.DOWN?colorNegative:colorNeutral)).into(this.downIcon);
         this.downCount.setTextColor(status == VoteStatus.DOWN ? colorNegative : colorNeutral);
     }
 
@@ -108,7 +109,6 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                 break;
             default:
                 Timber.d("Clicked view : %s", view);
-                throw new RuntimeException("Unexpected Event");
-        } //itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition());
+        }
     }
 }
