@@ -279,9 +279,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             showCrossBtn(false);
         }
     }
+
+    private MaterialMenuDrawable.IconState state;
     @Override
     public void onShowChange(boolean show) {
+        Timber.d("on show change %s", show);
         if(show) {
+            state = this.mMaterialMenuDrawable.getIconState();
             this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
             mToolbar.setNavigationOnClickListener(view -> {
                 mAutoCompletableSearch.showCandidates(false);
@@ -290,7 +294,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             });
 //            ToolbarSearch.getInstance().toolbarIconClick(true);
         }else{
-            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+            this.mMaterialMenuDrawable.animateIconState(state);
             this.editText.setText("");
             this.searchView.setIconified(true);
             mToolbar.setNavigationOnClickListener(
