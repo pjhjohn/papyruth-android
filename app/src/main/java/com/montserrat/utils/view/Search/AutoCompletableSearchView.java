@@ -58,6 +58,7 @@ public class AutoCompletableSearchView {
     private Type type;
     private boolean searchMode;
     private boolean setOpen;
+    private boolean isOpen;
     private boolean isAutocompleteViewOpen;
 
     private SearchViewListener searchViewListener;
@@ -80,6 +81,7 @@ public class AutoCompletableSearchView {
         this.editText = null;
         this.setOpen = false;
         this.isAutocompleteViewOpen = false;
+        this.isOpen = false;
     }
 
     public interface SearchViewListener{
@@ -114,7 +116,7 @@ public class AutoCompletableSearchView {
         this.candidates.clear();
         this.candidates.addAll(candidates);
         this.autoCompleteAdapter.notifyDataSetChanged();
-        this.showCandidates(true);
+        this.updateViewHeight();
     }
 
     public void notifyChangedCourse(List<CourseData> courses){
@@ -122,14 +124,15 @@ public class AutoCompletableSearchView {
         this.courses.addAll(courses);
         this.courseItemsAdapter.notifyDataSetChanged();
     }
-    public void setAutoCompleteViewOpen(boolean isOpen){
-        this.setOpen = isOpen;
+    public void setAutoCompleteViewOpen(boolean setOpen){
+        this.setOpen = setOpen;
     }
 
     public void autoComplete(TextView textView){
         this.editText = (EditText) textView;
 //        this.editText.clearFocus();
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
+            Timber.d("@@@focus changed ");
             if(hasFocus)
                 this.showCandidates(true);
         });
@@ -166,7 +169,8 @@ public class AutoCompletableSearchView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     results -> {
-                        this.showCandidates(setOpen);
+                        if(isOpen && setOpen)
+                            this.showCandidates(setOpen);
                         this.notifyChangedAutocomplete(results);
                     },
                     error -> {
@@ -310,8 +314,22 @@ public class AutoCompletableSearchView {
         this.searchMode = searchMode;
     }
 
+    public void updateViewHeight(){
+        ViewGroup.LayoutParams param;
+        param =  autocompleteView.getLayoutParams();
+
+        if(this.candidates.size() < 5){
+            param.height = (int)(48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
+        }else{
+            param.height = (int)(240 * this.context.getResources().getDisplayMetrics().density);
+        }
+
+//            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
+        this.autocompleteView.setLayoutParams(param);
+    }
+
     public void showCandidates(boolean show){
-        Timber.d("showCandidates %s", show);
+        Timber.d("@@@showCandidates %s", show);
         ViewGroup.LayoutParams param;
         if(show){
             if(type == Type.EVALUATION) {
@@ -322,16 +340,7 @@ public class AutoCompletableSearchView {
             if(this.editText.getText().toString().length() == 0)
                 this.candidates.clear();
 
-            param =  autocompleteView.getLayoutParams();
-
-            if(this.candidates.size() < 5){
-                param.height = (int)(48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
-            }else{
-                param.height = (int)(240 * this.context.getResources().getDisplayMetrics().density);
-            }
-
-//            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
-            this.autocompleteView.setLayoutParams(param);
+            this.updateViewHeight();
 
             this.outsideView.setAlpha((float) 0.7);
             this.outsideView.setBackgroundColor(Color.GRAY);
@@ -343,6 +352,7 @@ public class AutoCompletableSearchView {
             this.isAutocompleteViewOpen = true;
 
             this.searchViewListener.onShowChange(true);
+            this.isOpen = true;
         } else {
             param =  this.autocompleteView.getLayoutParams();
             param.height = 0;
@@ -362,6 +372,7 @@ public class AutoCompletableSearchView {
             this.searchViewListener.onShowChange(false);
 
             this.setOpen = false;
+            this.isOpen = false;
         }
     }
 

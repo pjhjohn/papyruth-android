@@ -88,6 +88,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         ToolbarSearch.getInstance().setActivityComponent(this);
         mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
         ToolbarSearch.getInstance().setSearchViewListener(this);
+        this.isAutocompleteViewOpen = false;
 
         this.onInitializeMenuOnToolbar(mToolbar.getMenu());
     }
@@ -281,26 +282,31 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     private MaterialMenuDrawable.IconState state;
+    private boolean isAutocompleteViewOpen;
     @Override
     public void onShowChange(boolean show) {
         Timber.d("on show change %s", show);
         if(show) {
-            state = this.mMaterialMenuDrawable.getIconState();
+            if(!this.isAutocompleteViewOpen)
+                this.state = this.mMaterialMenuDrawable.getIconState();
             this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
-            mToolbar.setNavigationOnClickListener(view -> {
-                mAutoCompletableSearch.showCandidates(false);
+            this.mToolbar.setNavigationOnClickListener(view -> {
+                this.mAutoCompletableSearch.showCandidates(false);
                 this.editText.setText("");
                 this.searchView.setIconified(true);
             });
 //            ToolbarSearch.getInstance().toolbarIconClick(true);
+
+            this.isAutocompleteViewOpen = true;
         }else{
             this.mMaterialMenuDrawable.animateIconState(state);
             this.editText.setText("");
             this.searchView.setIconified(true);
-            mToolbar.setNavigationOnClickListener(
-                mNavigationDrawer::onClick
+            this.mToolbar.setNavigationOnClickListener(
+                this.mNavigationDrawer::onClick
             );
 
+            this.isAutocompleteViewOpen = false;
         }
     }
 }
