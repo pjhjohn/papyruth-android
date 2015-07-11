@@ -87,10 +87,12 @@
                     android:id="@+id/comment_up_vote_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     android:minWidth="@dimen/baseline_x1"
                     android:layout_toRightOf="@+id/comment_up_vote_icon"
                     android:layout_toEndOf="@+id/comment_up_vote_icon"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_centerVertical="true"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/comment_down_vote"
@@ -110,10 +112,12 @@
                     android:id="@+id/comment_down_vote_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     android:minWidth="@dimen/baseline_x1"
                     android:layout_toRightOf="@+id/comment_down_vote_icon"
                     android:layout_toEndOf="@+id/comment_down_vote_icon"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_centerVertical="true"/>
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
