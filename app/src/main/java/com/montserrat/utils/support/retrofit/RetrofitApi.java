@@ -14,6 +14,7 @@ import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
 import com.montserrat.app.model.response.UserDataResponse;
 import com.montserrat.app.model.response.VoidResponse;
+import com.montserrat.app.model.response.VoteResponse;
 import com.montserrat.app.model.response.VotedUsersResponse;
 
 import java.util.List;
@@ -70,13 +71,13 @@ public class RetrofitApi {
             @Path("id") Integer id
         );
         @POST("/comments/{id}/vote")
-        Observable<VoidResponse> post_comment_vote(
+        Observable<VoteResponse> post_comment_vote(
             @Header("Authorization") String authorization,
             @Path("id") Integer id,
             @Query("up") Boolean up
         );
         @DELETE("/comments/{id}/vote")
-        Observable<VoidResponse> delete_comment_vote(
+        Observable<VoteResponse> delete_comment_vote(
             @Header("Authorization") String authorization,
             @Path("id") Integer id
         );
@@ -164,13 +165,13 @@ public class RetrofitApi {
             @Path("id") Integer id
         );
         @POST("/evaluations/{id}/vote")
-        Observable<VoidResponse> post_evaluation_vote(
+        Observable<VoteResponse> post_evaluation_vote(
             @Header("Authorization") String authorization,
             @Path("id") Integer id,
             @Query("up") Boolean up
         );
         @DELETE("/evaluations/{id}/vote")
-        Observable<VoidResponse> delete_evaluation_vote(
+        Observable<VoteResponse> delete_evaluation_vote(
             @Header("Authorization") String authorization,
             @Path("id") Integer id
         );

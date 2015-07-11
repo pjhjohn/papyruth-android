@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.montserrat.app.R;
 import com.montserrat.app.model.CommentData;
@@ -36,7 +37,6 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     @InjectView (R.id.comment_up_vote_count) protected TextView upCount;
     @InjectView (R.id.comment_down_vote_icon) protected ImageView downIcon;
     @InjectView (R.id.comment_down_vote_count) protected TextView downCount;
-    private RecyclerViewItemClickListener itemClickListener;
     private int id;
     private VoteStatus status;
     public enum VoteStatus {
@@ -48,7 +48,6 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
         ButterKnife.inject(this, itemView);
         itemView.setOnClickListener(this);
         this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        itemClickListener = listener;
         this.upIcon.setOnClickListener(this);
         this.upCount.setOnClickListener(this);
         this.downIcon.setOnClickListener(this);
@@ -66,6 +65,11 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
         this.downCount.setTextColor(status == VoteStatus.DOWN ? colorNegative : colorNeutral);
     }
 
+    private void setVoteCount(Integer upCount, Integer downCount) {
+        this.upCount.setText(String.valueOf(upCount == null ? 0 : upCount));
+        this.downCount.setText(String.valueOf(downCount == null ? 0 : downCount));
+    }
+
     public void bind(CommentData comment) {
         this.id = comment.id;
 
@@ -78,34 +82,51 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
         else if(comment.request_user_vote == 1) this.setStatus(VoteStatus.UP);
         else this.setStatus(VoteStatus.DOWN);
 
-        this.upCount.setText(String.valueOf(comment.up_vote_count == null ? 0 : comment.up_vote_count));
-        this.downCount.setText(String.valueOf(comment.down_vote_count == null ? 0 : comment.down_vote_count));
+        this.setVoteCount(comment.up_vote_count, comment.down_vote_count);
     }
 
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.comment_up_vote_icon:
-            case R.id.comment_up_vote_count:
                 if(this.status == VoteStatus.UP) RetrofitApi.getInstance()
                     .delete_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> this.setStatus(VoteStatus.NONE));
+                    .subscribe(response -> {
+                        this.setStatus(VoteStatus.NONE);
+                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
+                    });
                 else RetrofitApi.getInstance()
                     .post_comment_vote(User.getInstance().getAccessToken(), this.id, true)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> this.setStatus(VoteStatus.UP));
+                    .subscribe(response -> {
+                        this.setStatus(VoteStatus.UP);
+                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
+                    });
                 break;
             case R.id.comment_down_vote_icon:
-            case R.id.comment_down_vote_count:
                 if(this.status == VoteStatus.DOWN) RetrofitApi.getInstance()
                     .delete_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> this.setStatus(VoteStatus.NONE));
+                    .subscribe(response -> {
+                        this.setStatus(VoteStatus.NONE);
+                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
+                    });
                 else RetrofitApi.getInstance()
                     .post_comment_vote(User.getInstance().getAccessToken(), this.id, false)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> this.setStatus(VoteStatus.DOWN));
+                    .subscribe(response -> {
+                        this.setStatus(VoteStatus.DOWN);
+                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
+                    });
+                break;
+            case R.id.comment_up_vote_count:
+                // TODO : Show dialog with up-voted users
+                Toast.makeText(view.getContext(), "준비중입니다", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.comment_down_vote_count:
+                // TODO : Show dialog with down-voted users
+                Toast.makeText(view.getContext(), "준비중입니다", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Timber.d("Clicked view : %s", view);

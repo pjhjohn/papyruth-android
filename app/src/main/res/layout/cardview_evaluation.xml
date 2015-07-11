@@ -126,7 +126,9 @@
                 android:minWidth="@dimen/baseline_x1"
                 android:layout_toRightOf="@+id/evaluation_up_vote_icon"
                 android:layout_toEndOf="@+id/evaluation_up_vote_icon"
-                android:layout_alignParentBottom="true"/>
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/evaluation_down_vote"
@@ -149,7 +151,9 @@
                 android:minWidth="@dimen/baseline_x1"
                 android:layout_toRightOf="@+id/evaluation_down_vote_icon"
                 android:layout_toEndOf="@+id/evaluation_down_vote_icon"
-                android:layout_alignParentBottom="true"/>
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/evaluation_comment"
@@ -172,7 +176,9 @@
                 android:minWidth="@dimen/baseline_x1"
                 android:layout_toRightOf="@+id/evaluation_comment_icon"
                 android:layout_toEndOf="@+id/evaluation_comment_icon"
-                android:layout_alignParentBottom="true"/>
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"/>
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
