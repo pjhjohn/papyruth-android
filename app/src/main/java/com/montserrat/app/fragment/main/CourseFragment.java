@@ -103,8 +103,13 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         Timber.d("clicked %s @ %d", view, position);
         if(isEvaluationDetailOpened) return;
         if(animators != null && animators.isRunning()) return;
-        Evaluation.getInstance().update(this.items.get(position));
-        this.openEvaluation(view);
+        RetrofitApi.getInstance()
+            .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                Evaluation.getInstance().update(response.evaluation);
+                this.openEvaluation(view);
+            });
     }
 
     @Override

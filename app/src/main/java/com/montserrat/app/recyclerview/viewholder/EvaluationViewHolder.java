@@ -82,7 +82,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
         this.lectureName.setText(evaluation.getLectureName());
         this.timestamp.setText(DateTimeUtil.convert(evaluation.getCreatedAt()));
-        Picasso.with(this.itemView.getContext()).load(R.drawable.avatar_dummy/*evaluation.getUserAvatarUrl()*/).transform(new CircleTransformation()).into(this.avatar);
+        Picasso.with(this.itemView.getContext()).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(this.avatar);
         this.nickname.setText(evaluation.getUserNickname());
         this.body.setText(evaluation.getBody());
         ChartUtil.init(this.chart);
@@ -90,10 +90,14 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.chart.animateY(1000);
         this.hashtags.removeAllViews();
         for(int i = 0; i < 5; i ++) this.hashtags.addView(new Hashtag(this.itemView.getContext(), "tag" + i));
-        this.upCount.setText(String.valueOf(evaluation.getUpVoteCount() == null ? 0 : evaluation.getUpVoteCount()));
-        this.downCount.setText(String.valueOf(evaluation.getDownVoteCount() == null ? 0 : evaluation.getDownVoteCount()));
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(colorNeutral)).into(this.commentIcon);
         this.commentCount.setText(String.valueOf(evaluation.getCommentCount() == null ? 0 : evaluation.getCommentCount()));
+
+        if(evaluation.getRequestUserVote() == null) this.setStatus(VoteStatus.NONE);
+        else if(evaluation.getRequestUserVote() == 1) this.setStatus(VoteStatus.UP);
+        else this.setStatus(VoteStatus.DOWN);
+
+        this.setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
     }
 
     @Override
