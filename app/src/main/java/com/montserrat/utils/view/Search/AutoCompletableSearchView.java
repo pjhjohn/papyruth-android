@@ -22,13 +22,13 @@ import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
-import com.montserrat.utils.view.viewpager.OnBack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.RetrofitError;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
@@ -60,6 +60,7 @@ public class AutoCompletableSearchView {
     private boolean setOpen;
     private boolean isOpen;
     private boolean isAutocompleteViewOpen;
+    private boolean reserveCandidateListOnClose;
 
     private SearchViewListener searchViewListener;
 
@@ -82,6 +83,7 @@ public class AutoCompletableSearchView {
         this.setOpen = false;
         this.isAutocompleteViewOpen = false;
         this.isOpen = false;
+        this.reserveCandidateListOnClose = false;
     }
 
     public interface SearchViewListener{
@@ -133,8 +135,9 @@ public class AutoCompletableSearchView {
 //        this.editText.clearFocus();
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
             Timber.d("@@@focus changed ");
-            if(hasFocus)
+            if(hasFocus) {
                 this.showCandidates(true);
+            }
         });
         this.subscription.add(
             WidgetObservable
@@ -182,8 +185,7 @@ public class AutoCompletableSearchView {
                                 default:
                                     Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                             }
-                        } else
-                            candidates.clear();
+                        }
                     }
                 )
         );
@@ -215,6 +217,14 @@ public class AutoCompletableSearchView {
     public void setEvaluationCandidate(String query){
         this.evaluationCandidate.clear();
         this.evaluationQuery = query;
+    }
+
+    public void setReserveCandidateListOnClose(boolean reserve){
+        this.reserveCandidateListOnClose = reserve;
+    }
+
+    public boolean getReserveCandidateListOnClose(){
+        return this.reserveCandidateListOnClose;
     }
 
     public boolean hasData(){
@@ -317,15 +327,22 @@ public class AutoCompletableSearchView {
     public void updateViewHeight(){
         ViewGroup.LayoutParams param;
         param =  autocompleteView.getLayoutParams();
-
-        if(this.candidates.size() < 5){
-            param.height = (int)(48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
-        }else{
-            param.height = (int)(240 * this.context.getResources().getDisplayMetrics().density);
-        }
+        if(isOpen) {
+            if (this.candidates.size() < 5) {
+                param.height = (int) (48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
+            } else {
+                param.height = (int) (240 * this.context.getResources().getDisplayMetrics().density);
+            }
 
 //            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
+        }else{
+            param.height = 0;
+        }
         this.autocompleteView.setLayoutParams(param);
+    }
+    public void onShowChange(boolean show){
+        if(this.searchViewListener != null)
+            this.searchViewListener.onShowChange(show);
     }
 
     public void showCandidates(boolean show){
@@ -351,7 +368,7 @@ public class AutoCompletableSearchView {
             this.outsideView.setLayoutParams(param);
             this.isAutocompleteViewOpen = true;
 
-            this.searchViewListener.onShowChange(true);
+            this.onShowChange(true);
             this.isOpen = true;
         } else {
             param =  this.autocompleteView.getLayoutParams();
@@ -369,10 +386,12 @@ public class AutoCompletableSearchView {
             ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.editText.getWindowToken(), 2);
             this.isAutocompleteViewOpen = false;
 
-            this.searchViewListener.onShowChange(false);
+            this.onShowChange(false);
 
             this.setOpen = false;
             this.isOpen = false;
+            if(!reserveCandidateListOnClose)
+                this.candidates.clear();
         }
     }
 
