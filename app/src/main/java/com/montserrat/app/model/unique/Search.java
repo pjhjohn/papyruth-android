@@ -78,7 +78,6 @@ public class Search {
 
     public void fromCandidate(Candidate candidate){
         clear()
-                .setCourse(candidate.course)
                 .setLectureId(candidate.lecture_id)
                 .setLectureName(candidate.lecture_name)
                 .setProfessorId(candidate.professor_id)
