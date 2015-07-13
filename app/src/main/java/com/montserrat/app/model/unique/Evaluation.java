@@ -25,6 +25,8 @@ public class Evaluation {
     private Integer up_vote_count;
     private Integer down_vote_count;
     private Integer comment_count;
+    private String avatar_url;
+    private Integer request_user_vote; // 1 for up-vote, 0 for down-vote, null for neither.
 
     private static Evaluation instance = null;
     public synchronized static Evaluation getInstance(){
@@ -64,6 +66,10 @@ public class Evaluation {
     public void setDownVoteCount(Integer down_vote_count) { this.down_vote_count = down_vote_count; }
     public Integer getCommentCount() { return comment_count; }
     public void setCommentCount(Integer comment_count) { this.comment_count = comment_count; }
+    public String getAvatarUrl() { return avatar_url; }
+    public void setAvatar_url(String avatar_url) { this.avatar_url = avatar_url; }
+    public Integer getRequestUserVote() { return request_user_vote; }
+    public void setRequestUserVote(Integer request_user_vote) { this.request_user_vote = request_user_vote; }
 
     public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;
@@ -82,6 +88,8 @@ public class Evaluation {
         if(evaluation.up_vote_count != null)            this.up_vote_count = evaluation.up_vote_count;
         if(evaluation.down_vote_count != null)          this.down_vote_count = evaluation.down_vote_count;
         if(evaluation.comment_count != null)            this.comment_count = evaluation.comment_count;
+        if(evaluation.avatar_url != null)               this.avatar_url = evaluation.avatar_url;
+        this.request_user_vote = evaluation.request_user_vote; // TODO : verify data consistency holds without null check
     }
 
     public void clear(){
@@ -101,5 +109,7 @@ public class Evaluation {
         this.up_vote_count = null;
         this.down_vote_count = null;
         this.comment_count = null;
+        this.avatar_url = null;
+        this.request_user_vote = null;
     }
 }

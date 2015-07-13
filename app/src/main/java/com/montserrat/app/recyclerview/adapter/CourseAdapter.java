@@ -21,28 +21,28 @@ import timber.log.Timber;
  * Created by SSS on 2015-04-25.
  */
 public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String USER_LEARNED_INFORM = "CourseAdapter.userLearnedInform"; // Inform is UNIQUE per Adapter.
+    private static final String USER_LEARNED_INFORM = "CourseAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
     private RecyclerViewItemClickListener evaluationItemClickListener;
     private List<EvaluationData> evaluations;
-    private boolean userLearnedInform;
+    private boolean mUserLearnedInform;
     public CourseAdapter(List<EvaluationData> initialEvaluations, RecyclerViewItemClickListener listener) {
         this.evaluations = initialEvaluations;
         this.evaluationItemClickListener = listener;
-        userLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
+        mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-            if(!userLearnedInform && position == 1) {
+            if(!mUserLearnedInform && position == 1) {
                 switch(view.getId()) {
                     case R.id.inform_btn_optional :
                         AppManager.getInstance().putBoolean(USER_LEARNED_INFORM, true);
                     case R.id.inform_btn_positive :
                         this.notifyItemRemoved(position);
-                        this.userLearnedInform = true;
+                        this.mUserLearnedInform = true;
                         break;
-                    default : Timber.d("Unexpected view id %d", view.getId());
+                    default : Timber.d("Unexpected view #%x", view.getId());
                 }
             } else evaluationItemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
         });
@@ -55,8 +55,8 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        if (position == (userLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_course);
-        else if (position == 1 + (userLearnedInform ? 0 : 1)) ((CourseViewHolder) holder).bind(Course.getInstance());
+        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_course);
+        else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((CourseViewHolder) holder).bind(Course.getInstance());
         else ((EvaluationItemViewHolder) holder).bind(this.evaluations.get(position - getItemOffset()));
     }
 
@@ -66,14 +66,14 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public int getItemOffset() {
-        return 2 + (userLearnedInform ? 0 : 1);
+        return 2 + (mUserLearnedInform ? 0 : 1);
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
-        if (position == (userLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
-        else if (position == 1 + (userLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.COURSE;
+        if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
+        else if (position == 1 + (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.COURSE;
         else return ViewHolderFactory.ViewType.EVALUATION_ITEM;
     }
 }

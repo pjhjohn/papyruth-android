@@ -1,6 +1,7 @@
 package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,6 +61,9 @@ public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdap
         this.swipeRefresh.setEnabled(true);
         this.setupRecyclerView(this.evaluationOverview);
         this.setupSwipeRefresh(this.swipeRefresh);
+
+        toolbar.setTitle(R.string.toolbar_title_home);
+        toolbar.setTitleTextColor(Color.WHITE);
 
         return view;
     }

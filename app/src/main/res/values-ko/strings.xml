@@ -71,9 +71,19 @@
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
     <string name="toolbar_title_new_comment">덧글 쓰기</string>
-    <string name="toolbar_title_evaluation">강의평</string>
+    <string name="toolbar_title_evaluation">강의 평가</string>
     <string name="empty"/>
     <string name="confirm_positive">확인</string>
     <string name="confirm_optional">다시보지 않기</string>
+    <string name="inform_home">최신 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 해당 강의평의 상세 페이지를 열고 닫을 수 있습니다.</string>
     <string name="inform_course">강의 통계와 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
+    <string name="inform_evaluation">강의에 대한 강의평을 보여주는 페이지입니다.\n\n댓글을 추가하거나 강의평, 댓글에 투표를 위-아래 위-위-아래</string>
+    <string name="toolbar_title_home">최신 강의평가</string>
+    <string name="professor_prefix"/>
+    <string name="professor_postfix"> 교수</string>
+
+    <!-- time -->
+    <string name="just_now">방금</string>
+    <string name="time_ago">%s 전</string>
+    <string name="yesterday">어제</string>
 </resources>

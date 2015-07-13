@@ -1,5 +1,7 @@
 package com.montserrat.app;
 
+import android.graphics.Color;
+
 /**
  * Created by pjhjohn on 2015-04-16.
  */
@@ -28,6 +30,10 @@ public class AppConst {
         public static final String API = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // TODO : Z stands for TimeZone, but seems not working now
         public static final String SIMPLE = "yyyy.MM.dd";
     }
+
+    public static final int COLOR_POSITIVE = Color.rgb(250, 100, 100);
+    public static final int COLOR_NEGATIVE = Color.rgb(100, 100, 250);
+    public static final int COLOR_NEUTRAL = Color.rgb(100, 100, 100);
 
     /**
      * Hierachy of ViewPager is directly mapped to FragmentFactory & ViewPagerManager

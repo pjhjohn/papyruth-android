@@ -20,6 +20,8 @@ public class EvaluationData {
     public Integer up_vote_count;
     public Integer down_vote_count;
     public Integer comment_count;
+    public String avatar_url;
+    public Integer request_user_vote; // 1 for up-vote, 0 for down-vote, null for neither.
 
     @Override
     public String toString() {
