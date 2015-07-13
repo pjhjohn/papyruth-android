@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="minutes">
+        <item quantity="other">%d 분</item>
+    </plurals>
+
+    <plurals name="hours">
+        <item quantity="other">%d 시간</item>
+    </plurals>
+
+    <plurals name="days">
+        <item quantity="other">%d 일</item>
+    </plurals>
+</resources>

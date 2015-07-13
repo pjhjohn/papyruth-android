@@ -1,6 +1,5 @@
 package com.montserrat.app.recyclerview.viewholder;
 
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
@@ -31,7 +31,6 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private static final int colorPositive = Color.rgb(100, 100, 250), colorNegative = Color.rgb(250, 100, 100), colorNeutral = Color.rgb(100, 100, 100);
     @InjectView(R.id.evaluation_lecture_name) protected TextView lectureName;
     @InjectView (R.id.evaluation_timestamp) protected TextView timestamp;
     @InjectView (R.id.evaluation_user_avatar) protected ImageView avatar;
@@ -65,11 +64,11 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     private void setStatus(VoteStatus newStatus) {
         this.status = newStatus;
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(status == VoteStatus.UP ? colorPositive : colorNeutral)).into(this.upIcon);
-        this.upCount.setTextColor(status == VoteStatus.UP ? colorPositive : colorNeutral);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL)).into(this.upIcon);
+        this.upCount.setTextColor(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL);
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(status == VoteStatus.DOWN?colorNegative:colorNeutral)).into(this.downIcon);
-        this.downCount.setTextColor(status == VoteStatus.DOWN ? colorNegative : colorNeutral);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL)).into(this.downIcon);
+        this.downCount.setTextColor(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL);
     }
 
     private void setVoteCount(Integer upCount, Integer downCount) {
@@ -90,7 +89,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.chart.animateY(1000);
         this.hashtags.removeAllViews();
         for(int i = 0; i < 5; i ++) this.hashtags.addView(new Hashtag(this.itemView.getContext(), "tag" + i));
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(colorNeutral)).into(this.commentIcon);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.commentIcon);
         this.commentCount.setText(String.valueOf(evaluation.getCommentCount() == null ? 0 : evaluation.getCommentCount()));
 
         if(evaluation.getRequestUserVote() == null) this.setStatus(VoteStatus.NONE);
