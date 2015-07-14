@@ -20,6 +20,10 @@
                 android:scrollbars="none"
                 android:layout_gravity="left|top" />
             </android.support.v4.widget.SwipeRefreshLayout>
+        <FrameLayout
+            android:id="@+id/evaluation_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </FrameLayout>
     <include layout="@layout/progress"/>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>

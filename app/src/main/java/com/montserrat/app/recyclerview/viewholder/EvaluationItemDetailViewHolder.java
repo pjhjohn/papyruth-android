@@ -3,13 +3,16 @@ package com.montserrat.app.recyclerview.viewholder;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
@@ -51,6 +54,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
 
     private RecyclerViewItemClickListener itemClickListener;
     private VoteStatus status;
+
     public enum VoteStatus {
         UP, DOWN, NONE
     }
@@ -121,7 +125,6 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
         this.nickname.setText(evaluation.user_nickname);
         this.hashtags.removeAllViews();
         this.hashtags.post(() -> {
-            Timber.d("hashtags : %d x %d", hashtags.getWidth(), hashtags.getHeight());
             float totalWidth = 0;
             for(int i = 0; i < 5; i ++) {
                 Hashtag hashtag = new Hashtag(this.itemView.getContext(), "hashtag" + i);

@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@drawable/viewholder_bg_selector"
         android:layout_marginBottom="1dp">
         <ImageView
             android:id="@+id/evaluation_item_avatar"
@@ -161,7 +161,6 @@
             android:layout_height="@dimen/baseline_x3"
             android:orientation="horizontal"
             android:gravity="end"
-            android:background="@color/white"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/baseline_x1"
@@ -172,7 +171,9 @@
             <RelativeLayout
                 android:id="@+id/evaluation_item_up_vote"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/baseline_x0.5"
+                android:layout_marginRight="@dimen/baseline_x0.5">
                 <ImageView
                     android:id="@+id/evaluation_item_up_vote_icon"
                     android:layout_width="@dimen/baseline_x3"
@@ -197,7 +198,9 @@
             <RelativeLayout
                 android:id="@+id/evaluation_item_down_vote"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/baseline_x0.5"
+                android:layout_marginRight="@dimen/baseline_x0.5">
                 <ImageView
                     android:id="@+id/evaluation_item_down_vote_icon"
                     android:layout_width="@dimen/baseline_x3"

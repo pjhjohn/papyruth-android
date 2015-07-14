@@ -2,6 +2,7 @@
 <resources>
     <color name="bg_normal">#607D8B</color>
     <color name="bg_accent">#90A4AE</color>
+    <color name="bg_highlight">#B0C4CE</color>
 
     <color name="fg_normal">#1BBC9B</color>
     <color name="fg_accent">#3BDCBB</color>
