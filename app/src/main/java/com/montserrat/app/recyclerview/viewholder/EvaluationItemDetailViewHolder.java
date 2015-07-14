@@ -82,7 +82,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
         this.category.setText("Àü°ø"); // TODO -> evaluation.category
         this.lecture.setText(evaluation.lecture_name);
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.professor_name, context.getResources().getString(R.string.professor_postfix))));
-        this.timestamp.setText(DateTimeUtil.convertRelative(context, evaluation.created_at));
+        this.timestamp.setText(DateTimeUtil.timeago(context, evaluation.created_at));
         this.body.setText(evaluation.body);
         this.nickname.setText(evaluation.user_nickname);
         this.hashtag.removeAllViews();

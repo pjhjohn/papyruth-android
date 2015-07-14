@@ -80,7 +80,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.id = evaluation.getId();
 
         this.lectureName.setText(evaluation.getLectureName());
-        this.timestamp.setText(DateTimeUtil.convert(evaluation.getCreatedAt()));
+        this.timestamp.setText(DateTimeUtil.timestamp(evaluation.getCreatedAt()));
         Picasso.with(this.itemView.getContext()).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(this.avatar);
         this.nickname.setText(evaluation.getUserNickname());
         this.body.setText(evaluation.getBody());

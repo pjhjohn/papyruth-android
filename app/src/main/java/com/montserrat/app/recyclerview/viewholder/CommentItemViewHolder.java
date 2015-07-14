@@ -73,7 +73,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
 
         Picasso.with(this.itemView.getContext()).load(comment.avatar_url).transform(new CircleTransformation()).into(this.avatar);
         this.nickname.setText(comment.user_nickname);
-        this.timestamp.setText(DateTimeUtil.convert(comment.updated_at));
+        this.timestamp.setText(DateTimeUtil.timestamp(comment.updated_at));
         this.body.setText(comment.body);
 
         if(comment.request_user_vote == null) this.setStatus(VoteStatus.NONE);

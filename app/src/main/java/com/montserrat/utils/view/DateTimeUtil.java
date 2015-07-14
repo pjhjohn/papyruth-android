@@ -2,7 +2,6 @@ package com.montserrat.utils.view;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.text.format.DateUtils;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -16,10 +15,10 @@ import java.util.Date;
  * Created by pjhjohn on 2015-06-27.
  */
 public class DateTimeUtil {
-    public static String convert(String in) {
-        return DateTimeUtil.convert(in, AppConst.DateFormat.API, AppConst.DateFormat.SIMPLE);
+    public static String timestamp(String in) {
+        return DateTimeUtil.timestamp(in, AppConst.DateFormat.API, AppConst.DateFormat.SIMPLE);
     }
-    public static String convert(String in, String in_format, String out_format) {
+    public static String timestamp(String in, String in_format, String out_format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(in_format);
         Date date = null;
         try {
@@ -31,12 +30,12 @@ public class DateTimeUtil {
         return dateFormat.format(date);
     }
 
-    public static String convertRelative(Context context, String in) {
-        return DateTimeUtil.convertRelative(context, in, AppConst.DateFormat.API);
+    public static String timeago(Context context, String in) {
+        return DateTimeUtil.timeago(context, in, AppConst.DateFormat.API);
     }
 
     private static final String NOT_ASSIGNED = "N/A";
-    public static String convertRelative(Context context, String in, String in_format) {
+    public static String timeago(Context context, String in, String in_format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(in_format);
         Date date = null;
         try {
@@ -46,7 +45,7 @@ public class DateTimeUtil {
         }
 
         if(date == null) return NOT_ASSIGNED;
-        return getTimeAgo(context, Calendar.getInstance().getTimeInMillis(), date.getTime(), convert(in));
+        return getTimeAgo(context, Calendar.getInstance().getTimeInMillis(), date.getTime(), timestamp(in));
     }
 
     private static final long _A_SECOND = 1000;           // One second (in milliseconds)
