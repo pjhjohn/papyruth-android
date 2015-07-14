@@ -21,9 +21,10 @@ public class Hashtag extends TextView {
         this.setup(context);
         this.setText("#"+value);
     }
+
     private void setup(Context context) {
         this.setGravity(Gravity.CENTER_HORIZONTAL);
-        this.setTextColor(Color.BLUE);
+        this.setTextColor(Color.rgb(84, 107, 141));
         this.setPaintFlags(super.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.setPadding(4, 4, 4, 4);
     }

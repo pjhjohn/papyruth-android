@@ -141,7 +141,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
 
         this.setVoteCount(evaluation.up_vote_count, evaluation.down_vote_count);
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.commentIcon);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.commentIcon);
         this.commentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
     }
 
