@@ -22,7 +22,6 @@ import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
-import com.montserrat.utils.view.viewpager.OnBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +59,13 @@ public class AutoCompletableSearchView {
     private boolean setOpen;
     private boolean isOpen;
     private boolean isAutocompleteViewOpen;
+    private boolean reserveCandidateListOnClose;
 
     private SearchViewListener searchViewListener;
 
     public enum Type{
         SEARCH, EVALUATION
-}
+    }
 
     public AutoCompletableSearchView(RecyclerViewItemClickListener listener, Context context, Type type){
         this.courses = new ArrayList<>();
@@ -82,6 +82,7 @@ public class AutoCompletableSearchView {
         this.setOpen = false;
         this.isAutocompleteViewOpen = false;
         this.isOpen = false;
+        this.reserveCandidateListOnClose = false;
     }
 
     public interface SearchViewListener{
@@ -124,18 +125,21 @@ public class AutoCompletableSearchView {
         this.courses.addAll(courses);
         this.courseItemsAdapter.notifyDataSetChanged();
     }
+
     public void setAutoCompleteViewOpen(boolean setOpen){
         this.setOpen = setOpen;
     }
 
     public void autoComplete(TextView textView){
         this.editText = (EditText) textView;
-//        this.editText.clearFocus();
+
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
             Timber.d("@@@focus changed ");
-            if(hasFocus)
+            if(hasFocus) {
                 this.showCandidates(true);
+            }
         });
+
         this.subscription.add(
             WidgetObservable
                 .text(this.editText)
@@ -144,6 +148,7 @@ public class AutoCompletableSearchView {
                 .subscribe(unused -> this.setAutoCompleteViewOpen(true))
 
         );
+
         this.subscription.add(
             WidgetObservable
                 .text(this.editText)
@@ -169,8 +174,8 @@ public class AutoCompletableSearchView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     results -> {
-                        if(isOpen && setOpen)
-                            this.showCandidates(setOpen);
+                        if (isOpen && setOpen)
+                            this.showCandidates(true);
                         this.notifyChangedAutocomplete(results);
                     },
                     error -> {
@@ -182,18 +187,17 @@ public class AutoCompletableSearchView {
                                 default:
                                     Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                             }
-                        } else
-                            candidates.clear();
+                        }
                     }
                 )
         );
     }
 
-    public void submit(){
-        this.submit(this.editText.getText().toString());
+    public void querySubmit(){
+        this.querySubmit(this.editText.getText().toString());
     }
 
-    public void submit(String query){
+    public void querySubmit(String query){
         if(this.type == Type.EVALUATION){
             this.setEvaluationCandidate(query);
             this.searchCourse();
@@ -203,6 +207,9 @@ public class AutoCompletableSearchView {
         this.showCandidates(false);
         this.editText.clearFocus();
     }
+
+
+
     private Candidate evaluationCandidate;
     private String evaluationQuery;
 
@@ -215,6 +222,14 @@ public class AutoCompletableSearchView {
     public void setEvaluationCandidate(String query){
         this.evaluationCandidate.clear();
         this.evaluationQuery = query;
+    }
+
+    public void setReserveCandidateListOnClose(boolean reserve){
+        this.reserveCandidateListOnClose = reserve;
+    }
+
+    public boolean getReserveCandidateListOnClose(){
+        return this.reserveCandidateListOnClose;
     }
 
     public boolean hasData(){
@@ -257,6 +272,10 @@ public class AutoCompletableSearchView {
                 );
             }
         }
+    }
+
+    public void setSearchMode(boolean searchMode){
+        this.searchMode = searchMode;
     }
 
     public void searchCourse() {
@@ -310,21 +329,21 @@ public class AutoCompletableSearchView {
         }
     }
 
-    public void setSearchMode(boolean searchMode){
-        this.searchMode = searchMode;
-    }
 
     public void updateViewHeight(){
         ViewGroup.LayoutParams param;
         param =  autocompleteView.getLayoutParams();
-
-        if(this.candidates.size() < 5){
-            param.height = (int)(48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
-        }else{
-            param.height = (int)(240 * this.context.getResources().getDisplayMetrics().density);
-        }
+        if(isOpen) {
+            if (this.candidates.size() < 5) {
+                param.height = (int) (48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
+            } else {
+                param.height = (int) (240 * this.context.getResources().getDisplayMetrics().density);
+            }
 
 //            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
+        }else{
+            param.height = 0;
+        }
         this.autocompleteView.setLayoutParams(param);
     }
 
@@ -339,7 +358,9 @@ public class AutoCompletableSearchView {
             }
             if(this.editText.getText().toString().length() == 0)
                 this.candidates.clear();
+            Timber.d("&&& size : %s", this.candidates.size());
 
+            this.isOpen = true;
             this.updateViewHeight();
 
             this.outsideView.setAlpha((float) 0.7);
@@ -351,12 +372,10 @@ public class AutoCompletableSearchView {
             this.outsideView.setLayoutParams(param);
             this.isAutocompleteViewOpen = true;
 
-            this.searchViewListener.onShowChange(true);
-            this.isOpen = true;
+            this.onShowChange(true);
         } else {
             param =  this.autocompleteView.getLayoutParams();
             param.height = 0;
-//            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
             this.autocompleteView.setLayoutParams(param);
 
             param =  outsideView.getLayoutParams();
@@ -369,13 +388,19 @@ public class AutoCompletableSearchView {
             ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.editText.getWindowToken(), 2);
             this.isAutocompleteViewOpen = false;
 
-            this.searchViewListener.onShowChange(false);
+            this.onShowChange(false);
 
             this.setOpen = false;
             this.isOpen = false;
+            if(!reserveCandidateListOnClose)
+                this.candidates.clear();
         }
     }
 
+    private void onShowChange(boolean show){
+        if(this.searchViewListener != null)
+            this.searchViewListener.onShowChange(show);
+    }
 
     public boolean onBack(){
         if(isAutocompleteViewOpen){

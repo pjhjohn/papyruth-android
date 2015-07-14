@@ -111,7 +111,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
-        mAutoCompletableSearch.submit(query);
+        mAutoCompletableSearch.querySubmit(query);
         ToolbarSearch.getInstance().search(true);
         return false;
     }

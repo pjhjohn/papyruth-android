@@ -60,7 +60,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         this.queryTextView.setOnKeyListener((v, keycode, e) -> {
             if (e.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keycode == KeyEvent.KEYCODE_ENTER) {
-                    this.search.submit();
+                    this.search.querySubmit();
                     return true;
                 }
             }
