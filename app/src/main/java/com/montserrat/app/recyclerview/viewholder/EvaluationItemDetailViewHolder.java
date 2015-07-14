@@ -2,6 +2,8 @@ package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
@@ -35,7 +38,8 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
     @InjectView (R.id.evaluation_item_timestamp) protected TextView timestamp;
     @InjectView (R.id.evaluation_item_body) protected TextView body;
     @InjectView (R.id.evaluation_item_nickname) protected TextView nickname;
-    @InjectView (R.id.evaluation_item_hashtag) protected LinearLayout hashtag;
+    @InjectView (R.id.evaluation_item_hashtags) protected LinearLayout hashtags;
+    @InjectView (R.id.evaluation_item_point_overall_text_prefix) protected TextView pointTextPrefix;
     @InjectView (R.id.evaluation_item_point_overall_text) protected TextView pointText;
     @InjectView (R.id.evaluation_item_point_overall_star) protected RatingBar pointStar;
     @InjectView (R.id.evaluation_item_up_vote_icon) protected ImageView upIcon;
@@ -76,6 +80,36 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
         this.downCount.setText(String.valueOf(downCount == null ? 0 : downCount));
     }
 
+    private void setRatingBarColor(int color) {
+        LayerDrawable stars = (LayerDrawable) pointStar.getProgressDrawable();
+        for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+    }
+
+    private void setPoint(Integer point) {
+        String pointStr = "";
+        if(point == null || point < 0) {
+            pointStr = "N/A";
+            this.pointTextPrefix.setTextColor(AppConst.COLOR_NEUTRAL);
+            this.pointText.setTextColor(AppConst.COLOR_NEUTRAL);
+            this.pointStar.setRating(10);
+            this.setRatingBarColor(AppConst.COLOR_NEUTRAL);
+        } else if(point >= 8) {
+            if(point >= 10) pointStr = "10";
+            else pointStr = String.format("%d.0", point);
+            this.pointTextPrefix.setTextColor(AppConst.COLOR_POINT_HIGH);
+            this.pointText.setTextColor(AppConst.COLOR_POINT_HIGH);
+            this.setRatingBarColor(AppConst.COLOR_POINT_HIGH);
+        } else {
+            pointStr = String.format("%d.0", point);
+            this.pointTextPrefix.setTextColor(AppConst.COLOR_POINT_LOW);
+            this.pointText.setTextColor(AppConst.COLOR_POINT_LOW);
+            this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
+        }
+        this.pointTextPrefix.setText("รัมก");
+        this.pointText.setText(Html.fromHtml(String.format("%s<strong>%s</strong>", "", pointStr)));
+        this.pointStar.setRating(point);
+    }
+
     public void bind(EvaluationData evaluation) {
         final Context context = this.itemView.getContext();
         Picasso.with(context).load(evaluation.avatar_url).transform(new CircleTransformation()).into(this.avatar);
@@ -85,12 +119,21 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
         this.timestamp.setText(DateTimeUtil.timeago(context, evaluation.created_at));
         this.body.setText(evaluation.body);
         this.nickname.setText(evaluation.user_nickname);
-        this.hashtag.removeAllViews();
-        for(int i = 0; i < 5; i ++) this.hashtag.addView(new Hashtag(this.itemView.getContext(), "tag" + i)); // TODO : use real hashtag
-        if(evaluation.point_overall == null || evaluation.point_overall < 0) this.pointText.setText("N/A");
-        else if(evaluation.point_overall >= 10) this.pointText.setText("10");
-        else this.pointText.setText(String.format("%d.0", evaluation.point_overall));
-        this.pointStar.setRating(evaluation.point_overall);
+        this.hashtags.removeAllViews();
+        this.hashtags.post(() -> {
+            Timber.d("hashtags : %d x %d", hashtags.getWidth(), hashtags.getHeight());
+            float totalWidth = 0;
+            for(int i = 0; i < 5; i ++) {
+                Hashtag hashtag = new Hashtag(this.itemView.getContext(), "hashtag" + i);
+                float width = hashtag.getPaint().measureText((String)hashtag.getText());
+                if(width + totalWidth > hashtags.getWidth()) break;
+                this.hashtags.addView(hashtag);
+                totalWidth += width;
+                // TODO : use real hashtag
+            }
+        });
+
+        this.setPoint(evaluation.point_overall);
 
         if(evaluation.request_user_vote == null) this.setStatus(VoteStatus.NONE);
         else if(evaluation.request_user_vote == 1) this.setStatus(VoteStatus.UP);

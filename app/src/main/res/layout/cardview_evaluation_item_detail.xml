@@ -20,133 +20,162 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
         <TextView
-            android:text="xxxxx"
             android:id="@+id/evaluation_item_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/evaluation_item_avatar"
             android:gravity="center"
             android:layout_alignLeft="@+id/evaluation_item_avatar"
-            android:layout_alignRight="@+id/evaluation_item_avatar"/>
+            android:layout_alignStart="@+id/evaluation_item_avatar"
+            android:layout_alignRight="@+id/evaluation_item_avatar"
+            android:layout_alignEnd="@+id/evaluation_item_avatar"/>
 
         <TextView
-            android:text="xxxxx"
             android:id="@+id/evaluation_item_lecture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:maxLines="2"
             android:layout_marginTop="@dimen/baseline_x2"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_toRightOf="@+id/evaluation_item_avatar"
-            android:layout_toEndOf="@+id/evaluation_item_avatar"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-
-        <TextView
-            android:id="@+id/evaluation_item_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:background="@drawable/rounded_corner"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_marginRight="@dimen/baseline_x1"
-            android:layout_marginEnd="@dimen/baseline_x1"
-            android:layout_below="@+id/evaluation_item_lecture"
+            android:layout_toLeftOf="@+id/evaluation_item_timestamp"
+            android:layout_toStartOf="@+id/evaluation_item_timestamp"
             android:layout_toRightOf="@+id/evaluation_item_avatar"
             android:layout_toEndOf="@+id/evaluation_item_avatar"/>
 
-        <TextView
-            android:text="xxxxx"
-            android:id="@+id/evaluation_item_professor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_below="@+id/evaluation_item_lecture"
-            android:layout_toRightOf="@+id/evaluation_item_category"
-            android:layout_toEndOf="@+id/evaluation_item_category"/>
         <TextView
             android:id="@+id/evaluation_item_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text="xxxxx"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_below="@+id/evaluation_item_lecture"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
+            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
+
+        <RelativeLayout
+            android:id="@+id/evaluation_item_subinfo_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x0.5"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/evaluation_item_lecture"
+            android:layout_toRightOf="@+id/evaluation_item_avatar"
+            android:layout_toEndOf="@+id/evaluation_item_avatar">
+            <TextView
+                android:id="@+id/evaluation_item_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:background="@drawable/rounded_corner"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginRight="@dimen/baseline_x0.5"
+                android:layout_marginEnd="@dimen/baseline_x0.5"/>
+
+            <TextView
+                android:id="@+id/evaluation_item_professor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/evaluation_item_category"
+                android:layout_toEndOf="@+id/evaluation_item_category"
+                android:layout_toLeftOf="@+id/evaluation_item_point_overall_text_prefix"
+                android:layout_toStartOf="@+id/evaluation_item_point_overall_text_prefix"/>
+            <TextView
+                android:id="@+id/evaluation_item_point_overall_text_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/evaluation_item_point_overall_text"
+                android:layout_toStartOf="@+id/evaluation_item_point_overall_text"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/evaluation_item_point_overall_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/baseline_x0.5"
+                android:layout_marginStart="@dimen/baseline_x0.5"
+                android:layout_toLeftOf="@+id/evaluation_item_point_overall_star"
+                android:layout_toStartOf="@+id/evaluation_item_point_overall_star"
+                android:textSize="24sp"/>
+            <RatingBar
+                android:progressDrawable="@drawable/ratingbar"
+                android:id="@+id/evaluation_item_point_overall_star"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/baseline_x3"
+                android:numStars="5"
+                android:max="10"
+                android:isIndicator="true"
+                android:layout_marginLeft="@dimen/baseline_x0.5"
+                android:layout_marginStart="@dimen/baseline_x0.5"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/evaluation_item_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_below="@+id/evaluation_item_professor"
-            android:layout_toRightOf="@+id/evaluation_item_avatar"
-            android:layout_toEndOf="@+id/evaluation_item_avatar"
-            android:layout_toLeftOf="@+id/evaluation_item_point_overall_text"
-            android:layout_toStartOf="@+id/evaluation_item_point_overall_text"
-            android:layout_alignBottom="@+id/evaluation_item_point_overall_text"/>
-        <TextView
-            android:id="@+id/evaluation_item_point_overall_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_below="@+id/evaluation_item_professor"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textSize="40sp"/>
+            android:layout_below="@+id/evaluation_item_subinfo_container"
+            android:layout_toRightOf="@+id/evaluation_item_avatar"
+            android:layout_toEndOf="@+id/evaluation_item_avatar"
+            android:maxLines="4"
+            android:ellipsize="end"/>
+
         <LinearLayout
-            android:id="@+id/evaluation_item_hashtag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/evaluation_item_hashtags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_toRightOf="@+id/evaluation_item_avatar"
-            android:layout_toEndOf="@+id/evaluation_item_avatar"
-            android:layout_below="@+id/evaluation_item_body"/>
-        <RatingBar
-            style="?android:ratingBarStyleSmall"
-            android:id="@+id/evaluation_item_point_overall_star"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/baseline_x3"
-            android:layout_below="@+id/evaluation_item_body"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:numStars="5"
-            android:stepSize="1.0"
-            />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/evaluation_item_footer"
+            android:layout_alignBottom="@+id/evaluation_item_footer"
+            android:layout_marginLeft="@dimen/baseline_x1"
+            android:layout_marginStart="@dimen/baseline_x1"
+            android:layout_toLeftOf="@+id/evaluation_item_footer"
+            android:layout_toStartOf="@+id/evaluation_item_footer"
+            android:gravity="center_vertical"/>
+
         <LinearLayout
             android:id="@+id/evaluation_item_footer"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/baseline_x4"
+            android:layout_height="@dimen/baseline_x3"
             android:orientation="horizontal"
             android:gravity="end"
             android:background="@color/white"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="@dimen/baseline_x2"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_below="@+id/evaluation_item_point_overall_star">
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_marginBottom="@dimen/baseline_x1"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
+            android:layout_below="@+id/evaluation_item_body">
             <RelativeLayout
                 android:id="@+id/evaluation_item_up_vote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/evaluation_item_up_vote_icon"
-                    android:layout_width="@dimen/baseline_x4"
-                    android:layout_height="@dimen/baseline_x4"
+                    android:layout_width="@dimen/baseline_x3"
+                    android:layout_height="@dimen/baseline_x3"
                     android:contentDescription="@string/empty"
-                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_marginLeft="@dimen/baseline_x1"
                     android:layout_marginRight="@dimen/baseline_x1"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -168,10 +197,10 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/evaluation_item_down_vote_icon"
-                    android:layout_width="@dimen/baseline_x4"
-                    android:layout_height="@dimen/baseline_x4"
+                    android:layout_width="@dimen/baseline_x3"
+                    android:layout_height="@dimen/baseline_x3"
                     android:contentDescription="@string/empty"
-                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_marginLeft="@dimen/baseline_x1"
                     android:layout_marginRight="@dimen/baseline_x1"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -196,7 +225,7 @@
                     android:layout_width="@dimen/baseline_x3"
                     android:layout_height="@dimen/baseline_x3"
                     android:contentDescription="@string/empty"
-                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_marginLeft="@dimen/baseline_x1"
                     android:layout_marginRight="@dimen/baseline_x1"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
