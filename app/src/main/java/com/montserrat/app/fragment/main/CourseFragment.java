@@ -41,12 +41,6 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-/**
- * Course Fragment
- * - HEADER @ 0 position of recycler view
- * - COURSE @ 1 position of recycler view
- * - SIMPLE_EVALUATION @ 2+ position of recycler view : has ability to be expanded when clicked
- */
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, EvaluationData> implements OnBack {
     private Navigator navigator;
     @Override
@@ -100,7 +94,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
      */
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        Timber.d("clicked %s @ %d", view, position);
         if(isEvaluationDetailOpened) return;
         if(animators != null && animators.isRunning()) return;
         RetrofitApi.getInstance()
