@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -81,6 +85,29 @@ public class AppManager {
     }
     public Map<String, ?> getAll(String key, Map<String, ?> fallback) {
         return this.pref.getAll();
+    }
+
+    public <T> void addStringParsed(String key, T value){
+        List<T> objetList;
+        this.getStringParsed(" ", List.class);
+    }
+
+    public void putStringParsed(String key, Object value){
+        Gson gson = new Gson();
+        String json = gson.toJson(value);
+
+        this.putString(key, json);
+    }
+
+    public Object getStringParsed(String key, Class<?> classtype){
+        Gson gson = new Gson();
+        if(!this.contains(key)){
+            return null;
+        }
+        return gson.fromJson(
+            this.getString(key, ""),
+            classtype
+        );
     }
 
     public void remove(String key) {
