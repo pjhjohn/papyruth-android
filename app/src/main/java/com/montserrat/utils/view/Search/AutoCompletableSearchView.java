@@ -15,6 +15,7 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
+import com.montserrat.app.model.CoursesData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
@@ -134,7 +135,6 @@ public class AutoCompletableSearchView {
         this.editText = (EditText) textView;
 
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
-            Timber.d("@@@focus changed ");
             if(hasFocus) {
                 this.showCandidates(true);
             }
@@ -162,7 +162,6 @@ public class AutoCompletableSearchView {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(query -> {
                     if (type != Type.EVALUATION && query.isEmpty()) return null; // history
-                    Timber.d("query : %s", query);
                     return RetrofitApi.getInstance().search_autocomplete(
                         User.getInstance().getAccessToken(),
                         User.getInstance().getUniversityId(),
@@ -243,7 +242,11 @@ public class AutoCompletableSearchView {
     }
 
     public void searchHistory(){
-        List<CourseData> courseList = this.preferences.getHistory();
+        List<CourseData> courseList = ((CoursesData)AppManager.getInstance().getStringParsed(
+            AppConst.Preference.HISTORY,
+            CoursesData.class
+        )).courses;
+        Timber.d("courses : %s", courseList.size());
         this.courses.clear();
         if(courseList == null){
             //Todo : when history is empty, inform history is empty.
@@ -348,7 +351,6 @@ public class AutoCompletableSearchView {
     }
 
     public void showCandidates(boolean show){
-        Timber.d("@@@showCandidates %s", show);
         ViewGroup.LayoutParams param;
         if(show){
             if(type == Type.EVALUATION) {

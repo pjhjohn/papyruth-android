@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment {
         this.subscriptions.add(ViewObservable
             .clicks(signout)
             .subscribe(unused -> {
-                Preferences.clear();
+                AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
                 User.getInstance().clear();
                 this.getActivity().startActivity(new Intent(this.getActivity(), AuthActivity.class));
