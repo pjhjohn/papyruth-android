@@ -5,7 +5,6 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.CoursesData;
-import com.montserrat.app.model.response.CoursesResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +17,6 @@ import timber.log.Timber;
 public class Preferences {
     private Gson gson;
 
-    public enum Type{
-        HISTORY
-    }
     public static final int HISTORY_SIZE = 10;
 
     public Preferences(){
@@ -31,11 +27,10 @@ public class Preferences {
         if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
             return null;
         }
-        String data = AppManager.getInstance().getString(AppConst.Preference.HISTORY, "");
-        CoursesData coursesData = gson.fromJson(data, CoursesData.class);
-
-        Timber.d("***get History");
-        return coursesData.courses;
+        return gson.fromJson(
+            AppManager.getInstance().getString(AppConst.Preference.HISTORY, ""),
+            CoursesData.class
+        ).courses;
     }
 
     public boolean addHistory(CourseData course){
@@ -49,7 +44,7 @@ public class Preferences {
             courseDataList  = getHistory();
         }
         int index;
-        if((index = CourseDataContains(courseDataList, course)) >= 0) {
+        if((index = containsCourse(courseDataList, course)) >= 0) {
             courseDataList.remove(index);
             courseDataList.add(course);
         }else if (courseDataList.size() > HISTORY_SIZE - 1) {
@@ -69,21 +64,17 @@ public class Preferences {
         return true;
     }
 
-    public int CourseDataContains(List<CourseData> list, CourseData course){
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).id.equals(course.id))
-                return i;
+    public int containsCourse(List<CourseData> courses, CourseData target) {
+        for (CourseData course : courses) {
+            if (course.id.equals(target.id)) return courses.indexOf(course);
         }
         return -1;
     }
 
-
-    public static boolean clear(Type type){
-        if(type == Type.HISTORY) {
-            if (AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
-                AppManager.getInstance().remove(AppConst.Preference.HISTORY);
-                return true;
-            }
+    public static boolean clear(){
+        if (AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
+            AppManager.getInstance().remove(AppConst.Preference.HISTORY);
+            return true;
         }
         return false;
     }

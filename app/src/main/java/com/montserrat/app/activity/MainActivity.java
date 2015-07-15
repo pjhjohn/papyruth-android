@@ -27,6 +27,7 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.model.CoursesData;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
