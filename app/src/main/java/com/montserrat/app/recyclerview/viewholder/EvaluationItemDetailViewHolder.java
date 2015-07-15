@@ -3,16 +3,13 @@ package com.montserrat.app.recyclerview.viewholder;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
@@ -28,7 +25,6 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
@@ -90,12 +86,12 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
     }
 
     private void setPoint(Integer point) {
-        String pointStr = "";
+        String pointStr;
         if(point == null || point < 0) {
             pointStr = "N/A";
             this.pointTextPrefix.setTextColor(AppConst.COLOR_NEUTRAL);
             this.pointText.setTextColor(AppConst.COLOR_NEUTRAL);
-            this.pointStar.setRating(10);
+            this.pointStar.setRating(5.0f);
             this.setRatingBarColor(AppConst.COLOR_NEUTRAL);
         } else if(point >= 8) {
             if(point >= 10) pointStr = "10";
@@ -109,15 +105,15 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
             this.pointText.setTextColor(AppConst.COLOR_POINT_LOW);
             this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
         }
-        this.pointTextPrefix.setText("ÃÑÁ¡");
+        this.pointTextPrefix.setText(this.itemView.getContext().getString(R.string.point_overall));
         this.pointText.setText(Html.fromHtml(String.format("%s<strong>%s</strong>", "", pointStr)));
-        this.pointStar.setRating(point);
+        this.pointStar.setRating(point/2f);
     }
 
     public void bind(EvaluationData evaluation) {
         final Context context = this.itemView.getContext();
         Picasso.with(context).load(evaluation.avatar_url).transform(new CircleTransformation()).into(this.avatar);
-        this.category.setText("Àü°ø"); // TODO -> evaluation.category
+        this.category.setText(context.getString(R.string.category_major)); // TODO -> evaluation.category
         this.lecture.setText(evaluation.lecture_name);
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.professor_name, context.getResources().getString(R.string.professor_postfix))));
         this.timestamp.setText(DateTimeUtil.timeago(context, evaluation.created_at));

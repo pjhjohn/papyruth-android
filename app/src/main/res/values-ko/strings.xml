@@ -86,4 +86,6 @@
     <string name="just_now">방금</string>
     <string name="time_ago">%s 전</string>
     <string name="yesterday">어제</string>
+    <string name="point_overall">총점</string>
+    <string name="category_major">전공</string>
 </resources>

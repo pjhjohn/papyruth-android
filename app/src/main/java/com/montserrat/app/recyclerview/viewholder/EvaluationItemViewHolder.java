@@ -85,7 +85,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
             pointStr = "N/A";
             this.pointTextPrefix.setTextColor(AppConst.COLOR_NEUTRAL);
             this.pointText.setTextColor(AppConst.COLOR_NEUTRAL);
-            this.pointStar.setRating(10);
+            this.pointStar.setRating(5.0f);
             this.setRatingBarColor(AppConst.COLOR_NEUTRAL);
         } else if(point >= 8) {
             if(point >= 10) pointStr = "10";
@@ -99,9 +99,9 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
             this.pointText.setTextColor(AppConst.COLOR_POINT_LOW);
             this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
         }
-        this.pointTextPrefix.setText("รัมก");
+        this.pointTextPrefix.setText(this.itemView.getContext().getString(R.string.point_overall));
         this.pointText.setText(Html.fromHtml(String.format("%s<strong>%s</strong>", "", pointStr)));
-        this.pointStar.setRating(point);
+        this.pointStar.setRating(point/2.0f);
     }
 
     public void bind(EvaluationData evaluation) {

@@ -86,4 +86,6 @@
     <string name="just_now">just now</string>
     <string name="time_ago">%s ago</string>
     <string name="yesterday">yesterday</string>
+    <string name="point_overall">Total</string>
+    <string name="category_major">MAJOR</string>
 </resources>
