@@ -42,6 +42,8 @@ import com.montserrat.utils.view.search.CustomSearchView;
 import com.montserrat.utils.view.search.ToolbarSearch;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -65,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(this.fac);

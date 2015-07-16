@@ -16,7 +16,6 @@ import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.search.Preferences;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
@@ -93,7 +92,7 @@ public class ProfileFragment extends Fragment {
         this.subscriptions.add(ViewObservable
             .clicks(signout)
             .subscribe(unused -> {
-                Preferences.clear();
+                AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
                 User.getInstance().clear();
                 this.getActivity().startActivity(new Intent(this.getActivity(), AuthActivity.class));

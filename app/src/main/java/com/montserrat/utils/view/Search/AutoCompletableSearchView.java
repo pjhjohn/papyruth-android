@@ -15,6 +15,7 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
+import com.montserrat.app.model.CoursesData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
@@ -47,7 +48,6 @@ public class AutoCompletableSearchView {
     private AutoCompleteAdapter autoCompleteAdapter;
     private CourseItemsAdapter courseItemsAdapter;
 
-    private Preferences preferences;
     private CompositeSubscription subscription;
     private Context context;
 
@@ -71,7 +71,6 @@ public class AutoCompletableSearchView {
         this.courses = new ArrayList<>();
         this.candidates = new ArrayList<>();
         this.subscription = new CompositeSubscription();
-        this.preferences = new Preferences();
 
         this.autoCompleteListener = listener;
         this.context = context;
@@ -134,7 +133,6 @@ public class AutoCompletableSearchView {
         this.editText = (EditText) textView;
 
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
-            Timber.d("@@@focus changed ");
             if(hasFocus) {
                 this.showCandidates(true);
             }
@@ -162,7 +160,6 @@ public class AutoCompletableSearchView {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(query -> {
                     if (type != Type.EVALUATION && query.isEmpty()) return null; // history
-                    Timber.d("query : %s", query);
                     return RetrofitApi.getInstance().search_autocomplete(
                         User.getInstance().getAccessToken(),
                         User.getInstance().getUniversityId(),
@@ -243,7 +240,11 @@ public class AutoCompletableSearchView {
     }
 
     public void searchHistory(){
-        List<CourseData> courseList = this.preferences.getHistory();
+        List<CourseData> courseList = ((CoursesData)AppManager.getInstance().getStringParsed(
+            AppConst.Preference.HISTORY,
+            CoursesData.class
+        )).courses;
+        Timber.d("courses : %s", courseList.size());
         this.courses.clear();
         if(courseList == null){
             //Todo : when history is empty, inform history is empty.
@@ -272,6 +273,47 @@ public class AutoCompletableSearchView {
                 );
             }
         }
+    }
+
+    private static final int HISTORY_SIZE = 10;
+    public boolean addHistory(CourseData course){
+        List<CourseData> courseDataList;
+        CoursesData coursesData = new CoursesData();
+        coursesData.courses = new ArrayList<>();
+
+        if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
+            courseDataList = new ArrayList<>();
+        }else {
+            courseDataList  = ((CoursesData)AppManager.getInstance().getStringParsed(
+                AppConst.Preference.HISTORY,
+                CoursesData.class
+            )).courses;
+        }
+        int index;
+        if((index = containsCourse(courseDataList, course)) >= 0) {
+            courseDataList.remove(index);
+            courseDataList.add(course);
+        }else if (courseDataList.size() > HISTORY_SIZE - 1) {
+            courseDataList.remove(0);
+            courseDataList.add(course);
+            while(courseDataList.size() > HISTORY_SIZE - 1){
+                courseDataList.remove(0);
+            }
+        }else{
+            courseDataList.add(course);
+        }
+        coursesData.courses.clear();
+        coursesData.courses.addAll(courseDataList);
+        AppManager.getInstance().putStringParsed(AppConst.Preference.HISTORY, coursesData);
+        return true;
+    }
+    public int containsCourse(List<CourseData> courses, CourseData target) {
+        Timber.d("hash : %s", target.hashCode());
+        for (CourseData course : courses) {
+            Timber.d("hash : %s", course.hashCode());
+            if (course.id.equals(target.id)) return courses.indexOf(course);
+        }
+        return -1;
     }
 
     public void setSearchMode(boolean searchMode){
@@ -325,7 +367,7 @@ public class AutoCompletableSearchView {
             Search.getInstance().fromCandidate(candidates.get(position));
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
             Course.getInstance().clear().update(courses.get(position));
-            preferences.addHistory(courses.get(position));
+            this.addHistory(courses.get(position));
         }
     }
 
@@ -348,7 +390,6 @@ public class AutoCompletableSearchView {
     }
 
     public void showCandidates(boolean show){
-        Timber.d("@@@showCandidates %s", show);
         ViewGroup.LayoutParams param;
         if(show){
             if(type == Type.EVALUATION) {

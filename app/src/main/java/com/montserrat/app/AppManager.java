@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-04-10.
  * Contains Various Parameters for the application : Should be singleton.
@@ -87,14 +89,10 @@ public class AppManager {
         return this.pref.getAll();
     }
 
-    public <T> void addStringParsed(String key, T value){
-        List<T> objetList;
-        this.getStringParsed(" ", List.class);
-    }
-
     public void putStringParsed(String key, Object value){
         Gson gson = new Gson();
         String json = gson.toJson(value);
+        Timber.d("type2 : %s", value.getClass().getSimpleName());
 
         this.putString(key, json);
     }
@@ -104,6 +102,7 @@ public class AppManager {
         if(!this.contains(key)){
             return null;
         }
+        Timber.d("type : %s", classtype);
         return gson.fromJson(
             this.getString(key, ""),
             classtype
@@ -112,6 +111,14 @@ public class AppManager {
 
     public void remove(String key) {
         this.pref.edit().remove(key).apply();
+    }
+
+    public boolean clear(String key){
+        if (this.contains(key)) {
+            AppManager.getInstance().remove(key);
+            return true;
+        }
+        return false;
     }
 
     public void clear() {
