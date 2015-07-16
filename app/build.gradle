@@ -49,6 +49,7 @@ dependencies {
     compile 'com.klinkerapps:android-chips:1.0.0'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.0'
     compile 'com.balysv.materialmenu:material-menu-toolbar:1.5.4'
+    compile 'com.github.johnkil.android-robototextview:robototextview:2.4.0'
 }
 repositories {
     maven { url "https://jitpack.io" }
