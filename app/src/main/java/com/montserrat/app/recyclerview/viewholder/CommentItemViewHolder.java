@@ -27,14 +27,14 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-06-29.
  */
 public class CommentItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.comment_user_avatar) protected ImageView avatar;
-    @InjectView (R.id.comment_user_nickname) protected TextView nickname;
-    @InjectView (R.id.comment_timestamp) protected TextView timestamp;
-    @InjectView (R.id.comment_body) protected TextView body;
-    @InjectView (R.id.comment_up_vote_icon) protected ImageView upIcon;
-    @InjectView (R.id.comment_up_vote_count) protected TextView upCount;
-    @InjectView (R.id.comment_down_vote_icon) protected ImageView downIcon;
-    @InjectView (R.id.comment_down_vote_count) protected TextView downCount;
+    @InjectView(R.id.comment_item_avatar) protected ImageView avatar;
+    @InjectView(R.id.comment_item_nickname) protected TextView nickname;
+    @InjectView(R.id.comment_item_timestamp) protected TextView timestamp;
+    @InjectView(R.id.comment_item_body) protected TextView body;
+    @InjectView(R.id.comment_item_up_vote_icon) protected ImageView upIcon;
+    @InjectView(R.id.comment_item_up_vote_count) protected TextView upCount;
+    @InjectView(R.id.comment_item_down_vote_icon) protected ImageView downIcon;
+    @InjectView(R.id.comment_item_down_vote_count) protected TextView downCount;
     private int id;
     private VoteStatus status;
     public enum VoteStatus {
@@ -73,7 +73,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
 
         Picasso.with(this.itemView.getContext()).load(comment.avatar_url).transform(new CircleTransformation()).into(this.avatar);
         this.nickname.setText(comment.user_nickname);
-        this.timestamp.setText(DateTimeUtil.timestamp(comment.updated_at));
+        this.timestamp.setText(DateTimeUtil.timeago(this.itemView.getContext(), comment.updated_at));
         this.body.setText(comment.body);
 
         if(comment.request_user_vote == null) this.setStatus(VoteStatus.NONE);
@@ -86,7 +86,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
-            case R.id.comment_up_vote_icon:
+            case R.id.comment_item_up_vote_icon:
                 if(this.status == VoteStatus.UP) RetrofitApi.getInstance()
                     .delete_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -102,7 +102,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                         this.setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
                 break;
-            case R.id.comment_down_vote_icon:
+            case R.id.comment_item_down_vote_icon:
                 if(this.status == VoteStatus.DOWN) RetrofitApi.getInstance()
                     .delete_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -118,15 +118,15 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                         this.setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
                 break;
-            case R.id.comment_up_vote_count:
-            case R.id.comment_down_vote_count:
+            case R.id.comment_item_up_vote_count:
+            case R.id.comment_item_down_vote_count:
                 RetrofitApi.getInstance()
                     .get_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> VotersDialog.show(
                         view.getContext(),
-                        view.getId() == R.id.comment_up_vote_count ? "UP" : "DOWN",
-                        view.getId() == R.id.comment_up_vote_count ? response.up : response.down
+                        view.getId() == R.id.comment_item_up_vote_count ? "UP" : "DOWN",
+                        view.getId() == R.id.comment_item_up_vote_count ? response.up : response.down
                     ));
                 break;
             default : Timber.d("Clicked view : %s", view);
