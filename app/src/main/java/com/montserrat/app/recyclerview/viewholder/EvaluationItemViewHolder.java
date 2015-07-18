@@ -35,7 +35,6 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
     @InjectView (R.id.evaluation_item_body) protected TextView body;
     @InjectView (R.id.evaluation_item_nickname) protected TextView nickname;
     @InjectView (R.id.evaluation_item_hashtags) protected LinearLayout hashtags;
-    @InjectView (R.id.evaluation_item_point_overall_text_prefix) protected TextView pointTextPrefix;
     @InjectView (R.id.evaluation_item_point_overall_text) protected TextView pointText;
     @InjectView (R.id.evaluation_item_point_overall_star) protected RatingBar pointStar;
     @InjectView (R.id.evaluation_item_up_vote_icon) protected ImageView upIcon;
@@ -83,23 +82,19 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
         String pointStr;
         if(point == null || point < 0) {
             pointStr = "N/A";
-            this.pointTextPrefix.setTextColor(AppConst.COLOR_NEUTRAL);
             this.pointText.setTextColor(AppConst.COLOR_NEUTRAL);
             this.pointStar.setRating(5.0f);
             this.setRatingBarColor(AppConst.COLOR_NEUTRAL);
         } else if(point >= 8) {
             if(point >= 10) pointStr = "10";
             else pointStr = String.format("%d.0", point);
-            this.pointTextPrefix.setTextColor(AppConst.COLOR_POINT_HIGH);
             this.pointText.setTextColor(AppConst.COLOR_POINT_HIGH);
             this.setRatingBarColor(AppConst.COLOR_POINT_HIGH);
         } else {
             pointStr = String.format("%d.0", point);
-            this.pointTextPrefix.setTextColor(AppConst.COLOR_POINT_LOW);
             this.pointText.setTextColor(AppConst.COLOR_POINT_LOW);
             this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
         }
-        this.pointTextPrefix.setText(this.itemView.getContext().getString(R.string.point_overall));
         this.pointText.setText(Html.fromHtml(String.format("%s<strong>%s</strong>", "", pointStr)));
         this.pointStar.setRating(point/2.0f);
     }
