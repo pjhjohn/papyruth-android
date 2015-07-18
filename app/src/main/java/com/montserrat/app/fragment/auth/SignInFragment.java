@@ -153,7 +153,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
             .filter(trigger -> trigger)
             .subscribe(unused -> doRequest()));
 
-        subscriptions.add(ViewObservable.clicks(this.signup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+        subscriptions.add(ViewObservable.clicks(this.signup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV, true)));
     }
 
     private interface ProfileQuery {

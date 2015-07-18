@@ -1,6 +1,7 @@
 <resources>
     <!--app name-->
-    <string name="app_name">몬쎄라-트</string>
+    <string name="app_name">파피루스-</string>
+    <string name="sub_title">대학교 강의 평가</string>
 
     <!--navigation-->
     <string name="nav_item_home">홈</string>
@@ -11,6 +12,14 @@
     <string name="nav_item_random">임의강의</string>
 
     <!--toolbar-->
+
+    <!--sign up-->
+    <string name="step1">1단계</string>
+    <string name="step2">2단계</string>
+    <string name="step3">3단계</string>
+    <string name="step4">4단계</string>
+    <string name="step5">5단계</string>
+    <string name="entrance_year">입학년도</string>
 
     <!-- Strings related to login -->
     <string name="action_sign_in">로그인</string>
@@ -38,6 +47,7 @@
     <string name="email_default">--이메일 왜 로딩안됨?--</string>
     <string name="signup_category_account">계정</string>
     <string name="signup_category_info">추가 정보</string>
+    <string name="gender">성별</string>
     <string name="gender_male">남자</string>
     <string name="gender_female">여자</string>
     <string name="entrance_prompt">입학 년도를 선택해 주세요</string>

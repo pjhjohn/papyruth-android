@@ -46,7 +46,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
+public class SignUpStep1FragmentOld extends Fragment implements OnPageFocus {
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -69,7 +69,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
+        View view = inflater.inflate(R.layout.fragment_signup_step, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.entranceYear = null;
@@ -106,8 +106,8 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
                     if (response.success) {
                         User.getInstance().update(response.user, response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                        SignUpStep2Fragment.this.getActivity().startActivity(new Intent(SignUpStep2Fragment.this.getActivity(), MainActivity.class));
-                        SignUpStep2Fragment.this.getActivity().finish();
+                        SignUpStep1FragmentOld.this.getActivity().startActivity(new Intent(SignUpStep1FragmentOld.this.getActivity(), MainActivity.class));
+                        SignUpStep1FragmentOld.this.getActivity().finish();
                     } else {
                         Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                     }
@@ -151,7 +151,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
                 this.nickname.setError(nicknameError);
                 return emailError == null && passwordError == null && realnameError == null && nicknameError == null &&
                     validRadioGroup != null && validRadioGroup &&
-                    entranceYear != null && AppConst.MIN_ADMISSION_YEAR <= entranceYear && entranceYear <= Calendar.getInstance().get(Calendar.YEAR);
+                    entranceYear != null && AppConst.MIN_ENTRANCE_YEAR <= entranceYear && entranceYear <= Calendar.getInstance().get(Calendar.YEAR);
             })
             .startWith(false)
             .subscribe(valid -> {
@@ -170,16 +170,16 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        SignUpStep2Fragment.this.register();
+                        SignUpStep1FragmentOld.this.register();
                     }
                 })
                 .show()
         ));
-        this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+        this.subscriptions.add(ViewObservable.clicks(this.university).subscribe(unused -> pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV, true)));
     }
 
     private Observable<Integer> buildEntranceYearDialog() {
-        final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ADMISSION_YEAR + 1;
+        final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
         String[] years = new String[length];
         for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
         return Observable.create(observer -> this.entranceYearDialog = new MaterialDialog.Builder(this.getActivity())
