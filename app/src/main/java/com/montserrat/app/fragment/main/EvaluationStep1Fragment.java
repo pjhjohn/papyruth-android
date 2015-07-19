@@ -93,7 +93,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         }else{
             this.search.onRecyclerViewItemClick(view, position);
             EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
             EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
 
             ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);

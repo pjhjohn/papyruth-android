@@ -9,19 +9,21 @@ import java.util.List;
  */
 public class Course {
     private Integer id;
-    private Integer universityId;
-    private String name;
-    private String professor;
-    private Integer professorId;
-    private Integer lectureId;
-    private Integer pointOverall;
+    private Boolean isFavorite;
     private Integer pointGpaSatisfaction;
-    private Integer pointEasiness;
+    private Integer lectureId;
+    private Integer professorId;
+    private String createdAt;
+    private Integer evaluationCount;
+    private Integer universityId;
     private Integer pointClarity;
-    private Integer evaluation_count;
-    private String date;
+    private Integer pointOverall;
+    private String professorName;
+    private String updatedAt;
+    private Integer pointEasiness;
     private List<String> hashtags;
-
+    private String professorPhotoUrl;
+    private String name;
 
     private static Course instance = null;
     public static synchronized Course getInstance() {
@@ -30,119 +32,168 @@ public class Course {
     }
     public Course clear(){
         this.id = null;
-        this.universityId = null;
-        this.name = null;
-        this.professor = null;
-        this.professorId = null;
-        this.lectureId = null;
-        this.pointOverall = null;
+        this.isFavorite = null;
         this.pointGpaSatisfaction = null;
-        this.pointEasiness = null;
+        this.lectureId = null;
+        this.professorId = null;
+        this.createdAt = null;
+        this.evaluationCount = null;
+        this.universityId = null;
         this.pointClarity = null;
-        this.evaluation_count = null;
-        this.date = null;
+        this.pointOverall = null;
+        this.professorName = null;
+        this.updatedAt = null;
+        this.pointEasiness = null;
         this.hashtags = null;
+        this.professorPhotoUrl = null;
+        this.name = null;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("<lecture:%s> <professor:%s> <course-id:%d> <overall:%d> <gpa satisfaction:%d> <easiness:%d> <clarity:%d>",
-                name, professor, id, pointOverall, pointGpaSatisfaction, pointEasiness, pointClarity);
     }
 
     public void update(CourseData courseData){
         this.setId(courseData.id);
-        this.setProfessor(courseData.professor_name);
-        this.setName(courseData.name);
+        this.setIsFavorite(courseData.is_favorite);
+        this.setPointGpaSatisfaction(courseData.point_gpa_satisfaction);
         this.setLectureId(courseData.lecture_id);
         this.setProfessorId(courseData.professor_id);
-        this.setUniversityId(courseData.university_id);
+        this.setCreatedAt(courseData.created_at);
         this.setEvaluationCount(courseData.evaluation_count);
-        this.setPointOverall(courseData.point_overall);
-        this.setPointEasiness(courseData.point_easiness);
-        this.setPointGpaSatisfaction(courseData.point_gpa_satisfaction);
+        this.setUniversityId(courseData.university_id);
         this.setPointClarity(courseData.point_clarity);
-        this.setDate(courseData.created_at);
+        this.setPointOverall(courseData.point_overall);
+        this.setProfessorName(courseData.professor_name);
+        this.setUpdatedAt(courseData.updated_at);
+        this.setPointEasiness(courseData.point_easiness);
         this.setHashtags(courseData.hashtags);
+        this.setProfessorPhotoUrl(courseData.professor_photo_url);
+        this.setName(courseData.name);
     }
 
-    public Integer getId() { return id; }
-    public Integer getUniversityId() { return universityId; }
-    public String getName() { return name; }
-    public Integer getPointClarity() { return pointClarity; }
-    public String getProfessor() { return professor; }
-    public Integer getPointOverall() { return pointOverall; }
-    public Integer getPointGpaSatisfaction() { return pointGpaSatisfaction; }
-    public Integer getPointEasiness() { return pointEasiness; }
-    public Integer getLectureId() { return lectureId; }
-    public Integer getProfessorId() { return professorId; }
-    public List<String> getHashtags() { return hashtags; }
-    public Integer getEvaluationCount() { return evaluation_count; }
-    public String getDate() { return date; }
+    public Integer getId() {
+        return id;
+    }
 
-    public Course setId(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
-        return this;
     }
 
-    public Course setUniversityId(Integer universityId) {
-        this.universityId = universityId;
-        return this;
+    public Boolean getIsFavorite() {
+        return isFavorite;
     }
 
-    public Course setName(String name) {
-        this.name = name;
-        return this;
+    public void setIsFavorite(Boolean isFavorite) {
+        this.isFavorite = isFavorite;
     }
 
-    public Course setProfessor(String professor) {
-        this.professor = professor;
-        return this;
+    public Integer getPointGpaSatisfaction() {
+        return pointGpaSatisfaction;
     }
 
-    public Course setProfessorId(Integer professorId) {
-        this.professorId = professorId;
-        return this;
-    }
-
-    public Course setLectureId(Integer lectureId) {
-        this.lectureId = lectureId;
-        return this;
-    }
-
-    public Course setPointOverall(Integer pointOverall) {
-        this.pointOverall = pointOverall;
-        return this;
-    }
-
-    public Course setPointGpaSatisfaction(Integer pointGpaSatisfaction) {
+    public void setPointGpaSatisfaction(Integer pointGpaSatisfaction) {
         this.pointGpaSatisfaction = pointGpaSatisfaction;
-        return this;
     }
 
-    public Course setPointEasiness(Integer pointEasiness) {
-        this.pointEasiness = pointEasiness;
-        return this;
+    public Integer getLectureId() {
+        return lectureId;
     }
 
-    public Course setPointClarity(Integer pointClarity) {
+    public void setLectureId(Integer lectureId) {
+        this.lectureId = lectureId;
+    }
+
+    public Integer getProfessorId() {
+        return professorId;
+    }
+
+    public void setProfessorId(Integer professorId) {
+        this.professorId = professorId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getEvaluationCount() {
+        return evaluationCount;
+    }
+
+    public void setEvaluationCount(Integer evaluationCount) {
+        this.evaluationCount = evaluationCount;
+    }
+
+    public Integer getUniversityId() {
+        return universityId;
+    }
+
+    public void setUniversityId(Integer universityId) {
+        this.universityId = universityId;
+    }
+
+    public Integer getPointClarity() {
+        return pointClarity;
+    }
+
+    public void setPointClarity(Integer pointClarity) {
         this.pointClarity = pointClarity;
-        return this;
     }
 
-    public Course setEvaluationCount(Integer evaluation_count) {
-        this.evaluation_count = evaluation_count;
-        return this;
+    public Integer getPointOverall() {
+        return pointOverall;
     }
 
-    public Course setDate(String date) {
-        this.date = date;
-        return this;
+    public void setPointOverall(Integer pointOverall) {
+        this.pointOverall = pointOverall;
     }
 
-    public Course setHashtags(List<String> hashtags) {
+    public String getProfessorName() {
+        return professorName;
+    }
+
+    public void setProfessorName(String professorName) {
+        this.professorName = professorName;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getPointEasiness() {
+        return pointEasiness;
+    }
+
+    public void setPointEasiness(Integer pointEasiness) {
+        this.pointEasiness = pointEasiness;
+    }
+
+    public List<String> getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(List<String> hashtags) {
         this.hashtags = hashtags;
-        return this;
+    }
+
+    public String getProfessorPhotoUrl() {
+        return professorPhotoUrl;
+    }
+
+    public void setProfessorPhotoUrl(String professorPhotoUrl) {
+        this.professorPhotoUrl = professorPhotoUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

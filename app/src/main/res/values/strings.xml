@@ -88,4 +88,5 @@
     <string name="yesterday">yesterday</string>
     <string name="point_overall">Total</string>
     <string name="category_major">MAJOR</string>
+    <string name="toolbar_title_course">Course Overview</string>
 </resources>

@@ -1,46 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    android:id="@+id/cardview_course"
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    card_view:cardCornerRadius="0dp"
-    card_view:cardElevation="2dp">
+    android:minHeight="@dimen/cardview_min_height_extended"
+    android:layout_gravity="center">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/course_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/course_professor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/viewholder_bg_selector"
+        android:layout_marginBottom="1dp"
+        android:padding="@dimen/baseline_x2">
+
         <TextView
             android:id="@+id/course_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:id="@+id/course_thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/app_name"/><!--TODO : specify attribute definition of this 'contentDescription'-->
-        <com.github.mikephil.charting.charts.HorizontalBarChart
-            android:id="@+id/course_chart"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/rounded_corner"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/course_lecture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="100dp"/>
+            android:layout_alignBaseline="@+id/course_category"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/baseline_x0.5"
+            android:layout_marginStart="@dimen/baseline_x0.5"
+            android:layout_toRightOf="@+id/course_category"
+            android:layout_toEndOf="@+id/course_category"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/course_professor_image"
+            android:layout_width="@dimen/cardview_image_side_length"
+            android:layout_height="@dimen/cardview_image_side_length"
+            android:padding="@dimen/cardview_image_padding"
+            android:contentDescription=""
+            android:layout_below="@+id/course_category"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/course_professor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_below="@+id/course_category"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
+            android:layout_toLeftOf="@+id/course_point_overall_prefix"
+            android:layout_toStartOf="@+id/course_point_overall_prefix"
+            android:layout_toRightOf="@+id/course_professor_image"
+            android:layout_toEndOf="@+id/course_professor_image"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/course_point_overall_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_below="@+id/course_category"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
+            android:layout_toLeftOf="@+id/course_point_overall_text"
+            android:layout_toStartOf="@+id/course_point_overall_text"/>
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/course_point_overall_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_below="@+id/course_category"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textSize="16sp"
+            app:fontFamily="roboto"
+            app:textWeight="light"/>
+
+        <RatingBar
+            android:id="@+id/course_point_overall_star"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/baseline_x3"
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_below="@+id/course_point_overall_text"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:progressDrawable="@drawable/ratingbar_22dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:max="10"/>
+
+        <RelativeLayout
+            android:id="@+id/course_point_clarity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_below="@id/course_point_overall_star">
+
+            <TextView
+                android:id="@+id/course_point_clarity_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/point_clarity"
+                android:minWidth="@dimen/baseline_x6"
+                android:gravity="right|end"/>
+
+            <ProgressBar
+                android:id="@+id/course_point_clarity_progress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/baseline_x1"
+                android:layout_marginLeft="@dimen/baseline_x1"
+                android:layout_marginRight="@dimen/baseline_x1"
+                android:layout_toLeftOf="@+id/course_point_clarity_text"
+                android:layout_toStartOf="@+id/course_point_clarity_text"
+                android:layout_toRightOf="@+id/course_point_clarity_prefix"
+                android:layout_toEndOf="@+id/course_point_clarity_prefix"
+                android:layout_centerVertical="true"
+                android:progressDrawable="@drawable/progressbar_clarity"
+                android:indeterminateOnly="false"
+                android:max="100"/>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/course_point_clarity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/point_clarity"
+                app:fontFamily="roboto"
+                app:textWeight="light"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/course_point_gpa_satisfaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_below="@id/course_point_clarity">
+
+            <TextView
+                android:id="@+id/course_point_gpa_satisfaction_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/point_gpa_satisfaction"
+                android:minWidth="@dimen/baseline_x6"
+                android:gravity="right|end"/>
+
+            <ProgressBar
+                android:id="@+id/course_point_gpa_satisfaction_progress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/baseline_x1"
+                android:layout_marginLeft="@dimen/baseline_x1"
+                android:layout_marginRight="@dimen/baseline_x1"
+                android:layout_toLeftOf="@+id/course_point_gpa_satisfaction_text"
+                android:layout_toStartOf="@+id/course_point_gpa_satisfaction_text"
+                android:layout_toRightOf="@+id/course_point_gpa_satisfaction_prefix"
+                android:layout_toEndOf="@+id/course_point_gpa_satisfaction_prefix"
+                android:layout_centerVertical="true"
+                android:progressDrawable="@drawable/progressbar_gpa_satisfaction"
+                android:indeterminateOnly="false"
+                android:max="100"/>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/course_point_gpa_satisfaction_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/point_gpa_satisfaction"
+                app:fontFamily="roboto"
+                app:textWeight="light"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/course_point_easiness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_below="@id/course_point_gpa_satisfaction">
+
+            <TextView
+                android:id="@+id/course_point_easiness_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/point_easiness"
+                android:minWidth="@dimen/baseline_x6"
+                android:gravity="end|right"/>
+
+            <ProgressBar
+                android:id="@+id/course_point_easiness_progress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/baseline_x1"
+                android:layout_marginLeft="@dimen/baseline_x1"
+                android:layout_marginRight="@dimen/baseline_x1"
+                android:layout_toLeftOf="@+id/course_point_easiness_text"
+                android:layout_toStartOf="@+id/course_point_easiness_text"
+                android:layout_toRightOf="@+id/course_point_easiness_prefix"
+                android:layout_toEndOf="@+id/course_point_easiness_prefix"
+                android:layout_centerVertical="true"
+                android:progressDrawable="@drawable/progressbar_easiness"
+                android:indeterminateOnly="false"
+                android:max="100"/>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/course_point_easiness_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/point_easiness"
+                app:fontFamily="roboto"
+                app:textWeight="light"/>
+        </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/course_hashtags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_alignTop="@+id/course_footer"
+            android:layout_alignBottom="@+id/course_footer"
+            android:layout_toLeftOf="@+id/course_footer"
+            android:layout_toStartOf="@+id/course_footer"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"/>
+
+        <LinearLayout
+            android:id="@+id/course_footer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/baseline_x3"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/baseline_x0.5"
+            android:layout_below="@+id/course_point_easiness">
+
+            <RelativeLayout
+                android:id="@+id/course_evaluator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/baseline_x0.5"
+                android:layout_marginRight="@dimen/baseline_x0.5">
+
+                <ImageView
+                    android:id="@+id/course_evaluator_icon"
+                    android:layout_width="@dimen/baseline_x3"
+                    android:layout_height="@dimen/baseline_x3"
+                    android:contentDescription="@string/empty"
+                    android:layout_marginLeft="@dimen/baseline_x0.5"
+                    android:layout_marginRight="@dimen/baseline_x0.5"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"/>
+
+                <TextView
+                    android:id="@+id/course_evaluator_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_toRightOf="@+id/course_evaluator_icon"
+                    android:layout_toEndOf="@+id/course_evaluator_icon"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+    </RelativeLayout>
+</FrameLayout>

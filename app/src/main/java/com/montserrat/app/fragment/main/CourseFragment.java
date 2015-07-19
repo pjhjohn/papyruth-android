@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,6 +69,10 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.isEvaluationDetailOpened = false;
         this.setupRecyclerView(this.courseRecyclerView);
+
+        this.toolbar.setTitle(R.string.toolbar_title_course);
+        this.toolbar.setTitleTextColor(Color.WHITE);
+
         return view;
     }
 
@@ -140,7 +145,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     private void jumpToEvaluationStep2() {
         EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-        EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessor());
+        EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
         this.navigator.navigate(EvaluationStep2Fragment.class, true);
     }
 

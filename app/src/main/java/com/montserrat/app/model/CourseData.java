@@ -7,20 +7,21 @@ import java.util.List;
  */
 public class CourseData {
     public Integer id;
-    public Integer professor_id;
-    public Integer lecture_id;
-    public Integer university_id;
-    public Integer evaluation_count;
-    public Integer point_overall;
-    public Integer point_gpa_satisfaction;
-    public Integer point_easiness;
-    public Integer point_clarity;
-    public String created_at;
-    public String updated_at;
-    public String name;
-    public String professor_name;
-    public List<String> hashtags;
     public Boolean is_favorite;
+    public Integer point_gpa_satisfaction;
+    public Integer lecture_id;
+    public Integer professor_id;
+    public String created_at;
+    public Integer evaluation_count;
+    public Integer university_id;
+    public Integer point_clarity;
+    public Integer point_overall;
+    public String professor_name;
+    public String updated_at;
+    public Integer point_easiness;
+    public List<String> hashtags;
+    public String professor_photo_url;
+    public String name;
 
     public static CourseData Sample(){
         CourseData courseData = new CourseData();
