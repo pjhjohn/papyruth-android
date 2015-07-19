@@ -8,9 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
+import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,16 +23,16 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep3Fragment extends Fragment{
-//    private ViewPagerController pagerController;
+public class SignUpStep3Fragment extends Fragment implements OnPageFocus{
+    private ViewPagerController pagerController;
 
     private Navigator navigator;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        this.pagerController = (ViewPagerController) activity;
-        this.navigator = (Navigator)activity;
+        this.pagerController = (ViewPagerController) activity;
+//        this.navigator = (Navigator)activity;
     }
 
     private CompositeSubscription subscription;
@@ -53,13 +56,17 @@ public class SignUpStep3Fragment extends Fragment{
     public void onResume() {
         super.onResume();
 
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+    }
+
+    @Override
+    public void onPageFocused() {
+
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    this.navigator.navigate(SignUpStep3Fragment.class, true);
+                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
                 })
         );
     }
-
 }

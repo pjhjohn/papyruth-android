@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -16,17 +15,14 @@ import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
+public class SignUpStep4Fragment extends Fragment implements OnPageFocus{
     private ViewPagerController pagerController;
-//    private ViewPagerController pagerController;
-    @InjectView(R.id.email) protected EditText email;
 
     private Navigator navigator;
 
@@ -41,7 +37,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
+        View view = inflater.inflate(R.layout.fragment_signup_step4, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
         return view;
@@ -57,15 +53,17 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
     @Override
     public void onPageFocused() {
+
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP5, true);
                 })
         );
     }

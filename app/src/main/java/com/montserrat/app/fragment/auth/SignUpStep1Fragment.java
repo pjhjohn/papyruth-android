@@ -15,6 +15,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
 import com.montserrat.app.model.unique.EvaluationForm;
+import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -111,14 +112,12 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus{
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
-        FloatingActionControl.getInstance().show(true);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
+                    Signup.getInstance().clear();
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
-
-//                    this.navigator.navigate(SignUpStep2Fragment.class, true);
                 })
         );
     }
