@@ -41,6 +41,7 @@ public class AuthActivity extends Activity implements ViewPagerController, Navig
         FloatingActionControl.getInstance().setContainer(this.fac);
 
         this.mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_viewpager, SignInFragment.class);
+//        this.mNavigator = new FragmentNavigator(null, this.getFragmentManager(), R.id.auth_viewpager, SignInFragment.class, null, null);
 
         /* Set Manager for ViewPager */
         this.manager = new ViewPagerManager(

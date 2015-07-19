@@ -95,10 +95,10 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     public void onRecyclerViewItemClick(View view, int position) {
         User.getInstance().setUniversityId(this.items.get(position).id);
         User.getInstance().setUniversityName(this.items.get(position).name);
-//        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP1) {
-//            if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_UNIV)) this.pagerController.popCurrentPage();
-//            else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-//        } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-        this.navigator.navigate(SignUpStep1Fragment.class, true);
+        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP1) {
+            if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_UNIV)) this.pagerController.popCurrentPage();
+            else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+        } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+//        this.navigator.navigate(SignUpStep1Fragment.class, true);
     }
 }

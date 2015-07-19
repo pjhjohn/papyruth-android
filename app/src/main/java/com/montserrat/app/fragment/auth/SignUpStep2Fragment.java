@@ -29,14 +29,14 @@ import timber.log.Timber;
  */
 
 public class SignUpStep2Fragment extends Fragment{
-    private ViewPagerController pagerController;
+//    private ViewPagerController pagerController;
 
     private Navigator navigator;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+//        this.pagerController = (ViewPagerController) activity;
         this.navigator = (Navigator)activity;
     }
 
