@@ -16,6 +16,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
@@ -31,10 +32,12 @@ import rx.subscriptions.CompositeSubscription;
 
 public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus {
     private ViewPagerController pagerController;
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+        this.navigator = (Navigator)activity;
     }
     @Override
     public void onDetach() {
@@ -92,9 +95,10 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     public void onRecyclerViewItemClick(View view, int position) {
         User.getInstance().setUniversityId(this.items.get(position).id);
         User.getInstance().setUniversityName(this.items.get(position).name);
-        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP1) {
-            if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_UNIV)) this.pagerController.popCurrentPage();
-            else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-        } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+//        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP1) {
+//            if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_UNIV)) this.pagerController.popCurrentPage();
+//            else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+//        } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+        this.navigator.navigate(SignUpStep1Fragment.class, true);
     }
 }

@@ -47,9 +47,12 @@
         android:id="@+id/entrance_year"
         android:layout_width="300dp"
         android:layout_gravity="center"
-        android:layout_height="wrap_content"/>
+        android:layout_height="40dp"/>
+
     <ListView
         android:id="@+id/entrance_year_list"
+        android:background="#ddd"
+
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="200dp"/>

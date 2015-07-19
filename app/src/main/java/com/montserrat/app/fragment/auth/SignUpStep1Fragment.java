@@ -13,6 +13,11 @@ import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
+import com.montserrat.app.model.unique.EvaluationForm;
+import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.navigator.FragmentNavigator;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.Calendar;
@@ -32,10 +37,13 @@ public class SignUpStep1Fragment extends Fragment{
     @InjectView(R.id.entrance_year_list) protected ListView yearList;
     @InjectView(R.id.entrance_year) protected TextView year;
 
+    private Navigator navigator;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+        this.navigator = (Navigator)activity;
     }
 
     private CompositeSubscription subscription;
@@ -60,12 +68,25 @@ public class SignUpStep1Fragment extends Fragment{
         super.onResume();
         this.setEntranceYear();
 
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        FloatingActionControl.getInstance().show(true);
+        this.subscription.add(FloatingActionControl
+                .clicks()
+                .subscribe(unused -> {
+                    this.navigator.navigate(SignUpStep2Fragment.class, true);
+                })
+        );
     }
 
     public void setEntranceYear(){
         final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
-        String[] years = new String[length];
-        for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
+        String[] years = new String[length+4];
+        for(int i = 0; i < length+4; i ++){
+            if(i < 2 || i >= length+2)
+                years[i] = "";
+            else
+                years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i+2);
+        }
         this.yearList.setAdapter(new ArrayAdapter<String>(this.getActivity().getBaseContext(), R.layout.cardview_simpletext, years));
 
         this.subscription.add(
@@ -75,8 +96,21 @@ public class SignUpStep1Fragment extends Fragment{
                 .subscribe(position -> {
                     int height = yearList.getHeight();
                     int itemHeight = yearList.getChildAt(0).getHeight();
-                    this.yearList.setSelectionFromTop(3, height / 2 - itemHeight / 2);
-                    Timber.d("year2 %s", yearList.getChildAt(position).toString());
+                    this.yearList.setSelectionFromTop(position, height / 2 - itemHeight / 2);
+                    this.year.setText(years[position].toString());
+                    Timber.d("selection : %s", years[position]);
+                    this.navigator.navigate(SignUpStep2Fragment.class, true);
+                }, error -> {
+                    Timber.d("click error : %s", error);
+                })
+        );
+        this.subscription.add(
+            WidgetObservable
+                .listScrollEvents(yearList)
+                .map(listener -> listener.firstVisibleItem())
+                .subscribe(position -> {
+                    this.year.setText(years[position+2]);
+                    Timber.d("year3 %s", position);
                 })
         );
     }

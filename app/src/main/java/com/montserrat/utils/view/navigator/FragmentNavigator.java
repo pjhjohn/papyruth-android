@@ -26,12 +26,16 @@ public class FragmentNavigator implements Navigator {
     NavigationDrawerFragment navigationDrawer;
 
     public FragmentNavigator(NavigationDrawerFragment drawer, FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment, MaterialMenuDrawable materialMenuDrawable, MaterialMenuDrawable.IconState initialMaterialMenuDrawableState) {
-        this.containerViewId = containerViewId;
-        this.manager = manager;
+        this(manager, containerViewId, initialFragment);
         this.materialMenuDrawable = materialMenuDrawable;
         this.materialMenuDrawableState = initialMaterialMenuDrawableState;
         this.materialMenuDrawable.setIconState(initialMaterialMenuDrawableState);
         this.navigationDrawer = drawer;
+
+    }
+    public FragmentNavigator(FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment) {
+        this.containerViewId = containerViewId;
+        this.manager = manager;
 
         Fragment fragment = this.instantiateFragment(initialFragment);
         this.manager.beginTransaction()
@@ -39,7 +43,6 @@ public class FragmentNavigator implements Navigator {
             .addToBackStack(fragment.getClass().getSimpleName())
             .commit();
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
         final Fragment current = this.manager.findFragmentById(this.containerViewId);
