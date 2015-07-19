@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
- * Used in {@link com.montserrat.app.fragment.auth.SignUpStep1Fragment SignUpStep1Fragment}
+ * Used in {@link com.montserrat.app.fragment.auth.SignUpStepUnivFragment SignUpStep1Fragment}
  * as an adapter for Grid-type {@link RecyclerView} to provide university selection to user
  */
 public class UniversityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

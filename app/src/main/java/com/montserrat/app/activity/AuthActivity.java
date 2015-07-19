@@ -1,14 +1,20 @@
 package com.montserrat.app.activity;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.auth.AuthFragmentFactory;
+import com.montserrat.app.fragment.auth.SignInFragment;
+import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
+import com.montserrat.utils.view.navigator.FragmentNavigator;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
@@ -21,8 +27,9 @@ import butterknife.InjectView;
 /**
  * Activity For Authentication.
  */
-public class AuthActivity extends Activity implements ViewPagerController {
+public class AuthActivity extends Activity implements ViewPagerController, Navigator {
     private ViewPagerManager manager;
+    private FragmentNavigator mNavigator;
 
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
 
@@ -32,6 +39,9 @@ public class AuthActivity extends Activity implements ViewPagerController {
         this.setContentView(R.layout.activity_auth);
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(this.fac);
+
+        this.mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_viewpager, SignInFragment.class);
+//        this.mNavigator = new FragmentNavigator(null, this.getFragmentManager(), R.id.auth_viewpager, SignInFragment.class, null, null);
 
         /* Set Manager for ViewPager */
         this.manager = new ViewPagerManager(
@@ -80,5 +90,55 @@ public class AuthActivity extends Activity implements ViewPagerController {
     @Override
     public void onBackPressed() {
         if(!this.manager.onBack()) super.onBackPressed();
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
+        this.mNavigator.navigate(target, addToBackStack);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType) {
+        this.mNavigator.navigate(target, addToBackStack, animatorType);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
+        this.mNavigator.navigate(target, addToBackStack, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
+        this.mNavigator.navigate(target, addToBackStack, animatorType, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack) {
+        this.mNavigator.navigate(target, bundle, addToBackStack);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType) {
+        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, boolean clear) {
+        this.mNavigator.navigate(target, bundle, addToBackStack, clear);
+    }
+
+    @Override
+    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
+        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType, clear);
+    }
+
+    @Override
+    public String getBackStackNameAt(int index) {
+        return this.mNavigator.getBackStackNameAt(index);
+    }
+
+    @Override
+    public boolean back() {
+        return this.mNavigator.back();
     }
 }

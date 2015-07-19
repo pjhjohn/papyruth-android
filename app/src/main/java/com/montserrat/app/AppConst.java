@@ -10,7 +10,7 @@ public class AppConst {
     public static final String API_ROOT = "mont.izz.kr:3001";
     public static final String API_VERSION = "v1";
 
-    public static final int MIN_ADMISSION_YEAR = 2000;
+    public static final int MIN_ENTRANCE_YEAR = 2000;
     /* KOREAN : 1 WORD == 3 BYTES */
     public static final int MAX_REALNAME_BYTES = 20;
     public static final int MAX_NICKNAME_BYTES = 20;
@@ -57,8 +57,12 @@ public class AppConst {
             public static final int LENGTH = 4;
             public static final int LOADING = 0;
             public static final int AUTH = 1;
-            public static final int SIGNUP_STEP1 = 2;
-            public static final int SIGNUP_STEP2 = 3;
+            public static final int SIGNUP_UNIV = 2;
+            public static final int SIGNUP_STEP1 = 3;
+            public static final int SIGNUP_STEP2 = 4;
+            public static final int SIGNUP_STEP3 = 5;
+            public static final int SIGNUP_STEP4 = 6;
+            public static final int SIGNUP_ARTICLE = 6;
         }
     }
 

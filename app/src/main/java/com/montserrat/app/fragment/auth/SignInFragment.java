@@ -28,6 +28,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -56,10 +57,13 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 public class SignInFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
     private ViewPagerController pagerController;
+    private Navigator navigator;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+        this.navigator = (Navigator) activity;
     }
 
     @InjectView (R.id.email) protected MaterialAutoCompleteTextView emailField;
@@ -153,7 +157,11 @@ public class SignInFragment extends Fragment implements OnPageFocus {
             .filter(trigger -> trigger)
             .subscribe(unused -> doRequest()));
 
-        subscriptions.add(ViewObservable.clicks(this.signup).subscribe(unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)));
+        subscriptions.add(ViewObservable.clicks(this.signup).subscribe(
+            unused ->
+//                this.navigator.navigate(SignUpStepUnivFragment.class, true)
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV, true)
+        ));
     }
 
     private interface ProfileQuery {
