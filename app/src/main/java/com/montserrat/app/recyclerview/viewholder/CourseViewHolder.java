@@ -3,6 +3,7 @@ package com.montserrat.app.recyclerview.viewholder;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -18,7 +19,6 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
-import com.montserrat.utils.view.DateTimeUtil;
 import com.montserrat.utils.view.Hashtag;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +35,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.course_professor_image) protected ImageView professor_image;
     @InjectView(R.id.course_point_overall_prefix) protected TextView pointOverallPrefix;
     @InjectView(R.id.course_point_overall_text) protected TextView pointOverallText;
-    @InjectView(R.id.course_point_overall_star) protected RatingBar pointOverallStar;
+    @InjectView(R.id.course_point_overall_star) protected RatingBar pointOverallRating;
     @InjectView(R.id.course_point_clarity_prefix) protected TextView pointClarityPrefix;
     @InjectView(R.id.course_point_clarity_text) protected TextView pointClarityText;
     @InjectView(R.id.course_point_clarity_progress) protected ProgressBar pointClarityProgress;
@@ -57,36 +57,55 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.fg_accent));
     }
 
-    private void setRatingBarColor(int color) {
-        LayerDrawable stars = (LayerDrawable) pointOverallStar.getProgressDrawable();
+    private void setRatingBarColor(RatingBar rating, int color) {
+        LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
         for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 
-    private void setOverallRating(Float point) {
-        if(point == null || point < 0) this.setRatingBarColor(AppConst.COLOR_NEUTRAL);
-        else if(point >= 8) this.setRatingBarColor(AppConst.COLOR_POINT_HIGH);
-        else this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
-        this.pointOverallStar.setRating(point == null || point < 0 ? 5.0f : point / 2f);
+    private void setPointRating(TextView prefix, RatingBar rating, TextView text, Integer point_sum, Integer count) {
+        Float rating_value = count == null || count <= 0 ? null : point_sum == null ? null : (float)point_sum / (float)count / 2f;
+        if(rating_value == null || rating_value < 0) {
+            prefix.setTextColor(AppConst.COLOR_NEUTRAL);
+            this.setRatingBarColor(rating, AppConst.COLOR_NEUTRAL);
+            text.setTextColor(AppConst.COLOR_NEUTRAL);
+            text.setText("N/A");
+        } else {
+            prefix.setTextColor(rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
+            this.setRatingBarColor(rating, rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
+            text.setTextColor(rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
+            text.setText(rating_value >= 10 ? "10" : String.format("%.1f", rating_value));
+        } rating.setRating(rating_value == null || rating_value < 0 ? 5.0f : rating_value);
+    }
+    
+    private void setPointProgress(TextView prefix, ProgressBar progress, TextView text, Integer point_sum, Integer count) {
+        Integer progress_value = count == null || count <= 0 ? null : point_sum == null ? null : (int)(((float)point_sum / (float)count) * 10);
+        if(progress_value == null || progress_value < 0) {
+            prefix.setTextColor(AppConst.COLOR_NEUTRAL);
+            progress.setProgressDrawable(new ColorDrawable(AppConst.COLOR_NEUTRAL));
+            progress.setProgress(100);
+            text.setTextColor(AppConst.COLOR_NEUTRAL);
+            text.setText("N/A");
+        } else {
+            progress.setProgress(progress_value);
+            text.setText(progress_value >= 100 ? "10" : String.format("%d.%d", progress_value/10, progress_value%10));
+        }
     }
 
     public void bind(Course course) {
         final Context context = this.itemView.getContext();
+        final Integer count = course.getEvaluationCount();
         this.category.setText(context.getString(R.string.category_major)); // TODO -> evaluation.category
         this.lecture.setText(course.getName());
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), course.getProfessorName(), context.getResources().getString(R.string.professor_postfix))));
         Picasso.with(context).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(this.professor_image);
         this.pointOverallPrefix.setText(R.string.label_point_overall);
-        this.setOverallRating((float) course.getPointOverall() / (float) course.getEvaluationCount());
-        this.pointOverallText.setText("TODO");
+        this.setPointRating(this.pointOverallPrefix, this.pointOverallRating, this.pointOverallText, course.getPointOverall(), count);
         this.pointClarityPrefix.setText(R.string.label_point_clarity);
-        this.pointClarityProgress.setProgress(25);
-        this.pointClarityText.setText("TODO");
+        this.setPointProgress(this.pointClarityPrefix, this.pointClarityProgress, this.pointClarityText, course.getPointClarity(), count);
         this.pointEasinessPrefix.setText(R.string.label_point_easiness);
-        this.pointEasinessProgress.setProgress(50);
-        this.pointEasinessText.setText("TODO");
+        this.setPointProgress(this.pointEasinessPrefix, this.pointEasinessProgress, this.pointEasinessText, course.getPointEasiness(), count);
         this.pointGpaSatisfactionPrefix.setText(R.string.label_point_gpa_satisfaction);
-        this.pointGpaSatisfactionProgress.setProgress(75);
-        this.pointGpaSatisfactionText.setText("TODO");
+        this.setPointProgress(this.pointGpaSatisfactionPrefix, this.pointGpaSatisfactionProgress, this.pointGpaSatisfactionText, course.getPointGpaSatisfaction(), count);
         this.hashtags.removeAllViews();
         this.hashtags.post(() -> {
             float totalWidth = 0;

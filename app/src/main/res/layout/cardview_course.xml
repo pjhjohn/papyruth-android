@@ -29,8 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/course_category"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/baseline_x0.5"
-            android:layout_marginStart="@dimen/baseline_x0.5"
+            android:layout_marginLeft="@dimen/baseline_x1"
+            android:layout_marginStart="@dimen/baseline_x1"
             android:layout_toRightOf="@+id/course_category"
             android:layout_toEndOf="@+id/course_category"
             android:textSize="18sp"/>
@@ -49,8 +49,8 @@
             android:id="@+id/course_professor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x2"
-            android:layout_below="@+id/course_category"
+            android:layout_marginTop="@dimen/baseline_x0.5"
+            android:layout_alignBaseline="@+id/course_point_overall_text"
             android:layout_marginRight="@dimen/baseline_x1"
             android:layout_marginEnd="@dimen/baseline_x1"
             android:layout_toLeftOf="@+id/course_point_overall_prefix"
@@ -63,8 +63,8 @@
             android:id="@+id/course_point_overall_prefix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x2"
-            android:layout_below="@+id/course_category"
+            android:layout_marginTop="@dimen/baseline_x0.5"
+            android:layout_alignBaseline="@+id/course_point_overall_text"
             android:layout_marginRight="@dimen/baseline_x1"
             android:layout_marginEnd="@dimen/baseline_x1"
             android:layout_toLeftOf="@+id/course_point_overall_text"
@@ -75,13 +75,13 @@
             android:id="@+id/course_point_overall_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_marginTop="@dimen/baseline_x0.5"
             android:layout_below="@+id/course_category"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textSize="16sp"
+            android:textSize="24sp"
             app:fontFamily="roboto"
-            app:textWeight="light"/>
+            app:textWeight="bold"/>
 
         <RatingBar
             android:id="@+id/course_point_overall_star"
@@ -140,7 +140,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/point_clarity"
                 app:fontFamily="roboto"
-                app:textWeight="light"/>
+                app:textWeight="bold"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -187,7 +187,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/point_gpa_satisfaction"
                 app:fontFamily="roboto"
-                app:textWeight="light"/>
+                app:textWeight="bold"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -234,7 +234,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/point_easiness"
                 app:fontFamily="roboto"
-                app:textWeight="light"/>
+                app:textWeight="bold"/>
         </RelativeLayout>
 
         <LinearLayout
