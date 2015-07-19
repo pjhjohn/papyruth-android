@@ -18,6 +18,7 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.Calendar;
@@ -32,7 +33,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends Fragment{
+public class SignUpStep1Fragment extends Fragment implements OnPageFocus{
     private ViewPagerController pagerController;
     @InjectView(R.id.entrance_year_list) protected ListView yearList;
     @InjectView(R.id.entrance_year) protected TextView year;
@@ -68,14 +69,6 @@ public class SignUpStep1Fragment extends Fragment{
         super.onResume();
         this.setEntranceYear();
 
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
-        FloatingActionControl.getInstance().show(true);
-        this.subscription.add(FloatingActionControl
-                .clicks()
-                .subscribe(unused -> {
-                    this.navigator.navigate(SignUpStep2Fragment.class, true);
-                })
-        );
     }
 
     public void setEntranceYear(){
@@ -99,7 +92,8 @@ public class SignUpStep1Fragment extends Fragment{
                     this.yearList.setSelectionFromTop(position, height / 2 - itemHeight / 2);
                     this.year.setText(years[position].toString());
                     Timber.d("selection : %s", years[position]);
-                    this.navigator.navigate(SignUpStep2Fragment.class, true);
+//                    this.navigator.navigate(SignUpStep2Fragment.class, true);
+
                 }, error -> {
                     Timber.d("click error : %s", error);
                 })
@@ -111,6 +105,20 @@ public class SignUpStep1Fragment extends Fragment{
                 .subscribe(position -> {
                     this.year.setText(years[position+2]);
                     Timber.d("year3 %s", position);
+                })
+        );
+    }
+
+    @Override
+    public void onPageFocused() {
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        FloatingActionControl.getInstance().show(true);
+        this.subscription.add(FloatingActionControl
+                .clicks()
+                .subscribe(unused -> {
+                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+
+//                    this.navigator.navigate(SignUpStep2Fragment.class, true);
                 })
         );
     }

@@ -20,9 +20,8 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment{
+public class SignUpStep3Fragment extends Fragment{
 //    private ViewPagerController pagerController;
-    @InjectView(R.id.email) protected EditText email;
 
     private Navigator navigator;
 
@@ -37,7 +36,7 @@ public class SignUpStep2Fragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
+        View view = inflater.inflate(R.layout.fragment_signup_step3, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
         return view;
@@ -58,7 +57,7 @@ public class SignUpStep2Fragment extends Fragment{
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    this.navigator.navigate(SignUpStep2Fragment.class, true);
+                    this.navigator.navigate(SignUpStep3Fragment.class, true);
                 })
         );
     }
