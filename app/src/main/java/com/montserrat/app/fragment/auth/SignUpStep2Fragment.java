@@ -18,6 +18,7 @@ import com.montserrat.utils.view.viewpager.ViewPagerController;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -25,16 +26,13 @@ import rx.subscriptions.CompositeSubscription;
 
 public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
     private ViewPagerController pagerController;
-//    private ViewPagerController pagerController;
     @InjectView(R.id.email) protected EditText email;
 
-    private Navigator navigator;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
-//        this.navigator = (Navigator)activity;
     }
 
     private CompositeSubscription subscription;
@@ -62,11 +60,16 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
+        
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                })
+                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
+                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP2)) this.pagerController.popCurrentPage();
+                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                }, error -> Timber.d("page change error %s", error))
         );
     }
 }

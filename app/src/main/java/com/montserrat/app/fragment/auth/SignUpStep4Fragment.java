@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -16,6 +15,7 @@ import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import butterknife.ButterKnife;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -24,13 +24,11 @@ import rx.subscriptions.CompositeSubscription;
 public class SignUpStep4Fragment extends Fragment implements OnPageFocus{
     private ViewPagerController pagerController;
 
-    private Navigator navigator;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
-//        this.navigator = (Navigator)activity;
     }
 
     private CompositeSubscription subscription;
@@ -47,6 +45,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus{
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        FloatingActionControl.getInstance().clear();
         if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
     }
 
@@ -58,13 +57,12 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus{
 
     @Override
     public void onPageFocused() {
-
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP5, true);
-                })
+//                    this.navigator.navigate(SignUpStep5Fragment.class, true);
+                }, error -> Timber.d("page change error %s", error))
         );
     }
 }

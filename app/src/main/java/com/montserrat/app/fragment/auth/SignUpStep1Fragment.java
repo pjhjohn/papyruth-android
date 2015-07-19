@@ -116,9 +116,13 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus{
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    Signup.getInstance().clear();
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
-                })
+                    Signup.getInstance().setEntrance_year(Integer.parseInt(this.year.getText().toString()));
+                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) {
+                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP1)) this.pagerController.popCurrentPage();
+                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+                }, error -> Timber.d("page change error %s", error))
         );
     }
 }

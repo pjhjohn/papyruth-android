@@ -18,6 +18,7 @@ import com.montserrat.utils.view.viewpager.ViewPagerController;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -26,13 +27,11 @@ import rx.subscriptions.CompositeSubscription;
 public class SignUpStep3Fragment extends Fragment implements OnPageFocus{
     private ViewPagerController pagerController;
 
-    private Navigator navigator;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
-//        this.navigator = (Navigator)activity;
     }
 
     private CompositeSubscription subscription;
@@ -49,6 +48,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus{
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        FloatingActionControl.getInstance().clear();
         if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
     }
 
@@ -65,8 +65,12 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus{
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-                })
+                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4) {
+                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP3)) this.pagerController.popCurrentPage();
+                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+                }, error -> Timber.d("page change error %s", error))
         );
     }
 }
