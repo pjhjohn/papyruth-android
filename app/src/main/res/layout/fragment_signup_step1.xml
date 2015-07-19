@@ -4,37 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <include layout="@layout/layout_signup"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:text="@string/gender"
-            android:textSize="20sp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <RadioGroup
-            android:id="@+id/gender"
-            android:layout_gravity="right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton
-                android:layout_weight="0.5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/gender_male"
-                android:id="@+id/gender_male"/>
-            <RadioButton
-                android:layout_weight="0.5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/gender_female"
-                android:id="@+id/gender_female"/>
-        </RadioGroup>
-    </LinearLayout>
+
 
     <TextView
         android:text="@string/entrance_year"
@@ -52,9 +22,8 @@
     <ListView
         android:id="@+id/entrance_year_list"
         android:background="#ddd"
-
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dp"/>
 
 </LinearLayout>

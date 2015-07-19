@@ -24,9 +24,8 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
+public class SignUpStep3Fragment extends Fragment implements OnPageFocus{
     private ViewPagerController pagerController;
-    @InjectView(R.id.email) protected EditText email;
 
 
     @Override
@@ -39,7 +38,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
+        View view = inflater.inflate(R.layout.fragment_signup_step3, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
         return view;
@@ -49,26 +48,28 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        FloatingActionControl.getInstance().clear();
         if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
     @Override
     public void onPageFocused() {
+
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
-        
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
-                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP2)) this.pagerController.popCurrentPage();
-                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4) {
+                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP3)) this.pagerController.popCurrentPage();
+                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
                 }, error -> Timber.d("page change error %s", error))
         );
     }
