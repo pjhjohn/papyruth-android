@@ -1,51 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    card_view:cardElevation="2dp"
-    card_view:cardCornerRadius="0dp">
-    <LinearLayout
-        android:id="@+id/itemLayout"
+    android:minHeight="@dimen/cardview_min_height_default"
+    android:layout_gravity="center">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <!--android:background="?android:attr/activatedBackgroundIndicator"-->
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:background="@drawable/viewholder_bg_selector"
+        android:layout_marginBottom="1dp">
+
+        <ImageView
+            android:id="@+id/course_item_professor_image"
+            android:layout_width="@dimen/cardview_image_side_length"
+            android:layout_height="@dimen/cardview_image_side_length"
+            android:padding="@dimen/cardview_image_padding"
+            android:contentDescription=""
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/course_item_lecture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:elevation="15dp">
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/course_item_professor_image"
+            android:layout_toEndOf="@+id/course_item_professor_image"/>
+
+        <RelativeLayout
+            android:id="@+id/course_item_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/course_item_lecture"
+            android:layout_marginRight="@dimen/baseline_x2"
+            android:layout_marginEnd="@dimen/baseline_x2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/course_item_professor_image"
+            android:layout_toEndOf="@+id/course_item_professor_image">
+
             <TextView
-                android:id="@+id/lecture"
-                android:layout_width="match_parent"
+                android:id="@+id/course_item_category"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="start"/>
-            <RelativeLayout
-                android:layout_width="fill_parent"
+                android:textSize="14sp"
+                android:background="@drawable/rounded_corner"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginRight="@dimen/baseline_x0.5"
+                android:layout_marginEnd="@dimen/baseline_x0.5"/>
+
+            <TextView
+                android:id="@+id/course_item_professor"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/professor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_alignParentLeft="true"/>
-                <!--style="?android:ratingBarStyleIndicator"-->
-                <!--style="@style/MainRatingBar"-->
-                <RatingBar
-                    style="?android:ratingBarStyleSmall"
-                    android:id="@+id/point_overall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:numStars="5"
-                    android:stepSize="1.0"/>
-            </RelativeLayout>
-        </LinearLayout>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/course_item_category"
+                android:layout_toEndOf="@+id/course_item_category"
+                android:layout_toLeftOf="@+id/course_item_point_overall_star"
+                android:layout_toStartOf="@+id/course_item_point_overall_star"/>
+
+            <RatingBar
+                android:progressDrawable="@drawable/ratingbar_22dp"
+                android:id="@+id/course_item_point_overall_star"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/baseline_x3"
+                android:numStars="5"
+                android:max="10"
+                android:isIndicator="true"
+                android:layout_marginLeft="@dimen/baseline_x0.5"
+                android:layout_marginStart="@dimen/baseline_x0.5"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/course_item_hashtags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/baseline_x2"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_alignTop="@+id/course_item_evaluator"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
+            android:layout_toLeftOf="@+id/course_item_evaluator"
+            android:layout_toStartOf="@+id/course_item_evaluator"
+            android:layout_alignBottom="@+id/course_item_evaluator"
+            android:layout_marginLeft="@dimen/baseline_x2"
+            android:layout_marginStart="@dimen/baseline_x2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"/>
+
+        <RelativeLayout
+            android:id="@+id/course_item_evaluator"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/baseline_x3"
+            android:layout_below="@id/course_item_content"
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_marginRight="@dimen/baseline_x2"
+            android:layout_marginEnd="@dimen/baseline_x2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/baseline_x2">
+
+            <ImageView
+                android:id="@+id/course_item_evaluator_icon"
+                android:layout_width="@dimen/baseline_x3"
+                android:layout_height="@dimen/baseline_x3"
+                android:contentDescription="@string/empty"
+                android:layout_marginLeft="@dimen/baseline_x0.5"
+                android:layout_marginRight="@dimen/baseline_x0.5"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"/>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/course_item_evaluator_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_toRightOf="@+id/course_item_evaluator_icon"
+                android:layout_toEndOf="@+id/course_item_evaluator_icon"
+                android:layout_centerVertical="true"
+                app:fontFamily="roboto"
+                app:textWeight="normal"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</FrameLayout>

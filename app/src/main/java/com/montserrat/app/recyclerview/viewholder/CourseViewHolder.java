@@ -97,7 +97,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         this.category.setText(context.getString(R.string.category_major)); // TODO -> evaluation.category
         this.lecture.setText(course.getName());
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), course.getProfessorName(), context.getResources().getString(R.string.professor_postfix))));
-        Picasso.with(context).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(this.professor_image);
+        Picasso.with(context).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(this.professor_image);
         this.pointOverallPrefix.setText(R.string.label_point_overall);
         this.setPointRating(this.pointOverallPrefix, this.pointOverallRating, this.pointOverallText, course.getPointOverall(), count);
         this.pointClarityPrefix.setText(R.string.label_point_clarity);
@@ -107,7 +107,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         this.pointGpaSatisfactionPrefix.setText(R.string.label_point_gpa_satisfaction);
         this.setPointProgress(this.pointGpaSatisfactionPrefix, this.pointGpaSatisfactionProgress, this.pointGpaSatisfactionText, course.getPointGpaSatisfaction(), count);
         this.hashtags.removeAllViews();
-        this.hashtags.post(() -> {
+        if(course.getHashtags()!=null) this.hashtags.post(() -> {
             float totalWidth = 0;
             for (String hashtag : course.getHashtags()) {
                 Hashtag tag = new Hashtag(this.itemView.getContext(), hashtag);
@@ -117,7 +117,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
                 totalWidth += width;
             }
         });
-        Picasso.with(context).load(R.drawable.ic_light_shuffle).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.evaluatorIcon);
-        this.evaluatorCount.setText("3");
+        Picasso.with(context).load(R.drawable.ic_people_white_24dp).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.evaluatorIcon);
+        this.evaluatorCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
     }
 }
