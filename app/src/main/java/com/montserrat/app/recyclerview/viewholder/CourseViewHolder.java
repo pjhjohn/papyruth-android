@@ -39,12 +39,12 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.course_point_clarity_prefix) protected TextView pointClarityPrefix;
     @InjectView(R.id.course_point_clarity_text) protected TextView pointClarityText;
     @InjectView(R.id.course_point_clarity_progress) protected ProgressBar pointClarityProgress;
-    @InjectView(R.id.course_point_easiness_prefix) protected TextView pointEasinessPrefix;
-    @InjectView(R.id.course_point_easiness_text) protected TextView pointEasinessText;
-    @InjectView(R.id.course_point_easiness_progress) protected ProgressBar pointEasinessProgress;
     @InjectView(R.id.course_point_gpa_satisfaction_prefix) protected TextView pointGpaSatisfactionPrefix;
     @InjectView(R.id.course_point_gpa_satisfaction_text) protected TextView pointGpaSatisfactionText;
     @InjectView(R.id.course_point_gpa_satisfaction_progress) protected ProgressBar pointGpaSatisfactionProgress;
+    @InjectView(R.id.course_point_easiness_prefix) protected TextView pointEasinessPrefix;
+    @InjectView(R.id.course_point_easiness_text) protected TextView pointEasinessText;
+    @InjectView(R.id.course_point_easiness_progress) protected ProgressBar pointEasinessProgress;
     @InjectView(R.id.course_hashtags) protected LinearLayout hashtags;
     @InjectView(R.id.course_evaluator_icon) protected ImageView evaluatorIcon;
     @InjectView(R.id.course_evaluator_count) protected TextView evaluatorCount;
@@ -102,10 +102,10 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         this.setPointRating(this.pointOverallPrefix, this.pointOverallRating, this.pointOverallText, course.getPointOverall(), count);
         this.pointClarityPrefix.setText(R.string.label_point_clarity);
         this.setPointProgress(this.pointClarityPrefix, this.pointClarityProgress, this.pointClarityText, course.getPointClarity(), count);
-        this.pointEasinessPrefix.setText(R.string.label_point_easiness);
-        this.setPointProgress(this.pointEasinessPrefix, this.pointEasinessProgress, this.pointEasinessText, course.getPointEasiness(), count);
         this.pointGpaSatisfactionPrefix.setText(R.string.label_point_gpa_satisfaction);
         this.setPointProgress(this.pointGpaSatisfactionPrefix, this.pointGpaSatisfactionProgress, this.pointGpaSatisfactionText, course.getPointGpaSatisfaction(), count);
+        this.pointEasinessPrefix.setText(R.string.label_point_easiness);
+        this.setPointProgress(this.pointEasinessPrefix, this.pointEasinessProgress, this.pointEasinessText, course.getPointEasiness(), count);
         this.hashtags.removeAllViews();
         if(course.getHashtags()!=null) this.hashtags.post(() -> {
             float totalWidth = 0;
