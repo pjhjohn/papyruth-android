@@ -68,8 +68,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus{
     @Override
     public void onResume() {
         super.onResume();
-        this.setEntranceYear();
-
     }
 
     public void setEntranceYear(){
@@ -94,7 +92,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus{
                     this.year.setText(years[position].toString());
                     Timber.d("selection : %s", years[position]);
 //                    this.navigator.navigate(SignUpStep2Fragment.class, true);
-
                 }, error -> {
                     Timber.d("click error : %s", error);
                 })
@@ -112,6 +109,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus{
 
     @Override
     public void onPageFocused() {
+        this.setEntranceYear();
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
         this.subscription.add(FloatingActionControl
                 .clicks()

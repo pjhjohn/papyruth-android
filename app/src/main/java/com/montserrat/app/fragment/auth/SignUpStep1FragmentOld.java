@@ -134,7 +134,7 @@ public class SignUpStep1FragmentOld extends Fragment implements OnPageFocus {
     @Override
     public void onPageFocused () {
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
-        this.university.setText(User.getInstance().getUniversityName());
+//        this.university.setText(User.getInstance().getUniversityName());
 
         this.subscriptions.add(ViewObservable.clicks(this.entrance).filter(unused -> !this.entranceYearDialog.isShowing()).subscribe(unused -> this.entranceYearDialog.show()));
         this.subscriptions.add(Observable.combineLatest(

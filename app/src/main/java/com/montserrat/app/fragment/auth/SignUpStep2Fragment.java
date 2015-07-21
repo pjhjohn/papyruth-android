@@ -10,15 +10,25 @@ import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.rengwuxian.materialedittext.MaterialEditText;
+
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -26,7 +36,8 @@ import timber.log.Timber;
 
 public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
     private ViewPagerController pagerController;
-    @InjectView(R.id.email) protected EditText email;
+    @InjectView(R.id.email) protected MaterialEditText email;
+    @InjectView(R.id.nickname) protected MaterialEditText nickname;
 
 
     @Override
@@ -59,11 +70,30 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
-        
+        FloatingActionControl.getInstance().show(true);
+        this.subscription.add(
+            Observable.combineLatest(
+                WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+                WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
+                (String emailError, String nicknameError) -> {
+                    this.email.setError(emailError);
+                    this.nickname.setError(nicknameError);
+                    return emailError == null && nicknameError == null;
+                })
+            .startWith(false)
+            .subscribe(
+                valid -> {
+                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                }
+            )
+        );
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
+                    Signup.getInstance().setEmail(this.email.getText().toString());
+                    Signup.getInstance().setNickname(this.nickname.getText().toString());
                     if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
                         if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP2)) this.pagerController.popCurrentPage();
                         else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);

@@ -79,7 +79,7 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().clear();
+        FloatingActionControl.getInstance().hide(true);
     }
 
     @Override
