@@ -21,9 +21,9 @@ import timber.log.Timber;
 public class FragmentNavigator implements Navigator {
     int containerViewId;
     FragmentManager manager;
-    MaterialMenuDrawable materialMenuDrawable;
-    MaterialMenuDrawable.IconState materialMenuDrawableState;
-    NavigationDrawerFragment navigationDrawer;
+    MaterialMenuDrawable materialMenuDrawable = null;
+    MaterialMenuDrawable.IconState materialMenuDrawableState = null;
+    NavigationDrawerFragment navigationDrawer = null;
 
     public FragmentNavigator(NavigationDrawerFragment drawer, FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment, MaterialMenuDrawable materialMenuDrawable, MaterialMenuDrawable.IconState initialMaterialMenuDrawableState) {
         this(manager, containerViewId, initialFragment);
@@ -31,7 +31,6 @@ public class FragmentNavigator implements Navigator {
         this.materialMenuDrawableState = initialMaterialMenuDrawableState;
         this.materialMenuDrawable.setIconState(initialMaterialMenuDrawableState);
         this.navigationDrawer = drawer;
-
     }
     public FragmentNavigator(FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment) {
         this.containerViewId = containerViewId;
@@ -55,7 +54,7 @@ public class FragmentNavigator implements Navigator {
             if(navigationDrawer != null) navigationDrawer.setOnNavigationIconClickListener(null);
         } else {
             if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
-            if(materialMenuDrawable != null) navigationDrawer.setOnNavigationIconClickListener(view -> navigationDrawer.getActivity().onBackPressed());
+            if(navigationDrawer != null) navigationDrawer.setOnNavigationIconClickListener(view -> navigationDrawer.getActivity().onBackPressed());
         }
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
         if(addToBackStack) transaction.addToBackStack(next.getClass().getSimpleName());
@@ -119,12 +118,12 @@ public class FragmentNavigator implements Navigator {
                     backed = true;
                 } else if(this.manager.getBackStackEntryCount() == 2) {
                     this.manager.popBackStack();
-                    materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
-                    navigationDrawer.setOnNavigationIconClickListener(null);
+                    if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+                    if(navigationDrawer!= null) navigationDrawer.setOnNavigationIconClickListener(null);
                     backed = true;
                 } if(this.manager.getBackStackEntryCount() == 1){
-                    materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
-                    navigationDrawer.setOnNavigationIconClickListener(null);
+                    if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+                    if(navigationDrawer!= null) navigationDrawer.setOnNavigationIconClickListener(null);
                     backed = false;
                 }
             } return backed;
