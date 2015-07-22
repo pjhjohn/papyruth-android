@@ -37,9 +37,11 @@ public class ViewPagerManager implements ViewPagerController {
                 ViewPagerManager.this.current = position;
 
                 final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(position);
+                final Fragment previousTarget = ViewPagerManager.this.adapter.getFragmentAt(ViewPagerManager.this.previous);
                 if (ViewPagerManager.this.addToBackStack && container != null) container.onPageSelected(position);
                 ViewPagerManager.this.addToBackStack = true;
                 if (target != null && target.getView() != null && target instanceof OnPageFocus) ((OnPageFocus) target).onPageFocused();
+                if (previousTarget != null && previousTarget.getView() != null && previousTarget instanceof OnPageUnfocus) ((OnPageUnfocus) previousTarget).onPageUnfocused();
             }
         };
         this.active();

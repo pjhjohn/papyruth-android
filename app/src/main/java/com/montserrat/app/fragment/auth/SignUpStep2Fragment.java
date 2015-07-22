@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
@@ -14,6 +15,7 @@ import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
+import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -24,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -34,10 +37,11 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
+public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus{
     private ViewPagerController pagerController;
     @InjectView(R.id.email) protected MaterialEditText email;
     @InjectView(R.id.nickname) protected MaterialEditText nickname;
+    @InjectView(R.id.nextBtn) protected Button next;
 
 
     @Override
@@ -66,11 +70,17 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
     @Override
     public void onResume() {
         super.onResume();
+        Timber.d("*** %s", this.getClass().getSimpleName());
     }
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().show(true);
+        Timber.d("*** focus %s", this.getClass().getSimpleName());
+
+        if(this.subscription.isUnsubscribed())
+            this.subscription = new CompositeSubscription();
+
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         this.subscription.add(
             Observable.combineLatest(
                 WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
@@ -89,17 +99,32 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus{
                 }
             )
         );
-        this.subscription.add(FloatingActionControl
-                .clicks()
+        this.subscription.add(
+            ViewObservable
+                .clicks(FloatingActionControl.getButton())
                 .subscribe(unused -> {
                     Signup.getInstance().setEmail(this.email.getText().toString());
                     Signup.getInstance().setNickname(this.nickname.getText().toString());
-                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
-                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP2)) this.pagerController.popCurrentPage();
-                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+//                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
+//                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP2)) this.pagerController.popCurrentPage();
+//                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+//                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
                 }, error -> Timber.d("page change error %s", error))
         );
+//        this.next.setOnClickListener(v -> {
+//            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+//        });
+        this.subscription.add(
+            ViewObservable.clicks(this.next)
+            .subscribe(u -> {
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+            })
+        );
+    }
+
+    @Override
+    public void onPageUnfocused() {
+        if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
     }
 }
