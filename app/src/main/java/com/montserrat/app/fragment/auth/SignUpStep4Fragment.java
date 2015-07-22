@@ -21,6 +21,7 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
+import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.concurrent.TimeUnit;
@@ -42,7 +43,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep4Fragment extends Fragment implements OnPageFocus{
+public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPageUnfocus{
     private ViewPagerController pagerController;
 
     @InjectView(R.id.password) protected EditText password;
@@ -74,11 +75,16 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus{
     @Override
     public void onResume() {
         super.onResume();
+        Timber.d("*** %s", this.getClass().getSimpleName());
 
     }
 
     @Override
     public void onPageFocused() {
+        Timber.d("*** focus %s", this.getClass().getSimpleName());
+        if(this.subscription.isUnsubscribed())
+            this.subscription = new CompositeSubscription();
+
         FloatingActionControl.getInstance().hide(true);
         this.subscription.add(
             WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -145,5 +151,10 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus{
                 }
             )
         );
+    }
+
+    @Override
+    public void onPageUnfocused() {
+        if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
     }
 }
