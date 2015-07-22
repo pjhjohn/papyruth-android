@@ -135,7 +135,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.lecture.setText(evaluation.getLectureName());
         this.timestamp.setText(DateTimeUtil.timeago(context, evaluation.getCreatedAt()));
         this.category.setText(context.getString(R.string.category_major)); // TODO -> evaluation.category
-        this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.getProfessorName(), context.getResources().getString(R.string.professor_postfix))));
+        this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.getProfessorName(), " "+context.getResources().getString(R.string.professor_postfix))));
         Picasso.with(this.itemView.getContext()).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(this.avatar);
         this.nickname.setText(evaluation.getUserNickname());
         this.body.setText(evaluation.getBody());

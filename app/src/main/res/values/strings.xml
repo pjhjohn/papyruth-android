@@ -99,4 +99,5 @@
     <string name="point_overall">Total</string>
     <string name="category_major">MAJOR</string>
     <string name="toolbar_title_course">Course Overview</string>
+    <string name="toolbar_title_new_evaluation">New Evaluation</string>
 </resources>

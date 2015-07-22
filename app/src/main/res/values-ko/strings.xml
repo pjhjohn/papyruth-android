@@ -90,7 +90,7 @@
     <string name="inform_evaluation">강의에 대한 강의평을 보여주는 페이지입니다.\n\n댓글을 추가하거나 강의평, 댓글에 투표를 위-아래 위-위-아래</string>
     <string name="toolbar_title_home">최신 강의평가</string>
     <string name="professor_prefix"/>
-    <string name="professor_postfix"> 교수</string>
+    <string name="professor_postfix">교수</string>
 
     <!-- time -->
     <string name="just_now">방금</string>
@@ -99,4 +99,5 @@
     <string name="point_overall">총점</string>
     <string name="category_major">전공</string>
     <string name="toolbar_title_course">강의 정보</string>
+    <string name="toolbar_title_new_evaluation">강의평 쓰기</string>
 </resources>

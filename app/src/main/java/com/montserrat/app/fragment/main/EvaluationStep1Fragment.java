@@ -3,9 +3,11 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +16,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -47,6 +51,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     private CompositeSubscription subscriptions;
 
     private AutoCompletableSearchView search;
+    private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -69,6 +74,11 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
 
         if(this.search.hasData())
             this.search.searchCourse();
+
+        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
         return view;
     }

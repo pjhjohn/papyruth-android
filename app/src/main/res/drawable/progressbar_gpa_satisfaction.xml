@@ -4,6 +4,7 @@
         android:id="@android:id/background">
         <shape>
             <solid android:color="@color/bg_highlight"/>
+            <corners android:radius="@dimen/baseline_x1"/>
         </shape>
     </item>
 
@@ -11,6 +12,7 @@
         android:id="@android:id/secondaryProgress">
         <shape>
             <solid android:color="@color/bg_highlight"/>
+            <corners android:radius="@dimen/baseline_x1"/>
         </shape>
     </item>
 
@@ -19,6 +21,7 @@
         <clip>
             <shape>
                 <solid android:color="@color/point_gpa_satisfaction"/>
+                <corners android:radius="@dimen/baseline_x1"/>
             </shape>
         </clip>
     </item>

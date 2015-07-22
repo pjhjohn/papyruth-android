@@ -1,5 +1,7 @@
 package com.montserrat.utils.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +45,23 @@ public class ToolbarUtil {
         animColor.setIntValues(fromColor, toColor);
         animColor.setEvaluator(new ArgbEvaluator());
         animColor.addUpdateListener(animator -> toolbar.setBackgroundColor((int) animator.getAnimatedValue()));
+        return animColor;
+    }
+
+    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColor) {
+        if(toolbar == null) return null;
+        ValueAnimator animColor = new ValueAnimator();
+        animColor.setIntValues(AppManager.getInstance().getMainToolbarColor(), toColor);
+        animColor.setEvaluator(new ArgbEvaluator());
+        animColor.addUpdateListener(animator -> toolbar.setBackgroundColor((int) animator.getAnimatedValue()));
+        animColor.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                toolbar.setBackgroundColor(toColor);
+                AppManager.getInstance().setMainToolbarColor(toColor);
+            }
+        });
         return animColor;
     }
 }

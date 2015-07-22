@@ -27,6 +27,7 @@ import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.MetricUtil;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -77,6 +78,7 @@ public class HomeFragment extends RecyclerViewFragment<EvaluationItemsDetailAdap
 
         toolbar.setTitle(R.string.toolbar_title_home);
         toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         this.isEvaluationDetailOpened = false;
 

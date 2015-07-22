@@ -40,6 +40,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
+                android:layout_marginLeft="@dimen/baseline_x1"
+                android:layout_marginStart="@dimen/baseline_x1"
                 android:textColor="@color/bg_normal"
                 android:textStyle="bold"
                 android:textSize="14sp"/>
@@ -50,6 +52,7 @@
             android:id="@+id/evaluation_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x0.5"
             android:layout_below="@+id/evaluation_header"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -88,13 +91,11 @@
             android:id="@+id/evaluation_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/evaluation_point_overall_text"
+            android:layout_below="@+id/evaluation_category"
             android:layout_marginRight="@dimen/baseline_x1"
             android:layout_marginEnd="@dimen/baseline_x1"
-            android:layout_toLeftOf="@+id/evaluation_point_overall_prefix"
-            android:layout_toStartOf="@+id/evaluation_point_overall_prefix"
-            android:layout_toRightOf="@+id/evaluation_avatar"
-            android:layout_toEndOf="@+id/evaluation_avatar"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="3"
@@ -104,6 +105,7 @@
             android:id="@+id/evaluation_point_overall_prefix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x1"
             android:layout_alignBaseline="@+id/evaluation_point_overall_text"
             android:layout_marginRight="@dimen/baseline_x1"
             android:layout_marginEnd="@dimen/baseline_x1"
@@ -115,9 +117,11 @@
             android:id="@+id/evaluation_point_overall_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/evaluation_category"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/evaluation_point_overall_star"
+            android:layout_marginRight="@dimen/baseline_x1"
+            android:layout_marginEnd="@dimen/baseline_x1"
+            android:layout_toLeftOf="@+id/evaluation_point_overall_star"
+            android:layout_toStartOf="@+id/evaluation_point_overall_star"
             android:textSize="24sp"
             app:fontFamily="roboto"
             app:textWeight="normal"/>
@@ -126,8 +130,7 @@
             android:id="@+id/evaluation_point_overall_star"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/baseline_x3"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_below="@+id/evaluation_point_overall_text"
+            android:layout_below="@+id/evaluation_nickname"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:progressDrawable="@drawable/ratingbar_22dp"
@@ -135,22 +138,14 @@
             android:numStars="5"
             android:max="10"/>
 
-        <TextView
-            android:id="@+id/evaluation_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_below="@id/evaluation_point_overall_star"
-            android:layout_toRightOf="@+id/evaluation_avatar"
-            android:layout_toEndOf="@+id/evaluation_avatar"
-            />
-
         <RelativeLayout
             android:id="@+id/evaluation_point_clarity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x0.5"
-            android:layout_below="@id/evaluation_body">
+            android:layout_marginTop="0dp"
+            android:layout_below="@+id/evaluation_point_overall_star"
+            android:layout_toRightOf="@+id/evaluation_avatar"
+            android:layout_toEndOf="@+id/evaluation_avatar">
 
             <TextView
                 android:id="@+id/evaluation_point_clarity_prefix"
@@ -196,8 +191,10 @@
             android:id="@+id/evaluation_point_gpa_satisfaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x0.5"
-            android:layout_below="@id/evaluation_point_clarity">
+            android:layout_marginTop="0dp"
+            android:layout_below="@+id/evaluation_point_clarity"
+            android:layout_toRightOf="@+id/evaluation_avatar"
+            android:layout_toEndOf="@+id/evaluation_avatar">
 
             <TextView
                 android:id="@+id/evaluation_point_gpa_satisfaction_prefix"
@@ -243,8 +240,10 @@
             android:id="@+id/evaluation_point_easiness"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x0.5"
-            android:layout_below="@id/evaluation_point_gpa_satisfaction">
+            android:layout_marginTop="0dp"
+            android:layout_below="@+id/evaluation_point_gpa_satisfaction"
+            android:layout_toRightOf="@+id/evaluation_avatar"
+            android:layout_toEndOf="@+id/evaluation_avatar">
 
             <TextView
                 android:id="@+id/evaluation_point_easiness_prefix"
@@ -286,14 +285,20 @@
                 app:textWeight="bold"/>
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/evaluation_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_below="@+id/evaluation_point_easiness"/>
+
         <LinearLayout
             android:id="@+id/evaluation_hashtags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/baseline_x2"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/baseline_x2"
-            android:layout_below="@+id/evaluation_point_easiness"
+            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_below="@+id/evaluation_body"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:gravity="center_vertical"/>
