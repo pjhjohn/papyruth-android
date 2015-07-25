@@ -97,6 +97,7 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         Signup.getInstance().setUniversity_id(this.items.get(position).id);
+        Signup.getInstance().setImage_url(this.items.get(position).image_url);
         this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
     }
 }

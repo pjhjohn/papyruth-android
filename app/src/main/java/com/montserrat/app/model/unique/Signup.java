@@ -17,6 +17,7 @@ public class Signup {
     private String  email;
     private Boolean is_boy;
     private Integer university_id;
+    private String image_url;
     private String  password;
     private Integer entrance_year;
     public Signup(){
@@ -37,6 +38,7 @@ public class Signup {
     public Integer getUniversity_id() {return university_id;}
     public String getPassword() {return password;}
     public Integer getEntrance_year() {return entrance_year;}
+    public String getImage_url() {return image_url;}
 
     public void setRealname(String realname) {this.realname = realname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
@@ -45,6 +47,7 @@ public class Signup {
     public void setUniversity_id(Integer university_id) {this.university_id = university_id;}
     public void setPassword(String password) {this.password = password;}
     public void setEntrance_year(Integer entrance_year) {this.entrance_year = entrance_year;}
+    public void setImage_url(String image_url) {this.image_url = image_url;}
 
     @Override
     public String toString() {

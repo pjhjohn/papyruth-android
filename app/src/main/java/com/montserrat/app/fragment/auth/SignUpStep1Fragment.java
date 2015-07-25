@@ -21,11 +21,13 @@ import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.SquareImageView;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -46,6 +48,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
 
     @InjectView(R.id.nextBtn) protected Button next;
     @InjectView (R.id.entrance) protected ButtonFlat entrance;
+    @InjectView(R.id.university_item_image) protected SquareImageView imageView;
 
     private MaterialDialog entranceYearDialog;
     private Integer entranceYear;
@@ -115,6 +118,8 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUp(true);
         ((AuthActivity)this.getActivity()).signUpStep(1);
+
+        Picasso.with(this.getActivity().getBaseContext()).load(Signup.getInstance().getImage_url()).into(this.imageView);
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();

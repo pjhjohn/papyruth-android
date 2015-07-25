@@ -4,6 +4,16 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <com.montserrat.utils.view.SquareImageView
+        android:id="@+id/university_item_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/snu_logo"
+        android:scaleType="centerCrop"/>
+
     <TextView
         android:text="@string/entrance_year"
         android:textSize="20sp"
