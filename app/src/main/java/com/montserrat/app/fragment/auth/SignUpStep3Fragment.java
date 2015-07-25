@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.rx.RxValidator;
@@ -72,12 +73,11 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Timber.d("*** %s", this.getClass().getSimpleName());
     }
 
     @Override
     public void onPageFocused() {
-        Timber.d("*** focus %s", this.getClass().getSimpleName());
+        ((AuthActivity)this.getActivity()).signUpStep(3);
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
@@ -105,19 +105,13 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                 .subscribe(unused -> {
                     Signup.getInstance().setRealname(this.realname.getText().toString());
                     Signup.getInstance().setIs_boy(((RadioButton)this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
-//                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4) {
-//                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP3)) this.pagerController.popCurrentPage();
-//                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-//                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
                 }, error -> {
                     Timber.d("page change error %s", error);
                     error.printStackTrace();
                 })
         );
-//        this.next.setOnClickListener(v -> {
-//            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-//        });
 
         this.subscription.add(
             ViewObservable.clicks(this.next)

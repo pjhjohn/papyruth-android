@@ -2,7 +2,11 @@ package com.montserrat.app.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
@@ -31,7 +35,9 @@ public class AuthActivity extends Activity implements ViewPagerController, Navig
     private ViewPagerManager manager;
     private FragmentNavigator mNavigator;
 
-    @InjectView(R.id.fac) FloatingActionControlContainer fac;
+    @InjectView(R.id.fac) protected FloatingActionControlContainer fac;
+    @InjectView(R.id.sign_up_step) protected LinearLayout signUpStep;
+    @InjectView(R.id.state_name) protected TextView stateName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,27 @@ public class AuthActivity extends Activity implements ViewPagerController, Navig
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.reset(this);
+    }
+
+    public void signUp(boolean signup){
+        ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
+        if(signup){
+            this.stateName.setText(R.string.action_sign_up);
+            param.height = (int) (8 * this.getBaseContext().getResources().getDisplayMetrics().density);
+        }else{
+            this.stateName.setText("");
+            param.height = 0;
+        }
+        this.signUpStep.setLayoutParams(param);
+    }
+    public void signUpStep(int step){
+        for (int i = 0; i < 4; i++){
+            if(i < step)
+                this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.fg_normal));
+            else
+                this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.translucent));
+
+        }
     }
 
     @Override

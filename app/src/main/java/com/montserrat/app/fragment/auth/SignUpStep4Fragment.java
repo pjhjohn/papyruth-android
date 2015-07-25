@@ -75,13 +75,11 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Timber.d("*** %s", this.getClass().getSimpleName());
 
     }
 
     @Override
     public void onPageFocused() {
-        Timber.d("*** focus %s", this.getClass().getSimpleName());
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 

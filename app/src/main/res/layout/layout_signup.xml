@@ -35,7 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
-                android:text="@string/action_sign_up"
+                android:id="@+id/state_name"
+                android:text=""
                 android:textColor="@color/fg_normal"
                 android:textSize="25sp"
                 android:layout_gravity="center"
@@ -43,61 +44,49 @@
                 android:layout_height="wrap_content"
                 />
         </LinearLayout>
-        <TableLayout
+        <LinearLayout
+            android:id="@+id/sign_up_step"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="*"
+            android:layout_height="0dp"
+            android:weightSum="4"
             >
-            <TableRow android:layout_width="match_parent">
                 <View
                     android:layout_height="8dp"
                     android:background="#bbb"
                     android:layout_marginRight="2dp"
-                    android:id="@+id/step1"/>
+                    android:id="@+id/step1"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"/>
                 <View
                     android:layout_height="8dp"
                     android:background="#bbb"
                     android:layout_marginRight="2dp"
-                    android:id="@+id/step2"/>
+                    android:id="@+id/step2"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"/>
                 <View
                     android:layout_height="8dp"
                     android:background="#bbb"
                     android:layout_marginRight="2dp"
-                    android:id="@+id/step3"/>
+                    android:id="@+id/step3"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"/>
                 <View
                     android:layout_height="8dp"
                     android:background="#bbb"
                     android:layout_marginRight="2dp"
-                    android:id="@+id/step4"/>
-                <View
-                    android:layout_height="8dp"
-                    android:background="#bbb"
-                    android:layout_marginRight="2dp"
-                    android:id="@+id/step5"/>
-            </TableRow>
-            <TableRow
-                android:background="@color/white">
-
-                <TextView
-                    android:text="@string/step1"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:text="@string/step2"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:text="@string/step3"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:text="@string/step4"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:text="@string/step5"
-                    android:layout_gravity="center"/>
-            </TableRow>
-        </TableLayout>
+                    android:id="@+id/step4"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"/>
+                <!--<View-->
+                    <!--android:layout_height="8dp"-->
+                    <!--android:background="#bbb"-->
+                    <!--android:layout_marginRight="2dp"-->
+                    <!--android:id="@+id/step5"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"/>-->
+        </LinearLayout>
     </LinearLayout>
     <!--<com.montserrat.utils.view.viewpager.FlexibleViewPager-->
         <!--android:id="@+id/signup_container"-->

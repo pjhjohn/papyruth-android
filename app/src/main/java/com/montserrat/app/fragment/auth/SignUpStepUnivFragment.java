@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.app.recyclerview.adapter.UniversityAdapter;
 import com.montserrat.app.model.UniversityData;
@@ -67,9 +68,9 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
                 this.adapter.notifyDataSetChanged();
             })
         );
-
         return view;
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -79,6 +80,7 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
 
     @Override
     public void onPageFocused() {
+        ((AuthActivity)this.getActivity()).signUpStep(0);
         FloatingActionControl.getInstance().hide(true);
     }
 
@@ -95,10 +97,6 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         Signup.getInstance().setUniversity_id(this.items.get(position).id);
-        if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP1) {
-            if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_UNIV)) this.pagerController.popCurrentPage();
-            else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-        } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-//        this.navigator.navigate(SignUpStep1Fragment.class, true);
+        this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
     }
 }

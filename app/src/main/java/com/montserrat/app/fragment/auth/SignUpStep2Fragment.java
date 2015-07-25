@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.rx.RxValidator;
@@ -70,12 +71,11 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Timber.d("*** %s", this.getClass().getSimpleName());
     }
 
     @Override
     public void onPageFocused() {
-        Timber.d("*** focus %s", this.getClass().getSimpleName());
+        ((AuthActivity)this.getActivity()).signUpStep(2);
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();

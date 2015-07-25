@@ -12,8 +12,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.Signup;
@@ -28,6 +31,7 @@ import java.util.Calendar;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
@@ -39,9 +43,13 @@ import timber.log.Timber;
 
 public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPageUnfocus{
     private ViewPagerController pagerController;
-    @InjectView(R.id.entrance_year_list) protected ListView yearList;
-    @InjectView(R.id.entrance_year) protected TextView year;
+
     @InjectView(R.id.nextBtn) protected Button next;
+    @InjectView (R.id.entrance) protected ButtonFlat entrance;
+
+    private MaterialDialog entranceYearDialog;
+    private Integer entranceYear;
+    private Observable<Integer> entranceYearObservable;
 
     private Navigator navigator;
 
@@ -59,6 +67,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
+        this.entranceYearObservable = this.buildEntranceYearDialog();
         return view;
     }
 
@@ -72,7 +81,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Timber.d("*** %s", this.getClass().getSimpleName());
     }
 
     public void setEntranceYear(){
@@ -84,62 +92,58 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
             else
                 years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i+2);
         }
-        this.yearList.setAdapter(new ArrayAdapter<String>(this.getActivity().getBaseContext(), R.layout.cardview_simpletext, years));
+    }
 
-        this.subscription.add(
-            WidgetObservable
-                .itemClicks(yearList)
-                .map(listener -> listener.position())
-                .subscribe(position -> {
-                    int height = yearList.getHeight();
-                    int itemHeight = yearList.getChildAt(0).getHeight();
-                    this.yearList.setSelectionFromTop(position, height / 2 - itemHeight / 2);
-                    this.year.setText(years[position].toString());
-                    Timber.d("selection : %s", years[position]);
-//                    this.navigator.navigate(SignUpStep2Fragment.class, true);
-                }, error -> {
-                    Timber.d("click error : %s", error);
+    private Observable<Integer> buildEntranceYearDialog() {
+        final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
+        String[] years = new String[length];
+        for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
+        return Observable.create(observer -> this.entranceYearDialog = new MaterialDialog.Builder(this.getActivity())
+                .title(R.string.dialog_title_entrance_year)
+                .negativeText(R.string.cancel)
+                .items(years)
+                .itemsCallback((dialog, view, which, text) -> {
+                    this.entrance.setText(text.toString() + getResources().getString(R.string.entrance_postfix));
+                    this.entranceYear = Integer.parseInt(text.toString());
+                    observer.onNext(this.entranceYear);
                 })
-        );
-        this.subscription.add(
-            WidgetObservable
-                .listScrollEvents(yearList)
-                .map(listener -> listener.firstVisibleItem())
-                .subscribe(position -> {
-                    this.year.setText(years[position+2]);
-                    Timber.d("year3 %s", position);
-                })
+                .build()
         );
     }
 
     @Override
     public void onPageFocused() {
+        ((AuthActivity)this.getActivity()).signUp(true);
+        ((AuthActivity)this.getActivity()).signUpStep(1);
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        this.subscription.add(ViewObservable.clicks(this.entrance).filter(unused -> !this.entranceYearDialog.isShowing()).subscribe(unused -> this.entranceYearDialog.show()));
+
         this.setEntranceYear();
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next).show(true);
         this.subscription.add(
-//            FloatingActionControl
-//                .clicks();
+            this.entranceYearObservable.startWith((Integer) null)
+                .map(year ->
+                        entranceYear != null && AppConst.MIN_ENTRANCE_YEAR <= entranceYear && entranceYear <= Calendar.getInstance().get(Calendar.YEAR)
+                )
+                .subscribe(
+                    valid -> {
+                        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                        if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                        else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                    }
+                )
+        );
+        this.subscription.add(
             ViewObservable
                 .clicks(FloatingActionControl.getButton())
                 .subscribe(unused -> {
-                    Signup.getInstance().setEntrance_year(Integer.parseInt(this.year.getText().toString()));
-//                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) {
-//                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP1))
-//                            this.pagerController.popCurrentPage();
-//                        else
-//                            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
-//                    } else
-//                        this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+                    Signup.getInstance().setEntrance_year(this.entranceYear);
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
                 }, error -> Timber.d("page change error %s", error))
         );
-//        this.next.setOnClickListener(v -> {
-//            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
-//        });
 
         this.subscription.add(
             ViewObservable.clicks(this.next)
