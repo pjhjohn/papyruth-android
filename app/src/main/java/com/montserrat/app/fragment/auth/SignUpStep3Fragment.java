@@ -47,6 +47,8 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     @InjectView(R.id.nextBtn) protected Button next;
 
 
+    private Boolean isNext;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -60,6 +62,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step3, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
+        this.isNext = false;
         return view;
     }
 
@@ -77,9 +80,16 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
+        Timber.d(Signup.getInstance().toString());
         ((AuthActivity)this.getActivity()).signUpStep(3);
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
+
+        if(Signup.getInstance().getRealname() != null){
+            this.realname.setText(Signup.getInstance().getRealname());
+            ((RadioButton)this.gender.findViewById(this.gender.getChildAt((Signup.getInstance().getIs_boy()?0:1)).getId())).setChecked(true);
+            this.isNext = true;
+        }
 
         FloatingActionControl.getInstance().hide(true);
         this.subscription.add(
@@ -94,8 +104,10 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                 .subscribe(
                     valid -> {
                         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                        Timber.d("%s %s", visible, valid);
                         if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                        else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                        else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
+
                     }
                 )
         );

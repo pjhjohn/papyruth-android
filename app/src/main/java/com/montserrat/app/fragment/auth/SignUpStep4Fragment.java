@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.app.model.unique.User;
@@ -48,6 +49,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
     @InjectView(R.id.password) protected EditText password;
 
+    private Boolean isNext;
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,6 +64,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step4, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
+        this.isNext = false;
         return view;
     }
 
@@ -75,15 +78,21 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
     public void onPageFocused() {
+        Timber.d(Signup.getInstance().toString());
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
+        ((AuthActivity)this.getActivity()).signUpStep(4);
 
-        FloatingActionControl.getInstance().hide(true);
+        if(Signup.getInstance().getPassword() != null){
+            this.password.setText(Signup.getInstance().getPassword());
+            this.isNext = true;
+        }
+
+        FloatingActionControl.getInstance();
         this.subscription.add(
             WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(toString)
@@ -93,12 +102,12 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                         this.password.setError(passwordError);
                         return passwordError == null;
                     })
-                .startWith(false)
                 .subscribe(
                     valid -> {
                         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                        Timber.d("%s %s", visible, valid);
                         if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                        else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                        else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
                     }
                 )
         );
@@ -129,6 +138,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                     if (response.success) {
                         User.getInstance().update(response.user, response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+                        Signup.getInstance().clear();
                         SignUpStep4Fragment.this.getActivity().startActivity(new Intent(SignUpStep4Fragment.this.getActivity(), MainActivity.class));
                         SignUpStep4Fragment.this.getActivity().finish();
                     } else {
@@ -140,7 +150,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400: // Invalid field or lack of required field.
                             case 403: // Failed to SignUp
-                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_up), Toast.LENGTH_LONG).show();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());

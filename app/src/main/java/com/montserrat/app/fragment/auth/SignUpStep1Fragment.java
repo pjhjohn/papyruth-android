@@ -56,6 +56,8 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
 
     private Navigator navigator;
 
+    private boolean isNext;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -71,6 +73,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
         this.entranceYearObservable = this.buildEntranceYearDialog();
+        this.isNext = false;
         return view;
     }
 
@@ -118,14 +121,23 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUp(true);
         ((AuthActivity)this.getActivity()).signUpStep(1);
+        Timber.d(Signup.getInstance().toString());
 
         Picasso.with(this.getActivity().getBaseContext()).load(Signup.getInstance().getImage_url()).into(this.imageView);
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
+        if(Signup.getInstance().getEntrance_year() != null){
+            this.entrance.setText(Signup.getInstance().getEntrance_year().toString() + getResources().getString(R.string.entrance_postfix));
+            this.entranceYear = Signup.getInstance().getEntrance_year();
+            this.isNext = true;
+        }
+
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         this.subscription.add(ViewObservable.clicks(this.entrance).filter(unused -> !this.entranceYearDialog.isShowing()).subscribe(unused -> this.entranceYearDialog.show()));
+
+
 
         this.setEntranceYear();
         this.subscription.add(
@@ -137,7 +149,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
                     valid -> {
                         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                         if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                        else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                        else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
                     }
                 )
         );
@@ -145,7 +157,8 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
             ViewObservable
                 .clicks(FloatingActionControl.getButton())
                 .subscribe(unused -> {
-                    Signup.getInstance().setEntrance_year(this.entranceYear);
+                    if(!isNext)
+                        Signup.getInstance().setEntrance_year(this.entranceYear);
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
                 }, error -> Timber.d("page change error %s", error))
         );

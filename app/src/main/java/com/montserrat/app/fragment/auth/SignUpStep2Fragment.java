@@ -44,6 +44,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @InjectView(R.id.nickname) protected MaterialEditText nickname;
     @InjectView(R.id.nextBtn) protected Button next;
 
+    private Boolean isNext;
 
     @Override
     public void onAttach(Activity activity) {
@@ -58,6 +59,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
+        this.isNext = false;
         return view;
     }
 
@@ -76,9 +78,16 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(2);
+        Timber.d(Signup.getInstance().toString());
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
+
+        if(Signup.getInstance().getNickname() != null){
+            this.email.setText(Signup.getInstance().getEmail());
+            this.nickname.setText(Signup.getInstance().getNickname());
+            this.isNext = true;
+        }
 
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         this.subscription.add(
@@ -94,8 +103,9 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             .subscribe(
                 valid -> {
                     boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                    Timber.d("%s %s", visible, valid);
                     if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                    else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
                 }
             )
         );
@@ -105,16 +115,9 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                 .subscribe(unused -> {
                     Signup.getInstance().setEmail(this.email.getText().toString());
                     Signup.getInstance().setNickname(this.nickname.getText().toString());
-//                    if (this.pagerController.getPreviousPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
-//                        if (this.pagerController.getHistoryCopy().contains(AppConst.ViewPager.Auth.SIGNUP_STEP2)) this.pagerController.popCurrentPage();
-//                        else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-//                    } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
                 }, error -> Timber.d("page change error %s", error))
         );
-//        this.next.setOnClickListener(v -> {
-//            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-//        });
         this.subscription.add(
             ViewObservable.clicks(this.next)
             .subscribe(u -> {

@@ -30,6 +30,7 @@ public class Signup {
         this.is_boy = null;
         this.university_id = null;
         this.password = null;
+        this.entrance_year = null;
     }
     public String getRealname() {return realname;}
     public String getNickname() {return nickname;}
@@ -51,6 +52,9 @@ public class Signup {
 
     @Override
     public String toString() {
-        return String.format("[%s][%s][%s][%d][%s]", this.realname, this.nickname, this.email, this.university_id, this.is_boy? "male" : "female");
+        if(is_boy != null)
+            return String.format("[%s][%s][%s][%d][%s][%s]", this.realname, this.nickname, this.email, this.university_id, this.is_boy? "male" : "female", entrance_year);
+        else
+            return String.format("[%s][%s][%s][%d][%s][%s]", this.realname, this.nickname, this.email, this.university_id, null, entrance_year);
     }
 }
