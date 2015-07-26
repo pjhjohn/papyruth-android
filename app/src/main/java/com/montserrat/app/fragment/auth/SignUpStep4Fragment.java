@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
@@ -20,7 +22,6 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
-import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -30,14 +31,13 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.montserrat.utils.support.rx.RxValidator.isValidRadioButton;
 import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
@@ -48,6 +48,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     private ViewPagerController pagerController;
 
     @InjectView(R.id.password) protected EditText password;
+    @InjectView(R.id.term) protected TextView term;
+    @InjectView(R.id.term_agree) protected CheckBox termAgree;
 
     private Boolean isNext;
 
@@ -82,7 +84,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
-        Timber.d(Signup.getInstance().toString());
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
         ((AuthActivity)this.getActivity()).signUpStep(4);
@@ -100,7 +101,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 .map(
                     (String passwordError) -> {
                         this.password.setError(passwordError);
-                        return passwordError == null;
+                        return passwordError == null && this.termAgree.isChecked();
                     })
                 .subscribe(
                     valid -> {
@@ -117,6 +118,12 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                     Signup.getInstance().setPassword(this.password.getText().toString());
                     this.register();
                 }, error -> Timber.d("page change error %s", error))
+        );
+        this.subscription.add(
+            ViewObservable.clicks(this.term).subscribe(
+                unused ->
+                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_TERM, true)
+            )
         );
     }
 

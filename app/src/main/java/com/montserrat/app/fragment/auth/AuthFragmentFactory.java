@@ -27,6 +27,7 @@ public class AuthFragmentFactory implements IFragmentFactory{
             case AppConst.ViewPager.Auth.SIGNUP_STEP2: fragment = new SignUpStep2Fragment();     break;
             case AppConst.ViewPager.Auth.SIGNUP_STEP3: fragment = new SignUpStep3Fragment();     break;
             case AppConst.ViewPager.Auth.SIGNUP_STEP4: fragment = new SignUpStep4Fragment();     break;
+            case AppConst.ViewPager.Auth.SIGNUP_TERM: fragment = new SignUpTermFragment();      break;
         }
         if (fragment == null) throw new RuntimeException(String.format("No Fragment found having position of %d.", position));
         return fragment;

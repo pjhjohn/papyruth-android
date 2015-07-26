@@ -54,7 +54,7 @@ public class AppConst {
     public static class ViewPager {
         /* For Auth Activity */
         public static class Auth {
-            public static final int LENGTH = 7;
+            public static final int LENGTH = 8;
             public static final int LOADING = 0;
             public static final int AUTH = 1;
             public static final int SIGNUP_UNIV = 2;
@@ -62,7 +62,7 @@ public class AppConst {
             public static final int SIGNUP_STEP2 = 4;
             public static final int SIGNUP_STEP3 = 5;
             public static final int SIGNUP_STEP4 = 6;
-            public static final int SIGNUP_ARTICLE = 7;
+            public static final int SIGNUP_TERM = 7;
         }
     }
 

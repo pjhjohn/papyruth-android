@@ -11,6 +11,7 @@ import com.montserrat.app.model.response.FavoriteCoursesResponse;
 import com.montserrat.app.model.response.HashtagsResponse;
 import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
+import com.montserrat.app.model.response.TermResponse;
 import com.montserrat.app.model.response.UniversitiesResponse;
 import com.montserrat.app.model.response.UserDataResponse;
 import com.montserrat.app.model.response.VoidResponse;
@@ -279,6 +280,11 @@ public class RetrofitApi {
         Observable<FavoriteCoursesResponse> users_me_favorites(
             @Header("Authorization") String authorization,
             @Query("page") Integer page
+        );
+
+        @GET("/terms/{id}")
+        Observable<TermResponse> terms(
+            @Path("id") Integer id
         );
     }
 

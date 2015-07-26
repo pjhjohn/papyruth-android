@@ -121,7 +121,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUp(true);
         ((AuthActivity)this.getActivity()).signUpStep(1);
-        Timber.d(Signup.getInstance().toString());
 
         Picasso.with(this.getActivity().getBaseContext()).load(Signup.getInstance().getImage_url()).into(this.imageView);
 

@@ -78,7 +78,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(2);
-        Timber.d(Signup.getInstance().toString());
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();

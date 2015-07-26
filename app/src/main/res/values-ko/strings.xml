@@ -20,6 +20,7 @@
     <string name="step4">4단계</string>
     <string name="step5">5단계</string>
     <string name="entrance_year">입학년도</string>
+    <string name="agree_terms">약관에 동의합니다</string>
 
     <!-- Strings related to login -->
     <string name="action_sign_in">로그인</string>
