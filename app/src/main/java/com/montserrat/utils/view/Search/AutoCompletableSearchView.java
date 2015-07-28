@@ -240,15 +240,15 @@ public class AutoCompletableSearchView {
     }
 
     public void searchHistory(){
-        List<CourseData> courseList = ((CoursesData)AppManager.getInstance().getStringParsed(
-            AppConst.Preference.HISTORY,
-            CoursesData.class
-        )).courses;
-        Timber.d("courses : %s", courseList.size());
-        this.courses.clear();
-        if(courseList == null){
-            //Todo : when history is empty, inform history is empty.
+        if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
+            //Todo : when history is empty, inform empty.
         }else {
+            List<CourseData> courseList = ((CoursesData)AppManager.getInstance().getStringParsed(
+                AppConst.Preference.HISTORY,
+                CoursesData.class
+            )).courses;
+            Timber.d("courses : %s", courseList.size());
+            this.courses.clear();
             for (int i = 0; i < courseList.size(); i++) {
                 final int j = courseList.size() - i - 1;
                 this.courses.add(CourseData.Sample());
