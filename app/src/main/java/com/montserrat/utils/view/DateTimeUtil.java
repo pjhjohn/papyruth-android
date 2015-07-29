@@ -40,7 +40,7 @@ public class DateTimeUtil {
         Date date = null;
         try {
             date = dateFormat.parse(in);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
             e.printStackTrace();
         }
 

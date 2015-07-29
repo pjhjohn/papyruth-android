@@ -52,7 +52,8 @@ public class RetrofitApi {
         Observable<CommentsResponse> get_comments(
             @Header("Authorization") String authorization,
             @Query("evaluation_id") Integer evaluation_id,
-            @Query("page") Integer page,
+            @Query("since_id") Integer since_id,
+            @Query("max_id") Integer max_id,
             @Query("limit") Integer limit
         );
         @GET("/comments/{id}")
@@ -203,6 +204,9 @@ public class RetrofitApi {
         @GET("/info")
         Observable<StatisticsResponse> get_info();
 
+        @GET("/hashtag")
+        Observable<HashtagsResponse> get_hashtag_preset();
+
         /* PROFESSORS */
         @PATCH("/professors/{id}")
         Observable<VoidResponse> patch_professor(
@@ -231,6 +235,12 @@ public class RetrofitApi {
             @Query("lecture_id") Integer lecture_id,
             @Query("professor_id") Integer professor_id,
             @Query("query") String query
+        );
+
+        /* TERMS */
+        @GET("/terms/{id}")
+        Observable<TermResponse> terms(
+            @Path("id") Integer id
         );
 
         /* UNIVERSITIES */
@@ -281,10 +291,15 @@ public class RetrofitApi {
             @Header("Authorization") String authorization,
             @Query("page") Integer page
         );
-
-        @GET("/terms/{id}")
-        Observable<TermResponse> terms(
-            @Path("id") Integer id
+        @GET("/users/me/evaluations")
+        Observable<EvaluationsResponse> users_me_evaluations(
+            @Header("Authorization") String authorization,
+            @Query("page") Integer page
+        );
+        @GET("/users/me/comments")
+        Observable<EvaluationsResponse> users_me_comments(
+            @Header("Authorization") String authorization,
+            @Query("page") Integer page
         );
     }
 

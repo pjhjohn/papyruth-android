@@ -1,9 +1,6 @@
 package com.montserrat.app.model.unique;
 
-import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.EvaluationData;
-
-import java.util.List;
 
 /**
  * Created by SSS on 2015-05-24.
@@ -29,6 +26,7 @@ public class Evaluation {
     private Integer request_user_vote; // 1 for up-vote, 0 for down-vote, null for neither.
 
     private static Evaluation instance = null;
+    private Evaluation() {}
     public synchronized static Evaluation getInstance(){
         if ( Evaluation.instance == null ) Evaluation.instance = new Evaluation();
         return Evaluation.instance;

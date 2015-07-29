@@ -62,7 +62,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_down_vote_count) protected TextView downCount;
     @InjectView(R.id.evaluation_comment_icon) protected ImageView commentIcon;
     @InjectView(R.id.evaluation_comment_count) protected TextView commentCount;
-    private int id;
+    private Integer id;
     private VoteStatus status;
     public enum VoteStatus {
         UP, DOWN, NONE
@@ -148,10 +148,10 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.pointEasinessPrefix.setText(R.string.label_point_easiness);
         this.setPointProgress(this.pointEasinessPrefix, this.pointEasinessProgress, this.pointEasinessText, evaluation.getPointEasiness());
         this.hashtags.removeAllViews();
-        RetrofitApi.getInstance()
-        .get_evaluation_hashtag(User.getInstance().getAccessToken(), this.id)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(response -> {
+        if(this.id != null) RetrofitApi.getInstance()
+            .get_evaluation_hashtag(User.getInstance().getAccessToken(), this.id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
                 if (response.hashtags != null) this.hashtags.post(() -> {
                     float totalWidth = 0;
                     for (String hashtag : response.hashtags) {
@@ -162,8 +162,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                         totalWidth += width;
                     }
                 });
-            }
-        );
+            });
 
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.commentIcon);
         this.commentCount.setText(evaluation.getCommentCount() == null || evaluation.getCommentCount() < 0 ? "N/A" : String.valueOf(evaluation.getCommentCount()));
@@ -177,6 +176,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View view) {
+        if(this.id == null) return;
         switch(view.getId()) {
             case R.id.evaluation_up_vote_icon:
                 if(this.status == VoteStatus.UP) RetrofitApi.getInstance()

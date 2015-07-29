@@ -38,6 +38,6 @@ public class MontserratApp extends Application {
 
         /* Picasso Debugging flags */
         Picasso.with(getApplicationContext()).setIndicatorsEnabled(false);
-        Picasso.with(getApplicationContext()).setLoggingEnabled(true);
+        Picasso.with(getApplicationContext()).setLoggingEnabled(false);
     }
 }

@@ -4,24 +4,24 @@ package com.montserrat.app.model;
  * Created by pjhjohn on 2015-05-10.
  */
 public class EvaluationData {
-    public Integer id;
-    public Integer user_id;
-    public Integer course_id;
-    public Integer point_overall;
-    public Integer point_easiness;
-    public Integer point_gpa_satisfaction;
-    public Integer point_clarity;
-    public String body;
-    public String created_at;
-    public String updated_at;
-    public String professor_name;
-    public String lecture_name;
-    public String user_nickname;
-    public Integer up_vote_count;
-    public Integer down_vote_count;
-    public Integer comment_count;
-    public String avatar_url;
-    public Integer request_user_vote; // 1 for up-vote, 0 for down-vote, null for neither.
+    public Integer id = null;
+    public Integer user_id = null;
+    public Integer course_id = null;
+    public Integer point_overall = null;
+    public Integer point_easiness = null;
+    public Integer point_gpa_satisfaction = null;
+    public Integer point_clarity = null;
+    public String body = null;
+    public String created_at = null;
+    public String updated_at = null;
+    public String professor_name = null;
+    public String lecture_name = null;
+    public String user_nickname = null;
+    public Integer up_vote_count = null;
+    public Integer down_vote_count = null;
+    public Integer comment_count = null;
+    public String avatar_url = null;
+    public Integer request_user_vote = null; // 1 for up-vote, 0 for down-vote, null for neither.
 
     @Override
     public String toString() {
