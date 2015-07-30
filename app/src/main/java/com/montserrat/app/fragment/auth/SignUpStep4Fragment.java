@@ -12,11 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.activity.MainActivity;
+import com.montserrat.app.model.error.SignupError;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -31,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
+import retrofit.mime.TypedByteArray;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
@@ -156,6 +159,9 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400: // Invalid field or lack of required field.
+                                String json = new String(((TypedByteArray)((RetrofitError)error).getResponse().getBody()).getBytes());
+                                Gson gson = new Gson();
+                                Timber.d("reason : %s", gson.fromJson(json, SignupError.class).errors.email);
                             case 403: // Failed to SignUp
                                 Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_up), Toast.LENGTH_LONG).show();
                                 break;

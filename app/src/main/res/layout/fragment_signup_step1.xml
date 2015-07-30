@@ -9,25 +9,33 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
         android:src="@drawable/snu_logo"
         android:scaleType="centerCrop"/>
 
-    <TextView
-        android:text="@string/entrance_year"
-        android:textSize="20sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.montserrat.utils.view.SquareImageView
+            android:src="@drawable/ic_schedule_black_24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+        <TextView
+            android:text="@string/entrance_year"
+            android:textSize="20sp"
+            android:layout_marginLeft="72dp"
+            android:textColor="@color/primary_dark_material_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
     <com.gc.materialdesign.views.ButtonFlat
         android:id="@+id/entrance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/entrance_prompt"
-        android:background="@color/fg_normal"/>
+        android:background="@color/primary_dark_material_dark"/>
 
 
     <Button

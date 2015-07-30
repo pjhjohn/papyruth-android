@@ -10,6 +10,9 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="@string/hint_password"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:met_hideUnderline="true"
         app:met_floatingLabel="highlight"
         app:met_floatingLabelText="@string/hint_password"
         app:met_primaryColor="@color/fg_accent"/>

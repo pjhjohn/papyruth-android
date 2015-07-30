@@ -4,23 +4,37 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <LinearLayout
+    <FrameLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="72dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <com.montserrat.utils.view.SquareImageView
+            android:src="@drawable/ic_wc_black_24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"/>
+
         <TextView
             android:text="@string/gender"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="72dp"
             android:textSize="20sp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:textColor="@color/primary_dark_material_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
         <RadioGroup
             android:id="@+id/gender"
-            android:layout_gravity="right"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <RadioButton
                 android:layout_weight="0.5"
                 android:layout_width="wrap_content"
@@ -34,17 +48,27 @@
                 android:text="@string/gender_female"
                 android:id="@+id/gender_female"/>
         </RadioGroup>
-    </LinearLayout>
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/realname"
+    </FrameLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="@string/hint_realname"
-        app:met_floatingLabel="highlight"
-        app:met_floatingLabelText="@string/hint_realname"
-        app:met_primaryColor="@color/fg_accent"
-        app:met_singleLineEllipsis="true"/>
+        android:orientation="horizontal">
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/realname"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:inputType="text"
+            android:hint="@string/hint_realname"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:met_iconLeft="@drawable/ic_person_outline_black_24dp"
+            app:met_hideUnderline="true"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelText="@string/hint_realname"
+            app:met_primaryColor="@color/fg_accent"
+            app:met_singleLineEllipsis="true"/>
+    </LinearLayout>
     <Button
         android:id="@+id/nextBtn"
         android:text="next"
