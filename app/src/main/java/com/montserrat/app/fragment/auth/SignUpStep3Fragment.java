@@ -103,7 +103,6 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                 .subscribe(
                     valid -> {
                         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                        Timber.d("%s %s", visible, valid);
                         if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                         else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
 

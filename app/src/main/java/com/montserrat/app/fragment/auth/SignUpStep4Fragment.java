@@ -96,7 +96,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             this.isNext = true;
         }
 
-        FloatingActionControl.getInstance();
+        FloatingActionControl.getInstance().hide(true);
         this.subscription.add(
             WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(toString)
@@ -109,7 +109,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 .subscribe(
                     valid -> {
                         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                        Timber.d("%s %s", visible, valid);
+                        Timber.d("***%s %s", visible, valid);
                         if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                         else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
                     }

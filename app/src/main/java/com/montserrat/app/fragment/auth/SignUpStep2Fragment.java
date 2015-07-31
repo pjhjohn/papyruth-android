@@ -91,9 +91,22 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         this.subscription.add(
             Observable.combineLatest(
-                WidgetObservable.text(this.email).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
-                WidgetObservable.text(this.nickname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageNickname),
+                WidgetObservable.text(this.email).debounce(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(
+                    event -> {
+                        this.isNext = false;
+                        Timber.d("*** changed text");
+                        return event.text().toString();
+                    }).map(RxValidator.getErrorMessageEmail),
+
+                WidgetObservable.text(this.nickname).debounce(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(
+                    event -> {
+                        this.isNext = false;
+                        return event.text().toString();
+                    }
+                ).map(RxValidator.getErrorMessageNickname),
+
                 (String emailError, String nicknameError) -> {
+                    Timber.d("email : %s, nick : %s", emailError, nicknameError);
                     this.email.setError(emailError);
                     this.nickname.setError(nicknameError);
                     return emailError == null && nicknameError == null;
