@@ -12,7 +12,7 @@
         android:layout_marginRight="16dp">
 
         <com.montserrat.utils.view.SquareImageView
-            android:src="@drawable/ic_wc_black_24dp"
+            android:src="@drawable/ic_light_gender"
             android:layout_gravity="center_vertical"
             android:alpha="0.5"
             android:layout_width="48dp"
@@ -68,7 +68,7 @@
             android:hint="@string/hint_realname"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            app:met_iconLeft="@drawable/ic_person_outline_black_24dp"
+            app:met_iconLeft="@drawable/ic_light_persion"
             app:met_hideUnderline="false"
             app:met_floatingLabel="highlight"
             app:met_floatingLabelText="@string/hint_realname"

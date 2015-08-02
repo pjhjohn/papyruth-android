@@ -12,7 +12,7 @@
         android:hint="@string/hint_password"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:met_iconLeft="@drawable/ic_https_black_24dp"
+        app:met_iconLeft="@drawable/ic_light_lock"
         app:met_hideUnderline="true"
         app:met_floatingLabel="highlight"
         app:met_floatingLabelText="@string/hint_password"

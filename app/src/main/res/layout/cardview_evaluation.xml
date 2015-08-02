@@ -133,7 +133,7 @@
             android:layout_below="@+id/evaluation_nickname"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:progressDrawable="@drawable/ratingbar_22dp"
+            android:progressDrawable="@drawable/ratingbar_24dp"
             android:isIndicator="true"
             android:numStars="5"
             android:max="10"/>

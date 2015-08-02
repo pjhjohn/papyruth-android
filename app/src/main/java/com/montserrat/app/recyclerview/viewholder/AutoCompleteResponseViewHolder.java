@@ -1,17 +1,19 @@
 package com.montserrat.app.recyclerview.viewholder;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.model.Candidate;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
+import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,14 +39,15 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder impl
     }
 
     public void bind(Candidate item) {
+        final Context context = this.itemView.getContext();
         if (item.lecture_id != null && item.professor_id != null){
-            this.icon.setImageResource(R.drawable.ic_dark_new_evaluation);
+            Picasso.with(context).load(R.drawable.ic_light_new_evaluation).transform(new ColorFilterTransformation(R.color.translucent)).into(this.icon);
             this.content.setText(item.lecture_name + " - " +item.professor_name);
         }else if(item.lecture_name != null) {
-            this.icon.setImageResource(R.drawable.ic_dark_lecture);
+            Picasso.with(context).load(R.drawable.ic_light_lecture).transform(new ColorFilterTransformation(R.color.translucent)).into(this.icon);
             this.content.setText(item.lecture_name);
         }else if(item.professor_name != null){
-            this.icon.setImageResource(R.drawable.ic_dark_school);
+            Picasso.with(context).load(R.drawable.ic_light_school).transform(new ColorFilterTransformation(R.color.translucent)).into(this.icon);
             this.content.setText((item.professor_name));
         }
     }

@@ -202,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 img.setImageDrawable(getResources().getDrawable(R.drawable.background_transparent));
 //                this.mAutoCompletableSearch.showCandidates(true);
             }else {
-                img.setImageDrawable(getResources().getDrawable(R.drawable.ic_dark_clear));
+                img.setImageDrawable(getResources().getDrawable(R.drawable.ic_light_clear));
             }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

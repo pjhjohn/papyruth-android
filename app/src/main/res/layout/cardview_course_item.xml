@@ -75,7 +75,7 @@
                 android:layout_toStartOf="@+id/course_item_point_overall_star"/>
 
             <RatingBar
-                android:progressDrawable="@drawable/ratingbar_22dp"
+                android:progressDrawable="@drawable/ratingbar_24dp"
                 android:id="@+id/course_item_point_overall_star"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/baseline_x3"
