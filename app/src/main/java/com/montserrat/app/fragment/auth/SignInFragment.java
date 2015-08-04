@@ -130,7 +130,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUp(false);
+        ((AuthActivity)this.getActivity()).signUpStep(-1);
         FloatingActionControl.getInstance().clear();
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),

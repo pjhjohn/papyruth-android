@@ -15,7 +15,6 @@
             android:id="@+id/icon_gender"
             android:src="@drawable/ic_light_gender"
             android:layout_gravity="center_vertical"
-            android:alpha="0.5"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="12dp"/>
@@ -23,7 +22,7 @@
         <RadioGroup
             android:id="@+id/gender"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,14 +48,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
         <ImageView
             android:id="@+id/icon_realname"
             android:src="@drawable/ic_light_person"
             android:layout_gravity="center_vertical"
-            android:alpha="0.5"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="12dp"/>
@@ -65,7 +65,7 @@
             android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:hint="@string/hint_realname"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"/>

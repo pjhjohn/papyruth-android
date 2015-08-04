@@ -77,8 +77,8 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.iconGender);
-        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.iconRealname);
+        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconGender);
+        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconRealname);
 
     }
 

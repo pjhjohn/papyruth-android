@@ -1,12 +1,14 @@
 package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -78,6 +80,8 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(0);
         FloatingActionControl.getInstance().hide(true);
+        ((InputMethodManager)this.getActivity().getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.universityList.getWindowToken(), 2);
+
     }
 
     @Override

@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -22,11 +24,13 @@ import com.montserrat.app.model.error.SignupError;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
@@ -41,8 +45,6 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.montserrat.utils.support.rx.RxValidator.toString;
-
 /**
  * Created by pjhjohn on 2015-04-12.
  */
@@ -51,8 +53,13 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     private ViewPagerController pagerController;
 
     @InjectView(R.id.password) protected EditText password;
-    @InjectView(R.id.term) protected TextView term;
+    @InjectView(R.id.icon_password) protected ImageView iconPassword;
+    @InjectView(R.id.agree_term) protected TextView agreeTerm;
     @InjectView(R.id.term_agree) protected CheckBox termAgree;
+
+    private MaterialDialog termPage;
+
+    private CharSequence termContents;
 
     @Override
     public void onAttach(Activity activity) {
@@ -80,6 +87,26 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
+        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_lock).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconPassword);
+
+        this.subscription.add(
+            RetrofitApi.getInstance().terms(0)
+                .map(terms -> terms.term)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    term -> {
+                        if (term != null && term.size() > 0) {
+                            this.termContents = term.get(0).body;
+                        }else {
+                            this.termContents = "";
+                        }
+                    }, error -> {
+                        Timber.d("get Term error", error);
+                        error.printStackTrace();
+                    }
+                )
+        );
     }
 
     public void showFAC() {
@@ -93,6 +120,15 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         }else if (visible && !valid) {
             FloatingActionControl.getInstance().hide(true);
         }
+    }
+
+    private void buildTermDialog(){
+        this.termContents = this.getResources().getString(R.string.lorem_ipsum);
+        this.termPage = new MaterialDialog.Builder(this.getActivity())
+            .title(R.string.term)
+            .content(this.termContents)
+            .positiveText(R.string.agree_terms)
+            .build();
     }
 
     @Override
@@ -126,12 +162,18 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 }, error -> Timber.d("page change error %s", error))
         );
         this.subscription.add(
-            ViewObservable.clicks(this.term).subscribe(
-                unused ->
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_TERM, true)
-            )
+            ViewObservable.clicks(this.agreeTerm)
+                .filter(unuse -> !this.termPage.isShowing())
+                .subscribe(
+                unused -> {
+//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_TERM, true)
+                    this.termPage.show();
+                })
         );
+
+        this.buildTermDialog();
     }
+
 
     private void register(){
         this.subscription.add(

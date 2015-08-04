@@ -81,6 +81,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_history).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconAdmissionYear);
 
+
     }
 
     public void setEntranceYear(){
@@ -113,7 +114,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUp(true);
         ((AuthActivity)this.getActivity()).signUpStep(1);
 
         Picasso.with(this.getActivity().getBaseContext()).load(Signup.getInstance().getImage_url()).into(this.univerity);
