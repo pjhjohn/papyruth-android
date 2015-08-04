@@ -54,8 +54,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @InjectView(R.id.term) protected TextView term;
     @InjectView(R.id.term_agree) protected CheckBox termAgree;
 
-    private Boolean isNext;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -69,7 +67,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step4, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
-        this.isNext = false;
         return view;
     }
 
@@ -85,36 +82,42 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
     }
 
+    public void showFAC() {
+        String validatePassword = RxValidator.getErrorMessagePassword.call(this.password.getText().toString());
+
+        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+        boolean valid = validatePassword == null;
+
+        if (!visible && valid) {
+            FloatingActionControl.getInstance().show(true);
+        }else if (visible && !valid) {
+            FloatingActionControl.getInstance().hide(true);
+        }
+    }
+
     @Override
     public void onPageFocused() {
+        ((AuthActivity)this.getActivity()).signUpStep(4);
+        FloatingActionControl.getInstance().hide(true);
+
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
-        ((AuthActivity)this.getActivity()).signUpStep(4);
 
         if(Signup.getInstance().getPassword() != null){
             this.password.setText(Signup.getInstance().getPassword());
-            this.isNext = true;
+            this.showFAC();
         }
-
-        FloatingActionControl.getInstance().hide(true);
         this.subscription.add(
-            WidgetObservable.text(this.password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .map(toString)
-                .map(RxValidator.getErrorMessagePassword)
-                .map(
-                    (String passwordError) -> {
-                        this.password.setError(passwordError);
-                        return passwordError == null && this.termAgree.isChecked();
-                    })
-                .subscribe(
-                    valid -> {
-                        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                        Timber.d("***%s %s", visible, valid);
-                        if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                        else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
-                    }
-                )
+            WidgetObservable
+                .text(this.password)
+                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    String validatePassword = RxValidator.getErrorMessagePassword.call(event.text().toString());
+                    this.password.setError(validatePassword);
+                    this.showFAC();
+                })
         );
+
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {

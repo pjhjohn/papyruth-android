@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -16,11 +17,12 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.rx.RxValidator;
-import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,10 +46,10 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     private ViewPagerController pagerController;
     @InjectView(R.id.gender) protected RadioGroup gender;
     @InjectView(R.id.realname) protected EditText realname;
+    @InjectView(R.id.icon_gender) protected ImageView iconGender;
+    @InjectView(R.id.icon_realname) protected ImageView iconRealname;
     @InjectView(R.id.nextBtn) protected Button next;
 
-
-    private Boolean isNext;
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,7 +64,6 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step3, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
-        this.isNext = false;
         return view;
     }
 
@@ -76,39 +77,51 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
+        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.iconGender);
+        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.iconRealname);
+
+    }
+
+    public void showFAC() {
+        String validateName = RxValidator.getErrorMessageRealname.call(this.realname.getText().toString());
+
+        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+        boolean valid = validateName == null && this.gender.getCheckedRadioButtonId() != -1;
+
+        if (!visible && valid) {
+            FloatingActionControl.getInstance().show(true);
+        }else if (visible && !valid) {
+            FloatingActionControl.getInstance().hide(true);
+        }
     }
 
     @Override
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(3);
+        FloatingActionControl.getInstance().hide(true);
+
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
         if(Signup.getInstance().getRealname() != null){
             this.realname.setText(Signup.getInstance().getRealname());
             ((RadioButton)this.gender.findViewById(this.gender.getChildAt((Signup.getInstance().getIs_boy()?0:1)).getId())).setChecked(true);
-            this.isNext = true;
+            this.showFAC();
         }
 
-        FloatingActionControl.getInstance().hide(true);
         this.subscription.add(
-            Observable.combineLatest(
-                WidgetObservable.text(this.realname).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageRealname),
-                RxValidator.createObservableRadioGroup(this.gender).map(isValidRadioButton),
-                (String realnameError, Boolean validRadioGroup) -> {
-                    this.realname.setError(realnameError);
-                    return realnameError == null && validRadioGroup != null && validRadioGroup;
+            WidgetObservable
+                .text(this.realname)
+                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    String validateName = RxValidator.getErrorMessageRealname.call(event.text().toString());
+                    this.realname.setError(validateName);
+                    this.showFAC();
                 })
-                .startWith(false)
-                .subscribe(
-                    valid -> {
-                        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                        if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                        else if (isNext||(!visible && valid)) FloatingActionControl.getInstance().show(true);
-
-                    }
-                )
         );
+        this.gender.setOnCheckedChangeListener((group, id) -> {
+            this.showFAC();
+        });
         this.subscription.add(
             ViewObservable
                 .clicks(FloatingActionControl.getButton())

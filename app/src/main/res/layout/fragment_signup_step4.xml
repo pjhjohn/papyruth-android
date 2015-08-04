@@ -4,19 +4,28 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/password"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="@string/hint_password"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:met_iconLeft="@drawable/ic_light_lock"
-        app:met_hideUnderline="true"
-        app:met_floatingLabel="highlight"
-        app:met_floatingLabelText="@string/hint_password"
-        app:met_primaryColor="@color/fg_accent"/>
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/icon_realname"
+            android:src="@drawable/ic_light_lock"
+            android:layout_gravity="center_vertical"
+            android:alpha="0.5"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"/>
+        <EditText
+            android:id="@+id/password"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="@string/hint_password"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+    </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
