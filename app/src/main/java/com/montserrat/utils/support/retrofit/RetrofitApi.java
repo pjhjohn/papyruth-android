@@ -9,6 +9,7 @@ import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.EvaluationsResponse;
 import com.montserrat.app.model.response.FavoriteCoursesResponse;
 import com.montserrat.app.model.response.HashtagsResponse;
+import com.montserrat.app.model.response.SignUpValidateResponse;
 import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.TermResponse;
@@ -17,6 +18,7 @@ import com.montserrat.app.model.response.UserDataResponse;
 import com.montserrat.app.model.response.VoidResponse;
 import com.montserrat.app.model.response.VoteResponse;
 import com.montserrat.app.model.response.VotersResponse;
+import com.montserrat.app.model.unique.User;
 
 import java.util.List;
 
@@ -300,6 +302,15 @@ public class RetrofitApi {
         Observable<EvaluationsResponse> users_me_comments(
             @Header("Authorization") String authorization,
             @Query("page") Integer page
+        );
+        @POST("/users/refresh_token")
+        Observable<UserDataResponse> refresh_token(
+            @Header("Authorization") String authorization
+        );
+        @POST("/users/sign_up/validate")
+        Observable<SignUpValidateResponse> validate(
+            @Query("name") String name,
+            @Query("value") String value
         );
     }
 

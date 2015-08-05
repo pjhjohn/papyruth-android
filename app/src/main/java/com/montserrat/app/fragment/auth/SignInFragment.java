@@ -58,13 +58,11 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 public class SignInFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
     private ViewPagerController pagerController;
-    private Navigator navigator;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
-        this.navigator = (Navigator) activity;
     }
 
     @InjectView (R.id.email) protected MaterialAutoCompleteTextView emailField;
@@ -106,8 +104,22 @@ public class SignInFragment extends Fragment implements OnPageFocus {
                 success -> {
                     this.progress.setVisibility(View.GONE);
                     if (success) {
-                        this.getActivity().startActivity(new Intent(SignInFragment.this.getActivity(), MainActivity.class));
-                        this.getActivity().finish();
+                        this.subscriptions.add(
+                            RetrofitApi.getInstance().refresh_token(User.getInstance().getAccessToken())
+                                .map(user -> user.access_token)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(token -> {
+                                        User.getInstance().setAccessToken(token);
+                                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
+                                        this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+                                        this.getActivity().finish();
+                                    },error -> {
+                                        Timber.d("refresh error : %s", error);
+                                        error.printStackTrace();
+                                    }
+                                )
+                        );
                     } else {
                         Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                     }
@@ -130,7 +142,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUp(false);
+        ((AuthActivity)this.getActivity()).signUpStep(-1);
         FloatingActionControl.getInstance().clear();
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),

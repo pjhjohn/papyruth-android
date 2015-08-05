@@ -29,7 +29,7 @@ import timber.log.Timber;
 public class SignUpTermFragment extends Fragment implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController pagerController;
 
-    @InjectView(R.id.term) protected TextView term;
+    @InjectView(R.id.agree_term) protected TextView term;
     @InjectView(R.id.confirm) protected Button confirm;
 
     @Override

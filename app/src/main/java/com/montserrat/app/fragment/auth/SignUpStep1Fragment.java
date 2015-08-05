@@ -2,28 +2,23 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
-import com.montserrat.app.fragment.main.EvaluationStep3Fragment;
-import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.view.SquareImageView;
-import com.montserrat.utils.view.navigator.FragmentNavigator;
-import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -35,7 +30,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.view.ViewObservable;
-import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -48,13 +42,12 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
 
     @InjectView(R.id.nextBtn) protected Button next;
     @InjectView (R.id.entrance) protected ButtonFlat entrance;
-    @InjectView(R.id.university_item_image) protected SquareImageView imageView;
+    @InjectView(R.id.university_item_image) protected SquareImageView univerity;
+    @InjectView(R.id.icon_admission_year) protected ImageView iconAdmissionYear;
 
     private MaterialDialog entranceYearDialog;
     private Integer entranceYear;
     private Observable<Integer> entranceYearObservable;
-
-    private Navigator navigator;
 
     private boolean isNext;
 
@@ -62,7 +55,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
-        this.navigator = (Navigator)activity;
     }
 
     private CompositeSubscription subscription;
@@ -87,6 +79,9 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
+        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_history).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconAdmissionYear);
+
+
     }
 
     public void setEntranceYear(){
@@ -119,10 +114,9 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUp(true);
         ((AuthActivity)this.getActivity()).signUpStep(1);
 
-        Picasso.with(this.getActivity().getBaseContext()).load(Signup.getInstance().getImage_url()).into(this.imageView);
+        Picasso.with(this.getActivity().getBaseContext()).load(Signup.getInstance().getImage_url()).into(this.univerity);
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();

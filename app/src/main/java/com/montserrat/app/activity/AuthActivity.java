@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,12 +17,14 @@ import com.montserrat.app.fragment.auth.SignInFragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
+import com.squareup.picasso.Picasso;
 
 import java.util.Stack;
 
@@ -31,13 +34,13 @@ import butterknife.InjectView;
 /**
  * Activity For Authentication.
  */
-public class AuthActivity extends Activity implements ViewPagerController, Navigator {
+public class AuthActivity extends Activity implements ViewPagerController {
     private ViewPagerManager manager;
-    private FragmentNavigator mNavigator;
 
     @InjectView(R.id.fac) protected FloatingActionControlContainer fac;
     @InjectView(R.id.sign_up_step) protected LinearLayout signUpStep;
     @InjectView(R.id.state_name) protected TextView stateName;
+    @InjectView(R.id.logo) protected ImageView logo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,9 +48,6 @@ public class AuthActivity extends Activity implements ViewPagerController, Navig
         this.setContentView(R.layout.activity_auth);
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(this.fac);
-
-        this.mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_viewpager, SignInFragment.class);
-//        this.mNavigator = new FragmentNavigator(null, this.getFragmentManager(), R.id.auth_viewpager, SignInFragment.class, null, null);
 
         /* Set Manager for ViewPager */
         this.manager = new ViewPagerManager(
@@ -61,6 +61,8 @@ public class AuthActivity extends Activity implements ViewPagerController, Navig
     public void onResume() {
         super.onResume();
         ViewHolderFactory.getInstance().setContext(this);
+        Picasso.with(this.getBaseContext()).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.logo);
+
     }
     @Override
     public void onDestroy() {
@@ -68,24 +70,26 @@ public class AuthActivity extends Activity implements ViewPagerController, Navig
         ButterKnife.reset(this);
     }
 
-    public void signUp(boolean signup){
-        ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
-        if(signup){
-            this.stateName.setText(R.string.action_sign_up);
-            param.height = (int) (8 * this.getBaseContext().getResources().getDisplayMetrics().density);
-        }else{
+    public void signUpStep(int step){
+        if(step < 0){
+            ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
             this.stateName.setText("");
             param.height = 0;
-        }
-        this.signUpStep.setLayoutParams(param);
-    }
-    public void signUpStep(int step){
-        for (int i = 0; i < 4; i++){
-            if(i < step)
-                this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.fg_normal));
-            else
-                this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.translucent));
+            this.signUpStep.setLayoutParams(param);
+        }else {
+            if(this.signUpStep.getHeight() < 1){
+                ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
+                this.stateName.setText(R.string.action_sign_up);
+                param.height = (int) (4 * this.getBaseContext().getResources().getDisplayMetrics().density);
+                this.signUpStep.setLayoutParams(param);
+            }
+            for (int i = 0; i < 4; i++) {
+                if (i < step)
+                    this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.fg_normal));
+                else
+                    this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.translucent));
 
+            }
         }
     }
 
@@ -117,55 +121,5 @@ public class AuthActivity extends Activity implements ViewPagerController, Navig
     @Override
     public void onBackPressed() {
         if(!this.manager.onBack()) super.onBackPressed();
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
-        this.mNavigator.navigate(target, addToBackStack);
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType) {
-        this.mNavigator.navigate(target, addToBackStack, animatorType);
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
-        this.mNavigator.navigate(target, addToBackStack, clear);
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
-        this.mNavigator.navigate(target, addToBackStack, animatorType, clear);
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack) {
-        this.mNavigator.navigate(target, bundle, addToBackStack);
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType) {
-        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType);
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, boolean clear) {
-        this.mNavigator.navigate(target, bundle, addToBackStack, clear);
-    }
-
-    @Override
-    public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
-        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType, clear);
-    }
-
-    @Override
-    public String getBackStackNameAt(int index) {
-        return this.mNavigator.getBackStackNameAt(index);
-    }
-
-    @Override
-    public boolean back() {
-        return this.mNavigator.back();
     }
 }

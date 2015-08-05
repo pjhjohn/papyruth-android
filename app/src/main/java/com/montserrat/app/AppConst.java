@@ -77,6 +77,10 @@ public class AppConst {
         public static final String HISTORY = "history";
         public static final String SEARCH = "search";
 
+        /* Validate */
+        public static final String EMAIL = "email";
+        public static final String NICKNAME = "nickname";
+
     }
     public static class Tag{
         public static final String ACTIVE_FRAGMENT = "FRAGMENT";

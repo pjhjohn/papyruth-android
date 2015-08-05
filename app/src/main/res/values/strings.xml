@@ -21,6 +21,9 @@
     <string name="step5">step 5</string>
     <string name="entrance_year">Admission year</string>
     <string name="agree_terms">I agree to the terms and conditions</string>
+    <string name="term">Term</string>
+    <string name="duplicated_email">duplicated email</string>
+    <string name="duplicated_nickname">duplicated nickname</string>
 
     <!-- Strings related to login -->
     <string name="action_sign_in">Sign in</string>
@@ -101,4 +104,11 @@
     <string name="category_major">MAJOR</string>
     <string name="toolbar_title_course">Course Overview</string>
     <string name="toolbar_title_new_evaluation">New Evaluation</string>
+
+    <string name="lorem_ipsum"><b>Lorem      ipsum</b>\n\n dolor sit amet, consectetur adipiscing elit. Fusce pulvinar, leo in fermentum sollicitudin, odio turpis lobortis purus, vitae tempus leo libero ut diam. Integer rhoncus turpis at viverra venenatis. In convallis lobortis tellus, et fringilla quam convallis a. Ut consequat lobortis egestas. Mauris euismod, tortor vitae tristique dignissim, felis dolor malesuada arcu, at pulvinar lacus magna quis ex. Nunc quis tincidunt turpis, eget lobortis odio. Nunc mi magna, feugiat eget orci at, efficitur laoreet nisi. Morbi eros magna, pellentesque non viverra sit amet, tristique ut diam. Aenean hendrerit congue sem, ac facilisis mi hendrerit a. In sit amet euismod tellus. Aliquam egestas porta nunc, a dictum lacus ullamcorper quis. Proin ut quam et metus dapibus tempor id id quam. Curabitur et sapien massa.
+Vestibulum maximus aliquam purus quis consectetur. Etiam metus lorem, aliquam at sagittis quis, feugiat a tellus. Quisque placerat, quam in vehicula faucibus, nisl lacus ullamcorper metus, sit amet malesuada turpis urna at dui. Sed volutpat nibh ex, vitae porttitor mauris pulvinar id. Quisque hendrerit ornare eros, eget sodales sem porta eget. Praesent molestie nibh erat, ut gravida libero suscipit ut. Vestibulum et erat elementum, mollis nulla ut, molestie massa. Integer nibh turpis, pulvinar vitae velit quis, aliquam gravida magna.
+Nunc sem tortor, sagittis a interdum vel, elementum at dui. Maecenas quis lacinia purus, eget mattis arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tortor nisl, dictum porta nisl consequat vel. Nulla condimentum efficitur facilisis. Nullam ante dolor, maximus eget urna in, ultricies rutrum orci. Praesent feugiat diam non nunc sodales, sit amet semper metus ornare. Nam finibus consequat metus id tincidunt. Phasellus sollicitudin lacus ex, vitae pulvinar erat condimentum eget. Duis ullamcorper urna tellus, eget pulvinar mauris lobortis tincidunt. Vivamus suscipit malesuada neque quis aliquet.
+Fusce diam purus, interdum id vulputate vel, egestas sed turpis. Duis id semper eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque porttitor augue elementum, pulvinar urna nec, faucibus nulla. Pellentesque id egestas lacus. Donec ut justo eu massa semper ultricies. Cras a porttitor lectus. Cras viverra sapien in nunc pellentesque porta. Sed sagittis tempus tellus, molestie faucibus nisl sodales eu. Maecenas tempus sapien ex, non tincidunt ex pharetra et. Quisque et maximus risus, sit amet dapibus libero. Pellentesque sapien lacus, iaculis vitae convallis at, semper at neque.
+Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facilisis sapien nibh, sit amet aliquam nulla laoreet pretium. Etiam porta maximus magna vitae pellentesque. Donec eget tortor sodales, sagittis quam at, aliquam tellus. Mauris vel sapien tellus. Integer sit amet est maximus, porttitor turpis id, tempor nunc. Phasellus blandit imperdiet lacus vitae pharetra. Aenean tristique ligula orci, vel venenatis odio pellentesque eget. Sed libero magna, vulputate at sodales nec, lacinia ut nisl. Suspendisse tincidunt dui ac ultrices convallis. Donec in augue convallis, dapibus odio molestie, vehicula orci. In vitae dolor cursus, bibendum mauris at, lobortis mauris. Vivamus dignissim et lacus eget pretium. Fusce laoreet arcu ut odio bibendum ornare. Vestibulum at sem ac nibh faucibus laoreet sit amet in eros. Nam pellentesque bibendum posuere.</string>
+
 </resources>

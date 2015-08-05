@@ -4,34 +4,54 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/email"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:inputType="textEmailAddress"
-        android:hint="@string/hint_email"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:met_iconLeft="@drawable/ic_light_mail"
-        app:met_hideUnderline="false"
-        app:met_floatingLabel="highlight"
-        app:met_floatingLabelText="@string/hint_email"
-        app:met_primaryColor="@color/fg_accent"
-        app:met_singleLineEllipsis="true"/>
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/nickname"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/icon_email"
+            android:src="@drawable/ic_light_mail"
+            android:layout_gravity="center_vertical"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"/>
+        <EditText
+            android:id="@+id/email"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:inputType="textEmailAddress"
+            android:hint="@string/hint_email"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:inputType="text"
-        android:hint="@string/hint_nickname"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:met_iconLeft="@drawable/ic_light_persion"
-        app:met_hideUnderline="false"
-        app:met_floatingLabel="highlight"
-        app:met_floatingLabelText="@string/hint_nickname"
-        app:met_primaryColor="@color/fg_accent"
-        app:met_singleLineEllipsis="true"/>
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/icon_nickname"
+            android:src="@drawable/ic_light_person"
+            android:layout_gravity="center_vertical"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"/>
+        <EditText
+            android:id="@+id/nickname"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:inputType="text|textNoSuggestions"
+            android:hint="@string/hint_nickname"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+    </LinearLayout>
     <Button
         android:id="@+id/nextBtn"
         android:text="next"
