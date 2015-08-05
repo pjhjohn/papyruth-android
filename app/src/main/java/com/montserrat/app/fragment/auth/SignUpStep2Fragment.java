@@ -16,6 +16,7 @@ import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.Signup;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
@@ -32,6 +33,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -77,13 +79,46 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconNickname);
     }
 
+    private boolean isDuplicateEmail = false;
+    private boolean isDuplicateNickname = false;
+
+    private String duplicatedValidator(String email, String nickcname){
+        String errorMsg = null;
+        this.subscription.add(
+            RetrofitApi.getInstance().validate((email != null ? AppConst.Preference.EMAIL : AppConst.Preference.NICKNAME), (email != null ? email : nickcname))
+                .map(validator -> validator.validation)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    success -> {
+                        Timber.d("error vali : %s", success);
+                        if(success) {
+                            if (email != null) isDuplicateEmail = true;
+                            else isDuplicateNickname = true;
+                        }else{
+                            if(email != null) {
+                                this.email.setError(getResources().getString(R.string.duplicated_email));
+                            }else {
+                                this.nickname.setError(getResources().getString(R.string.duplicated_nickname));
+                            }
+                        }
+                    },
+                    error -> {
+                        Timber.d("duplicate validator error : %s", error);
+                        error.printStackTrace();
+                    }
+                )
+        );
+        return errorMsg;
+    }
+
     public void showFAC() {
         String validateNickname = RxValidator.getErrorMessageNickname.call(this.nickname.getText().toString());
         String validateEmail = RxValidator.getErrorMessageEmail.call(this.email.getText().toString());
 
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-        boolean valid = validateEmail == null && validateNickname == null;
+        boolean valid = validateEmail == null && validateNickname == null && isDuplicateEmail && isDuplicateNickname;
 
         if (!visible && valid) {
             FloatingActionControl.getInstance().show(true);
@@ -113,16 +148,21 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                     .text(this.email)
                     .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                     .doOnNext(event -> {
+                        isDuplicateEmail = false;
+                        this.duplicatedValidator(event.text().toString(), null);
                         this.email.setError(RxValidator.getErrorMessageEmail.call(event.text().toString()));
                     }),
                 WidgetObservable
                     .text(this.nickname)
                     .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                     .doOnNext(event -> {
+                        isDuplicateNickname = false;
+                        this.duplicatedValidator(null, event.text().toString());
                         this.nickname.setError(RxValidator.getErrorMessageNickname.call(event.text().toString()));
                     })
             ).subscribe(event -> {
                 Timber.d("event class", event.getClass());
+                Timber.d("error msg : %s >< %s", this.email.getError(), this.nickname.getError());
                 this.showFAC();
             })
         );

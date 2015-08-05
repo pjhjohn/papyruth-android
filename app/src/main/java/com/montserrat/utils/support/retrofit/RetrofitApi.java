@@ -9,6 +9,7 @@ import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.EvaluationsResponse;
 import com.montserrat.app.model.response.FavoriteCoursesResponse;
 import com.montserrat.app.model.response.HashtagsResponse;
+import com.montserrat.app.model.response.SignUpValidateResponse;
 import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.response.TermResponse;
@@ -305,6 +306,11 @@ public class RetrofitApi {
         @POST("/users/refresh_token")
         Observable<UserDataResponse> refresh_token(
             @Header("Authorization") String authorization
+        );
+        @POST("/users/sign_up/validate")
+        Observable<SignUpValidateResponse> validate(
+            @Query("name") String name,
+            @Query("value") String value
         );
     }
 
