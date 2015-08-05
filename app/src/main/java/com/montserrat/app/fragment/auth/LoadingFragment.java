@@ -81,20 +81,23 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
         this.subscriptions.add(RetrofitApi.getInstance().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
-                this.subscriptions.add(RetrofitApi.getInstance().universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this.actionWithStatistics)
+                this.subscriptions.add(
+                    RetrofitApi.getInstance().universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this.actionWithStatistics)
                 );
             },
             error -> {
                 if (error instanceof RetrofitError) {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
                         case 401:
-                            this.subscriptions.add(RetrofitApi.getInstance().get_info()
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(this.actionWithStatistics)
+                        case 419:
+                            this.subscriptions.add(
+                                RetrofitApi.getInstance().get_info()
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(this.actionWithStatistics)
                             );
                             break;
                         default:
@@ -113,6 +116,11 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                 .subscribe(actionWithStatistics)
         );
     }
+
+    /**
+     * if user has valid token, auto sign in.<br/>
+     * else invalid token, current page set SigninFragment.
+     */
 
     private Action1<StatisticsResponse> actionWithStatistics = statistics -> {
         if (statistics == null) this.timerFinished = true;
@@ -134,8 +142,24 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
             if ( validAuthorization == null ) return;
             if (!validAuthorization) this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
             else {
-                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                this.getActivity().finish();
+                this.subscriptions.add(
+                    RetrofitApi.getInstance().refresh_token(User.getInstance().getAccessToken())
+                        .map(user -> user.access_token)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                            token -> {
+                                User.getInstance().setAccessToken(token);
+                                AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
+                                this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+                                this.getActivity().finish();
+                            },error -> {
+                                Timber.d("refresh error : %s", error);
+                                error.printStackTrace();
+                                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
+                            }
+                        )
+                );
             }
         }
     };

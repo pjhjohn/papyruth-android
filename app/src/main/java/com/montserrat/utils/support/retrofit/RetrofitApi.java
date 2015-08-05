@@ -17,6 +17,7 @@ import com.montserrat.app.model.response.UserDataResponse;
 import com.montserrat.app.model.response.VoidResponse;
 import com.montserrat.app.model.response.VoteResponse;
 import com.montserrat.app.model.response.VotersResponse;
+import com.montserrat.app.model.unique.User;
 
 import java.util.List;
 
@@ -300,6 +301,10 @@ public class RetrofitApi {
         Observable<EvaluationsResponse> users_me_comments(
             @Header("Authorization") String authorization,
             @Query("page") Integer page
+        );
+        @POST("/users/refresh_token")
+        Observable<UserDataResponse> refresh_token(
+            @Header("Authorization") String authorization
         );
     }
 
