@@ -6,6 +6,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
@@ -20,6 +21,7 @@ import rx.Observable;
 import rx.android.view.ViewObservable;
 import rx.android.widget.OnTextChangeEvent;
 import rx.functions.Func1;
+import rx.functions.Func2;
 
 /**
  * Created by pjhjohn on 2015-05-06.
@@ -80,13 +82,20 @@ public class RxValidator {
 
     /* for SeekBar Validation */
     public static Func1<Integer, Boolean> isIntegerValueInRange = value -> value != null && value >= 0 && value <= 10;
+    public static Func2<TextView, Integer, Integer> assignProgressValue = (text, value) -> {
+        if(text == null) return value;
+        if(value >= 10) text.setText("10");
+        else if(value < 0) text.setText("N/A");
+        else text.setText(String.format("%d.0", value));
+        return value;
+    };
     public static Observable<Integer> createObservableSeekBar(SeekBar seekbar, Boolean fromUserOnly) {
         return Observable.create(observer ->
             seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if(fromUserOnly && !fromUser) return;
-                    else observer.onNext(progress);
+                    observer.onNext(progress);
                 }
 
                 @Override
@@ -104,10 +113,17 @@ public class RxValidator {
 
     /* for RatingBar Validation */
     public static Func1<Float, Boolean> isFloatValueInRange = value -> value != null && value >= 0 && value <= 10;
+    public static Func2<TextView, Float, Float> assignRatingValue = (text, value) -> {
+        if(text == null) return value;
+        if(value >= 10) text.setText("10");
+        else if(value < 0) text.setText("N/A");
+        else text.setText(String.format("%d.0", (int)(2*value)));
+        return value;
+    };
     public static Observable<Float> createObservableRatingBar(RatingBar ratingbar, Boolean fromUserOnly) {
         return Observable.create(observer -> ratingbar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             if(fromUserOnly && !fromUser) return;
-            else observer.onNext(rating);
+            observer.onNext(rating);
         }));
     }
 }

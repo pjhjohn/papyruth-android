@@ -11,12 +11,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/baseline_x2">
             <TextView
                 android:id="@+id/lecture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/baseline_x2"
                 android:gravity="center"
                 android:textSize="24sp"/>
             <TextView
@@ -26,82 +26,105 @@
                 android:layout_marginTop="@dimen/baseline_x1"
                 android:gravity="center"
                 android:textSize="18sp"/>
-
             <RelativeLayout
-                android:id="@+id/evalution_point_overall"
+                android:id="@+id/evaluation_point_overall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/baseline_x2">
-                <TextView
-                    android:id="@+id/evaluation_point_overall_prefix"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/evaluation_point_overall_text"
-                    android:layout_marginRight="@dimen/baseline_x1"
-                    android:layout_marginEnd="@dimen/baseline_x1"
+                <ImageView
+                    android:id="@+id/evaluation_point_overall_icon"
+                    android:layout_width="@dimen/baseline_x5"
+                    android:layout_height="@dimen/baseline_x5"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="@color/background_material_dark"
-                    android:text="@string/label_point_overall"/>
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_point_overall_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x2"
+                    android:paddingLeft="@dimen/baseline_x2"
+                    android:paddingRight="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_overall_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_overall_icon"
+                    android:layout_toLeftOf="@+id/evaluation_point_overall_text"
+                    android:layout_toStartOf="@+id/evaluation_point_overall_text"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/point_overall"
+                    android:text="@string/label_point_overall"
+                    android:minWidth="@dimen/baseline_x6"/>
 
                 <RatingBar
-                    android:id="@+id/evaluation_point_overall_star"
+                    android:id="@+id/evaluation_point_overall_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/baseline_x3"
+                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_marginStart="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_overall_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_overall_icon"
+                    android:layout_alignParentBottom="true"
                     android:progressDrawable="@drawable/ratingbar_24dp"
                     android:numStars="5"
                     android:max="10"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"/>
+                    android:progress="0"/>
 
                 <com.devspark.robototextview.widget.RobotoTextView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/evaluation_point_overall_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    app:fontFamily="roboto"
-                    app:textWeight="normal"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="32sp"
+                    android:textColor="@color/point_overall"
+                    android:minWidth="@dimen/baseline_x3"
+                    app:fontFamily="roboto"
+                    app:textWeight="light"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/evaluation_point_clarity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/baseline_x2"
                 android:layout_marginTop="@dimen/baseline_x2">
-                <TextView
-                    android:id="@+id/evaluation_point_clarity_prefix"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/evaluation_point_clarity_icon"
+                    android:layout_width="@dimen/baseline_x5"
+                    android:layout_height="@dimen/baseline_x5"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/point_clarity"
-                    android:text="@string/label_point_clarity"
-                    android:minWidth="@dimen/baseline_x6"
-                    android:gravity="right|end"/>
-
-                <SeekBar
-                    android:id="@+id/evaluation_point_clarity_progress"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/baseline_x3"
-                    android:maxHeight="@dimen/baseline_x1"
-                    android:layout_marginLeft="@dimen/baseline_x1"
-                    android:layout_marginRight="@dimen/baseline_x1"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_point_clarity_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x2"
+                    android:paddingLeft="@dimen/baseline_x2"
+                    android:paddingRight="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_clarity_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_clarity_icon"
                     android:layout_toLeftOf="@+id/evaluation_point_clarity_text"
                     android:layout_toStartOf="@+id/evaluation_point_clarity_text"
-                    android:layout_toRightOf="@+id/evaluation_point_clarity_prefix"
-                    android:layout_toEndOf="@+id/evaluation_point_clarity_prefix"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/point_clarity"
+                    android:text="@string/label_point_clarity"
+                    android:minWidth="@dimen/baseline_x6"/>
+                <SeekBar
+                    android:id="@+id/evaluation_point_clarity_seekbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x3"
+                    android:paddingLeft="@dimen/baseline_x2"
+                    android:paddingRight="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_clarity_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_clarity_icon"
+                    android:layout_toLeftOf="@+id/evaluation_point_clarity_text"
+                    android:layout_toStartOf="@+id/evaluation_point_clarity_text"
+                    android:layout_alignParentBottom="true"
+                    android:maxHeight="@dimen/baseline_x1"
                     android:progressDrawable="@drawable/progressbar_clarity"
                     android:thumb="@drawable/progressbar_thumb_clarity"
                     android:thumbOffset="@dimen/baseline_x1"
                     android:indeterminateOnly="false"
-                    android:max="10"/>
+                    android:max="10"
+                    android:progress="0"/>
 
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/evaluation_point_clarity_text"
@@ -109,50 +132,58 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="32sp"
                     android:textColor="@color/point_clarity"
                     android:minWidth="@dimen/baseline_x3"
                     app:fontFamily="roboto"
-                    app:textWeight="bold"/>
+                    app:textWeight="light"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/evaluation_point_gpa_satisfaction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/baseline_x2"
                 android:layout_marginTop="@dimen/baseline_x2">
-
-                <TextView
-                    android:id="@+id/evaluation_point_gpa_satisfaction_prefix"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/evaluation_point_gpa_satisfaction_icon"
+                    android:layout_width="@dimen/baseline_x5"
+                    android:layout_height="@dimen/baseline_x5"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/point_gpa_satisfaction"
-                    android:text="@string/label_point_gpa_satisfaction"
-                    android:minWidth="@dimen/baseline_x6"
-                    android:gravity="right|end"/>
-
-                <SeekBar
-                    android:id="@+id/evaluation_point_gpa_satisfaction_progress"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/baseline_x3"
-                    android:maxHeight="@dimen/baseline_x1"
-                    android:layout_marginLeft="@dimen/baseline_x1"
-                    android:layout_marginRight="@dimen/baseline_x1"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_point_gpa_satisfaction_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x2"
+                    android:paddingLeft="@dimen/baseline_x2"
+                    android:paddingRight="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_gpa_satisfaction_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_gpa_satisfaction_icon"
                     android:layout_toLeftOf="@+id/evaluation_point_gpa_satisfaction_text"
                     android:layout_toStartOf="@+id/evaluation_point_gpa_satisfaction_text"
-                    android:layout_toRightOf="@+id/evaluation_point_gpa_satisfaction_prefix"
-                    android:layout_toEndOf="@+id/evaluation_point_gpa_satisfaction_prefix"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/point_gpa_satisfaction"
+                    android:text="@string/label_point_gpa_satisfaction"
+                    android:minWidth="@dimen/baseline_x6"/>
+                <SeekBar
+                    android:id="@+id/evaluation_point_gpa_satisfaction_seekbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x3"
+                    android:paddingLeft="@dimen/baseline_x2"
+                    android:paddingRight="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_gpa_satisfaction_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_gpa_satisfaction_icon"
+                    android:layout_toLeftOf="@+id/evaluation_point_gpa_satisfaction_text"
+                    android:layout_toStartOf="@+id/evaluation_point_gpa_satisfaction_text"
+                    android:layout_alignParentBottom="true"
+                    android:maxHeight="@dimen/baseline_x1"
                     android:progressDrawable="@drawable/progressbar_gpa_satisfaction"
                     android:thumb="@drawable/progressbar_thumb_gpa_satisfaction"
                     android:thumbOffset="@dimen/baseline_x1"
                     android:indeterminateOnly="false"
-                    android:max="10"/>
+                    android:max="10"
+                    android:progress="0"/>
 
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/evaluation_point_gpa_satisfaction_text"
@@ -160,50 +191,58 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="32sp"
                     android:textColor="@color/point_gpa_satisfaction"
                     android:minWidth="@dimen/baseline_x3"
                     app:fontFamily="roboto"
-                    app:textWeight="bold"/>
+                    app:textWeight="light"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/evaluation_point_easiness"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/baseline_x2"
                 android:layout_marginTop="@dimen/baseline_x2">
-
-                <TextView
-                    android:id="@+id/evaluation_point_easiness_prefix"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/evaluation_point_easiness_icon"
+                    android:layout_width="@dimen/baseline_x5"
+                    android:layout_height="@dimen/baseline_x5"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/point_easiness"
-                    android:text="@string/label_point_easiness"
-                    android:minWidth="@dimen/baseline_x6"
-                    android:gravity="end|right"/>
-
-                <SeekBar
-                    android:id="@+id/evaluation_point_easiness_progress"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/baseline_x3"
-                    android:maxHeight="@dimen/baseline_x1"
-                    android:layout_marginLeft="@dimen/baseline_x1"
-                    android:layout_marginRight="@dimen/baseline_x1"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_point_easiness_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x2"
+                    android:paddingLeft="@dimen/baseline_x2"
+                    android:paddingRight="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_easiness_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_easiness_icon"
                     android:layout_toLeftOf="@+id/evaluation_point_easiness_text"
                     android:layout_toStartOf="@+id/evaluation_point_easiness_text"
-                    android:layout_toRightOf="@+id/evaluation_point_easiness_prefix"
-                    android:layout_toEndOf="@+id/evaluation_point_easiness_prefix"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/point_easiness"
+                    android:text="@string/label_point_easiness"
+                    android:minWidth="@dimen/baseline_x6"/>
+                <SeekBar
+                    android:id="@+id/evaluation_point_easiness_seekbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x3"
+                    android:paddingLeft="@dimen/baseline_x2"
+                    android:paddingRight="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_point_easiness_icon"
+                    android:layout_toEndOf="@+id/evaluation_point_easiness_icon"
+                    android:layout_toLeftOf="@+id/evaluation_point_easiness_text"
+                    android:layout_toStartOf="@+id/evaluation_point_easiness_text"
+                    android:layout_alignParentBottom="true"
+                    android:maxHeight="@dimen/baseline_x1"
                     android:progressDrawable="@drawable/progressbar_easiness"
                     android:thumb="@drawable/progressbar_thumb_easiness"
                     android:thumbOffset="@dimen/baseline_x1"
                     android:indeterminateOnly="false"
-                    android:max="10"/>
+                    android:max="10"
+                    android:progress="0"/>
 
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/evaluation_point_easiness_text"
@@ -211,12 +250,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="32sp"
                     android:textColor="@color/point_easiness"
                     android:minWidth="@dimen/baseline_x3"
                     app:fontFamily="roboto"
-                    app:textWeight="bold"/>
+                    app:textWeight="light"/>
             </RelativeLayout>
 
             <EditText
@@ -225,6 +264,7 @@
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/baseline_x8"
                 android:inputType="textMultiLine"/>
+
             <EditText
                 android:id="@+id/hashtag_input"
                 android:layout_width="match_parent"
