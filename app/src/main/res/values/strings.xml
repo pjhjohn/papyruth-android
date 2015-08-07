@@ -87,8 +87,9 @@
     <string name="toolbar_title_new_comment">New Comment</string>
     <string name="toolbar_title_evaluation">Evaluation</string>
     <string name="empty"/>
-    <string name="confirm_positive">AGREE</string>
+    <string name="confirm_positive">OK</string>
     <string name="confirm_optional">DON\'T SHOW AGAIN</string>
+    <string name="confirm_cancel">Cancel</string>
     <string name="inform_home">Latest Evaluations are provided.\n\nYou can see the latest evaluations by clicking it.</string>
     <string name="inform_course">Overall statistics for course and list of evaluations are provided.\n\nYou can open evaluation detail window by clicking the item.</string>
     <string name="inform_evaluation">Evaluations statistics and comments are provided.\n\nYou can vote up and down to both evaluation and comments.</string>
@@ -110,5 +111,12 @@ Vestibulum maximus aliquam purus quis consectetur. Etiam metus lorem, aliquam at
 Nunc sem tortor, sagittis a interdum vel, elementum at dui. Maecenas quis lacinia purus, eget mattis arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tortor nisl, dictum porta nisl consequat vel. Nulla condimentum efficitur facilisis. Nullam ante dolor, maximus eget urna in, ultricies rutrum orci. Praesent feugiat diam non nunc sodales, sit amet semper metus ornare. Nam finibus consequat metus id tincidunt. Phasellus sollicitudin lacus ex, vitae pulvinar erat condimentum eget. Duis ullamcorper urna tellus, eget pulvinar mauris lobortis tincidunt. Vivamus suscipit malesuada neque quis aliquet.
 Fusce diam purus, interdum id vulputate vel, egestas sed turpis. Duis id semper eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque porttitor augue elementum, pulvinar urna nec, faucibus nulla. Pellentesque id egestas lacus. Donec ut justo eu massa semper ultricies. Cras a porttitor lectus. Cras viverra sapien in nunc pellentesque porta. Sed sagittis tempus tellus, molestie faucibus nisl sodales eu. Maecenas tempus sapien ex, non tincidunt ex pharetra et. Quisque et maximus risus, sit amet dapibus libero. Pellentesque sapien lacus, iaculis vitae convallis at, semper at neque.
 Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facilisis sapien nibh, sit amet aliquam nulla laoreet pretium. Etiam porta maximus magna vitae pellentesque. Donec eget tortor sodales, sagittis quam at, aliquam tellus. Mauris vel sapien tellus. Integer sit amet est maximus, porttitor turpis id, tempor nunc. Phasellus blandit imperdiet lacus vitae pharetra. Aenean tristique ligula orci, vel venenatis odio pellentesque eget. Sed libero magna, vulputate at sodales nec, lacinia ut nisl. Suspendisse tincidunt dui ac ultrices convallis. Donec in augue convallis, dapibus odio molestie, vehicula orci. In vitae dolor cursus, bibendum mauris at, lobortis mauris. Vivamus dignissim et lacus eget pretium. Fusce laoreet arcu ut odio bibendum ornare. Vestibulum at sem ac nibh faucibus laoreet sit amet in eros. Nam pellentesque bibendum posuere.</string>
-
+    <string name="new_evaluation_submit_title">Submit New Evaluation</string>
+    <string name="new_evaluation_submit_content">Are you sure to submit new evaluation with current contents?</string>
+    <string name="new_evaluation_incomplete">Submit form is incomplete. Aborting submission</string>
+    <string name="label_evaluation_hashtags">Hashtags</string>
+    <string name="label_evaluation_body">Evaluation Content</string>
+    <string name="hashtag_delete_title">Removing Hashtag</string>
+    <string name="hashtag_delete_content">Are you sure to delete this hashtag?</string>
+    <string name="confirm_delete">DELETE</string>
 </resources>

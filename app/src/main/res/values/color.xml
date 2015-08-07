@@ -12,7 +12,7 @@
     <color name="white">#ffffffff</color>
     <color name="nav_filter">#DE000000</color>
 
-    <color name="point_overall">#405D48</color>
+    <color name="point_overall">#222222</color>
     <color name="point_clarity">#41B7AE</color>
     <color name="point_gpa_satisfaction">#546B8D</color>
     <color name="point_easiness">#E05E5F</color>

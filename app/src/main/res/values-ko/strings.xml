@@ -89,6 +89,7 @@
     <string name="empty"/>
     <string name="confirm_positive">확인</string>
     <string name="confirm_optional">다시보지 않기</string>
+    <string name="confirm_cancel">취소</string>
     <string name="inform_home">최신 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 해당 강의평의 상세 페이지를 열고 닫을 수 있습니다.</string>
     <string name="inform_course">강의 통계와 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
     <string name="inform_evaluation">강의에 대한 강의평을 보여주는 페이지입니다.\n\n댓글을 추가하거나 강의평, 댓글에 투표를 위-아래 위-위-아래</string>
@@ -104,4 +105,12 @@
     <string name="category_major">전공</string>
     <string name="toolbar_title_course">강의 정보</string>
     <string name="toolbar_title_new_evaluation">강의평 쓰기</string>
+    <string name="new_evaluation_submit_title">새 강의평 등록</string>
+    <string name="new_evaluation_submit_content">현재 기입된 정보로 새 강의평을 작성하시겠습니까?</string>
+    <string name="new_evaluation_incomplete">필수 항목 중 누락된 부분이 있어 강의평 등록을 취소합니다</string>
+    <string name="label_evaluation_hashtags">해시태그 등록</string>
+    <string name="label_evaluation_body">강의평 작성</string>
+    <string name="hashtag_delete_title">해시태그 삭제</string>
+    <string name="hashtag_delete_content">해당 해시태그를 삭제하시겠습니까?</string>
+    <string name="confirm_delete">삭제</string>
 </resources>

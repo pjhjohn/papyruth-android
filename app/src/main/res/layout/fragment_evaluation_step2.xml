@@ -51,6 +51,7 @@
                     android:layout_alignParentTop="true"
                     android:textColor="@color/point_overall"
                     android:text="@string/label_point_overall"
+                    android:textStyle="bold"
                     android:minWidth="@dimen/baseline_x6"/>
 
                 <RatingBar
@@ -106,6 +107,7 @@
                     android:layout_alignParentTop="true"
                     android:textColor="@color/point_clarity"
                     android:text="@string/label_point_clarity"
+                    android:textStyle="bold"
                     android:minWidth="@dimen/baseline_x6"/>
                 <SeekBar
                     android:id="@+id/evaluation_point_clarity_seekbar"
@@ -165,6 +167,7 @@
                     android:layout_alignParentTop="true"
                     android:textColor="@color/point_gpa_satisfaction"
                     android:text="@string/label_point_gpa_satisfaction"
+                    android:textStyle="bold"
                     android:minWidth="@dimen/baseline_x6"/>
                 <SeekBar
                     android:id="@+id/evaluation_point_gpa_satisfaction_seekbar"
@@ -224,6 +227,7 @@
                     android:layout_alignParentTop="true"
                     android:textColor="@color/point_easiness"
                     android:text="@string/label_point_easiness"
+                    android:textStyle="bold"
                     android:minWidth="@dimen/baseline_x6"/>
                 <SeekBar
                     android:id="@+id/evaluation_point_easiness_seekbar"
@@ -258,21 +262,81 @@
                     app:textWeight="light"/>
             </RelativeLayout>
 
-            <EditText
-                android:id="@+id/evaluation_input"
+            <RelativeLayout
+                android:id="@+id/evaluation_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/baseline_x8"
-                android:inputType="textMultiLine"/>
+                android:paddingTop="@dimen/baseline_x2">
+                <ImageView
+                    android:id="@+id/evaluation_body_icon"
+                    android:layout_width="@dimen/nav_icon_length"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_body_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_marginStart="@dimen/baseline_x2"
+                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_body_icon"
+                    android:layout_toEndOf="@+id/evaluation_body_icon"
+                    android:layout_alignBottom="@+id/evaluation_body_icon"
+                    android:text="@string/label_evaluation_body"/>
+                <EditText
+                    android:id="@+id/evaluation_body_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/baseline_x8"
+                    android:inputType="textMultiLine"
+                    android:layout_marginTop="@dimen/baseline_x1"
+                    android:layout_below="@+id/evaluation_body_icon"
+                    android:background="@color/bg_highlight"/>
+            </RelativeLayout>
 
-            <EditText
-                android:id="@+id/hashtag_input"
+            <RelativeLayout
+                android:id="@+id/evaluation_hashtags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/baseline_x3"
-                android:inputType="text"
-                android:singleLine="true"/>
-
+                android:paddingTop="@dimen/baseline_x2">
+                <ImageView
+                    android:id="@+id/evaluation_hashtags_icon"
+                    android:layout_width="@dimen/nav_icon_length"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_hashtags_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_marginStart="@dimen/baseline_x2"
+                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_hashtags_icon"
+                    android:layout_toEndOf="@+id/evaluation_hashtags_icon"
+                    android:layout_alignBottom="@+id/evaluation_hashtags_icon"
+                    android:text="@string/label_evaluation_hashtags"/>
+                <LinearLayout
+                    android:id="@+id/evaluation_hashtags_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/evaluation_hashtags_icon"
+                    android:orientation="horizontal"/>
+                <EditText
+                    android:id="@+id/evaluation_hashtags_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/baseline_x3"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:layout_marginTop="@dimen/baseline_x1"
+                    android:layout_below="@+id/evaluation_hashtags_container"
+                    android:background="@color/bg_highlight"/>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>

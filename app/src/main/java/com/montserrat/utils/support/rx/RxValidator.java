@@ -115,8 +115,8 @@ public class RxValidator {
     public static Func1<Float, Boolean> isFloatValueInRange = value -> value != null && value >= 0 && value <= 10;
     public static Func2<TextView, Float, Float> assignRatingValue = (text, value) -> {
         if(text == null) return value;
-        if(value >= 10) text.setText("10");
-        else if(value < 0) text.setText("N/A");
+        if(value >= 5.0f) text.setText("10");
+        else if(value < 0.0f) text.setText("N/A");
         else text.setText(String.format("%d.0", (int)(2*value)));
         return value;
     };
