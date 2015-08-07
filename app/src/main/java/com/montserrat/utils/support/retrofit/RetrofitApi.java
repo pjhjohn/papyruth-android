@@ -9,6 +9,7 @@ import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.EvaluationsResponse;
 import com.montserrat.app.model.response.FavoriteCoursesResponse;
 import com.montserrat.app.model.response.HashtagsResponse;
+import com.montserrat.app.model.response.MyWrittenResponse;
 import com.montserrat.app.model.response.SignUpValidateResponse;
 import com.montserrat.app.model.response.SimpleResponse;
 import com.montserrat.app.model.response.StatisticsResponse;
@@ -294,12 +295,12 @@ public class RetrofitApi {
             @Query("page") Integer page
         );
         @GET("/users/me/evaluations")
-        Observable<EvaluationsResponse> users_me_evaluations(
+        Observable<MyWrittenResponse> users_me_evaluations(
             @Header("Authorization") String authorization,
             @Query("page") Integer page
         );
         @GET("/users/me/comments")
-        Observable<EvaluationsResponse> users_me_comments(
+        Observable<MyWrittenResponse> users_me_comments(
             @Header("Authorization") String authorization,
             @Query("page") Integer page
         );

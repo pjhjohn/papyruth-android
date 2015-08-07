@@ -82,11 +82,26 @@
                 app:met_hideUnderline="true"/>
         </LinearLayout>
         <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/my_evaluation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/fg_normal"
+            app:animate="false"
+            android:text="@string/my_evaluation"/>
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/my_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/fg_normal"
+            app:animate="false"
+            android:text="@string/my_comment"/>
+        <com.gc.materialdesign.views.ButtonFlat
             android:id="@+id/sign_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/fg_normal"
-            android:text="나가기"/>
+            app:animate="false"
+            android:text="@string/exit"/>
     </LinearLayout>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>
 

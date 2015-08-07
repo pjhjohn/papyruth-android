@@ -43,6 +43,8 @@ public class ViewHolderFactory {
         /* item : etc */
         public static final int AUTO_COMPLETE_RESPONSE = 0x80;
         public static final int UNIVERSITY             = 0x90;
+        public static final int MY_WRITTEN_EVALUATION  = 0xa0;
+        public static final int MY_WRITTEN_COMMENT     = 0xb0;
     }
     public RecyclerView.ViewHolder create(ViewGroup parent, int viewType) {
         return this.create(parent, viewType, null, null);
@@ -64,6 +66,9 @@ public class ViewHolderFactory {
             case ViewType.COMMENT_ITEM           : return new          CommentItemViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_comment_item          , parent, false), listener);
             case ViewType.AUTO_COMPLETE_RESPONSE : return new AutoCompleteResponseViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_autocomplete_response , parent, false), listener);
             case ViewType.UNIVERSITY             : return new           UniversityViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_university            , parent, false), listener);
+            case ViewType.MY_WRITTEN_EVALUATION  : return new         MyEvaluationViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written            , parent, false), listener);
+            case ViewType.MY_WRITTEN_COMMENT     : return new            MyCommentViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written            , parent, false), listener);
+
             default : throw new RuntimeException(String.format("There doesn't exist a ViewHolder which has viewType#%d. Make sure to put correct viewType.", viewType));
         }
     }

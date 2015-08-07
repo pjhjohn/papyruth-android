@@ -42,6 +42,8 @@ public class ProfileFragment extends Fragment {
     @InjectView (R.id.nickname) protected MaterialEditText nickname;
     @InjectView (R.id.gender) protected MaterialEditText gender;
     @InjectView (R.id.entrance) protected MaterialEditText entrance;
+    @InjectView (R.id.my_evaluation) protected ButtonFlat myEvaluation;
+    @InjectView (R.id.my_comment) protected ButtonFlat myComment;
     @InjectView (R.id.sign_out) protected ButtonFlat signout;
     private CompositeSubscription subscriptions;
 
@@ -88,6 +90,13 @@ public class ProfileFragment extends Fragment {
             .clicks(R.id.fab_edit_password)
             .subscribe(unused -> this.navigator.navigate(ProfileEditPasswordFragment.class, true))
         );
+
+        myComment.setRippleSpeed(20);
+        myEvaluation.setRippleSpeed(20);
+        signout.setRippleSpeed(20);
+
+        this.subscriptions.add(ViewObservable.clicks(this.myEvaluation).subscribe(unuse -> this.navigator.navigate(MyEvaluationFragment.class, true), error -> error.printStackTrace()));
+        this.subscriptions.add(ViewObservable.clicks(this.myComment).subscribe(unuse->this.navigator.navigate(MyCommentFragment.class, true), error->error.printStackTrace()));
 
         this.subscriptions.add(ViewObservable
             .clicks(signout)

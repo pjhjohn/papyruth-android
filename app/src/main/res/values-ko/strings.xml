@@ -104,4 +104,9 @@
     <string name="category_major">전공</string>
     <string name="toolbar_title_course">강의 정보</string>
     <string name="toolbar_title_new_evaluation">강의평 쓰기</string>
+
+    <!-- profile -->
+    <string name="exit">나가기</string>
+    <string name="my_evaluation">내가 쓴 강의평</string>
+    <string name="my_comment">내가 쓴 댓글</string>
 </resources>
