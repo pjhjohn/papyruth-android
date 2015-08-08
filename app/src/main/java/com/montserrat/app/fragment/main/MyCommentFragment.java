@@ -46,11 +46,10 @@ public class MyCommentFragment extends RecyclerViewFragment<MyCommentAdapter, Co
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
-    private Integer sinceId = null, maxId = null;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_written, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
 
@@ -117,7 +116,7 @@ public class MyCommentFragment extends RecyclerViewFragment<MyCommentAdapter, Co
         );
 
         this.subscriptions.add(
-            super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, true)
+            super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
                 .startWith((Boolean) null)
                 .filter(passIfNull -> !isWorking&&!lastComment && passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,26 +124,26 @@ public class MyCommentFragment extends RecyclerViewFragment<MyCommentAdapter, Co
                     this.progress.setVisibility(View.VISIBLE);
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
                     Timber.d("calling");
-                    isWorking = true;
+//                    isWorking = true;
                     return RetrofitApi.getInstance().users_me_comments(User.getInstance().getAccessToken(), page);
                 })
-                .filter(response -> {
-                    if (!response.success)
-                        this.lastComment = true;
-                    return response.success;
-                })
+//                .filter(response -> {
+////                    if (!response.success)
+////                        this.lastComment = true;
+//                    return response.success;
+//                })
                 .map(mywritten -> mywritten.comments)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
                     this.progress.setVisibility(View.GONE);
                     if (comments != null) this.items.addAll(comments);
-                    page++;
+//                    page++;
                     this.adapter.notifyDataSetChanged();
-                    isWorking = false;
+//                    isWorking = false;
                 }, error -> {
                     this.progress.setVisibility(View.GONE);
-                    isWorking = false;
+//                    isWorking = false;
                     error.printStackTrace();
                 })
         );

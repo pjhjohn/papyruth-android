@@ -104,7 +104,7 @@ public class EvaluationStep3Fragment extends Fragment {
         this.subscriptions.add(FloatingActionControl
             .clicks()
             .map(pass -> {
-                EvaluationForm.getInstance().setComment(this.body.getText().toString());
+                EvaluationForm.getInstance().setBody(this.body.getText().toString());
                 return pass;
             })
             .observeOn(Schedulers.io())
@@ -115,7 +115,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 EvaluationForm.getInstance().getPointGpaSatisfaction(),
                 EvaluationForm.getInstance().getPointEasiness(),
                 EvaluationForm.getInstance().getPointClarity(),
-                EvaluationForm.getInstance().getComment()
+                EvaluationForm.getInstance().getBody()
             ))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

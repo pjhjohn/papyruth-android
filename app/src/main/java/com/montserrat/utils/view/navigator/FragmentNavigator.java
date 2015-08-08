@@ -12,8 +12,6 @@ import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.viewpager.OnBack;
 
-import timber.log.Timber;
-
 
 /**
  * Created by pjhjohn on 2015-06-10.

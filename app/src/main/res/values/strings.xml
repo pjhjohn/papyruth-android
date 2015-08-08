@@ -87,8 +87,9 @@
     <string name="toolbar_title_new_comment">New Comment</string>
     <string name="toolbar_title_evaluation">Evaluation</string>
     <string name="empty"/>
-    <string name="confirm_positive">AGREE</string>
+    <string name="confirm_positive">OK</string>
     <string name="confirm_optional">DON\'T SHOW AGAIN</string>
+    <string name="confirm_cancel">Cancel</string>
     <string name="inform_home">Latest Evaluations are provided.\n\nYou can see the latest evaluations by clicking it.</string>
     <string name="inform_course">Overall statistics for course and list of evaluations are provided.\n\nYou can open evaluation detail window by clicking the item.</string>
     <string name="inform_evaluation">Evaluations statistics and comments are provided.\n\nYou can vote up and down to both evaluation and comments.</string>
@@ -120,4 +121,12 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="new_evaluation_submit_title">Submit New Evaluation</string>
+    <string name="new_evaluation_submit_content">Are you sure to submit new evaluation with current contents?</string>
+    <string name="new_evaluation_incomplete">Submit form is incomplete. Aborting submission</string>
+    <string name="label_evaluation_hashtags">Hashtags</string>
+    <string name="label_evaluation_body">Evaluation Content</string>
+    <string name="hashtag_delete_title">Removing Hashtag</string>
+    <string name="hashtag_delete_content">Are you sure to delete this hashtag?</string>
+    <string name="confirm_delete">DELETE</string>
 </resources>

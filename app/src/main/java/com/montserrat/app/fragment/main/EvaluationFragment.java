@@ -51,12 +51,16 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     private CompositeSubscription subscriptions;
     private MaterialMenuDrawable materialNavigationDrawable;
     private Integer since, max;
+    private boolean standalone;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
+
+        this.standalone = false;
+        if(this.getArguments()!=null && this.getArguments().getBoolean("STANDALONE")) standalone = true;
 
         this.setupRecyclerView(this.evaluationRecyclerView);
         EvaluationFragment.TOOLBAR_COLOR_EVALUATION = getResources().getColor(R.color.bg_normal);
@@ -100,6 +104,10 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 } else this.since = -1;
                 this.registerScrollToLoadMoreListener();
             });
+
+        if(!standalone) return;
+        this.setEvaluationFloatingActionControl();
+        this.showContent(true);
     }
 
     private void registerScrollToLoadMoreListener() {
