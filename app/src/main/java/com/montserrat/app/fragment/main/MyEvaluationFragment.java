@@ -33,6 +33,8 @@ import rx.subscriptions.CompositeSubscription;
 
 public class MyEvaluationFragment extends RecyclerViewFragment<MyEvaluationAdapter, EvaluationData>{
     private Navigator navigator;
+
+    int page = 1;
     @Override
     public void onAttach (Activity activity) {
         super.onAttach(activity);
@@ -49,7 +51,6 @@ public class MyEvaluationFragment extends RecyclerViewFragment<MyEvaluationAdapt
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
-    private Integer sinceId = null, maxId = null;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +91,7 @@ public class MyEvaluationFragment extends RecyclerViewFragment<MyEvaluationAdapt
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
             .flatMap(unused -> {
                 this.swipeRefresh.setRefreshing(true);
-                return RetrofitApi.getInstance().users_me_evaluations(User.getInstance().getAccessToken(), null);
+                return RetrofitApi.getInstance().users_me_evaluations(User.getInstance().getAccessToken(), page = 1);
             })
             .map(evaluations -> evaluations.evaluations)
             .subscribeOn(Schedulers.io())
@@ -113,8 +114,9 @@ public class MyEvaluationFragment extends RecyclerViewFragment<MyEvaluationAdapt
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
+                this.swipeRefresh.setRefreshing(false);
                 // TODO : handle the case for max_id == 0 : prefer not to request to server
-                return RetrofitApi.getInstance().users_me_evaluations(User.getInstance().getAccessToken(), null);
+                return RetrofitApi.getInstance().users_me_evaluations(User.getInstance().getAccessToken(), page++);
             })
             .map(mywritten -> mywritten.evaluations)
             .subscribeOn(Schedulers.io())

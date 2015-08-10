@@ -77,40 +77,29 @@ public class MyCommentFragment extends RecyclerViewFragment<MyCommentAdapter, Co
     public void onRecyclerViewItemClick(View view, int position) {
     }
     private int page = 1;
-    private boolean lastComment = false;
-    private boolean isWorking = false;
     @Override
     public void onResume() {
         super.onResume();
 
         this.subscriptions.add(
             super.getRefreshObservable(this.swipeRefresh)
-                .filter(working -> !isWorking && working)
                 .flatMap(unused -> {
                     this.swipeRefresh.setRefreshing(true);
-                    isWorking = true;
-                    return RetrofitApi.getInstance().users_me_comments(User.getInstance().getAccessToken(), page);
+                    return RetrofitApi.getInstance().users_me_comments(User.getInstance().getAccessToken(), page = 1);
                 })
-                .filter(response -> {
-                    if (!response.success)
-                        this.lastComment = true;
-                    return response.success;
-                })
+                .filter(response -> response.success)
                 .map(mywritten -> mywritten.comments)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
-                    isWorking = false;
                     this.swipeRefresh.setRefreshing(false);
                     this.items.clear();
                     if (comments != null) {
                         this.items.addAll(comments);
-                        page++;
                     }
                     this.adapter.notifyDataSetChanged();
                 }, error -> {
                     this.swipeRefresh.setRefreshing(false);
-                    isWorking = false;
                     error.printStackTrace();
                 })
         );
@@ -118,32 +107,24 @@ public class MyCommentFragment extends RecyclerViewFragment<MyCommentAdapter, Co
         this.subscriptions.add(
             super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
                 .startWith((Boolean) null)
-                .filter(passIfNull -> !isWorking&&!lastComment && passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
+                    this.swipeRefresh.setRefreshing(false);
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
                     Timber.d("calling");
-//                    isWorking = true;
-                    return RetrofitApi.getInstance().users_me_comments(User.getInstance().getAccessToken(), page);
+                    return RetrofitApi.getInstance().users_me_comments(User.getInstance().getAccessToken(), page++);
                 })
-//                .filter(response -> {
-////                    if (!response.success)
-////                        this.lastComment = true;
-//                    return response.success;
-//                })
                 .map(mywritten -> mywritten.comments)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
                     this.progress.setVisibility(View.GONE);
                     if (comments != null) this.items.addAll(comments);
-//                    page++;
                     this.adapter.notifyDataSetChanged();
-//                    isWorking = false;
                 }, error -> {
                     this.progress.setVisibility(View.GONE);
-//                    isWorking = false;
                     error.printStackTrace();
                 })
         );
