@@ -55,12 +55,11 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
 
     protected Observable<Boolean> getRecyclerViewScrollObservable(RecyclerView view, Toolbar toolbar, boolean animateFloatingActionControl) {
         return Observable.create( observer -> view.setOnScrollListener( new PanelControllerOnScrollWithAskMore(AppConst.DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE) {
-            @Override public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) { Timber.d("&&ask");observer.onNext(null); }
-            @Override public void onHidePanels () { Timber.d("&&hide");observer.onNext(false); }
-            @Override public void onShowPanels () { Timber.d("&&show");observer.onNext(true); }
+            @Override public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) { observer.onNext(null); }
+            @Override public void onHidePanels () { observer.onNext(false); }
+            @Override public void onShowPanels () { observer.onNext(true); }
         }))
         .map(show_panels -> {
-            Timber.d("scroll %s", show_panels);
             if (show_panels == null) return null;
             if ((boolean) show_panels) {
                 if (this.hideToolbarOnScroll) ToolbarUtil.show(toolbar);

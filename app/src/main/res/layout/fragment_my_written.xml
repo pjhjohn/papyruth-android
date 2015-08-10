@@ -19,7 +19,7 @@
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 android:layout_gravity="left|top" />
-            </android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
         <FrameLayout
             android:id="@+id/evaluation_container"
             android:layout_width="match_parent"

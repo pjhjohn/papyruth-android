@@ -57,7 +57,7 @@ public class MyEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
-        else((MyEvaluationViewHolder) holder).bind(this.myWritten.get(position - 1));
+        else((MyEvaluationViewHolder) holder).bind(this.myWritten.get(position - (mUserLearnedInform ? 1 : 2)));
     }
 
     public int getItemOffset() {

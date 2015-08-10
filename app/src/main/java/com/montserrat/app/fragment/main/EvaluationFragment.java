@@ -37,6 +37,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static com.montserrat.utils.support.rx.RxValidator.nonEmpty;
 import static com.montserrat.utils.support.rx.RxValidator.toString;
@@ -164,6 +165,18 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         if (!isCommentInputWindowOpened) return false;
         this.hideCommentInputWindow();
         return true;
+    }
+
+
+    public void focusComment(int commentId){
+        final int offset = 4;
+        for(int i = 0; i < items.size(); i++){
+            if(items.get(i).id == commentId){
+                Timber.d("position : %s", i);
+                this.evaluationRecyclerView.scrollToPosition((i+offset >= items.size()) ? items.size()+1 : i+offset);
+                break;
+            }
+        }
     }
 
     private void showCommentInputWindow() {
