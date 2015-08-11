@@ -32,4 +32,5 @@ public class UserData {
     public String updated_at;
     public String university_name;
     public String avatar_url;
+    public Integer mandatory_evaluation_count;
 }

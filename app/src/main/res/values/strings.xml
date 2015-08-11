@@ -72,6 +72,7 @@
     <string name="lecture_type_culture">Culture</string>
     <string name="lecture_type_major">Major</string>
     <string name="like">LIKE</string>
+    <string name="modify">MODIFY</string>
 
     <!--comment-->
     <string name="submit_comment_success">Succeed to register Comment</string>

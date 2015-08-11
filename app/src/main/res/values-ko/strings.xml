@@ -72,6 +72,7 @@
     <string name="lecture_type_culture">교양</string>
     <string name="lecture_type_major">전공</string>
     <string name="like">좋아요</string>
+    <string name="modify">수정</string>
 
     <!--comment-->
     <string name="submit_comment_success">댓글을 등록했습니다</string>

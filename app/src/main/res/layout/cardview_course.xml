@@ -33,13 +33,13 @@
             android:layout_marginStart="@dimen/baseline_x1"
             android:textSize="18sp"
             android:singleLine="true"
-            android:layout_toLeftOf="@+id/bookmark"
-            android:layout_toStartOf="@+id/bookmark"
+            android:layout_toLeftOf="@+id/course_bookmark"
+            android:layout_toStartOf="@+id/course_bookmark"
             android:layout_toRightOf="@+id/course_category"
             android:layout_toEndOf="@+id/course_category"/>
 
         <ImageView
-            android:id="@+id/bookmark"
+            android:id="@+id/course_bookmark"
             android:src="@drawable/ic_light_bookmark"
             android:layout_width="24dp"
             android:layout_height="24dp"

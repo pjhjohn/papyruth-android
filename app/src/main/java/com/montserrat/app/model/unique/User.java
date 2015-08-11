@@ -19,6 +19,7 @@ public class User {
         return User.instance;
     }
 
+    private Integer id;
     private String  access_token;
     private String  realname;
     private String  nickname;
@@ -31,6 +32,7 @@ public class User {
     private BehaviorSubject<String> bsNickname;
     private BehaviorSubject<String> bsEmail;
     private BehaviorSubject<String> bsAvatarUrl;
+    private Integer mandatory_evaluation_count;
 
     private User () {
         this.clear();
@@ -109,10 +111,37 @@ public class User {
         this.bsAvatarUrl.onNext(url);
     }
 
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public Integer getMandatory_evaluation_count() {
+        return mandatory_evaluation_count;
+    }
+    public void setMandatory_evaluation_count(Integer mandatory_evaluation_count) {
+        this.mandatory_evaluation_count = mandatory_evaluation_count;
+    }
+
+/**
+ *  if mandatory count > 0 return true<br>
+ *  else return false
+ **/
+    public boolean addEvaluationCount(){
+        if(mandatory_evaluation_count > 0){
+            mandatory_evaluation_count --;
+            return true;
+        }
+        return false;
+    }
+
     public void update(UserData user) {
         this.update(user, null);
     }
     public void update(UserData user, String access_token) {
+        if(user.id != null) this.setId(user.id);
+        if(user.mandatory_evaluation_count != null) this.setMandatory_evaluation_count(user.mandatory_evaluation_count);
         if(user.email != null) this.setEmail(user.email);
         if(user.realname != null) this.setRealname(user.realname);
         if(user.nickname != null) this.setNickName(user.nickname);

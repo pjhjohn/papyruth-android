@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.model.FavoriteData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.CircleTransformation;
@@ -55,7 +54,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     @InjectView(R.id.course_hashtags) protected LinearLayout hashtags;
     @InjectView(R.id.course_evaluator_icon) protected ImageView evaluatorIcon;
     @InjectView(R.id.course_evaluator_count) protected TextView evaluatorCount;
-    @InjectView(R.id.bookmark) protected ImageView bookmark;
+    @InjectView(R.id.course_bookmark) protected ImageView bookmark;
 
     private CompositeSubscription subscription;
     public CourseViewHolder(View itemView) {
@@ -139,7 +138,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.bookmark){
+        if(v.getId() == R.id.course_bookmark){
             this.favorite(!Course.getInstance().getIsFavorite());
         }
     }
