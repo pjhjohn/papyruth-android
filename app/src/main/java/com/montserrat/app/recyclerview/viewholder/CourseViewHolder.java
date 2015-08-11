@@ -16,19 +16,26 @@ import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.model.FavoriteData;
 import com.montserrat.app.model.unique.Course;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.Hashtag;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class CourseViewHolder extends RecyclerView.ViewHolder {
+public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @InjectView(R.id.course_category) TextView category;
     @InjectView(R.id.course_lecture) protected TextView lecture;
     @InjectView(R.id.course_professor) protected TextView professor;
@@ -48,13 +55,16 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.course_hashtags) protected LinearLayout hashtags;
     @InjectView(R.id.course_evaluator_icon) protected ImageView evaluatorIcon;
     @InjectView(R.id.course_evaluator_count) protected TextView evaluatorCount;
+    @InjectView(R.id.bookmark) protected ImageView bookmark;
 
+    private CompositeSubscription subscription;
     public CourseViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
         this.lecture.setPaintFlags(this.lecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.fg_accent));
+        this.subscription = new CompositeSubscription();
     }
 
     private void setRatingBarColor(RatingBar rating, int color) {
@@ -76,7 +86,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
             text.setText(rating_value >= 10 ? "10" : String.format("%.1f", rating_value));
         } rating.setRating(rating_value == null || rating_value < 0 ? 5.0f : rating_value);
     }
-    
+
     private void setPointProgress(TextView prefix, ProgressBar progress, TextView text, Integer point_sum, Integer count) {
         Integer progress_value = count == null || count <= 0 ? null : point_sum == null ? null : (int)(((float)point_sum / (float)count) * 10);
         if(progress_value == null || progress_value < 0) {
@@ -119,5 +129,38 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         });
         Picasso.with(context).load(R.drawable.ic_light_people).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.evaluatorIcon);
         this.evaluatorCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
+        Picasso.with(context).load(R.drawable.ic_light_bookmark)
+            .transform(
+                new ColorFilterTransformation(course.getIsFavorite()? AppConst.COLOR_POINT_CLARITY : AppConst.COLOR_GRAY ))
+            .into(this.bookmark);
+        this.bookmark.setOnClickListener(this);
+        Timber.d("favor %s", Course.getInstance().getIsFavorite());
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.bookmark){
+            this.favorite(!Course.getInstance().getIsFavorite());
+        }
+    }
+    private void favorite(boolean setting){
+        final Context context = this.itemView.getContext();
+        this.subscription.add(
+            RetrofitApi.getInstance().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), setting)
+                .filter(response -> response.success)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    response -> {
+                        Course.getInstance().setIsFavorite(setting);
+                        Picasso.with(context).load(R.drawable.ic_light_bookmark)
+                            .transform(
+                                new ColorFilterTransformation(setting ? AppConst.COLOR_HIGHLIGHT_YELLOW : AppConst.COLOR_GRAY))
+                            .into(this.bookmark);
+                    }, error -> {
+                        error.printStackTrace();
+                    }
+                )
+        );
     }
 }

@@ -248,4 +248,5 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
         this.navigator.navigate(EvaluationStep2Fragment.class, true);
     }
+
 }

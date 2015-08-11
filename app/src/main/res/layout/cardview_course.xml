@@ -26,19 +26,25 @@
 
         <TextView
             android:id="@+id/course_lecture"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/course_category"
-            android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/baseline_x1"
             android:layout_marginStart="@dimen/baseline_x1"
-            android:layout_toRightOf="@+id/course_category"
-            android:layout_toEndOf="@+id/course_category"
             android:textSize="18sp"
             android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="3"/>
+            android:layout_toLeftOf="@+id/bookmark"
+            android:layout_toStartOf="@+id/bookmark"
+            android:layout_toRightOf="@+id/course_category"
+            android:layout_toEndOf="@+id/course_category"/>
 
+        <ImageView
+            android:id="@+id/bookmark"
+            android:src="@drawable/ic_light_bookmark"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:singleLine="true"/>
         <ImageView
             android:id="@+id/course_professor_image"
             android:layout_width="@dimen/cardview_image_side_length"

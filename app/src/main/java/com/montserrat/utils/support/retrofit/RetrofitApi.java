@@ -106,14 +106,14 @@ public class RetrofitApi {
             @Header("Authorization") String authorization,
             @Path("id") Integer id
         );
-        @GET("/courses/{id}/favorite")
+        @POST("/courses/{id}/favorite")
         Observable<SimpleResponse> post_course_favorite(
             @Header("Authorization") String authorization,
             @Path("id") Integer id,
             @Query("favorite") Boolean favorite
         );
-        @GET("/courses/random")
-        Observable<CoursesResponse> post_course_favorite(
+        @POST("/courses/random")
+        Observable<CoursesResponse> get_course_random(
             @Header("Authorization") String authorization,
             @Query("university_id") Integer university_id,
             @Query("number") Integer number

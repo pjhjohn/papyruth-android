@@ -1,6 +1,9 @@
 package com.montserrat.app.model.unique;
 
+import com.montserrat.app.model.FavoriteData;
 import com.montserrat.app.model.UserData;
+
+import java.util.List;
 
 import rx.Observable;
 import rx.subjects.BehaviorSubject;

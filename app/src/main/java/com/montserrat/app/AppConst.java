@@ -37,6 +37,7 @@ public class AppConst {
 
     public static final int COLOR_GRAY = Color.rgb(230, 230, 230);
     public static final int COLOR_GRAY_ACCENT = Color.rgb(242, 242, 242);
+    public static final int COLOR_HIGHLIGHT_YELLOW = Color.rgb(255, 194, 0);
 
     public static final int COLOR_POINT_OVERALL = Color.rgb(0, 0, 0);
     public static final int COLOR_POINT_CLARITY = Color.rgb(65, 183, 174);

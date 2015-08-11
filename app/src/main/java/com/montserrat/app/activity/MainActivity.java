@@ -27,11 +27,13 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -98,6 +100,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         super.onResume();
         ViewHolderFactory.getInstance().setContext(this);
     }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
