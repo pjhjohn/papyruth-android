@@ -117,6 +117,7 @@
     <string name="exit">나가기</string>
     <string name="my_evaluation">내가 쓴 강의평</string>
     <string name="my_comment">내가 쓴 댓글</string>
+    <string name="opensourse_license">오픈소스 라이센스</string>
 
     <string name="new_evaluation_submit_title">새 강의평 등록</string>
     <string name="new_evaluation_submit_content">현재 기입된 정보로 새 강의평을 작성하시겠습니까?</string>

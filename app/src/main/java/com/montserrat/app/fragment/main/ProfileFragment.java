@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -17,6 +18,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -25,8 +27,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-19.
@@ -48,6 +53,8 @@ public class ProfileFragment extends Fragment {
     @InjectView (R.id.my_evaluation) protected ButtonFlat myEvaluation;
     @InjectView (R.id.my_comment) protected ButtonFlat myComment;
     @InjectView (R.id.sign_out) protected ButtonFlat signout;
+    @InjectView(R.id.term) protected ButtonFlat term;
+    @InjectView(R.id.opensourse_license) protected ButtonFlat opensourseLicense;
     private CompositeSubscription subscriptions;
 
     private Toolbar toolbar;
@@ -121,5 +128,67 @@ public class ProfileFragment extends Fragment {
 
             })
         );
+//
+//        this.subscriptions.add(
+//            RetrofitApi.getInstance().terms(0)
+//                .map(terms -> terms.term)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                    term -> {
+//                        if (term != null && term.size() > 0) {
+//                            this.termContents = term.get(0).body;
+//                        }else {
+//                            this.termContents = "";
+//                        }
+//                    }, error -> {
+//                        Timber.d("get Term error", error);
+//                        error.printStackTrace();
+//                    }
+//                )
+//        );
+        buildTermDialog();
+        buildLicenseDialog();
+        this.subscriptions.add(
+            ViewObservable
+                .clicks(term)
+                .filter(unused -> !this.termPage.isShowing())
+                .subscribe(unused -> {
+                    termPage.show();
+                },error ->{
+                    error.printStackTrace();
+                })
+        );
+        this.subscriptions.add(
+            ViewObservable
+                .clicks(opensourseLicense)
+                .filter(unused -> !this.termPage.isShowing())
+                .subscribe(unused -> {
+                    termPage.show();
+                },error ->{
+                    error.printStackTrace();
+                })
+        );
+    }
+
+    private MaterialDialog termPage;
+
+    private CharSequence termContents;
+    private void buildTermDialog(){
+        this.termContents = this.getResources().getString(R.string.lorem_ipsum);
+        this.termPage = new MaterialDialog.Builder(this.getActivity())
+            .title(R.string.term)
+            .content(this.termContents)
+            .positiveText(R.string.confirm_positive)
+            .build();
+    }
+
+    private void buildLicenseDialog(){
+        this.termContents = this.getResources().getString(R.string.lorem_ipsum);
+        this.termPage = new MaterialDialog.Builder(this.getActivity())
+            .title(R.string.opensourse_license)
+            .content(this.termContents)
+            .positiveText(R.string.confirm_positive)
+            .build();
     }
 }

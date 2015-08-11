@@ -123,6 +123,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="exit">EXIT</string>
     <string name="my_evaluation">My evaluation</string>
     <string name="my_comment">My comment</string>
+    <string name="opensourse_license">Open sourse License</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

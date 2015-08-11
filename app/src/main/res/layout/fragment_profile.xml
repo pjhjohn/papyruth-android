@@ -82,6 +82,20 @@
                 app:met_hideUnderline="true"/>
         </LinearLayout>
         <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/term"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/fg_normal"
+            app:animate="false"
+            android:text="@string/term"/>
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/opensourse_license"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/fg_normal"
+            app:animate="false"
+            android:text="@string/opensourse_license"/>
+        <com.gc.materialdesign.views.ButtonFlat
             android:id="@+id/my_evaluation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
