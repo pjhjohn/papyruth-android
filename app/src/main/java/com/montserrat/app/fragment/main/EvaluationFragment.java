@@ -248,7 +248,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     }
 
     @InjectView(R.id.evaluation_container_cover) protected FrameLayout cover;
-    void showContent(boolean show) {
+    public void showContent(boolean show) {
         ValueAnimator animAlpha = ValueAnimator.ofFloat(show ? 1.0f : 0.0f, show ? 0.0f : 1.0f);
         animAlpha.addUpdateListener(animator -> {
             if(this.cover != null) this.cover.setAlpha((float) animator.getAnimatedValue());
