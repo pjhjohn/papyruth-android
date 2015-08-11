@@ -78,7 +78,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         toolbar.setTitleTextColor(Color.WHITE);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
 
         return view;
     }
@@ -124,10 +124,12 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @Override
     public void onResume() {
         super.onResume();
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().clear();
         this.search.autoComplete(this.queryTextView);
     }
     public void back(){
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         this.search.onBack();
     }
 }

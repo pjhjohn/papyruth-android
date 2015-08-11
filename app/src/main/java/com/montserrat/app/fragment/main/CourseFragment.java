@@ -28,6 +28,7 @@ import com.montserrat.app.recyclerview.adapter.CourseAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.MetricUtil;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
@@ -67,6 +68,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
         this.toolbar.setTitle(R.string.toolbar_title_course);
         this.toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         this.slave = null;
         this.slaveIsOccupying = false;
@@ -114,6 +116,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public boolean onBack() {
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if (!slaveIsOccupying && animators == null) return false;
         if (!slaveIsOccupying && !animators.isRunning()) return false;
         if (!slaveIsOccupying ) animators.cancel();

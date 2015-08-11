@@ -2,6 +2,7 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -59,6 +61,9 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        this.toolbar.setTitle(R.string.toolbar_search);
+        this.toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
         this.refresh.setEnabled(true);
 
         this.search = ToolbarSearch.getInstance().getAutoCompletableSearchView();
@@ -66,7 +71,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
         this.search.initCourse(this.recycler);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
-
+//        this.search.toolbarState(toolbar);
         return view;
     }
 
@@ -80,6 +85,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
 
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
@@ -104,6 +110,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @Override
     public void onResume() {
         super.onResume();
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 

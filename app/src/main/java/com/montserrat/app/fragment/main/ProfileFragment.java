@@ -3,7 +3,9 @@ package com.montserrat.app.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -47,6 +50,8 @@ public class ProfileFragment extends Fragment {
     @InjectView (R.id.sign_out) protected ButtonFlat signout;
     private CompositeSubscription subscriptions;
 
+    private Toolbar toolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -58,6 +63,11 @@ public class ProfileFragment extends Fragment {
         this.nickname.setEnabled(false);
         this.gender.setEnabled(false);
         this.entrance.setEnabled(false);
+
+        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        this.toolbar.setTitle(R.string.toolbar_profile);
+        this.toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         return view;
     }
 
@@ -65,6 +75,7 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -72,6 +83,7 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         final int ANIMATION_DELAY = 200;
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, ANIMATION_DELAY, TimeUnit.MILLISECONDS);
 
         this.email.setText(User.getInstance().getEmail());

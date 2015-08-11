@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.Hashtag;
 import com.montserrat.utils.view.HashtagButton;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
@@ -90,12 +92,17 @@ public class EvaluationStep2Fragment extends Fragment {
     @InjectView(R.id.evaluation_hashtags_container) protected LinearLayout hashtagsContainer;
     @InjectView(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
     private CompositeSubscription subscriptions;
+    private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step2, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
+        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         return view;
     }
 
@@ -110,6 +117,7 @@ public class EvaluationStep2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)

@@ -12,6 +12,15 @@
     <string name="nav_item_random">Random</string>
 
     <!--toolbar-->
+    <string name="toolbar_profile">My profile</string>
+    <string name="toolbar_edit_profile">Edit profile</string>
+    <string name="toolbar_title_course">Course Overview</string>
+    <string name="toolbar_title_new_evaluation">New Evaluation</string>
+    <string name="toolbar_title_home">Latest Evaluations</string>
+    <string name="toolbar_title_new_comment">New Comment</string>
+    <string name="toolbar_title_evaluation">Evaluation</string>
+    <string name="toolbar_favorite">Favorite Course</string>
+    <string name="toolbar_search">Search Course</string>
 
     <!--sign up-->
     <string name="step1">step 1</string>
@@ -85,8 +94,6 @@
     <string name="failed_passwd">Failed to change password</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
-    <string name="toolbar_title_new_comment">New Comment</string>
-    <string name="toolbar_title_evaluation">Evaluation</string>
     <string name="empty"/>
     <string name="confirm_positive">OK</string>
     <string name="confirm_optional">DON\'T SHOW AGAIN</string>
@@ -94,7 +101,7 @@
     <string name="inform_home">Latest Evaluations are provided.\n\nYou can see the latest evaluations by clicking it.</string>
     <string name="inform_course">Overall statistics for course and list of evaluations are provided.\n\nYou can open evaluation detail window by clicking the item.</string>
     <string name="inform_evaluation">Evaluations statistics and comments are provided.\n\nYou can vote up and down to both evaluation and comments.</string>
-    <string name="toolbar_title_home">Latest Evaluations</string>
+
     <string name="professor_prefix">Prof. </string>
     <string name="professor_postfix"/>
 
@@ -104,8 +111,6 @@
     <string name="yesterday">yesterday</string>
     <string name="point_overall">Total</string>
     <string name="category_major">MAJOR</string>
-    <string name="toolbar_title_course">Course Overview</string>
-    <string name="toolbar_title_new_evaluation">New Evaluation</string>
 
     <string name="lorem_ipsum"><b>Lorem      ipsum</b>\n\n dolor sit amet, consectetur adipiscing elit. Fusce pulvinar, leo in fermentum sollicitudin, odio turpis lobortis purus, vitae tempus leo libero ut diam. Integer rhoncus turpis at viverra venenatis. In convallis lobortis tellus, et fringilla quam convallis a. Ut consequat lobortis egestas. Mauris euismod, tortor vitae tristique dignissim, felis dolor malesuada arcu, at pulvinar lacus magna quis ex. Nunc quis tincidunt turpis, eget lobortis odio. Nunc mi magna, feugiat eget orci at, efficitur laoreet nisi. Morbi eros magna, pellentesque non viverra sit amet, tristique ut diam. Aenean hendrerit congue sem, ac facilisis mi hendrerit a. In sit amet euismod tellus. Aliquam egestas porta nunc, a dictum lacus ullamcorper quis. Proin ut quam et metus dapibus tempor id id quam. Curabitur et sapien massa.
 Vestibulum maximus aliquam purus quis consectetur. Etiam metus lorem, aliquam at sagittis quis, feugiat a tellus. Quisque placerat, quam in vehicula faucibus, nisl lacus ullamcorper metus, sit amet malesuada turpis urna at dui. Sed volutpat nibh ex, vitae porttitor mauris pulvinar id. Quisque hendrerit ornare eros, eget sodales sem porta eget. Praesent molestie nibh erat, ut gravida libero suscipit ut. Vestibulum et erat elementum, mollis nulla ut, molestie massa. Integer nibh turpis, pulvinar vitae velit quis, aliquam gravida magna.

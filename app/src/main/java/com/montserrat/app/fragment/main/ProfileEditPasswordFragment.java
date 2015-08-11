@@ -2,17 +2,21 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -45,12 +49,17 @@ public class ProfileEditPasswordFragment extends Fragment {
     @InjectView (R.id.new_password) protected MaterialEditText new_password;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
+    private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_edit_password, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
+        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.toolbar_edit_profile);
+        toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         return view;
     }
 
@@ -58,12 +67,14 @@ public class ProfileEditPasswordFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         this.subscriptions.add(Observable.combineLatest(

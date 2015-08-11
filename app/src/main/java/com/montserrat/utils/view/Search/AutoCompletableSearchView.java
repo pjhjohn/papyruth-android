@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -62,6 +63,7 @@ public class AutoCompletableSearchView {
     private boolean reserveCandidateListOnClose;
 
     private SearchViewListener searchViewListener;
+
 
     public enum Type{
         SEARCH, EVALUATION
@@ -436,6 +438,11 @@ public class AutoCompletableSearchView {
             if(!reserveCandidateListOnClose)
                 this.candidates.clear();
         }
+    }
+    public void toolbarState(Toolbar toolbar) {
+//        if()
+        toolbar.setTitle(R.string.toolbar_title_course);
+        toolbar.setTitleTextColor(Color.WHITE);
     }
 
     private void onShowChange(boolean show){

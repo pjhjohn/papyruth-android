@@ -1,7 +1,9 @@
 package com.montserrat.app.fragment.main;
 
+import android.graphics.Color;
 import android.view.View;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Evaluation;
@@ -9,6 +11,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.MyEvaluationAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 
@@ -38,8 +41,10 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     @Override
     public void onResume() {
         super.onResume();
-//        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-//        FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN));
+
+        toolbar.setTitle(R.string.my_evaluation);
+        toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
             .flatMap(unused -> {

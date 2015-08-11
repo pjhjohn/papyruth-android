@@ -1,7 +1,9 @@
 package com.montserrat.app.fragment.main;
 
+import android.graphics.Color;
 import android.view.View;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Evaluation;
@@ -9,6 +11,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 
@@ -39,6 +42,9 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     @Override
     public void onResume() {
         super.onResume();
+        toolbar.setTitle(R.string.toolbar_title_home);
+        toolbar.setTitleTextColor(Color.WHITE);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
             .flatMap(unused -> {
                 this.swipeRefresh.setRefreshing(true);

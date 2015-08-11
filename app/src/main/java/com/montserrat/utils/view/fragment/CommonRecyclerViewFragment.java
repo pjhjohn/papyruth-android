@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,7 +30,9 @@ import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by SSS on 2015-08-12.
+ *
+ * use this Fragment when need to open EvaluationView.
+ *
  */
 public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>, ITEM> extends RecyclerViewFragment<ADAPTER, ITEM> implements OnBack {
     protected Navigator navigator;
@@ -76,9 +77,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         this.setupRecyclerView(this.recyclerView);
         this.setupSwipeRefresh(this.swipeRefresh);
 
-        toolbar.setTitle(R.string.my_evaluation);
-        toolbar.setTitleTextColor(Color.WHITE);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         this.slave = null;
         this.slaveIsOccupying = false;
@@ -99,6 +97,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
 
     @Override
     public boolean onBack() {
+        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if (!slaveIsOccupying && animators == null) return false;
         if (!slaveIsOccupying && !animators.isRunning()) return false;
         if (!slaveIsOccupying) animators.cancel();
