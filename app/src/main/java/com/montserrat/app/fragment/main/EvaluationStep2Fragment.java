@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.gc.materialdesign.views.ButtonRectangle;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.Evaluation;
@@ -34,8 +33,6 @@ import com.montserrat.utils.support.materialdialog.HashtagDeleteDialog;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
-import com.montserrat.utils.view.Hashtag;
-import com.montserrat.utils.view.HashtagButton;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
@@ -208,11 +205,14 @@ public class EvaluationStep2Fragment extends Fragment {
         );
 
         this.subscriptions.add(WidgetObservable.text(this.hashtagsText)
-            .filter(event -> event.text().charAt(event.text().length() - 1) == ' ')
+            .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
             .subscribe(event -> {
-                ButtonRectangle hashtag = new HashtagButton(context, event.text().subSequence(0, event.text().length() - 1).toString());
+                final String str = event.text().subSequence(0, event.text().length() - 1).toString();
+                TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+                hashtag.setText(str);
                 hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
                 hashtagsContainer.addView(hashtag);
+                this.hashtagsText.setText("");
             })
         );
     }
