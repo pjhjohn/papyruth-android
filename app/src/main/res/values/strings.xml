@@ -54,6 +54,7 @@
     <string name="cancel">Cancel</string>
     <string name="pending">Pending Another Request</string>
     <string name="close">Close</string>
+    <string name="wait_to_loading">please wait to loading</string>
 
     <!--menu-->
     <string name="menu_search">Menu Search</string>
@@ -136,4 +137,5 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="hashtag_delete_title">Removing Hashtag</string>
     <string name="hashtag_delete_content">Are you sure to delete this hashtag?</string>
     <string name="confirm_delete">DELETE</string>
+
 </resources>

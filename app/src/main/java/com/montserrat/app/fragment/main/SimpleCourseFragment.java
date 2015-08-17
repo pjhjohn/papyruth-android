@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -102,9 +103,12 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        this.search.onRecyclerViewItemClick(view, position);
-        Timber.d("***go Course");
-        this.navigator.navigate(CourseFragment.class, true);
+        if(this.search.getCourseItem(position).id < 0){
+            Timber.d("cannot click this item");
+        }else if(this.search.onRecyclerViewItemClick(view, position)) {
+            Timber.d("***go Course");
+            this.navigator.navigate(CourseFragment.class, true);
+        }
     }
 
     @Override

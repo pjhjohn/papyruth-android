@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -362,15 +363,22 @@ public class AutoCompletableSearchView {
         );
     }
 
-    public void onRecyclerViewItemClick(View view, int position) {
+    public boolean onRecyclerViewItemClick(View view, int position) {
 //        this.showCandidates(false);
         if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
             Search.getInstance().clear();
             Search.getInstance().fromCandidate(candidates.get(position));
         }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
+            Timber.d("items data : <%s><%s><%s><%s><%s>", courses.get(position).name, courses.get(position).id, courses.get(position).professor_name, courses.get(position).professor_photo_url, courses.get(position).is_favorite);
+            if(courses.get(position).id == null || courses.get(position).id < 0){
+                Toast.makeText(context, context.getResources().getText(R.string.wait_to_loading), Toast.LENGTH_SHORT).show();
+                return false;
+            }
             Course.getInstance().clear().update(courses.get(position));
             this.addHistory(courses.get(position));
+
         }
+        return true;
     }
 
 
@@ -457,5 +465,12 @@ public class AutoCompletableSearchView {
         }
 
         return false;
+    }
+
+    public CourseData getCourseItem(int position){
+        return this.courses.get(position);
+    }
+    public Candidate getCandidateItem(int position){
+        return this.candidates.get(position);
     }
 }
