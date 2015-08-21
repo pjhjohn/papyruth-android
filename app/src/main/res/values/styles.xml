@@ -2,4 +2,12 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
     </style>
+    <style name="loading_highlight_medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="loading_highlight_big">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

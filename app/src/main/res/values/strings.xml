@@ -99,6 +99,8 @@
     <string name="confirm_positive">OK</string>
     <string name="confirm_optional">DON\'T SHOW AGAIN</string>
     <string name="confirm_cancel">Cancel</string>
+
+    <!-- inform -->
     <string name="inform_home">Latest Evaluations are provided.\n\nYou can see the latest evaluations by clicking it.</string>
     <string name="inform_course">Overall statistics for course and list of evaluations are provided.\n\nYou can open evaluation detail window by clicking the item.</string>
     <string name="inform_evaluation">Evaluations statistics and comments are provided.\n\nYou can vote up and down to both evaluation and comments.</string>
@@ -138,4 +140,18 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="hashtag_delete_content">Are you sure to delete this hashtag?</string>
     <string name="confirm_delete">DELETE</string>
 
+    <!-- loading -->
+    <string name="loading_number_of_university">%1$d universities has</string>
+    <string name="loading_university">has</string>
+    <string name="loading_student">students with</string>
+    <string name="loading_evaluation">evaluations</string>
+    <string name="loading_end_word"> wrote. </string>
+    <string name="loading_word_evaluation"> </string>
+
+    <!-- simple word -->
+    <string name="word_evaluation">evaluaion</string>
+    <string name="word_lecture">lecture</string>
+    <string name="word_student">student</string>
+    <string name="word_university">university</string>
+    <string name="word_professor">professor</string>
 </resources>

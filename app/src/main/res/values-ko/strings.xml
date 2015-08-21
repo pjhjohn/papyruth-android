@@ -100,11 +100,13 @@
     <string name="confirm_positive">확인</string>
     <string name="confirm_optional">다시보지 않기</string>
     <string name="confirm_cancel">취소</string>
+    <string name="professor_prefix"/>
+    <string name="professor_postfix">교수</string>
+
+    <!-- inform -->
     <string name="inform_home">최신 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 해당 강의평의 상세 페이지를 열고 닫을 수 있습니다.</string>
     <string name="inform_course">강의 통계와 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
     <string name="inform_evaluation">강의에 대한 강의평을 보여주는 페이지입니다.\n\n댓글을 추가하거나 강의평, 댓글에 투표를 위-아래 위-위-아래</string>
-    <string name="professor_prefix"/>
-    <string name="professor_postfix">교수</string>
 
     <!-- time -->
     <string name="just_now">방금</string>
@@ -129,4 +131,18 @@
     <string name="hashtag_delete_content">해당 해시태그를 삭제하시겠습니까?</string>
     <string name="confirm_delete">삭제</string>
 
+    <!-- loading -->
+    <string name="loading_number_of_university">개의 대학에서</string>
+    <string name="loading_university">에서</string>
+    <string name="loading_student">명이</string>
+    <string name="loading_evaluation">개의</string>
+    <string name="loading_end_word">을 작성하였습니다</string>
+    <string name="loading_word_evaluation">강의평</string>
+
+    <!-- simple word -->
+    <string name="word_evaluation">강의평</string>
+    <string name="word_lecture">강의</string>
+    <string name="word_student">학생</string>
+    <string name="word_university">대학교</string>
+    <string name="word_professor">교수</string>
 </resources>

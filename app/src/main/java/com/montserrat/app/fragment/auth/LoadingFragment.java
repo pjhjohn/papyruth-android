@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.User;
@@ -48,6 +53,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.loading_university_text) protected TextView vUnivText;
     @InjectView (R.id.loading_users_text) protected TextView vUserText;
     @InjectView (R.id.loading_evaluations_text) protected TextView vEvalText;
+    @InjectView (R.id.loading_text_end_word) protected TextView vLoadingEndWord;
     @InjectView (R.id.loading_university_image) protected ImageView vUnivIcon;
     @InjectView (R.id.loading_users_image) protected ImageView vUserIcon;
     @InjectView (R.id.loading_evaluations_image) protected ImageView vEvalIcon;
@@ -77,6 +83,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
+        ((AuthActivity)this.getActivity()).signUpStep(5 );
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         this.subscriptions.add(RetrofitApi.getInstance().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
@@ -109,7 +116,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
 
         subscriptions.add(
             Observable
-                .timer(3, TimeUnit.SECONDS)
+                .timer(10, TimeUnit.SECONDS)
                 .map(unused -> (StatisticsResponse) null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,16 +132,66 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     private Action1<StatisticsResponse> actionWithStatistics = statistics -> {
         if (statistics == null) this.timerFinished = true;
         else {
+            SpannableStringBuilder styleTextBuilder = new SpannableStringBuilder();
             if (statistics.university == null) {
-                this.vUnivText.setText(String.format("%d\nuniversities has", statistics.university_count));
-                this.vUserText.setText(String.format("%d\nstudents with", statistics.user_count));
-                this.vEvalText.setText(String.format("%d\nevaluations", statistics.evaluation_count));
+                SpannableString styleText = new SpannableString(String.format("%d", statistics.university_count));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_number_of_university));
+                this.vUnivText.setText(styleTextBuilder);
+
+                styleText = new SpannableString(String.format("%d", statistics.user_count));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.clear();
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_student));
+                this.vUserText.setText(styleTextBuilder);
+
+                styleText = new SpannableString(String.format("%d", statistics.evaluation_count));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.clear();
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_evaluation));
+                this.vEvalText.setText(styleTextBuilder);
+
+                styleText = new SpannableString(getResources().getString(R.string.loading_word_evaluation));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.clear();
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_end_word));
+                this.vLoadingEndWord.setText(styleTextBuilder);
+
                 this.validAuthorization = false;
             } else {
                 Picasso.with(this.getActivity()).load(statistics.university.image_url).into(this.vUnivIcon);
-                this.vUnivText.setText(String.format("%s\nhas", statistics.university.name));
-                this.vUserText.setText(String.format("%d\nstudents with", statistics.university.user_count));
-                this.vEvalText.setText(String.format("%d\nevaluations", statistics.university.evaluation_count));
+
+                SpannableString styleText = new SpannableString(String.format("%s", statistics.university.name));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.clear();
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_university));
+                this.vUnivText.setText(styleTextBuilder);
+
+                styleText = new SpannableString(String.format("%d", statistics.university.user_count));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.clear();
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_student));
+                this.vUserText.setText(styleTextBuilder);
+
+                styleText = new SpannableString(String.format("%d", statistics.university.evaluation_count));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.clear();
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_evaluation));
+                this.vEvalText.setText(styleTextBuilder);
+
+                styleText = new SpannableString(getResources().getString(R.string.loading_word_evaluation));
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleTextBuilder.clear();
+                styleTextBuilder.append(styleText);
+                styleTextBuilder.append(getResources().getString(R.string.loading_end_word));
+                this.vLoadingEndWord.setText(styleTextBuilder);
                 this.validAuthorization = true;
             } this.responseActionFinished = true;
         }

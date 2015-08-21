@@ -39,6 +39,7 @@ public class AuthActivity extends Activity implements ViewPagerController {
 
     @InjectView(R.id.fac) protected FloatingActionControlContainer fac;
     @InjectView(R.id.sign_up_step) protected LinearLayout signUpStep;
+    @InjectView(R.id.auth_header) protected LinearLayout header;
     @InjectView(R.id.state_name) protected TextView stateName;
     @InjectView(R.id.logo) protected ImageView logo;
 
@@ -64,18 +65,30 @@ public class AuthActivity extends Activity implements ViewPagerController {
         Picasso.with(this.getBaseContext()).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.logo);
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.reset(this);
     }
 
+    private final int MAXSTEP = 4;
+    /**
+     * @param step : < 0 : sign up step bar height : 0
+     *             : <= 4 : sign up step bar height : 4 and set color
+     *             : > 4 : auth activity header height : 0
+     *
+     */
     public void signUpStep(int step){
         if(step < 0){
             ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
             this.stateName.setText("");
             param.height = 0;
             this.signUpStep.setLayoutParams(param);
+        }else if (step > MAXSTEP){
+            ViewGroup.LayoutParams param =  this.header.getLayoutParams();
+            param.height = 0;
+            this.header.setLayoutParams(param);
         }else {
             if(this.signUpStep.getHeight() < 1){
                 ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
@@ -83,7 +96,7 @@ public class AuthActivity extends Activity implements ViewPagerController {
                 param.height = (int) (4 * this.getBaseContext().getResources().getDisplayMetrics().density);
                 this.signUpStep.setLayoutParams(param);
             }
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < MAXSTEP; i++) {
                 if (i < step)
                     this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.fg_normal));
                 else

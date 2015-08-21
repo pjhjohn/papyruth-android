@@ -2,65 +2,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <GridLayout
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="120dp"
-        android:orientation="vertical">
-        <GridLayout
+        android:columnCount="4"
+        android:layout_gravity="left|center_vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="3">
+            <ImageView
+                android:id="@+id/loading_university_image"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_light_intro_house"/>
+            <TextView
+                android:id="@+id/loading_university_text"
+                android:layout_marginLeft="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/loading_users_image"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_light_intro_student"/>
+            <TextView
+                android:id="@+id/loading_users_text"
+                android:layout_marginLeft="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/loading_evaluations_image"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_light_intro_evaluation"/>
+            <TextView
+                android:id="@+id/loading_evaluations_text"
+                android:layout_marginLeft="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/loading_text_end_word"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:rowCount="3">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="120dp"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/loading_university_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:src="@drawable/snu_logo"/>
-                <TextView
-                    android:id="@+id/loading_university_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="120dp"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/loading_users_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:src="@drawable/snu_logo"/>
-                <TextView
-                    android:id="@+id/loading_users_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="120dp"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/loading_evaluations_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:src="@drawable/snu_logo"/>
-                <TextView
-                    android:id="@+id/loading_evaluations_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"/>
-            </LinearLayout>
-        </GridLayout>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/loading_end_word"
+            android:gravity="center"/>
+    </GridLayout>
 </FrameLayout>
 
 
