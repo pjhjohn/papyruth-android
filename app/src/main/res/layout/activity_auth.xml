@@ -95,6 +95,6 @@
             android:id="@+id/auth_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        </LinearLayout>
+    </LinearLayout>
     <include layout="@layout/fac"/>
 </FrameLayout>

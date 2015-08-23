@@ -191,7 +191,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                 Picasso.with(this.getActivity()).load(statistics.university.image_url).into(this.vUnivIcon);
 
                 SpannableString styleText = new SpannableString(String.format("%s", statistics.university.name));
-                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_medium), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 styleTextBuilder.clear();
                 styleTextBuilder.append(styleText);
                 styleTextBuilder.append(getResources().getString(R.string.loading_university));

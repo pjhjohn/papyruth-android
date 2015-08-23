@@ -1,26 +1,20 @@
 package com.montserrat.app.activity;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.auth.AuthFragmentFactory;
-import com.montserrat.app.fragment.auth.SignInFragment;
-import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.view.FloatingActionControlContainer;
-import com.montserrat.utils.view.navigator.FragmentNavigator;
-import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
@@ -30,6 +24,7 @@ import java.util.Stack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Activity For Authentication.
@@ -80,28 +75,30 @@ public class AuthActivity extends Activity implements ViewPagerController {
      *
      */
     public void signUpStep(int step){
-        if(step < 0){
-            ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
-            this.stateName.setText("");
-            param.height = 0;
-            this.signUpStep.setLayoutParams(param);
-        }else if (step > MAXSTEP){
-            ViewGroup.LayoutParams param =  this.header.getLayoutParams();
-            param.height = 0;
-            this.header.setLayoutParams(param);
-        }else {
-            if(this.signUpStep.getHeight() < 1){
+        if (step > MAXSTEP) {
+            this.header.setVisibility(View.GONE);
+        }else{
+            this.header.setVisibility(View.VISIBLE);
+            if(step < 0){
                 ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
-                this.stateName.setText(R.string.action_sign_up);
-                param.height = (int) (4 * this.getBaseContext().getResources().getDisplayMetrics().density);
+                this.stateName.setText("");
+                param.height = 0;
                 this.signUpStep.setLayoutParams(param);
-            }
-            for (int i = 0; i < MAXSTEP; i++) {
-                if (i < step)
-                    this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.fg_normal));
-                else
-                    this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.translucent));
 
+            }else {
+                if(this.signUpStep.getHeight() < 1){
+                    ViewGroup.LayoutParams param =  this.signUpStep.getLayoutParams();
+                    this.stateName.setText(R.string.action_sign_up);
+                    param.height = (int) (4 * this.getBaseContext().getResources().getDisplayMetrics().density);
+                    this.signUpStep.setLayoutParams(param);
+                }
+                for (int i = 0; i < MAXSTEP; i++) {
+                    if (i < step)
+                        this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.fg_normal));
+                    else
+                        this.signUpStep.getChildAt(i).setBackgroundColor(this.getResources().getColor(R.color.translucent));
+
+                }
             }
         }
     }
