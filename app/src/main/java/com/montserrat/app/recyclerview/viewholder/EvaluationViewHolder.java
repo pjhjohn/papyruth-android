@@ -63,7 +63,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_comment_icon) protected ImageView commentIcon;
     @InjectView(R.id.evaluation_comment_count) protected TextView commentCount;
     @InjectView(R.id.evaluation_modify) protected ImageView modify;
-    @InjectView(R.id.modify_container) protected LinearLayout modify_container;
     private Integer id;
     private VoteStatus status;
     public enum VoteStatus {
@@ -174,11 +173,12 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         else this.setStatus(VoteStatus.DOWN);
 
         this.setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_EASINESS)).into(this.modify);
+//        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_EASINESS)).into(this.modify);
         if(User.getInstance().getId().equals(evaluation.getUserId())){
-            this.modify_container.setVisibility(View.VISIBLE);
+            this.modify.setVisibility(View.VISIBLE);
+            this.modify.setOnClickListener(this);
         }else{
-            this.modify_container.setVisibility(View.GONE);
+            this.modify.setVisibility(View.GONE);
         }
     }
 
@@ -229,6 +229,9 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                         view.getId() == R.id.evaluation_up_vote_count ? "UP" : "DOWN",
                         view.getId() == R.id.evaluation_up_vote_count ? response.up : response.down
                     ));
+                break;
+            case R.id.evaluation_modify:
+
                 break;
             default : Timber.d("Clicked view : %s", view);
         }
