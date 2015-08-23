@@ -83,9 +83,12 @@ public class AppConst {
         public static final String NICKNAME = "nickname";
 
         /* University info */
-        public static final String INFO_UNIVERSITY = "info_university";
-        public static final String INFO_NUMBER_OF_EVALUATION = "info_number_of_evaluation";
-        public static final String INFO_NUMBER_OF_STUDENT = "info_number_of_student";
+        public static final String INFO_UNIVERSITY_COUNT = "univ_name";
+        public static final String INFO_STUREND_COUNT = "univ_student_count";
+        public static final String INFO_EVALUATION_COUNT = "univ_evaluation_count";
+        public static final String UNIVERSITY_NAME = "info_university";
+        public static final String UNIVERSITY_EVALUATION_COUNT = "info_number_of_evaluation";
+        public static final String UNIVERSITY_STUDENT_COUNT = "info_number_of_student";
     }
     public static class Tag{
         public static final String ACTIVE_FRAGMENT = "FRAGMENT";

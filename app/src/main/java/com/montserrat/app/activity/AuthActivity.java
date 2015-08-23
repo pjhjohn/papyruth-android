@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.auth.AuthFragmentFactory;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
@@ -59,6 +61,17 @@ public class AuthActivity extends Activity implements ViewPagerController {
         ViewHolderFactory.getInstance().setContext(this);
         Picasso.with(this.getBaseContext()).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.logo);
 
+        /* Cache expired for TEST DEBUGGING */
+        this.logo.setOnClickListener(v->{
+            AppManager.getInstance().clear(AppConst.Preference.INFO_EVALUATION_COUNT);
+            AppManager.getInstance().clear(AppConst.Preference.INFO_UNIVERSITY_COUNT);
+            AppManager.getInstance().clear(AppConst.Preference.INFO_STUREND_COUNT);
+            AppManager.getInstance().clear(AppConst.Preference.UNIVERSITY_NAME);
+            AppManager.getInstance().clear(AppConst.Preference.UNIVERSITY_EVALUATION_COUNT);
+            AppManager.getInstance().clear(AppConst.Preference.UNIVERSITY_STUDENT_COUNT);
+            Toast.makeText(this,"cache expired!!!", Toast.LENGTH_LONG).show();
+        });
+        /* DEBUGGING CODE END*/
     }
 
     @Override

@@ -128,21 +128,33 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     }
 
     private void cachingStatistics(StatisticsResponse statistics){
-        AppManager.getInstance().putString(AppConst.Preference.INFO_UNIVERSITY, statistics.university.name);
-        AppManager.getInstance().putInt(AppConst.Preference.INFO_NUMBER_OF_EVALUATION, statistics.university.evaluation_count);
-        AppManager.getInstance().putInt(AppConst.Preference.INFO_NUMBER_OF_STUDENT, statistics.university.user_count);
+        if(statistics.university != null) {
+            AppManager.getInstance().putString(AppConst.Preference.UNIVERSITY_NAME, statistics.university.name);
+            AppManager.getInstance().putInt(AppConst.Preference.UNIVERSITY_EVALUATION_COUNT, statistics.university.evaluation_count);
+            AppManager.getInstance().putInt(AppConst.Preference.UNIVERSITY_STUDENT_COUNT, statistics.university.user_count);
+        }else if(statistics.university_count != null){
+            AppManager.getInstance().putInt(AppConst.Preference.INFO_UNIVERSITY_COUNT, statistics.university_count);
+            AppManager.getInstance().putInt(AppConst.Preference.INFO_EVALUATION_COUNT, statistics.evaluation_count);
+            AppManager.getInstance().putInt(AppConst.Preference.INFO_STUREND_COUNT, statistics.user_count);
+        }
     }
 
     private StatisticsResponse getCacheStatistics(){
-        if(!AppManager.getInstance().contains(AppConst.Preference.INFO_UNIVERSITY))
-            return null;
         StatisticsResponse statistics = new StatisticsResponse();
-        statistics.university = new UniversityData();
-        statistics.university.name = AppManager.getInstance().getString(
-            AppConst.Preference.INFO_UNIVERSITY,
-            null);
-        statistics.university.evaluation_count = AppManager.getInstance().getInt(AppConst.Preference.INFO_NUMBER_OF_EVALUATION, 0);
-        statistics.university.user_count = AppManager.getInstance().getInt(AppConst.Preference.INFO_NUMBER_OF_STUDENT, 0);
+        if(User.getInstance().getAccessToken() != null && AppManager.getInstance().contains(AppConst.Preference.UNIVERSITY_NAME)) {
+            statistics.university = new UniversityData();
+            statistics.university.name = AppManager.getInstance().getString( AppConst.Preference.UNIVERSITY_NAME, null);
+            statistics.university.evaluation_count = AppManager.getInstance().getInt(AppConst.Preference.UNIVERSITY_EVALUATION_COUNT, 0);
+            statistics.university.user_count = AppManager.getInstance().getInt(AppConst.Preference.UNIVERSITY_STUDENT_COUNT, 0);
+        }else if (AppManager.getInstance().contains(AppConst.Preference.INFO_UNIVERSITY_COUNT)){
+            statistics.user_count = AppManager.getInstance().getInt(AppConst.Preference.INFO_STUREND_COUNT, 0);
+            statistics.evaluation_count = AppManager.getInstance().getInt(AppConst.Preference.INFO_EVALUATION_COUNT, 0);
+            statistics.university_count = AppManager.getInstance().getInt(AppConst.Preference.INFO_UNIVERSITY_COUNT, 0);
+        }else{
+            statistics.user_count = 0;
+            statistics.evaluation_count = 0;
+            statistics.university_count = 0;
+        }
 
         return statistics;
     }
@@ -157,7 +169,10 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
         if (statistics == null) this.timerFinished = true;
         else {
             SpannableStringBuilder styleTextBuilder = new SpannableStringBuilder();
+            this.cachingStatistics(statistics);
             if (statistics.university == null) {
+                Picasso.with(this.getActivity()).load(R.drawable.ic_light_intro_house).into(this.vUnivIcon);
+
                 SpannableString styleText = new SpannableString(String.format("%d", statistics.university_count));
                 styleText.setSpan(new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_big), 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 styleTextBuilder.append(styleText);
@@ -187,7 +202,6 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
 
                 this.validAuthorization = false;
             } else {
-                this.cachingStatistics(statistics);
                 Picasso.with(this.getActivity()).load(statistics.university.image_url).into(this.vUnivIcon);
 
                 SpannableString styleText = new SpannableString(String.format("%s", statistics.university.name));
