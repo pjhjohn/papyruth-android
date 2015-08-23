@@ -139,4 +139,5 @@ public class AppManager {
     public void setMainToolbarColor(int color) {
         this.mainToolbarColor = color;
     }
+
 }

@@ -19,6 +19,7 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.activity.MainActivity;
+import com.montserrat.app.model.UniversityData;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -83,8 +84,10 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused () {
-        ((AuthActivity)this.getActivity()).signUpStep(5 );
+        ((AuthActivity)this.getActivity()).signUpStep(5);
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
+        this.actionWithStatistics.call(this.getCacheStatistics());
+
         this.subscriptions.add(RetrofitApi.getInstance().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
@@ -123,6 +126,27 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                 .subscribe(actionWithStatistics)
         );
     }
+
+    private void cachingStatistics(StatisticsResponse statistics){
+        AppManager.getInstance().putString(AppConst.Preference.INFO_UNIVERSITY, statistics.university.name);
+        AppManager.getInstance().putInt(AppConst.Preference.INFO_NUMBER_OF_EVALUATION, statistics.university.evaluation_count);
+        AppManager.getInstance().putInt(AppConst.Preference.INFO_NUMBER_OF_STUDENT, statistics.university.user_count);
+    }
+
+    private StatisticsResponse getCacheStatistics(){
+        if(!AppManager.getInstance().contains(AppConst.Preference.INFO_UNIVERSITY))
+            return null;
+        StatisticsResponse statistics = new StatisticsResponse();
+        statistics.university = new UniversityData();
+        statistics.university.name = AppManager.getInstance().getString(
+            AppConst.Preference.INFO_UNIVERSITY,
+            null);
+        statistics.university.evaluation_count = AppManager.getInstance().getInt(AppConst.Preference.INFO_NUMBER_OF_EVALUATION, 0);
+        statistics.university.user_count = AppManager.getInstance().getInt(AppConst.Preference.INFO_NUMBER_OF_STUDENT, 0);
+
+        return statistics;
+    }
+
 
     /**
      * if user has valid token, auto sign in.<br/>
@@ -163,6 +187,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
 
                 this.validAuthorization = false;
             } else {
+                this.cachingStatistics(statistics);
                 Picasso.with(this.getActivity()).load(statistics.university.image_url).into(this.vUnivIcon);
 
                 SpannableString styleText = new SpannableString(String.format("%s", statistics.university.name));

@@ -82,6 +82,10 @@ public class AppConst {
         public static final String EMAIL = "email";
         public static final String NICKNAME = "nickname";
 
+        /* University info */
+        public static final String INFO_UNIVERSITY = "info_university";
+        public static final String INFO_NUMBER_OF_EVALUATION = "info_number_of_evaluation";
+        public static final String INFO_NUMBER_OF_STUDENT = "info_number_of_student";
     }
     public static class Tag{
         public static final String ACTIVE_FRAGMENT = "FRAGMENT";
