@@ -91,7 +91,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     success -> {
-                        Timber.d("error vali : %s", success);
                         if(success) {
                             if (email != null) isDuplicateEmail = true;
                             else isDuplicateNickname = true;
@@ -102,6 +101,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                                 this.nickname.setError(getResources().getString(R.string.duplicated_nickname));
                             }
                         }
+                        this.showFAC();
                     },
                     error -> {
                         Timber.d("duplicate validator error : %s", error);
@@ -119,7 +119,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validateEmail == null && validateNickname == null && isDuplicateEmail && isDuplicateNickname;
-
         if (!visible && valid) {
             FloatingActionControl.getInstance().show(true);
         }else if (visible && !valid) {
