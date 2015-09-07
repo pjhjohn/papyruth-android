@@ -1,7 +1,7 @@
 <resources>
     <!--app name-->
-    <string name="app_name">PAPYRUTH</string>
-    <string name="sub_title">Univ Course Evaluation</string>
+    <string name="app_title">PAPYRUTH</string>
+    <string name="app_sub_title">University Course Evaluator</string>
 
     <!--navigation-->
     <string name="nav_item_home">Home</string>
@@ -147,7 +147,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="loading_university">has</string>
     <string name="loading_student">students with</string>
     <string name="loading_evaluation">evaluations</string>
-    <string name="loading_end_word"> wrote. </string>
+    <string name="loading_end_word">Wrote in PAPYRUTH</string>
     <string name="loading_word_evaluation"> </string>
 
     <!-- simple word -->

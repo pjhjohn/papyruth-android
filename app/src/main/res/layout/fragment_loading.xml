@@ -1,77 +1,103 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridLayout
-        android:orientation="vertical"
-        android:layout_marginTop="80dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:columnCount="4">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnSpan="3">
+            android:layout_above="@+id/relativeLayout2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="@dimen/baseline_x3">
+
             <ImageView
-                android:id="@+id/loading_university_image"
+                android:id="@+id/loading_university_icon"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:src="@drawable/ic_light_intro_house"/>
-            <TextView
+
+            <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/loading_university_text"
-                android:layout_marginLeft="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"/>
-        </LinearLayout>
+                android:gravity="right"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/loading_university_icon"
+                android:layout_toEndOf="@+id/loading_university_icon"
+                android:textSize="48sp"
+                app:textWeight="light"/>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_marginTop="40dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/relativeLayout2"
+            android:padding="@dimen/baseline_x3">
+
             <ImageView
-                android:id="@+id/loading_users_image"
+                android:id="@+id/loading_user_icon"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:src="@drawable/ic_light_intro_student"/>
-            <TextView
-                android:id="@+id/loading_users_text"
-                android:layout_marginLeft="24dp"
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/loading_user_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="end"/>
-        </LinearLayout>
+                android:gravity="end"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/loading_user_icon"
+                android:layout_toEndOf="@+id/loading_user_icon"
+                android:textSize="48sp"
+                app:textWeight="light"/>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_marginTop="40dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/relativeLayout"
+            android:layout_below="@+id/relativeLayout2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="@dimen/baseline_x3">
+
             <ImageView
-                android:id="@+id/loading_evaluations_image"
+                android:id="@+id/loading_evaluation_icon"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:src="@drawable/ic_light_intro_evaluation"/>
-            <TextView
-                android:id="@+id/loading_evaluations_text"
-                android:layout_marginLeft="24dp"
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/loading_evaluation_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"/>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/loading_text_end_word"
-            android:layout_marginTop="50dp"
+                android:gravity="right"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/loading_evaluation_icon"
+                android:layout_toEndOf="@+id/loading_evaluation_icon"
+                android:textSize="48sp"
+                app:textWeight="light"/>
+        </RelativeLayout>
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/loading_quote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/loading_end_word"
-            android:gravity="center_horizontal"/>
-    </GridLayout>
+            android:layout_below="@+id/relativeLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+    </RelativeLayout>
 </FrameLayout>
 
 

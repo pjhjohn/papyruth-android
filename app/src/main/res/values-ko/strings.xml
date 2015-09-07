@@ -1,7 +1,7 @@
 <resources>
     <!--app name-->
-    <string name="app_name">파피루스-</string>
-    <string name="sub_title">대학교 강의 평가</string>
+    <string name="app_title">파피루스</string>
+    <string name="app_sub_title">대학교 강의 평가</string>
 
     <!--navigation-->
     <string name="nav_item_home">홈</string>
@@ -138,7 +138,7 @@
     <string name="loading_university">에서</string>
     <string name="loading_student">명이</string>
     <string name="loading_evaluation">개의</string>
-    <string name="loading_end_word">을 작성하였습니다</string>
+    <string name="loading_end_word">파피루스에서 작성하였습니다</string>
     <string name="loading_word_evaluation">강의평</string>
 
     <!-- simple word -->

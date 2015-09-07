@@ -56,14 +56,14 @@ public class AppConst {
         /* For Auth Activity */
         public static class Auth {
             public static final int LENGTH       = 8;
-            public static final int LOADING      = 0;
-            public static final int SIGNIN       = 1;
-            public static final int SIGNUP_STEP0 = 2;
-            public static final int SIGNUP_STEP1 = 3;
-            public static final int SIGNUP_STEP2 = 4;
-            public static final int SIGNUP_STEP3 = 5;
-            public static final int SIGNUP_STEP4 = 6;
-            public static final int SIGNUP_STEP5 = 7;
+            public static final int SPLASH       = 0;
+            public static final int LOADING      = 1;
+            public static final int SIGNIN       = 2;
+            public static final int SIGNUP_STEP0 = 3;
+            public static final int SIGNUP_STEP1 = 4;
+            public static final int SIGNUP_STEP2 = 5;
+            public static final int SIGNUP_STEP3 = 6;
+            public static final int SIGNUP_STEP4 = 7;
         }
     }
 
