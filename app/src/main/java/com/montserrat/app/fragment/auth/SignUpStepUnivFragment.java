@@ -29,14 +29,16 @@ import com.squareup.picasso.Picasso;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus {
+public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController pagerController;
 
     @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView universityList;
@@ -86,7 +88,19 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     @Override
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(0);
-        FloatingActionControl.getInstance().hide(true);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        if(this.subscriptions.isUnsubscribed())
+            this.subscriptions = new CompositeSubscription();
+        this.subscriptions.add(
+            ViewObservable
+                .clicks(FloatingActionControl.getButton())
+                .subscribe(unused -> {
+                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+                }, error -> Timber.d("page change error %s", error))
+        );
+        if(Signup.getInstance().getUniversity_id() != null){
+            FloatingActionControl.getInstance().show(true);
+        }
         ((InputMethodManager)this.getActivity().getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.universityList.getWindowToken(), 2);
         if(Signup.getInstance().getUniversity_id() != null){
             this.universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.selected_gray));
@@ -94,6 +108,10 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
         }
     }
 
+    @Override
+    public void onPageUnfocused() {
+        if(this.subscriptions !=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
 
     public int getUniversityPosition(){
         for(int i = 0; i < items.size(); i++){
