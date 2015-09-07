@@ -113,7 +113,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         String validatePassword = RxValidator.getErrorMessagePassword.call(this.password.getText().toString());
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-        boolean valid = validatePassword == null;
+        boolean valid = validatePassword == null && this.termAgree.isChecked();
 
         if (!visible && valid) {
             FloatingActionControl.getInstance().show(true);
@@ -128,6 +128,20 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             .title(R.string.term)
             .content(this.termContents)
             .positiveText(R.string.agree_terms)
+            .negativeText(R.string.disagree)
+            .callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog dialog) {
+                    super.onPositive(dialog);
+                    termAgree.setChecked(true);
+                }
+
+                @Override
+                public void onNegative(MaterialDialog dialog) {
+                    super.onNegative(dialog);
+                    termAgree.setChecked(false);
+                }
+            })
             .build();
     }
 
@@ -143,6 +157,10 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             this.password.setText(Signup.getInstance().getPassword());
             this.showFAC();
         }
+        this.termAgree.setOnCheckedChangeListener((btnView, checked)->{
+            showFAC();
+            Timber.d("changed");
+        });
         this.subscription.add(
             WidgetObservable
                 .text(this.password)

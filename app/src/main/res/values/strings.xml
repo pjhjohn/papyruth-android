@@ -30,6 +30,8 @@
     <string name="step5">step 5</string>
     <string name="entrance_year">Admission year</string>
     <string name="agree_terms">I agree to the terms and conditions</string>
+    <string name="agree">Agree</string>
+    <string name="disagree">Disagree</string>
     <string name="term">Term</string>
     <string name="duplicated_email">duplicated email</string>
     <string name="duplicated_nickname">duplicated nickname</string>
