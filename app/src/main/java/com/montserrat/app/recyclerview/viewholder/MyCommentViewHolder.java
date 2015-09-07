@@ -12,13 +12,20 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.EvaluationData;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
+import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.DateTimeUtil;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
+import com.squareup.okhttp.Cache;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
@@ -37,11 +44,13 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
     @InjectView(R.id.evaluation_item_comment) protected RelativeLayout commentContainer;
 
     private RecyclerViewItemClickListener itemClickListener;
+    private CompositeSubscription subscription;
     public MyCommentViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
         itemView.setOnClickListener(this);
         itemClickListener = listener;
+        this.subscription = new CompositeSubscription();
     }
 
     public void bind(CommentData comment) {
@@ -50,10 +59,27 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
         this.timestamp.setText(DateTimeUtil.timeago(context, comment.created_at));
 
         commentContainer.setVisibility(View.GONE);
+        getCourseOfComment(comment.evaluation_id);
 
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.upIcon);
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.downIcon);
         this.setVoteCount(comment.up_vote_count, comment.down_vote_count);
+    }
+
+    private void getCourseOfComment(int evaluationId){
+        this.subscription.add(
+            RetrofitApi.getInstance().get_evaluation(User.getInstance().getAccessToken(), evaluationId)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    response -> {
+                        this.professor.setText(response.evaluation.professor_name);
+                        this.lecture.setText(response.evaluation.lecture_name);
+                    }, error -> {
+                        Timber.d("get CourseOfComment error : evaluation id <%s>", evaluationId);
+                    }
+                )
+        );
     }
 
     @Override
