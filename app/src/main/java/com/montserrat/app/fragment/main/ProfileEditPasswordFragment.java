@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
@@ -18,7 +19,6 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
 
@@ -45,8 +45,8 @@ public class ProfileEditPasswordFragment extends Fragment {
         this.navigator = (Navigator) activity;
     }
 
-    @InjectView (R.id.old_password) protected MaterialEditText old_password;
-    @InjectView (R.id.new_password) protected MaterialEditText new_password;
+    @InjectView (R.id.old_password) protected EditText old_password;
+    @InjectView (R.id.new_password) protected EditText new_password;
     @InjectView (R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;

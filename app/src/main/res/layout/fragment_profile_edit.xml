@@ -1,6 +1,5 @@
 <com.montserrat.utils.view.navigator.NavigatableFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="24dp"
@@ -12,36 +11,24 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <com.rengwuxian.materialedittext.MaterialEditText
+        <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:hint="@string/hint_email"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_email"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_singleLineEllipsis="true"/>
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="@string/hint_email"/>
+        <EditText
             android:id="@+id/realname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/hint_realname"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_realname"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_singleLineEllipsis="true"/>
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="@string/hint_realname"/>
+        <EditText
             android:id="@+id/nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/hint_nickname"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_nickname"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_singleLineEllipsis="true"/>
+            android:hint="@string/hint_nickname"/>
         <RadioGroup
             android:id="@+id/gender"
             android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -20,7 +21,6 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
 
@@ -48,9 +48,9 @@ public class ProfileEditFragment extends Fragment {
         this.navigator = (Navigator) activity;
     }
 
-    @InjectView (R.id.email) protected MaterialEditText email;
-    @InjectView (R.id.realname) protected MaterialEditText realname;
-    @InjectView (R.id.nickname) protected MaterialEditText nickname;
+    @InjectView (R.id.email) protected EditText email;
+    @InjectView (R.id.realname) protected EditText realname;
+    @InjectView (R.id.nickname) protected EditText nickname;
     @InjectView (R.id.gender) protected RadioGroup gender;
     @InjectView (R.id.university) protected ButtonFlat university;
     @InjectView (R.id.entrance) protected ButtonFlat entrance;

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <include layout="@layout/progress"/>
-
     <RelativeLayout
         android:id="@+id/content_auth"
         android:layout_width="match_parent"
@@ -20,20 +17,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_vertical"
             android:orientation="vertical">
-            <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
+            <AutoCompleteTextView
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:singleLine="true"
-                app:met_floatingLabel="highlight"
-                app:met_floatingLabelText="@string/hint_email"
-                app:met_primaryColor="@color/fg_accent"
-                app:met_singleLineEllipsis="true"/>
+                android:singleLine="true"/>
 
-            <com.rengwuxian.materialedittext.MaterialEditText
+            <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,11 +34,7 @@
                 android:imeActionLabel="@string/action_sign_in"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
-                android:singleLine="true"
-                app:met_floatingLabel="highlight"
-                app:met_floatingLabelText="@string/hint_password"
-                app:met_primaryColor="@color/fg_accent"
-                app:met_singleLineEllipsis="true"/>
+                android:singleLine="true"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -66,7 +55,6 @@
                     android:layout_weight="0.5"
                     android:background="@color/fg_normal"
                     android:text="@string/action_sign_up"/>
-
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

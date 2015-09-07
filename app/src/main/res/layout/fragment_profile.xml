@@ -11,75 +11,48 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <com.rengwuxian.materialedittext.MaterialEditText
+        <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:hint="@string/hint_email"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_email"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_singleLineEllipsis="true"
-            app:met_hideUnderline="true"/>
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="@string/hint_email"/>
+        <EditText
             android:id="@+id/realname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/hint_realname"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_realname"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_singleLineEllipsis="true"
-            app:met_hideUnderline="true"/>
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="@string/hint_realname"/>
+        <EditText
             android:id="@+id/nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/hint_nickname"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_nickname"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_singleLineEllipsis="true"
-            app:met_hideUnderline="true"/>
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="@string/hint_nickname"/>
+        <EditText
             android:id="@+id/gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/hint_gender"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/hint_gender"
-            app:met_primaryColor="@color/fg_accent"
-            app:met_hideUnderline="true"/>
+            android:hint="@string/hint_gender"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <com.rengwuxian.materialedittext.MaterialEditText
+            <EditText
                 android:id="@+id/university"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:inputType="text"
-                android:hint="@string/hint_university"
-                app:met_floatingLabel="highlight"
-                app:met_floatingLabelText="@string/hint_university"
-                app:met_primaryColor="@color/fg_accent"
-                app:met_hideUnderline="true"/>
-            <com.rengwuxian.materialedittext.MaterialEditText
+                android:hint="@string/hint_university"/>
+            <EditText
                 android:id="@+id/entrance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:inputType="text"
-                android:hint="@string/hint_entrance"
-                app:met_floatingLabel="highlight"
-                app:met_floatingLabelText="@string/hint_entrance"
-                app:met_primaryColor="@color/fg_accent"
-                app:met_hideUnderline="true"/>
+                android:hint="@string/hint_entrance"/>
         </LinearLayout>
         <com.gc.materialdesign.views.ButtonFlat
             android:id="@+id/term"

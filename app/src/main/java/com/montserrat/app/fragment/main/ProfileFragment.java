@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFlat;
@@ -18,20 +19,15 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-19.
@@ -44,12 +40,12 @@ public class ProfileFragment extends Fragment {
         this.navigator = (Navigator) activity;
     }
 
-    @InjectView (R.id.email) protected MaterialEditText email;
-    @InjectView (R.id.university) protected MaterialEditText university;
-    @InjectView (R.id.realname) protected MaterialEditText realname;
-    @InjectView (R.id.nickname) protected MaterialEditText nickname;
-    @InjectView (R.id.gender) protected MaterialEditText gender;
-    @InjectView (R.id.entrance) protected MaterialEditText entrance;
+    @InjectView (R.id.email) protected EditText email;
+    @InjectView (R.id.university) protected EditText university;
+    @InjectView (R.id.realname) protected EditText realname;
+    @InjectView (R.id.nickname) protected EditText nickname;
+    @InjectView (R.id.gender) protected EditText gender;
+    @InjectView (R.id.entrance) protected EditText entrance;
     @InjectView (R.id.my_evaluation) protected ButtonFlat myEvaluation;
     @InjectView (R.id.my_comment) protected ButtonFlat myComment;
     @InjectView (R.id.sign_out) protected ButtonFlat signout;

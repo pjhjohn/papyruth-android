@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +31,8 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
-import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
-import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +64,8 @@ public class SignInFragment extends Fragment implements OnPageFocus {
         this.pagerController = (ViewPagerController) activity;
     }
 
-    @InjectView (R.id.email) protected MaterialAutoCompleteTextView emailField;
-    @InjectView (R.id.password) protected MaterialEditText passwordField;
+    @InjectView (R.id.email) protected AutoCompleteTextView emailField;
+    @InjectView (R.id.password) protected EditText passwordField;
     @InjectView (R.id.progress) protected View progress;
     @InjectView (R.id.sign_in) protected ButtonFlat signin;
     @InjectView (R.id.sign_up) protected ButtonFlat signup;
