@@ -107,6 +107,8 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
             this.realname.setText(Signup.getInstance().getRealname());
             ((RadioButton)this.gender.findViewById(this.gender.getChildAt((Signup.getInstance().getIs_boy()?0:1)).getId())).setChecked(true);
             this.showFAC();
+        }if(this.realname.length() > 0 && this.gender.getCheckedRadioButtonId() != -1){
+            this.showFAC();
         }
 
         this.subscription.add(

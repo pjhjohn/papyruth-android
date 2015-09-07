@@ -156,6 +156,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         if(Signup.getInstance().getPassword() != null){
             this.password.setText(Signup.getInstance().getPassword());
             this.showFAC();
+        }else if(this.password.length() > 0 && this.termAgree.isChecked()){
+            this.showFAC();
         }
         this.termAgree.setOnCheckedChangeListener((btnView, checked)->{
             showFAC();

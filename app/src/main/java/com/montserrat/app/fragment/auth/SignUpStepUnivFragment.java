@@ -104,7 +104,6 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
         ((InputMethodManager)this.getActivity().getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.universityList.getWindowToken(), 2);
         if(Signup.getInstance().getUniversity_id() != null){
             this.universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.selected_gray));
-//            this.universityList.getChildAt(getUniversityPosition()).setAlpha((float) 0.4);
         }
     }
 
@@ -135,7 +134,6 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     public void onRecyclerViewItemClick(View view, int position) {
         if(Signup.getInstance().getUniversity_id() != null) {
             this.universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.transparent));
-//            this.universityList.getChildAt(getUniversityPosition()).setAlpha((float)1.0);
         }
         Signup.getInstance().setUniversity_id(this.items.get(position).id);
         Signup.getInstance().setImage_url(this.items.get(position).image_url);

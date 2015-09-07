@@ -119,6 +119,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validateEmail == null && validateNickname == null && isDuplicateEmail && isDuplicateNickname;
+        Timber.d("vali : %s %s", visible, valid);
         if (!visible && valid) {
             FloatingActionControl.getInstance().show(true);
         }else if (visible && !valid) {
@@ -137,7 +138,12 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         if(Signup.getInstance().getNickname() != null){
             this.email.setText(Signup.getInstance().getEmail());
             this.nickname.setText(Signup.getInstance().getNickname());
+            this.duplicatedValidator(email.getText().toString(), null);
+            this.duplicatedValidator(null, nickname.getText().toString());
             this.showFAC();
+        }else if(this.email.length() > 0 && this.nickname.length() > 0){
+            this.duplicatedValidator(email.getText().toString(), null);
+            this.duplicatedValidator(null, nickname.getText().toString());
         }
 
 
