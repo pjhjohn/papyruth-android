@@ -38,24 +38,25 @@ import timber.log.Timber;
 
 public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPageUnfocus{
     private ViewPagerController pagerController;
-
-    @InjectView(R.id.nextBtn) protected Button next;
-    @InjectView(R.id.entrance) protected ButtonFlat entrance;
-    @InjectView(R.id.university_item_image) protected SquareImageView univerity;
-    @InjectView(R.id.entrance_year_icon) protected ImageView entranceYearIcon;
-
-    private MaterialDialog entranceYearDialog;
-    private Integer entranceYear;
-    private Observable<Integer> entranceYearObservable;
-
-    private boolean isNext;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
     }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.pagerController = null;
+    }
 
+    @InjectView(R.id.nextBtn) protected Button next;
+    @InjectView(R.id.entrance) protected ButtonFlat entrance;
+    @InjectView(R.id.university_item_image) protected SquareImageView univerity;
+    @InjectView(R.id.entrance_year_icon) protected ImageView entranceYearIcon;
+    private MaterialDialog entranceYearDialog;
+    private Integer entranceYear;
+    private Observable<Integer> entranceYearObservable;
+    private boolean isNext;
     private CompositeSubscription subscription;
 
     @Override

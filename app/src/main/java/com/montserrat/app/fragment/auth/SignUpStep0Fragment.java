@@ -37,11 +37,6 @@ import timber.log.Timber;
 
 public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController pagerController;
-
-    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView universityList;
-    private CompositeSubscription subscriptions;
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -52,6 +47,9 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
         super.onDetach();
         this.pagerController = null;
     }
+
+    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView universityList;
+    private CompositeSubscription subscriptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

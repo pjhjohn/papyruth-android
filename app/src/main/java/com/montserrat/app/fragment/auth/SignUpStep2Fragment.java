@@ -41,18 +41,22 @@ import timber.log.Timber;
 
 public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus{
     private ViewPagerController pagerController;
-    @InjectView(R.id.email) protected EditText email;
-    @InjectView(R.id.nickname) protected EditText nickname;
-    @InjectView(R.id.icon_email) protected ImageView iconEmail;
-    @InjectView(R.id.icon_nickname) protected ImageView iconNickname;
-    @InjectView(R.id.nextBtn) protected Button next;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
     }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.pagerController = null;
+    }
 
+    @InjectView(R.id.email) protected EditText email;
+    @InjectView(R.id.nickname) protected EditText nickname;
+    @InjectView(R.id.icon_email) protected ImageView iconEmail;
+    @InjectView(R.id.icon_nickname) protected ImageView iconNickname;
+    @InjectView(R.id.nextBtn) protected Button next;
     private CompositeSubscription subscription;
 
     @Override

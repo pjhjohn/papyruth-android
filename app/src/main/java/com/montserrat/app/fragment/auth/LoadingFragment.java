@@ -41,6 +41,11 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
     }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.pagerController = null;
+    }
     @InjectView (R.id.loading_university_icon) protected ImageView universityIcon;
     @InjectView (R.id.loading_university_text) protected TextView universityText;
     @InjectView (R.id.loading_user_icon) protected ImageView userIcon;

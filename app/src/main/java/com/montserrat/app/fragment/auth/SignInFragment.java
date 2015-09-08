@@ -57,11 +57,15 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 public class SignInFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
     private ViewPagerController pagerController;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.pagerController = null;
     }
 
     @InjectView (R.id.email) protected AutoCompleteTextView emailField;

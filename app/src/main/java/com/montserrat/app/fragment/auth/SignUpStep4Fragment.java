@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
@@ -51,22 +52,23 @@ import timber.log.Timber;
 
 public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPageUnfocus{
     private ViewPagerController pagerController;
-
-    @InjectView(R.id.password) protected EditText password;
-    @InjectView(R.id.icon_password) protected ImageView iconPassword;
-    @InjectView(R.id.agree_term) protected TextView agreeTerm;
-    @InjectView(R.id.term_agree) protected CheckBox termAgree;
-
-    private MaterialDialog termPage;
-
-    private CharSequence termContents;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.pagerController = (ViewPagerController) activity;
     }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.pagerController = null;
+    }
 
+    @InjectView(R.id.password) protected EditText password;
+    @InjectView(R.id.icon_password) protected ImageView iconPassword;
+    @InjectView(R.id.agree_term) protected TextView agreeTerm;
+    @InjectView(R.id.term_agree) protected CheckBox termAgree;
+    private MaterialDialog termPage;
+    private CharSequence termContents;
     private CompositeSubscription subscription;
 
     @Override
@@ -127,8 +129,9 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         this.termPage = new MaterialDialog.Builder(this.getActivity())
             .title(R.string.term)
             .content(this.termContents)
-            .positiveText(R.string.agree_terms)
-            .negativeText(R.string.disagree)
+            .positiveText(R.string.agree)
+            .negativeText(R.string.back)
+            .buttonsGravity(GravityEnum.CENTER)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
@@ -148,7 +151,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(4);
-        FloatingActionControl.getInstance().hide(true);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_done).hide(true);
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
