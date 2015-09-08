@@ -12,9 +12,6 @@
     <color name="white">#ffffffff</color>
     <color name="nav_filter">#DE000000</color>
 
-    <color name="selected_gray">#88888888</color>
-    <color name="hover_gray">#88dddddd</color>
-
     <color name="point_overall">#222222</color>
     <color name="point_clarity">#41B7AE</color>
     <color name="point_gpa_satisfaction">#546B8D</color>

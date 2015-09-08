@@ -3,7 +3,6 @@ package com.montserrat.app.fragment.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -81,7 +80,7 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
                         @Override
                         public void onChildViewAdded(View parent, View child) {
                             if(Signup.getInstance().getUniversity_id() != null)
-                                ((CardView)universityList.getChildAt(getUniversityPosition())).setCardBackgroundColor(getResources().getColor(R.color.selected_gray));
+                                universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.bg_accent));
                         }
                         @Override public void onChildViewRemoved(View parent, View child) { }
                     });
@@ -147,11 +146,11 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         if(Signup.getInstance().getUniversity_id() != null) {
-            ((CardView)this.universityList.getChildAt(getUniversityPosition())).setCardBackgroundColor(getResources().getColor(R.color.transparent));
+            this.universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.transparent));
         }
         Signup.getInstance().setUniversity_id(this.items.get(position).id);
         Signup.getInstance().setImage_url(this.items.get(position).image_url);
-        ((CardView)this.universityList.getChildAt(position)).setCardBackgroundColor(getResources().getColor(R.color.selected_gray));
+        this.universityList.getChildAt(position).setBackgroundColor(getResources().getColor(R.color.bg_accent));
 
         this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
     }
