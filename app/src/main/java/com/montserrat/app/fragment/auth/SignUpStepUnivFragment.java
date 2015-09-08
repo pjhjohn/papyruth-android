@@ -2,8 +2,8 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +16,6 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.UniversityData;
 import com.montserrat.app.model.unique.Signup;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.UniversityAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -24,7 +23,6 @@ import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
-import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,19 +61,35 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
         this.subscriptions = new CompositeSubscription();
         this.setupRecyclerView(this.universityList);
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         this.subscriptions.add(
             RetrofitApi.getInstance().universities()
-            .map(response -> response.universities)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(universities -> {
-                this.items.clear();
-                this.items.addAll(universities);
-                this.adapter.notifyDataSetChanged();
-            })
+                .map(response -> response.universities)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(universities -> {
+                    this.items.clear();
+                    this.items.addAll(universities);
+                    this.adapter.notifyDataSetChanged();
+                    this.universityList.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                        @Override
+                        public void onChildViewAdded(View parent, View child) {
+                            if(Signup.getInstance().getUniversity_id() != null)
+                                ((CardView)universityList.getChildAt(getUniversityPosition())).setCardBackgroundColor(getResources().getColor(R.color.selected_gray));
+                        }
+                        @Override public void onChildViewRemoved(View parent, View child) { }
+                    });
+                }, error -> {
+                    Timber.d("get university list error : %s", error);
+                    error.printStackTrace();
+                })
         );
-        return view;
     }
 
     @Override
@@ -91,6 +105,7 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         if(this.subscriptions.isUnsubscribed())
             this.subscriptions = new CompositeSubscription();
+
         this.subscriptions.add(
             ViewObservable
                 .clicks(FloatingActionControl.getButton())
@@ -98,13 +113,12 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
                 }, error -> Timber.d("page change error %s", error))
         );
+
         if(Signup.getInstance().getUniversity_id() != null){
             FloatingActionControl.getInstance().show(true);
         }
+
         ((InputMethodManager)this.getActivity().getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.universityList.getWindowToken(), 2);
-        if(Signup.getInstance().getUniversity_id() != null){
-            this.universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.selected_gray));
-        }
     }
 
     @Override
@@ -133,10 +147,12 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         if(Signup.getInstance().getUniversity_id() != null) {
-            this.universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.transparent));
+            ((CardView)this.universityList.getChildAt(getUniversityPosition())).setCardBackgroundColor(getResources().getColor(R.color.transparent));
         }
         Signup.getInstance().setUniversity_id(this.items.get(position).id);
         Signup.getInstance().setImage_url(this.items.get(position).image_url);
+        ((CardView)this.universityList.getChildAt(position)).setCardBackgroundColor(getResources().getColor(R.color.selected_gray));
+
         this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
     }
 
