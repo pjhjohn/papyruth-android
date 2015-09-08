@@ -186,7 +186,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 .filter(unuse -> !this.termPage.isShowing())
                 .subscribe(
                 unused -> {
-//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_TERM, true)
+//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP5, true)
                     this.termPage.show();
                 })
         );

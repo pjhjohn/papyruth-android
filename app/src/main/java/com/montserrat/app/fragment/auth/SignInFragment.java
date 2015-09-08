@@ -73,7 +73,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_auth, container, false);
+        View view = inflater.inflate(R.layout.fragment_signin, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.initEmailAutoComplete();
@@ -173,7 +173,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
         subscriptions.add(ViewObservable.clicks(this.signup).subscribe(
             unused ->
 //                this.navigator.navigate(SignUpStepUnivFragment.class, true)
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_UNIV, true)
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP0, true)
         ));
     }
 

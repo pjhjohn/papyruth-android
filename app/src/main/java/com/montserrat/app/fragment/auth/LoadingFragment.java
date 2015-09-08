@@ -236,7 +236,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
         }
         if (this.timerFinished && this.responseActionFinished) {
             if ( validAuthorization == null ) return;
-            if (!validAuthorization) this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
+            if (!validAuthorization) this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNIN, false);
             else {
                 this.subscriptions.add(
                     RetrofitApi.getInstance().refresh_token(User.getInstance().getAccessToken())
@@ -252,7 +252,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                             },error -> {
                                 Timber.d("refresh error : %s", error);
                                 error.printStackTrace();
-                                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.AUTH, false);
+                                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNIN, false);
                             }
                         )
                 );

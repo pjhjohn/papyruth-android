@@ -36,7 +36,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
+public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController pagerController;
 
     @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView universityList;
@@ -56,7 +56,7 @@ public class SignUpStepUnivFragment extends RecyclerViewFragment<UniversityAdapt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_signup_univ, container, false);
+        View view = inflater.inflate(R.layout.fragment_signup_step0, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.setupRecyclerView(this.universityList);

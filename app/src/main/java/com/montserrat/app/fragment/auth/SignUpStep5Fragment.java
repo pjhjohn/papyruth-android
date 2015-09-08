@@ -26,7 +26,7 @@ import timber.log.Timber;
 /**
  * Created by SSS on 2015-07-26.
  */
-public class SignUpTermFragment extends Fragment implements OnPageFocus, OnPageUnfocus {
+public class SignUpStep5Fragment extends Fragment implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController pagerController;
 
     @InjectView(R.id.agree_term) protected TextView term;
@@ -42,7 +42,7 @@ public class SignUpTermFragment extends Fragment implements OnPageFocus, OnPageU
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_signup_term, container, false);
+        View view = inflater.inflate(R.layout.fragment_signup_step5, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
         return view;
