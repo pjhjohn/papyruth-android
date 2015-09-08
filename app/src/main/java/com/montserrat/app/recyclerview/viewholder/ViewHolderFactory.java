@@ -65,9 +65,9 @@ public class ViewHolderFactory {
             case ViewType.EVALUATION_ITEM_DETAIL : return new EvaluationItemDetailViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation_item_detail, parent, false), listener);
             case ViewType.COMMENT_ITEM           : return new          CommentItemViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_comment_item          , parent, false), listener);
             case ViewType.AUTO_COMPLETE_RESPONSE : return new AutoCompleteResponseViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_autocomplete_response , parent, false), listener);
-            case ViewType.UNIVERSITY             : return new           UniversityViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_university            , parent, false), listener);
-            case ViewType.MY_WRITTEN_EVALUATION  : return new         MyEvaluationViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written, parent, false), listener);
-            case ViewType.MY_WRITTEN_COMMENT     : return new            MyCommentViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written, parent, false), listener);
+            case ViewType.UNIVERSITY             : return new           UniversityViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_university_item       , parent, false), listener);
+            case ViewType.MY_WRITTEN_EVALUATION  : return new         MyEvaluationViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written            , parent, false), listener);
+            case ViewType.MY_WRITTEN_COMMENT     : return new            MyCommentViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written            , parent, false), listener);
 
             default : throw new RuntimeException(String.format("There doesn't exist a ViewHolder which has viewType#%d. Make sure to put correct viewType.", viewType));
         }

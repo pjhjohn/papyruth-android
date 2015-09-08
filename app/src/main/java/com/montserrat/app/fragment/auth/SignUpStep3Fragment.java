@@ -15,7 +15,7 @@ import android.widget.RadioGroup;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
-import com.montserrat.app.model.unique.Signup;
+import com.montserrat.app.model.unique.SignUpForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.rx.RxValidator;
@@ -28,15 +28,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
-
-import static com.montserrat.utils.support.rx.RxValidator.isValidRadioButton;
-import static com.montserrat.utils.support.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -103,9 +99,9 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
-        if(Signup.getInstance().getRealname() != null){
-            this.realname.setText(Signup.getInstance().getRealname());
-            ((RadioButton)this.gender.findViewById(this.gender.getChildAt((Signup.getInstance().getIs_boy()?0:1)).getId())).setChecked(true);
+        if(SignUpForm.getInstance().getRealname() != null){
+            this.realname.setText(SignUpForm.getInstance().getRealname());
+            ((RadioButton)this.gender.findViewById(this.gender.getChildAt((SignUpForm.getInstance().getIsBoy()?0:1)).getId())).setChecked(true);
             this.showFAC();
         }if(this.realname.length() > 0 && this.gender.getCheckedRadioButtonId() != -1){
             this.showFAC();
@@ -128,8 +124,8 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
             ViewObservable
                 .clicks(FloatingActionControl.getButton())
                 .subscribe(unused -> {
-                    Signup.getInstance().setRealname(this.realname.getText().toString());
-                    Signup.getInstance().setIs_boy(((RadioButton)this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
+                    SignUpForm.getInstance().setRealname(this.realname.getText().toString());
+                    SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
 
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
                 }, error -> {

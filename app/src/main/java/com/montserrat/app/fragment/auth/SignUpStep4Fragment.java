@@ -21,7 +21,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.error.SignupError;
-import com.montserrat.app.model.unique.Signup;
+import com.montserrat.app.model.unique.SignUpForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
@@ -153,8 +153,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
-        if(Signup.getInstance().getPassword() != null){
-            this.password.setText(Signup.getInstance().getPassword());
+        if(SignUpForm.getInstance().getPassword() != null){
+            this.password.setText(SignUpForm.getInstance().getPassword());
             this.showFAC();
         }else if(this.password.length() > 0 && this.termAgree.isChecked()){
             this.showFAC();
@@ -177,7 +177,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         this.subscription.add(FloatingActionControl
                 .clicks()
                 .subscribe(unused -> {
-                    Signup.getInstance().setPassword(this.password.getText().toString());
+                    SignUpForm.getInstance().setPassword(this.password.getText().toString());
                     this.register();
                 }, error -> Timber.d("page change error %s", error))
         );
@@ -198,13 +198,13 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     private void register(){
         this.subscription.add(
             RetrofitApi.getInstance().users_sign_up(
-                Signup.getInstance().getEmail(),
-                Signup.getInstance().getPassword(),
-                Signup.getInstance().getRealname(),
-                Signup.getInstance().getNickname(),
-                Signup.getInstance().getIs_boy(),
-                Signup.getInstance().getUniversity_id(),
-                Signup.getInstance().getEntrance_year()
+                SignUpForm.getInstance().getEmail(),
+                SignUpForm.getInstance().getPassword(),
+                SignUpForm.getInstance().getRealname(),
+                SignUpForm.getInstance().getNickname(),
+                SignUpForm.getInstance().getIsBoy(),
+                SignUpForm.getInstance().getUniversityId(),
+                SignUpForm.getInstance().getEntranceYear()
             )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -213,7 +213,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                     if (response.success) {
                         User.getInstance().update(response.user, response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                        Signup.getInstance().clear();
+                        SignUpForm.getInstance().clear();
                         SignUpStep4Fragment.this.getActivity().startActivity(new Intent(SignUpStep4Fragment.this.getActivity(), MainActivity.class));
                         SignUpStep4Fragment.this.getActivity().finish();
                     } else {

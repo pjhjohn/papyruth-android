@@ -1,47 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/baseline_x2">
 
     <com.montserrat.utils.view.SquareImageView
         android:id="@+id/university_item_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/baseline_x10"
+        android:layout_height="@dimen/baseline_x10"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
         android:src="@drawable/snu_logo"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="@dimen/baseline_x2"
+        android:layout_marginStart="@dimen/baseline_x2"/>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/frameLayout">
         <ImageView
-            android:id="@+id/icon_admission_year"
+            android:id="@+id/entrance_year_icon"
             android:src="@drawable/ic_light_history"
-            android:layout_marginLeft="16dp"
             android:layout_width="24dp"
-            android:layout_height="24dp"/>
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/empty"/>
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/entrance_year"
             android:textSize="20sp"
-            android:layout_marginLeft="72dp"
+            android:layout_marginLeft="@dimen/baseline_x7"
+            android:layout_marginStart="@dimen/baseline_x7"
             android:textColor="@color/primary_dark_material_dark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_gravity="center_vertical"/>
     </FrameLayout>
     <com.gc.materialdesign.views.ButtonFlat
         android:id="@+id/entrance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/entrance_prompt"
-        android:background="@color/primary_dark_material_dark"/>
-
+        android:textSize="20sp"
+        android:background="@color/primary_dark_material_dark"
+        android:layout_alignBottom="@+id/university_item_image"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/university_item_image"
+        android:layout_toStartOf="@+id/university_item_image"/>
 
     <Button
         android:id="@+id/nextBtn"
         android:text="next"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

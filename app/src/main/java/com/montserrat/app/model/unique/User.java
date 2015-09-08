@@ -1,9 +1,6 @@
 package com.montserrat.app.model.unique;
 
-import com.montserrat.app.model.FavoriteData;
 import com.montserrat.app.model.UserData;
-
-import java.util.List;
 
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -94,8 +91,8 @@ public class User {
     public Integer getEntranceYear() {
         return this.entrance_year;
     }
-    public void setEntranceYear (Integer admission_year) {
-        this.entrance_year = admission_year;
+    public void setEntranceYear (Integer entrance_year) {
+        this.entrance_year = entrance_year;
     }
     public boolean getGenderIsBoy() {
         return this.is_boy;

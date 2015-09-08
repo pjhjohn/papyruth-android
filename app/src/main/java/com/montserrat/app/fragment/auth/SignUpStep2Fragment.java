@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
-import com.montserrat.app.model.unique.Signup;
+import com.montserrat.app.model.unique.SignUpForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -133,9 +133,9 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
-        if(Signup.getInstance().getNickname() != null){
-            this.email.setText(Signup.getInstance().getEmail());
-            this.nickname.setText(Signup.getInstance().getNickname());
+        if(SignUpForm.getInstance().getNickname() != null){
+            this.email.setText(SignUpForm.getInstance().getEmail());
+            this.nickname.setText(SignUpForm.getInstance().getNickname());
             this.duplicatedValidator(email.getText().toString(), null);
             this.duplicatedValidator(null, nickname.getText().toString());
             this.showFAC();
@@ -174,8 +174,8 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             ViewObservable
                 .clicks(FloatingActionControl.getButton())
                 .subscribe(unused -> {
-                    Signup.getInstance().setEmail(this.email.getText().toString());
-                    Signup.getInstance().setNickname(this.nickname.getText().toString());
+                    SignUpForm.getInstance().setEmail(this.email.getText().toString());
+                    SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
                     this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
                 }, error -> Timber.d("page change error %s", error))
         );

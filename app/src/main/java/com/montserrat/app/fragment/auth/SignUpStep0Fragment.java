@@ -14,7 +14,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.UniversityData;
-import com.montserrat.app.model.unique.Signup;
+import com.montserrat.app.model.unique.SignUpForm;
 import com.montserrat.app.recyclerview.adapter.UniversityAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -79,7 +79,7 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
                     this.universityList.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
                         @Override
                         public void onChildViewAdded(View parent, View child) {
-                            if(Signup.getInstance().getUniversity_id() != null)
+                            if(SignUpForm.getInstance().getUniversityId() != null)
                                 universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.bg_accent));
                         }
                         @Override public void onChildViewRemoved(View parent, View child) { }
@@ -113,7 +113,7 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
                 }, error -> Timber.d("page change error %s", error))
         );
 
-        if(Signup.getInstance().getUniversity_id() != null){
+        if(SignUpForm.getInstance().getUniversityId() != null){
             FloatingActionControl.getInstance().show(true);
         }
 
@@ -127,7 +127,7 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     public int getUniversityPosition(){
         for(int i = 0; i < items.size(); i++){
-            if(items.get(i).id == Signup.getInstance().getUniversity_id())
+            if(items.get(i).id == SignUpForm.getInstance().getUniversityId())
                 return i;
         }
         return -1;
@@ -145,11 +145,11 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(Signup.getInstance().getUniversity_id() != null) {
+        if(SignUpForm.getInstance().getUniversityId() != null) {
             this.universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.transparent));
         }
-        Signup.getInstance().setUniversity_id(this.items.get(position).id);
-        Signup.getInstance().setImage_url(this.items.get(position).image_url);
+        SignUpForm.getInstance().setUniversityId(this.items.get(position).id);
+        SignUpForm.getInstance().setImageUrl(this.items.get(position).image_url);
         this.universityList.getChildAt(position).setBackgroundColor(getResources().getColor(R.color.bg_accent));
 
         this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);

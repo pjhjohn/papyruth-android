@@ -1,15 +1,13 @@
 package com.montserrat.app.model.unique;
 
-import rx.subjects.BehaviorSubject;
-
 /**
  * Created by SSS on 2015-07-19.
  */
-public class Signup {
-    private static Signup instance = null;
-    public static synchronized Signup getInstance () {
-        if ( Signup.instance == null ) Signup.instance = new Signup();
-        return Signup.instance;
+public class SignUpForm {
+    private static SignUpForm instance = null;
+    public static synchronized SignUpForm getInstance () {
+        if ( SignUpForm.instance == null ) SignUpForm.instance = new SignUpForm();
+        return SignUpForm.instance;
     }
 
     private String  realname;
@@ -20,7 +18,7 @@ public class Signup {
     private String image_url;
     private String  password;
     private Integer entrance_year;
-    public Signup(){
+    public SignUpForm(){
         this.clear();
     }
     public void clear(){
@@ -35,20 +33,20 @@ public class Signup {
     public String getRealname() {return realname;}
     public String getNickname() {return nickname;}
     public String getEmail() {return email;}
-    public Boolean getIs_boy() {return is_boy;}
-    public Integer getUniversity_id() {return university_id;}
+    public Boolean getIsBoy() {return is_boy;}
+    public Integer getUniversityId() {return university_id;}
     public String getPassword() {return password;}
-    public Integer getEntrance_year() {return entrance_year;}
-    public String getImage_url() {return image_url;}
+    public Integer getEntranceYear() {return entrance_year;}
+    public String getImageUrl() {return image_url;}
 
     public void setRealname(String realname) {this.realname = realname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
     public void setEmail(String email) {this.email = email;}
-    public void setIs_boy(Boolean is_boy) {this.is_boy = is_boy;}
-    public void setUniversity_id(Integer university_id) {this.university_id = university_id;}
+    public void setIsBoy(Boolean is_boy) {this.is_boy = is_boy;}
+    public void setUniversityId(Integer university_id) {this.university_id = university_id;}
     public void setPassword(String password) {this.password = password;}
-    public void setEntrance_year(Integer entrance_year) {this.entrance_year = entrance_year;}
-    public void setImage_url(String image_url) {this.image_url = image_url;}
+    public void setEntranceYear(Integer entrance_year) {this.entrance_year = entrance_year;}
+    public void setImageUrl(String image_url) {this.image_url = image_url;}
 
     @Override
     public String toString() {

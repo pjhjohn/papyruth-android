@@ -48,7 +48,7 @@
     <string name="field_invalid_realname">이름이 너무 깁니다</string>
     <string name="field_invalid_nickname">닉네임이 너무 깁니다</string>
     <string name="field_invalid_gender">존재하지 않는 성별입니다</string>
-    <string name="field_invalid_admission_year">해당 입학년도는 지원되지 않습니다</string>
+    <string name="field_invalid_entrance_year">해당 입학년도는 지원되지 않습니다</string>
 
     <!--common-->
     <string name="next">다음</string>
