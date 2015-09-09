@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="horizontal"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
-
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:padding="@dimen/baseline_x2">
         <ImageView
             android:id="@+id/icon_gender"
-            android:src="@drawable/ic_light_gender"
+            android:layout_width="@dimen/baseline_x3"
+            android:layout_height="@dimen/baseline_x3"
             android:layout_gravity="center_vertical"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"/>
-
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/empty"
+            android:src="@drawable/ic_light_gender"/>
         <RadioGroup
             android:id="@+id/gender"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/icon_gender"
+            android:layout_toEndOf="@+id/icon_gender"
+            android:layout_marginLeft="@dimen/baseline_x4"
+            android:layout_marginStart="@dimen/baseline_x4"
             android:orientation="horizontal">
-
             <RadioButton
                 android:layout_weight="0.5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:textColor="@color/primary_dark_material_light"
-
                 android:text="@string/gender_male"
+                android:textSize="16sp"
                 android:id="@+id/gender_male"/>
             <RadioButton
                 android:layout_weight="0.5"
@@ -43,36 +46,39 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/primary_dark_material_light"
                 android:text="@string/gender_female"
+                android:textSize="16sp"
                 android:id="@+id/gender_female"/>
         </RadioGroup>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:padding="@dimen/baseline_x2">
         <ImageView
             android:id="@+id/icon_realname"
-            android:src="@drawable/ic_light_person"
+            android:layout_width="@dimen/baseline_x3"
+            android:layout_height="@dimen/baseline_x3"
             android:layout_gravity="center_vertical"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"/>
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/empty"
+            android:src="@drawable/ic_light_person"/>
         <EditText
             android:id="@+id/realname"
-            android:background="@android:color/transparent"
+            android:background="@color/transparent"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:inputType="text|textNoSuggestions"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/icon_realname"
+            android:layout_toEndOf="@+id/icon_realname"
+            android:layout_marginLeft="@dimen/baseline_x4"
+            android:layout_marginStart="@dimen/baseline_x4"
+            android:inputType="text"
             android:hint="@string/hint_realname"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
-    </LinearLayout>
-    <Button
-        android:id="@+id/nextBtn"
-        android:text="next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+            android:textSize="16sp"/>
+    </RelativeLayout>
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -55,7 +54,6 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     @InjectView(R.id.realname) protected EditText realname;
     @InjectView(R.id.icon_gender) protected ImageView iconGender;
     @InjectView(R.id.icon_realname) protected ImageView iconRealname;
-    @InjectView(R.id.nextBtn) protected Button next;
     private CompositeSubscription subscription;
 
     @Override
@@ -78,7 +76,6 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconGender);
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconRealname);
-
     }
 
     public void showFAC() {
@@ -97,51 +94,40 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(3);
-        FloatingActionControl.getInstance().hide(true);
-
-        if(this.subscription.isUnsubscribed())
-            this.subscription = new CompositeSubscription();
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
+        if(this.subscription.isUnsubscribed()) this.subscription = new CompositeSubscription();
 
         if(SignUpForm.getInstance().getRealname() != null){
             this.realname.setText(SignUpForm.getInstance().getRealname());
             ((RadioButton)this.gender.findViewById(this.gender.getChildAt((SignUpForm.getInstance().getIsBoy()?0:1)).getId())).setChecked(true);
             this.showFAC();
-        }if(this.realname.length() > 0 && this.gender.getCheckedRadioButtonId() != -1){
+        }
+
+        if(this.realname.length() > 0 && this.gender.getCheckedRadioButtonId() != -1){
             this.showFAC();
         }
 
-        this.subscription.add(
-            WidgetObservable
-                .text(this.realname)
-                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    String validateName = RxValidator.getErrorMessageRealname.call(event.text().toString());
-                    this.realname.setError(validateName);
-                    this.showFAC();
-                })
+        this.subscription.add(WidgetObservable
+            .text(this.realname)
+            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .subscribe(event -> {
+                String validateName = RxValidator.getErrorMessageRealname.call(event.text().toString());
+                this.realname.setError(validateName);
+                this.showFAC();
+            })
         );
-        this.gender.setOnCheckedChangeListener((group, id) -> {
-            this.showFAC();
-        });
-        this.subscription.add(
-            ViewObservable
-                .clicks(FloatingActionControl.getButton())
-                .subscribe(unused -> {
-                    SignUpForm.getInstance().setRealname(this.realname.getText().toString());
-                    SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
+        this.gender.setOnCheckedChangeListener((group, id) -> this.showFAC());
+        this.subscription.add(ViewObservable
+            .clicks(FloatingActionControl.getButton())
+            .subscribe(unused -> {
+                SignUpForm.getInstance().setRealname(this.realname.getText().toString());
+                SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
 
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-                }, error -> {
-                    Timber.d("page change error %s", error);
-                    error.printStackTrace();
-                })
-        );
-
-        this.subscription.add(
-            ViewObservable.clicks(this.next)
-                .subscribe(u -> {
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-                })
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+            }, error -> {
+                Timber.d("page change error %s", error);
+                error.printStackTrace();
+            })
         );
     }
 

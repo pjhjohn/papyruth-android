@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -56,7 +55,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @InjectView(R.id.nickname) protected EditText nickname;
     @InjectView(R.id.icon_email) protected ImageView iconEmail;
     @InjectView(R.id.icon_nickname) protected ImageView iconNickname;
-    @InjectView(R.id.nextBtn) protected Button next;
     private CompositeSubscription subscription;
 
     @Override
@@ -86,30 +84,27 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
     private String duplicatedValidator(String email, String nickcname){
         String errorMsg = null;
-        this.subscription.add(
-            RetrofitApi.getInstance().validate((email != null ? AppConst.Preference.EMAIL : AppConst.Preference.NICKNAME), (email != null ? email : nickcname))
-                .map(validator -> validator.validation)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    success -> {
-                        if(success) {
-                            if (email != null) isDuplicateEmail = true;
-                            else isDuplicateNickname = true;
-                        }else{
-                            if(email != null) {
-                                this.email.setError(getResources().getString(R.string.duplicated_email));
-                            }else {
-                                this.nickname.setError(getResources().getString(R.string.duplicated_nickname));
-                            }
-                        }
-                        this.showFAC();
-                    },
-                    error -> {
-                        Timber.d("duplicate validator error : %s", error);
-                        error.printStackTrace();
+        this.subscription.add(RetrofitApi.getInstance()
+            .validate((email != null ? AppConst.Preference.EMAIL : AppConst.Preference.NICKNAME), (email != null ? email : nickcname))
+            .map(validator -> validator.validation)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                success -> {
+                    if(success) {
+                        if (email != null) isDuplicateEmail = true;
+                        else isDuplicateNickname = true;
+                    } else {
+                        if (email != null) this.email.setError(getResources().getString(R.string.duplicated_email));
+                        else this.nickname.setError(getResources().getString(R.string.duplicated_nickname));
                     }
-                )
+                    this.showFAC();
+                },
+                error -> {
+                    Timber.d("duplicate validator error : %s", error);
+                    error.printStackTrace();
+                }
+            )
         );
         return errorMsg;
     }
@@ -132,7 +127,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageFocused() {
         ((AuthActivity)this.getActivity()).signUpStep(2);
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
@@ -149,24 +144,24 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         }
 
 
-        this.subscription.add(
-            Observable.merge(
+        this.subscription.add(Observable
+            .merge(
                 WidgetObservable
-                    .text(this.email)
-                    .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                    .doOnNext(event -> {
-                        isDuplicateEmail = false;
-                        this.duplicatedValidator(event.text().toString(), null);
-                        this.email.setError(RxValidator.getErrorMessageEmail.call(event.text().toString()));
-                    }),
+                .text(this.email)
+                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .doOnNext(event -> {
+                    isDuplicateEmail = false;
+                    this.duplicatedValidator(event.text().toString(), null);
+                    this.email.setError(RxValidator.getErrorMessageEmail.call(event.text().toString()));
+                }),
                 WidgetObservable
-                    .text(this.nickname)
-                    .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                    .doOnNext(event -> {
-                        isDuplicateNickname = false;
-                        this.duplicatedValidator(null, event.text().toString());
-                        this.nickname.setError(RxValidator.getErrorMessageNickname.call(event.text().toString()));
-                    })
+                .text(this.nickname)
+                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .doOnNext(event -> {
+                    isDuplicateNickname = false;
+                    this.duplicatedValidator(null, event.text().toString());
+                    this.nickname.setError(RxValidator.getErrorMessageNickname.call(event.text().toString()));
+                })
             ).subscribe(event -> {
                 Timber.d("event class", event.getClass());
                 Timber.d("error msg : %s >< %s", this.email.getError(), this.nickname.getError());
@@ -174,20 +169,13 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             })
         );
 
-        this.subscription.add(
-            ViewObservable
-                .clicks(FloatingActionControl.getButton())
-                .subscribe(unused -> {
-                    SignUpForm.getInstance().setEmail(this.email.getText().toString());
-                    SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                }, error -> Timber.d("page change error %s", error))
-        );
-        this.subscription.add(
-            ViewObservable.clicks(this.next)
-                .subscribe(u -> {
-                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                })
+        this.subscription.add(ViewObservable
+            .clicks(FloatingActionControl.getButton())
+            .subscribe(unused -> {
+                SignUpForm.getInstance().setEmail(this.email.getText().toString());
+                SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+            }, error -> Timber.d("page change error %s", error))
         );
     }
 

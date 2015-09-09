@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -49,7 +48,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
         this.pagerController = null;
     }
 
-    @InjectView(R.id.nextBtn) protected Button next;
     @InjectView(R.id.entrance) protected ButtonFlat entrance;
     @InjectView(R.id.university_item_image) protected SquareImageView univerity;
     @InjectView(R.id.entrance_year_icon) protected ImageView entranceYearIcon;
@@ -113,7 +111,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
             this.isNext = true;
         }
 
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
         this.subscription.add(ViewObservable.clicks(this.entrance).filter(unused -> !this.entranceYearDialog.isShowing()).subscribe(unused -> this.entranceYearDialog.show()));
 
         this.subscription.add(this.entranceYearObservable
@@ -131,17 +129,9 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
         this.subscription.add(ViewObservable
             .clicks(FloatingActionControl.getButton())
             .subscribe(unused -> {
-                if (!isNext)
-                    SignUpForm.getInstance().setEntranceYear(this.entranceYear);
+                if (!isNext) SignUpForm.getInstance().setEntranceYear(this.entranceYear);
                 this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
             }, error -> Timber.d("page change error %s", error))
-        );
-
-        this.subscription.add(ViewObservable
-            .clicks(this.next)
-            .subscribe(u -> {
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
-            })
         );
     }
 

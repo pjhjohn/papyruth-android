@@ -65,27 +65,27 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
     public void onResume() {
         super.onResume();
 
-        this.subscriptions.add(
-            RetrofitApi.getInstance().universities()
-                .map(response -> response.universities)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(universities -> {
-                    this.items.clear();
-                    this.items.addAll(universities);
-                    this.adapter.notifyDataSetChanged();
-                    this.universityList.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
-                        @Override
-                        public void onChildViewAdded(View parent, View child) {
-                            if(SignUpForm.getInstance().getUniversityId() != null)
-                                universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.bg_accent));
-                        }
-                        @Override public void onChildViewRemoved(View parent, View child) { }
-                    });
-                }, error -> {
-                    Timber.d("get university list error : %s", error);
-                    error.printStackTrace();
-                })
+        this.subscriptions.add(RetrofitApi.getInstance()
+            .universities()
+            .map(response -> response.universities)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(universities -> {
+                this.items.clear();
+                this.items.addAll(universities);
+                this.adapter.notifyDataSetChanged();
+                this.universityList.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                    @Override
+                    public void onChildViewAdded(View parent, View child) {
+                        if(SignUpForm.getInstance().getUniversityId() != null)
+                            universityList.getChildAt(getUniversityPosition()).setBackgroundColor(getResources().getColor(R.color.bg_accent));
+                    }
+                    @Override public void onChildViewRemoved(View parent, View child) { }
+                });
+            }, error -> {
+                Timber.d("get university list error : %s", error);
+                error.printStackTrace();
+            })
         );
     }
 
