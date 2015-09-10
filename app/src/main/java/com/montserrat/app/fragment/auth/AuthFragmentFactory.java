@@ -20,8 +20,6 @@ public class AuthFragmentFactory implements IFragmentFactory{
     public Fragment create(int position) {
         Fragment fragment = null;
         switch(position) {
-            case AppConst.ViewPager.Auth.SPLASH       : fragment = new SplashFragment();        break;
-            case AppConst.ViewPager.Auth.LOADING      : fragment = new LoadingFragment();       break;
             case AppConst.ViewPager.Auth.SIGNIN       : fragment = new SignInFragment();        break;
             case AppConst.ViewPager.Auth.SIGNUP_STEP0 : fragment = new SignUpStep0Fragment();   break;
             case AppConst.ViewPager.Auth.SIGNUP_STEP1 : fragment = new SignUpStep1Fragment();   break;

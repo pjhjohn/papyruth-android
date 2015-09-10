@@ -55,7 +55,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.pagerController = ((AuthActivity) activity).getViewPagerController();
     }
     @Override
     public void onDetach() {
@@ -150,7 +150,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUpStep(4);
         FloatingActionControl.getInstance().setControl(R.layout.fab_done).hide(true);
 
         if(this.subscription.isUnsubscribed())

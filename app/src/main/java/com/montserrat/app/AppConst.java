@@ -55,15 +55,13 @@ public class AppConst {
     public static class ViewPager {
         /* For Auth Activity */
         public static class Auth {
-            public static final int LENGTH       = 8;
-            public static final int SPLASH       = 0;
-            public static final int LOADING      = 1;
-            public static final int SIGNIN       = 2;
-            public static final int SIGNUP_STEP0 = 3;
-            public static final int SIGNUP_STEP1 = 4;
-            public static final int SIGNUP_STEP2 = 5;
-            public static final int SIGNUP_STEP3 = 6;
-            public static final int SIGNUP_STEP4 = 7;
+            public static final int LENGTH       = 6;
+            public static final int SIGNIN       = 0;
+            public static final int SIGNUP_STEP0 = 1;
+            public static final int SIGNUP_STEP1 = 2;
+            public static final int SIGNUP_STEP2 = 3;
+            public static final int SIGNUP_STEP3 = 4;
+            public static final int SIGNUP_STEP4 = 5;
         }
     }
 

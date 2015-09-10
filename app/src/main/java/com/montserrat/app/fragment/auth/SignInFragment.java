@@ -60,7 +60,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.pagerController = ((AuthActivity) activity).getViewPagerController();
     }
     @Override
     public void onDetach() {
@@ -92,60 +92,14 @@ public class SignInFragment extends Fragment implements OnPageFocus {
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
-    private void doRequest() {
-        this.progress.setVisibility(View.VISIBLE);
-        this.subscriptions.add(
-            RetrofitApi.getInstance().users_sign_in(emailField.getText().toString(), passwordField.getText().toString())
-            .map(response -> {
-                User.getInstance().update(response.user, response.access_token);
-                AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                return response.success;
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                success -> {
-                    this.progress.setVisibility(View.GONE);
-                    if (success) {
-                        this.subscriptions.add(
-                            RetrofitApi.getInstance().refresh_token(User.getInstance().getAccessToken())
-                                .map(user -> user.access_token)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(token -> {
-                                        User.getInstance().setAccessToken(token);
-                                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
-                                        this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                                        this.getActivity().finish();
-                                    },error -> {
-                                        Timber.d("refresh error : %s", error);
-                                        error.printStackTrace();
-                                    }
-                                )
-                        );
-                    } else {
-                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                    }
-                },
-                error -> {
-                    this.progress.setVisibility(View.GONE);
-                    if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 403:
-                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                                break;
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                        }
-                    }
-                }
-            )
-        );
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(this.getUserVisibleHint()) onPageFocused();
     }
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUpStep(-1);
         FloatingActionControl.getInstance().clear();
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
@@ -171,14 +125,63 @@ public class SignInFragment extends Fragment implements OnPageFocus {
                     return !this.signin.isEnabled();
                 }))
             )
-            .filter(trigger -> trigger)
-            .subscribe(unused -> doRequest()));
+                .filter(trigger -> trigger)
+                .subscribe(unused -> doRequest()));
 
         subscriptions.add(ViewObservable.clicks(this.signup).subscribe(
-            unused ->
-//                this.navigator.navigate(SignUpStepUnivFragment.class, true)
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP0, true)
+            unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP0, true)
         ));
+    }
+
+    private void doRequest() {
+        this.progress.setVisibility(View.VISIBLE);
+        this.subscriptions.add(RetrofitApi.getInstance()
+            .users_sign_in(emailField.getText().toString(), passwordField.getText().toString())
+            .map(response -> {
+                User.getInstance().update(response.user, response.access_token);
+                AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+                return response.success;
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                success -> {
+                    this.progress.setVisibility(View.GONE);
+                    if (success) {
+                        this.subscriptions.add(RetrofitApi.getInstance()
+                            .refresh_token(User.getInstance().getAccessToken())
+                            .map(user -> user.access_token)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(token -> {
+                                    User.getInstance().setAccessToken(token);
+                                    AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
+                                    this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+                                    this.getActivity().finish();
+                                }, error -> {
+                                    Timber.d("refresh error : %s", error);
+                                    error.printStackTrace();
+                                }
+                            )
+                        );
+                    } else {
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    this.progress.setVisibility(View.GONE);
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            case 403:
+                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        }
+                    }
+                }
+            )
+        );
     }
 
     private interface ProfileQuery {

@@ -10,15 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.UniversityData;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.Statistics;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
@@ -34,18 +31,19 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class LoadingFragment extends Fragment implements OnPageFocus {
-    private ViewPagerController pagerController;
+public class LoadingFragment extends Fragment {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.navigator = (Navigator) activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.pagerController = null;
+        this.navigator = null;
     }
+
     @InjectView (R.id.loading_university_icon) protected ImageView universityIcon;
     @InjectView (R.id.loading_university_text) protected TextView universityText;
     @InjectView (R.id.loading_user_icon) protected ImageView userIcon;
@@ -69,8 +67,8 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
     }
 
     @Override
-    public void onPageFocused () {
-        ((AuthActivity)this.getActivity()).signUpStep(5);
+    public void onResume () {
+        super.onResume();
         if(Statistics.getInstance().getUniversity() == null) {
             Picasso.with(this.getActivity()).load(R.drawable.ic_light_intro_house).into(this.universityIcon);
             this.universityText.setText(String.format("%d", Statistics.getInstance().getUniversityCount()));
@@ -92,7 +90,7 @@ public class LoadingFragment extends Fragment implements OnPageFocus {
                 if(Statistics.getInstance().getUniversity() != null /* Condition that user has been successfully authenticated */) {
                     this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
                     this.getActivity().finish();
-                } else this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNIN, false);
+                } else this.navigator.navigate(AuthFragment.class, false);
             })
         );
     }

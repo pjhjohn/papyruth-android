@@ -40,7 +40,7 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.pagerController = ((AuthActivity) activity).getViewPagerController();
     }
     @Override
     public void onDetach() {
@@ -101,7 +101,6 @@ public class SignUpStep1Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUpStep(1);
         Picasso.with(this.getActivity().getBaseContext()).load(SignUpForm.getInstance().getImageUrl()).into(this.univerity);
         if(this.subscription.isUnsubscribed()) this.subscription = new CompositeSubscription();
 

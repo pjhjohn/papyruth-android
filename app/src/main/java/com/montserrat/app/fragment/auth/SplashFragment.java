@@ -10,13 +10,11 @@ import android.view.ViewGroup;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.Statistics;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
-import com.montserrat.utils.view.viewpager.OnPageFocus;
-import com.montserrat.utils.view.viewpager.ViewPagerController;
+import com.montserrat.utils.view.navigator.Navigator;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,17 +30,17 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SplashFragment extends Fragment implements OnPageFocus {
-    private ViewPagerController pagerController;
+public class SplashFragment extends Fragment {
+    private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.navigator = (Navigator) activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.pagerController = null;
+        this.navigator = null;
     }
 
     private CompositeSubscription subscriptions;
@@ -61,12 +59,6 @@ public class SplashFragment extends Fragment implements OnPageFocus {
     @Override
     public void onResume() {
         super.onResume();
-        if(this.getUserVisibleHint()) onPageFocused();
-    }
-
-    @Override
-    public void onPageFocused () {
-        ((AuthActivity)this.getActivity()).signUpStep(5);
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         this.subscriptions.add(RetrofitApi.getInstance().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
@@ -116,24 +108,24 @@ public class SplashFragment extends Fragment implements OnPageFocus {
         } else timerPending = false;
 
         if (timerPending||requestPending) return;
-        if (authFailed) this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.LOADING, false);
+        if (authFailed) this.navigator.navigate(LoadingFragment.class, false);
         else {
-            this.subscriptions.add(
-                RetrofitApi.getInstance().refresh_token(User.getInstance().getAccessToken())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        response -> {
-                            User.getInstance().setAccessToken(response.access_token);
-                            AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.LOADING, false);
-                        },
-                        error -> {
-                            Timber.d("refresh error : %s", error);
-                            error.printStackTrace();
-                            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.LOADING, false);
-                        }
-                    )
+            this.subscriptions.add(RetrofitApi.getInstance()
+                .refresh_token(User.getInstance().getAccessToken())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    response -> {
+                        User.getInstance().setAccessToken(response.access_token);
+                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+                        this.navigator.navigate(LoadingFragment.class, false);
+                    },
+                    error -> {
+                        Timber.d("refresh error : %s", error);
+                        error.printStackTrace();
+                        this.navigator.navigate(LoadingFragment.class, false);
+                    }
+                )
             );
         }
     };

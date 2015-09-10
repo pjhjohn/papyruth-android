@@ -119,7 +119,7 @@ public class FragmentNavigator implements Navigator {
                     if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
                     if(navigationDrawer!= null) navigationDrawer.setOnNavigationIconClickListener(null);
                     backed = true;
-                } if(this.manager.getBackStackEntryCount() == 1){
+                } else if(this.manager.getBackStackEntryCount() == 1) {
                     if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
                     if(navigationDrawer!= null) navigationDrawer.setOnNavigationIconClickListener(null);
                     backed = false;

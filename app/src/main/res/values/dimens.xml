@@ -27,4 +27,5 @@
     <dimen name="baseline_x8">64dp</dimen>
     <dimen name="baseline_x9">72dp</dimen>
     <dimen name="baseline_x10">80dp</dimen>
+    <dimen name="baseline_x20">160dp</dimen>
 </resources>

@@ -1,4 +1,4 @@
-<FrameLayout
+<com.montserrat.utils.view.navigator.NavigatableFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -98,7 +98,4 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
     </RelativeLayout>
-</FrameLayout>
-
-
-
+</com.montserrat.utils.view.navigator.NavigatableFrameLayout>

@@ -40,7 +40,7 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = (ViewPagerController) activity;
+        this.pagerController = ((AuthActivity) activity).getViewPagerController();
     }
     @Override
     public void onDetach() {
@@ -98,7 +98,6 @@ public class SignUpStep0Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     public void onPageFocused() {
-        ((AuthActivity)this.getActivity()).signUpStep(0);
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         if(this.subscriptions.isUnsubscribed())
             this.subscriptions = new CompositeSubscription();
