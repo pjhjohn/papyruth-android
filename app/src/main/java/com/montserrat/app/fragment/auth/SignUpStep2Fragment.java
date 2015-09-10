@@ -148,7 +148,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             .merge(
                 WidgetObservable
                 .text(this.email)
-                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .doOnNext(event -> {
                     isDuplicateEmail = false;
                     this.duplicatedValidator(event.text().toString(), null);
@@ -156,7 +156,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                 }),
                 WidgetObservable
                 .text(this.nickname)
-                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .doOnNext(event -> {
                     isDuplicateNickname = false;
                     this.duplicatedValidator(null, event.text().toString());
