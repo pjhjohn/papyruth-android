@@ -5,57 +5,71 @@
     android:layout_height="match_parent">
     <include layout="@layout/progress"/>
     <RelativeLayout
-        android:id="@+id/content_auth"
+        android:id="@+id/email_signin_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:layout_gravity="center">
-
-        <LinearLayout android:id="@+id/email_signin_form"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|center_vertical"
+        android:padding="@dimen/baseline_x2">
+        <AutoCompleteTextView
+            android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|center_vertical"
-            android:orientation="vertical">
-            <AutoCompleteTextView
-                android:id="@+id/email"
-                android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x5"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/baseline_x1"
+            android:hint="@string/hint_email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:background="@drawable/background_edittext"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x5"
+            android:layout_below="@+id/email"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/baseline_x1"
+            android:hint="@string/hint_password"
+            android:imeActionLabel="@string/action_sign_in"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:background="@drawable/background_edittext"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/password"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal">
+
+            <com.gc.materialdesign.views.ButtonFlat
+                android:id="@+id/sign_in"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_email"
-                android:imeOptions="actionNext"
-                android:inputType="textEmailAddress"
-                android:singleLine="true"/>
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
+                android:layout_weight="0.5"
+                android:background="#ffffff"
+                android:text="@string/action_sign_in"
+                android:layout_gravity="bottom"/>
+            <com.gc.materialdesign.views.ButtonFlat
+                android:id="@+id/sign_up"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_password"
-                android:imeActionLabel="@string/action_sign_in"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:singleLine="true"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <com.gc.materialdesign.views.ButtonFlat
-                    android:id="@+id/sign_in"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:background="#ffffff"
-                    android:text="@string/action_sign_in"/>
-                <com.gc.materialdesign.views.ButtonFlat
-                    android:id="@+id/sign_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:background="@color/fg_normal"
-                    android:text="@string/action_sign_up"/>
-            </LinearLayout>
+                android:layout_weight="0.5"
+                android:background="@color/fg_normal"
+                android:text="@string/action_sign_up"
+                android:layout_gravity="bottom"/>
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>
