@@ -34,7 +34,6 @@ dependencies {
 //    compile 'com.android.support:palette-v7:23.0.1'
 //    compile 'com.android.support:design:23.0.1'
 //    compile 'com.google.android.gms:play-services-analytics:7.8.0'
-    compile 'com.google.android.gms:play-services:6.5.87'
     /* Utility */
     compile 'io.reactivex:rxandroid:0.24.0'
     compile 'com.jakewharton.timber:timber:3.0.2'
