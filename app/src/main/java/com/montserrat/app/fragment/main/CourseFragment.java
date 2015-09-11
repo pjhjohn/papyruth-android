@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;

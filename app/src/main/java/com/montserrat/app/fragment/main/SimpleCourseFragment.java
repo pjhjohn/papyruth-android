@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -64,7 +63,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.toolbar.setTitle(R.string.toolbar_search);
         this.toolbar.setTitleTextColor(Color.WHITE);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         this.refresh.setEnabled(true);
 
         this.search = ToolbarSearch.getInstance().getAutoCompletableSearchView();

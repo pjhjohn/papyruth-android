@@ -99,7 +99,7 @@ public class EvaluationStep2Fragment extends Fragment {
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         toolbar.setTitleTextColor(Color.WHITE);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
         return view;
     }
 

@@ -6,8 +6,6 @@ import android.content.res.Resources;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,7 +19,7 @@ public class AppManager {
     /* Singleton */
     private static AppManager instance;
     private AppManager() {
-        mainToolbarColor = AppConst.COLOR_POINT_CLARITY;
+        mainToolbarColor = AppConst.COLOR_POINT_EASINESS;
     }
     public static AppManager getInstance() {
         if ( instance == null ) return instance = new AppManager();

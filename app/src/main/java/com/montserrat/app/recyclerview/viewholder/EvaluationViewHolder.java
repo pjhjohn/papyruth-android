@@ -173,7 +173,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         else this.setStatus(VoteStatus.DOWN);
 
         this.setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
-//        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_EASINESS)).into(this.modify);
+//        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_CLARITY)).into(this.modify);
         if(User.getInstance().getId().equals(evaluation.getUserId())){
             this.modify.setVisibility(View.VISIBLE);
             this.modify.setOnClickListener(this);

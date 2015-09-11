@@ -130,7 +130,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         this.evaluatorCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
         Picasso.with(context).load(R.drawable.ic_light_bookmark)
             .transform(
-                new ColorFilterTransformation(course.getIsFavorite()? AppConst.COLOR_POINT_CLARITY : AppConst.COLOR_GRAY ))
+                new ColorFilterTransformation(course.getIsFavorite()? AppConst.COLOR_POINT_EASINESS : AppConst.COLOR_GRAY ))
             .into(this.bookmark);
         this.bookmark.setOnClickListener(this);
         Timber.d("favor %s", Course.getInstance().getIsFavorite());
