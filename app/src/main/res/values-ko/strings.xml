@@ -8,7 +8,7 @@
     <string name="nav_item_search">강좌검색</string>
     <string name="nav_item_recommendation">추천강좌</string>
     <string name="nav_item_bookmark">관심강좌</string>
-    <string name="nav_item_evaluation">강의평작성</string>
+    <string name="nav_item_evaluation">강의평가 작성</string>
     <string name="nav_item_random">임의강의</string>
 
     <!--toolbar-->
@@ -16,7 +16,7 @@
     <string name="toolbar_title_evaluation">강의 평가</string>
     <string name="toolbar_title_home">최신 강의평가</string>
     <string name="toolbar_title_course">강의 정보</string>
-    <string name="toolbar_title_new_evaluation">강의평 쓰기</string>
+    <string name="toolbar_title_new_evaluation">강의평가 쓰기</string>
     <string name="toolbar_profile">내 정보</string>
     <string name="toolbar_edit_profile">내 정보 수정</string>
     <string name="toolbar_favorite">관심 강좌</string>
@@ -71,16 +71,16 @@
     <string name="hint_lecture">강좌 제목</string>
     <string name="hint_professor">교수님 성함</string>
     <string name="confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
-    <string name="submit_evaluation_success">강의평 등록에 성공하였습니다</string>
-    <string name="submit_evaluation_fail">강의평 등록에 실패하였습니다</string>
-    <string name="fab_evaluation">강의평 등록하기</string>
+    <string name="submit_evaluation_success">강의평가 등록에 성공하였습니다</string>
+    <string name="submit_evaluation_fail">강의평가 등록에 실패하였습니다</string>
+    <string name="fab_evaluation">강의평가 등록하기</string>
     <string name="fab_comment">덧글 달기</string>
 
     <!--course-->
     <string name="label_point_overall">총점</string>
     <string name="label_point_gpa_satisfaction">학점만족</string>
     <string name="label_point_clarity">강의력</string>
-    <string name="label_point_easiness">쉬움도</string>
+    <string name="label_point_easiness">널널함</string>
     <string name="lecture_type_culture">교양</string>
     <string name="lecture_type_major">전공</string>
     <string name="like">좋아요</string>
@@ -106,9 +106,9 @@
     <string name="professor_postfix">교수</string>
 
     <!-- inform -->
-    <string name="inform_home">최신 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 해당 강의평의 상세 페이지를 열고 닫을 수 있습니다.</string>
-    <string name="inform_course">강의 통계와 강의평을 보여주는 페이지입니다.\n\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
-    <string name="inform_evaluation">강의에 대한 강의평을 보여주는 페이지입니다.\n\n댓글을 추가하거나 강의평, 댓글에 투표를 위-아래 위-위-아래</string>
+    <string name="inform_home">최신 강의평가를 보여주는 페이지입니다.\n\n강의평을 클릭하면 해당 강의평가의 상세 페이지를 열고 닫을 수 있습니다.</string>
+    <string name="inform_course">강의 통계와 강의평가를 보여주는 페이지입니다.\n\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
+    <string name="inform_evaluation">강의에 대한 강의평가를 보여주는 페이지입니다.\n\n댓글을 추가하거나 강의평가, 댓글에 투표를 위-아래 위-위-아래</string>
 
     <!-- time -->
     <string name="just_now">방금</string>
@@ -120,13 +120,13 @@
 
     <!-- profile -->
     <string name="exit">나가기</string>
-    <string name="my_evaluation">내가 쓴 강의평</string>
+    <string name="my_evaluation">내가 쓴 강의평가</string>
     <string name="my_comment">내가 쓴 댓글</string>
     <string name="opensourse_license">오픈소스 라이센스</string>
 
-    <string name="new_evaluation_submit_title">새 강의평 등록</string>
-    <string name="new_evaluation_submit_content">현재 기입된 정보로 새 강의평을 작성하시겠습니까?</string>
-    <string name="new_evaluation_incomplete">필수 항목 중 누락된 부분이 있어 강의평 등록을 취소합니다</string>
+    <string name="new_evaluation_submit_title">새 강의평가 등록</string>
+    <string name="new_evaluation_submit_content">현재 기입된 정보로 새 강의평가를 작성하시겠습니까?</string>
+    <string name="new_evaluation_incomplete">필수 항목 중 누락된 부분이 있어 강의평가 등록을 취소합니다</string>
     <string name="label_evaluation_hashtags">해시태그 등록</string>
     <string name="label_evaluation_body">강의평 작성</string>
     <string name="hashtag_delete_title">해시태그 삭제</string>
@@ -139,10 +139,10 @@
     <string name="loading_student">명이</string>
     <string name="loading_evaluation">개의</string>
     <string name="loading_end_word">파피루스에서 작성하였습니다</string>
-    <string name="loading_word_evaluation">강의평</string>
+    <string name="loading_word_evaluation">강의평가</string>
 
     <!-- simple word -->
-    <string name="word_evaluation">강의평</string>
+    <string name="word_evaluation">강의평가</string>
     <string name="word_lecture">강의</string>
     <string name="word_student">학생</string>
     <string name="word_university">대학교</string>
