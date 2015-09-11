@@ -117,11 +117,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validatePassword == null && this.termAgree.isChecked();
 
-        if (!visible && valid) {
-            FloatingActionControl.getInstance().show(true);
-        }else if (visible && !valid) {
-            FloatingActionControl.getInstance().hide(true);
-        }
+        if (!visible && valid) FloatingActionControl.getInstance().show(true);
+        else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
     }
 
     private void buildTermDialog(){
@@ -165,32 +162,27 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             showFAC();
             Timber.d("changed");
         });
-        this.subscription.add(
-            WidgetObservable
-                .text(this.password)
-                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    String validatePassword = RxValidator.getErrorMessagePassword.call(event.text().toString());
-                    this.password.setError(validatePassword);
-                    this.showFAC();
-                })
+        this.subscription.add(WidgetObservable
+            .text(this.password)
+            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .subscribe(event -> {
+                String validatePassword = RxValidator.getErrorMessagePassword.call(event.text().toString());
+                this.password.setError(validatePassword);
+                this.showFAC();
+            })
         );
 
-        this.subscription.add(FloatingActionControl
-                .clicks()
-                .subscribe(unused -> {
-                    SignUpForm.getInstance().setPassword(this.password.getText().toString());
-                    this.register();
-                }, error -> Timber.d("page change error %s", error))
-        );
-        this.subscription.add(
-            ViewObservable.clicks(this.agreeTerm)
-                .filter(unuse -> !this.termPage.isShowing())
-                .subscribe(
-                unused -> {
-//                    this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP5, true)
-                    this.termPage.show();
-                })
+        this.subscription.add(FloatingActionControl.clicks().subscribe(unused -> {
+            SignUpForm.getInstance().setPassword(this.password.getText().toString());
+            this.register();
+        }));
+
+        this.subscription.add(ViewObservable
+            .clicks(this.agreeTerm)
+            .filter(unuse -> !this.termPage.isShowing())
+            .subscribe(unused -> {
+                this.termPage.show();
+            })
         );
 
         this.buildTermDialog();

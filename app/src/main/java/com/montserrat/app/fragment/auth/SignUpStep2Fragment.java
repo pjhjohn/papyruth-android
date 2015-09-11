@@ -168,14 +168,11 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             })
         );
 
-        this.subscription.add(ViewObservable
-            .clicks(FloatingActionControl.getButton())
-            .subscribe(unused -> {
-                SignUpForm.getInstance().setEmail(this.email.getText().toString());
-                SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-            }, error -> Timber.d("page change error %s", error))
-        );
+        this.subscription.add(FloatingActionControl.clicks().subscribe(unused -> {
+            SignUpForm.getInstance().setEmail(this.email.getText().toString());
+            SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
+            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+        }));
     }
 
     @Override

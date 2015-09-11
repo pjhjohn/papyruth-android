@@ -23,10 +23,11 @@ public class ViewPagerManager implements ViewPagerController {
     IFragmentFactory factory;
 
     public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, IFragmentFactory factory, int viewCount) {
-        this(pager, manager, factory, viewCount, null);
+        this(pager, manager, factory, viewCount, viewCount, null);
     }
-    public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, IFragmentFactory factory, int viewCount, ViewPager.SimpleOnPageChangeListener container) {
+    public ViewPagerManager (FlexibleViewPager pager, FragmentManager manager, IFragmentFactory factory, int viewCount, int offsetScreenPageLimit, ViewPager.SimpleOnPageChangeListener container) {
         this.pager = pager;
+        this.pager.setOffscreenPageLimit(offsetScreenPageLimit);
         this.adapter = new Adapter(manager, viewCount);
         this.factory = factory;
         this.listener = new ViewPager.SimpleOnPageChangeListener() {

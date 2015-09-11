@@ -84,11 +84,8 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validateName == null && this.gender.getCheckedRadioButtonId() != -1;
 
-        if (!visible && valid) {
-            FloatingActionControl.getInstance().show(true);
-        }else if (visible && !valid) {
-            FloatingActionControl.getInstance().hide(true);
-        }
+        if (!visible && valid) FloatingActionControl.getInstance().show(true);
+        else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
     }
 
     @Override
@@ -115,19 +112,13 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                 this.showFAC();
             })
         );
-        this.gender.setOnCheckedChangeListener((group, id) -> this.showFAC());
-        this.subscription.add(ViewObservable
-            .clicks(FloatingActionControl.getButton())
-            .subscribe(unused -> {
-                SignUpForm.getInstance().setRealname(this.realname.getText().toString());
-                SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
 
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-            }, error -> {
-                Timber.d("page change error %s", error);
-                error.printStackTrace();
-            })
-        );
+        this.gender.setOnCheckedChangeListener((group, id) -> this.showFAC());
+        this.subscription.add(FloatingActionControl.clicks().subscribe(unused -> {
+            SignUpForm.getInstance().setRealname(this.realname.getText().toString());
+            SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
+            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+        }));
     }
 
     @Override
