@@ -3,6 +3,7 @@ package com.montserrat.utils.view.viewpager;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 /**
@@ -10,6 +11,7 @@ import android.view.MotionEvent;
  */
 public class FlexibleViewPager extends ViewPager {
     private boolean mIsEnabledSwipe = false;
+    private ViewPagerController pagerController;
 
     public FlexibleViewPager (Context context) {
         super(context);
@@ -37,5 +39,18 @@ public class FlexibleViewPager extends ViewPager {
 
     public void setSwipeEnabled (boolean enabled) {
         mIsEnabledSwipe = enabled;
+    }
+
+    public void setOnBackListener(ViewPagerController pagerController){
+        this.pagerController = pagerController;
+    }
+
+    @Override
+    public boolean dispatchKeyEventPreIme(KeyEvent event) {
+        if(event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+            if (this.pagerController.onBackKeyPressed())
+                return false;
+        }
+        return super.dispatchKeyEventPreIme(event);
     }
 }

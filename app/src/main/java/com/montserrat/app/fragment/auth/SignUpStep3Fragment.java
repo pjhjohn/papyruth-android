@@ -2,10 +2,13 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -76,6 +79,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconGender);
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconRealname);
+        this.pagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP3);
     }
 
     public void showFAC() {
@@ -92,6 +96,9 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
         if(this.subscription.isUnsubscribed()) this.subscription = new CompositeSubscription();
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        this.realname.requestFocus();
 
         if(SignUpForm.getInstance().getRealname() != null){
             this.realname.setText(SignUpForm.getInstance().getRealname());

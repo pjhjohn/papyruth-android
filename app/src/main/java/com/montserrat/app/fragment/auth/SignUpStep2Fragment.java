@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -28,7 +29,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -77,6 +77,8 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_mail).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconEmail);
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconNickname);
+
+        this.pagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP2);
     }
 
     private boolean isDuplicateEmail = false;
@@ -127,6 +129,8 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        email.requestFocus();
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();

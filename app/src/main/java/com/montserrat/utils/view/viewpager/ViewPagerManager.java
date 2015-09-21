@@ -7,12 +7,16 @@ import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
+
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-23.
  */
-public class ViewPagerManager implements ViewPagerController {
+public class ViewPagerManager implements ViewPagerController{
     FlexibleViewPager pager;
     Stack<Integer> history;
     boolean addToBackStack;
@@ -46,6 +50,7 @@ public class ViewPagerManager implements ViewPagerController {
             }
         };
         this.active();
+        this.pager.setOnBackListener(this);
     }
 
     public void active() {
@@ -92,12 +97,37 @@ public class ViewPagerManager implements ViewPagerController {
     public boolean back() {
         final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(this.current);
         if (target != null) {
+            Timber.d("current fragment : %s", this.current);
             boolean backed = false;
             if(target instanceof OnBack) backed = ((OnBack)target).onBack();
             if(!backed) return popCurrentPage();
             else return true;
         } return false;
     }
+
+    private List<Integer> controlTargets = new ArrayList<>();
+    @Override
+    public void addImeControlFragment(int page) {
+        if(!controlTargets.contains(page))
+            controlTargets.add(page);
+    }
+
+    @Override
+    public boolean onBackKeyPressed() {
+        if (this.controlTargetContains(this.current)){
+            this.popCurrentPage();
+            return true;
+        }
+        return false;
+    }
+    private boolean controlTargetContains(int number){
+        for(int i : this.controlTargets){
+            if(i == number)
+                return true;
+        }
+        return false;
+    }
+
 
     private class Adapter extends FragmentStatePagerAdapter {
         private SparseArray<Fragment> fragments;

@@ -3,7 +3,6 @@ package com.montserrat.app.fragment.auth;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v13.app.FragmentStatePagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,5 +88,15 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     public boolean back() {
         if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress() - 1);
         return this.manager.back();
+    }
+
+    @Override
+    public void addImeControlFragment(int page) {
+        this.manager.addImeControlFragment(page);
+    }
+
+    @Override
+    public boolean onBackKeyPressed() {
+        return this.manager.onBackKeyPressed();
     }
 }
