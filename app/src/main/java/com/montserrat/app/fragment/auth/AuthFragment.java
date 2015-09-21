@@ -86,8 +86,8 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     }
 
     @Override
-    public boolean onBack() {
+    public boolean back() {
         if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress() - 1);
-        return this.manager.onBack();
+        return this.manager.back();
     }
 }

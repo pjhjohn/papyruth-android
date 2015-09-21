@@ -10,5 +10,5 @@ public interface ViewPagerController {
     int getPreviousPage();
     void setCurrentPage(int pageNum, boolean addToBackStack);
     boolean popCurrentPage();
-    boolean onBack();
+    boolean back();
 }

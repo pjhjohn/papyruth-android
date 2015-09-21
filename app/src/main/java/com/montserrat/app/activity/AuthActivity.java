@@ -36,6 +36,7 @@ public class AuthActivity extends Activity implements Navigator {
     public void onBackPressed() {
         boolean backed = false;
         if(mViewPagerController != null && mViewPagerController.onBack()) backed = true;
+        if(mViewPagerController != null && mViewPagerController.back()) backed = true;
         if(!backed && this.mNavigator.back()) backed = true;
         if(!backed) this.finish();
     }

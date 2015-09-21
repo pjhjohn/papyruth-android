@@ -89,7 +89,7 @@ public class ViewPagerManager implements ViewPagerController {
     }
 
     @Override
-    public boolean onBack() {
+    public boolean back() {
         final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(this.current);
         if (target != null) {
             boolean backed = false;
