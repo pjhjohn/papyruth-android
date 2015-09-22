@@ -112,19 +112,17 @@ public class ViewPagerManager implements ViewPagerController{
     }
 
     @Override
-    public boolean onBackKeyPressed() {
-        if (this.controlTargetContains(this.current)){
-            this.popCurrentPage();
-            return true;
-        }
-        return false;
-    }
-    private boolean controlTargetContains(int number){
+    public boolean controlTargetContains(int number){
         for(int i : this.controlTargets){
             if(i == number)
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public int getCurrentPage(){
+        return this.current;
     }
 
 

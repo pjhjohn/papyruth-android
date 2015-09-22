@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-04-17.
  */
@@ -47,9 +49,11 @@ public class FlexibleViewPager extends ViewPager {
 
     @Override
     public boolean dispatchKeyEventPreIme(KeyEvent event) {
+
         if(event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-            if (this.pagerController.onBackKeyPressed())
-                return false;
+            Timber.d("back from pager");
+            if (this.pagerController.back())
+                return true;
         }
         return super.dispatchKeyEventPreIme(event);
     }

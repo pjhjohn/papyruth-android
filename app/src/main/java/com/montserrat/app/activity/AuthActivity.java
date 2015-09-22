@@ -13,6 +13,8 @@ import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
+import timber.log.Timber;
+
 /**
  * Activity For Authentication.
  */
@@ -32,9 +34,12 @@ public class AuthActivity extends Activity implements Navigator {
         ViewHolderFactory.getInstance().setContext(this);
     }
 
+
     @Override
     public void onBackPressed() {
+        Timber.d("back from activity");
         boolean backed = false;
+        if(this.mViewPagerController.controlTargetContains(mViewPagerController.getCurrentPage())) return;
         if(mViewPagerController != null && mViewPagerController.back()) backed = true;
         if(!backed && this.mNavigator.back()) backed = true;
         if(!backed) this.finish();

@@ -22,6 +22,7 @@ import java.util.Stack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 public class AuthFragment extends Fragment implements ViewPagerController {
     private ViewPagerManager manager;
@@ -89,7 +90,12 @@ public class AuthFragment extends Fragment implements ViewPagerController {
 
     @Override
     public boolean back() {
+        Timber.d("back!!!!!!!!!!! ");
         if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress() - 1);
+        if (this.manager.controlTargetContains(this.manager.getCurrentPage())){
+            this.popCurrentPage();
+            return true;
+        }
         return this.manager.back();
     }
 
@@ -99,7 +105,13 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     }
 
     @Override
-    public boolean onBackKeyPressed() {
-        return this.manager.onBackKeyPressed();
+    public boolean controlTargetContains(int number) {
+        return this.manager.controlTargetContains(number);
     }
+
+    @Override
+    public int getCurrentPage() {
+        return this.manager.getCurrentPage();
+    }
+
 }
