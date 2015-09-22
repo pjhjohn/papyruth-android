@@ -41,7 +41,7 @@ public class FlexibleViewPager extends ViewPager {
         mIsEnabledSwipe = enabled;
     }
 
-    public void setOnBackListener(ViewPagerController pagerController){
+    public void setPagerController(ViewPagerController pagerController){
         this.pagerController = pagerController;
     }
 

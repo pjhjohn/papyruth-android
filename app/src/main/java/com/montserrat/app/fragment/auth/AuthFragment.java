@@ -28,18 +28,21 @@ public class AuthFragment extends Fragment implements ViewPagerController {
 
     @InjectView(R.id.application_logo) protected ImageView applicationLogo;
     @InjectView(R.id.signup_progress) protected ProgressBar progress;
+    @InjectView(R.id.auth_viewpager) protected FlexibleViewPager viewPager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
         ButterKnife.inject(this, view);
         this.manager = new ViewPagerManager(
-            (FlexibleViewPager) view.findViewById(R.id.auth_viewpager),
+            this.viewPager,
             this.getFragmentManager(),
             AuthFragmentFactory.getInstance(),
             AppConst.ViewPager.Auth.LENGTH
         );
         Picasso.with(this.getActivity()).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.fg_accent))).into(applicationLogo);
         this.progress.setMax(AppConst.ViewPager.Auth.LENGTH - 1);
+
+        this.viewPager.setPagerController(this);
         return view;
     }
 

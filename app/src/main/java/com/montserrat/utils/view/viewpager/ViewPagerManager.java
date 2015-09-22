@@ -50,7 +50,6 @@ public class ViewPagerManager implements ViewPagerController{
             }
         };
         this.active();
-        this.pager.setOnBackListener(this);
     }
 
     public void active() {
