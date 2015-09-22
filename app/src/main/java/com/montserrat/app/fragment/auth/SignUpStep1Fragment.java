@@ -98,7 +98,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         if(this.subscriptions.isUnsubscribed()) this.subscriptions = new CompositeSubscription();
 
         this.subscriptions.add(FloatingActionControl.clicks().subscribe(
-            unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true),
+            unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
             error -> Timber.d("page change error %s", error)
         ));
 
