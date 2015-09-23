@@ -90,7 +90,6 @@ public class AuthFragment extends Fragment implements ViewPagerController {
 
     @Override
     public boolean back() {
-        Timber.d("back!!!!!!!!!!! ");
         if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress() - 1);
         if (this.manager.controlTargetContains(this.manager.getCurrentPage())){
             this.popCurrentPage();

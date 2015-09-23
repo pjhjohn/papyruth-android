@@ -94,7 +94,6 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     public void onPageFocused() {
-        Timber.d("Step1 focused!");
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
         if(this.subscriptions.isUnsubscribed()) this.subscriptions = new CompositeSubscription();
@@ -104,11 +103,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
             error -> Timber.d("page change error %s", error)
         ));
 
-//        ((InputMethodManager) this.getActivity().getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE))
-//            .hideSoftInputFromWindow(this.universityList.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         imm.hideSoftInputFromWindow(this.universityList.getWindowToken(), 0);
     }
 

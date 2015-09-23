@@ -51,7 +51,6 @@ public class FlexibleViewPager extends ViewPager {
     public boolean dispatchKeyEventPreIme(KeyEvent event) {
 
         if(event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-            Timber.d("back from pager");
             if (this.pagerController.back())
                 return true;
         }

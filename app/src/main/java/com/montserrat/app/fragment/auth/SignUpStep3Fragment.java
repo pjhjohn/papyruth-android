@@ -97,11 +97,8 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
         if(this.subscription.isUnsubscribed()) this.subscription = new CompositeSubscription();
 
-//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
         InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-//        imm.showSoftInput(getView(),InputMethodManager.SHOW_FORCED);
         this.realname.requestFocus();
 
         if(SignUpForm.getInstance().getRealname() != null){

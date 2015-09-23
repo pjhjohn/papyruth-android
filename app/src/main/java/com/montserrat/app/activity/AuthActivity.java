@@ -37,7 +37,6 @@ public class AuthActivity extends Activity implements Navigator {
 
     @Override
     public void onBackPressed() {
-        Timber.d("back from activity");
         boolean backed = false;
         if(this.mViewPagerController.controlTargetContains(mViewPagerController.getCurrentPage())) return;
         if(mViewPagerController != null && mViewPagerController.back()) backed = true;

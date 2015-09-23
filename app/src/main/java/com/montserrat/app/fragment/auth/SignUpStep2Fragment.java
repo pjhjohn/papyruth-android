@@ -120,7 +120,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validateEmail == null && validateNickname == null && isDuplicateEmail && isDuplicateNickname;
-        Timber.d("vali : %s %s", visible, valid);
         if (!visible && valid) {
             FloatingActionControl.getInstance().show(true);
         }else if (visible && !valid) {
@@ -133,10 +132,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
         InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        Timber.d("isfocus1 %s %s %s", email.isFocused(), email.isFocusable(), email.isFocusableInTouchMode());
         email.requestFocus();
-//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        Timber.d("isfocus2 %s %s %s", email.isFocused(), email.isFocusable(), email.isFocusableInTouchMode());
 
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();

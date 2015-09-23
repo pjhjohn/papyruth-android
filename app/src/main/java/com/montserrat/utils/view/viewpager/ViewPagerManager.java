@@ -96,7 +96,6 @@ public class ViewPagerManager implements ViewPagerController{
     public boolean back() {
         final Fragment target = ViewPagerManager.this.adapter.getFragmentAt(this.current);
         if (target != null) {
-            Timber.d("current fragment : %s", this.current);
             boolean backed = false;
             if(target instanceof OnBack) backed = ((OnBack)target).onBack();
             if(!backed) return popCurrentPage();
