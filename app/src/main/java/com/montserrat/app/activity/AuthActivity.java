@@ -3,6 +3,7 @@ package com.montserrat.app.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.auth.SplashFragment;
@@ -12,8 +13,6 @@ import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
-
-import timber.log.Timber;
 
 /**
  * Activity For Authentication.
@@ -31,6 +30,7 @@ public class AuthActivity extends Activity implements Navigator {
     @Override
     public void onResume() {
         super.onResume();
+        ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
         ViewHolderFactory.getInstance().setContext(this);
     }
 
@@ -93,6 +93,12 @@ public class AuthActivity extends Activity implements Navigator {
     @Override
     public boolean back() {
         return this.mNavigator.back();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
     }
 
     /* ViewPagerController Mapper */
