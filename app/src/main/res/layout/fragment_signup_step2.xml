@@ -33,7 +33,7 @@
             android:layout_toEndOf="@+id/icon_email"
             android:layout_marginLeft="@dimen/baseline_x4"
             android:layout_marginStart="@dimen/baseline_x4"
-            android:inputType="textEmailAddress"
+            android:inputType="textEmailAddress|textNoSuggestions"
             android:hint="@string/hint_email"
             android:textSize="16sp"/>
     </RelativeLayout>

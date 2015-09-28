@@ -129,7 +129,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
+        FloatingActionControl.getInstance().hide(true);
         InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         email.requestFocus();

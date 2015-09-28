@@ -2,6 +2,7 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.content.Context;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,9 +28,11 @@ import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
@@ -99,7 +102,21 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         if(this.subscriptions.isUnsubscribed()) this.subscriptions = new CompositeSubscription();
 
         this.subscriptions.add(FloatingActionControl.clicks().subscribe(
-            unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
+            unused -> {
+                InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                imm.showSoftInput(this.universityList, InputMethodManager.SHOW_FORCED);
+                this.subscriptions.add(
+                    Observable
+                        .timer(300, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                            unuse -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
+                            error -> error.printStackTrace()
+                        )
+                );
+            },
             error -> Timber.d("page change error %s", error)
         ));
 
@@ -142,10 +159,21 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
             .items(years)
             .itemsCallback((dialog, v, which, text) -> {
                 SignUpForm.getInstance().setEntranceYear(Integer.parseInt(text.toString()));
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
+                InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                imm.showSoftInput(this.universityList, InputMethodManager.SHOW_FORCED);
+                this.subscriptions.add(
+                    Observable
+                        .timer(300, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                            unuse -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
+                            error -> error.printStackTrace()
+                        )
+                );
             })
             .build()
             .show();
     }
-
 }
