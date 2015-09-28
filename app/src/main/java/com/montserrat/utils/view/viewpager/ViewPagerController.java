@@ -12,6 +12,6 @@ public interface ViewPagerController {
     boolean popCurrentPage();
     boolean back();
     void addImeControlFragment(int page);
-    public boolean controlTargetContains(int number);
-    public int getCurrentPage();
+    boolean controlTargetContains(int number);
+    int getCurrentPage();
 }

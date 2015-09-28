@@ -88,8 +88,8 @@ public class AutoCompletableSearchView {
     }
 
     public interface SearchViewListener{
-        public void onTextChange(String query);
-        public void onShowChange(boolean show);
+        void onTextChange(String query);
+        void onShowChange(boolean show);
     }
     public void setSearchViewListener(SearchViewListener listener){
         this.searchViewListener = listener;
@@ -448,7 +448,6 @@ public class AutoCompletableSearchView {
         }
     }
     public void toolbarState(Toolbar toolbar) {
-//        if()
         toolbar.setTitle(R.string.toolbar_title_course);
         toolbar.setTitleTextColor(Color.WHITE);
     }

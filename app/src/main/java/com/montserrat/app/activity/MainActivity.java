@@ -33,6 +33,7 @@ import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
@@ -70,12 +71,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         FloatingActionControl.getInstance().setContainer(this.fac);
         mCompositeSubscription = new CompositeSubscription();
         mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
-        mToolbar.inflateMenu(R.menu.searchview);
+
         mToolbar.setNavigationIcon(mMaterialMenuDrawable);
-        mToolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.menu_search) return true;
-            return super.onOptionsItemSelected(item);
-        });
+        ToolbarUtil.registerMenu(mToolbar, R.menu.search, item -> item.getItemId() == R.id.menu_search || super.onOptionsItemSelected(item));
 
         mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         mNavigationDrawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), mToolbar);
@@ -84,7 +82,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER);
 
         /* Instantiate Multiple ViewPagerManagers */
-//        mAutoCompletableSearch = new AutoCompletableSearchView(this, this, AutoCompletableSearchView.Type.SEARCH);
         mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
         ToolbarSearch.getInstance().setActivityComponent(this);
         mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);

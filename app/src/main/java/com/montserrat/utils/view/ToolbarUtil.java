@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -39,19 +40,10 @@ public class ToolbarUtil {
         animTop.addUpdateListener(animator -> toolbar.setY((int) animator.getAnimatedValue()));
         return animTop;
     }
-    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int fromColor, int toColor) {
-        if(toolbar == null) return null;
+
+    private static ValueAnimator getColorTransitionAnimatorInner(Toolbar toolbar, int fromColor, int toColor) {
         ValueAnimator animColor = new ValueAnimator();
         animColor.setIntValues(fromColor, toColor);
-        animColor.setEvaluator(new ArgbEvaluator());
-        animColor.addUpdateListener(animator -> toolbar.setBackgroundColor((int) animator.getAnimatedValue()));
-        return animColor;
-    }
-
-    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColor) {
-        if(toolbar == null) return null;
-        ValueAnimator animColor = new ValueAnimator();
-        animColor.setIntValues(AppManager.getInstance().getMainToolbarColor(), toColor);
         animColor.setEvaluator(new ArgbEvaluator());
         animColor.addUpdateListener(animator -> toolbar.setBackgroundColor((int) animator.getAnimatedValue()));
         animColor.addListener(new AnimatorListenerAdapter() {
@@ -63,5 +55,20 @@ public class ToolbarUtil {
             }
         });
         return animColor;
+    }
+
+    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int fromColor, int toColor) {
+        if(toolbar == null) return null;
+        return getColorTransitionAnimatorInner(toolbar, fromColor, toColor);
+    }
+
+    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColor) {
+        if(toolbar == null) return null;
+        return getColorTransitionAnimatorInner(toolbar, AppManager.getInstance().getMainToolbarColor(), toColor);
+    }
+
+    public static void registerMenu(Toolbar toolbar, int menuResourceId, Toolbar.OnMenuItemClickListener listener) {
+        toolbar.inflateMenu(menuResourceId);
+        toolbar.setOnMenuItemClickListener(listener);
     }
 }
