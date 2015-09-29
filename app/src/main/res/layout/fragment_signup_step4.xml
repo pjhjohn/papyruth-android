@@ -47,17 +47,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/term_agree"
-            android:layout_toStartOf="@+id/term_agree"
             android:text="@string/agree_terms"
             android:textSize="16sp"/>
-        <CheckBox
-            android:id="@+id/term_agree"
-            android:layout_width="@dimen/baseline_x4"
-            android:layout_height="@dimen/baseline_x4"
-            android:gravity="center"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 </LinearLayout>

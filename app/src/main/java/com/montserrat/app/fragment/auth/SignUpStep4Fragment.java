@@ -2,19 +2,27 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.montserrat.app.AppConst;
@@ -34,14 +42,16 @@ import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 import retrofit.mime.TypedByteArray;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -67,9 +77,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @InjectView(R.id.password) protected EditText password;
     @InjectView(R.id.icon_password) protected ImageView iconPassword;
     @InjectView(R.id.agree_term) protected TextView agreeTerm;
-    @InjectView(R.id.term_agree) protected CheckBox termAgree;
     private MaterialDialog termPage;
-    private CharSequence termContents;
+    private List<CharSequence> termContents;
     private CompositeSubscription subscription;
 
     @Override
@@ -77,6 +86,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step4, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
+        this.termContents = new ArrayList<>();
         return view;
     }
 
@@ -91,7 +101,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     public void onResume() {
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_lock).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconPassword);
-
         this.subscription.add(
             RetrofitApi.getInstance().terms(0)
                 .map(terms -> terms.term)
@@ -100,9 +109,10 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 .subscribe(
                     term -> {
                         if (term != null && term.size() > 0) {
-                            this.termContents = term.get(0).body;
+                            this.termContents.add(term.get(0).body);
                         }else {
-                            this.termContents = "";
+                            this.termContents.add("term!"+this.getResources().getString(R.string.lorem_ipsum));
+                            this.termContents.add("privacy!!"+this.getResources().getString(R.string.lorem_ipsum));
                         }
                     }, error -> {
                         Timber.d("get Term error", error);
@@ -110,37 +120,77 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                     }
                 )
         );
+
+        InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS);
+
+        String term = getString(R.string.term);
+        String privacy = getString(R.string.privacy_policy);
+        String agreeTerm = String.format(getString(R.string.agree_terms), term, privacy);
+
+        SpannableString spannableText = new SpannableString(agreeTerm);
+
+        ClickableSpan termSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                buildTermDialog(0);
+                if(!termPage.isShowing()) {
+                    imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
+                    termPage.show();
+                }
+                Timber.d("term!!");
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
+        ClickableSpan privacySpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                buildTermDialog(1);
+                if(!termPage.isShowing()) {
+                    imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
+                    termPage.show();
+                }
+                Timber.d("privacy!!");
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
+        int wordIndex = agreeTerm.indexOf(term);
+        spannableText.setSpan(termSpan, wordIndex, wordIndex+term.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        wordIndex = agreeTerm.indexOf(privacy);
+        spannableText.setSpan(privacySpan, wordIndex, wordIndex+privacy.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        this.agreeTerm.setText(spannableText);
+        this.agreeTerm.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public void showFAC() {
         String validatePassword = RxValidator.getErrorMessagePassword.call(this.password.getText().toString());
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-        boolean valid = validatePassword == null && this.termAgree.isChecked();
+        boolean valid = validatePassword == null;
 
         if (!visible && valid) FloatingActionControl.getInstance().show(true);
         else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
     }
 
-    private void buildTermDialog(){
-        this.termContents = this.getResources().getString(R.string.lorem_ipsum);
+    private void buildTermDialog(int number){
         this.termPage = new MaterialDialog.Builder(this.getActivity())
             .title(R.string.term)
-            .content(this.termContents)
+            .content(this.termContents.get(number))
             .positiveText(R.string.agree)
-            .negativeText(R.string.back)
-            .buttonsGravity(GravityEnum.CENTER)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
                     super.onPositive(dialog);
-                    termAgree.setChecked(true);
-                }
-
-                @Override
-                public void onNegative(MaterialDialog dialog) {
-                    super.onNegative(dialog);
-                    termAgree.setChecked(false);
                 }
             })
             .build();
@@ -151,19 +201,17 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         FloatingActionControl.getInstance().setControl(R.layout.fab_done).hide(true);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
+        this.password.requestFocus();
+
         if(this.subscription.isUnsubscribed())
             this.subscription = new CompositeSubscription();
 
         if(SignUpForm.getInstance().getPassword() != null){
             this.password.setText(SignUpForm.getInstance().getPassword());
             this.showFAC();
-        }else if(this.password.length() > 0 && this.termAgree.isChecked()){
+        }else if(this.password.length() > 0){
             this.showFAC();
         }
-        this.termAgree.setOnCheckedChangeListener((btnView, checked)->{
-            showFAC();
-            Timber.d("changed");
-        });
         this.subscription.add(WidgetObservable
             .text(this.password)
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -174,20 +222,22 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             })
         );
 
-        this.subscription.add(FloatingActionControl.clicks().subscribe(unused -> {
-            SignUpForm.getInstance().setPassword(this.password.getText().toString());
-            this.register();
-        }));
-
-        this.subscription.add(ViewObservable
-            .clicks(this.agreeTerm)
-            .filter(unuse -> !this.termPage.isShowing())
-            .subscribe(unused -> {
-                this.termPage.show();
-            })
+        this.subscription.add(
+            Observable.mergeDelayError(
+                FloatingActionControl.clicks().map(event -> FloatingActionControl.getButton().getVisibility() == View.VISIBLE),
+                Observable.create(observer -> this.password.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                    observer.onNext(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
+                    return !(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
+                }))
+            )
+                .filter(use -> use)
+                .subscribe(
+                    use -> {
+                        SignUpForm.getInstance().setPassword(this.password.getText().toString());
+                        this.register();
+                    },
+                    error -> error.printStackTrace())
         );
-
-        this.buildTermDialog();
     }
 
 

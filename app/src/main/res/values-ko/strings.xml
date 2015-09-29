@@ -29,10 +29,11 @@
     <string name="step4">4단계</string>
     <string name="step5">5단계</string>
     <string name="entrance_year">입학년도</string>
-    <string name="agree_terms">약관에 동의합니다</string>
+    <string name="agree_terms">가입하면 %1$s 및 %2$s에 동의하게 됩니다.</string>
     <string name="agree">동의합니다</string>
     <string name="back">돌아가기</string>
     <string name="term">약관</string>
+    <string name="privacy_policy">개인정보 취급방침</string>
     <string name="duplicated_email">이메일이 중복되었습니다</string>
     <string name="duplicated_nickname">닉네임이 중복되었습니다</string>
 

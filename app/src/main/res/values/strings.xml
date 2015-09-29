@@ -29,10 +29,11 @@
     <string name="step4">step 4</string>
     <string name="step5">step 5</string>
     <string name="entrance_year">Entrance year</string>
-    <string name="agree_terms">Agree to the terms and conditions</string>
+    <string name="agree_terms">If you sign up, you agree to the %1$s and %2$s.</string>
     <string name="agree">Agree</string>
     <string name="back">Disagree</string>
     <string name="term">Term</string>
+    <string name="privacy_policy">Privacy Policy</string>
     <string name="duplicated_email">duplicated email</string>
     <string name="duplicated_nickname">duplicated nickname</string>
 

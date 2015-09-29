@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -31,6 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -132,6 +135,8 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         FloatingActionControl.getInstance().hide(true);
         InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        imm.showSoftInput(this.email, InputMethodManager.SHOW_FORCED);
+
         email.requestFocus();
 
         if(this.subscription.isUnsubscribed())
@@ -174,11 +179,23 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             })
         );
 
-        this.subscription.add(FloatingActionControl.clicks().subscribe(unused -> {
-            SignUpForm.getInstance().setEmail(this.email.getText().toString());
-            SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
-            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-        }));
+        this.subscription.add(
+            Observable.mergeDelayError(
+                FloatingActionControl.clicks().map(event -> FloatingActionControl.getButton().getVisibility() == View.VISIBLE),
+                Observable.create(observer -> this.nickname.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                    observer.onNext(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
+                    return !(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
+                }))
+            )
+                .filter(use -> use)
+                .subscribe(
+                    use -> {
+                        SignUpForm.getInstance().setEmail(this.email.getText().toString());
+                        SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
+                        this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                    },
+                    error -> error.printStackTrace())
+        );
     }
 
     @Override

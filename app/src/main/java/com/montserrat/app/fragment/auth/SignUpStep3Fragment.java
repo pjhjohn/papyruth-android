@@ -3,7 +3,9 @@ package com.montserrat.app.fragment.auth;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -30,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
@@ -99,6 +103,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
 
         InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        imm.showSoftInput(this.realname, InputMethodManager.SHOW_FORCED);
         this.realname.requestFocus();
 
         if(SignUpForm.getInstance().getRealname() != null){
@@ -122,11 +127,25 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         );
 
         this.gender.setOnCheckedChangeListener((group, id) -> this.showFAC());
-        this.subscription.add(FloatingActionControl.clicks().subscribe(unused -> {
-            SignUpForm.getInstance().setRealname(this.realname.getText().toString());
-            SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
-            this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-        }));
+
+
+        this.subscription.add(
+            Observable.mergeDelayError(
+                FloatingActionControl.clicks().map(event -> FloatingActionControl.getButton().getVisibility() == View.VISIBLE),
+                Observable.create(observer -> this.realname.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                    observer.onNext(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
+                    return !(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
+                }))
+            )
+                .filter(use -> use)
+                .subscribe(
+                    use -> {
+                        SignUpForm.getInstance().setRealname(this.realname.getText().toString());
+                        SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
+                        this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+                    },
+                    error -> error.printStackTrace())
+        );
     }
 
     @Override
