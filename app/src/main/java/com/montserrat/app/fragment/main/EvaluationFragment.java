@@ -136,8 +136,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .observeOn(AndroidSchedulers.mainThread())
             .map(unused -> {
                 this.morph2FAB();
-                FloatingActionControl.getButton().setMax(100);
-                FloatingActionControl.getButton().setShowProgressBackground(false);
+                ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
                 FloatingActionControl.getButton().setIndeterminate(true);
                 return null;
             })
@@ -147,9 +146,13 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 Evaluation.getInstance().getId(),
                 this.mCommentText.getText().toString()
             ))
-            .flatMap(unused -> RetrofitApi.getInstance()
-                    .get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), this.since = null, this.max = null, null)
-            )
+            .flatMap(unused -> RetrofitApi.getInstance().get_comments(
+                User.getInstance().getAccessToken(),
+                Evaluation.getInstance().getId(),
+                this.since = null,
+                this.max = null,
+                null
+            ))
             .map(response -> response.comments)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(comments -> {
@@ -344,6 +347,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     }
     public void setEvaluationFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.getButton().setMax(100);
+        FloatingActionControl.getButton().setShowProgressBackground(false);
         FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput());
     }
     @Override
