@@ -2,10 +2,12 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -88,6 +90,7 @@ public class SplashFragment extends Fragment {
                 }
             }
         ));
+        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
         subscriptions.add(Observable
             .timer(2, TimeUnit.SECONDS)

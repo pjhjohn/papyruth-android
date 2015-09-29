@@ -2,11 +2,13 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -81,6 +83,8 @@ public class LoadingFragment extends Fragment {
             this.userText.setText(String.format("%d", univ.user_count));
             this.evaluationText.setText(String.format("%d", univ.evaluation_count));
         }
+        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
+
         subscriptions.add(Observable
             .timer(2, TimeUnit.SECONDS)
             .map(unused -> (StatisticsResponse) null)
