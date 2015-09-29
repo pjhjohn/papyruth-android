@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -57,6 +58,18 @@ public class ToolbarUtil {
         return animColor;
     }
 
+    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int fromColor, int toColor, String name){
+        if(toolbar == null) return null;
+        toolbar.setTitle(name);
+        return getColorTransitionAnimatorInner(toolbar, fromColor, toColor);
+    }
+
+    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColor, String name){
+        if(toolbar == null) return null;
+        toolbar.setTitle(name);
+        return getColorTransitionAnimatorInner(toolbar, AppManager.getInstance().getMainToolbarColor(), toColor);
+    }
+
     public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int fromColor, int toColor) {
         if(toolbar == null) return null;
         return getColorTransitionAnimatorInner(toolbar, fromColor, toColor);
@@ -70,5 +83,7 @@ public class ToolbarUtil {
     public static void registerMenu(Toolbar toolbar, int menuResourceId, Toolbar.OnMenuItemClickListener listener) {
         toolbar.inflateMenu(menuResourceId);
         toolbar.setOnMenuItemClickListener(listener);
+        toolbar.setTitleTextColor(Color.WHITE);
+
     }
 }
