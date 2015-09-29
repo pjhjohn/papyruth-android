@@ -37,6 +37,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -92,7 +93,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validateName == null && this.gender.getCheckedRadioButtonId() != -1;
 
-        if (!visible && valid) FloatingActionControl.getInstance().show(true);
+        if (!visible && valid) FloatingActionControl.getInstance().show(true, 200, TimeUnit.MILLISECONDS);
         else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
     }
 

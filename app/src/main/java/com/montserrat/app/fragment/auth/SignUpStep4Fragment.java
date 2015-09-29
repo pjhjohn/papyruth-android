@@ -178,7 +178,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validatePassword == null;
 
-        if (!visible && valid) FloatingActionControl.getInstance().show(true);
+        if (!visible && valid) FloatingActionControl.getInstance().show(true, 200, TimeUnit.MILLISECONDS);
         else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
     }
 
