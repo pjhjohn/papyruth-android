@@ -85,8 +85,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
-
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -113,8 +111,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @Override
     public void onResume() {
         super.onResume();
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
-
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
         this.subscriptions.add(FloatingActionControl
@@ -134,7 +130,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
                     error -> Timber.d("search error : %s", error)
                 )
         );
-
         this.search.searchCourse();
     }
 }

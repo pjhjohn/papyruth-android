@@ -97,7 +97,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
 
     @Override
     public boolean onBack() {
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if (!slaveIsOccupying && animators == null) return false;
         if (!slaveIsOccupying && !animators.isRunning()) return false;
         if (!slaveIsOccupying) animators.cancel();
@@ -187,7 +186,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         });
 
         animators = new AnimatorSet();
-        animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
+        animators.setDuration(AppConst.ANIM_DURATION_SHORT);
         animators.playTogether(animHeight, animTop);
         animators.setInterpolator(new AccelerateInterpolator(AppConst.ANIM_ACCELERATION));
         animators.addListener(new AnimatorListenerAdapter() {

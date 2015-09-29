@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/comment_reveal_frame"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:layout_gravity="bottom">
+    <RelativeLayout
+        android:id="@+id/comment_input"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_normal"
+        android:padding="@dimen/baseline_x1"
+        android:visibility="gone">
+        <EditText
+            android:id="@+id/comment_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/comment_submit"
+            android:layout_toStartOf="@+id/comment_submit"
+            android:background="#ffffff"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:maxLines="2"/>
+        <ImageButton
+            android:id="@+id/comment_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_light_done"
+            android:background="@color/transparent"
+            android:padding="@dimen/baseline_x3"
+            android:contentDescription=""/>
+    </RelativeLayout>
+</io.codetail.widget.RevealFrameLayout>

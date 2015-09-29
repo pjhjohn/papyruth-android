@@ -3,22 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="bottom"
     android:background="@color/bg_accent">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/evaluation_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"/>
+
     <FrameLayout
         android:id="@+id/evaluation_container_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"/>
     <include layout="@layout/toolbar_evaluation"/>
-    <com.montserrat.utils.view.CommentInputWindow
-        android:id="@+id/comment_window"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
     <include layout="@layout/progress"/>
 </FrameLayout>

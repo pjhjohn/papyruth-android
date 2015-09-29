@@ -116,7 +116,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public boolean onBack() {
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if (!slaveIsOccupying && animators == null) return false;
         if (!slaveIsOccupying && !animators.isRunning()) return false;
         if (!slaveIsOccupying ) animators.cancel();

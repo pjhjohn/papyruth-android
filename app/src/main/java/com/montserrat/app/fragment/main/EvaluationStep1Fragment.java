@@ -124,12 +124,10 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @Override
     public void onResume() {
         super.onResume();
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().clear();
         this.search.autoComplete(this.queryTextView);
     }
     public void back(){
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         this.search.onBack();
     }
 }

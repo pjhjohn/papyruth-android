@@ -4,12 +4,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.viewpager.OnBack;
 
 
@@ -22,13 +24,15 @@ public class FragmentNavigator implements Navigator {
     MaterialMenuDrawable materialMenuDrawable = null;
     MaterialMenuDrawable.IconState materialMenuDrawableState = null;
     NavigationDrawerFragment navigationDrawer = null;
+    Toolbar toolbar = null;
 
-    public FragmentNavigator(NavigationDrawerFragment drawer, FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment, MaterialMenuDrawable materialMenuDrawable, MaterialMenuDrawable.IconState initialMaterialMenuDrawableState) {
+    public FragmentNavigator(NavigationDrawerFragment drawer, FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment, MaterialMenuDrawable materialMenuDrawable, MaterialMenuDrawable.IconState initialMaterialMenuDrawableState, Toolbar toolbar) {
         this(manager, containerViewId, initialFragment);
         this.materialMenuDrawable = materialMenuDrawable;
         this.materialMenuDrawableState = initialMaterialMenuDrawableState;
         this.materialMenuDrawable.setIconState(initialMaterialMenuDrawableState);
         this.navigationDrawer = drawer;
+        this.toolbar = toolbar;
     }
     public FragmentNavigator(FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment) {
         this.containerViewId = containerViewId;
@@ -57,6 +61,7 @@ public class FragmentNavigator implements Navigator {
         FragmentTransaction transaction = this.setCustomAnimator(this.manager.beginTransaction(), animatorType);
         if(addToBackStack) transaction.addToBackStack(next.getClass().getSimpleName());
         transaction.replace(this.containerViewId, next, AppConst.Tag.ACTIVE_FRAGMENT).commit();
+        if(toolbar != null) ToolbarUtil.show(toolbar);
     }
 
     @Override
@@ -113,9 +118,11 @@ public class FragmentNavigator implements Navigator {
             if(!backed) {
                 if(this.manager.getBackStackEntryCount() > 2) {
                     this.manager.popBackStack();
+                    if(toolbar != null) ToolbarUtil.show(toolbar);
                     backed = true;
                 } else if(this.manager.getBackStackEntryCount() == 2) {
                     this.manager.popBackStack();
+                    if(toolbar != null) ToolbarUtil.show(toolbar);
                     if(materialMenuDrawable != null) materialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
                     if(navigationDrawer!= null) navigationDrawer.setOnNavigationIconClickListener(null);
                     backed = true;

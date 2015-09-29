@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mNavigationDrawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), mToolbar);
         mNavigationDrawer.update();
 
-        mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER);
+        mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
 
         /* Instantiate Multiple ViewPagerManagers */
         mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
@@ -128,8 +128,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onBackPressed() {
         if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
-//        else if(this.mAutoCompletableSearch.onBack()) ;
-        else if(ToolbarSearch.getInstance().onBack()) ;
+        else if (ToolbarSearch.getInstance().onBack()) ;
         else if (this.mNavigator.back()) terminate = false;
         else if (terminate) super.onBackPressed();
         else {

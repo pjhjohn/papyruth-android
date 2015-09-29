@@ -78,7 +78,6 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -86,7 +85,6 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         final int ANIMATION_DELAY = 200;
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, ANIMATION_DELAY, TimeUnit.MILLISECONDS);
 
         this.email.setText(User.getInstance().getEmail());

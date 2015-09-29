@@ -114,7 +114,6 @@ public class EvaluationStep2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)

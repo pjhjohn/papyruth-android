@@ -36,8 +36,8 @@
             android:background="#eee"
             android:alpha="1"
             android:layout_gravity="center_horizontal|top" />
-
         <include layout="@layout/fac"/>
+        <include layout="@layout/fab_morphed_comment_input"/>
         <include layout="@layout/toolbar"/>
     </FrameLayout>
 

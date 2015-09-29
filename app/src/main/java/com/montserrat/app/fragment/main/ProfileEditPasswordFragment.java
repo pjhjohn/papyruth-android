@@ -67,14 +67,12 @@ public class ProfileEditPasswordFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(toolbar.getY() < 0) ToolbarUtil.show(toolbar);
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
 
         this.subscriptions.add(Observable.combineLatest(
