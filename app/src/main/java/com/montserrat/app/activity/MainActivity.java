@@ -25,6 +25,7 @@ import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
@@ -73,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
         mToolbar.setNavigationIcon(mMaterialMenuDrawable);
-        ToolbarUtil.registerMenu(mToolbar, R.menu.search, item -> item.getItemId() == R.id.menu_search || super.onOptionsItemSelected(item));
+        ToolbarUtil.registerMenu(mToolbar, R.menu.main, item -> item.getItemId() == R.id.menu_search || super.onOptionsItemSelected(item));
 
         mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.drawer);
         mNavigationDrawer.setup(R.id.drawer, (DrawerLayout) this.findViewById(R.id.drawer_layout), mToolbar);
@@ -105,7 +106,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mCompositeSubscription.unsubscribe();
     }
 
-    private MenuItem searchitem;
+    private MenuItem itemSearch;
+    private MenuItem itemSetting;
     private CustomSearchView searchView;
     private EditText editText;
 
@@ -139,12 +141,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     /* Menu */
+    public void setMenuItemVisibility(int res, boolean visible){
+        if(itemSearch.getItemId() == res)
+            itemSearch.setVisible(visible);
+        else if(itemSetting.getItemId() == res)
+            itemSetting.setVisible(visible);
+    }
     private boolean onInitializeMenuOnToolbar(Menu menu) {
-        this.searchitem = menu.findItem(R.id.menu_search);
-        this.searchView = (CustomSearchView) searchitem.getActionView();
-        this.searchitem.expandActionView();
+        this.itemSearch = menu.findItem(R.id.menu_search);
+        this.itemSetting = menu.findItem(R.id.menu_setting);
+        this.searchView = (CustomSearchView) itemSearch.getActionView();
+        this.itemSearch.expandActionView();
         this.searchView.setOnBackListener(()->{
-//            this.mAutoCompletableSearch.onBack();
             ToolbarSearch.getInstance().onBack();
             return true;
         });
@@ -156,18 +164,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             if (searchManager != null)
                 searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(true);
-            this.editText.setOnEditorActionListener(
-                (v, actionId, event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        onQueryTextSubmit(searchView.getQuery().toString());
-                        return true;
-                    }
-                    return false;
+            this.editText.setOnEditorActionListener( (v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    onQueryTextSubmit(searchView.getQuery().toString());
+                    return true;
                 }
-            );
-            this.mAutoCompletableSearch.autoComplete(
-                this.editText
-            );
+                return false;
+            });
+            this.mAutoCompletableSearch.autoComplete(this.editText);
             ImageView closeBtn = (ImageView) this.searchView.findViewById(R.id.search_close_btn);
             closeBtn.setOnClickListener(view -> {
 //                if (!(this.editText.getText().toString().length() > 0)) {
@@ -180,10 +184,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                     this.editText.setText("");
                 }
             });
-
-//            this.searchView.setTextStrokeColor(0xffffffff);
             this.showCrossBtn(true);
-
+            this.mToolbar.setOnMenuItemClickListener(item -> {
+                if (item.equals(itemSetting)) {
+                    this.navigate(DummyFragment.class, true);
+                }
+                return true;
+            });
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -193,7 +200,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         try {
             Field field = SearchView.class.getDeclaredField("mCloseButton");
             field.setAccessible(true);
-            ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.searchitem));
+            ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.itemSearch));
             if(remove) {
                 img.setImageDrawable(getResources().getDrawable(R.drawable.background_transparent));
 //                this.mAutoCompletableSearch.showCandidates(true);

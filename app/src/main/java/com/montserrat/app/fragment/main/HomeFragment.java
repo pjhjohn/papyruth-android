@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
@@ -45,6 +46,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         toolbar.setTitle(R.string.toolbar_title_home);
         toolbar.setTitleTextColor(Color.WHITE);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+        ((MainActivity)getActivity()).setMenuItemVisibility(R.id.menu_setting, false);
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
             .flatMap(unused -> {
                 this.swipeRefresh.setRefreshing(true);
