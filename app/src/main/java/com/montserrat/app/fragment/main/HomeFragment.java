@@ -45,7 +45,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         super.onResume();
         toolbar.setTitle(R.string.toolbar_title_home);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
-        ((MainActivity)getActivity()).setMenuItemVisibility(R.id.menu_setting, false);
+        ((MainActivity)getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
             .flatMap(unused -> {
                 this.swipeRefresh.setRefreshing(true);

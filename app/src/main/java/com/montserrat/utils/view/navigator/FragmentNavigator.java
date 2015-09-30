@@ -25,6 +25,7 @@ public class FragmentNavigator implements Navigator {
     MaterialMenuDrawable.IconState materialMenuDrawableState = null;
     NavigationDrawerFragment navigationDrawer = null;
     Toolbar toolbar = null;
+    NavigationCallback navigateListener;
 
     public FragmentNavigator(NavigationDrawerFragment drawer, FragmentManager manager, int containerViewId, Class<? extends Fragment> initialFragment, MaterialMenuDrawable materialMenuDrawable, MaterialMenuDrawable.IconState initialMaterialMenuDrawableState, Toolbar toolbar) {
         this(manager, containerViewId, initialFragment);
@@ -62,6 +63,10 @@ public class FragmentNavigator implements Navigator {
         if(addToBackStack) transaction.addToBackStack(next.getClass().getSimpleName());
         transaction.replace(this.containerViewId, next, AppConst.Tag.ACTIVE_FRAGMENT).commit();
         if(toolbar != null) ToolbarUtil.show(toolbar);
+        if(navigateListener != null) {
+            navigateListener.onNavigation(next);
+            navigateListener.onNavigationChanged();
+        }
     }
 
     @Override
@@ -131,8 +136,18 @@ public class FragmentNavigator implements Navigator {
                     if(navigationDrawer!= null) navigationDrawer.setOnNavigationIconClickListener(null);
                     backed = false;
                 }
-            } return backed;
+            }
+            if(backed && this.navigateListener != null) {
+                navigateListener.onNavigationBack();
+                navigateListener.onNavigationChanged();
+            }
+            return backed;
         } return false;
+    }
+
+    @Override
+    public void setOnNavigateListener(NavigationCallback listener) {
+        this.navigateListener = listener;
     }
 
     private FragmentTransaction setCustomAnimator(FragmentTransaction transaction, AnimatorType animatorType) {

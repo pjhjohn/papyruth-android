@@ -20,4 +20,5 @@ public interface Navigator {
     void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear);
     String getBackStackNameAt(int index);
     boolean back();
+    void setOnNavigateListener(NavigationCallback listener);
 }

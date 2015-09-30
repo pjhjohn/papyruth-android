@@ -11,6 +11,7 @@ import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
+import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 
@@ -93,6 +94,11 @@ public class AuthActivity extends Activity implements Navigator {
     @Override
     public boolean back() {
         return this.mNavigator.back();
+    }
+
+    @Override
+    public void setOnNavigateListener(NavigationCallback listener) {
+        mNavigator.setOnNavigateListener(listener);
     }
 
     @Override

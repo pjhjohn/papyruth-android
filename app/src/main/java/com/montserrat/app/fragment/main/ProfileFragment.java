@@ -17,6 +17,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.ToolbarUtil;
@@ -92,6 +93,8 @@ public class ProfileFragment extends Fragment {
         this.nickname.setText(User.getInstance().getNickname());
         this.gender.setText(this.getResources().getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
         this.entrance.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.entrance_postfix)));
+
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_profile)

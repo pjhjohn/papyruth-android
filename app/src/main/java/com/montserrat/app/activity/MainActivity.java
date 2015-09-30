@@ -28,6 +28,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.fragment.main.ProfileFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
@@ -36,6 +37,7 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
+import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 import com.montserrat.utils.view.search.AutoCompletableSearchView;
@@ -47,9 +49,8 @@ import java.lang.reflect.Field;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener, NavigationCallback {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
 
@@ -81,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mNavigationDrawer.update();
 
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
+        mNavigator.setOnNavigateListener(this);
 
         /* Instantiate Multiple ViewPagerManagers */
         mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
@@ -186,7 +188,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             this.showCrossBtn(true);
             this.mToolbar.setOnMenuItemClickListener(item -> {
                 if (item.equals(itemSetting)) {
-                    this.navigate(DummyFragment.class, true);
+                    this.navigate(DummyFragment.class, true, AnimatorType.SLIDE_TO_LEFT);
                 }
                 return true;
             });
@@ -279,6 +281,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     @Override
+    public void setOnNavigateListener(NavigationCallback listener) {
+        this.mNavigator.setOnNavigateListener(listener);
+    }
+
+    @Override
     public void onTextChange(String query) {
         if (TextUtils.isEmpty(query)){
             showCrossBtn(true);
@@ -291,7 +298,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private boolean isAutocompleteViewOpen;
     @Override
     public void onShowChange(boolean show) {
-        Timber.d("on show change %s", show);
         if(show) {
             if(!this.isAutocompleteViewOpen)
                 this.state = this.mMaterialMenuDrawable.getIconState();
@@ -315,4 +321,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             this.isAutocompleteViewOpen = false;
         }
     }
+
+    @Override
+    public void onNavigationChanged() { }
+
+    @Override
+    public void onNavigation(Fragment target) {
+        if(target instanceof ProfileFragment ){
+            this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
+        }else{
+            this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
+        }
+    }
+
+    @Override
+    public void onNavigationBack() { }
 }
