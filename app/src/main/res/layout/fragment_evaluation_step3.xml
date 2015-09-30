@@ -1,59 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.montserrat.utils.view.navigator.NavigatableFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="?attr/actionBarSize">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:focusableInTouchMode="true">
-
-        <Button
-            android:id="@+id/lecture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/professor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <RatingBar
-            android:id="@+id/point_overall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:numStars="5"
-            android:stepSize="1"
-            android:max="10"/>
-
-        <SeekBar
-            android:id="@+id/point_gpa_satisfaction"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="10"/>
+            android:orientation="vertical"
+            android:padding="@dimen/baseline_x2">
+            <RelativeLayout
+                android:id="@+id/evaluation_hashtags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/baseline_x2">
+                <ImageView
+                    android:id="@+id/evaluation_hashtags_icon"
+                    android:layout_width="@dimen/nav_icon_length"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_hashtags_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_marginStart="@dimen/baseline_x2"
+                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_hashtags_icon"
+                    android:layout_toEndOf="@+id/evaluation_hashtags_icon"
+                    android:layout_alignBottom="@+id/evaluation_hashtags_icon"
+                    android:text="@string/label_evaluation_hashtags"/>
+                <LinearLayout
+                    android:id="@+id/evaluation_hashtags_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/evaluation_hashtags_icon"
+                    android:orientation="horizontal"/>
+                <EditText
+                    android:id="@+id/evaluation_hashtags_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/baseline_x3"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:layout_marginTop="@dimen/baseline_x1"
+                    android:layout_below="@+id/evaluation_hashtags_container"
+                    android:background="@color/bg_highlight"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/evaluation_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/baseline_x2">
+                <ImageView
+                    android:id="@+id/evaluation_body_icon"
+                    android:layout_width="@dimen/nav_icon_length"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/evaluation_body_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/nav_icon_length"
+                    android:layout_marginStart="@dimen/baseline_x2"
+                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_toRightOf="@+id/evaluation_body_icon"
+                    android:layout_toEndOf="@+id/evaluation_body_icon"
+                    android:layout_alignBottom="@+id/evaluation_body_icon"
+                    android:text="@string/label_evaluation_body"/>
+                <EditText
+                    android:id="@+id/evaluation_body_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/baseline_x8"
+                    android:inputType="textMultiLine"
+                    android:layout_marginTop="@dimen/baseline_x1"
+                    android:layout_below="@+id/evaluation_body_icon"
+                    android:background="@color/bg_highlight"/>
+            </RelativeLayout>
 
-        <SeekBar
-            android:id="@+id/point_easiness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="10"/>
-
-        <SeekBar
-            android:id="@+id/point_clarity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="10"/>
-
-        <EditText
-            android:id="@+id/evaluation_body"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:imeOptions="actionDone"
-            android:hint="@string/hint_evaluation_body"
-            android:focusableInTouchMode="true"/>
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>

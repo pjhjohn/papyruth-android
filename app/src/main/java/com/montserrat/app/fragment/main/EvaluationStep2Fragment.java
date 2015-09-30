@@ -81,13 +81,6 @@ public class EvaluationStep2Fragment extends Fragment {
     @InjectView(R.id.evaluation_point_easiness_icon) protected ImageView pointEasinessIcon;
     @InjectView(R.id.evaluation_point_easiness_text) protected TextView pointEasinessText;
     @InjectView(R.id.evaluation_point_easiness_seekbar) protected SeekBar pointEasinessSeekBar;
-    @InjectView(R.id.evaluation_body_icon) protected ImageView bodyIcon;
-    @InjectView(R.id.evaluation_body_label) protected TextView bodyLabel;
-    @InjectView(R.id.evaluation_body_text) protected EditText bodyText;
-    @InjectView(R.id.evaluation_hashtags_icon) protected ImageView hashtagsIcon;
-    @InjectView(R.id.evaluation_hashtags_label) protected TextView hashtagsLabel;
-    @InjectView(R.id.evaluation_hashtags_container) protected LinearLayout hashtagsContainer;
-    @InjectView(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
@@ -113,31 +106,11 @@ public class EvaluationStep2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
-        FloatingActionControl.getInstance().setControl(R.layout.fab_done);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
-            new MaterialDialog.Builder(context)
-                .title(R.string.new_evaluation_submit_title)
-                .content(R.string.new_evaluation_submit_content)
-                .positiveText(R.string.confirm_positive)
-                .negativeText(R.string.confirm_cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        if (EvaluationForm.getInstance().isCompleted()) submitNewEvaluation();
-                        else {
-                            Toast.makeText(context, R.string.new_evaluation_incomplete, Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        dialog.dismiss();
-                    }
-                })
-                .build()
-                .show();
-        });
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unused -> {
+                this.navigator.navigate(EvaluationStep3Fragment.class, true);
+            });
 
         this.lecture.setText(EvaluationForm.getInstance().getLectureName());
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
@@ -146,14 +119,10 @@ public class EvaluationStep2Fragment extends Fragment {
         Picasso.with(context).load(R.drawable.ic_point_clarity).into(this.pointClarityIcon);
         Picasso.with(context).load(R.drawable.ic_point_satisfaction).into(this.pointGpaSatisfactionIcon);
         Picasso.with(context).load(R.drawable.ic_point_easiness).into(this.pointEasinessIcon);
-        Picasso.with(context).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.bodyIcon);
-        Picasso.with(context).load(R.drawable.ic_light_tag).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.hashtagsIcon);
         this.pointOverallText.setText("0.0");
         this.pointClarityText.setText("0.0");
         this.pointGpaSatisfactionText.setText("0.0");
         this.pointEasinessText.setText("0.0");
-        this.bodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.bodyLabel.getPaintFlags());
-        this.hashtagsLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.hashtagsLabel.getPaintFlags());
 
         this.subscriptions.add(Observable
             .combineLatest(
@@ -181,19 +150,12 @@ public class EvaluationStep2Fragment extends Fragment {
                         EvaluationForm.getInstance().setPointClarity(progress);
                         return RxValidator.isIntegerValueInRange.call(progress);
                     }),
-                WidgetObservable.text(this.bodyText)
-                    .map(RxValidator.toString)
-                    .map(body -> {
-                        EvaluationForm.getInstance().setBody(body);
-                        return body;
-                    })
-                    .map(RxValidator.isValidEvaluationBody),
-                (a, b, c, d, e) -> {
+                (a, b, c, d) -> {
                     Timber.d("EvaluationForm : %s", EvaluationForm.getInstance());
-                    return EvaluationForm.getInstance().isCompleted();
+                    return EvaluationForm.getInstance().isNextStep();
                 }
             )
-            .startWith(EvaluationForm.getInstance().clear(true).isCompleted())
+            .startWith(EvaluationForm.getInstance().clear(true).isNextStep())
             .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
@@ -201,75 +163,10 @@ public class EvaluationStep2Fragment extends Fragment {
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
             }, error -> Timber.d("error : %s", error))
         );
-
-        this.subscriptions.add(WidgetObservable.text(this.hashtagsText)
-            .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
-            .subscribe(event -> {
-                final String str = event.text().subSequence(0, event.text().length() - 1).toString();
-                TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
-                hashtag.setText(str);
-                hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
-                hashtagsContainer.addView(hashtag);
-                this.hashtagsText.setText("");
-            })
-        );
     }
 
     private void setRatingBarColor(RatingBar rating, int color) {
         LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
         for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-    }
-
-    private Integer evaluationID = null;
-    private void submitNewEvaluation() {
-        RetrofitApi.getInstance().post_evaluation(
-            User.getInstance().getAccessToken(),
-            EvaluationForm.getInstance().getCourseId(),
-            EvaluationForm.getInstance().getPointOverall(),
-            EvaluationForm.getInstance().getPointGpaSatisfaction(),
-            EvaluationForm.getInstance().getPointEasiness(),
-            EvaluationForm.getInstance().getPointClarity(),
-            EvaluationForm.getInstance().getBody()
-        )
-        .filter(response -> response.success)
-        .flatMap(response -> {
-            evaluationID = response.evaluation_id;
-            List<String> hashtags = new ArrayList<>();
-            for (int i = 0; i < hashtagsContainer.getChildCount(); i++) {
-                hashtags.add(((Button) hashtagsContainer.getChildAt(i)).getText().toString());
-            }
-            return RetrofitApi.getInstance().post_evaluation_hashtag(
-                User.getInstance().getAccessToken(),
-                evaluationID,
-                hashtags
-            );
-        })
-
-        .flatMap(response -> RetrofitApi.getInstance().get_evaluation(
-            User.getInstance().getAccessToken(),
-            evaluationID
-        ))
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-            response -> {
-                if (response.success) {
-                    Evaluation.getInstance().update(response.evaluation);
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("STANDALONE", true);
-                    this.navigator.back();
-                    this.navigator.navigate(EvaluationFragment.class, bundle, true, Navigator.AnimatorType.SLIDE_TO_RIGHT);
-                } else {
-                    Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
-                }
-            },
-            error -> {
-                if (error instanceof RetrofitError) {
-                    switch (((RetrofitError) error).getResponse().getStatus()) {
-                        default:
-                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                    }
-                }
-            }
-        );
     }
 }

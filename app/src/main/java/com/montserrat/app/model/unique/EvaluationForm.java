@@ -62,6 +62,17 @@ public class EvaluationForm {
         return this;
     }
 
+    public boolean isNextStep(){
+        return
+            this.lectureName           != null &&
+                this.professorName         != null &&
+                this.courseId              != null &&
+                this.pointOverall          != null &&
+                this.pointGpaSatisfaction  != null &&
+                this.pointEasiness         != null &&
+                this.pointClarity          != null;
+    }
+
     public boolean isCompleted() {
         return
             this.lectureName           != null &&
