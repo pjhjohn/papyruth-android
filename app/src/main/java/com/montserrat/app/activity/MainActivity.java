@@ -50,7 +50,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener, NavigationCallback {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
 
@@ -82,7 +82,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mNavigationDrawer.update();
 
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
-        mNavigator.setOnNavigateListener(this);
 
         /* Instantiate Multiple ViewPagerManagers */
         mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
@@ -97,6 +96,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public void onResume() {
         super.onResume();
         ViewHolderFactory.getInstance().setContext(this);
+        this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
     }
 
 
@@ -321,19 +321,4 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             this.isAutocompleteViewOpen = false;
         }
     }
-
-    @Override
-    public void onNavigationChanged() { }
-
-    @Override
-    public void onNavigation(Fragment target) {
-        if(target instanceof ProfileFragment ){
-            this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
-        }else{
-            this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
-        }
-    }
-
-    @Override
-    public void onNavigationBack() { }
 }

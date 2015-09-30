@@ -167,6 +167,12 @@ public class ProfileFragment extends Fragment {
         );
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
+    }
+
     private MaterialDialog termPage;
 
     private CharSequence termContents;
