@@ -18,6 +18,9 @@ public class DateTimeUtil {
     public static String timestamp(String in) {
         return DateTimeUtil.timestamp(in, AppConst.DateFormat.API, AppConst.DateFormat.SIMPLE);
     }
+    public static String timestamp(String in, String out_format) {
+        return DateTimeUtil.timestamp(in, AppConst.DateFormat.API, out_format);
+    }
     public static String timestamp(String in, String in_format, String out_format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(in_format);
         Date date = null;

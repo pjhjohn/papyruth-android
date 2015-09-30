@@ -47,7 +47,7 @@ public class MyEvaluationViewHolder extends RecyclerView.ViewHolder implements V
         this.lecture.setText(evaluation.lecture_name);
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.professor_name, context.getResources().getString(R.string.professor_postfix))));
         this.body.setText(evaluation.body);
-        this.timestamp.setText(DateTimeUtil.timeago(context, evaluation.created_at));
+        this.timestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
 
 
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.upIcon);

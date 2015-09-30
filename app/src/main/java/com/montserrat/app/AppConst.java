@@ -29,6 +29,7 @@ public class AppConst {
     public static class DateFormat {
         public static final String API = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // TODO : Z stands for TimeZone, but seems not working now
         public static final String SIMPLE = "yyyy.MM.dd";
+        public static final String DATE_AND_TIME = "yy.MM.dd HH:mm";
     }
 
     public static final int COLOR_POSITIVE = Color.rgb(201, 57, 64);

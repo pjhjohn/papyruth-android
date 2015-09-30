@@ -56,7 +56,7 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
     public void bind(CommentData comment) {
         final Context context = this.itemView.getContext();
         this.body.setText(comment.body);
-        this.timestamp.setText(DateTimeUtil.timeago(context, comment.created_at));
+        this.timestamp.setText(DateTimeUtil.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
 
         commentContainer.setVisibility(View.GONE);
         getCourseOfComment(comment.evaluation_id);

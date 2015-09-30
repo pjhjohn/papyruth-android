@@ -102,7 +102,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
     public void bind(EvaluationData evaluation) {
         final Context context = this.itemView.getContext();
         Picasso.with(context).load(evaluation.avatar_url).transform(new CircleTransformation()).into(this.avatar);
-        this.timestamp.setText(DateTimeUtil.timestamp(evaluation.created_at));
+        this.timestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
         this.body.setText(evaluation.body);
         this.nickname.setText(evaluation.user_nickname);
         this.hashtags.removeAllViews();
