@@ -7,7 +7,7 @@ import android.graphics.Color;
  */
 public class AppConst {
     /* API BINDING */
-    public static final String API_ROOT = "mont.izz.kr:3001";
+    public static final String API_ROOT = "dev.papyruth.com:443";
     public static final String API_VERSION = "v1";
 
     public static final int MIN_ENTRANCE_YEAR = 2000;

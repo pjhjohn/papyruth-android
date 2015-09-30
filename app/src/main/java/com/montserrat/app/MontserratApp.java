@@ -31,7 +31,7 @@ public class MontserratApp extends Application {
         new RetrofitApi.Builder()
             .setRoot(AppConst.API_ROOT)
             .setVersion(AppConst.API_VERSION)
-            .enableSSL(false)
+            .enableSSL(true)
             .setLogLevel(RestAdapter.LogLevel.FULL)
             .setLog(new RetrofitLogger("RetrofitApi", "^[A\\-\\<\\{].*"))
             .build();
