@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.model.response.VoidResponse;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
@@ -175,27 +176,33 @@ public class EvaluationStep3Fragment extends Fragment {
             EvaluationForm.getInstance().getBody()
         )
         .filter(response -> response.success)
-        .flatMap(response -> {
+        .map(response -> {
             evaluationID = response.evaluation_id;
-            List<String> hashtags = new ArrayList<>();
-            for (int i = 0; i < hashtagsContainer.getChildCount(); i++) {
-                hashtags.add(((Button) hashtagsContainer.getChildAt(i)).getText().toString());
+            Timber.d("&&hash %s", hashtagsContainer.getChildCount());
+            if (hashtagsContainer.getChildCount() > 0) {
+                List<String> hashtags = new ArrayList<>();
+                for (int i = 0; i < hashtagsContainer.getChildCount(); i++) {
+                    hashtags.add(((TextView) hashtagsContainer.getChildAt(i)).getText().toString());
+                }
+                Timber.d("&&regist hash %s", hashtags.size());
+                RetrofitApi.getInstance().post_evaluation_hashtag(
+                    User.getInstance().getAccessToken(),
+                    evaluationID,
+                    hashtags
+                );
             }
-            return RetrofitApi.getInstance().post_evaluation_hashtag(
-                User.getInstance().getAccessToken(),
-                evaluationID,
-                hashtags
-            );
+            return true;
         })
-
-        .flatMap(response -> RetrofitApi.getInstance().get_evaluation(
+        .flatMap(unused -> RetrofitApi.getInstance().get_evaluation(
             User.getInstance().getAccessToken(),
             evaluationID
         ))
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(
             response -> {
+                Timber.d("&&after getEvaluation %s", response.success);
                 if (response.success) {
+                    EvaluationForm.getInstance().free();
                     Evaluation.getInstance().update(response.evaluation);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("STANDALONE", true);
@@ -211,6 +218,8 @@ public class EvaluationStep3Fragment extends Fragment {
                         default:
                             Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                     }
+                }else{
+                    error.printStackTrace();
                 }
             }
         );

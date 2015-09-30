@@ -48,6 +48,11 @@ public class EvaluationForm {
     public void clear() {
         this.clear(false);
     }
+
+    public void free(){
+        clear();
+        EvaluationForm.instance = null;
+    }
     public EvaluationForm clear(boolean soft) {
         if(!soft) {
             this.lectureName        = null;
