@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -76,12 +77,16 @@ public class ProfileEditFragment extends Fragment {
         super.onDestroyView();
         ButterKnife.reset(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, true);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
+
 
         this.email.setText(User.getInstance().getEmail());
         this.university.setText(""+User.getInstance().getUniversityName());

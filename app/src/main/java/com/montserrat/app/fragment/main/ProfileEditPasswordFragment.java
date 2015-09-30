@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
@@ -66,6 +67,7 @@ public class ProfileEditPasswordFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, true);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -73,6 +75,7 @@ public class ProfileEditPasswordFragment extends Fragment {
     public void onResume() {
         super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
 
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(this.old_password).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),

@@ -78,6 +78,8 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, true);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
@@ -95,6 +97,7 @@ public class ProfileFragment extends Fragment {
         this.entrance.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.entrance_postfix)));
 
         ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_profile)
@@ -165,12 +168,6 @@ public class ProfileFragment extends Fragment {
                     error.printStackTrace();
                 })
         );
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
     }
 
     private MaterialDialog termPage;
