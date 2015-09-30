@@ -188,7 +188,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             this.showCrossBtn(true);
             this.mToolbar.setOnMenuItemClickListener(item -> {
                 if (item.equals(itemSetting)) {
-                    this.navigate(DummyFragment.class, true, AnimatorType.SLIDE_TO_LEFT);
+                    this.navigate(DummyFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
                 }
                 return true;
             });
