@@ -86,7 +86,7 @@ public class RxValidator {
         if(text == null) return value;
         if(value >= 10) text.setText("10");
         else if(value < 0) text.setText("N/A");
-        else text.setText(String.format("%d.0", value));
+        else text.setText(String.format("%d", value));
         return value;
     };
     public static Observable<Integer> createObservableSeekBar(SeekBar seekbar, Boolean fromUserOnly) {
@@ -117,7 +117,7 @@ public class RxValidator {
         if(text == null) return value;
         if(value >= 5.0f) text.setText("10");
         else if(value < 0.0f) text.setText("N/A");
-        else text.setText(String.format("%d.0", (int)(2*value)));
+        else text.setText(String.format("%d", (int)(2*value)));
         return value;
     };
     public static Observable<Float> createObservableRatingBar(RatingBar ratingbar, Boolean fromUserOnly) {

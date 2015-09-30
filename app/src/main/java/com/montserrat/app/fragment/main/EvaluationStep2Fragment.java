@@ -119,10 +119,18 @@ public class EvaluationStep2Fragment extends Fragment {
         Picasso.with(context).load(R.drawable.ic_point_clarity).into(this.pointClarityIcon);
         Picasso.with(context).load(R.drawable.ic_point_satisfaction).into(this.pointGpaSatisfactionIcon);
         Picasso.with(context).load(R.drawable.ic_point_easiness).into(this.pointEasinessIcon);
-        this.pointOverallText.setText("0.0");
-        this.pointClarityText.setText("0.0");
-        this.pointGpaSatisfactionText.setText("0.0");
-        this.pointEasinessText.setText("0.0");
+        if(EvaluationForm.getInstance().isNextStep()){
+            this.pointOverallText.setText(EvaluationForm.getInstance().getPointOverall().toString());
+            this.pointClarityText.setText(EvaluationForm.getInstance().getPointClarity().toString());
+            this.pointGpaSatisfactionText.setText(EvaluationForm.getInstance().getPointGpaSatisfaction().toString());
+            this.pointEasinessText.setText(EvaluationForm.getInstance().getPointEasiness().toString());
+            FloatingActionControl.getInstance().show(true);
+        }else {
+            this.pointOverallText.setText("0");
+            this.pointClarityText.setText("0");
+            this.pointGpaSatisfactionText.setText("0");
+            this.pointEasinessText.setText("0");
+        }
 
         this.subscriptions.add(Observable
             .combineLatest(
@@ -155,7 +163,7 @@ public class EvaluationStep2Fragment extends Fragment {
                     return EvaluationForm.getInstance().isNextStep();
                 }
             )
-            .startWith(EvaluationForm.getInstance().clear(true).isNextStep())
+            .startWith(EvaluationForm.getInstance().isNextStep())
             .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;

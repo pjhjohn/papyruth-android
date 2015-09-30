@@ -1,5 +1,8 @@
 package com.montserrat.app.model.unique;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by pjhjohn on 2015-04-26.
  */
@@ -26,6 +29,7 @@ public class EvaluationForm {
 
     /* STEP 3 */
     private String body;
+    private List<String> hashtag;
 
     public String  getLectureName () { return lectureName; }
     public String  getProfessorName() { return professorName; }
@@ -35,6 +39,7 @@ public class EvaluationForm {
     public Integer getPointEasiness () { return pointEasiness; }
     public Integer getPointClarity () {  return pointClarity; }
     public String getBody() {  return body; }
+    public List<String> getHashtag() {  return hashtag; }
 
     public void setLectureName (String lectureName) { this.lectureName = lectureName; }
     public void setProfessorName (String professorName) { this.professorName = professorName; }
@@ -44,6 +49,11 @@ public class EvaluationForm {
     public void setPointEasiness (Integer pointEasiness) { this.pointEasiness = pointEasiness; }
     public void setPointClarity (Integer pointClarity) { this.pointClarity = pointClarity; }
     public void setBody(String body) { this.body = body; }
+    public void setHashtag(List<String> hashtag){
+        this.hashtag.clear();
+        this.hashtag.addAll(hashtag);
+    }
+    public void addHashtag(String hashtag){ this.hashtag.add(hashtag); }
 
     public void clear() {
         this.clear(false);
@@ -64,6 +74,9 @@ public class EvaluationForm {
         this.pointEasiness          = null;
         this.pointClarity           = null;
         this.body                   = null;
+        if(hashtag == null)
+            this.hashtag = new ArrayList<>();
+        this.hashtag.clear();
         return this;
     }
 

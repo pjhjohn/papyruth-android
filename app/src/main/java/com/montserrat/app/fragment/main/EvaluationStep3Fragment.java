@@ -100,6 +100,18 @@ public class EvaluationStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
+        if(EvaluationForm.getInstance().getBody() != null) {
+            this.bodyText.setText(EvaluationForm.getInstance().getBody());
+        }
+        if(EvaluationForm.getInstance().getHashtag().size() > 0){
+            for(String str : EvaluationForm.getInstance().getHashtag()) {
+                TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+                hashtag.setText(str);
+                hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
+                hashtagsContainer.addView(hashtag);
+            }
+        }
+        Timber.d("on Loading %s", hashtagsContainer.getChildCount());
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
@@ -158,6 +170,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
                 hashtag.setText(str);
                 hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
+                EvaluationForm.getInstance().addHashtag(str);
                 hashtagsContainer.addView(hashtag);
                 this.hashtagsText.setText("");
             })
@@ -178,18 +191,12 @@ public class EvaluationStep3Fragment extends Fragment {
         .filter(response -> response.success)
         .map(response -> {
             evaluationID = response.evaluation_id;
-            Timber.d("&&hash %s", hashtagsContainer.getChildCount());
             if (hashtagsContainer.getChildCount() > 0) {
-                List<String> hashtags = new ArrayList<>();
-                for (int i = 0; i < hashtagsContainer.getChildCount(); i++) {
-                    hashtags.add(((TextView) hashtagsContainer.getChildAt(i)).getText().toString());
-                }
-                Timber.d("&&regist hash %s", hashtags.size());
                 RetrofitApi.getInstance().post_evaluation_hashtag(
                     User.getInstance().getAccessToken(),
                     evaluationID,
-                    hashtags
-                );
+                    EvaluationForm.getInstance().getHashtag()
+                ).subscribe();
             }
             return true;
         })
@@ -200,14 +207,13 @@ public class EvaluationStep3Fragment extends Fragment {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(
             response -> {
-                Timber.d("&&after getEvaluation %s", response.success);
                 if (response.success) {
                     EvaluationForm.getInstance().free();
                     Evaluation.getInstance().update(response.evaluation);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("STANDALONE", true);
                     this.navigator.back();
-                    this.navigator.navigate(EvaluationFragment.class, bundle, true, Navigator.AnimatorType.SLIDE_TO_RIGHT);
+                    this.navigator.navigate(EvaluationFragment.class, bundle, false, Navigator.AnimatorType.SLIDE_TO_RIGHT);
                 } else {
                     Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
                 }
