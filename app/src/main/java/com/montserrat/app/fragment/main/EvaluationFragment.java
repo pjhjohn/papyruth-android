@@ -98,7 +98,6 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         this.evaluationToolbar.setNavigationIcon(materialNavigationDrawable);
         this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
         this.evaluationToolbar.setTitle(R.string.toolbar_title_evaluation);
-        this.evaluationToolbar.setTitleTextColor(Color.WHITE);
         ToolbarUtil.registerMenu(this.evaluationToolbar, R.menu.evaluation, null);
 
         this.mCommentInputActive = false;

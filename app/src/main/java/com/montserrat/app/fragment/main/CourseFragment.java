@@ -67,7 +67,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.setupRecyclerView(this.courseRecyclerView);
 
         this.toolbar.setTitle(R.string.toolbar_title_course);
-        this.toolbar.setTitleTextColor(Color.WHITE);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         this.slave = null;

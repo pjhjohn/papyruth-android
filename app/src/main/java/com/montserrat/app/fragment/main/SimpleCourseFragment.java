@@ -62,7 +62,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.toolbar.setTitle(R.string.toolbar_search);
-        this.toolbar.setTitleTextColor(Color.WHITE);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         this.refresh.setEnabled(true);
 

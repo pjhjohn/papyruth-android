@@ -43,7 +43,6 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         super.onResume();
 
         toolbar.setTitle(R.string.my_evaluation);
-        toolbar.setTitleTextColor(Color.WHITE);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)

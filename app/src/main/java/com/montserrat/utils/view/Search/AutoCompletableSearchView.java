@@ -449,7 +449,6 @@ public class AutoCompletableSearchView {
     }
     public void toolbarState(Toolbar toolbar) {
         toolbar.setTitle(R.string.toolbar_title_course);
-        toolbar.setTitleTextColor(Color.WHITE);
     }
 
     private void onShowChange(boolean show){

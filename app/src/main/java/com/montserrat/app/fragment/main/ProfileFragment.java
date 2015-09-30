@@ -69,7 +69,6 @@ public class ProfileFragment extends Fragment {
 
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.toolbar.setTitle(R.string.toolbar_profile);
-        this.toolbar.setTitleTextColor(Color.WHITE);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         return view;
     }
