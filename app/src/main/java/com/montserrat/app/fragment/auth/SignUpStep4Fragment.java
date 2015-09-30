@@ -183,8 +183,13 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     }
 
     private void buildTermDialog(int number){
+        String title = getString(R.string.term);
+        if(number == 0)
+            title = getString(R.string.term);
+        else if(number == 1)
+            title = getString(R.string.privacy_policy);
         this.termPage = new MaterialDialog.Builder(this.getActivity())
-            .title(R.string.term)
+            .title(title)
             .content(this.termContents.get(number))
             .positiveText(R.string.agree)
             .callback(new MaterialDialog.ButtonCallback() {
