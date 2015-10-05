@@ -16,6 +16,10 @@ public class EvaluationForm {
         return EvaluationForm.instance;
     }
 
+    /* FLAG */
+    private boolean isEdit;
+    private boolean modifyMode;
+
     /* STEP 1*/
     private String lectureName;
     private String professorName;
@@ -40,6 +44,8 @@ public class EvaluationForm {
     public Integer getPointClarity () {  return pointClarity; }
     public String getBody() {  return body; }
     public List<String> getHashtag() {  return hashtag; }
+    public boolean isEdit() { return isEdit; }
+    public boolean isModifyMode() { return modifyMode; }
 
     public void setLectureName (String lectureName) { this.lectureName = lectureName; }
     public void setProfessorName (String professorName) { this.professorName = professorName; }
@@ -53,7 +59,23 @@ public class EvaluationForm {
         this.hashtag.clear();
         this.hashtag.addAll(hashtag);
     }
+    public void setEdit(boolean isEdit) { this.isEdit = isEdit; }
+    public void setModifyMode(boolean modifyMode) { this.modifyMode = modifyMode; }
+
     public void addHashtag(String hashtag){ this.hashtag.add(hashtag); }
+
+    public void initForEdit(Evaluation evaluation){
+        this.modifyMode = true;
+        this.courseId = evaluation.getCourseId();
+        this.lectureName = evaluation.getLectureName();
+        this.professorName = evaluation.getProfessorName();
+        this.pointOverall = evaluation.getPointOverall();
+        this.pointGpaSatisfaction = evaluation.getPointGpaSatisfaction();
+        this.pointEasiness = evaluation.getPointEasiness();
+        this.pointClarity = evaluation.getPointClarity();
+        this.body = evaluation.getBody();
+        this.hashtag = evaluation.getHashTag();
+    }
 
     public void clear() {
         this.clear(false);
@@ -77,6 +99,8 @@ public class EvaluationForm {
         if(hashtag == null)
             this.hashtag = new ArrayList<>();
         this.hashtag.clear();
+        this.isEdit = false;
+        this.modifyMode = false;
         return this;
     }
 

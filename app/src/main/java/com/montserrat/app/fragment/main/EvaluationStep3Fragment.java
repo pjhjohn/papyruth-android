@@ -3,29 +3,22 @@ package com.montserrat.app.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.model.response.VoidResponse;
+import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
@@ -38,8 +31,6 @@ import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -146,17 +137,21 @@ public class EvaluationStep3Fragment extends Fragment {
             WidgetObservable.text(this.bodyText)
                 .map(RxValidator.toString)
                 .map(body -> {
+                    if(EvaluationForm.getInstance().isModifyMode())
+                        EvaluationForm.getInstance().setEdit(true);
                     EvaluationForm.getInstance().setBody(body);
                     return body;
                 })
                 .map(RxValidator.isValidEvaluationBody)
                 .map(e -> {
-                        Timber.d("EvaluationForm : %s", EvaluationForm.getInstance());
-                        return EvaluationForm.getInstance().isCompleted();
-                    })
+                    Timber.d("EvaluationForm : %s", EvaluationForm.getInstance());
+                    return EvaluationForm.getInstance().isCompleted();
+                })
                 .startWith(EvaluationForm.getInstance().isCompleted())
                 .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .map(valid -> valid && ((EvaluationForm.getInstance().isModifyMode() && EvaluationForm.getInstance().isEdit()) || !EvaluationForm.getInstance().isModifyMode()))
                 .subscribe(valid -> {
+                    Timber.d("is modi edit%s %s", EvaluationForm.getInstance().isModifyMode(), EvaluationForm.getInstance().isEdit());
                     boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                     if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                     else if (!visible && valid) FloatingActionControl.getInstance().show(true);
@@ -173,13 +168,25 @@ public class EvaluationStep3Fragment extends Fragment {
                 EvaluationForm.getInstance().addHashtag(str);
                 hashtagsContainer.addView(hashtag);
                 this.hashtagsText.setText("");
+                if(EvaluationForm.getInstance().isModifyMode())
+                    EvaluationForm.getInstance().setEdit(true);
             })
         );
     }
 
-    private Integer evaluationID = null;
-    private void submitNewEvaluation() {
-        RetrofitApi.getInstance().post_evaluation(
+    private Observable<EvaluationResponse> submitEvaluation(boolean isModifyMode){
+        if(isModifyMode){
+            return RetrofitApi.getInstance().put_update_evaluation(
+                User.getInstance().getAccessToken(),
+                EvaluationForm.getInstance().getCourseId(),
+                EvaluationForm.getInstance().getPointOverall(),
+                EvaluationForm.getInstance().getPointGpaSatisfaction(),
+                EvaluationForm.getInstance().getPointEasiness(),
+                EvaluationForm.getInstance().getPointClarity(),
+                EvaluationForm.getInstance().getBody()
+            );
+        }
+        return RetrofitApi.getInstance().post_evaluation(
             User.getInstance().getAccessToken(),
             EvaluationForm.getInstance().getCourseId(),
             EvaluationForm.getInstance().getPointOverall(),
@@ -187,7 +194,12 @@ public class EvaluationStep3Fragment extends Fragment {
             EvaluationForm.getInstance().getPointEasiness(),
             EvaluationForm.getInstance().getPointClarity(),
             EvaluationForm.getInstance().getBody()
-        )
+        );
+    }
+
+    private Integer evaluationID = null;
+    private void submitNewEvaluation() {
+        this.submitEvaluation(EvaluationForm.getInstance().isModifyMode())
         .filter(response -> response.success)
         .map(response -> {
             evaluationID = response.evaluation_id;

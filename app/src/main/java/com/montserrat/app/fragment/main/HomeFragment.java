@@ -1,11 +1,9 @@
 package com.montserrat.app.fragment.main;
 
-import android.graphics.Color;
 import android.view.View;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;

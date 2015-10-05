@@ -1,6 +1,7 @@
 package com.montserrat.app.recyclerview.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.montserrat.app.AppManager;
@@ -24,10 +25,12 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final String USER_LEARNED_INFORM = "EvaluationAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
     private boolean mUserLearnedInform;
     private RecyclerViewItemClickListener commentItemClickListener;
+    private View.OnClickListener onClickListener;
     private List<CommentData> comments;
-    public EvaluationAdapter(List<CommentData> initialComments, RecyclerViewItemClickListener listener) {
+    public EvaluationAdapter(List<CommentData> initialComments, RecyclerViewItemClickListener listener, View.OnClickListener onClick) {
         this.comments = initialComments;
         this.commentItemClickListener = listener;
+        this.onClickListener = onClick;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
     }
 
@@ -56,7 +59,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_evaluation);
-        else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((EvaluationViewHolder) holder).bind(Evaluation.getInstance());
+        else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), onClickListener);
         else ((CommentItemViewHolder) holder).bind(this.comments.get(position - getItemOffset()));
     }
 
