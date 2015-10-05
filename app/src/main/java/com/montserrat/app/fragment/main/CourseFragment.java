@@ -86,6 +86,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     @Override
     public void onResume() {
         super.onResume();
+        this.isOpenSlave = false;
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
         RetrofitApi
@@ -112,6 +113,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     @InjectView(R.id.evaluation_container) protected FrameLayout slaveContainer;
     private EvaluationFragment slave;
     private boolean slaveIsOccupying;
+    private Boolean isOpenSlave;
 
     @Override
     public boolean onBack() {
@@ -127,6 +129,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     public void onRecyclerViewItemClick(View view, int position) {
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
+        if(isOpenSlave) return;
+        isOpenSlave = true;
         RetrofitApi.getInstance()
             .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
             .observeOn(AndroidSchedulers.mainThread())
@@ -142,6 +146,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     private AnimatorSet animators;
     private Boolean isAnimationCanceled;
     private void openEvaluation(View view) {
+        this.isOpenSlave = true;
         this.slaveContainer.setVisibility(View.VISIBLE);
         if(this.getView() != null) this.screenHeight = this.getView().getHeight();
         this.itemHeight = view.getHeight();
@@ -179,6 +184,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 super.onAnimationCancel(animation);
                 if(slave != null) getFragmentManager().beginTransaction().remove(slave).commit();
                 isAnimationCanceled = true;
+                isOpenSlave = false;
             }
 
             @Override
@@ -196,6 +202,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         animators.start();
     }
     private void closeEvaluation() {
+        this.isOpenSlave = false;
         ViewGroup.LayoutParams lp = this.slaveContainer.getLayoutParams();
         ValueAnimator animHeight = ValueAnimator.ofInt(this.screenHeight, this.itemHeight);
         animHeight.addUpdateListener(animator -> {

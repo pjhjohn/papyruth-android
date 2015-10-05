@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDetailAdapter, EvaluationData> {
 
@@ -26,8 +27,10 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
+        if(isOpenSlave) return;
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
+        isOpenSlave = true;
         RetrofitApi.getInstance()
             .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
             .observeOn(AndroidSchedulers.mainThread())
