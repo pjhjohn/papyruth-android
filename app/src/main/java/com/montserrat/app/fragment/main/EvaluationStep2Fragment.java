@@ -120,6 +120,10 @@ public class EvaluationStep2Fragment extends Fragment {
         Picasso.with(context).load(R.drawable.ic_point_satisfaction).into(this.pointGpaSatisfactionIcon);
         Picasso.with(context).load(R.drawable.ic_point_easiness).into(this.pointEasinessIcon);
         if(EvaluationForm.getInstance().isNextStep()){
+            this.pointOverallRatingBar.setProgress(EvaluationForm.getInstance().getPointOverall());
+            this.pointClaritySeekBar.setProgress(EvaluationForm.getInstance().getPointClarity());
+            this.pointGpaSatisfactionSeekBar.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
+            this.pointEasinessSeekBar.setProgress(EvaluationForm.getInstance().getPointEasiness());
             this.pointOverallText.setText(EvaluationForm.getInstance().getPointOverall().toString());
             this.pointClarityText.setText(EvaluationForm.getInstance().getPointClarity().toString());
             this.pointGpaSatisfactionText.setText(EvaluationForm.getInstance().getPointGpaSatisfaction().toString());
