@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.EvaluationFragment;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -88,6 +89,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     @Override
     public void onDestroyView () {
         super.onDestroyView();
+        FloatingActionControl.getInstance().closeMenuButton(true);
         if(this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
         ButterKnife.reset(this);
     }

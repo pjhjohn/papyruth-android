@@ -112,10 +112,11 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
-        this.subscriptions.add(FloatingActionControl
-            .clicks(R.id.fab_new_evaluation)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
+        this.subscriptions.add(
+            FloatingActionControl
+                .clicks(R.id.fab_new_evaluation)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
         );
         this.subscriptions.add(
             this.getRefreshObservable(this.refresh)

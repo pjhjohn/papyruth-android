@@ -22,6 +22,7 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.ProfileFragment;
 import com.montserrat.app.model.unique.User;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
@@ -153,6 +154,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     public void onClick(View view){
         if(mNavigationPriorClickListener == null) {
+            FloatingActionControl.getInstance().closeMenuButton(true);
             if (isDrawerOpened) this.close();
             else this.open();
         } else if(!isDrawerOpened) mNavigationPriorClickListener.onClick(view);

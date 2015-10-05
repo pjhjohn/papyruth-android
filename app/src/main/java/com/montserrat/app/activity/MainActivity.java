@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
@@ -298,6 +299,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private boolean isAutocompleteViewOpen;
     @Override
     public void onShowChange(boolean show) {
+        FloatingActionControl.getInstance().closeMenuButton(true);
         if(show) {
             if(!this.isAutocompleteViewOpen)
                 this.state = this.mMaterialMenuDrawable.getIconState();
