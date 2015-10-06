@@ -96,12 +96,11 @@ public class EvaluationStep3Fragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(hashtags -> {
-                    Timber.d("hashtag : %s", hashtags);
                     for (String string : hashtags) {
                         TextView hashtag = (TextView) LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.button_hashtag, hashtagsContainer, false);
                         hashtag.setText(string);
                         hashtag.setOnClickListener(event -> {
-                            registNewHashtag(string);
+                            addNewHashtag(string);
                         });
                         recommendHashtag.addView(hashtag);
                     }
@@ -124,7 +123,6 @@ public class EvaluationStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
-        Timber.d("on Loading %s", hashtagsContainer.getChildCount());
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
@@ -165,18 +163,11 @@ public class EvaluationStep3Fragment extends Fragment {
                     return body;
                 })
                 .map(RxValidator.isValidEvaluationBody)
-                .map(e -> {
-                    Timber.d("EvaluationForm : %s", EvaluationForm.getInstance());
-                    return EvaluationForm.getInstance().isCompleted();
-                })
+                .map(e -> EvaluationForm.getInstance().isCompleted())
                 .startWith(EvaluationForm.getInstance().isCompleted())
                 .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .map(valid -> valid && ((EvaluationForm.getInstance().isModifyMode() && EvaluationForm.getInstance().isEdit()) || !EvaluationForm.getInstance().isModifyMode()))
                 .subscribe(valid -> {
-                    Timber.d("is modi edit%s %s", EvaluationForm.getInstance().isModifyMode(), EvaluationForm.getInstance().isEdit());
-                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                    this.showFAB(valid);
                 }, error -> Timber.d("error : %s", error))
         );
 
@@ -186,26 +177,39 @@ public class EvaluationStep3Fragment extends Fragment {
                 .subscribe(event -> {
                     final String str = event.text().subSequence(0, event.text().length() - 1).toString();
 
-                    registNewHashtag(str);
+                    this.addNewHashtag(str);
                     this.hashtagsText.setText("");
-
-                    if(EvaluationForm.getInstance().isModifyMode())
-                        EvaluationForm.getInstance().setEdit(true);
                 })
         );
     }
 
-    private boolean registNewHashtag(String text){
+    private boolean showFAB(boolean valid){
+        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+        if (visible && !valid){
+            FloatingActionControl.getInstance().hide(true);
+        }else if (!visible && valid) {
+            FloatingActionControl.getInstance().show(true);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean addNewHashtag(String text){
         if(EvaluationForm.getInstance().getHashtag().contains(text))
             return false;
         addNewHashtagView(text);
         EvaluationForm.getInstance().addHashtag(text);
+
+        if(EvaluationForm.getInstance().isModifyMode())
+            EvaluationForm.getInstance().setEdit(true);
+        this.showFAB(EvaluationForm.getInstance().isCompleted());
         return true;
     }
     private void addNewHashtagView(String text){
-        TextView hashtag = (TextView) LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+        Context context = getActivity();
+        TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
         hashtag.setText(text);
-        hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(getActivity().getBaseContext(), hashtagsContainer, hashtag));
+        hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
         hashtagsContainer.addView(hashtag);
     }
 
@@ -235,46 +239,46 @@ public class EvaluationStep3Fragment extends Fragment {
     private Integer evaluationID = null;
     private void submitNewEvaluation() {
         this.submitEvaluation(EvaluationForm.getInstance().isModifyMode())
-        .filter(response -> response.success)
-        .map(response -> {
-            evaluationID = response.evaluation_id;
-            if (hashtagsContainer.getChildCount() > 0) {
-                RetrofitApi.getInstance().post_evaluation_hashtag(
-                    User.getInstance().getAccessToken(),
-                    evaluationID,
-                    EvaluationForm.getInstance().getHashtag()
-                ).subscribe();
-            }
-            return true;
-        })
-        .flatMap(unused -> RetrofitApi.getInstance().get_evaluation(
-            User.getInstance().getAccessToken(),
-            evaluationID
-        ))
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-            response -> {
-                if (response.success) {
-                    EvaluationForm.getInstance().free();
-                    Evaluation.getInstance().update(response.evaluation);
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("STANDALONE", true);
-                    this.navigator.back();
-                    this.navigator.navigate(EvaluationFragment.class, bundle, false, Navigator.AnimatorType.SLIDE_TO_RIGHT);
-                } else {
-                    Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
+            .filter(response -> response.success)
+            .map(response -> {
+                evaluationID = response.evaluation_id;
+                if (hashtagsContainer.getChildCount() > 0) {
+                    RetrofitApi.getInstance().post_evaluation_hashtag(
+                        User.getInstance().getAccessToken(),
+                        evaluationID,
+                        EvaluationForm.getInstance().getHashtag()
+                    ).subscribe();
                 }
-            },
-            error -> {
-                if (error instanceof RetrofitError) {
-                    switch (((RetrofitError) error).getResponse().getStatus()) {
-                        default:
-                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                return true;
+            })
+            .flatMap(unused -> RetrofitApi.getInstance().get_evaluation(
+                User.getInstance().getAccessToken(),
+                evaluationID
+            ))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                response -> {
+                    if (response.success) {
+                        EvaluationForm.getInstance().free();
+                        Evaluation.getInstance().update(response.evaluation);
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("STANDALONE", true);
+                        this.navigator.back();
+                        this.navigator.navigate(EvaluationFragment.class, bundle, false, Navigator.AnimatorType.SLIDE_TO_RIGHT);
+                    } else {
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    error.printStackTrace();
+                },
+                error -> {
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            default:
+                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        }
+                    }else{
+                        error.printStackTrace();
+                    }
                 }
-            }
-        );
+            );
     }
 }

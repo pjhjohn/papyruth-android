@@ -63,6 +63,13 @@ public class EvaluationForm {
     public void setModifyMode(boolean modifyMode) { this.modifyMode = modifyMode; }
 
     public void addHashtag(String hashtag){ this.hashtag.add(hashtag); }
+    public boolean removeHashtag(String text){
+        if(this.hashtag.contains(text)) {
+            this.hashtag.remove(text);
+            return true;
+        }
+        return false;
+    }
 
     public void initForEdit(Evaluation evaluation){
         this.modifyMode = true;
@@ -124,7 +131,9 @@ public class EvaluationForm {
             this.pointGpaSatisfaction  != null &&
             this.pointEasiness         != null &&
             this.pointClarity          != null &&
-            this.body                  != null;
+            this.body                  != null &&
+            ( !this.modifyMode || this.isEdit );
+
     }
 
     @Override

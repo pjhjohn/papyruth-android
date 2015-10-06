@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -13,40 +12,26 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.materialdialog.HashtagDeleteDialog;
-import com.montserrat.utils.support.picasso.ColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -131,13 +116,11 @@ public class EvaluationStep2Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        final Context context = this.getActivity();
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> {
                 this.navigator.navigate(EvaluationStep3Fragment.class, true);
             });
-
 
         this.subscriptions.add(Observable
             .combineLatest(
@@ -166,7 +149,6 @@ public class EvaluationStep2Fragment extends Fragment {
                         return RxValidator.isIntegerValueInRange.call(progress);
                     }),
                 (a, b, c, d) -> {
-                    Timber.d("EvaluationForm : %s", EvaluationForm.getInstance());
                     return EvaluationForm.getInstance().isNextStep();
                 }
             )
