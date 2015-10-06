@@ -24,23 +24,6 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 
     private Integer sinceId = null, maxId = null;
 
-
-    @Override
-    public void onRecyclerViewItemClick(View view, int position) {
-        if(isOpenSlave) return;
-        if(slaveIsOccupying) return;
-        if(animators != null && animators.isRunning()) return;
-        isOpenSlave = true;
-        RetrofitApi.getInstance()
-            .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                Evaluation.getInstance().update(response.evaluation);
-                this.slave = new EvaluationFragment();
-                this.openEvaluation(view);
-            });
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -91,6 +74,22 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         );
     }
 
+    @Override
+    public void onRecyclerViewItemClick(View view, int position) {
+        Timber.d("current position : %s", position);
+        if(isOpenSlave) return;
+        if(slaveIsOccupying) return;
+        if(animators != null && animators.isRunning()) return;
+        isOpenSlave = true;
+        RetrofitApi.getInstance()
+            .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                Evaluation.getInstance().update(response.evaluation);
+                this.slave = new EvaluationFragment();
+                this.openEvaluation(view);
+            });
+    }
 
     @Override
     protected EvaluationItemsDetailAdapter getAdapter () {
