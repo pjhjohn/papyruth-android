@@ -39,6 +39,7 @@ import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -66,6 +67,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @InjectView(R.id.evaluation_hashtags_label) protected TextView hashtagsLabel;
     @InjectView(R.id.evaluation_hashtags_container) protected LinearLayout hashtagsContainer;
     @InjectView(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
+    @InjectView(R.id.evaluation_recommend_hashtag_list) protected LinearLayout recommendHashtag;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
@@ -77,6 +79,37 @@ public class EvaluationStep3Fragment extends Fragment {
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+
+        if(EvaluationForm.getInstance().getBody() != null) {
+            this.bodyText.setText(EvaluationForm.getInstance().getBody());
+        }
+        if(EvaluationForm.getInstance().getHashtag().size() > 0){
+            for(String str : EvaluationForm.getInstance().getHashtag()) {
+                addNewHashtagView(str);
+            }
+        }
+        this.subscriptions.add(
+            RetrofitApi
+                .getInstance()
+                .get_hashtag_preset(User.getInstance().getAccessToken())
+                .map(response -> response.hashtags)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(hashtags -> {
+                    Timber.d("hashtag : %s", hashtags);
+                    for (String string : hashtags) {
+                        TextView hashtag = (TextView) LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+                        hashtag.setText(string);
+                        hashtag.setOnClickListener(event -> {
+                            registNewHashtag(string);
+                        });
+                        recommendHashtag.addView(hashtag);
+                    }
+                }, error -> {
+                    error.printStackTrace();
+                })
+        );
+
         return view;
     }
 
@@ -91,17 +124,6 @@ public class EvaluationStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
-        if(EvaluationForm.getInstance().getBody() != null) {
-            this.bodyText.setText(EvaluationForm.getInstance().getBody());
-        }
-        if(EvaluationForm.getInstance().getHashtag().size() > 0){
-            for(String str : EvaluationForm.getInstance().getHashtag()) {
-                TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
-                hashtag.setText(str);
-                hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
-                hashtagsContainer.addView(hashtag);
-            }
-        }
         Timber.d("on Loading %s", hashtagsContainer.getChildCount());
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
@@ -158,20 +180,33 @@ public class EvaluationStep3Fragment extends Fragment {
                 }, error -> Timber.d("error : %s", error))
         );
 
-        this.subscriptions.add(WidgetObservable.text(this.hashtagsText)
-            .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
-            .subscribe(event -> {
-                final String str = event.text().subSequence(0, event.text().length() - 1).toString();
-                TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
-                hashtag.setText(str);
-                hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
-                EvaluationForm.getInstance().addHashtag(str);
-                hashtagsContainer.addView(hashtag);
-                this.hashtagsText.setText("");
-                if(EvaluationForm.getInstance().isModifyMode())
-                    EvaluationForm.getInstance().setEdit(true);
-            })
+        this.subscriptions.add(
+            WidgetObservable.text(this.hashtagsText)
+                .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
+                .subscribe(event -> {
+                    final String str = event.text().subSequence(0, event.text().length() - 1).toString();
+
+                    registNewHashtag(str);
+                    this.hashtagsText.setText("");
+
+                    if(EvaluationForm.getInstance().isModifyMode())
+                        EvaluationForm.getInstance().setEdit(true);
+                })
         );
+    }
+
+    private boolean registNewHashtag(String text){
+        if(EvaluationForm.getInstance().getHashtag().contains(text))
+            return false;
+        addNewHashtagView(text);
+        EvaluationForm.getInstance().addHashtag(text);
+        return true;
+    }
+    private void addNewHashtagView(String text){
+        TextView hashtag = (TextView) LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+        hashtag.setText(text);
+        hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(getActivity().getBaseContext(), hashtagsContainer, hashtag));
+        hashtagsContainer.addView(hashtag);
     }
 
     private Observable<EvaluationResponse> submitEvaluation(boolean isModifyMode){

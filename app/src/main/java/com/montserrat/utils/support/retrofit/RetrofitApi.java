@@ -208,7 +208,9 @@ public class RetrofitApi {
         Observable<StatisticsResponse> get_info();
 
         @GET("/hashtag")
-        Observable<HashtagsResponse> get_hashtag_preset();
+        Observable<HashtagsResponse> get_hashtag_preset(
+            @Header("Authorization") String authorization
+        );
 
         /* PROFESSORS */
         @PATCH("/professors/{id}")

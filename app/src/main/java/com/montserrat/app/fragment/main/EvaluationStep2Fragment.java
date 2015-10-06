@@ -92,26 +92,8 @@ public class EvaluationStep2Fragment extends Fragment {
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
-        return view;
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         final Context context = this.getActivity();
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
-            .subscribe(unused -> {
-                this.navigator.navigate(EvaluationStep3Fragment.class, true);
-            });
-
         this.lecture.setText(EvaluationForm.getInstance().getLectureName());
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
         this.setRatingBarColor(this.pointOverallRatingBar, Color.YELLOW);
@@ -135,6 +117,27 @@ public class EvaluationStep2Fragment extends Fragment {
             this.pointGpaSatisfactionText.setText("0");
             this.pointEasinessText.setText("0");
         }
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final Context context = this.getActivity();
+        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unused -> {
+                this.navigator.navigate(EvaluationStep3Fragment.class, true);
+            });
+
 
         this.subscriptions.add(Observable
             .combineLatest(
