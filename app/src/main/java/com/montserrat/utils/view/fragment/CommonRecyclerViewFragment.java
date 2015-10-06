@@ -175,7 +175,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     }
 
     protected void closeEvaluation() {
-        Timber.d("$$bye~");
         this.isOpenSlave = false;
         ViewGroup.LayoutParams lpEvaluationContainer = this.slaveContainer.getLayoutParams();
 
