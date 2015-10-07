@@ -26,7 +26,6 @@ import timber.log.Timber;
 public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDetailAdapter, EvaluationData> {
 
     private Integer sinceId = null, maxId = null, firstId = null, size = null;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -38,62 +37,62 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         sinceId = null;
         toolbar.setTitle(R.string.toolbar_title_home);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
-        this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
-            .flatMap(unused -> {
-                this.swipeRefresh.setRefreshing(true);
-                return RetrofitApi.getInstance().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
-            })
-            .map(evaluations -> evaluations.evaluations)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(evaluations -> {
-                this.swipeRefresh.setRefreshing(false);
-                this.items.clear();
-                if (evaluations != null)
-                    this.items.addAll(evaluations);
-                this.adapter.notifyDataSetChanged();
-                size = items.size();
-            })
+        this.subscriptions.add(
+            super.getRefreshObservable(this.swipeRefresh)
+                .flatMap(unused -> {
+                    this.swipeRefresh.setRefreshing(true);
+                    return RetrofitApi.getInstance().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
+                })
+                .map(evaluations -> evaluations.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.swipeRefresh.setRefreshing(false);
+                    this.items.clear();
+                    if (evaluations != null)
+                        this.items.addAll(evaluations);
+                    this.adapter.notifyDataSetChanged();
+                    size = items.size();
+                })
         );
 
-        this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, true)
-            .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMap(unused -> {
-                this.progress.setVisibility(View.VISIBLE);
-                // TODO : handle the case for max_id == 0 : prefer not to request to server
-                return RetrofitApi.getInstance().get_evaluations(
-                    User.getInstance().getAccessToken(),
-                    User.getInstance().getUniversityId(),
-                    null,
-                    sinceId == null ? null : sinceId - 1,
-                    null,
-                    null
-                );
-            })
-            .map(evaluations -> evaluations.evaluations)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(evaluations -> {
+        this.subscriptions.add(
+            super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, true)
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE  )
+                .flatMap(unused -> {
+                    this.progress.setVisibility(View.VISIBLE);
+                    // TODO : handle the case for max_id == 0 : prefer not to request to server
+                    return RetrofitApi.getInstance().get_evaluations(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        null,
+                        sinceId == null ? null : sinceId - 1,
+                        null,
+                        null
+                    );
+                })
+                .map(evaluations -> evaluations.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.progress.setVisibility(View.GONE);
+                    if (evaluations != null) {
+                        this.items.addAll(evaluations);
 
-                this.progress.setVisibility(View.GONE);
-                if (evaluations != null) {
-                    this.items.addAll(evaluations);
-
-                    // TODO : Compare with below TODO Algorithm.
-                    if(evaluations.get(evaluations.size()-1).id < evaluations.get(0).id) {
-                        sinceId = evaluations.get(evaluations.size()-1).id;
-                        maxId = evaluations.get(0).id;
-                    }else{
-                        sinceId = evaluations.get(0).id;
-                        maxId = evaluations.get(evaluations.size()-1).id;
+                        // TODO : Compare with below TODO Algorithm.
+                        if(evaluations.get(evaluations.size()-1).id < evaluations.get(0).id) {
+                            sinceId = evaluations.get(evaluations.size()-1).id;
+                            maxId = evaluations.get(0).id;
+                        }else{
+                            sinceId = evaluations.get(0).id;
+                            maxId = evaluations.get(evaluations.size()-1).id;
+                        }
                     }
-                }
-                this.adapter.notifyDataSetChanged();
-                if(firstId == null)
-                    firstId = this.items.get(0).id;
-                size = items.size();
-                // TODO : Implement Better Algorithm.
+                    this.adapter.notifyDataSetChanged();
+                    if(firstId == null)
+                        firstId = this.items.get(0).id;
+                    size = items.size();
+                    // TODO : Implement Better Algorithm.
 //                for (EvaluationData evaluation : evaluations) {
 //                    final int id = evaluation.id;
 //                    if (maxId == null) maxId = id;
@@ -101,7 +100,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 //                    if (sinceId == null) sinceId = id;
 //                    else if (sinceId > id) sinceId = id;
 //                }
-            }, error -> error.printStackTrace())
+                }, error -> error.printStackTrace())
         );
     }
 
