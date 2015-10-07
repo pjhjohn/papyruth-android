@@ -59,7 +59,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     @Override
     public void onDetach() {
         super.onDetach();
-        navigator = null;
     }
 
     @Override
