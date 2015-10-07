@@ -27,6 +27,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.CommentData;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
@@ -365,6 +366,17 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         if(v.getId() == R.id.evaluation_modify && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
             EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
+        }else if(v.getId() == R.id.evaluation_header){
+            this.subscriptions.add(
+                RetrofitApi.getInstance().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
+                    .map(response -> response.course)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(course -> {
+                        Course.getInstance().update(course);
+                        ((MainActivity)this.getActivity()).navigate(CourseFragment.class, true);
+                    }, error -> error.printStackTrace())
+            );
         }
     }
 }

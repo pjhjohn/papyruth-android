@@ -32,6 +32,7 @@ public class Evaluation {
     private static Evaluation instance = null;
     private Evaluation() {
         this.hashTag = new ArrayList<>();
+        this.clear();
     }
     public synchronized static Evaluation getInstance(){
         if ( Evaluation.instance == null ) Evaluation.instance = new Evaluation();

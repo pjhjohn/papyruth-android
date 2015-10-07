@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
@@ -36,6 +37,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @InjectView(R.id.evaluation_header) protected RelativeLayout header;
     @InjectView(R.id.evaluation_lecture) protected TextView lecture;
     @InjectView(R.id.evaluation_timestamp) protected TextView timestamp;
     @InjectView(R.id.evaluation_category) protected TextView category;
@@ -132,6 +134,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void bind(Evaluation evaluation, View.OnClickListener listener){
         this.modify.setOnClickListener(listener);
+        this.header.setOnClickListener(listener);
         this.bind(evaluation);
     }
 
