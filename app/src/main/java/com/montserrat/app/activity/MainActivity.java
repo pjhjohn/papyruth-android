@@ -22,14 +22,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
-import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
-import com.montserrat.app.fragment.main.ProfileFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
@@ -116,7 +114,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
-        mAutoCompletableSearch.querySubmit(query);
+        mAutoCompletableSearch.submitQuery(query);
         ToolbarSearch.getInstance().search(true);
         return false;
     }
@@ -313,6 +311,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             this.isAutocompleteViewOpen = true;
         }else{
+            if(getFragmentManager().getBackStackEntryCount() < 1)
+                this.state = MaterialMenuDrawable.IconState.BURGER;
             this.mMaterialMenuDrawable.animateIconState(state);
             this.editText.setText("");
             this.searchView.setIconified(true);
@@ -322,5 +322,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             this.isAutocompleteViewOpen = false;
         }
+//        if(show){
+//            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+//        }else if(getFragmentManager().getBackStackEntryCount() < 1)
+//            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
     }
 }

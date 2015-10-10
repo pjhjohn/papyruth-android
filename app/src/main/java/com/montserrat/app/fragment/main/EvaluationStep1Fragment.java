@@ -3,7 +3,6 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +64,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         this.queryTextView.setOnKeyListener((v, keycode, e) -> {
             if (e.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keycode == KeyEvent.KEYCODE_ENTER) {
-                    this.search.querySubmit();
+                    this.search.submitQuery();
                     return true;
                 }
             }

@@ -136,7 +136,7 @@ public class AutoCompletableSearchView {
         this.editText = (EditText) textView;
 
         this.editText.setOnFocusChangeListener((v, hasFocus) -> {
-            if(hasFocus) {
+            if (hasFocus) {
                 this.showCandidates(true);
             }
         });
@@ -193,11 +193,11 @@ public class AutoCompletableSearchView {
         );
     }
 
-    public void querySubmit(){
-        this.querySubmit(this.editText.getText().toString());
+    public void submitQuery(){
+        this.submitQuery(this.editText.getText().toString());
     }
 
-    public void querySubmit(String query){
+    public void submitQuery(String query){
         if(this.type == Type.EVALUATION){
             this.setEvaluationCandidate(query);
             this.searchCourse();
@@ -208,8 +208,7 @@ public class AutoCompletableSearchView {
         this.editText.clearFocus();
     }
 
-
-
+    //ONLY used Evaluation
     private Candidate evaluationCandidate;
     private String evaluationQuery;
 
@@ -329,6 +328,7 @@ public class AutoCompletableSearchView {
         this.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
         this.setAutoCompleteViewOpen(false);
 
+
         if (this.type == Type.EVALUATION){
             lectureId = this.evaluationCandidate.lecture_id;
             professorId = this.evaluationCandidate.professor_id;
@@ -376,7 +376,6 @@ public class AutoCompletableSearchView {
             }
             Course.getInstance().clear().update(courses.get(position));
             this.addHistory(courses.get(position));
-
         }
         return true;
     }
@@ -402,11 +401,11 @@ public class AutoCompletableSearchView {
     public void showCandidates(boolean show){
         ViewGroup.LayoutParams param;
         if(show){
-            if(type == Type.EVALUATION) {
-                param =  courseListView.getLayoutParams();
-                param.height = this.context.getResources().getDisplayMetrics().heightPixels - this.editText.getHeight();
-                courseListView.setLayoutParams(param);
-            }
+//            if(type == Type.EVALUATION) {
+//                param =  courseListView.getLayoutParams();
+//                param.height = this.context.getResources().getDisplayMetrics().heightPixels - this.editText.getHeight();
+//                courseListView.setLayoutParams(param);
+//            }
             if(this.editText.getText().toString().length() == 0)
                 this.candidates.clear();
             Timber.d("&&& size : %s", this.candidates.size());
@@ -447,6 +446,7 @@ public class AutoCompletableSearchView {
                 this.candidates.clear();
         }
     }
+
     public void toolbarState(Toolbar toolbar) {
         toolbar.setTitle(R.string.toolbar_title_course);
     }
