@@ -28,4 +28,9 @@ public class Candidate {
         this.lecture_id = null;
         this.lecture_name = null;
     }
+
+    @Override
+    public String toString() {
+        return String.format("professor : id-<%s>, name-<%s>  lecture : id-<%s>, name-<%s>", professor_id, professor_name, lecture_id, lecture_name);
+    }
 }

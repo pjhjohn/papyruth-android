@@ -17,15 +17,19 @@ import android.widget.RelativeLayout;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.model.Candidate;
-import com.montserrat.app.model.unique.Course;
+import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.unique.EvaluationForm;
+import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
+import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.ToolbarUtil;
-import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.view.search.AutoCompletableSearchView2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,30 +53,38 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @InjectView(R.id.query_result_outside) protected RelativeLayout resultOutside;
     private CompositeSubscription subscriptions;
 
-    private AutoCompletableSearchView search;
+    private AutoCompletableSearchView2 search;
     private Toolbar toolbar;
+
+    private List<CourseData> courses;
+    private CourseItemsAdapter courseAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.courses = new ArrayList<>();
+        this.courseAdapter = new CourseItemsAdapter(this.courses, this, R.layout.cardview_header_height_zero);
+
+        this.search = new AutoCompletableSearchView2(this, this.getActivity().getBaseContext());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
+        this.setupRecyclerView(this.queryResult);
 
-        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext(), AutoCompletableSearchView.Type.EVALUATION);
-        this.search.initAutoComplete(this.queryResult, this.resultOutside);
-        this.search.initCourse(this.courseList);
+        this.search.initAutocompleteView(this.queryResult, this.resultOutside, this.queryTextView, getAdapter(), items);
+        this.search.initResultView(this.courseList, courseAdapter, courses);
+
         this.queryTextView.setOnKeyListener((v, keycode, e) -> {
-            if (e.getAction() == KeyEvent.ACTION_DOWN) {
-                if (keycode == KeyEvent.KEYCODE_ENTER) {
+            if (e.getAction() == KeyEvent.ACTION_DOWN && keycode == KeyEvent.KEYCODE_ENTER) {
                     this.search.submitQuery();
                     return true;
-                }
             }
             return false;
         });
-
-        if(this.search.hasData())
-            this.search.searchCourse();
 
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
@@ -92,26 +104,22 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-
         if(((RecyclerView)view.getParent()).getId() == this.queryResult.getId()) {
-            this.search.setEvaluationCandidate(position);
-            this.search.searchCourse();
-            this.search.onRecyclerViewItemClick(view, position);
-            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
+            this.search.searchCourse(this.items.get(position).lecture_id, this.items.get(position).professor_id, null);
         }else{
-            this.search.onRecyclerViewItemClick(view, position);
-            EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
-            EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
-            EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
-
-            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
+            EvaluationForm.getInstance().setLectureName(this.courses.get(position).name);
+            EvaluationForm.getInstance().setProfessorName(this.courses.get(position).professor_name);
+            EvaluationForm.getInstance().setCourseId(this.courses.get(position).id);
 
             this.navigator.navigate(EvaluationStep2Fragment.class, true);
         }
+        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
 
     @Override
     protected AutoCompleteAdapter getAdapter() {
+        if(this.adapter != null)
+            return this.adapter;
         return new AutoCompleteAdapter(this.items, this);
     }
 
@@ -123,7 +131,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     public void onResume() {
         super.onResume();
         FloatingActionControl.getInstance().clear();
-        this.search.autoComplete(this.queryTextView);
     }
     public void back(){
         this.search.onBack();

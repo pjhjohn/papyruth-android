@@ -21,6 +21,7 @@ import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +67,7 @@ public class AutoCompletableSearchView2 {
         void onTextChange(String query);
         void onShowChange(boolean open);
         void submitQuery(String query);
+        void onItemSelected(Candidate candidate);
     }
     public void setSearchViewListener(SearchViewListener listener){
         this.searchViewListener = listener;
@@ -77,21 +79,37 @@ public class AutoCompletableSearchView2 {
         reserveCandidateListOnClose = false;
         isOpen = false;
         setOpen = false;
+        this.evaluationCandidate = new Candidate();
+        this.subscription = new CompositeSubscription();
     }
 
-    public void initAutocompleteView(RecyclerView autocompleteListView, View outsideTouchableView, EditText editText,AutoCompleteAdapter adapter){
+    public void initAutocompleteView(RecyclerView autocompleteListView, View outsideTouchableView, EditText editText, AutoCompleteAdapter adapter, List<Candidate> items){
         this.autocompleteListView = autocompleteListView;
         this.outsideTouchableView = outsideTouchableView;
 
-        this.autoCompleteAdapter = adapter;
-        this.autocompleteListView.setLayoutManager(new LinearLayoutManager(context));
-        this.autocompleteListView.setAdapter(this.autoCompleteAdapter);
+        if(items == null)
+            this.candidates = new ArrayList<>();
+        else
+            this.candidates = items;
+
+        if(adapter != null)
+            this.autoCompleteAdapter = adapter;
+        else {
+            this.autoCompleteAdapter = new AutoCompleteAdapter(candidates, itemClickListener);
+            this.autocompleteListView.setLayoutManager(new LinearLayoutManager(context));
+            this.autocompleteListView.setAdapter(this.autoCompleteAdapter);
+        }
         this.outsideTouchableView.setOnClickListener(view -> showCandidates(false));
 
         this.queryView = editText;
+        this.autocomplete();
     }
-    public void initResultView(RecyclerView resultCouresListView, CourseItemsAdapter adapter){
+    public void initResultView(RecyclerView resultCouresListView, CourseItemsAdapter adapter, List<CourseData> items){
         this.resultCourseListView = resultCouresListView;
+        if(items == null)
+            this.courseDatas = new ArrayList<>();
+        else
+            this.courseDatas = items;
         this.courseItemsAdapter = adapter;
         this.resultCourseListView.setLayoutManager(new LinearLayoutManager(context));
         this.resultCourseListView.setAdapter(courseItemsAdapter);
@@ -101,6 +119,7 @@ public class AutoCompletableSearchView2 {
         this.candidates.clear();
         this.candidates.addAll(candidates);
         this.autoCompleteAdapter.notifyDataSetChanged();
+        Timber.d("update autocomplete %s %s", this.autoCompleteAdapter, this.candidates);
         this.updateAutoCompleteViewHeight();
     }
 
@@ -171,7 +190,7 @@ public class AutoCompletableSearchView2 {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    /* removed flag setOpen*/
+                    Timber.d("add autocomplete");
                     if (isOpen && setOpen)
                         this.showCandidates(true);
                     this.notifyChangedAutocomplete(result);
@@ -188,7 +207,9 @@ public class AutoCompletableSearchView2 {
     }
 
     public void submitQuery(String query){
-        this.searchViewListener.submitQuery(query);
+        if(searchViewListener != null)
+            this.searchViewListener.submitQuery(query);
+        this.searchCourse(null, null, query);
         this.showCandidates(false);
         this.queryView.clearFocus();
     }
@@ -279,10 +300,13 @@ public class AutoCompletableSearchView2 {
         );
     }
 
+    // DON'T USE at EVALUATION
     public boolean onRecyclerViewItemClick(View view, int position) {
         if(autocompleteListView != null && ((RecyclerView)view.getParent()).getId() == autocompleteListView.getId()) {
-            Search.getInstance().clear();
-            Search.getInstance().fromCandidate(candidates.get(position));
+//            Search.getInstance().clear();
+//            Search.getInstance().fromCandidate(candidates.get(position));
+            if(searchViewListener != null)
+                searchViewListener.onItemSelected(candidates.get(position));
         }else if(resultCourseListView != null && ((RecyclerView)view.getParent()).getId() == resultCourseListView.getId()){
             Timber.d("items data : <%s><%s><%s><%s><%s>", courseDatas.get(position).name, courseDatas.get(position).id, courseDatas.get(position).professor_name, courseDatas.get(position).professor_photo_url, courseDatas.get(position).is_favorite);
             if(courseDatas.get(position).id == null || courseDatas.get(position).id < 0){
@@ -316,6 +340,10 @@ public class AutoCompletableSearchView2 {
         this.evaluationQuery = null;
         this.evaluationCandidate = candidates.get(position);
     }
+    public Candidate getEvaluationCandidate(int position){
+        return this.candidates.get(position);
+    }
+
     public void setEvaluationCandidateQuery(String query){
         this.evaluationCandidate.clear();
         this.evaluationQuery = query;
@@ -330,8 +358,21 @@ public class AutoCompletableSearchView2 {
         }
         return false;
     }
-    // not implement hasData();
-//
+
+    public CourseItemsAdapter getCourseItemsAdapter(){
+        return this.courseItemsAdapter;
+    }
+    public AutoCompleteAdapter getAutoCompleteAdapter(){
+        return this.autoCompleteAdapter;
+    }
+
+    public List<Candidate> getCandidates(){
+        return this.candidates;
+    }
+    public List<CourseData> getCourseDatas(){
+        return this.courseDatas;
+    }
+
 //    private static class onother{
 //
 //        private Candidate evaluationCandidate;
