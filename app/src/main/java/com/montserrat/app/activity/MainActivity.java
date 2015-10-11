@@ -28,6 +28,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.model.Candidate;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
@@ -39,20 +40,22 @@ import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
-import com.montserrat.utils.view.search.AutoCompletableSearchView;
+import com.montserrat.utils.view.search.AutoCompletableSearchView2;
 import com.montserrat.utils.view.search.CustomSearchView;
 import com.montserrat.utils.view.search.ToolbarSearch;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView2.SearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
-
+    private ToolbarSearch toolbarSearch;
 
     private CompositeSubscription mCompositeSubscription;
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
@@ -60,7 +63,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @InjectView(R.id.search_result) protected RecyclerView searchResult;
     @InjectView(R.id.query_result_outside) protected View outsideResult;
     @InjectView(R.id.toolbar) protected Toolbar mToolbar;
-    private AutoCompletableSearchView mAutoCompletableSearch;
     private MaterialMenuDrawable mMaterialMenuDrawable;
 
     @Override
@@ -70,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(this.fac);
+        toolbarSearch = new ToolbarSearch(this, this);
         mCompositeSubscription = new CompositeSubscription();
         mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
@@ -82,15 +85,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
 
-        /* Instantiate Multiple ViewPagerManagers */
-        mAutoCompletableSearch = ToolbarSearch.getInstance().newSearchView(this,this,AutoCompletableSearchView.Type.SEARCH);
-        ToolbarSearch.getInstance().setActivityComponent(this);
-        mAutoCompletableSearch.initAutoComplete(this.searchResult, this.outsideResult);
-        ToolbarSearch.getInstance().setSearchViewListener(this);
-        this.isAutocompleteViewOpen = false;
-
         this.onInitializeMenuOnToolbar(mToolbar.getMenu());
+        List<Candidate> candidates = new ArrayList<>();
+        /* Instantiate Multiple ViewPagerManagers */
+
+        toolbarSearch.initAutoComplete(this.searchResult, this.outsideResult, this.editText, candidates);
+
+        toolbarSearch.setSearchViewListener(this);
+        this.isAutocompleteViewOpen = false;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -112,26 +116,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private CustomSearchView searchView;
     private EditText editText;
 
-    public boolean onQueryTextSubmit(String query) {
-        searchView.clearFocus();
-        mAutoCompletableSearch.submitQuery(query);
-        ToolbarSearch.getInstance().search(true);
-        return false;
-    }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         if(searchResult != null && ((RecyclerView)view.getParent()).getId() == searchResult.getId())
-            ToolbarSearch.getInstance().recyclerViewClicked(view, position, true);
-        else
-            ToolbarSearch.getInstance().recyclerViewClicked(view, position, false);
+            toolbarSearch.recyclerViewClicked(view, position);
     }
 
     private boolean terminate = false;
     @Override
     public void onBackPressed() {
         if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
-        else if (ToolbarSearch.getInstance().onBack()) ;
+        else if (toolbarSearch.onBack()) ;
         else if (this.mNavigator.back()) terminate = false;
         else if (terminate) super.onBackPressed();
         else {
@@ -153,7 +149,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         this.searchView = (CustomSearchView) itemSearch.getActionView();
         this.itemSearch.expandActionView();
         this.searchView.setOnBackListener(()->{
-            ToolbarSearch.getInstance().onBack();
+            toolbarSearch.onBack();
             return true;
         });
         if(searchView != null) {
@@ -164,20 +160,20 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             if (searchManager != null)
                 searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(true);
-            this.editText.setOnEditorActionListener( (v, actionId, event) -> {
+            this.editText.setOnEditorActionListener((v, actionId, event) -> {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    onQueryTextSubmit(searchView.getQuery().toString());
+                    searchView.clearFocus();
+                    toolbarSearch.submitQuery(searchView.getQuery().toString());
+                    toolbarSearch.search();
                     return true;
                 }
                 return false;
             });
-            this.mAutoCompletableSearch.autoComplete(this.editText);
             ImageView closeBtn = (ImageView) this.searchView.findViewById(R.id.search_close_btn);
             closeBtn.setOnClickListener(view -> {
-//                if (!(this.editText.getText().toString().length() > 0)) {
                 if (!TextUtils.isEmpty(this.editText.getText())) {
                     this.editText.setText("");
-                    this.mAutoCompletableSearch.showCandidates(true);
+                    this.toolbarSearch.getAutoCompletableSearchView().showCandidates(true);
                 } else {
                     this.editText.setText(" ");
                     this.searchView.setIconified(true);
@@ -203,7 +199,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.itemSearch));
             if(remove) {
                 img.setImageDrawable(getResources().getDrawable(R.drawable.background_transparent));
-//                this.mAutoCompletableSearch.showCandidates(true);
             }else {
                 img.setImageDrawable(getResources().getDrawable(R.drawable.ic_light_clear));
             }
@@ -303,11 +298,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 this.state = this.mMaterialMenuDrawable.getIconState();
             this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
             this.mToolbar.setNavigationOnClickListener(view -> {
-                this.mAutoCompletableSearch.showCandidates(false);
+                this.toolbarSearch.getAutoCompletableSearchView().showCandidates(false);
                 this.editText.setText("");
                 this.searchView.setIconified(true);
             });
-//            ToolbarSearch.getInstance().toolbarIconClick(true);
 
             this.isAutocompleteViewOpen = true;
         }else{
@@ -326,5 +320,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 //            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
 //        }else if(getFragmentManager().getBackStackEntryCount() < 1)
 //            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+    }
+
+    public ToolbarSearch getToolbarSearch(){
+        return this.toolbarSearch;
+    }
+
+    @Override
+    public void submitQuery(String query) {
+
+    }
+
+    @Override
+    public void onItemSelected(Candidate candidate) {
+
     }
 }

@@ -20,10 +20,10 @@
         <RelativeLayout
             android:id="@+id/query_result_outside"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:background="#eee"
             android:alpha="1"
-            android:visibility="visible"
+            android:visibility="gone"
             android:focusable="true"
             android:clickable="true" />
         <android.support.v7.widget.RecyclerView

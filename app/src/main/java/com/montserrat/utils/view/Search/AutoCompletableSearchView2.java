@@ -29,7 +29,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class AutoCompletableSearchView2 {
 
@@ -119,7 +118,6 @@ public class AutoCompletableSearchView2 {
         this.candidates.clear();
         this.candidates.addAll(candidates);
         this.autoCompleteAdapter.notifyDataSetChanged();
-        Timber.d("update autocomplete %s %s", this.autoCompleteAdapter, this.candidates);
         this.updateAutoCompleteViewHeight();
     }
 
@@ -190,7 +188,6 @@ public class AutoCompletableSearchView2 {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    Timber.d("add autocomplete");
                     if (isOpen && setOpen)
                         this.showCandidates(true);
                     this.notifyChangedAutocomplete(result);
@@ -308,7 +305,6 @@ public class AutoCompletableSearchView2 {
             if(searchViewListener != null)
                 searchViewListener.onItemSelected(candidates.get(position));
         }else if(resultCourseListView != null && ((RecyclerView)view.getParent()).getId() == resultCourseListView.getId()){
-            Timber.d("items data : <%s><%s><%s><%s><%s>", courseDatas.get(position).name, courseDatas.get(position).id, courseDatas.get(position).professor_name, courseDatas.get(position).professor_photo_url, courseDatas.get(position).is_favorite);
             if(courseDatas.get(position).id == null || courseDatas.get(position).id < 0){
                 Toast.makeText(context, context.getResources().getText(R.string.wait_to_loading), Toast.LENGTH_SHORT).show();
                 return false;
@@ -372,27 +368,4 @@ public class AutoCompletableSearchView2 {
     public List<CourseData> getCourseDatas(){
         return this.courseDatas;
     }
-
-//    private static class onother{
-//
-//        private Candidate evaluationCandidate;
-//        private String evaluationQuery;
-//
-//        public void setEvaluationCandidate(int position) {
-//            this.evaluationCandidate.clear();
-//
-//            this.evaluationQuery = null;
-//            this.evaluationCandidate = candidates.get(position);
-//        }
-//        public void setEvaluationCandidate(String query){
-//            this.evaluationCandidate.clear();
-//            this.evaluationQuery = query;
-//        }
-//
-//
-//
-//        public void setSearchMode(boolean searchMode){
-//            this.searchMode = searchMode;
-//        }
-//    }
 }

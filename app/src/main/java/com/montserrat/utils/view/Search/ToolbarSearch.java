@@ -4,89 +4,132 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
-import com.montserrat.app.fragment.main.CourseFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
+import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.CoursesData;
-import com.montserrat.app.model.unique.User;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
+import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class ToolbarSearch {
-    private AutoCompletableSearchView searchView;
+    private AutoCompletableSearchView2 searchView;
     private Navigator navigator;
     private FragmentManager fragmentManager;
-    private AutoCompletableSearchView.SearchViewListener searchViewListener;
     private CompositeSubscription subscription;
+    private Context context;
 
-    private static ToolbarSearch instance;
-    private ToolbarSearch(){
+    private AutoCompleteAdapter autoCompleteAdapter;
+    private CourseItemsAdapter courseItemsAdapter;
+
+    private AutoCompletableSearchView2.SearchViewListener searchViewListener;
+    private RecyclerViewItemClickListener itemClickListener;
+
+    List<Candidate> candidates;
+    List<CourseData> courses;
+
+    private RecyclerView autocompleteListView;
+    private RecyclerView courseListView;
+    private EditText queryView;
+    private Candidate selectedCandidate;
+    private String searchQuery;
+
+    public ToolbarSearch(RecyclerViewItemClickListener listener, Activity activity){
         searchView = null;
-    }
-    public static synchronized ToolbarSearch getInstance(){
-        if(ToolbarSearch.instance == null) ToolbarSearch.instance = new ToolbarSearch();
-        return ToolbarSearch.instance;
-    }
-
-    public AutoCompletableSearchView newSearchView(RecyclerViewItemClickListener listener, Context context, AutoCompletableSearchView.Type type){
-        searchView = new AutoCompletableSearchView(listener, context, type);
-        return searchView;
+        selectedCandidate = new Candidate();
+        this.itemClickListener = listener;
+        this.navigator = (Navigator) activity;
+        this.fragmentManager = activity.getFragmentManager();
+        this.context = activity;
+        searchView = new AutoCompletableSearchView2(this.itemClickListener, this.context);
     }
 
-    public void setSearchViewListener(AutoCompletableSearchView.SearchViewListener listener){
+    public void initAutoComplete(RecyclerView autocompleteListView, View outsideTochableView, EditText editText, List<Candidate> candidates){
+
+        this.queryView = editText;
+        this.candidates = candidates;
+        this.autocompleteListView = autocompleteListView;
+        this.autoCompleteAdapter = new AutoCompleteAdapter(this.candidates, this.itemClickListener);
+        this.autocompleteListView.setLayoutManager(new LinearLayoutManager(context));
+        this.autocompleteListView.setAdapter(autoCompleteAdapter);
+
+        this.searchView.initAutocompleteView(autocompleteListView, outsideTochableView, queryView, autoCompleteAdapter, candidates);
+    }
+
+    public void initResult(RecyclerView recyclerView, CourseItemsAdapter adapter,List<CourseData> items){
+        this.courseListView = recyclerView;
+        this.courseItemsAdapter = adapter;
+        this.courses = items;
+
+        this.searchView.initResultView(courseListView, courseItemsAdapter, courses);
+    }
+
+    public void setSearchViewListener(AutoCompletableSearchView2.SearchViewListener listener){
         this.searchViewListener = listener;
         this.searchView.setSearchViewListener(searchViewListener);
     }
 
-    public AutoCompletableSearchView getAutoCompletableSearchView(){
+    public AutoCompletableSearchView2 getAutoCompletableSearchView(){
         return searchView;
     }
 
-    public void setActivityComponent(Activity activity){
-        this.navigator = (Navigator) activity;
-        this.fragmentManager = activity.getFragmentManager();
+
+    public void recyclerViewClicked(View view, int position){
+        this.selectedCandidate.lecture_id = candidates.get(position).lecture_id;
+        this.selectedCandidate.professor_id = candidates.get(position).professor_id;
+        this.searchQuery = null;
+
+        this.search();
+        this.searchView.showCandidates(false);
     }
 
-    public void recyclerViewClicked(View view, int position, boolean isAutoComplete){
-        this.searchView.onRecyclerViewItemClick(view, position);
-        this.search(isAutoComplete);
+    public void searchCourse(){
+        Timber.d("searchCourse : %s", selectedCandidate);
+        if (this.selectedCandidate.lecture_id == null && this.selectedCandidate.professor_id == null && searchQuery == null)
+            this.searchHistory();
+        else
+            this.searchView.searchCourse(selectedCandidate.lecture_id, selectedCandidate.professor_id, searchQuery);
     }
 
+    public void submitQuery(){
+        this.candidates.clear();
+        this.submitQuery(queryView.getText().toString());
+    }
 
-    public void search(boolean isAutoComplete){
-        if(isAutoComplete) {
-            AppManager.getInstance().putBoolean(AppConst.Preference.SEARCH, true);
+    public void submitQuery(String query){
+        this.searchQuery = query;
+        this.candidates.clear();
+    }
 
-            Fragment active = this.fragmentManager.findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
-            if (active != null && active.getClass() == SimpleCourseFragment.class) {
-                this.searchView.searchCourse();
-            }else {
-                this.navigator.navigate(SimpleCourseFragment.class, true);
-                this.searchViewListener.onShowChange(true);
-            }
-        }else{
-            this.navigator.navigate(CourseFragment.class, true);
+    public void search(){
+        AppManager.getInstance().putBoolean(AppConst.Preference.SEARCH, true);
+
+        Fragment active = this.fragmentManager.findFragmentByTag(AppConst.Tag.ACTIVE_FRAGMENT);
+        if (active != null && active.getClass() == SimpleCourseFragment.class) {
+            this.searchView.searchCourse(selectedCandidate.lecture_id, selectedCandidate.professor_id, searchQuery);
+        }else {
+            this.navigator.navigate(SimpleCourseFragment.class, true);
+            this.searchViewListener.onShowChange(true);
         }
     }
 
     public boolean onBack(){
         return this.searchView.onBack();
     }
-
-
 
     public void searchHistory(){
         if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
@@ -96,9 +139,7 @@ public class ToolbarSearch {
                 AppConst.Preference.HISTORY,
                 CoursesData.class
             )).courses;
-            // soon changed
-            //using ACSV2's
-            // notifyChangedCourseAsynchronized(courseList);
+            searchView.notifyChangedCourseAsynchronized(courseList);
         }
     }
 
