@@ -26,7 +26,7 @@ import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.search.AutoCompletableSearchView2;
+import com.montserrat.utils.view.search.AutoCompletableSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @InjectView(R.id.query_result_outside) protected RelativeLayout resultOutside;
     private CompositeSubscription subscriptions;
 
-    private AutoCompletableSearchView2 search;
+    private AutoCompletableSearchView search;
     private Toolbar toolbar;
 
     private List<CourseData> courses;
@@ -65,7 +65,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         this.courses = new ArrayList<>();
         this.courseAdapter = new CourseItemsAdapter(this.courses, this, R.layout.cardview_header_height_zero);
 
-        this.search = new AutoCompletableSearchView2(this, this.getActivity().getBaseContext());
+        this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext());
     }
 
     @Override

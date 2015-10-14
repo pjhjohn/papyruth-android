@@ -27,7 +27,7 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class ToolbarSearch {
-    private AutoCompletableSearchView2 searchView;
+    private AutoCompletableSearchView searchView;
     private Navigator navigator;
     private FragmentManager fragmentManager;
     private CompositeSubscription subscription;
@@ -36,7 +36,7 @@ public class ToolbarSearch {
     private AutoCompleteAdapter autoCompleteAdapter;
     private CourseItemsAdapter courseItemsAdapter;
 
-    private AutoCompletableSearchView2.SearchViewListener searchViewListener;
+    private AutoCompletableSearchView.SearchViewListener searchViewListener;
     private RecyclerViewItemClickListener itemClickListener;
 
     List<Candidate> candidates;
@@ -55,7 +55,7 @@ public class ToolbarSearch {
         this.navigator = (Navigator) activity;
         this.fragmentManager = activity.getFragmentManager();
         this.context = activity;
-        searchView = new AutoCompletableSearchView2(this.itemClickListener, this.context);
+        searchView = new AutoCompletableSearchView(this.itemClickListener, this.context);
     }
 
     public void initAutoComplete(RecyclerView autocompleteListView, View outsideTochableView, EditText editText, List<Candidate> candidates){
@@ -78,12 +78,12 @@ public class ToolbarSearch {
         this.searchView.initResultView(courseListView, courseItemsAdapter, courses);
     }
 
-    public void setSearchViewListener(AutoCompletableSearchView2.SearchViewListener listener){
+    public void setSearchViewListener(AutoCompletableSearchView.SearchViewListener listener){
         this.searchViewListener = listener;
         this.searchView.setSearchViewListener(searchViewListener);
     }
 
-    public AutoCompletableSearchView2 getAutoCompletableSearchView(){
+    public AutoCompletableSearchView getAutoCompletableSearchView(){
         return searchView;
     }
 

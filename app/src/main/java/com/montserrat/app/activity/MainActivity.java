@@ -40,7 +40,7 @@ import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
-import com.montserrat.utils.view.search.AutoCompletableSearchView2;
+import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.search.CustomSearchView;
 import com.montserrat.utils.view.search.ToolbarSearch;
 
@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView2.SearchViewListener {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
     private ToolbarSearch toolbarSearch;
