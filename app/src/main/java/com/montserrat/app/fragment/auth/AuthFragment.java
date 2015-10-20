@@ -1,5 +1,6 @@
 package com.montserrat.app.fragment.auth;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ import java.util.Stack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
 public class AuthFragment extends Fragment implements ViewPagerController {
     private ViewPagerManager manager;
@@ -40,7 +40,7 @@ public class AuthFragment extends Fragment implements ViewPagerController {
             AuthFragmentFactory.getInstance(),
             AppConst.ViewPager.Auth.LENGTH
         );
-        Picasso.with(this.getActivity()).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.fg_accent))).into(applicationLogo);
+        Picasso.with(this.getActivity()).load(R.drawable.logo).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.fg_accent))).into(applicationLogo);
         this.progress.setMax(AppConst.ViewPager.Auth.LENGTH - 1);
 
         this.viewPager.setPagerController(this);
@@ -51,6 +51,11 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     /* Bind this to Activity as ViewPagerController*/
@@ -80,6 +85,31 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     public void setCurrentPage (int pageNum, boolean addToBackStack) {
         this.progress.setProgress(pageNum - 1);
         this.manager.setCurrentPage(pageNum, addToBackStack);
+        this.logoScaleAnimation(pageNum, false);
+    }
+
+    public void logoScaleAnimation(int pageNum, boolean bigger) {
+        if (pageNum == AppConst.ViewPager.Auth.SIGNUP_STEP1){
+            ValueAnimator anim;
+            ViewGroup.LayoutParams params = applicationLogo.getLayoutParams();
+            int height, width;
+            if (bigger) {
+                anim = ValueAnimator.ofFloat(0.5f, 1);
+                height = params.height*2;
+                width = params.width*2;
+            } else {
+                anim = ValueAnimator.ofFloat(1, 0.5f);
+                height = params.height;
+                width = params.width;
+            }
+            anim.addUpdateListener(
+                animation -> {
+                    params.height = (int) (height * (float) animation.getAnimatedValue());
+                    params.width = (int) (width * (float) animation.getAnimatedValue());
+                    applicationLogo.setLayoutParams(params);
+                });
+            anim.start();
+        }
     }
 
     @Override
@@ -95,6 +125,7 @@ public class AuthFragment extends Fragment implements ViewPagerController {
             this.popCurrentPage();
             return true;
         }
+        this.logoScaleAnimation(this.manager.getCurrentPage(), true);
         return this.manager.back();
     }
 
