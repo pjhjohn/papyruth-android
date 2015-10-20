@@ -147,7 +147,6 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
         SignUpForm.getInstance().setUniversityId(this.items.get(position).id);
         SignUpForm.getInstance().setImageUrl(this.items.get(position).image_url);
-        this.universityList.getChildAt(position).setBackgroundColor(getResources().getColor(R.color.bg_accent));
 
         final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
         String[] years = new String[length];
