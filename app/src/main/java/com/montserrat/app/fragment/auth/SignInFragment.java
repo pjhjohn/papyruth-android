@@ -17,11 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonFlat;
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
@@ -71,8 +73,8 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.email) protected AutoCompleteTextView emailField;
     @InjectView (R.id.password) protected EditText passwordField;
     @InjectView (R.id.progress) protected View progress;
-    @InjectView (R.id.sign_in) protected ButtonFlat signin;
-    @InjectView (R.id.sign_up) protected ButtonFlat signup;
+    @InjectView (R.id.sign_in) protected Button signin;
+    @InjectView (R.id.sign_up) protected Button signup;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -81,8 +83,8 @@ public class SignInFragment extends Fragment implements OnPageFocus {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.initEmailAutoComplete();
-        this.signin.setRippleSpeed(50.0f);
-        this.signup.setRippleSpeed(50.0f);
+//        this.signin.setRippleSpeed(50.0f);
+//        this.signup.setRippleSpeed(50.0f);
         return view;
     }
     @Override

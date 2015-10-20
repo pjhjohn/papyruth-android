@@ -12,4 +12,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:color">@color/primary_dark_material_dark</item>
     </style>
+    <style name="evaluation_grade">
+        <item name="android:textStyle">italic|bold</item>
+    </style>
 </resources>

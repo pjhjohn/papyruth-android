@@ -49,28 +49,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:layout_below="@+id/password"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true">
 
-            <com.gc.materialdesign.views.ButtonFlat
+            <Button
                 android:id="@+id/sign_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:background="#ffffff"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_height_button"
+                android:background="@drawable/selector_button_green"
                 android:text="@string/action_sign_in"
+                android:textColor="@color/white"
+                android:layout_marginBottom="@dimen/baseline_x1"
                 android:layout_gravity="bottom"/>
-            <com.gc.materialdesign.views.ButtonFlat
+            <!--<com.gc.materialdesign.views.ButtonRectangle-->
+            <Button
                 android:id="@+id/sign_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:background="@color/fg_normal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_height_button"
+                android:background="@drawable/selector_button_white"
                 android:text="@string/action_sign_up"
+                android:textColor="@color/colorchip_green"
+                android:stateListAnimator="@null"
                 android:layout_gravity="bottom"/>
         </LinearLayout>
     </RelativeLayout>

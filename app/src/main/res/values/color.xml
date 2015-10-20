@@ -7,6 +7,10 @@
     <color name="fg_normal">#1BBC9B</color>
     <color name="fg_accent">#3BDCBB</color>
 
+    <color name="colorchip_red">#E05E5F</color>
+    <color name="colorchip_blue">#546B8D</color>
+    <color name="colorchip_green">#60CAC6</color>
+
     <color name="transparent">#00ffffff</color>
     <color name="translucent">#8affffff</color>
     <color name="white">#ffffffff</color>
@@ -16,4 +20,18 @@
     <color name="point_easiness">#41B7AE</color>
     <color name="point_gpa_satisfaction">#546B8D</color>
     <color name="point_clarity">#E05E5F</color>
+
+    <color name="button_diable">#76D1CC</color>
+    
+    <color name="edittext_solid_default">#C8C8C8</color>
+    
+    <color name="lecture_type_major">#27B5Af</color>
+    <color name="lecture_type_liberal_arts">#E05E5F</color>
+    <color name="lecture_type_other">#333333</color>
+    
+    <color name="background_white">#F2F2F2</color>
+    <color name="background_gpa_satisfaction">#E9ECF2</color>
+    <color name="background_easiness">#E9F7F7</color>
+    <color name="background_clarity">#FCEFEF</color>
+    <color name="background_contents_brim">#F7F7F7</color>
 </resources>
