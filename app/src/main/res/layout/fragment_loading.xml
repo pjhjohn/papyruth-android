@@ -21,7 +21,7 @@
                 android:id="@+id/loading_university_icon"
                 android:layout_width="@dimen/baseline_x12"
                 android:layout_height="@dimen/baseline_x12"
-                android:src="@drawable/ic_light_intro_house"/>
+                android:src="@drawable/ic_intro_univ_hq"/>
 
             <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/loading_university_text"
@@ -32,7 +32,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/loading_university_icon"
                 android:layout_toEndOf="@+id/loading_university_icon"
-                android:textSize="@dimen/abc_text_size_subhead_material"
+                android:textSize="@dimen/loading_text"
                 app:textWeight="light"/>
 
         </RelativeLayout>
@@ -52,7 +52,7 @@
                 android:id="@+id/loading_user_icon"
                 android:layout_width="@dimen/baseline_x12"
                 android:layout_height="@dimen/baseline_x12"
-                android:src="@drawable/ic_light_intro_student"/>
+                android:src="@drawable/ic_intro_student_hq"/>
 
             <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/loading_user_text"
@@ -63,7 +63,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/loading_user_icon"
                 android:layout_toEndOf="@+id/loading_user_icon"
-                android:textSize="@dimen/abc_text_size_subhead_material"
+                android:textSize="@dimen/loading_text"
                 app:textWeight="light"/>
         </RelativeLayout>
 
@@ -82,7 +82,7 @@
                 android:id="@+id/loading_evaluation_icon"
                 android:layout_width="@dimen/baseline_x12"
                 android:layout_height="@dimen/baseline_x12"
-                android:src="@drawable/ic_light_intro_evaluation"/>
+                android:src="@drawable/ic_intro_evaluation_hq"/>
 
             <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/loading_evaluation_text"
@@ -93,7 +93,8 @@
                 android:gravity="end"
                 android:layout_toRightOf="@+id/loading_evaluation_icon"
                 android:layout_toEndOf="@+id/loading_evaluation_icon"
-                android:textSize="@dimen/abc_text_size_subhead_material"
+                android:textSize="@dimen/loading_text"
+                android:textColor="@color/title_gray"
                 app:textWeight="light"/>
         </RelativeLayout>
 
@@ -102,6 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:textSize="@dimen/loading_text"
             android:text="@string/loading_end_word"/>
     </LinearLayout>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>

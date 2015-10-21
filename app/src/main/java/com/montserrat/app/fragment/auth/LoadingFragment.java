@@ -24,6 +24,7 @@ import com.montserrat.app.model.unique.Statistics;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -50,7 +51,7 @@ public class LoadingFragment extends Fragment {
         this.navigator = null;
     }
 
-    private final int SHOW_DURATION = 2;
+    private final int SHOW_DURATION = 5;
 
     @InjectView (R.id.loading_university_icon) protected ImageView universityIcon;
     @InjectView (R.id.loading_university_text) protected TextView universityText;
@@ -76,12 +77,12 @@ public class LoadingFragment extends Fragment {
 
     public SpannableStringBuilder getStyleText(Object contents, String suffix){
         SpannableStringBuilder styleTextBuilder = new SpannableStringBuilder();
-        TextAppearanceSpan appearanceSpan = new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_medium);
 
+        TextAppearanceSpan appearanceSpan = new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_normal);
         SpannableString styleText = new SpannableString(String.format("%s", contents));
         styleText.setSpan(appearanceSpan, 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
         styleTextBuilder.append(styleText);
+
         styleTextBuilder.append(suffix);
 
         return styleTextBuilder;
@@ -91,18 +92,17 @@ public class LoadingFragment extends Fragment {
     public void onResume () {
         super.onResume();
 
+        DecimalFormat formatter = new DecimalFormat("#,###,###,###");
         if(Statistics.getInstance().getUniversity() == null) {
-            Picasso.with(this.getActivity()).load(R.drawable.ic_light_intro_house).into(this.universityIcon);
-
             this.universityText.setText( getStyleText(Statistics.getInstance().getUniversityCount(), getResources().getString(R.string.loading_number_of_university)) );
-            this.userText.setText( getStyleText(Statistics.getInstance().getUserCount(), getResources().getString(R.string.loading_student)) );
-            this.evaluationText.setText( getStyleText(Statistics.getInstance().getEvaluationCount(), getResources().getString(R.string.loading_evaluation)) );
+            this.userText.setText( getStyleText(formatter.format(Statistics.getInstance().getUserCount()), getResources().getString(R.string.loading_student)) );
+            this.evaluationText.setText( getStyleText(formatter.format(Statistics.getInstance().getEvaluationCount()), getResources().getString(R.string.loading_evaluation)) );
         } else {
             final UniversityData univ = Statistics.getInstance().getUniversity();
             Picasso.with(this.getActivity()).load(univ.image_url).into(this.universityIcon);
             this.universityText.setText( getStyleText(univ.name, getResources().getString(R.string.loading_university)) );
-            this.userText.setText( getStyleText(univ.user_count, getResources().getString(R.string.loading_student)) );
-            this.evaluationText.setText( getStyleText(univ.evaluation_count, getResources().getString(R.string.loading_evaluation)) );
+            this.userText.setText( getStyleText(formatter.format(univ.user_count), getResources().getString(R.string.loading_student)) );
+            this.evaluationText.setText( getStyleText(formatter.format(univ.evaluation_count), getResources().getString(R.string.loading_evaluation)) );
         }
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
