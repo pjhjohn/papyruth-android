@@ -145,7 +145,7 @@ public class RetrofitApi {
             @Path("id") Integer id
         );
         @PATCH("/evaluations/{id}")
-        Observable<EvaluationResponse> patch_evaluation(
+        Observable<EvaluationResponse> patch_update_evaluation(
             @Header("Authorization") String authorization,
             @Path("id") Integer id,
             @Query("point_overall") Integer point_overall,
@@ -155,7 +155,7 @@ public class RetrofitApi {
             @Query("body") String body
         );
         @PUT("/evaluations/{id}")
-        Observable<EvaluationResponse> put_evaluation(
+        Observable<EvaluationResponse> put_update_evaluation(
             @Header("Authorization") String authorization,
             @Path("id") Integer id,
             @Query("point_overall") Integer point_overall,
@@ -208,7 +208,9 @@ public class RetrofitApi {
         Observable<StatisticsResponse> get_info();
 
         @GET("/hashtag")
-        Observable<HashtagsResponse> get_hashtag_preset();
+        Observable<HashtagsResponse> get_hashtag_preset(
+            @Header("Authorization") String authorization
+        );
 
         /* PROFESSORS */
         @PATCH("/professors/{id}")

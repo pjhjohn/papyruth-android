@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -13,40 +12,26 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.materialdialog.HashtagDeleteDialog;
-import com.montserrat.utils.support.picasso.ColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -92,6 +77,32 @@ public class EvaluationStep2Fragment extends Fragment {
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+
+        final Context context = this.getActivity();
+        this.lecture.setText(EvaluationForm.getInstance().getLectureName());
+        this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
+        this.setRatingBarColor(this.pointOverallRatingBar, Color.YELLOW);
+        Picasso.with(context).load(R.drawable.ic_point_overall).into(this.pointOverallIcon);
+        Picasso.with(context).load(R.drawable.ic_point_clarity).into(this.pointClarityIcon);
+        Picasso.with(context).load(R.drawable.ic_point_satisfaction).into(this.pointGpaSatisfactionIcon);
+        Picasso.with(context).load(R.drawable.ic_point_easiness).into(this.pointEasinessIcon);
+        if(EvaluationForm.getInstance().isNextStep()){
+            this.pointOverallRatingBar.setProgress(EvaluationForm.getInstance().getPointOverall());
+            this.pointClaritySeekBar.setProgress(EvaluationForm.getInstance().getPointClarity());
+            this.pointGpaSatisfactionSeekBar.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
+            this.pointEasinessSeekBar.setProgress(EvaluationForm.getInstance().getPointEasiness());
+            this.pointOverallText.setText(EvaluationForm.getInstance().getPointOverall().toString());
+            this.pointClarityText.setText(EvaluationForm.getInstance().getPointClarity().toString());
+            this.pointGpaSatisfactionText.setText(EvaluationForm.getInstance().getPointGpaSatisfaction().toString());
+            this.pointEasinessText.setText(EvaluationForm.getInstance().getPointEasiness().toString());
+            FloatingActionControl.getInstance().show(true);
+        }else {
+            this.pointOverallText.setText("0");
+            this.pointClarityText.setText("0");
+            this.pointGpaSatisfactionText.setText("0");
+            this.pointEasinessText.setText("0");
+        }
+
         return view;
     }
 
@@ -105,32 +116,11 @@ public class EvaluationStep2Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        final Context context = this.getActivity();
         FloatingActionControl.getInstance().setControl(R.layout.fab_next);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> {
                 this.navigator.navigate(EvaluationStep3Fragment.class, true);
             });
-
-        this.lecture.setText(EvaluationForm.getInstance().getLectureName());
-        this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
-        this.setRatingBarColor(this.pointOverallRatingBar, Color.YELLOW);
-        Picasso.with(context).load(R.drawable.ic_point_overall).into(this.pointOverallIcon);
-        Picasso.with(context).load(R.drawable.ic_point_clarity).into(this.pointClarityIcon);
-        Picasso.with(context).load(R.drawable.ic_point_satisfaction).into(this.pointGpaSatisfactionIcon);
-        Picasso.with(context).load(R.drawable.ic_point_easiness).into(this.pointEasinessIcon);
-        if(EvaluationForm.getInstance().isNextStep()){
-            this.pointOverallText.setText(EvaluationForm.getInstance().getPointOverall().toString());
-            this.pointClarityText.setText(EvaluationForm.getInstance().getPointClarity().toString());
-            this.pointGpaSatisfactionText.setText(EvaluationForm.getInstance().getPointGpaSatisfaction().toString());
-            this.pointEasinessText.setText(EvaluationForm.getInstance().getPointEasiness().toString());
-            FloatingActionControl.getInstance().show(true);
-        }else {
-            this.pointOverallText.setText("0");
-            this.pointClarityText.setText("0");
-            this.pointGpaSatisfactionText.setText("0");
-            this.pointEasinessText.setText("0");
-        }
 
         this.subscriptions.add(Observable
             .combineLatest(
@@ -159,7 +149,6 @@ public class EvaluationStep2Fragment extends Fragment {
                         return RxValidator.isIntegerValueInRange.call(progress);
                     }),
                 (a, b, c, d) -> {
-                    Timber.d("EvaluationForm : %s", EvaluationForm.getInstance());
                     return EvaluationForm.getInstance().isNextStep();
                 }
             )

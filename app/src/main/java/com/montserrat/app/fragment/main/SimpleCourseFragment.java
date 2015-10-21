@@ -2,7 +2,6 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,15 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
-import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.CourseData;
+import com.montserrat.app.model.unique.Course;
+import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.ToolbarUtil;
-import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.search.ToolbarSearch;
@@ -41,6 +41,7 @@ import timber.log.Timber;
 
 public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapter, CourseData> {
     private Navigator navigator;
+    private ToolbarSearch toolbarSearch;
 
     @Override
     public void onAttach(Activity activity) {
@@ -53,7 +54,12 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @InjectView(R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
-    private AutoCompletableSearchView search;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,12 +71,11 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         this.refresh.setEnabled(true);
 
-        this.search = ToolbarSearch.getInstance().getAutoCompletableSearchView();
-        this.search.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
+        this.setupRecyclerView(recycler);
+        toolbarSearch = ((MainActivity)this.getActivity()).getToolbarSearch();
 
-        this.search.initCourse(this.recycler);
+        toolbarSearch.initResult(this.recycler, this.getAdapter(), this.items);
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
-//        this.search.toolbarState(toolbar);
         return view;
     }
 
@@ -89,6 +94,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     protected CourseItemsAdapter getAdapter () {
+        if(this.adapter != null)
+            return adapter;
         return new CourseItemsAdapter(this.items, this);
     }
 
@@ -99,12 +106,14 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(this.search.getCourseItem(position).id < 0){
-            Timber.d("cannot click this item");
-        }else if(this.search.onRecyclerViewItemClick(view, position)) {
-            Timber.d("***go Course");
-            this.navigator.navigate(CourseFragment.class, true);
+        if(this.items.size() -1 < position){
+            Toast.makeText(getActivity().getBaseContext(),"please wait for loading", Toast.LENGTH_LONG).show();
+            return;
         }
+
+        Course.getInstance().update(this.items.get(position));
+        toolbarSearch.addHistory(this.items.get(position));
+        this.navigator.navigate(CourseFragment.class, true);
     }
 
     @Override
@@ -112,10 +121,11 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         super.onResume();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
-        this.subscriptions.add(FloatingActionControl
-            .clicks(R.id.fab_new_evaluation)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
+        this.subscriptions.add(
+            FloatingActionControl
+                .clicks(R.id.fab_new_evaluation)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
         );
         this.subscriptions.add(
             this.getRefreshObservable(this.refresh)
@@ -124,11 +134,11 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
                 .subscribe(
                     courses -> {
                         this.refresh.setRefreshing(false);
-                        this.search.searchCourse();
+                        toolbarSearch.searchCourse();
                     },
                     error -> Timber.d("search error : %s", error)
                 )
         );
-        this.search.searchCourse();
+        toolbarSearch.searchCourse();
     }
 }

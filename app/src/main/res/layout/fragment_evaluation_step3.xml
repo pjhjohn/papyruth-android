@@ -53,6 +53,15 @@
                     android:layout_below="@+id/evaluation_hashtags_container"
                     android:background="@color/bg_highlight"/>
             </RelativeLayout>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/evaluation_recommend_hashtag_list"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/baseline_x6"/>
+            </HorizontalScrollView>
             <RelativeLayout
                 android:id="@+id/evaluation_body"
                 android:layout_width="match_parent"
@@ -81,7 +90,7 @@
                     android:id="@+id/evaluation_body_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/baseline_x8"
+                    android:minHeight="@dimen/baseline_x10"
                     android:inputType="textMultiLine"
                     android:layout_marginTop="@dimen/baseline_x1"
                     android:layout_below="@+id/evaluation_body_icon"

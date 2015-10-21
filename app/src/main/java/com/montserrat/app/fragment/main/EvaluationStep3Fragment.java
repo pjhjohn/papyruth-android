@@ -3,29 +3,22 @@ package com.montserrat.app.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.model.response.VoidResponse;
+import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
@@ -38,8 +31,6 @@ import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -48,6 +39,7 @@ import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -75,6 +67,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @InjectView(R.id.evaluation_hashtags_label) protected TextView hashtagsLabel;
     @InjectView(R.id.evaluation_hashtags_container) protected LinearLayout hashtagsContainer;
     @InjectView(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
+    @InjectView(R.id.evaluation_recommend_hashtag_list) protected LinearLayout recommendHashtag;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
@@ -86,6 +79,36 @@ public class EvaluationStep3Fragment extends Fragment {
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+
+        if(EvaluationForm.getInstance().getBody() != null) {
+            this.bodyText.setText(EvaluationForm.getInstance().getBody());
+        }
+        if(EvaluationForm.getInstance().getHashtag().size() > 0){
+            for(String str : EvaluationForm.getInstance().getHashtag()) {
+                addNewHashtagView(str);
+            }
+        }
+        this.subscriptions.add(
+            RetrofitApi
+                .getInstance()
+                .get_hashtag_preset(User.getInstance().getAccessToken())
+                .map(response -> response.hashtags)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(hashtags -> {
+                    for (String string : hashtags) {
+                        TextView hashtag = (TextView) LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+                        hashtag.setText(string);
+                        hashtag.setOnClickListener(event -> {
+                            addNewHashtag(string);
+                        });
+                        recommendHashtag.addView(hashtag);
+                    }
+                }, error -> {
+                    error.printStackTrace();
+                })
+        );
+
         return view;
     }
 
@@ -100,18 +123,6 @@ public class EvaluationStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
-        if(EvaluationForm.getInstance().getBody() != null) {
-            this.bodyText.setText(EvaluationForm.getInstance().getBody());
-        }
-        if(EvaluationForm.getInstance().getHashtag().size() > 0){
-            for(String str : EvaluationForm.getInstance().getHashtag()) {
-                TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
-                hashtag.setText(str);
-                hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
-                hashtagsContainer.addView(hashtag);
-            }
-        }
-        Timber.d("on Loading %s", hashtagsContainer.getChildCount());
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
@@ -146,40 +157,75 @@ public class EvaluationStep3Fragment extends Fragment {
             WidgetObservable.text(this.bodyText)
                 .map(RxValidator.toString)
                 .map(body -> {
+                    if(EvaluationForm.getInstance().isModifyMode())
+                        EvaluationForm.getInstance().setEdit(true);
                     EvaluationForm.getInstance().setBody(body);
                     return body;
                 })
                 .map(RxValidator.isValidEvaluationBody)
-                .map(e -> {
-                        Timber.d("EvaluationForm : %s", EvaluationForm.getInstance());
-                        return EvaluationForm.getInstance().isCompleted();
-                    })
+                .map(e -> EvaluationForm.getInstance().isCompleted())
                 .startWith(EvaluationForm.getInstance().isCompleted())
                 .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe(valid -> {
-                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                    this.showFAB(valid);
                 }, error -> Timber.d("error : %s", error))
         );
 
-        this.subscriptions.add(WidgetObservable.text(this.hashtagsText)
-            .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
-            .subscribe(event -> {
-                final String str = event.text().subSequence(0, event.text().length() - 1).toString();
-                TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
-                hashtag.setText(str);
-                hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
-                EvaluationForm.getInstance().addHashtag(str);
-                hashtagsContainer.addView(hashtag);
-                this.hashtagsText.setText("");
-            })
+        this.subscriptions.add(
+            WidgetObservable.text(this.hashtagsText)
+                .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
+                .subscribe(event -> {
+                    final String str = event.text().subSequence(0, event.text().length() - 1).toString();
+
+                    this.addNewHashtag(str);
+                    this.hashtagsText.setText("");
+                })
         );
     }
 
-    private Integer evaluationID = null;
-    private void submitNewEvaluation() {
-        RetrofitApi.getInstance().post_evaluation(
+    private boolean showFAB(boolean valid){
+        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+        if (visible && !valid){
+            FloatingActionControl.getInstance().hide(true);
+        }else if (!visible && valid) {
+            FloatingActionControl.getInstance().show(true);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean addNewHashtag(String text){
+        if(EvaluationForm.getInstance().getHashtag().contains(text))
+            return false;
+        addNewHashtagView(text);
+        EvaluationForm.getInstance().addHashtag(text);
+
+        if(EvaluationForm.getInstance().isModifyMode())
+            EvaluationForm.getInstance().setEdit(true);
+        this.showFAB(EvaluationForm.getInstance().isCompleted());
+        return true;
+    }
+    private void addNewHashtagView(String text){
+        Context context = getActivity();
+        TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+        hashtag.setText(text);
+        hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
+        hashtagsContainer.addView(hashtag);
+    }
+
+    private Observable<EvaluationResponse> submitEvaluation(boolean isModifyMode){
+        if(isModifyMode){
+            return RetrofitApi.getInstance().put_update_evaluation(
+                User.getInstance().getAccessToken(),
+                EvaluationForm.getInstance().getCourseId(),
+                EvaluationForm.getInstance().getPointOverall(),
+                EvaluationForm.getInstance().getPointGpaSatisfaction(),
+                EvaluationForm.getInstance().getPointEasiness(),
+                EvaluationForm.getInstance().getPointClarity(),
+                EvaluationForm.getInstance().getBody()
+            );
+        }
+        return RetrofitApi.getInstance().post_evaluation(
             User.getInstance().getAccessToken(),
             EvaluationForm.getInstance().getCourseId(),
             EvaluationForm.getInstance().getPointOverall(),
@@ -187,47 +233,52 @@ public class EvaluationStep3Fragment extends Fragment {
             EvaluationForm.getInstance().getPointEasiness(),
             EvaluationForm.getInstance().getPointClarity(),
             EvaluationForm.getInstance().getBody()
-        )
-        .filter(response -> response.success)
-        .map(response -> {
-            evaluationID = response.evaluation_id;
-            if (hashtagsContainer.getChildCount() > 0) {
-                RetrofitApi.getInstance().post_evaluation_hashtag(
-                    User.getInstance().getAccessToken(),
-                    evaluationID,
-                    EvaluationForm.getInstance().getHashtag()
-                ).subscribe();
-            }
-            return true;
-        })
-        .flatMap(unused -> RetrofitApi.getInstance().get_evaluation(
-            User.getInstance().getAccessToken(),
-            evaluationID
-        ))
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-            response -> {
-                if (response.success) {
-                    EvaluationForm.getInstance().free();
-                    Evaluation.getInstance().update(response.evaluation);
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("STANDALONE", true);
-                    this.navigator.back();
-                    this.navigator.navigate(EvaluationFragment.class, bundle, false, Navigator.AnimatorType.SLIDE_TO_RIGHT);
-                } else {
-                    Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
-                }
-            },
-            error -> {
-                if (error instanceof RetrofitError) {
-                    switch (((RetrofitError) error).getResponse().getStatus()) {
-                        default:
-                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                    }
-                }else{
-                    error.printStackTrace();
-                }
-            }
         );
+    }
+
+    private Integer evaluationID = null;
+    private void submitNewEvaluation() {
+        this.submitEvaluation(EvaluationForm.getInstance().isModifyMode())
+            .filter(response -> response.success)
+            .map(response -> {
+                evaluationID = response.evaluation_id;
+                if (hashtagsContainer.getChildCount() > 0) {
+                    RetrofitApi.getInstance().post_evaluation_hashtag(
+                        User.getInstance().getAccessToken(),
+                        evaluationID,
+                        EvaluationForm.getInstance().getHashtag()
+                    ).subscribe();
+                }
+                return true;
+            })
+            .flatMap(unused -> RetrofitApi.getInstance().get_evaluation(
+                User.getInstance().getAccessToken(),
+                evaluationID
+            ))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                response -> {
+                    if (response.success) {
+                        EvaluationForm.getInstance().free();
+                        Evaluation.getInstance().update(response.evaluation);
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("STANDALONE", true);
+                        this.navigator.back();
+                        this.navigator.navigate(EvaluationFragment.class, bundle, false, Navigator.AnimatorType.SLIDE_TO_RIGHT);
+                    } else {
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            default:
+                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                        }
+                    }else{
+                        error.printStackTrace();
+                    }
+                }
+            );
     }
 }

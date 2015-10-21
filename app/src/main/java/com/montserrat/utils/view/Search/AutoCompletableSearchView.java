@@ -4,20 +4,15 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.montserrat.app.AppConst;
-import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
-import com.montserrat.app.model.CoursesData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
@@ -30,317 +25,259 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
-/**
- * Created by SSS on 2015-06-06.
- */
 public class AutoCompletableSearchView {
-    private EditText editText;
-    private RecyclerView autocompleteView;
-    private RecyclerView courseListView;
-    private View outsideView;
-    private RecyclerViewItemClickListener autoCompleteListener;
 
+    /* view */
+    private EditText queryView;
+    private RecyclerView autocompleteListView;
+    private RecyclerView resultCourseListView;
+    private View outsideTouchableView;
+
+    /* listener */
+    private RecyclerViewItemClickListener itemClickListener;
+    private SearchViewListener searchViewListener;
+
+    /* adapter */
     private AutoCompleteAdapter autoCompleteAdapter;
     private CourseItemsAdapter courseItemsAdapter;
+
 
     private CompositeSubscription subscription;
     private Context context;
 
+    /* data */
     private List<Candidate> candidates;
-    private List<CourseData> courses;
+    private List<CourseData> courseDatas;
+    //ONLY use EVALUATION
+    private Candidate evaluationCandidate;
+    private String evaluationQuery;
 
-    private Type type;
-    private boolean searchMode;
-    private boolean setOpen;
+    /*flag*/
     private boolean isOpen;
-    private boolean isAutocompleteViewOpen;
+    private boolean setOpen;
     private boolean reserveCandidateListOnClose;
-
-    private SearchViewListener searchViewListener;
-
-
-    public enum Type{
-        SEARCH, EVALUATION
-    }
-
-    public AutoCompletableSearchView(RecyclerViewItemClickListener listener, Context context, Type type){
-        this.courses = new ArrayList<>();
-        this.candidates = new ArrayList<>();
-        this.subscription = new CompositeSubscription();
-
-        this.autoCompleteListener = listener;
-        this.context = context;
-        this.type = type;
-
-        this.searchMode = true;
-        this.editText = null;
-        this.setOpen = false;
-        this.isAutocompleteViewOpen = false;
-        this.isOpen = false;
-        this.reserveCandidateListOnClose = false;
-    }
 
     public interface SearchViewListener{
         void onTextChange(String query);
-        void onShowChange(boolean show);
+        void onShowChange(boolean open);
+        void submitQuery(String query);
+        void onItemSelected(Candidate candidate);
     }
     public void setSearchViewListener(SearchViewListener listener){
         this.searchViewListener = listener;
     }
 
-    public void initAutoComplete(RecyclerView autocompleteView, View outsideView){
-        this.autocompleteView = autocompleteView;
-        this.autoCompleteAdapter = new AutoCompleteAdapter(this.candidates, this.autoCompleteListener);
-        this.autocompleteView.setLayoutManager(new LinearLayoutManager(context));
-        this.autocompleteView.setAdapter(this.autoCompleteAdapter);
-        this.outsideView = outsideView;
-        this.outsideView.setOnClickListener(view -> showCandidates(false));
+    public AutoCompletableSearchView(RecyclerViewItemClickListener listener, Context context){
+        this.itemClickListener = listener;
+        this.context = context;
+        reserveCandidateListOnClose = false;
+        isOpen = false;
+        setOpen = false;
+        this.evaluationCandidate = new Candidate();
+        this.subscription = new CompositeSubscription();
     }
 
-    public void initCourse(RecyclerView courseListView){
-        this.courseListView = courseListView;
-        if (type == Type.EVALUATION) {
-            this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener, R.layout.cardview_header_height_zero);
-            this.evaluationCandidate = new Candidate();
-        } else this.courseItemsAdapter = new CourseItemsAdapter(this.courses, this.autoCompleteListener);
+    public void initAutocompleteView(RecyclerView autocompleteListView, View outsideTouchableView, EditText editText, AutoCompleteAdapter adapter, List<Candidate> items){
+        this.autocompleteListView = autocompleteListView;
+        this.outsideTouchableView = outsideTouchableView;
 
-        this.courseListView.setLayoutManager(new LinearLayoutManager(context));
-        this.courseListView.setAdapter(this.courseItemsAdapter);
+        if(items == null)
+            this.candidates = new ArrayList<>();
+        else
+            this.candidates = items;
+
+        if(adapter != null)
+            this.autoCompleteAdapter = adapter;
+        else {
+            this.autoCompleteAdapter = new AutoCompleteAdapter(candidates, itemClickListener);
+            this.autocompleteListView.setLayoutManager(new LinearLayoutManager(context));
+            this.autocompleteListView.setAdapter(this.autoCompleteAdapter);
+        }
+        this.outsideTouchableView.setOnClickListener(view -> showCandidates(false));
+
+        this.queryView = editText;
+        this.autocomplete();
+    }
+    public void initResultView(RecyclerView resultCouresListView, CourseItemsAdapter adapter, List<CourseData> items){
+        this.resultCourseListView = resultCouresListView;
+        if(items == null)
+            this.courseDatas = new ArrayList<>();
+        else
+            this.courseDatas = items;
+        this.courseItemsAdapter = adapter;
+        this.resultCourseListView.setLayoutManager(new LinearLayoutManager(context));
+        this.resultCourseListView.setAdapter(courseItemsAdapter);
     }
 
     public void notifyChangedAutocomplete(List<Candidate> candidates){
         this.candidates.clear();
         this.candidates.addAll(candidates);
         this.autoCompleteAdapter.notifyDataSetChanged();
-        this.updateViewHeight();
+        this.updateAutoCompleteViewHeight();
     }
+
 
     public void notifyChangedCourse(List<CourseData> courses){
-        this.courses.clear();
-        this.courses.addAll(courses);
+        this.courseDatas.clear();
+        this.courseDatas.addAll(courses);
         this.courseItemsAdapter.notifyDataSetChanged();
     }
-
-    public void setAutoCompleteViewOpen(boolean setOpen){
-        this.setOpen = setOpen;
+    public void notifyChangedCourseAsynchronized(List<CourseData> courses){
+        this.courseDatas.clear();
+        for (int i = 0; i < courses.size(); i++) {
+            final int j = courses.size() - i - 1;
+            this.courseDatas.add(CourseData.Sample());
+            this.subscription.add(
+                RetrofitApi.getInstance().search_search(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    courses.get(i).lecture_id,
+                    courses.get(i).professor_id,
+                    null
+                )
+                    .map(response -> response.courses)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        course -> {
+                            this.courseDatas.set(j, course.get(0));
+                            this.courseItemsAdapter.notifyDataSetChanged();
+                        },
+                        error -> error.printStackTrace()
+                    )
+            );
+        }
     }
 
-    public void autoComplete(TextView textView){
-        this.editText = (EditText) textView;
-
-        this.editText.setOnFocusChangeListener((v, hasFocus) -> {
-            if(hasFocus) {
+    public void autocomplete(){
+        this.queryView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus)
                 this.showCandidates(true);
-            }
         });
 
         this.subscription.add(
             WidgetObservable
-                .text(this.editText)
+                .text(this.queryView)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(unused -> this.setAutoCompleteViewOpen(true))
-
+                .subscribe(unused -> this.setOpen = true)
         );
 
         this.subscription.add(
             WidgetObservable
-                .text(this.editText)
+                .text(this.queryView)
                 .map(listener -> {
-                    if (searchViewListener != null) {
+                    if (searchViewListener != null)
                         searchViewListener.onTextChange(listener.text().toString());
-                    }
                     return listener.text().toString();
                 })
                 .debounce(500, TimeUnit.MILLISECONDS)
+                .filter(text -> !text.isEmpty())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(query -> {
-                    if (type != Type.EVALUATION && query.isEmpty()) return null; // history
-                    return RetrofitApi.getInstance().search_autocomplete(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        query
-                    );
-                })
+                .flatMap(query -> RetrofitApi.getInstance().search_autocomplete(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    query
+                ))
                 .map(response -> response.candidates)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    results -> {
-                        if (isOpen && setOpen)
-                            this.showCandidates(true);
-                        this.notifyChangedAutocomplete(results);
-                    },
-                    error -> {
-//                        this.showCandidates(false);
-                        this.showCandidates(setOpen);
-                        Timber.d("get Candidates error : %s", error);
-                        if (error instanceof RetrofitError) {
-                            switch (((RetrofitError) error).getResponse().getStatus()) {
-                                default:
-                                    Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                            }
-                        }
-                    }
-                )
+                .subscribe(result -> {
+                    if (isOpen && setOpen)
+                        this.showCandidates(true);
+                    this.notifyChangedAutocomplete(result);
+                }, error -> {
+                    showCandidates(setOpen);
+//                    if (error instanceof RetrofitError)
+                    error.printStackTrace();
+                })
         );
     }
 
-    public void querySubmit(){
-        this.querySubmit(this.editText.getText().toString());
+    public void submitQuery(){
+        this.submitQuery(this.queryView.getText().toString());
     }
 
-    public void querySubmit(String query){
-        if(this.type == Type.EVALUATION){
-            this.setEvaluationCandidate(query);
-            this.searchCourse();
-        }else if(this.type == Type.SEARCH) {
-            Search.getInstance().clear().setQuery(query);
-        }
+    public void submitQuery(String query){
+        if(searchViewListener != null)
+            this.searchViewListener.submitQuery(query);
+        this.searchCourse(null, null, query);
         this.showCandidates(false);
-        this.editText.clearFocus();
+        this.queryView.clearFocus();
     }
 
-
-
-    private Candidate evaluationCandidate;
-    private String evaluationQuery;
-
-    public void setEvaluationCandidate(int position) {
-        this.evaluationCandidate.clear();
-
-        this.evaluationQuery = null;
-        this.evaluationCandidate = candidates.get(position);
-    }
-    public void setEvaluationCandidate(String query){
-        this.evaluationCandidate.clear();
-        this.evaluationQuery = query;
+    public void setOpen(boolean open){
+        this.setOpen = open;
     }
 
-    public void setReserveCandidateListOnClose(boolean reserve){
-        this.reserveCandidateListOnClose = reserve;
-    }
+    public void showCandidates(boolean show){
+        ViewGroup.LayoutParams param;
+        this.isOpen = show;
+        if(show){
+            if(this.queryView.getText().toString().length() == 0)
+                this.candidates.clear();
+            this.updateAutoCompleteViewHeight();
 
-    public boolean getReserveCandidateListOnClose(){
-        return this.reserveCandidateListOnClose;
-    }
+            this.outsideTouchableView.setAlpha((float)0.7);
+            this.outsideTouchableView.setBackgroundColor(Color.GRAY);
 
-    public boolean hasData(){
-        if(this.type == Type.SEARCH){
-            return true;
-        }else if(this.type == Type.EVALUATION){
-            if (this.evaluationCandidate.lecture_id != null || this.evaluationCandidate.professor_id != null || this.evaluationQuery != null)
-                return true;
+//            param = this.outsideTouchableView.getLayoutParams();
+            this.outsideTouchableView.setVisibility(View.VISIBLE);
+        }else{
+            this.setOpen = false;
+            this.queryView.clearFocus();
+            this.updateAutoCompleteViewHeight();
+
+            ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.queryView.getWindowToken(), 2);
+
+            this.outsideTouchableView.setVisibility(View.GONE);
+            if(!reserveCandidateListOnClose)
+                this.candidates.clear();
         }
-        return false;
+
+        if(this.searchViewListener != null)
+            this.searchViewListener.onShowChange(show);
     }
 
-    public void searchHistory(){
-        if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
-            //Todo : when history is empty, inform empty.
-        }else {
-            List<CourseData> courseList = ((CoursesData)AppManager.getInstance().getStringParsed(
-                AppConst.Preference.HISTORY,
-                CoursesData.class
-            )).courses;
-            Timber.d("courses : %s", courseList.size());
-            this.courses.clear();
-            for (int i = 0; i < courseList.size(); i++) {
-                final int j = courseList.size() - i - 1;
-                this.courses.add(CourseData.Sample());
-                this.subscription.add(
-                    RetrofitApi.getInstance().search_search(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        courseList.get(i).lecture_id,
-                        courseList.get(i).professor_id,
-                        null
-                    )
-                        .map(response -> response.courses)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                            course -> {
-                                this.courses.set(j, course.get(0));
-                                this.courseItemsAdapter.notifyDataSetChanged();
-                            },
-                            error -> Timber.d("serch history error : %s", error)
-                        )
-                );
-            }
-        }
-    }
-
-    private static final int HISTORY_SIZE = 10;
-    public boolean addHistory(CourseData course){
-        List<CourseData> courseDataList;
-        CoursesData coursesData = new CoursesData();
-        coursesData.courses = new ArrayList<>();
-
-        if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
-            courseDataList = new ArrayList<>();
-        }else {
-            courseDataList  = ((CoursesData)AppManager.getInstance().getStringParsed(
-                AppConst.Preference.HISTORY,
-                CoursesData.class
-            )).courses;
-        }
-        int index;
-        if((index = containsCourse(courseDataList, course)) >= 0) {
-            courseDataList.remove(index);
-            courseDataList.add(course);
-        }else if (courseDataList.size() > HISTORY_SIZE - 1) {
-            courseDataList.remove(0);
-            courseDataList.add(course);
-            while(courseDataList.size() > HISTORY_SIZE - 1){
-                courseDataList.remove(0);
+    private void updateAutoCompleteViewHeight() {
+        ViewGroup.LayoutParams param;
+        param =  autocompleteListView.getLayoutParams();
+        if(isOpen) {
+            if (this.candidates.size() < 5) {
+                param.height = (int) (48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
+            } else {
+                param.height = (int) (240 * this.context.getResources().getDisplayMetrics().density);
             }
         }else{
-            courseDataList.add(course);
+            param.height = 0;
         }
-        coursesData.courses.clear();
-        coursesData.courses.addAll(courseDataList);
-        AppManager.getInstance().putStringParsed(AppConst.Preference.HISTORY, coursesData);
-        return true;
-    }
-    public int containsCourse(List<CourseData> courses, CourseData target) {
-        Timber.d("hash : %s", target.hashCode());
-        for (CourseData course : courses) {
-            Timber.d("hash : %s", course.hashCode());
-            if (course.id.equals(target.id)) return courses.indexOf(course);
-        }
-        return -1;
+        this.autocompleteListView.setLayoutParams(param);
     }
 
-    public void setSearchMode(boolean searchMode){
-        this.searchMode = searchMode;
-    }
-
-    public void searchCourse() {
+    public void searchCourse(){
         Integer lectureId, professorId;
         String query;
-        this.setSearchMode(AppManager.getInstance().getBoolean(AppConst.Preference.SEARCH, true));
-        this.setAutoCompleteViewOpen(false);
 
-        if (this.type == Type.EVALUATION){
+        if(this.hasEvaluationData()){
             lectureId = this.evaluationCandidate.lecture_id;
             professorId = this.evaluationCandidate.professor_id;
             query = this.evaluationQuery;
-        } else if(searchMode) {
+        }else{// if(!Search.getInstance().isEmpty()){
             lectureId = Search.getInstance().getLectureId();
             professorId = Search.getInstance().getProfessorId();
             query = Search.getInstance().getQuery();
-        }else{
-            searchHistory();
-            return;
         }
+        searchCourse(lectureId, professorId, query);
+    }
+
+    public void searchCourse(Integer lectureId, Integer professorId, String query){
+
+        this.setOpen = false;
 
         this.subscription.add(
             RetrofitApi.getInstance().search_search(
@@ -353,111 +290,38 @@ public class AutoCompletableSearchView {
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnCompleted(() -> {
-                    this.showCandidates(false);
-                })
+                .doOnCompleted(() -> this.showCandidates(false))
                 .subscribe(
                     this::notifyChangedCourse,
-                    error -> Timber.d("search course error : %s", error)
-                )
+                    error -> error.printStackTrace())
         );
     }
 
+    // DON'T USE at EVALUATION
     public boolean onRecyclerViewItemClick(View view, int position) {
-//        this.showCandidates(false);
-        if(autocompleteView != null && ((RecyclerView)view.getParent()).getId() == autocompleteView.getId()) {
-            Search.getInstance().clear();
-            Search.getInstance().fromCandidate(candidates.get(position));
-        }else if(courseListView != null && ((RecyclerView)view.getParent()).getId() == courseListView.getId()){
-            Timber.d("items data : <%s><%s><%s><%s><%s>", courses.get(position).name, courses.get(position).id, courses.get(position).professor_name, courses.get(position).professor_photo_url, courses.get(position).is_favorite);
-            if(courses.get(position).id == null || courses.get(position).id < 0){
+        if(autocompleteListView != null && ((RecyclerView)view.getParent()).getId() == autocompleteListView.getId()) {
+//            Search.getInstance().clear();
+//            Search.getInstance().fromCandidate(candidates.get(position));
+            if(searchViewListener != null)
+                searchViewListener.onItemSelected(candidates.get(position));
+        }else if(resultCourseListView != null && ((RecyclerView)view.getParent()).getId() == resultCourseListView.getId()){
+            if(courseDatas.get(position).id == null || courseDatas.get(position).id < 0){
                 Toast.makeText(context, context.getResources().getText(R.string.wait_to_loading), Toast.LENGTH_SHORT).show();
                 return false;
             }
-            Course.getInstance().clear().update(courses.get(position));
-            this.addHistory(courses.get(position));
-
+            Course.getInstance().clear().update(courseDatas.get(position));
+//            this.addHistory(courseDatas.get(position));
         }
         return true;
     }
 
-
-    public void updateViewHeight(){
-        ViewGroup.LayoutParams param;
-        param =  autocompleteView.getLayoutParams();
-        if(isOpen) {
-            if (this.candidates.size() < 5) {
-                param.height = (int) (48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
-            } else {
-                param.height = (int) (240 * this.context.getResources().getDisplayMetrics().density);
-            }
-
-//            param.width = (int)(this.context.getResources().getDisplayMetrics().widthPixels * 0.8);
-        }else{
-            param.height = 0;
-        }
-        this.autocompleteView.setLayoutParams(param);
-    }
-
-    public void showCandidates(boolean show){
-        ViewGroup.LayoutParams param;
-        if(show){
-            if(type == Type.EVALUATION) {
-                param =  courseListView.getLayoutParams();
-                param.height = this.context.getResources().getDisplayMetrics().heightPixels - this.editText.getHeight();
-                courseListView.setLayoutParams(param);
-            }
-            if(this.editText.getText().toString().length() == 0)
-                this.candidates.clear();
-            Timber.d("&&& size : %s", this.candidates.size());
-
-            this.isOpen = true;
-            this.updateViewHeight();
-
-            this.outsideView.setAlpha((float) 0.7);
-            this.outsideView.setBackgroundColor(Color.GRAY);
-
-            param =  this.outsideView.getLayoutParams();
-            param.height = this.context.getResources().getDisplayMetrics().heightPixels;
-            param.width = this.context.getResources().getDisplayMetrics().widthPixels;
-            this.outsideView.setLayoutParams(param);
-            this.isAutocompleteViewOpen = true;
-
-            this.onShowChange(true);
-        } else {
-            param =  this.autocompleteView.getLayoutParams();
-            param.height = 0;
-            this.autocompleteView.setLayoutParams(param);
-
-            param =  outsideView.getLayoutParams();
-            param.height = 0;
-            param.width = this.context.getResources().getDisplayMetrics().widthPixels;
-
-            this.outsideView.setLayoutParams(param);
-
-            this.editText.clearFocus();
-            ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.editText.getWindowToken(), 2);
-            this.isAutocompleteViewOpen = false;
-
-            this.onShowChange(false);
-
-            this.setOpen = false;
-            this.isOpen = false;
-            if(!reserveCandidateListOnClose)
-                this.candidates.clear();
-        }
-    }
-    public void toolbarState(Toolbar toolbar) {
-        toolbar.setTitle(R.string.toolbar_title_course);
-    }
-
-    private void onShowChange(boolean show){
-        if(this.searchViewListener != null)
-            this.searchViewListener.onShowChange(show);
+    public CourseData getCourseItem(int position){
+        return this.courseDatas.get(position);
     }
 
     public boolean onBack(){
-        if(isAutocompleteViewOpen){
+        /* before use flag isautocompleteViewOpen */
+        if(isOpen){
             this.showCandidates(false);
             return true;
         }
@@ -465,10 +329,43 @@ public class AutoCompletableSearchView {
         return false;
     }
 
-    public CourseData getCourseItem(int position){
-        return this.courses.get(position);
+
+    public void setEvaluationCandidateByPosition(int position) {
+        this.evaluationCandidate.clear();
+
+        this.evaluationQuery = null;
+        this.evaluationCandidate = candidates.get(position);
     }
-    public Candidate getCandidateItem(int position){
+    public Candidate getEvaluationCandidate(int position){
         return this.candidates.get(position);
+    }
+
+    public void setEvaluationCandidateQuery(String query){
+        this.evaluationCandidate.clear();
+        this.evaluationQuery = query;
+    }
+    public void clearCandidates(){
+        this.evaluationCandidate = null;
+        this.evaluationQuery = null;
+    }
+    public boolean hasEvaluationData(){
+        if(this.evaluationCandidate.lecture_id != null || this.evaluationCandidate.professor_id != null || evaluationQuery != null){
+            return true;
+        }
+        return false;
+    }
+
+    public CourseItemsAdapter getCourseItemsAdapter(){
+        return this.courseItemsAdapter;
+    }
+    public AutoCompleteAdapter getAutoCompleteAdapter(){
+        return this.autoCompleteAdapter;
+    }
+
+    public List<Candidate> getCandidates(){
+        return this.candidates;
+    }
+    public List<CourseData> getCourseDatas(){
+        return this.courseDatas;
     }
 }

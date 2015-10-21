@@ -25,8 +25,11 @@ import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.github.clans.fab.FloatingActionButton;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.CommentData;
+import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
+import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -34,6 +37,7 @@ import com.montserrat.utils.support.retrofit.RetrofitApi;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
 
 import java.util.List;
@@ -48,7 +52,7 @@ import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, CommentData> implements OnBack {
+public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, CommentData> implements OnBack, View.OnClickListener {
     @InjectView(R.id.evaluation_recyclerview) protected RecyclerView evaluationRecyclerView;
     @InjectView(R.id.toolbar_evaluation) protected Toolbar evaluationToolbar;
     @InjectView(R.id.progress) protected View progress;
@@ -334,7 +338,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     }
     @Override
     protected EvaluationAdapter getAdapter() {
-        return new EvaluationAdapter(this.items, this);
+        return new EvaluationAdapter(this.items, this, this);
     }
     @Override
     protected RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
@@ -355,5 +359,24 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         if (!mCommentInputActive) return false;
         this.morph2FAB();
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.evaluation_modify && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
+            EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
+            ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
+        }else if(v.getId() == R.id.evaluation_header){
+            this.subscriptions.add(
+                RetrofitApi.getInstance().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
+                    .map(response -> response.course)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(course -> {
+                        Course.getInstance().update(course);
+                        ((MainActivity)this.getActivity()).navigate(CourseFragment.class, true);
+                    }, error -> error.printStackTrace())
+            );
+        }
     }
 }

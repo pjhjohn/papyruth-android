@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
@@ -36,6 +37,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @InjectView(R.id.evaluation_header) protected RelativeLayout header;
     @InjectView(R.id.evaluation_lecture) protected TextView lecture;
     @InjectView(R.id.evaluation_timestamp) protected TextView timestamp;
     @InjectView(R.id.evaluation_category) protected TextView category;
@@ -65,6 +67,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_modify) protected ImageView modify;
     private Integer id;
     private VoteStatus status;
+
     public enum VoteStatus {
         UP, DOWN, NONE
     }
@@ -129,6 +132,11 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         }
     }
 
+    public void bind(Evaluation evaluation, View.OnClickListener listener){
+        this.modify.setOnClickListener(listener);
+        this.header.setOnClickListener(listener);
+        this.bind(evaluation);
+    }
 
     public void bind(Evaluation evaluation) {
         final Context context = this.itemView.getContext();
@@ -156,6 +164,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                 if (response.hashtags != null) this.hashtags.post(() -> {
                     float totalWidth = 0;
                     for (String hashtag : response.hashtags) {
+                        Evaluation.getInstance().addHashTag(hashtag);
                         Hashtag tag = new Hashtag(this.itemView.getContext(), hashtag);
                         float width = tag.getPaint().measureText((String) tag.getText());
                         if (width + totalWidth > hashtags.getWidth()) break;
@@ -176,7 +185,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 //        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_CLARITY)).into(this.modify);
         if(User.getInstance().getId().equals(evaluation.getUserId())){
             this.modify.setVisibility(View.VISIBLE);
-            this.modify.setOnClickListener(this);
         }else{
             this.modify.setVisibility(View.GONE);
         }
@@ -229,9 +237,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                         view.getId() == R.id.evaluation_up_vote_count ? "UP" : "DOWN",
                         view.getId() == R.id.evaluation_up_vote_count ? response.up : response.down
                     ));
-                break;
-            case R.id.evaluation_modify:
-
                 break;
             default : Timber.d("Clicked view : %s", view);
         }

@@ -20,6 +20,8 @@ import android.widget.FrameLayout;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.EvaluationFragment;
+import com.montserrat.app.model.unique.Evaluation;
+import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -28,6 +30,7 @@ import com.montserrat.utils.view.viewpager.OnBack;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  *
@@ -56,12 +59,12 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     @Override
     public void onDetach() {
         super.onDetach();
-        navigator = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        this.isOpenSlave = false;
         setFloatingActionControl();
     }
 
@@ -86,6 +89,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     @Override
     public void onDestroyView () {
         super.onDestroyView();
+        FloatingActionControl.getInstance().closeMenuButton(true);
         if(this.subscriptions != null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
         ButterKnife.reset(this);
     }
@@ -94,6 +98,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     @InjectView(R.id.evaluation_container) protected FrameLayout slaveContainer;
     protected EvaluationFragment slave;
     protected Boolean  slaveIsOccupying;
+    protected Boolean isOpenSlave;
 
     @Override
     public boolean onBack() {
@@ -148,6 +153,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
                 super.onAnimationCancel(animation);
                 if(slave != null) getFragmentManager().beginTransaction().remove(slave).commit();
                 isAnimationCanceled = true;
+                isOpenSlave = false;
             }
 
             @Override
@@ -169,6 +175,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     }
 
     protected void closeEvaluation() {
+        this.isOpenSlave = false;
         ViewGroup.LayoutParams lpEvaluationContainer = this.slaveContainer.getLayoutParams();
 
         ValueAnimator animHeight = ValueAnimator.ofInt(this.screenHeight, this.itemHeight);
@@ -200,6 +207,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
                 slaveContainer.setVisibility(View.GONE);
                 slaveIsOccupying = false;
                 setFloatingActionControl();
+                Evaluation.getInstance().clear();
             }
         });
         animators.start();
@@ -218,4 +226,5 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     protected RecyclerView.LayoutManager getRecyclerViewLayoutManager () {
         return new LinearLayoutManager(this.getActivity());
     }
+
 }

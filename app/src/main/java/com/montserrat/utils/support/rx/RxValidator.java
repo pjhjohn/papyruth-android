@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.montserrat.app.R;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
+import com.montserrat.app.model.unique.EvaluationForm;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -95,6 +96,8 @@ public class RxValidator {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if(fromUserOnly && !fromUser) return;
+                    if(EvaluationForm.getInstance().isModifyMode() && !EvaluationForm.getInstance().isEdit())
+                        EvaluationForm.getInstance().setEdit(true);
                     observer.onNext(progress);
                 }
 

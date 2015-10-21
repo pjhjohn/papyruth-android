@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.montserrat.app.R;
+import com.montserrat.app.model.unique.EvaluationForm;
 
 import rx.functions.Func1;
 
@@ -25,6 +26,7 @@ public class HashtagDeleteDialog {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
                     container.removeView(hashtag);
+                    EvaluationForm.getInstance().removeHashtag(hashtag.getText().toString());
                     dialog.dismiss();
                 }
 
@@ -45,6 +47,7 @@ public class HashtagDeleteDialog {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
                     container.removeView(hashtag);
+                    EvaluationForm.getInstance().removeHashtag(hashtag.getText().toString());
                     dialog.dismiss();
                     action.call(null);
                 }

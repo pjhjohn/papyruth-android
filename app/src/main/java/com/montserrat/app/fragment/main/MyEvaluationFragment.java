@@ -1,6 +1,5 @@
 package com.montserrat.app.fragment.main;
 
-import android.graphics.Color;
 import android.view.View;
 
 import com.montserrat.app.AppConst;
@@ -25,9 +24,10 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-
+        if(isOpenSlave) return;
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
+        isOpenSlave = true;
         RetrofitApi.getInstance()
             .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
             .observeOn(AndroidSchedulers.mainThread())

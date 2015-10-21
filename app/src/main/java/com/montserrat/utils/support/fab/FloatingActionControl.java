@@ -84,6 +84,11 @@ public class FloatingActionControl {
         Observable.just(null).delay(delay, unit).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> this.hide(animate));
         return this;
     }
+    public FloatingActionControl closeMenuButton(boolean animate) {
+        if(fam != null)
+            fam.close(animate);
+        return this;
+    }
 
     public FloatingActionControl setContainer(FloatingActionControlContainer container) {
         this.container = container;
@@ -114,6 +119,17 @@ public class FloatingActionControl {
         if(control instanceof FloatingActionButton) ((FloatingActionButton) control).hide(false);
         else if(control instanceof FloatingActionMenu) ((FloatingActionMenu) control).hideMenuButton(false);
         return this;
+    }
+
+    public boolean isFAB(){
+        if(fab != null)
+            return true;
+        return false;
+    }
+    public boolean isFAM(){
+        if(fam != null)
+            return true;
+        return false;
     }
 
     public FloatingActionControl clear() {

@@ -2,6 +2,9 @@ package com.montserrat.app.model.unique;
 
 import com.montserrat.app.model.EvaluationData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by SSS on 2015-05-24.
  */
@@ -24,9 +27,13 @@ public class Evaluation {
     private Integer comment_count;
     private String avatar_url;
     private Integer request_user_vote; // 1 for up-vote, 0 for down-vote, null for neither.
+    private List<String> hashTag;
 
     private static Evaluation instance = null;
-    private Evaluation() {}
+    private Evaluation() {
+        this.hashTag = new ArrayList<>();
+        this.clear();
+    }
     public synchronized static Evaluation getInstance(){
         if ( Evaluation.instance == null ) Evaluation.instance = new Evaluation();
         return Evaluation.instance;
@@ -68,6 +75,12 @@ public class Evaluation {
     public void setAvatar_url(String avatar_url) { this.avatar_url = avatar_url; }
     public Integer getRequestUserVote() { return request_user_vote; }
     public void setRequestUserVote(Integer request_user_vote) { this.request_user_vote = request_user_vote; }
+    public List<String> getHashTag() { return hashTag; }
+    public void setHashTag(List<String> hashTag) {
+        this.hashTag.clear();
+        this.hashTag = hashTag;
+    }
+    public void addHashTag(String hashtag){ this.hashTag.add(hashtag); }
 
     public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;
@@ -109,5 +122,6 @@ public class Evaluation {
         this.comment_count = null;
         this.avatar_url = null;
         this.request_user_vote = null;
+        this.hashTag.clear();
     }
 }
