@@ -1,5 +1,8 @@
 package com.montserrat.app.fragment.auth;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
@@ -30,6 +34,7 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     @InjectView(R.id.application_logo) protected ImageView applicationLogo;
     @InjectView(R.id.signup_progress) protected ProgressBar progress;
     @InjectView(R.id.auth_viewpager) protected FlexibleViewPager viewPager;
+    @InjectView(R.id.state_name) protected TextView stateName;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
@@ -40,7 +45,7 @@ public class AuthFragment extends Fragment implements ViewPagerController {
             AuthFragmentFactory.getInstance(),
             AppConst.ViewPager.Auth.LENGTH
         );
-        Picasso.with(this.getActivity()).load(R.drawable.logo).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.fg_accent))).into(applicationLogo);
+
         this.progress.setMax(AppConst.ViewPager.Auth.LENGTH - 1);
 
         this.viewPager.setPagerController(this);
@@ -90,25 +95,40 @@ public class AuthFragment extends Fragment implements ViewPagerController {
 
     public void logoScaleAnimation(int pageNum, boolean bigger) {
         if (pageNum == AppConst.ViewPager.Auth.SIGNUP_STEP1){
-            ValueAnimator anim;
+            ValueAnimator logoAnim;
+            ValueAnimator nameAnim;
             ViewGroup.LayoutParams params = applicationLogo.getLayoutParams();
+            ViewGroup.LayoutParams stateNameParams = stateName.getLayoutParams();
             int height, width;
+            float sHeight = getResources().getDimension(R.dimen.baseline_x4);
             if (bigger) {
-                anim = ValueAnimator.ofFloat(0.5f, 1);
+                logoAnim = ValueAnimator.ofFloat(0.5f, 1);
+                nameAnim = ValueAnimator.ofFloat(1, 0);
                 height = params.height*2;
                 width = params.width*2;
             } else {
-                anim = ValueAnimator.ofFloat(1, 0.5f);
+                logoAnim = ValueAnimator.ofFloat(1, 0.5f);
+                nameAnim = ValueAnimator.ofFloat(0, 1);
                 height = params.height;
                 width = params.width;
             }
-            anim.addUpdateListener(
+            logoAnim.addUpdateListener(
                 animation -> {
                     params.height = (int) (height * (float) animation.getAnimatedValue());
                     params.width = (int) (width * (float) animation.getAnimatedValue());
                     applicationLogo.setLayoutParams(params);
                 });
-            anim.start();
+            nameAnim.addUpdateListener(
+                animation -> {
+                    stateNameParams.height = (int) (sHeight * (float) animation.getAnimatedValue());
+                    stateName.setLayoutParams(stateNameParams);
+                    stateName.setAlpha((float)animation.getAnimatedValue());
+                }
+            );
+//            logoAnim.start();
+            AnimatorSet set = new AnimatorSet();
+            set.playTogether(logoAnim, nameAnim);
+            set.start();
         }
     }
 

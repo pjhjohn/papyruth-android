@@ -19,15 +19,16 @@
                 android:layout_height="@dimen/baseline_x20"
                 android:animateLayoutChanges="true"
                 android:layout_gravity="center"
+                android:src="@drawable/logo"
                 android:contentDescription="@string/empty"/>
             <TextView
                 android:id="@+id/state_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:text=""
-                android:textSize="24sp"
+                android:text="@string/word_signup"
+                android:textSize="@dimen/baseline_x3"
                 android:textColor="@color/fg_normal"/>
         </LinearLayout>
         <ProgressBar
