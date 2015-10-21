@@ -83,8 +83,6 @@ public class SignInFragment extends Fragment implements OnPageFocus {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.initEmailAutoComplete();
-//        this.signin.setRippleSpeed(50.0f);
-//        this.signup.setRippleSpeed(50.0f);
         return view;
     }
     @Override
@@ -113,7 +111,6 @@ public class SignInFragment extends Fragment implements OnPageFocus {
             })
             .startWith(false)
             .subscribe(valid -> {
-                this.signin.getBackground().setColorFilter(getResources().getColor(valid? R.color.fg_accent : R.color.white), PorterDuff.Mode.MULTIPLY);
                 this.signin.setEnabled(valid);
             })
         );

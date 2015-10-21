@@ -50,7 +50,7 @@ public class LoadingFragment extends Fragment {
         this.navigator = null;
     }
 
-    private final int SHOW_DURATION = 15;
+    private final int SHOW_DURATION = 2;
 
     @InjectView (R.id.loading_university_icon) protected ImageView universityIcon;
     @InjectView (R.id.loading_university_text) protected TextView universityText;

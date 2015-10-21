@@ -60,10 +60,10 @@
                 android:layout_height="@dimen/default_height_button"
                 android:background="@drawable/selector_button_green"
                 android:text="@string/action_sign_in"
+                android:enabled="false"
                 android:textColor="@color/white"
                 android:layout_marginBottom="@dimen/baseline_x1"
                 android:layout_gravity="bottom"/>
-            <!--<com.gc.materialdesign.views.ButtonRectangle-->
             <Button
                 android:id="@+id/sign_up"
                 android:layout_width="match_parent"

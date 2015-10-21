@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item android:state_enabled="true">
         <shape android:shape="rectangle">
             <solid android:color="@color/colorchip_green"/>
+            <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
+            <corners android:radius="@dimen/baseline_x0.5"/>
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/edittext_solid_default"/>
             <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
             <corners android:radius="@dimen/baseline_x0.5"/>
         </shape>
