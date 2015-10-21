@@ -46,6 +46,8 @@ public class LoadingFragment extends Fragment {
         this.navigator = null;
     }
 
+    private final int SHOW_DURATION = 5;
+
     @InjectView (R.id.loading_university_icon) protected ImageView universityIcon;
     @InjectView (R.id.loading_university_text) protected TextView universityText;
     @InjectView (R.id.loading_user_icon) protected ImageView userIcon;
@@ -86,7 +88,7 @@ public class LoadingFragment extends Fragment {
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
         subscriptions.add(Observable
-            .timer(2, TimeUnit.SECONDS)
+            .timer(SHOW_DURATION, TimeUnit.SECONDS)
             .map(unused -> (StatisticsResponse) null)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
