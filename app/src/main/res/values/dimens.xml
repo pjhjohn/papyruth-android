@@ -34,4 +34,6 @@
     <dimen name="default_height_button">56dp</dimen>
     <dimen name="padding_icon_with_text">12dp</dimen>
 
+    <dimen name="loading_text">24sp</dimen>
+
 </resources>

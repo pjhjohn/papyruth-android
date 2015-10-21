@@ -11,12 +11,14 @@
     <color name="colorchip_blue">#546B8D</color>
     <color name="colorchip_green">#60CAC6</color>
 
+    <color name="title_gray">#555555</color>
+
     <color name="transparent">#00ffffff</color>
     <color name="translucent">#8affffff</color>
     <color name="white">#ffffffff</color>
     <color name="nav_filter">#DE000000</color>
 
-    <color name="point_overall">#222222</color>
+    <color name="point_overall">#FFC81D</color>
     <color name="point_easiness">#41B7AE</color>
     <color name="point_gpa_satisfaction">#546B8D</color>
     <color name="point_clarity">#E05E5F</color>

@@ -136,10 +136,10 @@
     <string name="confirm_delete">삭제</string>
 
     <!-- loading -->
-    <string name="loading_number_of_university"> 개의 대학에서</string>
-    <string name="loading_university"> 에서</string>
-    <string name="loading_student"> 명이</string>
-    <string name="loading_evaluation"> 개의</string>
+    <string name="loading_number_of_university">" 개의 대학에서"</string>
+    <string name="loading_university">" 에서"</string>
+    <string name="loading_student">" 명이"</string>
+    <string name="loading_evaluation">" 개의"</string>
     <string name="loading_end_word">강의평가를 작성하였습니다</string>
     <string name="loading_word_evaluation">강의평가</string>
 
@@ -149,4 +149,5 @@
     <string name="word_student">학생</string>
     <string name="word_university">대학교</string>
     <string name="word_professor">교수</string>
+    <string name="word_signup">회원가입</string>
 </resources>

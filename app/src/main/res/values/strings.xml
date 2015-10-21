@@ -145,10 +145,10 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="confirm_delete">DELETE</string>
 
     <!-- loading -->
-    <string name="loading_number_of_university"> universities has</string>
-    <string name="loading_university"> has</string>
-    <string name="loading_student"> students with</string>
-    <string name="loading_evaluation"> evaluations</string>
+    <string name="loading_number_of_university">" universities has"</string>
+    <string name="loading_university">" has"</string>
+    <string name="loading_student">" students with"</string>
+    <string name="loading_evaluation">" evaluations"</string>
     <string name="loading_end_word">Wrote in PAPYRUTH</string>
     <string name="loading_word_evaluation"> </string>
 
@@ -158,4 +158,5 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="word_student">student</string>
     <string name="word_university">university</string>
     <string name="word_professor">professor</string>
+    <string name="word_signup">Sign Up</string>
 </resources>
