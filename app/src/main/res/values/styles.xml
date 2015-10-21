@@ -3,7 +3,7 @@
 
     </style>
     <style name="loading_highlight_medium">
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">36sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:color">@color/primary_dark_material_dark</item>
     </style>

@@ -5,6 +5,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +50,7 @@ public class LoadingFragment extends Fragment {
         this.navigator = null;
     }
 
-    private final int SHOW_DURATION = 5;
+    private final int SHOW_DURATION = 15;
 
     @InjectView (R.id.loading_university_icon) protected ImageView universityIcon;
     @InjectView (R.id.loading_university_text) protected TextView universityText;
@@ -70,20 +74,35 @@ public class LoadingFragment extends Fragment {
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
+    public SpannableStringBuilder getStyleText(Object contents, String suffix){
+        SpannableStringBuilder styleTextBuilder = new SpannableStringBuilder();
+        TextAppearanceSpan appearanceSpan = new TextAppearanceSpan(getActivity().getBaseContext(), R.style.loading_highlight_medium);
+
+        SpannableString styleText = new SpannableString(String.format("%s", contents));
+        styleText.setSpan(appearanceSpan, 0, styleText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        styleTextBuilder.append(styleText);
+        styleTextBuilder.append(suffix);
+
+        return styleTextBuilder;
+    }
+
     @Override
     public void onResume () {
         super.onResume();
+
         if(Statistics.getInstance().getUniversity() == null) {
             Picasso.with(this.getActivity()).load(R.drawable.ic_light_intro_house).into(this.universityIcon);
-            this.universityText.setText(String.format("%d", Statistics.getInstance().getUniversityCount()));
-            this.userText.setText(String.format("%d", Statistics.getInstance().getUserCount()));
-            this.evaluationText.setText(String.format("%d", Statistics.getInstance().getEvaluationCount()));
+
+            this.universityText.setText( getStyleText(Statistics.getInstance().getUniversityCount(), getResources().getString(R.string.loading_number_of_university)) );
+            this.userText.setText( getStyleText(Statistics.getInstance().getUserCount(), getResources().getString(R.string.loading_student)) );
+            this.evaluationText.setText( getStyleText(Statistics.getInstance().getEvaluationCount(), getResources().getString(R.string.loading_evaluation)) );
         } else {
             final UniversityData univ = Statistics.getInstance().getUniversity();
             Picasso.with(this.getActivity()).load(univ.image_url).into(this.universityIcon);
-            this.universityText.setText(univ.name);
-            this.userText.setText(String.format("%d", univ.user_count));
-            this.evaluationText.setText(String.format("%d", univ.evaluation_count));
+            this.universityText.setText( getStyleText(univ.name, getResources().getString(R.string.loading_university)) );
+            this.userText.setText( getStyleText(univ.user_count, getResources().getString(R.string.loading_student)) );
+            this.evaluationText.setText( getStyleText(univ.evaluation_count, getResources().getString(R.string.loading_evaluation)) );
         }
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
