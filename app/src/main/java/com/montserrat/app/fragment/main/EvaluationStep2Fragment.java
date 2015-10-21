@@ -81,7 +81,7 @@ public class EvaluationStep2Fragment extends Fragment {
         final Context context = this.getActivity();
         this.lecture.setText(EvaluationForm.getInstance().getLectureName());
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
-        this.setRatingBarColor(this.pointOverallRatingBar, Color.YELLOW);
+        this.setRatingBarColor(this.pointOverallRatingBar, getResources().getColor(R.color.point_overall));
         Picasso.with(context).load(R.drawable.ic_point_overall).into(this.pointOverallIcon);
         Picasso.with(context).load(R.drawable.ic_point_clarity).into(this.pointClarityIcon);
         Picasso.with(context).load(R.drawable.ic_point_satisfaction).into(this.pointGpaSatisfactionIcon);
