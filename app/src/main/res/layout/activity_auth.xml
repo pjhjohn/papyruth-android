@@ -8,6 +8,7 @@
         android:id="@+id/auth_navigator"
         android:focusable="true"
         android:clickable="true"
+        android:background="@drawable/bg_tabby"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <include layout="@layout/fac"/>

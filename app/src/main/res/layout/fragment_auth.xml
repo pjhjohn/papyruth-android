@@ -36,6 +36,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/baseline_x0.5"
             android:progressDrawable="@drawable/progressbar_signup"
+            android:visibility="gone"
+            android:background="@color/white"
             android:indeterminateOnly="false">
         </ProgressBar>
         <com.montserrat.utils.view.viewpager.FlexibleViewPager

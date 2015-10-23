@@ -106,11 +106,15 @@ public class AuthFragment extends Fragment implements ViewPagerController {
                 nameAnim = ValueAnimator.ofFloat(1, 0);
                 height = params.height*2;
                 width = params.width*2;
+                this.progress.setVisibility(View.GONE);
+                this.viewPager.setBackgroundColor(getResources().getColor(R.color.transparent));
             } else {
                 logoAnim = ValueAnimator.ofFloat(1, 0.5f);
                 nameAnim = ValueAnimator.ofFloat(0, 1);
                 height = params.height;
                 width = params.width;
+                this.progress.setVisibility(View.VISIBLE);
+                this.viewPager.setBackgroundColor(getResources().getColor(R.color.white));
             }
             logoAnim.addUpdateListener(
                 animation -> {
