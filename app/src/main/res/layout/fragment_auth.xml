@@ -43,8 +43,10 @@
         <com.montserrat.utils.view.viewpager.FlexibleViewPager
             android:id="@+id/auth_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.montserrat.utils.view.viewpager.FlexibleViewPager>
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
+
+            />
     </LinearLayout>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>
 
