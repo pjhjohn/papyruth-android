@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="@drawable/background_university"
@@ -9,23 +9,19 @@
     <com.montserrat.utils.view.SquareImageView
         android:id="@+id/university_item_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:src="@drawable/snu_logo"
-        android:paddingTop="@dimen/baseline_x2"
-        android:paddingRight="@dimen/baseline_x4"
-        android:paddingLeft="@dimen/baseline_x4"
-        android:paddingBottom="@dimen/baseline_x0.5"
-        android:layout_margin="@dimen/baseline_x2"
-        android:layout_marginBottom="@dimen/baseline_x0.5"
+        android:paddingRight="@dimen/baseline_x6"
+        android:paddingLeft="@dimen/baseline_x6"
         android:scaleType="centerInside"/>
     <TextView
         android:id="@+id/university_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
+        android:paddingLeft="@dimen/baseline_x1"
+        android:paddingRight="@dimen/baseline_x1"
+        android:paddingBottom="@dimen/baseline_x1"
         android:gravity="center"
-        android:layout_gravity="bottom"
-        android:textSize="20sp"/>
-</LinearLayout>
+        android:textSize="@dimen/basefont_x1.5"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
