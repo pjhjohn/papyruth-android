@@ -26,6 +26,7 @@
     <color name="button_diable">#76D1CC</color>
     
     <color name="edittext_solid_default">#C8C8C8</color>
+    <color name="text_hint">#aaaaaa</color>
     
     <color name="lecture_type_major">#27B5Af</color>
     <color name="lecture_type_liberal_arts">#E05E5F</color>
