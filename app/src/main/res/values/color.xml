@@ -10,6 +10,7 @@
     <color name="colorchip_red">#E05E5F</color>
     <color name="colorchip_blue">#546B8D</color>
     <color name="colorchip_green">#60CAC6</color>
+    <color name="colorchip_green_accent">#80EAE6</color>
 
     <color name="title_gray">#555555</color>
 
