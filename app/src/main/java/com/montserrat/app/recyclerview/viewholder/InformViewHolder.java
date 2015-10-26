@@ -2,11 +2,10 @@ package com.montserrat.app.recyclerview.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.R;
-import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import butterknife.ButterKnife;
@@ -17,8 +16,8 @@ import butterknife.InjectView;
  */
 public class InformViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.inform_body) protected TextView body;
-    @InjectView(R.id.inform_btn_positive) protected ButtonFlat positiveButton;
-    @InjectView(R.id.inform_btn_optional) protected ButtonFlat optionalButton;
+    @InjectView(R.id.inform_btn_positive) protected Button positiveButton;
+    @InjectView(R.id.inform_btn_optional) protected Button optionalButton;
     public InformViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);

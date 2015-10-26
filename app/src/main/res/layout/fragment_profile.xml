@@ -54,40 +54,35 @@
                 android:inputType="text"
                 android:hint="@string/hint_entrance"/>
         </LinearLayout>
-        <com.gc.materialdesign.views.ButtonFlat
+        <Button
             android:id="@+id/term"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/fg_normal"
-            app:animate="false"
             android:text="@string/term"/>
-        <com.gc.materialdesign.views.ButtonFlat
+        <Button
             android:id="@+id/opensourse_license"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/fg_normal"
-            app:animate="false"
             android:text="@string/opensourse_license"/>
-        <com.gc.materialdesign.views.ButtonFlat
+        <Button
             android:id="@+id/my_evaluation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/fg_normal"
-            app:animate="false"
             android:text="@string/my_evaluation"/>
-        <com.gc.materialdesign.views.ButtonFlat
+        <Button
             android:id="@+id/my_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/fg_normal"
-            app:animate="false"
             android:text="@string/my_comment"/>
-        <com.gc.materialdesign.views.ButtonFlat
+        <Button
             android:id="@+id/sign_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/fg_normal"
-            app:animate="false"
             android:text="@string/exit"/>
     </LinearLayout>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>

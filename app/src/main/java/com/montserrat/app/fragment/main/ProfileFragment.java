@@ -3,16 +3,15 @@ package com.montserrat.app.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.gc.materialdesign.views.ButtonFlat;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
@@ -47,11 +46,11 @@ public class ProfileFragment extends Fragment {
     @InjectView (R.id.nickname) protected EditText nickname;
     @InjectView (R.id.gender) protected EditText gender;
     @InjectView (R.id.entrance) protected EditText entrance;
-    @InjectView (R.id.my_evaluation) protected ButtonFlat myEvaluation;
-    @InjectView (R.id.my_comment) protected ButtonFlat myComment;
-    @InjectView (R.id.sign_out) protected ButtonFlat signout;
-    @InjectView(R.id.term) protected ButtonFlat term;
-    @InjectView(R.id.opensourse_license) protected ButtonFlat opensourseLicense;
+    @InjectView (R.id.my_evaluation) protected Button myEvaluation;
+    @InjectView (R.id.my_comment) protected Button myComment;
+    @InjectView (R.id.sign_out) protected Button signout;
+    @InjectView(R.id.term) protected Button term;
+    @InjectView(R.id.opensourse_license) protected Button opensourseLicense;
     private CompositeSubscription subscriptions;
 
     private Toolbar toolbar;
@@ -108,10 +107,6 @@ public class ProfileFragment extends Fragment {
             .clicks(R.id.fab_edit_password)
             .subscribe(unused -> this.navigator.navigate(ProfileEditPasswordFragment.class, true))
         );
-
-        myComment.setRippleSpeed(20);
-        myEvaluation.setRippleSpeed(20);
-        signout.setRippleSpeed(20);
 
         this.subscriptions.add(ViewObservable.clicks(this.myEvaluation).subscribe(unuse -> this.navigator.navigate(MyEvaluationFragment.class, true), error -> error.printStackTrace()));
         this.subscriptions.add(ViewObservable.clicks(this.myComment).subscribe(unuse->this.navigator.navigate(MyCommentFragment.class, true), error->error.printStackTrace()));

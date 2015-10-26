@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#4285F4">
+    android:background="@color/colorchip_blue_accent">
     <TextView
         android:id="@+id/inform_body"
         android:layout_width="match_parent"
@@ -16,29 +16,42 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
-    <com.gc.materialdesign.views.ButtonFlat
+    <Button
+        android:minWidth="64dp"
+        android:minHeight="36dp"
+        android:paddingLeft="@dimen/baseline_x1"
+        android:paddingRight="@dimen/baseline_x1"
+        android:layout_marginLeft="@dimen/baseline_x1"
+        android:layout_marginRight="@dimen/baseline_x1"
+
         android:id="@+id/inform_btn_positive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:textSize="16sp"
+        android:background="@drawable/selector_button_inform"
         android:text="@string/confirm_positive"
+        android:textStyle="bold"
+        android:textColor="@color/white"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/baseline_x1"
-        android:layout_below="@+id/inform_body"
-        android:visibility="visible"/>
-    <com.gc.materialdesign.views.ButtonFlat
+        android:layout_below="@+id/inform_body"/>
+    <Button
+        android:minWidth="64dp"
+        android:minHeight="36dp"
+        android:paddingLeft="@dimen/baseline_x1"
+        android:paddingRight="@dimen/baseline_x1"
+        android:layout_marginLeft="@dimen/baseline_x1"
+        android:layout_marginRight="@dimen/baseline_x1"
+
         android:id="@+id/inform_btn_optional"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/translucent"
-        android:textSize="16sp"
+        android:background="@drawable/selector_button_inform"
         android:text="@string/confirm_optional"
+        android:textColor="@color/white"
         android:layout_toLeftOf="@+id/inform_btn_positive"
         android:layout_toStartOf="@+id/inform_btn_positive"
         android:layout_marginTop="@dimen/baseline_x1"
         android:layout_marginBottom="@dimen/baseline_x1"
-        android:layout_below="@+id/inform_body"
-        android:visibility="visible"/>
+        android:layout_below="@+id/inform_body"/>
 </RelativeLayout>

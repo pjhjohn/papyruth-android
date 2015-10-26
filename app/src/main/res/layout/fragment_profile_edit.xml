@@ -51,14 +51,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <com.gc.materialdesign.views.ButtonFlat
+            <Button
                 android:id="@+id/university"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="@color/fg_normal"
                 android:text=""/>
-            <com.gc.materialdesign.views.ButtonFlat
+            <Button
                 android:id="@+id/entrance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
