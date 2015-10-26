@@ -94,28 +94,22 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     }
 
     public void logoScaleAnimation(int pageNum, boolean bigger) {
+        ValueAnimator logoAnim;
+        ViewGroup.LayoutParams params = applicationLogo.getLayoutParams();
         if (pageNum == AppConst.ViewPager.Auth.SIGNUP_STEP1){
-            ValueAnimator logoAnim;
             ValueAnimator nameAnim;
-            ViewGroup.LayoutParams params = applicationLogo.getLayoutParams();
             ViewGroup.LayoutParams stateNameParams = stateName.getLayoutParams();
-            int height, width;
+            int height  = params.height, width = params.width;
             float sHeight = getResources().getDimension(R.dimen.baseline_x4);
             if (bigger) {
-                logoAnim = ValueAnimator.ofFloat(0.5f, 1);
+                logoAnim = ValueAnimator.ofFloat(1, 2);
                 nameAnim = ValueAnimator.ofFloat(1, 0);
-                height = params.height*2;
-                width = params.width*2;
-                this.progress.setVisibility(View.GONE);
-                this.viewPager.setBackgroundColor(getResources().getColor(R.color.transparent));
             } else {
                 logoAnim = ValueAnimator.ofFloat(1, 0.5f);
                 nameAnim = ValueAnimator.ofFloat(0, 1);
-                height = params.height;
-                width = params.width;
-                this.progress.setVisibility(View.VISIBLE);
-                this.viewPager.setBackgroundColor(getResources().getColor(R.color.white));
             }
+            this.progress.setVisibility(bigger ? View.GONE : View.VISIBLE);
+
             logoAnim.addUpdateListener(
                 animation -> {
                     params.height = (int) (height * (float) animation.getAnimatedValue());
@@ -133,6 +127,8 @@ public class AuthFragment extends Fragment implements ViewPagerController {
             AnimatorSet set = new AnimatorSet();
             set.playTogether(logoAnim, nameAnim);
             set.start();
+        }else if(pageNum == AppConst.ViewPager.Auth.SIGNIN){
+
         }
     }
 
