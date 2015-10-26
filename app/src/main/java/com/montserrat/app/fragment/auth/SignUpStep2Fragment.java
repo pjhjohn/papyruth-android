@@ -2,8 +2,14 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +33,8 @@ import com.montserrat.utils.view.viewpager.OnPageUnfocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -43,7 +51,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus{
+public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus, LoaderManager.LoaderCallbacks<Cursor>{
     private ViewPagerController pagerController;
     @Override
     public void onAttach(Activity activity) {
@@ -67,6 +75,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
         ButterKnife.inject(this, view);
         this.subscription = new CompositeSubscription();
+        getLoaderManager().initLoader(0, null, this);
         return view;
     }
 
@@ -143,7 +152,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             this.subscription = new CompositeSubscription();
 
         if(SignUpForm.getInstance().getNickname() != null){
-            this.email.setText(SignUpForm.getInstance().getEmail());
+            if(emailNotAssigned()) this.email.setText(SignUpForm.getInstance().getEmail());
             this.nickname.setText(SignUpForm.getInstance().getNickname());
             this.duplicatedValidator(email.getText().toString(), null);
             this.duplicatedValidator(null, nickname.getText().toString());
@@ -201,5 +210,52 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageUnfocused() {
         if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
+    }
+
+    /* For reading contacts to set initial email of user from device */
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
+        return new CursorLoader(this.getActivity(),
+            // Retrieve data rows for the device user's 'profile' contact.
+            Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+            ProfileQuery.PROJECTION,
+            // Select only email addresses.
+            ContactsContract.Contacts.Data.MIMETYPE + " = ?",
+            new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+            // Show primary email addresses first. Note that there won't be
+            // a primary email address if the user hasn't specified one.
+            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        List<String> emails = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+            // Potentially filter on ProfileQuery.IS_PRIMARY
+            cursor.moveToNext();
+        }
+        if(emails.size()>0 && emailNotAssigned()) this.email.setText(emails.get(0));
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {}
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+            ContactsContract.CommonDataKinds.Email.ADDRESS,
+            ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
+
+    private boolean emailNotAssigned() {
+        return SignUpForm.getInstance().getEmail() == null
+            || SignUpForm.getInstance().getEmail().length() <= 0
+            || this.email.getText() == null
+            || this.email.getText().length() <= 0;
     }
 }
