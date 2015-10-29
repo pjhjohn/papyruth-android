@@ -33,6 +33,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
     @InjectView (R.id.evaluation_item_category) protected TextView category;
     @InjectView (R.id.evaluation_item_professor) protected TextView professor;
     @InjectView (R.id.evaluation_item_point_overall_star) protected RatingBar pointStar;
+    @InjectView (R.id.evaluation_item_point_overall_text) protected TextView pointText;
     @InjectView (R.id.evaluation_item_body) protected TextView body;
 
     private RecyclerViewItemClickListener itemClickListener;
@@ -50,6 +51,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
     private void setRatingBarColor(int color) {
         LayerDrawable stars = (LayerDrawable) pointStar.getProgressDrawable();
         for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        pointText.setTextColor(color);
     }
 
     private void setPoint(Integer point) {
@@ -57,6 +59,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
         else if(point >= 8) this.setRatingBarColor(AppConst.COLOR_POINT_HIGH);
         else this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
         this.pointStar.setRating(point == null || point < 0 ? 5.0f : point/2f);
+        this.pointText.setText(point == null || point < 0 ? "0" : point.toString());
     }
 
     public void bind(EvaluationData evaluation) {
