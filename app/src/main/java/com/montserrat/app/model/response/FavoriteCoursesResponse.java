@@ -1,6 +1,6 @@
 package com.montserrat.app.model.response;
 
-import com.montserrat.app.model.FavoriteData;
+import com.montserrat.app.model.CourseData;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  */
 public class FavoriteCoursesResponse {
     public Boolean success;
-    public List<FavoriteData> favorites;
+    public List<CourseData> favorites;
 }

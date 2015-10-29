@@ -3,6 +3,7 @@ package com.montserrat.app.navigation_drawer;
 import android.app.Fragment;
 
 import com.montserrat.app.fragment.DummyFragment;
+import com.montserrat.app.fragment.main.BookmarkFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
@@ -26,7 +27,7 @@ public class NavigationDrawerUtils {
         switch(position) {
             case ItemType.HOME          : return HomeFragment.class;
             case ItemType.SEARCH        : return SimpleCourseFragment.class;
-            case ItemType.BOOKMARK      : return DummyFragment.class;
+            case ItemType.BOOKMARK      : return BookmarkFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;
             default: return null;
         }
