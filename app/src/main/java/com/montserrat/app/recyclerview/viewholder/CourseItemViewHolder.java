@@ -33,6 +33,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.course_item_professor) protected TextView professor;
     @InjectView(R.id.course_item_professor_image) protected ImageView professor_image;
     @InjectView(R.id.course_item_point_overall_star) protected RatingBar pointOverallRating;
+    @InjectView(R.id.course_item_point_overall_text) protected TextView pointOverallText;
     @InjectView(R.id.course_item_hashtags) protected LinearLayout hashtags;
     @InjectView(R.id.course_item_evaluator_icon) protected ImageView evaluatorIcon;
     @InjectView(R.id.course_item_evaluator_count) protected TextView evaluatorCount;
@@ -45,11 +46,13 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
         this.lecture.setPaintFlags(this.lecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.fg_accent));
+        this.professor.setTextColor(itemView.getContext().getResources().getColor(R.color.fg_accent));
     }
 
     private void setRatingBarColor(RatingBar rating, int color) {
         LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
         for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        this.pointOverallText.setTextColor(color);
     }
 
     private void setPointRating(RatingBar rating, Integer point_sum, Integer count) {
@@ -57,6 +60,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
         if(rating_value == null || rating_value < 0) this.setRatingBarColor(rating, AppConst.COLOR_NEUTRAL);
         else this.setRatingBarColor(rating, rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
         rating.setRating(rating_value == null || rating_value < 0 ? 5.0f : rating_value);
+        this.pointOverallText.setText(rating_value == null || rating_value < 0 ? "0" : rating_value.toString());
     }
 
     public void bind(CourseData course) {
@@ -77,7 +81,6 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
                 totalWidth += width;
             }
         });
-        Picasso.with(context).load(R.drawable.ic_light_people).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.evaluatorIcon);
         this.evaluatorCount.setText(course.evaluation_count == null || course.evaluation_count < 0 ? "N/A" : String.valueOf(course.evaluation_count));
     }
 

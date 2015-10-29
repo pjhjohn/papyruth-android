@@ -11,7 +11,7 @@
     <dimen name="nav_icon_length">24dp</dimen>
 
     <dimen name="cardview_image_side_length">72dp</dimen>
-    <dimen name="cardview_image_padding">@dimen/basefont_x1.5</dimen>
+    <dimen name="cardview_image_padding">@dimen/baseline_x1.5</dimen>
     <dimen name="cardview_min_height_default">72dp</dimen>
     <dimen name="cardview_min_height_extended">88dp</dimen>
 
@@ -37,6 +37,7 @@
     <dimen name="loading_text">@dimen/basefont_x2</dimen>
 
     <dimen name="basefont_x1">12sp</dimen>
+    <dimen name="basefont_x1.2">14sp</dimen>
     <dimen name="basefont_x1.5">18sp</dimen>
     <dimen name="basefont_x2">24sp</dimen>
     <dimen name="basefont_x2.5">30sp</dimen>
