@@ -17,6 +17,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.CourseData;
+import com.montserrat.app.model.FavoriteData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
@@ -27,6 +28,8 @@ import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.search.ToolbarSearch;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -44,6 +47,7 @@ import timber.log.Timber;
 public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, CourseData> {
     private Navigator navigator;
     private int page;
+    private List<FavoriteData> favorites;
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,20 +64,22 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.page = 0;
+
+        this.favorites = new ArrayList<>();
+        this.page = 1;
+
+        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        this.toolbar.setTitle(R.string.toolbar_favorite);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_course_search, container, false);
         ButterKnife.inject(this, view);
-        this.subscriptions = new CompositeSubscription();
-        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.toolbar.setTitle(R.string.toolbar_search);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         this.refresh.setEnabled(true);
-
         this.setupRecyclerView(recycler);
+        this.subscriptions = new CompositeSubscription();
 
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
         this.getBookmark();
@@ -124,12 +130,19 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     favorites -> {
-                        this.items.clear();
-                        this.items.addAll(favorites);
-                        this.adapter.notifyDataSetChanged();
+                        notifyDataChanged(favorites);
                     }, error -> error.printStackTrace()
                 )
         );
+    }
+    public void notifyDataChanged(List<FavoriteData> favorites){
+        this.items.clear();
+        this.favorites.clear();
+        this.favorites.addAll(favorites);
+        for (FavoriteData f : favorites){
+            this.items.add(f.course);
+        }
+        this.adapter.notifyDataSetChanged();
     }
 
     @Override
