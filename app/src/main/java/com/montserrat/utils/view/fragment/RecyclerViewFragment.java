@@ -47,8 +47,10 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
     }
 
     protected void setupRecyclerView (RecyclerView view) {
-        this.items = new ArrayList<>();
-        this.adapter = this.getAdapter();
+        if(items == null)
+            this.items = new ArrayList<>();
+        if(adapter == null)
+            this.adapter = this.getAdapter();
         view.setLayoutManager(this.getRecyclerViewLayoutManager());
         view.setAdapter(this.adapter);
     }
