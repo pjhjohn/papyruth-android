@@ -2,7 +2,6 @@ package com.montserrat.app.fragment.main;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -101,7 +100,7 @@ public class ProfileEditPasswordFragment extends Fragment {
             })
             .observeOn(Schedulers.io())
             .flatMap(unused ->
-                RetrofitApi.getInstance().users_me_passwd(
+                    Api.papyruth().users_me_passwd(
                     User.getInstance().getAccessToken(),
                     this.old_password.getText().toString(),
                     this.new_password.getText().toString()

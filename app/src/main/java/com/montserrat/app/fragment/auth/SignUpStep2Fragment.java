@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,7 +25,7 @@ import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.unique.SignUpForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
@@ -41,7 +40,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -100,7 +98,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
     private String duplicatedValidator(String email, String nickcname){
         String errorMsg = null;
-        this.subscription.add(RetrofitApi.getInstance()
+        this.subscription.add(Api.papyruth()
             .validate((email != null ? AppConst.Preference.EMAIL : AppConst.Preference.NICKNAME), (email != null ? email : nickcname))
             .map(validator -> validator.validation)
             .subscribeOn(Schedulers.io())

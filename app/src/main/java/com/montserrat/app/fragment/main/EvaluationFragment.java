@@ -33,11 +33,10 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
-import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
 
 import java.util.List;
@@ -123,7 +122,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onResume() {
         super.onResume();
-        this.subscriptions.add(RetrofitApi.getInstance()
+        this.subscriptions.add(Api.papyruth()
             .get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null)
             .map(response -> response.comments)
             .subscribeOn(Schedulers.io())
@@ -144,12 +143,12 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 return null;
             })
             .observeOn(Schedulers.io())
-            .flatMap(unused -> RetrofitApi.getInstance().post_comment(
+            .flatMap(unused -> Api.papyruth().post_comment(
                 User.getInstance().getAccessToken(),
                 Evaluation.getInstance().getId(),
                 this.mCommentText.getText().toString()
             ))
-            .flatMap(unused -> RetrofitApi.getInstance().get_comments(
+            .flatMap(unused -> Api.papyruth().get_comments(
                 User.getInstance().getAccessToken(),
                 Evaluation.getInstance().getId(),
                 this.since = null,
@@ -192,7 +191,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
-                return RetrofitApi.getInstance().get_comments(
+                return Api.papyruth().get_comments(
                     User.getInstance().getAccessToken(),
                     Evaluation.getInstance().getId(),
                     null,
@@ -368,7 +367,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
         }else if(v.getId() == R.id.evaluation_header){
             this.subscriptions.add(
-                RetrofitApi.getInstance().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
+                Api.papyruth().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
                     .map(response -> response.course)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

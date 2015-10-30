@@ -23,7 +23,7 @@ import com.montserrat.utils.support.materialdialog.VotersDialog;
 import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.DateTimeUtil;
 import com.montserrat.utils.view.Hashtag;
 import com.squareup.picasso.Picasso;
@@ -157,7 +157,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.pointEasinessPrefix.setText(R.string.label_point_easiness);
         this.setPointProgress(this.pointEasinessPrefix, this.pointEasinessProgress, this.pointEasinessText, evaluation.getPointEasiness());
         this.hashtags.removeAllViews();
-        if(this.id != null) RetrofitApi.getInstance()
+        if(this.id != null) Api.papyruth()
             .get_evaluation_hashtag(User.getInstance().getAccessToken(), this.id)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
@@ -195,14 +195,14 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         if(this.id == null) return;
         switch(view.getId()) {
             case R.id.evaluation_up_vote_icon:
-                if(this.status == VoteStatus.UP) RetrofitApi.getInstance()
+                if(this.status == VoteStatus.UP) Api.papyruth()
                     .delete_evaluation_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         this.setStatus(VoteStatus.NONE);
                         this.setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
-                else RetrofitApi.getInstance()
+                else Api.papyruth()
                     .post_evaluation_vote(User.getInstance().getAccessToken(), this.id, true)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -212,14 +212,14 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                     });
                 break;
             case R.id.evaluation_down_vote_icon:
-                if(this.status == VoteStatus.DOWN) RetrofitApi.getInstance()
+                if(this.status == VoteStatus.DOWN) Api.papyruth()
                     .delete_evaluation_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         this.setStatus(VoteStatus.NONE);
                         this.setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
-                else RetrofitApi.getInstance()
+                else Api.papyruth()
                     .post_evaluation_vote(User.getInstance().getAccessToken(), this.id, false)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -229,7 +229,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                 break;
             case R.id.evaluation_up_vote_count:
             case R.id.evaluation_down_vote_count:
-                RetrofitApi.getInstance()
+                Api.papyruth()
                     .get_evaluation_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> VotersDialog.show(

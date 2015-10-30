@@ -28,7 +28,7 @@ import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
@@ -132,7 +132,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
 
     private void doRequest() {
         this.progress.setVisibility(View.VISIBLE);
-        this.subscriptions.add(RetrofitApi.getInstance()
+        this.subscriptions.add(Api.papyruth()
             .users_sign_in(emailField.getText().toString(), passwordField.getText().toString())
             .map(response -> {
                 User.getInstance().update(response.user, response.access_token);
@@ -145,7 +145,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
                 success -> {
                     this.progress.setVisibility(View.GONE);
                     if (success) {
-                        this.subscriptions.add(RetrofitApi.getInstance()
+                        this.subscriptions.add(Api.papyruth()
                             .refresh_token(User.getInstance().getAccessToken())
                             .map(user -> user.access_token)
                             .subscribeOn(Schedulers.io())

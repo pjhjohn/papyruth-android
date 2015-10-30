@@ -13,7 +13,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.materialdialog.VotersDialog;
 import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.DateTimeUtil;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
@@ -88,14 +88,14 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.comment_item_up_vote_icon:
-                if(this.status == VoteStatus.UP) RetrofitApi.getInstance()
+                if(this.status == VoteStatus.UP) Api.papyruth()
                     .delete_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         this.setStatus(VoteStatus.NONE);
                         this.setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
-                else RetrofitApi.getInstance()
+                else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), this.id, true)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -104,14 +104,14 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                     });
                 break;
             case R.id.comment_item_down_vote_icon:
-                if(this.status == VoteStatus.DOWN) RetrofitApi.getInstance()
+                if(this.status == VoteStatus.DOWN) Api.papyruth()
                     .delete_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         this.setStatus(VoteStatus.NONE);
                         this.setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
-                else RetrofitApi.getInstance()
+                else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), this.id, false)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -121,7 +121,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                 break;
             case R.id.comment_item_up_vote_count:
             case R.id.comment_item_down_vote_count:
-                RetrofitApi.getInstance()
+                Api.papyruth()
                     .get_comment_vote(User.getInstance().getAccessToken(), this.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> VotersDialog.show(

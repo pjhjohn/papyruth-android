@@ -17,7 +17,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -118,7 +118,7 @@ public class ProfileEditFragment extends Fragment {
             })
             .observeOn(Schedulers.io())
             .flatMap(unused ->
-                RetrofitApi.getInstance().users_me_edit(
+                    Api.papyruth().users_me_edit(
                     User.getInstance().getAccessToken(),
                     this.email.getText().toString(),
                     this.realname.getText().toString(),

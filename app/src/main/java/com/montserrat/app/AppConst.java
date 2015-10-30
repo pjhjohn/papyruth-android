@@ -7,8 +7,12 @@ import android.graphics.Color;
  */
 public class AppConst {
     /* API BINDING */
-    public static final String API_ROOT = "dev.papyruth.com:443";
+    public static final String API_BASE_URL = "dev.papyruth.com:443";
     public static final String API_VERSION = "v1";
+
+    /* Retrofit REST Adapter*/
+    public static final String LOGGER_TAG = "RetrofitApi";
+    public static final String LOGGER_FILTER = "^[AC\\-\\<\\{].*";
 
     public static final int MIN_ENTRANCE_YEAR = 2000;
     /* KOREAN : 1 WORD == 3 BYTES */

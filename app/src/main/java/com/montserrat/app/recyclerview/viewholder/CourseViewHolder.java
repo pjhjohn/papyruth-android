@@ -20,7 +20,7 @@ import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.CircleTransformation;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.Hashtag;
 import com.squareup.picasso.Picasso;
 
@@ -145,7 +145,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     private void favorite(boolean setting){
         final Context context = this.itemView.getContext();
         this.subscription.add(
-            RetrofitApi.getInstance().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), setting)
+            Api.papyruth().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), setting)
                 .filter(response -> response.success)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

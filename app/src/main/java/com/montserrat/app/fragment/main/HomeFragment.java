@@ -12,7 +12,7 @@ import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
@@ -41,7 +41,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
             super.getRefreshObservable(this.swipeRefresh)
                 .flatMap(unused -> {
                     this.swipeRefresh.setRefreshing(true);
-                    return RetrofitApi.getInstance().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
+                    return Api.papyruth().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null);
                 })
                 .map(evaluations -> evaluations.evaluations)
                 .subscribeOn(Schedulers.io())
@@ -62,7 +62,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
-                    return RetrofitApi.getInstance().get_evaluations(
+                    return Api.papyruth().get_evaluations(
                         User.getInstance().getAccessToken(),
                         User.getInstance().getUniversityId(),
                         null,
@@ -111,7 +111,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
         isOpenSlave = true;
-        RetrofitApi.getInstance()
+        Api.papyruth()
             .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {

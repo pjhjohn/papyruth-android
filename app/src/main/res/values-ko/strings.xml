@@ -150,4 +150,5 @@
     <string name="word_university">대학교</string>
     <string name="word_professor">교수</string>
     <string name="word_signup">회원가입</string>
+    <string name="please_connect_to_internet">네트워크 연결 상태를 확인해주세요</string>
 </resources>

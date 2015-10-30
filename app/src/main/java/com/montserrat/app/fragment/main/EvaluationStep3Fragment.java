@@ -25,7 +25,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.materialdialog.HashtagDeleteDialog;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -89,8 +89,7 @@ public class EvaluationStep3Fragment extends Fragment {
             }
         }
         this.subscriptions.add(
-            RetrofitApi
-                .getInstance()
+            Api.papyruth()
                 .get_hashtag_preset(User.getInstance().getAccessToken())
                 .map(response -> response.hashtags)
                 .subscribeOn(Schedulers.io())
@@ -215,7 +214,7 @@ public class EvaluationStep3Fragment extends Fragment {
 
     private Observable<EvaluationResponse> submitEvaluation(boolean isModifyMode){
         if(isModifyMode){
-            return RetrofitApi.getInstance().put_update_evaluation(
+            return Api.papyruth().put_update_evaluation(
                 User.getInstance().getAccessToken(),
                 EvaluationForm.getInstance().getCourseId(),
                 EvaluationForm.getInstance().getPointOverall(),
@@ -225,7 +224,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 EvaluationForm.getInstance().getBody()
             );
         }
-        return RetrofitApi.getInstance().post_evaluation(
+        return Api.papyruth().post_evaluation(
             User.getInstance().getAccessToken(),
             EvaluationForm.getInstance().getCourseId(),
             EvaluationForm.getInstance().getPointOverall(),
@@ -243,7 +242,7 @@ public class EvaluationStep3Fragment extends Fragment {
             .map(response -> {
                 evaluationID = response.evaluation_id;
                 if (hashtagsContainer.getChildCount() > 0) {
-                    RetrofitApi.getInstance().post_evaluation_hashtag(
+                    Api.papyruth().post_evaluation_hashtag(
                         User.getInstance().getAccessToken(),
                         evaluationID,
                         EvaluationForm.getInstance().getHashtag()
@@ -251,7 +250,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 }
                 return true;
             })
-            .flatMap(unused -> RetrofitApi.getInstance().get_evaluation(
+            .flatMap(unused -> Api.papyruth().get_evaluation(
                 User.getInstance().getAccessToken(),
                 evaluationID
             ))

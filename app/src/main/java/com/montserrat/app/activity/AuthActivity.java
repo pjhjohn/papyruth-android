@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.auth.AuthFragment;
 import com.montserrat.app.fragment.auth.SplashFragment;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
