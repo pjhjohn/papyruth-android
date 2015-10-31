@@ -59,7 +59,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
         else if(point >= 8) this.setRatingBarColor(AppConst.COLOR_POINT_HIGH);
         else this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
         this.pointStar.setRating(point == null || point < 0 ? 5.0f : point/2f);
-        this.pointText.setText(point == null || point < 0 ? "0" : point.toString());
+        this.pointText.setText(point == null || point < 0 ? "0 " : point.toString()+" ");
     }
 
     public void bind(EvaluationData evaluation) {
