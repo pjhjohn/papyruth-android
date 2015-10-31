@@ -46,6 +46,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     private Navigator navigator;
     private int page;
     private List<FavoriteData> favorites;
+    private boolean askMore;
 
     @Override
     public void onAttach(Activity activity) {
@@ -78,9 +79,9 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         this.refresh.setEnabled(true);
         this.setupRecyclerView(recycler);
         this.subscriptions = new CompositeSubscription();
+        askMore = true;
 
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
-        this.getBookmark();
         return view;
     }
 
@@ -120,27 +121,21 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         this.navigator.navigate(CourseFragment.class, true);
     }
 
-    public void getBookmark(){
-        this.subscriptions.add(
-            Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page++)
-                .map(response -> response.favorites)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    favorites -> {
-                        notifyDataChanged(favorites);
-                    }, error -> error.printStackTrace()
-                )
-        );
-    }
     public void notifyDataChanged(List<FavoriteData> favorites){
-        this.items.clear();
-        this.favorites.clear();
+        if(page == 1) {
+            this.items.clear();
+            this.favorites.clear();
+        }
         this.favorites.addAll(favorites);
         for (FavoriteData f : favorites){
             this.items.add(f.course);
         }
         this.adapter.notifyDataSetChanged();
+
+        if(favorites.size() < 1){
+            askMore = false;
+        }
+        page ++;
     }
 
     @Override
@@ -154,16 +149,58 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
         );
+
         this.subscriptions.add(
-            this.getRefreshObservable(this.refresh)
+            Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page)
+                .map(response -> response.favorites)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    courses -> {
+                    favorites -> {
+                        notifyDataChanged(favorites);
+                    }, error -> error.printStackTrace()
+                )
+        );
+
+        this.subscriptions.add(
+            this.getRefreshObservable(this.refresh)
+                .flatMap(
+                    unused -> {
+                        this.refresh.setRefreshing(true);
+                        page = 1;
+                        return Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page);
+                    }
+                )
+                .map(favorites -> favorites.favorites)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    favorites -> {
+                        notifyDataChanged(favorites);
                         this.refresh.setRefreshing(false);
                     },
                     error -> Timber.d("search error : %s", error)
                 )
+        );
+
+
+        this.subscriptions.add(
+            super.getRecyclerViewScrollObservable(this.recycler, this.toolbar, true)
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askMore )
+                .flatMap(unused -> {
+                    this.progress.setVisibility(View.VISIBLE);
+                    return Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page);
+                })
+                .map(favorites -> favorites.favorites)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(favorites -> {
+                    this.progress.setVisibility(View.GONE);
+                    Timber.d("hello?");
+                    if (favorites != null) {
+                        this.notifyDataChanged(favorites);
+                    }
+                }, error -> error.printStackTrace())
         );
     }
 }
