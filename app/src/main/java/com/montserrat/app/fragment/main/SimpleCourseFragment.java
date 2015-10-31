@@ -110,6 +110,9 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
             Toast.makeText(getActivity().getBaseContext(),"please wait for loading", Toast.LENGTH_LONG).show();
             return;
         }
+        if(this.items.get(position).id == null){
+            return;
+        }
 
         Course.getInstance().update(this.items.get(position));
         toolbarSearch.addHistory(this.items.get(position));

@@ -145,6 +145,8 @@ public class ToolbarSearch {
 
     private static final int HISTORY_SIZE = 10;
     public boolean addHistory(CourseData course){
+        if(course.id == null)
+            return false;
         List<CourseData> courseDataList;
         CoursesData coursesData = new CoursesData();
         coursesData.courses = new ArrayList<>();
