@@ -94,8 +94,9 @@
     <string name="dialog_title_confirm_submit">Confirm Submission</string>
     <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
     <string name="dialog_title_entrance_year">Please select your entrance year</string>
+    <string name="fab_edit_email">Change Email Address</string>
+    <string name="fab_edit_nickname">Change Nickname</string>
     <string name="fab_edit_password">Change Password</string>
-    <string name="fab_edit_profile">Edit Profile</string>
     <string name="failed_passwd">Failed to change password</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
@@ -165,4 +166,8 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="word_professor">professor</string>
     <string name="word_signup">Sign Up</string>
     <string name="please_connect_to_internet">Please check your network status</string>
+    <string name="label_email">EMAIL</string>
+    <string name="label_realname">REALNAME</string>
+    <string name="label_nickname">NICKNAME</string>
+    <string name="label_gender">GENDER</string>
 </resources>

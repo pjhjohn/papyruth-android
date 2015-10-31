@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:contentDescription="@string/empty"
-            android:src="@drawable/ic_light_mail"/>
+            android:src="@drawable/ic_light_email"/>
         <EditText
             android:id="@+id/email"
             android:background="@color/transparent"

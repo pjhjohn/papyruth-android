@@ -9,9 +9,10 @@
 
     <color name="colorchip_red">#E05E5F</color>
     <color name="colorchip_blue">#546B8D</color>
+    <color name="colorchip_blue_highlight">#748BAD</color>
     <color name="colorchip_blue_accent">#546BAD</color>
     <color name="colorchip_green">#60CAC6</color>
-    <color name="colorchip_green_accent">#80EAE6</color>
+    <color name="colorchip_green_highlight">#80EAE6</color>
 
     <color name="selected_blue">#7D95B2</color>
 

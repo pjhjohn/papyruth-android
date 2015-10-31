@@ -12,9 +12,10 @@
     android:paddingLeft="10dp"
     fab:menu_labels_ellipsize="end"
     fab:menu_labels_singleLine="true"
-    fab:menu_colorNormal="@color/fg_normal"
-    fab:menu_colorPressed="@color/fg_accent"
+    fab:menu_colorNormal="@color/colorchip_blue"
+    fab:menu_colorPressed="@color/colorchip_blue_highlight"
     fab:menu_backgroundColor="#ccffffff">
-    <include layout="@layout/fab_edit_profile"/>
+    <include layout="@layout/fab_edit_email"/>
+    <include layout="@layout/fab_edit_nickname"/>
     <include layout="@layout/fab_edit_password"/>
 </com.github.clans.fab.FloatingActionMenu>

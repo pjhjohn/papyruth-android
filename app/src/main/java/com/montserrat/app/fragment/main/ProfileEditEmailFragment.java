@@ -40,7 +40,7 @@ import static com.montserrat.utils.support.rx.RxValidator.toString;
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileEditFragment extends Fragment {
+public class ProfileEditEmailFragment extends Fragment {
     private Navigator navigator;
     @Override
     public void onAttach(Activity activity) {

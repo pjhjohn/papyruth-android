@@ -2,11 +2,11 @@
 <com.github.clans.fab.FloatingActionButton
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fab_edit_profile"
+    android:id="@+id/fab_edit_nickname"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_light_edit"
-    fab:fab_colorNormal="@color/fg_normal"
-    fab:fab_colorPressed="@color/fg_accent"
+    android:src="@drawable/ic_light_person"
+    fab:fab_colorNormal="@color/colorchip_blue"
+    fab:fab_colorPressed="@color/colorchip_blue_highlight"
     fab:fab_size="mini"
-    fab:fab_label="@string/fab_edit_profile"/>
+    fab:fab_label="@string/fab_edit_nickname"/>
