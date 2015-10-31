@@ -88,6 +88,10 @@ public class EvaluationStep3Fragment extends Fragment {
                 addNewHashtagView(str);
             }
         }
+
+        /**
+         * Get recommended hashtag list from server
+         */
         this.subscriptions.add(
             Api.papyruth()
                 .get_hashtag_preset(User.getInstance().getAccessToken())
@@ -170,6 +174,9 @@ public class EvaluationStep3Fragment extends Fragment {
                 }, error -> Timber.d("error : %s", error))
         );
 
+        /**
+         * Type new hashtag.
+         */
         this.subscriptions.add(
             WidgetObservable.text(this.hashtagsText)
                 .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
@@ -193,21 +200,31 @@ public class EvaluationStep3Fragment extends Fragment {
         return false;
     }
 
+    private String hashWriter(String text, boolean adder){
+        if(text.charAt(0) != '#' && adder)
+            return "#" + text;
+        else if(text.charAt(0) == '#' && !adder)
+            return text.substring(1);
+
+        return text;
+    }
+
     private boolean addNewHashtag(String text){
         if(EvaluationForm.getInstance().getHashtag().contains(text))
             return false;
         addNewHashtagView(text);
-        EvaluationForm.getInstance().addHashtag(text);
+        EvaluationForm.getInstance().addHashtag(hashWriter(text, false));
 
         if(EvaluationForm.getInstance().isModifyMode())
             EvaluationForm.getInstance().setEdit(true);
         this.showFAB(EvaluationForm.getInstance().isCompleted());
         return true;
     }
+
     private void addNewHashtagView(String text){
         Context context = getActivity();
         TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
-        hashtag.setText(text);
+        hashtag.setText(hashWriter(text, true));
         hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
         hashtagsContainer.addView(hashtag);
     }
