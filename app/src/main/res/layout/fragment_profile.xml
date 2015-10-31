@@ -54,18 +54,7 @@
                 android:inputType="text"
                 android:hint="@string/hint_entrance"/>
         </LinearLayout>
-        <Button
-            android:id="@+id/term"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/fg_normal"
-            android:text="@string/term"/>
-        <Button
-            android:id="@+id/opensourse_license"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/fg_normal"
-            android:text="@string/opensourse_license"/>
+
         <Button
             android:id="@+id/my_evaluation"
             android:layout_width="match_parent"
@@ -78,12 +67,6 @@
             android:layout_height="wrap_content"
             android:background="@color/fg_normal"
             android:text="@string/my_comment"/>
-        <Button
-            android:id="@+id/sign_out"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/fg_normal"
-            android:text="@string/exit"/>
     </LinearLayout>
 </com.montserrat.utils.view.navigator.NavigatableFrameLayout>
 

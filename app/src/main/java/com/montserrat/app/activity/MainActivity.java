@@ -29,6 +29,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.fragment.main.MyInfoFragment;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
@@ -207,7 +208,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             this.showCrossBtn(true);
             this.mToolbar.setOnMenuItemClickListener(item -> {
                 if (item.equals(itemSetting)) {
-                    this.navigate(DummyFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
+                    this.navigate(MyInfoFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
                 }
                 return true;
             });

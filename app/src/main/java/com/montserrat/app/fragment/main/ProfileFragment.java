@@ -48,9 +48,6 @@ public class ProfileFragment extends Fragment {
     @InjectView (R.id.entrance) protected EditText entrance;
     @InjectView (R.id.my_evaluation) protected Button myEvaluation;
     @InjectView (R.id.my_comment) protected Button myComment;
-    @InjectView (R.id.sign_out) protected Button signout;
-    @InjectView(R.id.term) protected Button term;
-    @InjectView(R.id.opensourse_license) protected Button opensourseLicense;
     private CompositeSubscription subscriptions;
 
     private Toolbar toolbar;
@@ -111,17 +108,7 @@ public class ProfileFragment extends Fragment {
         this.subscriptions.add(ViewObservable.clicks(this.myEvaluation).subscribe(unuse -> this.navigator.navigate(MyEvaluationFragment.class, true), error -> error.printStackTrace()));
         this.subscriptions.add(ViewObservable.clicks(this.myComment).subscribe(unuse->this.navigator.navigate(MyCommentFragment.class, true), error->error.printStackTrace()));
 
-        this.subscriptions.add(ViewObservable
-            .clicks(signout)
-            .subscribe(unused -> {
-                AppManager.getInstance().clear(AppConst.Preference.HISTORY);
-                AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
-                User.getInstance().clear();
-                this.getActivity().startActivity(new Intent(this.getActivity(), AuthActivity.class));
-                this.getActivity().finish();
 
-            })
-        );
 //
 //        this.subscriptions.add(
 //            RetrofitApi.getInstance().terms(0)
@@ -141,48 +128,5 @@ public class ProfileFragment extends Fragment {
 //                    }
 //                )
 //        );
-        buildTermDialog();
-        buildLicenseDialog();
-        this.subscriptions.add(
-            ViewObservable
-                .clicks(term)
-                .filter(unused -> !this.termPage.isShowing())
-                .subscribe(unused -> {
-                    termPage.show();
-                },error ->{
-                    error.printStackTrace();
-                })
-        );
-        this.subscriptions.add(
-            ViewObservable
-                .clicks(opensourseLicense)
-                .filter(unused -> !this.termPage.isShowing())
-                .subscribe(unused -> {
-                    termPage.show();
-                },error ->{
-                    error.printStackTrace();
-                })
-        );
-    }
-
-    private MaterialDialog termPage;
-
-    private CharSequence termContents;
-    private void buildTermDialog(){
-        this.termContents = this.getResources().getString(R.string.lorem_ipsum);
-        this.termPage = new MaterialDialog.Builder(this.getActivity())
-            .title(R.string.term)
-            .content(this.termContents)
-            .positiveText(R.string.confirm_positive)
-            .build();
-    }
-
-    private void buildLicenseDialog(){
-        this.termContents = this.getResources().getString(R.string.lorem_ipsum);
-        this.termPage = new MaterialDialog.Builder(this.getActivity())
-            .title(R.string.opensourse_license)
-            .content(this.termContents)
-            .positiveText(R.string.confirm_positive)
-            .build();
     }
 }

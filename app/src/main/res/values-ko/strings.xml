@@ -123,7 +123,8 @@
     <string name="category_major">전공</string>
 
 
-    <!-- profile -->
+    <!-- my info -->
+    <string name="my_profile">내 프로필</string>
     <string name="exit">나가기</string>
     <string name="my_evaluation">내가 쓴 강의평가</string>
     <string name="my_comment">내가 쓴 댓글</string>
@@ -145,6 +146,7 @@
     <string name="loading_evaluation">" 개의"</string>
     <string name="loading_end_word">강의평가를 작성하였습니다</string>
     <string name="loading_word_evaluation">강의평가</string>
+
 
     <!-- simple word -->
     <string name="word_evaluation">강의평가</string>
