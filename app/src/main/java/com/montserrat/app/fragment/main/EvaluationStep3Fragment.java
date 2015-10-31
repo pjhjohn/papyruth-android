@@ -179,10 +179,13 @@ public class EvaluationStep3Fragment extends Fragment {
          */
         this.subscriptions.add(
             WidgetObservable.text(this.hashtagsText)
-                .filter(event -> event.text().length() > 0 && event.text().charAt(event.text().length() - 1) == ' ')
+                .filter(event -> event.text().length() > 1 && (event.text().charAt(event.text().length() - 1) == ' ' || event.text().charAt(event.text().length() - 1) == '#'))
                 .subscribe(event -> {
                     final String str = event.text().subSequence(0, event.text().length() - 1).toString();
-
+                    if (str.equals(" ") || str.equals("#")) {
+                        this.hashtagsText.setText("");
+                        return;
+                    }
                     this.addNewHashtag(str);
                     this.hashtagsText.setText("");
                 })
