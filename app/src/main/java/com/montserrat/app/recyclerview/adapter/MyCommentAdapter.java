@@ -1,6 +1,7 @@
 package com.montserrat.app.recyclerview.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.montserrat.app.AppManager;
@@ -8,6 +9,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.CommentData;
 import com.montserrat.app.recyclerview.viewholder.InformViewHolder;
 import com.montserrat.app.recyclerview.viewholder.MyCommentViewHolder;
+import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
@@ -57,12 +59,17 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
-        else((MyCommentViewHolder) holder).bind(this.myWritten.get(position - (mUserLearnedInform ? 1 : 2)));
+        else{
+            if(myWritten.isEmpty())
+                ((NoDataViewHolder) holder).bind(R.string.no_data);
+            else
+                ((MyCommentViewHolder) holder).bind(this.myWritten.get(position - (mUserLearnedInform ? 1 : 2)));
+        }
 
     }
 
     public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1);
+        return 1 + (mUserLearnedInform ? 0 : 1) +(myWritten.isEmpty()? 1 : 0);
     }
 
     @Override
@@ -75,6 +82,11 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
-        else return ViewHolderFactory.ViewType.MY_WRITTEN_COMMENT;
+        else {
+            if (myWritten.isEmpty())
+                return ViewHolderFactory.ViewType.NO_DATA;
+            else
+                return ViewHolderFactory.ViewType.MY_WRITTEN_COMMENT;
+        }
     }
 }

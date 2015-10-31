@@ -108,6 +108,7 @@
     <string name="inform_home">Latest Evaluations are provided.\n\nYou can see the latest evaluations by clicking it.</string>
     <string name="inform_course">Overall statistics for course and list of evaluations are provided.\n\nYou can open evaluation detail window by clicking the item.</string>
     <string name="inform_evaluation">Evaluations statistics and comments are provided.\n\nYou can vote up and down to both evaluation and comments.</string>
+    <string name="no_data">No Data</string>
 
     <string name="professor_prefix">Prof. </string>
     <string name="professor_postfix"/>
