@@ -64,7 +64,6 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         super.onCreate(savedInstanceState);
 
         this.favorites = new ArrayList<>();
-        this.page = 1;
 
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.toolbar.setTitle(R.string.toolbar_favorite);
@@ -75,6 +74,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_course_search, container, false);
         ButterKnife.inject(this, view);
+        this.page = 1;
         this.refresh.setEnabled(true);
         this.setupRecyclerView(recycler);
         this.subscriptions = new CompositeSubscription();
