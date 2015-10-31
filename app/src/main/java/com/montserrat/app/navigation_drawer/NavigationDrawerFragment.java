@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.fragment.main.MyInfoFragment;
 import com.montserrat.app.fragment.main.ProfileFragment;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;

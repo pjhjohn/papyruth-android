@@ -131,6 +131,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
 
 
     <!-- profile -->
+    <string name="my_profile">My profile</string>
     <string name="exit">EXIT</string>
     <string name="my_evaluation">My evaluation</string>
     <string name="my_comment">My comment</string>
