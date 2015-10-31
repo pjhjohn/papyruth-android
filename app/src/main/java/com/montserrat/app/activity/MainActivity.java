@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -29,6 +30,7 @@ import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.model.Candidate;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
@@ -51,6 +53,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;
@@ -99,6 +102,28 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         super.onResume();
         ViewHolderFactory.getInstance().setContext(this);
         this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
+        checkMandatoryEvlauation();
+    }
+
+    public void checkMandatoryEvlauation(){
+        if(User.getInstance().getMandatory_evaluation_count() > 0) {
+            new MaterialDialog.Builder(this)
+                .content(getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatory_evaluation_count()))
+                .positiveText(R.string.goto_write)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                    }
+                })
+                .show();
+        }
     }
 
 
