@@ -9,7 +9,7 @@ import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.MyCommentAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
 
@@ -25,7 +25,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
         isOpenSlave = true;
-        RetrofitApi.getInstance()
+        Api.papyruth()
             .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).evaluation_id)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
@@ -47,7 +47,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
             super.getRefreshObservable(this.swipeRefresh)
                 .flatMap(unused -> {
                     this.swipeRefresh.setRefreshing(true);
-                    return RetrofitApi.getInstance().users_me_comments(User.getInstance().getAccessToken(), page = 1);
+                    return Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page = 1);
                 })
                 .filter(response -> response.success)
                 .map(mywritten -> mywritten.comments)
@@ -79,7 +79,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                     this.swipeRefresh.setRefreshing(false);
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
                     Timber.d("calling");
-                    return RetrofitApi.getInstance().users_me_comments(User.getInstance().getAccessToken(), page++);
+                    return Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page++);
                 })
                 .map(mywritten -> mywritten.comments)
                 .subscribeOn(Schedulers.io())

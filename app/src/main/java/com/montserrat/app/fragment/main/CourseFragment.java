@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,7 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
@@ -89,8 +88,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.isOpenSlave = false;
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
-        RetrofitApi
-            .getInstance()
+        Api.papyruth()
             .get_evaluations(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
@@ -131,7 +129,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         if(animators != null && animators.isRunning()) return;
         if(isOpenSlave) return;
         isOpenSlave = true;
-        RetrofitApi.getInstance()
+        Api.papyruth()
             .get_evaluation(User.getInstance().getAccessToken(), this.items.get(position).id)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {

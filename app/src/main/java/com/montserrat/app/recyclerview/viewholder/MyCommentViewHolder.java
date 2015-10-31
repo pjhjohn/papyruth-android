@@ -2,7 +2,6 @@ package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -11,13 +10,11 @@ import android.widget.TextView;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.CommentData;
-import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.DateTimeUtil;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
-import com.squareup.okhttp.Cache;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -68,7 +65,7 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
 
     private void getCourseOfComment(int evaluationId){
         this.subscription.add(
-            RetrofitApi.getInstance().get_evaluation(User.getInstance().getAccessToken(), evaluationId)
+            Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), evaluationId)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(

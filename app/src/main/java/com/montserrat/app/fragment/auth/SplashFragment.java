@@ -15,7 +15,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.Statistics;
 import com.montserrat.app.model.unique.User;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.navigator.Navigator;
 
 import java.util.concurrent.TimeUnit;
@@ -62,10 +62,10 @@ public class SplashFragment extends Fragment {
     public void onResume() {
         super.onResume();
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
-        this.subscriptions.add(RetrofitApi.getInstance().users_me(User.getInstance().getAccessToken()).subscribe(
+        this.subscriptions.add(Api.papyruth().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
-                this.subscriptions.add(RetrofitApi.getInstance()
+                this.subscriptions.add(Api.papyruth()
                     .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +77,7 @@ public class SplashFragment extends Fragment {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
                         case 401:
                         case 419:
-                            this.subscriptions.add(RetrofitApi.getInstance()
+                            this.subscriptions.add(Api.papyruth()
                                 .get_info()
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -113,7 +113,7 @@ public class SplashFragment extends Fragment {
         if (timerPending||requestPending) return;
         if (authFailed) this.navigator.navigate(LoadingFragment.class, false);
         else {
-            this.subscriptions.add(RetrofitApi.getInstance()
+            this.subscriptions.add(Api.papyruth()
                 .refresh_token(User.getInstance().getAccessToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

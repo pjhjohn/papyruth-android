@@ -11,10 +11,15 @@ import retrofit.RestAdapter;
  */
 public class RetrofitLogger implements RestAdapter.Log {
     private static final int LOG_CHUNK_SIZE = 4000;
+    private static final String DEFAULT_FILTER = ".*";
 
     private final String tag;
     private final Pattern pattern;
 
+    public RetrofitLogger(String tag) {
+        this.tag = tag;
+        this.pattern = Pattern.compile(DEFAULT_FILTER);;
+    }
     public RetrofitLogger(String tag, String regex) {
         this.tag = tag;
         this.pattern = Pattern.compile(regex);

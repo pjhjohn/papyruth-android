@@ -1,7 +1,5 @@
 package com.montserrat.app.fragment.auth;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -17,11 +15,9 @@ import android.widget.TextView;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.AuthActivity;
-import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.view.viewpager.FlexibleViewPager;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
 import com.montserrat.utils.view.viewpager.ViewPagerManager;
-import com.squareup.picasso.Picasso;
 
 import java.util.Stack;
 

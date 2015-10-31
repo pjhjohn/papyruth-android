@@ -18,7 +18,7 @@ import com.montserrat.app.model.unique.Search;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
@@ -133,7 +133,7 @@ public class AutoCompletableSearchView {
             final int j = courses.size() - i - 1;
             this.courseDatas.add(CourseData.Sample());
             this.subscription.add(
-                RetrofitApi.getInstance().search_search(
+                Api.papyruth().search_search(
                     User.getInstance().getAccessToken(),
                     User.getInstance().getUniversityId(),
                     courses.get(i).lecture_id,
@@ -179,7 +179,7 @@ public class AutoCompletableSearchView {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .filter(text -> !text.isEmpty())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(query -> RetrofitApi.getInstance().search_autocomplete(
+                .flatMap(query -> Api.papyruth().search_autocomplete(
                     User.getInstance().getAccessToken(),
                     User.getInstance().getUniversityId(),
                     query
@@ -280,7 +280,7 @@ public class AutoCompletableSearchView {
         this.setOpen = false;
 
         this.subscription.add(
-            RetrofitApi.getInstance().search_search(
+            Api.papyruth().search_search(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
                 lectureId,

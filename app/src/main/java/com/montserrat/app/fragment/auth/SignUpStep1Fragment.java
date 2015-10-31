@@ -2,14 +2,12 @@ package com.montserrat.app.fragment.auth;
 
 import android.app.Activity;
 import android.content.Context;
-import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.afollestad.materialdialogs.GravityEnum;
@@ -21,7 +19,7 @@ import com.montserrat.app.model.UniversityData;
 import com.montserrat.app.model.unique.SignUpForm;
 import com.montserrat.app.recyclerview.adapter.UniversityAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
@@ -34,7 +32,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -72,7 +69,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     @Override
     public void onResume() {
         super.onResume();
-        this.subscriptions.add(RetrofitApi.getInstance()
+        this.subscriptions.add(Api.papyruth()
             .universities()
             .map(response -> response.universities)
             .subscribeOn(Schedulers.io())

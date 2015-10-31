@@ -3,9 +3,9 @@ package com.montserrat.app;
 import android.app.Application;
 
 import com.montserrat.app.model.unique.User;
-import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.ApiManager;
 import com.montserrat.utils.support.retrofit.RetrofitLogger;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.squareup.picasso.Picasso;
 
 import retrofit.RestAdapter;
@@ -28,13 +28,7 @@ public class MontserratApp extends Application {
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
 
         /* Retrofit Api */
-        new RetrofitApi.Builder()
-            .setRoot(AppConst.API_ROOT)
-            .setVersion(AppConst.API_VERSION)
-            .enableSSL(true)
-            .setLogLevel(RestAdapter.LogLevel.FULL)
-            .setLog(new RetrofitLogger("RetrofitApi", "^[A\\-\\<\\{].*"))
-            .build();
+        Api.createInstance(ApiManager.createPapyruthApi(this, RestAdapter.LogLevel.FULL, new RetrofitLogger("RetrofitApi", "^[AC\\-\\<\\{].*")));
 
         /* Picasso Debugging flags */
         Picasso.with(getApplicationContext()).setIndicatorsEnabled(false);

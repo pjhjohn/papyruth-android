@@ -15,18 +15,16 @@ import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.FavoriteData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.search.ToolbarSearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +122,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
 
     public void getBookmark(){
         this.subscriptions.add(
-            RetrofitApi.getInstance().users_me_favorites(User.getInstance().getAccessToken(), page++)
+            Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page++)
                 .map(response -> response.favorites)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

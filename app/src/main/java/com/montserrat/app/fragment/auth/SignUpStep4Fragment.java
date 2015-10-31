@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -19,7 +18,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +33,7 @@ import com.montserrat.app.model.unique.SignUpForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.RetrofitApi;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.viewpager.OnPageFocus;
 import com.montserrat.utils.view.viewpager.OnPageUnfocus;
@@ -102,7 +100,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_lock).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconPassword);
         this.subscription.add(
-            RetrofitApi.getInstance().terms(0)
+            Api.papyruth().terms(0)
                 .map(terms -> terms.term)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -248,7 +246,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
     private void register(){
         this.subscription.add(
-            RetrofitApi.getInstance().users_sign_up(
+            Api.papyruth().users_sign_up(
                 SignUpForm.getInstance().getEmail(),
                 SignUpForm.getInstance().getPassword(),
                 SignUpForm.getInstance().getRealname(),
