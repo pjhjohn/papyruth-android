@@ -92,7 +92,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         toolbarSearch.initAutoComplete(this.searchResult, this.outsideResult, this.editText, candidates);
 
         toolbarSearch.setSearchViewListener(this);
-        this.isAutocompleteViewOpen = false;
     }
 
     @Override
@@ -288,38 +287,28 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
     }
 
-    private MaterialMenuDrawable.IconState state;
-    private boolean isAutocompleteViewOpen;
     @Override
     public void onShowChange(boolean show) {
         FloatingActionControl.getInstance().closeMenuButton(true);
         if(show) {
-            if(!this.isAutocompleteViewOpen)
-                this.state = this.mMaterialMenuDrawable.getIconState();
             this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
             this.mToolbar.setNavigationOnClickListener(view -> {
                 this.toolbarSearch.getAutoCompletableSearchView().showCandidates(false);
                 this.editText.setText("");
                 this.searchView.setIconified(true);
             });
-
-            this.isAutocompleteViewOpen = true;
         }else{
-            if(getFragmentManager().getBackStackEntryCount() < 1)
-                this.state = MaterialMenuDrawable.IconState.BURGER;
-            this.mMaterialMenuDrawable.animateIconState(state);
+            if(getFragmentManager().getBackStackEntryCount() > 1)
+                this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+            else
+                this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+
             this.editText.setText("");
             this.searchView.setIconified(true);
             this.mToolbar.setNavigationOnClickListener(
                 this.mNavigationDrawer::onClick
             );
-
-            this.isAutocompleteViewOpen = false;
         }
-//        if(show){
-//            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.ARROW);
-//        }else if(getFragmentManager().getBackStackEntryCount() < 1)
-//            this.mMaterialMenuDrawable.animateIconState(MaterialMenuDrawable.IconState.BURGER);
     }
 
     public ToolbarSearch getToolbarSearch(){
