@@ -187,7 +187,11 @@ public class EvaluationStep3Fragment extends Fragment {
                         return;
                     }
                     this.addNewHashtag(str);
-                    this.hashtagsText.setText("");
+                    if(event.text().charAt(event.text().length() - 1) == '#') {
+                        this.hashtagsText.setText("#");
+                        this.hashtagsText.setSelection(hashtagsText.getText().length());
+                    }else
+                        this.hashtagsText.setText("");
                 })
         );
     }
