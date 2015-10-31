@@ -67,7 +67,8 @@ public class ApiManager {
             Response response = chain.proceed(request);
             // Re-write response CC header to force use of cache
             return response.newBuilder()
-                .header("Cache-Control", "public, max-age=86400") // 1 day
+//                .header("Cache-Control", "public, max-age=86400") // 1 day
+                .header("Cache-Control", "public, max-age=60") // 1 min
                 .build();
         });
 
