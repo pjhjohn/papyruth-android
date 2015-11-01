@@ -4,11 +4,13 @@
     <string name="app_sub_title">University Course Evaluator</string>
 
     <!--navigation-->
-    <string name="nav_item_home">Home</string>
+    <string name="nav_item_home">Recent Evaluation</string>
     <string name="nav_item_search">Search</string>
     <string name="nav_item_recommendation">Recommendation</string>
     <string name="nav_item_bookmark">Bookmark</string>
     <string name="nav_item_evaluation">Evaluation</string>
+    <string name="nav_item_my_evaluation">My evaluation</string>
+    <string name="nav_item_my_comment">My comment</string>
     <string name="nav_item_random">Random</string>
 
     <!--toolbar-->
@@ -134,8 +136,6 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <!-- profile -->
     <string name="my_profile">My profile</string>
     <string name="exit">EXIT</string>
-    <string name="my_evaluation">My evaluation</string>
-    <string name="my_comment">My comment</string>
     <string name="opensourse_license">Open sourse License</string>
 
 <!-- TODO: Remove or change this placeholder text -->
@@ -166,11 +166,11 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="word_professor">professor</string>
     <string name="word_signup">Sign Up</string>
     <string name="please_connect_to_internet">Please check your network status</string>
+
     <string name="label_email">EMAIL</string>
     <string name="label_realname">REALNAME</string>
     <string name="label_nickname">NICKNAME</string>
     <string name="label_gender">GENDER</string>
-
     <string name="label_email_change">ENTER NEW EMAIL ADDRESS TO CHANGE</string>
     <string name="label_email_change_prefix">ENTER</string>
     <string name="label_email_change_content">NEW EMAIL ADDRESS</string>
