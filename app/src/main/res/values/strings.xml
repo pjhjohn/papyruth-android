@@ -9,6 +9,8 @@
     <string name="nav_item_recommendation">Recommendation</string>
     <string name="nav_item_bookmark">Bookmark</string>
     <string name="nav_item_evaluation">Evaluation</string>
+    <string name="nav_item_evaluation">My evaluation</string>
+    <string name="nav_item_comment">My comment</string>
     <string name="nav_item_random">Random</string>
 
     <!--toolbar-->
@@ -134,8 +136,6 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <!-- profile -->
     <string name="my_profile">My profile</string>
     <string name="exit">EXIT</string>
-    <string name="my_evaluation">My evaluation</string>
-    <string name="my_comment">My comment</string>
     <string name="opensourse_license">Open sourse License</string>
 
 <!-- TODO: Remove or change this placeholder text -->
