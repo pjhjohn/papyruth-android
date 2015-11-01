@@ -71,7 +71,7 @@
                     android:id="@+id/evaluation_point_overall_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:progressDrawable="@drawable/abc_ratingbar_full_material"
+                    android:progressDrawable="@drawable/ratingbar_24dp"
                     android:numStars="5"
                     android:max="10"
                     android:progress="0"

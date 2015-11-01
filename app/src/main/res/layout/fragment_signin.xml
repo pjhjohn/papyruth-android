@@ -27,7 +27,7 @@
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:background="@drawable/background_edittext"/>
+            android:background="@drawable/edittext_background_green"/>
 
         <EditText
             android:id="@+id/password"
@@ -45,7 +45,7 @@
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:background="@drawable/background_edittext"
+            android:background="@drawable/edittext_background_green"
             />
 
         <LinearLayout
@@ -57,28 +57,21 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-            <Button
+            <Button style="@style/button_rect_green"
                 android:id="@+id/sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_height_button"
-                android:background="@drawable/selector_button_reverse"
-                android:text="@string/action_sign_in"
-                android:enabled="false"
-                android:textColor="@color/white"
-                style="@style/button_green"
+                android:layout_gravity="bottom"
                 android:layout_marginBottom="@dimen/baseline_x1"
+                android:enabled="false"
                 android:focusableInTouchMode="true"
-                android:layout_gravity="bottom"/>
-            <Button
+                android:text="@string/action_sign_in"/>
+            <Button style="@style/button_flat_green"
                 android:id="@+id/sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_height_button"
-                android:background="@drawable/selector_button_flat"
-                android:text="@string/action_sign_up"
-                android:textColor="@color/colorchip_green"
-                style="@style/button_white"
-                android:stateListAnimator="@null"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+                android:text="@string/action_sign_up"/>
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

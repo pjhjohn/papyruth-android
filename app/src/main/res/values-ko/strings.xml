@@ -10,8 +10,8 @@
     <string name="nav_item_bookmark">관심강좌</string>
     <string name="nav_item_evaluation">강의평가 작성</string>
     <string name="nav_item_random">임의강의</string>
-    <string name="nav_item_evaluaRtion">내가 쓴 강의평가</string>
-    <string name="nav_item_comment">내가 쓴 댓글</string>
+    <string name="nav_item_my_evaluation">내가 쓴 강의평가</string>
+    <string name="nav_item_my_comment">내가 쓴 댓글</string>
 
     <!--toolbar-->
     <string name="toolbar_title_new_comment">덧글 쓰기</string>

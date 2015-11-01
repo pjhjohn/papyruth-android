@@ -9,8 +9,8 @@
     <string name="nav_item_recommendation">Recommendation</string>
     <string name="nav_item_bookmark">Bookmark</string>
     <string name="nav_item_evaluation">Evaluation</string>
-    <string name="nav_item_evaluation">My evaluation</string>
-    <string name="nav_item_comment">My comment</string>
+    <string name="nav_item_my_evaluation">My evaluation</string>
+    <string name="nav_item_my_comment">My comment</string>
     <string name="nav_item_random">Random</string>
 
     <!--toolbar-->

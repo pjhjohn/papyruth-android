@@ -45,7 +45,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
     @Override
     public void onResume() {
         super.onResume();
-        toolbar.setTitle(R.string.nav_item_comment);
+        toolbar.setTitle(R.string.nav_item_my_comment);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
         this.subscriptions.add(

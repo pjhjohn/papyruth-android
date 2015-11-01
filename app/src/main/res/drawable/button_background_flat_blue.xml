@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_focused="false">
-        <shape>
+    <item android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <stroke android:color="@color/colorchip_blue" android:width="2dp"/><!-- Border Color -->
             <solid android:color="@color/white"/><!-- Fill Color -->
-            <stroke android:width="2dp" android:color="@color/edittext_solid_default"/><!-- Border Color -->
-            <padding android:left="@dimen/baseline_x2" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x2" android:bottom="@dimen/baseline_x1"/>
+            <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
             <corners android:radius="@dimen/baseline_x0.5"/>
         </shape>
     </item>
-    <item android:state_focused="true">
-        <shape>
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <stroke android:color="@color/colorchip_blue_highlight" android:width="2dp"/><!-- Border Color -->
             <solid android:color="@color/white"/><!-- Fill Color -->
-            <stroke android:width="2dp" android:color="@color/colorchip_green"/><!-- Border Color -->
             <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
             <corners android:radius="@dimen/baseline_x0.5"/>
         </shape>

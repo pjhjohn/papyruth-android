@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <stroke android:color="@color/disabled" android:width="2dp"/><!-- Border Color -->
+            <solid android:color="@color/disabled"/><!-- Fill Color -->
+            <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
+            <corners android:radius="@dimen/baseline_x0.5"/>
+        </shape>
+    </item>
+    <item android:state_enabled="true" android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <stroke android:color="@color/colorchip_blue" android:width="2dp"/><!-- Border Color -->
+            <solid android:color="@color/colorchip_blue"/><!-- Fill Color -->
+            <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
+            <corners android:radius="@dimen/baseline_x0.5"/>
+        </shape>
+    </item>
+    <item android:state_enabled="true" android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <stroke android:color="@color/colorchip_blue_highlight" android:width="2dp"/><!-- Border Color -->
+            <solid android:color="@color/colorchip_blue_highlight"/><!-- Fill Color -->
+            <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
+            <corners android:radius="@dimen/baseline_x0.5"/>
+        </shape>
+    </item>
+</selector>

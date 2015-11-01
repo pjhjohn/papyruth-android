@@ -102,15 +102,15 @@ public class ProfileFragment extends Fragment {
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_email)
-            .subscribe(unused -> this.navigator.navigate(ProfileEditEmailFragment.class, true))
+            .subscribe(unused -> this.navigator.navigate(ProfileChangeEmailFragment.class, true))
         );
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_nickname)
-            .subscribe(unused -> this.navigator.navigate(ProfileEditNicknameFragment.class, true))
+            .subscribe(unused -> this.navigator.navigate(ProfileChangeNicknameFragment.class, true))
         );
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_password)
-            .subscribe(unused -> this.navigator.navigate(ProfileEditPasswordFragment.class, true))
+            .subscribe(unused -> this.navigator.navigate(ProfileChangePasswordFragment.class, true))
         );
     }
 }

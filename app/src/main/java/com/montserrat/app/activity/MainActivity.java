@@ -221,7 +221,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
             field.setAccessible(true);
             ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.itemSearch));
             if(remove) {
-                img.setImageDrawable(getResources().getDrawable(R.drawable.background_transparent));
+                img.setImageDrawable(getResources().getDrawable(R.drawable.transparent));
             }else {
                 img.setImageDrawable(getResources().getDrawable(R.drawable.ic_light_clear));
             }
