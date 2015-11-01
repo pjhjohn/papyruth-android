@@ -6,6 +6,8 @@ import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.BookmarkFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
+import com.montserrat.app.fragment.main.MyCommentFragment;
+import com.montserrat.app.fragment.main.MyEvaluationFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
 
 /**
@@ -17,6 +19,8 @@ public class NavigationDrawerUtils {
         public static final int SEARCH          = 1;
         public static final int BOOKMARK        = 2;
         public static final int EVALUATION      = 3;
+        public static final int MYEVALUATION    = 4;
+        public static final int MYCOMMENT       = 5;
     }
     public int getNavigationDrawerPositionOf(Class<? extends Fragment> fragment) {
         switch(fragment.getSimpleName()) {
@@ -29,6 +33,8 @@ public class NavigationDrawerUtils {
             case ItemType.SEARCH        : return SimpleCourseFragment.class;
             case ItemType.BOOKMARK      : return BookmarkFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;
+            case ItemType.MYEVALUATION  : return MyEvaluationFragment.class;
+            case ItemType.MYCOMMENT     : return MyCommentFragment.class;
             default: return null;
         }
     }

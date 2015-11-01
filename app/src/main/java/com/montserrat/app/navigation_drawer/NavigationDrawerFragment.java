@@ -76,6 +76,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_search), R.drawable.ic_light_search));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_bookmark), R.drawable.ic_light_bookmark));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_evaluation), R.drawable.ic_light_new_evaluation));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.my_evaluation), R.drawable.ic_light_new_evaluation));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.my_comment), R.drawable.ic_light_new_evaluation));
+
 
         mNavigationDrawerAdapter = new NavigationDrawerAdapter(this.getActivity(), this.mNavigationDrawerItems);
         mNavigationDrawerAdapter.setClickCategoryCallback(this);
