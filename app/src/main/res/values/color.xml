@@ -29,8 +29,8 @@
     <color name="point_gpa_satisfaction">#546B8D</color>
     <color name="point_clarity">#E05E5F</color>
 
-    <color name="button_diable">#76D1CC</color>
-    
+    <color name="button_disable">#76D1CC</color>
+
     <color name="edittext_solid_default">#C8C8C8</color>
     <color name="text_hint">#aaaaaa</color>
     
@@ -43,4 +43,6 @@
     <color name="background_easiness">#E9F7F7</color>
     <color name="background_clarity">#FCEFEF</color>
     <color name="background_contents_brim">#F7F7F7</color>
+
+    <color name="disabled">#CCCCCC</color>
 </resources>
