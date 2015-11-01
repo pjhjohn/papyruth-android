@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.model.CommentData;
+import com.montserrat.app.model.MyCommentData;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.apis.Api;
@@ -30,6 +30,7 @@ import timber.log.Timber;
 public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @InjectView(R.id.my_written_body) protected TextView body;
     @InjectView(R.id.my_written_lecture) protected TextView lecture;
+    @InjectView(R.id.my_written_category) protected TextView category;
     @InjectView(R.id.my_written_professor) protected TextView professor;
     @InjectView(R.id.my_written_timestamp) protected TextView timestamp;
     @InjectView (R.id.evaluation_item_up_vote_icon) protected ImageView upIcon;
@@ -50,34 +51,25 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
         this.subscription = new CompositeSubscription();
     }
 
-    public void bind(CommentData comment) {
+    public void bind(MyCommentData comment) {
         final Context context = this.itemView.getContext();
         this.body.setText(comment.body);
         this.timestamp.setText(DateTimeUtil.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
 
         commentContainer.setVisibility(View.GONE);
-        getCourseOfComment(comment.evaluation_id);
+        addbind(comment);
 
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.upIcon);
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.downIcon);
         this.setVoteCount(comment.up_vote_count, comment.down_vote_count);
     }
 
-    private void getCourseOfComment(int evaluationId){
-        this.subscription.add(
-            Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), evaluationId)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    response -> {
-                        this.professor.setText(response.evaluation.professor_name);
-                        this.lecture.setText(response.evaluation.lecture_name);
-                    }, error -> {
-                        Timber.d("get CourseOfComment error : evaluation id <%s>", evaluationId);
-                    }
-                )
-        );
+    public void addbind(MyCommentData comment){
+        this.professor.setText(comment.professor_name);
+        this.lecture.setText(comment.lecture_name);
+        this.category.setText(comment.category);
     }
+
 
     @Override
     public void onClick (View view) {

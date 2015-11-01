@@ -1,49 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:minHeight="@dimen/cardview_min_height_extended"
+    android:padding="@dimen/baseline_x1"
     android:layout_gravity="center">
-    <RelativeLayout
+    <TextView
+        android:id="@+id/my_written_lecture"
+        android:textSize="@dimen/basefont_x2"
+        android:textStyle="bold"
+        android:layout_toLeftOf="@+id/my_written_timestamp"
+        android:layout_toStartOf="@+id/my_written_timestamp"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/my_written_lecture"
-            android:textSize="16sp"
-            android:layout_toLeftOf="@+id/my_written_timestamp"
-            android:layout_toStartOf="@+id/my_written_timestamp"
-            android:layout_alignBaseline="@+id/my_written_timestamp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/my_written_timestamp"
-            android:textSize="14sp"
-            android:layout_alignParentRight="true"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"/>
-    </RelativeLayout>
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/my_written_timestamp"
+        android:textSize="@dimen/basefont_x1"
+        android:layout_alignBaseline="@+id/my_written_lecture"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="@dimen/baseline_x12"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/my_written_category"
+        android:layout_width="@dimen/baseline_x7"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/basefont_x1"
+        android:layout_marginTop="@dimen/baseline_x1"
+        android:background="@drawable/rounded_corner"
+        android:layout_below="@id/my_written_lecture"
+        android:layout_marginRight="@dimen/baseline_x0.5"
+        android:layout_marginEnd="@dimen/baseline_x0.5"/>
     <TextView
         android:id="@+id/my_written_professor"
-        android:textSize="14sp"
+        android:textSize="@dimen/basefont_x1"
+        android:layout_below="@+id/my_written_lecture"
+        android:layout_toRightOf="@id/my_written_category"
+        android:layout_toEndOf="@id/my_written_category"
+        android:layout_alignBaseline="@id/my_written_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/my_written_body"
+        android:layout_marginTop="@dimen/baseline_x2"
+        android:layout_below="@id/my_written_professor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:id="@+id/evaluation_item_footer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/baseline_x3"
+        android:layout_below="@id/my_written_body"
         android:orientation="horizontal"
         android:gravity="end"
-        android:layout_gravity="right"
-        android:layout_marginTop="@dimen/baseline_x0.5"
-        android:layout_marginBottom="@dimen/baseline_x1"
-        android:layout_marginRight="@dimen/baseline_x2"
-        android:layout_marginEnd="@dimen/baseline_x2">
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/baseline_x0.5">
 
         <RelativeLayout
             android:id="@+id/evaluation_item_comment"
@@ -130,4 +144,4 @@
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

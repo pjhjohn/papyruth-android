@@ -42,7 +42,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     public void onResume() {
         super.onResume();
 
-        toolbar.setTitle(R.string.my_evaluation);
+        toolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
         this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)

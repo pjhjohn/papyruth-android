@@ -1,7 +1,7 @@
 package com.montserrat.app.model.response;
 
-import com.montserrat.app.model.CommentData;
 import com.montserrat.app.model.EvaluationData;
+import com.montserrat.app.model.MyCommentData;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ import java.util.List;
 public class MyWrittenResponse {
     public boolean success;
     public List<EvaluationData> evaluations;
-    public List<CommentData> comments;
+    public List<MyCommentData> comments;
 }

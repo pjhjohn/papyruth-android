@@ -1,12 +1,11 @@
 package com.montserrat.app.recyclerview.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.model.CommentData;
+import com.montserrat.app.model.MyCommentData;
 import com.montserrat.app.recyclerview.viewholder.InformViewHolder;
 import com.montserrat.app.recyclerview.viewholder.MyCommentViewHolder;
 import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
@@ -26,9 +25,9 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final String USER_LEARNED_INFORM = "MyWrittenCommentAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
     private boolean mUserLearnedInform;
     private RecyclerViewItemClickListener itemClickListener;
-    private List<CommentData> myWritten;
+    private List<MyCommentData> myWritten;
 
-    public MyCommentAdapter(List<CommentData> initialEvaluations, RecyclerViewItemClickListener listener) {
+    public MyCommentAdapter(List<MyCommentData> initialEvaluations, RecyclerViewItemClickListener listener) {
         this.myWritten = initialEvaluations;
         this.itemClickListener = listener;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
@@ -65,7 +64,6 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             else
                 ((MyCommentViewHolder) holder).bind(this.myWritten.get(position - (mUserLearnedInform ? 1 : 2)));
         }
-
     }
 
     public int getItemOffset() {

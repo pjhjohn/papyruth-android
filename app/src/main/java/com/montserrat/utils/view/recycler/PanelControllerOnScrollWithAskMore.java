@@ -3,6 +3,8 @@ package com.montserrat.utils.view.recycler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-04-25.
  */
