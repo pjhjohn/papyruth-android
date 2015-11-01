@@ -20,16 +20,16 @@
         <item name="android:textSize">45sp</item>
         <item name="android:textStyle">italic|bold</item>
     </style>
-    <style name="button_color">
+    <style name="button_base">
         <item name="android:textSize">@dimen/basefont_x1.5</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="button_green" parent="button_color">
+    <style name="button_rect" parent="button_base">
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@color/colorchip_green</item>
+        <item name="android:background">@drawable/button_background_rect</item>
     </style>
-    <style name="button_white" parent="button_color">
+    <style name="button_flat" parent="button_base">
         <item name="android:textColor">@color/colorchip_green</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@drawable/button_background_flat</item>
     </style>
 </resources>
