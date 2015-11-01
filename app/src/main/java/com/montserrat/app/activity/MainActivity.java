@@ -26,7 +26,6 @@ import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.MyInfoFragment;
@@ -54,7 +53,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallback, RecyclerViewItemClickListener, Navigator, AutoCompletableSearchView.SearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;
@@ -223,7 +221,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             field.setAccessible(true);
             ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.itemSearch));
             if(remove) {
-                img.setImageDrawable(getResources().getDrawable(R.drawable.background_transparent));
+                img.setImageDrawable(getResources().getDrawable(R.drawable.transparent));
             }else {
                 img.setImageDrawable(getResources().getDrawable(R.drawable.ic_light_clear));
             }

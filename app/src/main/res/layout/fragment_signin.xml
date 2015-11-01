@@ -27,7 +27,7 @@
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:background="@drawable/background_edittext"/>
+            android:background="@drawable/edittext_background_green"/>
 
         <EditText
             android:id="@+id/password"
@@ -45,7 +45,7 @@
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:background="@drawable/background_edittext"
+            android:background="@drawable/edittext_background_green"
             />
 
         <LinearLayout
