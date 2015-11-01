@@ -4,7 +4,7 @@
     <string name="app_sub_title">University Course Evaluator</string>
 
     <!--navigation-->
-    <string name="nav_item_home">Home</string>
+    <string name="nav_item_home">Recent Evaluation</string>
     <string name="nav_item_search">Search</string>
     <string name="nav_item_recommendation">Recommendation</string>
     <string name="nav_item_bookmark">Bookmark</string>

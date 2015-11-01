@@ -4,7 +4,7 @@
     <string name="app_sub_title">대학교 강의 평가</string>
 
     <!--navigation-->
-    <string name="nav_item_home">홈</string>
+    <string name="nav_item_home">최신 강의평가</string>
     <string name="nav_item_search">강좌검색</string>
     <string name="nav_item_recommendation">추천강좌</string>
     <string name="nav_item_bookmark">관심강좌</string>
