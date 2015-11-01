@@ -270,12 +270,14 @@ public interface Papyruth {
         @Query("new_password") String new_password
     );
     @POST("/users/me/edit")
-    Observable<UserDataResponse> users_me_edit(
+    Observable<UserDataResponse> users_me_edit_email(
         @Header("Authorization") String authorization,
-        @Query("email") String email,
-        @Query("nickname") String nickname,
-        @Query("realname") String realname,
-        @Query("is_boy") Boolean is_boy
+        @Query("email") String email
+    );
+    @POST("/users/me/edit")
+    Observable<UserDataResponse> users_me_edit_nickname(
+        @Header("Authorization") String authorization,
+        @Query("nickname") String nickname
     );
     @GET("/users/me/favorites")
     Observable<FavoriteCoursesResponse> users_me_favorites(

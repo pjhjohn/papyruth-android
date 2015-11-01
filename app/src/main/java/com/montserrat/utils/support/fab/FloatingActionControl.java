@@ -48,10 +48,10 @@ public class FloatingActionControl {
         return fac.fam;
     }
     public static rx.Observable<OnClickEvent> clicks() {
-        return ViewObservable.clicks(FloatingActionControl.getButton()).doOnError(error -> error.printStackTrace());
+        return ViewObservable.clicks(FloatingActionControl.getButton());
     }
     public static rx.Observable<OnClickEvent> clicks(int fab_id) {
-        return ViewObservable.clicks(FloatingActionControl.getButton(fab_id)).doOnError(error -> error.printStackTrace());
+        return ViewObservable.clicks(FloatingActionControl.getButton(fab_id));
     }
 
     public FloatingActionControl toggle(boolean animate) {

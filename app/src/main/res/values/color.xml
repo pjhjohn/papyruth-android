@@ -43,6 +43,7 @@
     <color name="background_easiness">#E9F7F7</color>
     <color name="background_clarity">#FCEFEF</color>
     <color name="background_contents_brim">#F7F7F7</color>
+    <color name="background_profile_change">#F2F2F2</color>
 
     <color name="disabled">#CCCCCC</color>
 </resources>

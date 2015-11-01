@@ -170,4 +170,31 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_realname">REALNAME</string>
     <string name="label_nickname">NICKNAME</string>
     <string name="label_gender">GENDER</string>
+
+    <string name="label_email_change">ENTER NEW EMAIL ADDRESS TO CHANGE</string>
+    <string name="label_email_change_prefix">ENTER</string>
+    <string name="label_email_change_content">NEW EMAIL ADDRESS</string>
+    <string name="label_email_change_postfix">TO CHANGE</string>
+
+    <string name="label_nickname_change">ENTER NEW NICKNAME TO CHANGE</string>
+    <string name="label_nickname_change_prefix">ENTER</string>
+    <string name="label_nickname_change_content">NEW NICKNAME</string>
+    <string name="label_nickname_change_postfix">TO CHANGE</string>
+
+    <string name="label_password_change">ENTER PASSWORD TO CHANGE</string>
+    <string name="label_password_change_prefix">ENTER</string>
+    <string name="label_password_change_content">PASSWORD</string>
+    <string name="label_password_change_postfix">TO CHANGE</string>
+
+    <string name="failure_title_prefix">Failed to change </string>
+    <string name="failure_title_postfix"></string>
+    <string name="change_email_title">email address</string>
+    <string name="change_nickname_title">nickname</string>
+    <string name="change_password_title">password</string>
+
+    <string name="failure_content_prefix">Could not register new </string>
+    <string name="failure_content_postfix"></string>
+    <string name="change_email_content">email address : Duplicate Email</string>
+    <string name="change_nickname_content">nickname : Duplicate Nickname</string>
+    <string name="change_password_content">password : Current Password not correct</string>
 </resources>
