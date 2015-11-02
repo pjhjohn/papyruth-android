@@ -1,6 +1,5 @@
 package com.montserrat.app.fragment.main;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.montserrat.app.AppConst;
@@ -9,7 +8,6 @@ import com.montserrat.app.model.MyCommentData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.MyCommentAdapter;
-import com.montserrat.app.recyclerview.viewholder.MyCommentViewHolder;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
@@ -100,8 +98,6 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         }
         askmore = !comments.isEmpty();
         this.items.addAll(comments);
-        this.adapter.notifyDataSetChanged();
-        Timber.d("itemss size : %s", items.size());
         this.doOnGetMyWritten(items.size() - comments.size(), items.size() - 1);
         page++;
     }
@@ -110,26 +106,30 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         if (start > -1)
             for(int i = start; i <= end; i++){
                 MyCommentData comment = items.get(i);
-                final int index = i;
-                comment.setCourseData(getActivity())
+                Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), comment.evaluation_id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(
-                        success->{
-                            Timber.d("**** %s's item %s", index+this.adapter.getItemOffset()-1, index);
-                            if(index + this.adapter.getItemOffset() <= ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastVisibleItemPosition() && index + this.adapter.getItemOffset() >= ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition()){
-                                ((MyCommentViewHolder) recyclerView.getChildViewHolder(
-                                    recyclerView.getChildAt(
-                                        index + this.adapter.getItemOffset()
-                                    ))
-                                ).addbind(items.get(index));
-                            }
+                        response->{
+                            comment.lecture_name = response.evaluation.lecture_name;
+                            comment.professor_name = response.evaluation.professor_name;
+                            comment.category = getResources().getString(R.string.category_major);
+
+                            if (checkAllDataLoad(start, end))
+                                this.adapter.notifyDataSetChanged();
                         },
                         error -> {
                             error.printStackTrace();
                         }
                     );
             }
+    }
+    private boolean checkAllDataLoad(int start, int end){
+        for(int i = start; i <= end; i++){
+            if(items.get(i).lecture_name == null)
+                return false;
+        }
+        return true;
     }
 
 
