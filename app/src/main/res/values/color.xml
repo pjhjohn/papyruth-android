@@ -46,4 +46,5 @@
     <color name="background_profile_change">#F2F2F2</color>
 
     <color name="disabled">#CCCCCC</color>
+    <color name="hr_settings">#F3F3F3</color>
 </resources>
