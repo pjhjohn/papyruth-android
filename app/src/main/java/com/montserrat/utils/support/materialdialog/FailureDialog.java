@@ -39,17 +39,7 @@ public class FailureDialog {
     }
 
     public static void show(Context context, Type type) {
-        new MaterialDialog.Builder(context)
-            .title(Title(context, type))
-            .content(Content(context, type))
-            .positiveText(R.string.confirm_positive)
-            .callback(new MaterialDialog.ButtonCallback() {
-                @Override
-                public void onPositive(MaterialDialog dialog) {
-                    dialog.dismiss();
-                }
-            })
-            .show();
+        FailureDialog.build(context, type).show();
     }
 
     private static String Title(Context context, Type type) {
