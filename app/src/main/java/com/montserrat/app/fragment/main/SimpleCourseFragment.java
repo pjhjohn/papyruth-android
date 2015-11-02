@@ -106,6 +106,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
+        if(!((MainActivity) getActivity()).isOverMandatoryEvlauation()) return;
         if(this.items.size() -1 < position){
             Toast.makeText(getActivity().getBaseContext(),"please wait for loading", Toast.LENGTH_LONG).show();
             return;

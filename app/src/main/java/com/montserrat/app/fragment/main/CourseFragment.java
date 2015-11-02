@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
@@ -88,24 +89,27 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.isOpenSlave = false;
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
-        Api.papyruth()
-            .get_evaluations(
-                User.getInstance().getAccessToken(),
-                User.getInstance().getUniversityId(),
-                null,
-                null,
-                null,
-                Course.getInstance().getId()
-            )
-            .map(response -> response.evaluations)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(evaluations -> {
-                this.items.clear();
-                this.items.addAll(evaluations);
-                final int offset = this.adapter.getItemOffset();
-                this.adapter.notifyItemRangeChanged(offset, this.adapter.getItemCount() - offset);
-            });
+
+        if(((MainActivity) getActivity()).isOverMandatoryEvlauation()) {
+            Api.papyruth()
+                .get_evaluations(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    null,
+                    null,
+                    null,
+                    Course.getInstance().getId()
+                )
+                .map(response -> response.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.items.clear();
+                    this.items.addAll(evaluations);
+                    final int offset = this.adapter.getItemOffset();
+                    this.adapter.notifyItemRangeChanged(offset, this.adapter.getItemCount() - offset);
+                });
+        }
     }
 
     @InjectView(R.id.evaluation_container) protected FrameLayout slaveContainer;
@@ -125,6 +129,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
+        if(!((MainActivity) getActivity()).isOverMandatoryEvlauation()) return;
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
         if(isOpenSlave) return;

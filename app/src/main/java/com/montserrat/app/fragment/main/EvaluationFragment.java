@@ -366,6 +366,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
         }else if(v.getId() == R.id.evaluation_header){
+            if(!((MainActivity) getActivity()).isOverMandatoryEvlauation()) return;
             this.subscriptions.add(
                 Api.papyruth().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
                     .map(response -> response.course)
