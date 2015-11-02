@@ -284,10 +284,7 @@ public class EvaluationStep3Fragment extends Fragment {
                     if (response.success) {
                         EvaluationForm.getInstance().free();
                         Evaluation.getInstance().update(response.evaluation);
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("STANDALONE", true);
-                        this.navigator.back();
-                        this.navigator.navigate(EvaluationFragment.class, bundle, false, Navigator.AnimatorType.SLIDE_TO_RIGHT);
+                        updateUserData();
                     } else {
                         Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
                     }
@@ -303,5 +300,22 @@ public class EvaluationStep3Fragment extends Fragment {
                     }
                 }
             );
+    }
+
+    public void updateUserData(){
+        if(User.getInstance().getMandatory_evaluation_count() < 1){
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("STANDALONE", true);
+            this.navigator.navigate(MyEvaluationFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
+        }else {
+            Api.papyruth().users_me(User.getInstance().getAccessToken())
+                .map(response -> response.user)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(user -> {
+                    User.getInstance().update(user);
+                    this.navigator.navigate(MyEvaluationFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
+                }, error -> error.printStackTrace());
+        }
     }
 }

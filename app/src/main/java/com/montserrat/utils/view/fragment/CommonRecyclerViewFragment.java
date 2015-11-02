@@ -115,14 +115,17 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     protected AnimatorSet animators;
     protected Boolean isAnimationCanceled;
     protected void openEvaluation(View view) {
-        this.slaveContainer.setVisibility(View.VISIBLE);
-        if(this.getView() != null) this.screenHeight = this.getView().getHeight();
-        this.itemHeight = view.getHeight();
-        this.itemTop = (int) view.getY();
+        openEvaluation(view.getHeight(), (int) view.getY());
+    }
 
+    protected void openEvaluation(int vHeight, int vY){
+        this.slaveContainer.setVisibility(View.VISIBLE);
+        this.itemHeight = vHeight;
+        this.itemTop = vY;
+        this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
         ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
 
-        ValueAnimator animHeight = ValueAnimator.ofInt(view.getHeight(), screenHeight);
+        ValueAnimator animHeight = ValueAnimator.ofInt(vHeight, screenHeight);
         animHeight.addUpdateListener(animator -> {
             lpEvaluationContainer.height = (int) animator.getAnimatedValue();
             this.slaveContainer.setLayoutParams(lpEvaluationContainer);

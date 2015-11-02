@@ -42,6 +42,13 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     public void onResume() {
         super.onResume();
 
+        if(Evaluation.getInstance().getId() != null){
+            this.slave = new EvaluationFragment();
+            int y = getActivity().getWindowManager().getDefaultDisplay().getHeight()/2;
+            int height = (int)getResources().getDimension(R.dimen.baseline_x5);
+            this.openEvaluation(height, y);
+        }
+
         toolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
