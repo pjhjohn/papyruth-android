@@ -101,10 +101,9 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         super.onResume();
         ViewHolderFactory.getInstance().setContext(this);
         this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
-        checkMandatoryEvlauation();
     }
 
-    public void checkMandatoryEvlauation(){
+    public boolean isOverMandatoryEvlauation(){
         if(User.getInstance().getMandatory_evaluation_count() > 0) {
             new MaterialDialog.Builder(this)
                 .content(getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatory_evaluation_count()))
@@ -114,15 +113,15 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
+                        if(mNavigationDrawer.isOpened())
+                            mNavigationDrawer.close();
+                        navigate(EvaluationStep1Fragment.class, true);
                     }
                 })
                 .show();
+            return false;
         }
+        return true;
     }
 
 
