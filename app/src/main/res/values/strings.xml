@@ -23,6 +23,8 @@
     <string name="toolbar_title_evaluation">Evaluation</string>
     <string name="toolbar_favorite">Favorite Course</string>
     <string name="toolbar_search">Search Course</string>
+    <string name="toolbar_settings">Settings</string>
+    <string name="toolbar_osl">Open Source Licenses</string>
 
     <!--sign up-->
     <string name="step1">step 1</string>
@@ -197,4 +199,8 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="change_email_content">email address : Duplicate Email</string>
     <string name="change_nickname_content">nickname : Duplicate Nickname</string>
     <string name="change_password_content">password : Current Password not correct</string>
+    <string name="label_signout">Sign Out</string>
+    <string name="label_osl">Open Source Licenses</string>
+    <string name="label_tos">Term of Services</string>
+    <string name="goto_github_repo">REPOSITORY</string>
 </resources>

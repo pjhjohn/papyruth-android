@@ -23,6 +23,8 @@
     <string name="toolbar_edit_profile">내 정보 수정</string>
     <string name="toolbar_favorite">관심 강좌</string>
     <string name="toolbar_search">강의 검색</string>
+    <string name="toolbar_settings">설정</string>
+    <string name="toolbar_osl">오픈 소스 라이센스</string>
 
     <!--sign up-->
     <string name="step1">1단계</string>
@@ -188,5 +190,8 @@
     <string name="change_email_content">중복된 이메일 입니다</string>
     <string name="change_nickname_content">중복된 닉네임 입니다</string>
     <string name="change_password_content">기존 비밀번호가 틀립니다</string>
-
+    <string name="label_signout">로그 아웃</string>
+    <string name="label_osl">오픈 소스 라이센스</string>
+    <string name="label_tos">이용 약관</string>
+    <string name="goto_github_repo">REPOSITORY</string>
 </resources>
