@@ -1,6 +1,5 @@
 package com.montserrat.app.recyclerview.viewholder;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,19 +9,14 @@ import android.widget.TextView;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.MyCommentData;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.picasso.ContrastColorFilterTransformation;
-import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.DateTimeUtil;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
@@ -52,23 +46,19 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
     }
 
     public void bind(MyCommentData comment) {
-        final Context context = this.itemView.getContext();
         this.body.setText(comment.body);
         this.timestamp.setText(DateTimeUtil.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
 
         commentContainer.setVisibility(View.GONE);
-        addbind(comment);
+        this.professor.setText(comment.professor_name);
+        this.lecture.setText(comment.lecture_name);
+        this.category.setText(comment.category);
 
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.upIcon);
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.downIcon);
         this.setVoteCount(comment.up_vote_count, comment.down_vote_count);
     }
 
-    public void addbind(MyCommentData comment){
-        this.professor.setText(comment.professor_name);
-        this.lecture.setText(comment.lecture_name);
-        this.category.setText(comment.category);
-    }
 
 
     @Override
