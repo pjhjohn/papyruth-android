@@ -64,7 +64,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_evaluation);
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), onClickListener);
-        else if (comments.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data);
+        else if (comments.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data_comment);
         else ((CommentItemViewHolder) holder).bind(this.comments.get(position - getItemOffset()));
     }
 

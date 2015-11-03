@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
+import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
@@ -134,6 +135,7 @@ public class ToolbarSearch {
     public void searchHistory(){
         if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
             //Todo : when history is empty, inform empty.
+            this.courseItemsAdapter.setResIdNoDataText(R.string.no_data_history);
         }else {
             List<CourseData> courseList = ((CoursesData)AppManager.getInstance().getStringParsed(
                 AppConst.Preference.HISTORY,

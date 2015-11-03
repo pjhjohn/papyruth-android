@@ -22,14 +22,20 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private RecyclerViewItemClickListener courseItemClickListener;
     private List<CourseData> courses;
     private Integer headerLayoutResourceId;
+    private int resIdNoDataText;
 
-    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener) {
-        this(initialCourses, listener, null);
+    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, int noDataTextRes) {
+        this(initialCourses, listener, null, noDataTextRes);
     }
-    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, Integer headerLayoutResourceId) {
+    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, Integer headerLayoutResourceId, int resIdNoDataText) {
         this.courses = initialCourses;
         this.courseItemClickListener = listener;
         this.headerLayoutResourceId = headerLayoutResourceId;
+        this.resIdNoDataText = resIdNoDataText;
+    }
+
+    public void setResIdNoDataText(int resIdNoDataText){
+        this.resIdNoDataText = resIdNoDataText;
     }
 
     @Override
@@ -43,7 +49,7 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if(courses.isEmpty())
-            ((NoDataViewHolder) holder).bind(R.string.no_data);
+            ((NoDataViewHolder) holder).bind(this.resIdNoDataText);
         else
             ((CourseItemViewHolder) holder).bind(this.courses.get(position - 1));
     }

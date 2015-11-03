@@ -7,6 +7,7 @@ import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.viewholder.CourseViewHolder;
 import com.montserrat.app.recyclerview.viewholder.EvaluationItemViewHolder;
 import com.montserrat.app.recyclerview.viewholder.InformViewHolder;
@@ -61,7 +62,10 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_course);
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((CourseViewHolder) holder).bind(Course.getInstance());
-        else if(evaluations.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data);
+        else if(evaluations.isEmpty())
+            ((NoDataViewHolder) holder).bind(
+                User.getInstance().getMandatory_evaluation_count() > 0 ? R.string.no_data_you_cant : R.string.no_data_evaluation
+            );
         else ((EvaluationItemViewHolder) holder).bind(this.evaluations.get(position - getItemOffset()));
     }
 

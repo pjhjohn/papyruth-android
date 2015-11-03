@@ -63,7 +63,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.courses = new ArrayList<>();
-        this.courseAdapter = new CourseItemsAdapter(this.courses, this, R.layout.cardview_header_height_zero);
+        this.courseAdapter = new CourseItemsAdapter(this.courses, this, R.layout.cardview_header_height_zero, R.string.no_data_search);
 
         this.search = new AutoCompletableSearchView(this, this.getActivity().getBaseContext());
     }

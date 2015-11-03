@@ -102,7 +102,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     protected CourseItemsAdapter getAdapter () {
         if(this.adapter != null)
             return adapter;
-        return new CourseItemsAdapter(this.items, this);
+        return new CourseItemsAdapter(this.items, this, R.string.no_data_favorite);
     }
 
     @Override

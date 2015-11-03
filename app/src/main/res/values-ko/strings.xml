@@ -120,6 +120,16 @@
     <string name="goto_write">강의평 작성하기</string>
     <string name="no_data">No Data</string>
 
+    <!-- No data Inform -->
+    <string name="no_data_my_evaluation">내가 쓴 강의평가가 없습니다.</string>
+    <string name="no_data_my_comment">내가 쓴 댓글이 없습니다.</string>
+    <string name="no_data_evaluation">현재 강의평가가 없습니다.</string>
+    <string name="no_data_comment">현재 댓글이 없습니다.</string>
+    <string name="no_data_favorite">나의 관심강의가 없습니다.</string>
+    <string name="no_data_search">검색 결과가 없습니다.</string>
+    <string name="no_data_history">내가 검색한 히스토리가 없습니다.</string>
+    <string name="no_data_you_cant">현재 강의평가를 볼 수 없습니다.</string>
+
     <!-- time -->
     <string name="just_now">방금</string>
     <string name="time_ago">%s 전</string>

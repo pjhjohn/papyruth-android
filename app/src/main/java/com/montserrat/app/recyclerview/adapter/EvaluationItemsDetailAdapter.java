@@ -62,7 +62,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
-        else if (evaluations.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data);
+        else if (evaluations.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data_you_cant);
         else ((EvaluationItemDetailViewHolder) holder).bind(this.evaluations.get(position - 1 - (mUserLearnedInform ? 0 : 1)));
     }
 
