@@ -67,7 +67,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1) + (evaluations.isEmpty() ? 0 : 1);
+        return 1 + (mUserLearnedInform ? 0 : 1) + (evaluations.isEmpty() ? 1 : 0);
     }
 
     @Override
