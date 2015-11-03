@@ -11,6 +11,7 @@ import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.recyclerview.viewholder.CommentItemViewHolder;
 import com.montserrat.app.recyclerview.viewholder.EvaluationViewHolder;
 import com.montserrat.app.recyclerview.viewholder.InformViewHolder;
+import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
@@ -18,8 +19,11 @@ import java.util.List;
 
 import timber.log.Timber;
 
+
 /**
- * Created by SSS on 2015-05-08.
+ * Author : Seungsou Shin &lt;sss@papyruth.com&gt;<br>
+ * Used in {@link com.montserrat.app.fragment.main.EvaluationFragment EvaluationFragment}
+ * as an adapter for List-type {@link RecyclerView} to provide course search result
  */
 public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String USER_LEARNED_INFORM = "EvaluationAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
@@ -60,11 +64,12 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_evaluation);
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), onClickListener);
+        else if (comments.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data);
         else ((CommentItemViewHolder) holder).bind(this.comments.get(position - getItemOffset()));
     }
 
     public int getItemOffset() {
-        return 2 + (mUserLearnedInform ? 0 : 1);
+        return 2 + (mUserLearnedInform ? 0 : 1) + (comments.isEmpty() ? 1 : 0);
     }
 
     @Override
@@ -77,6 +82,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.EVALUATION;
+        else if(comments.isEmpty()) return ViewHolderFactory.ViewType.NO_DATA;
         else return ViewHolderFactory.ViewType.COMMENT_ITEM;
     }
 }

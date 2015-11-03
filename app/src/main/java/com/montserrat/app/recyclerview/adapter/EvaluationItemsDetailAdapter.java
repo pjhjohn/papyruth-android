@@ -12,6 +12,7 @@ import com.montserrat.app.recyclerview.viewholder.CommentItemViewHolder;
 import com.montserrat.app.recyclerview.viewholder.EvaluationItemDetailViewHolder;
 import com.montserrat.app.recyclerview.viewholder.EvaluationViewHolder;
 import com.montserrat.app.recyclerview.viewholder.InformViewHolder;
+import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
@@ -61,11 +62,12 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
+        else if (evaluations.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data);
         else ((EvaluationItemDetailViewHolder) holder).bind(this.evaluations.get(position - 1 - (mUserLearnedInform ? 0 : 1)));
     }
 
     public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1);
+        return 1 + (mUserLearnedInform ? 0 : 1) + (evaluations.isEmpty() ? 0 : 1);
     }
 
     @Override
@@ -77,6 +79,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
+        else if(evaluations.isEmpty()) return ViewHolderFactory.ViewType.NO_DATA;
         else return ViewHolderFactory.ViewType.EVALUATION_ITEM_DETAIL;
     }
 }

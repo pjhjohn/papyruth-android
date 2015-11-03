@@ -3,9 +3,11 @@ package com.montserrat.app.recyclerview.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.recyclerview.viewholder.CourseItemViewHolder;
+import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
@@ -32,23 +34,32 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == ViewHolderFactory.ViewType.HEADER) return ViewHolderFactory.getInstance().create(parent, viewType, courseItemClickListener, headerLayoutResourceId);
+        if(viewType == ViewHolderFactory.ViewType.HEADER)
+            return ViewHolderFactory.getInstance().create(parent, viewType, courseItemClickListener, headerLayoutResourceId);
         else return ViewHolderFactory.getInstance().create(parent, viewType, courseItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        ((CourseItemViewHolder) holder).bind(this.courses.get(position - 1));
+        if(courses.isEmpty())
+            ((NoDataViewHolder) holder).bind(R.string.no_data);
+        else
+            ((CourseItemViewHolder) holder).bind(this.courses.get(position - 1));
     }
 
+    public int getItemOffset() {
+        return 1 +(courses.isEmpty()? 1 : 0);
+    }
     @Override
     public int getItemCount() {
-        return 1 + (this.courses == null ? 0 : this.courses.size());
+        return getItemOffset() + (this.courses == null ? 0 : this.courses.size());
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position <= 0 ? ViewHolderFactory.ViewType.HEADER : ViewHolderFactory.ViewType.COURSE_ITEM;
+        if(position <= 0) return ViewHolderFactory.ViewType.HEADER;
+        else if(courses.isEmpty()) return ViewHolderFactory.ViewType.NO_DATA;
+        else return ViewHolderFactory.ViewType.COURSE_ITEM;
     }
 }
