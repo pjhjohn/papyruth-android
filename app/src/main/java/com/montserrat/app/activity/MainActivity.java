@@ -104,9 +104,9 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     }
 
     public boolean isOverMandatoryEvlauation(){
-        if(User.getInstance().getMandatory_evaluation_count() > 0) {
+        if(User.getInstance().getMandatoryEvaluationCount() > 0) {
             new MaterialDialog.Builder(this)
-                .content(getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatory_evaluation_count()))
+                .content(getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()))
                 .positiveText(R.string.goto_write)
                 .negativeText(R.string.cancel)
                 .callback(new MaterialDialog.ButtonCallback() {

@@ -30,6 +30,7 @@ public class User {
     private BehaviorSubject<String> bsEmail;
     private BehaviorSubject<String> bsAvatarUrl;
     private Integer mandatory_evaluation_count;
+    private String  university_image_url;
 
     private User () {
         this.clear();
@@ -48,6 +49,7 @@ public class User {
         this.university_name = null;
         this.entrance_year   = null;
         this.avatar_url      = null;
+        this.university_image_url = null;
     }
 
     public String getAccessToken () {
@@ -107,6 +109,12 @@ public class User {
         this.avatar_url = url;
         this.bsAvatarUrl.onNext(url);
     }
+    public String getUniversityImageUrl() {
+        return this.university_image_url;
+    }
+    public void setUniversityImageUrl(String university_image_url) {
+        this.university_image_url = university_image_url;
+    }
 
     public Integer getId() {
         return id;
@@ -114,23 +122,11 @@ public class User {
     public void setId(Integer id) {
         this.id = id;
     }
-    public Integer getMandatory_evaluation_count() {
+    public Integer getMandatoryEvaluationCount() {
         return mandatory_evaluation_count;
     }
-    public void setMandatory_evaluation_count(Integer mandatory_evaluation_count) {
+    public void setMandatoryEvaluationCount(Integer mandatory_evaluation_count) {
         this.mandatory_evaluation_count = mandatory_evaluation_count;
-    }
-
-/**
- *  if mandatory count > 0 return true<br>
- *  else return false
- **/
-    public boolean addEvaluationCount(){
-        if(mandatory_evaluation_count > 0){
-            mandatory_evaluation_count --;
-            return true;
-        }
-        return false;
     }
 
     public void update(UserData user) {
@@ -138,7 +134,7 @@ public class User {
     }
     public void update(UserData user, String access_token) {
         if(user.id != null) this.setId(user.id);
-        if(user.mandatory_evaluation_count != null) this.setMandatory_evaluation_count(user.mandatory_evaluation_count);
+        if(user.mandatory_evaluation_count != null) this.setMandatoryEvaluationCount(user.mandatory_evaluation_count);
         if(user.email != null) this.setEmail(user.email);
         if(user.realname != null) this.setRealname(user.realname);
         if(user.nickname != null) this.setNickName(user.nickname);
@@ -146,7 +142,8 @@ public class User {
         if(user.university_id != null) this.setUniversityId(user.university_id);
         if(user.entrance_year != null) this.setEntranceYear(user.entrance_year);
         if(user.university_name != null) this.setUniversityName(user.university_name);
-        if(access_token!=null) this.setAccessToken(access_token);
+        if(user.university_image_url != null) this.setUniversityImageUrl(user.university_image_url);
+        if(access_token != null) this.setAccessToken(access_token);
     }
 
     public Observable<String> getNicknameObservable() {

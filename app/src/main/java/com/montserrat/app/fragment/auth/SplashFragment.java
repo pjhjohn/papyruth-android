@@ -64,6 +64,7 @@ public class SplashFragment extends Fragment {
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         this.subscriptions.add(Api.papyruth().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
+                Timber.d("%s", response.user.university_image_url);
                 User.getInstance().update(response.user);
                 this.subscriptions.add(Api.papyruth()
                     .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())

@@ -64,7 +64,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((CourseViewHolder) holder).bind(Course.getInstance());
         else if(evaluations.isEmpty())
             ((NoDataViewHolder) holder).bind(
-                User.getInstance().getMandatory_evaluation_count() > 0 ? R.string.no_data_you_cant : R.string.no_data_evaluation
+                User.getInstance().getMandatoryEvaluationCount() > 0 ? R.string.no_data_you_cant : R.string.no_data_evaluation
             );
         else ((EvaluationItemViewHolder) holder).bind(this.evaluations.get(position - getItemOffset()));
     }

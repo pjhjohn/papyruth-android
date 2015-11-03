@@ -303,7 +303,7 @@ public class EvaluationStep3Fragment extends Fragment {
     }
 
     public void updateUserData(){
-        if(User.getInstance().getMandatory_evaluation_count() < 1){
+        if(User.getInstance().getMandatoryEvaluationCount() < 1){
             Bundle bundle = new Bundle();
             bundle.putBoolean("STANDALONE", true);
             this.navigator.navigate(MyEvaluationFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);

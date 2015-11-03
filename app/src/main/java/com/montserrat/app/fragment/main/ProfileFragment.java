@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
         final Context context = this.getActivity();
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
 
-        Picasso.with(context).load(Statistics.getInstance().getUniversity().image_url).into(this.universityImage); // TODO : Statistics -> User
+        Picasso.with(context).load(User.getInstance().getUniversityImageUrl()).into(this.universityImage);
         this.universityName.setText(User.getInstance().getUniversityName());
         this.entrance.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.entrance_postfix)));
         Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(Color.GRAY)).into(this.emailIcon);
