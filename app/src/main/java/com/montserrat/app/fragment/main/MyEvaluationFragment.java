@@ -5,6 +5,7 @@ import android.view.View;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
+import com.montserrat.app.model.MyCommentData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.MyEvaluationAdapter;
@@ -14,13 +15,14 @@ import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationAdapter, EvaluationData> {
-
+    private boolean askmore;
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
@@ -62,10 +64,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(evaluations -> {
                 this.swipeRefresh.setRefreshing(false);
-                this.items.clear();
-                if (evaluations != null)
-                    this.items.addAll(evaluations);
-                this.adapter.notifyDataSetChanged();
+                this.notifyDataChanged(evaluations);
             },error -> {
                 this.swipeRefresh.setRefreshing(false);
                 error.printStackTrace();
@@ -76,22 +75,20 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         );
 
         this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, true)
-            .startWith((Boolean) null)
-            .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
+            .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore)
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap(unused -> {
                 this.progress.setVisibility(View.VISIBLE);
                 this.swipeRefresh.setRefreshing(false);
                 // TODO : handle the case for max_id == 0 : prefer not to request to server
-                return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page++);
+                return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page);
             })
             .map(mywritten -> mywritten.evaluations)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(evaluations -> {
                 this.progress.setVisibility(View.GONE);
-                if (evaluations != null) this.items.addAll(evaluations);
-                this.adapter.notifyDataSetChanged();
+                this.notifyDataChanged(evaluations);
             },error -> {
                 this.progress.setVisibility(View.GONE);
                 error.printStackTrace();
@@ -102,6 +99,15 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         );
     }
 
+    public void notifyDataChanged(List<EvaluationData> evaluations){
+        if(page < 2) {
+            this.items.clear();
+        }
+        askmore = !evaluations.isEmpty();
+        this.items.addAll(evaluations);
+        this.adapter.notifyDataSetChanged();
+        page++;
+    }
     @Override
     protected MyEvaluationAdapter getAdapter () {
         return new MyEvaluationAdapter(this.items, this);

@@ -49,15 +49,16 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(evaluations -> {
-                        this.swipeRefresh.setRefreshing(false);
-                        this.items.clear();
-                        if (evaluations != null)
-                            this.items.addAll(evaluations);
-                        this.adapter.notifyDataSetChanged();
-                        size = items.size();
-                    })
+                            this.items.clear();
+                            if (evaluations != null)
+                                this.items.addAll(evaluations);
+                            this.adapter.notifyDataSetChanged();
+                            size = items.size();
+                        }, error -> error.printStackTrace(),
+                        () -> {
+                            this.swipeRefresh.setRefreshing(false);
+                        })
             );
-
             this.subscriptions.add(
                 super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, true)
                     .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
@@ -104,6 +105,8 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 //                }
                     }, error -> error.printStackTrace())
             );
+        }else{
+            swipeRefresh.setEnabled(false);
         }
     }
 
