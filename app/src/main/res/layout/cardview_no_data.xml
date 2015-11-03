@@ -6,7 +6,8 @@
         android:id="@+id/no_data_text"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:textSize="@dimen/basefont_x3"
+        android:textSize="@dimen/basefont_x1.5"
+        android:background="@drawable/cardview_border"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 </RelativeLayout>
