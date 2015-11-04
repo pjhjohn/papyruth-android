@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationAdapter, EvaluationData> {
     private boolean askmore = true;
@@ -74,28 +75,32 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             })
         );
 
-        this.subscriptions.add(super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, true)
-            .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore)
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMap(unused -> {
-                this.progress.setVisibility(View.VISIBLE);
-                this.swipeRefresh.setRefreshing(false);
-                // TODO : handle the case for max_id == 0 : prefer not to request to server
-                return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page);
-            })
-            .map(mywritten -> mywritten.evaluations)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(evaluations -> {
-                this.progress.setVisibility(View.GONE);
-                this.notifyDataChanged(evaluations);
-            },error -> {
-                this.progress.setVisibility(View.GONE);
-                error.printStackTrace();
-            }, () ->{
-                this.swipeRefresh.setRefreshing(false);
-                this.progress.setVisibility(View.GONE);
-            })
+        this.subscriptions.add(
+            super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
+                .filter(passIfNull -> {
+                    Timber.d("has value : %s %s ", passIfNull, progress.getVisibility());
+                    return passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore;
+                })
+                .flatMap(unused -> {
+                    this.progress.setVisibility(View.VISIBLE);
+                    this.swipeRefresh.setRefreshing(false);
+                    // TODO : handle the case for max_id == 0 : prefer not to request to server
+                    Timber.d("calling");
+                    return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page);
+                })
+                .map(mywritten -> mywritten.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.progress.setVisibility(View.GONE);
+                    this.notifyDataChanged(evaluations);
+                },error -> {
+                    this.progress.setVisibility(View.GONE);
+                    error.printStackTrace();
+                }, () ->{
+                    this.swipeRefresh.setRefreshing(false);
+                    this.progress.setVisibility(View.GONE);
+                })
         );
     }
 
@@ -105,6 +110,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         }
         askmore = !evaluations.isEmpty();
         this.items.addAll(evaluations);
+        this.adapter.setIsEmptyData(evaluations.isEmpty());
         this.adapter.notifyDataSetChanged();
         page++;
     }

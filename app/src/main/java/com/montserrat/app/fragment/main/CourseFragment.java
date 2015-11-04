@@ -109,6 +109,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     this.items.clear();
                     this.items.addAll(evaluations);
                     final int offset = this.adapter.getItemOffset();
+                    this.adapter.setIsEmptyData(evaluations.isEmpty());
                     this.adapter.notifyItemRangeChanged(offset, this.adapter.getItemCount() - offset);
                 });
         }

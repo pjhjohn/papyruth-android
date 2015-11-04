@@ -26,11 +26,17 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private boolean mUserLearnedInform;
     private RecyclerViewItemClickListener itemClickListener;
     private List<MyCommentData> myWritten;
+    private boolean isEmptyData;
 
     public MyCommentAdapter(List<MyCommentData> initialEvaluations, RecyclerViewItemClickListener listener) {
         this.myWritten = initialEvaluations;
         this.itemClickListener = listener;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
+        isEmptyData = false;
+    }
+
+    public void setIsEmptyData(boolean isEmptyData){
+        this.isEmptyData = isEmptyData;
     }
 
     @Override
@@ -58,12 +64,12 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
-        else if(myWritten.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data_my_comment);
+        else if(myWritten.isEmpty() && isEmptyData) ((NoDataViewHolder) holder).bind(R.string.no_data_my_comment);
         else ((MyCommentViewHolder) holder).bind(this.myWritten.get(position - (mUserLearnedInform ? 1 : 2)));
     }
 
     public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1) +(myWritten.isEmpty()? 1 : 0);
+        return 1 + (mUserLearnedInform ? 0 : 1) +(myWritten.isEmpty() && isEmptyData? 1 : 0);
     }
 
     @Override
@@ -76,7 +82,7 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
-        else if (myWritten.isEmpty()) return ViewHolderFactory.ViewType.NO_DATA;
+        else if (myWritten.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
         else return ViewHolderFactory.ViewType.MY_WRITTEN_COMMENT;
 
     }

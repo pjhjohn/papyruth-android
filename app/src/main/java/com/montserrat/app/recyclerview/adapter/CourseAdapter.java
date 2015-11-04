@@ -30,10 +30,16 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private RecyclerViewItemClickListener evaluationItemClickListener;
     private List<EvaluationData> evaluations;
     private boolean mUserLearnedInform;
+    private boolean isEmptyData;
     public CourseAdapter(List<EvaluationData> initialEvaluations, RecyclerViewItemClickListener listener) {
         this.evaluations = initialEvaluations;
         this.evaluationItemClickListener = listener;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
+        isEmptyData = false;
+    }
+
+    public void setIsEmptyData(boolean isEmptyData){
+        this.isEmptyData = isEmptyData;
     }
 
     @Override
@@ -62,7 +68,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_course);
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((CourseViewHolder) holder).bind(Course.getInstance());
-        else if(evaluations.isEmpty())
+        else if(evaluations.isEmpty() && isEmptyData)
             ((NoDataViewHolder) holder).bind(
                 User.getInstance().getMandatoryEvaluationCount() > 0 ? R.string.no_data_you_cant : R.string.no_data_evaluation
             );
@@ -75,7 +81,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public int getItemOffset() {
-        return 2 + (mUserLearnedInform ? 0 : 1) + (evaluations.isEmpty() ? 1: 0);
+        return 2 + (mUserLearnedInform ? 0 : 1) + (evaluations.isEmpty() && isEmptyData ? 1: 0);
     }
 
     @Override
@@ -83,7 +89,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.COURSE;
-        else if(evaluations.isEmpty()) return ViewHolderFactory.ViewType.NO_DATA;
+        else if(evaluations.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
         else return ViewHolderFactory.ViewType.EVALUATION_ITEM;
     }
 }

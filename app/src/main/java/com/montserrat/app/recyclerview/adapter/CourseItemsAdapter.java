@@ -23,6 +23,7 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<CourseData> courses;
     private Integer headerLayoutResourceId;
     private int resIdNoDataText;
+    private boolean isEmptyData;
 
     public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, int noDataTextRes) {
         this(initialCourses, listener, null, noDataTextRes);
@@ -32,6 +33,11 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.courseItemClickListener = listener;
         this.headerLayoutResourceId = headerLayoutResourceId;
         this.resIdNoDataText = resIdNoDataText;
+        this.isEmptyData = false;
+    }
+
+    public void setIsEmptyData(boolean isEmptyData){
+        this.isEmptyData = isEmptyData;
     }
 
     public void setResIdNoDataText(int resIdNoDataText){
@@ -48,14 +54,14 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        if(courses.isEmpty())
+        if(courses.isEmpty() && isEmptyData)
             ((NoDataViewHolder) holder).bind(this.resIdNoDataText);
         else
             ((CourseItemViewHolder) holder).bind(this.courses.get(position - 1));
     }
 
     public int getItemOffset() {
-        return 1 +(courses.isEmpty()? 1 : 0);
+        return 1 +(courses.isEmpty() && isEmptyData ? 1 : 0);
     }
     @Override
     public int getItemCount() {
@@ -65,7 +71,7 @@ public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemViewType(int position) {
         if(position <= 0) return ViewHolderFactory.ViewType.HEADER;
-        else if(courses.isEmpty()) return ViewHolderFactory.ViewType.NO_DATA;
+        else if(courses.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
         else return ViewHolderFactory.ViewType.COURSE_ITEM;
     }
 }

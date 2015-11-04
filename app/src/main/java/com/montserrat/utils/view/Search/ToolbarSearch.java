@@ -135,8 +135,10 @@ public class ToolbarSearch {
     public void searchHistory(){
         if(!AppManager.getInstance().contains(AppConst.Preference.HISTORY)){
             //Todo : when history is empty, inform empty.
+            this.courseItemsAdapter.setIsEmptyData(true);
             this.courseItemsAdapter.setResIdNoDataText(R.string.no_data_history);
         }else {
+            this.courseItemsAdapter.setIsEmptyData(false);
             List<CourseData> courseList = ((CoursesData)AppManager.getInstance().getStringParsed(
                 AppConst.Preference.HISTORY,
                 CoursesData.class
