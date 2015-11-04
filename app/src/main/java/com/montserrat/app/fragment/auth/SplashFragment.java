@@ -64,7 +64,6 @@ public class SplashFragment extends Fragment {
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         this.subscriptions.add(Api.papyruth().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
-                Timber.d("%s", response.user.university_image_url);
                 User.getInstance().update(response.user);
                 this.subscriptions.add(Api.papyruth()
                     .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
@@ -112,7 +111,7 @@ public class SplashFragment extends Fragment {
         } else timerPending = false;
 
         if (timerPending||requestPending) return;
-        if (authFailed) this.navigator.navigate(LoadingFragment.class, false);
+        if (authFailed) this.navigator.navigate(LoadingFragment.class, false, Navigator.AnimatorType.FADE);
         else {
             this.subscriptions.add(Api.papyruth()
                 .refresh_token(User.getInstance().getAccessToken())
@@ -122,12 +121,12 @@ public class SplashFragment extends Fragment {
                     response -> {
                         User.getInstance().setAccessToken(response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                        this.navigator.navigate(LoadingFragment.class, false);
+                        this.navigator.navigate(LoadingFragment.class, false, Navigator.AnimatorType.FADE);
                     },
                     error -> {
                         Timber.d("refresh error : %s", error);
                         error.printStackTrace();
-                        this.navigator.navigate(LoadingFragment.class, false);
+                        this.navigator.navigate(LoadingFragment.class, false, Navigator.AnimatorType.FADE);
                     }
                 )
             );

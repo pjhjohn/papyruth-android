@@ -2,6 +2,7 @@ package com.montserrat.app.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -134,5 +135,12 @@ public class AuthActivity extends Activity implements Navigator {
 
     public void setViewPagerController(ViewPagerController mViewPagerController) {
         this.mViewPagerController = mViewPagerController;
+    }
+
+    public void startMainActivity() {
+        Intent mainIntent = new Intent(AuthActivity.this, MainActivity.class);
+        AuthActivity.this.startActivity(mainIntent);
+        AuthActivity.this.finish();
+        overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
     }
 }

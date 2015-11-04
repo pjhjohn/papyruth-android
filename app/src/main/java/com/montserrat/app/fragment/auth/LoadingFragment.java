@@ -3,7 +3,6 @@ package com.montserrat.app.fragment.auth;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -17,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
+import com.montserrat.app.activity.AuthActivity;
 import com.montserrat.app.model.UniversityData;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.Statistics;
@@ -51,7 +50,7 @@ public class LoadingFragment extends Fragment {
         this.navigator = null;
     }
 
-    private final int SHOW_DURATION = 5;
+    private final int SHOW_DURATION = 2;
 
     @InjectView (R.id.loading_university_icon) protected ImageView universityIcon;
     @InjectView (R.id.loading_university_text) protected TextView universityText;
@@ -112,10 +111,8 @@ public class LoadingFragment extends Fragment {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> {
-                if(Statistics.getInstance().getUniversity() != null /* Condition that user has been successfully authenticated */) {
-                    this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                    this.getActivity().finish();
-                } else this.navigator.navigate(AuthFragment.class, false);
+                if(Statistics.getInstance().getUniversity() == null) this.navigator.navigate(AuthFragment.class, false, Navigator.AnimatorType.FADE);
+                else ((AuthActivity)this.getActivity()).startMainActivity(); // Valid AccessToken
             })
         );
     }
