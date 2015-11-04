@@ -67,6 +67,8 @@ public class FragmentNavigator implements Navigator {
             navigateListener.onNavigation(next);
             navigateListener.onNavigationChanged();
         }
+        if(navigationDrawer != null && navigationDrawer.isOpened())
+            navigationDrawer.close();
     }
 
     @Override

@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
-import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
@@ -26,6 +25,7 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.materialdialog.AlertMandatoryDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
@@ -90,7 +90,9 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
 
-        if(((MainActivity) getActivity()).isOverMandatoryEvlauation()) {
+        if(User.getInstance().needMoreEvaluation()) {
+            AlertMandatoryDialog.show(getActivity(), navigator);
+        }else{
             Api.papyruth()
                 .get_evaluations(
                     User.getInstance().getAccessToken(),
@@ -129,7 +131,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(!((MainActivity) getActivity()).isOverMandatoryEvlauation()) return;
+        if(User.getInstance().needMoreEvaluation()) AlertMandatoryDialog.show(getActivity(), navigator);
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
         if(isOpenSlave) return;

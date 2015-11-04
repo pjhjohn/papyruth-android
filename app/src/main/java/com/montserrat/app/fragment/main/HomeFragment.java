@@ -13,6 +13,7 @@ import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.materialdialog.AlertMandatoryDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
@@ -38,7 +39,10 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         sinceId = null;
         toolbar.setTitle(R.string.toolbar_title_home);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
-        if(((MainActivity)getActivity()).isOverMandatoryEvlauation()) {
+        if(User.getInstance().needMoreEvaluation()) {
+            swipeRefresh.setEnabled(false);
+            AlertMandatoryDialog.show(getActivity(), this.navigator);
+        }else{
             this.subscriptions.add(
                 super.getRefreshObservable(this.swipeRefresh)
                     .flatMap(unused -> {
@@ -105,8 +109,6 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 //                }
                     }, error -> error.printStackTrace())
             );
-        }else{
-            swipeRefresh.setEnabled(false);
         }
     }
 

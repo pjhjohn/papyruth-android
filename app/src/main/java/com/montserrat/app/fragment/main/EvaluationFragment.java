@@ -33,10 +33,12 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.materialdialog.AlertMandatoryDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
+import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.viewpager.OnBack;
 
 import java.util.List;
@@ -71,6 +73,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     private float minRadius, maxRadius;
     private int centerX, centerY;
 
+    private Navigator navigator;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -79,12 +83,14 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         mCommentText = (EditText) activity.findViewById(R.id.comment_text);
         mCommentSubmit = (ImageButton) activity.findViewById(R.id.comment_submit);
         mRevealTarget.setVisibility(View.GONE);
+        navigator = (Navigator) getActivity();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mRevealTarget.setVisibility(View.GONE);
+        this.navigator = null;
     }
 
     @Override
@@ -327,7 +333,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         animAlpha.start();
     }
     public void focusComment(int commentId){
-        final int offset = 4;
+        final int offset = this.adapter.getItemOffset()+3;
         for(int i = 0; i < items.size(); i++){
             if(items.get(i).id == commentId){
                 this.evaluationRecyclerView.scrollToPosition((i+offset >= items.size()) ? items.size()+1 : i+offset);
@@ -335,6 +341,10 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             }
         }
     }
+//    public void focusCommentByPosition(int position){
+//        final int offset = this.adapter.getItemOffset()+2;
+//        this.evaluationRecyclerView.scrollToPosition(position+offset);
+//    }
     @Override
     protected EvaluationAdapter getAdapter() {
         return new EvaluationAdapter(this.items, this, this);
@@ -366,7 +376,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
         }else if(v.getId() == R.id.evaluation_header){
-            if(!((MainActivity) getActivity()).isOverMandatoryEvlauation()) return;
+            if(User.getInstance().needMoreEvaluation())
+                AlertMandatoryDialog.show(getActivity(), navigator);
             this.subscriptions.add(
                 Api.papyruth().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
                     .map(response -> response.course)

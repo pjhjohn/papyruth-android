@@ -120,6 +120,9 @@ public class User {
     public void setMandatory_evaluation_count(Integer mandatory_evaluation_count) {
         this.mandatory_evaluation_count = mandatory_evaluation_count;
     }
+    public boolean needMoreEvaluation(){
+        return this.mandatory_evaluation_count > 0;
+    }
 
 /**
  *  if mandatory count > 0 return true<br>

@@ -22,7 +22,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationAdapter, EvaluationData> {
-    private boolean askmore;
+    private boolean askmore = true;
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
