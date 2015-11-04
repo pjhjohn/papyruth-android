@@ -15,7 +15,7 @@ public class AlertMandatoryDialog {
 
     public static MaterialDialog build(Context context, Navigator navigator) {
         return new MaterialDialog.Builder(context)
-            .content(context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatory_evaluation_count()))
+            .content(context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()))
             .positiveText(R.string.goto_write)
             .negativeText(R.string.cancel)
             .callback(new MaterialDialog.ButtonCallback() {

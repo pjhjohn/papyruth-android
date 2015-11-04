@@ -103,6 +103,28 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
     }
 
+    public boolean isOverMandatoryEvlauation(){
+        if(User.getInstance().getMandatoryEvaluationCount() > 0) {
+            new MaterialDialog.Builder(this)
+                .content(getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()))
+                .positiveText(R.string.goto_write)
+                .negativeText(R.string.cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        if(mNavigationDrawer.isOpened())
+                            mNavigationDrawer.close();
+                        navigate(EvaluationStep1Fragment.class, true);
+                    }
+                })
+                .show();
+            return false;
+        }
+        return true;
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

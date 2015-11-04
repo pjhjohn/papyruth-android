@@ -8,7 +8,7 @@ import android.os.Bundle;
  */
 public interface Navigator {
     enum AnimatorType {
-        SLIDE_TO_RIGHT, SLIDE_TO_LEFT, SLIDE_TO_UP, SLIDE_TO_DOWN
+        SLIDE_TO_RIGHT, SLIDE_TO_LEFT, SLIDE_TO_UP, SLIDE_TO_DOWN, FADE
     }
     void navigate(Class<? extends Fragment> target, boolean addToBackStack);
     void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType);
