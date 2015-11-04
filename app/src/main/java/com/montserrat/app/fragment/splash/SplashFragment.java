@@ -1,6 +1,5 @@
-package com.montserrat.app.fragment.auth;
+package com.montserrat.app.fragment.splash;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,11 +11,11 @@ import android.view.inputmethod.InputMethodManager;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.SplashActivity;
 import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.Statistics;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.apis.Api;
-import com.montserrat.utils.view.navigator.Navigator;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,18 +32,6 @@ import timber.log.Timber;
  */
 
 public class SplashFragment extends Fragment {
-    private Navigator navigator;
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.navigator = (Navigator) activity;
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.navigator = null;
-    }
-
     private CompositeSubscription subscriptions;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,7 +98,7 @@ public class SplashFragment extends Fragment {
         } else timerPending = false;
 
         if (timerPending||requestPending) return;
-        if (authFailed) this.navigator.navigate(LoadingFragment.class, false, Navigator.AnimatorType.FADE);
+        if (authFailed) ((SplashActivity) this.getActivity()).startAuthActivity();
         else {
             this.subscriptions.add(Api.papyruth()
                 .refresh_token(User.getInstance().getAccessToken())
@@ -121,12 +108,12 @@ public class SplashFragment extends Fragment {
                     response -> {
                         User.getInstance().setAccessToken(response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                        this.navigator.navigate(LoadingFragment.class, false, Navigator.AnimatorType.FADE);
+                        ((SplashActivity) this.getActivity()).startAuthActivity();
                     },
                     error -> {
                         Timber.d("refresh error : %s", error);
                         error.printStackTrace();
-                        this.navigator.navigate(LoadingFragment.class, false, Navigator.AnimatorType.FADE);
+                        ((SplashActivity) this.getActivity()).startAuthActivity();
                     }
                 )
             );

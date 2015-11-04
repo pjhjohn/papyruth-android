@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.auth.SplashFragment;
+import com.montserrat.app.fragment.auth.LoadingFragment;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
@@ -29,7 +29,7 @@ public class AuthActivity extends Activity implements Navigator {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));
-        mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, SplashFragment.class);
+        mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, LoadingFragment.class);
     }
 
     @Override
