@@ -125,6 +125,7 @@ public class AutoCompletableSearchView {
     public void notifyChangedCourse(List<CourseData> courses){
         this.courseDatas.clear();
         this.courseDatas.addAll(courses);
+        this.courseItemsAdapter.setIsEmptyData(courses.isEmpty());
         this.courseItemsAdapter.setResIdNoDataText(R.string.no_data_search);
         this.courseItemsAdapter.notifyDataSetChanged();
     }

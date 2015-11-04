@@ -30,11 +30,17 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean mUserLearnedInform;
     private RecyclerViewItemClickListener itemClickListener;
     private List<EvaluationData> evaluations;
+    private boolean isEmptyData;
 
     public EvaluationItemsDetailAdapter(List<EvaluationData> initialEvaluations, RecyclerViewItemClickListener listener) {
         this.evaluations = initialEvaluations;
         this.itemClickListener = listener;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
+        isEmptyData = false;
+    }
+
+    public void setIsEmptyData(boolean isEmptyData){
+        this.isEmptyData = isEmptyData;
     }
 
     @Override
@@ -62,12 +68,12 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
-        else if (evaluations.isEmpty()) ((NoDataViewHolder) holder).bind(R.string.no_data_you_cant);
+        else if (evaluations.isEmpty() && isEmptyData) ((NoDataViewHolder) holder).bind(R.string.no_data_you_cant);
         else ((EvaluationItemDetailViewHolder) holder).bind(this.evaluations.get(position - 1 - (mUserLearnedInform ? 0 : 1)));
     }
 
     public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1) + (evaluations.isEmpty() ? 1 : 0);
+        return 1 + (mUserLearnedInform ? 0 : 1) + (evaluations.isEmpty() && isEmptyData ? 1 : 0);
     }
 
     @Override
@@ -79,7 +85,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
-        else if(evaluations.isEmpty()) return ViewHolderFactory.ViewType.NO_DATA;
+        else if(evaluations.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
         else return ViewHolderFactory.ViewType.EVALUATION_ITEM_DETAIL;
     }
 }

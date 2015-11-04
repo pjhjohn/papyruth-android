@@ -185,6 +185,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         this.since = this.since == null ? comments.get(comments.size() - 1).id : Math.min(this.since, comments.get(comments.size() - 1).id);
         this.max = this.max == null ? comments.get(0).id : Math.max(this.max, comments.get(0).id);
         this.items.addAll(comments);
+        this.adapter.setIsEmptyData(comments.isEmpty());
         if (reset) this.adapter.notifyDataSetChanged();
         else this.adapter.notifyItemRangeInserted(this.adapter.getItemCount(), comments.size());
     }

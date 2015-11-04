@@ -38,7 +38,6 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
             });
     }
 
-    private int page = 1;
     private boolean askmore = true;
     @Override
     public void onResume() {
@@ -69,7 +68,10 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
 
         this.subscriptions.add(
             super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
-                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore)
+                .filter(passIfNull -> {
+                    Timber.d("has value : %s %s ", passIfNull, progress.getVisibility());
+                    return passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore;
+                })
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
                     this.swipeRefresh.setRefreshing(false);
@@ -97,6 +99,9 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
             this.items.clear();
         }
         askmore = !comments.isEmpty();
+        adapter.setIsEmptyData(comments.isEmpty());
+        if (comments.isEmpty())
+            this.adapter.notifyDataSetChanged();
         this.items.addAll(comments);
         this.doOnGetMyWritten(items.size() - comments.size(), items.size() - 1);
         page++;
