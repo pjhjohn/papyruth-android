@@ -32,7 +32,7 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.myWritten = initialEvaluations;
         this.itemClickListener = listener;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
-        isEmptyData = false;
+        this.isEmptyData = false;
     }
 
     public void setIsEmptyData(boolean isEmptyData){
@@ -75,7 +75,6 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return getItemOffset() + (this.myWritten == null ? 0 : this.myWritten.size());
-
     }
 
     @Override
@@ -84,6 +83,5 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
         else if (myWritten.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
         else return ViewHolderFactory.ViewType.MY_WRITTEN_COMMENT;
-
     }
 }

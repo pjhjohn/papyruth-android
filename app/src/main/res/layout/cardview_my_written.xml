@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/cardview_min_height_extended"
     android:padding="@dimen/baseline_x1"
+    android:background="@drawable/cardview_border"
     android:layout_gravity="center">
     <TextView
         android:id="@+id/my_written_lecture"
@@ -29,6 +30,7 @@
         android:layout_width="@dimen/baseline_x7"
         android:layout_height="wrap_content"
         android:textSize="@dimen/basefont_x1"
+        android:gravity="center"
         android:layout_marginTop="@dimen/baseline_x1"
         android:background="@drawable/rounded_corner"
         android:layout_below="@id/my_written_lecture"

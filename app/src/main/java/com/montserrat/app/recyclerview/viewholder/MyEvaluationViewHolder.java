@@ -27,6 +27,7 @@ public class MyEvaluationViewHolder extends RecyclerView.ViewHolder implements V
     @InjectView(R.id.my_written_lecture) protected TextView lecture;
     @InjectView(R.id.my_written_professor) protected TextView professor;
     @InjectView(R.id.my_written_timestamp) protected TextView timestamp;
+    @InjectView(R.id.my_written_category) protected TextView category;
     @InjectView (R.id.evaluation_item_up_vote_icon) protected ImageView upIcon;
     @InjectView (R.id.evaluation_item_up_vote_count) protected TextView upCount;
     @InjectView (R.id.evaluation_item_down_vote_icon) protected ImageView downIcon;
@@ -48,7 +49,8 @@ public class MyEvaluationViewHolder extends RecyclerView.ViewHolder implements V
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.professor_name, context.getResources().getString(R.string.professor_postfix))));
         this.body.setText(evaluation.body);
         this.timestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
-
+        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.fg_accent));
+        this.category.setText(R.string.lecture_type_major);
 
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.upIcon);
         Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.downIcon);

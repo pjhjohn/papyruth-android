@@ -105,6 +105,14 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 //                }
                 }, error -> error.printStackTrace())
         );
+
+
+        if(Evaluation.getInstance().getId() != null){
+            this.slave = new EvaluationFragment();
+            int y = getActivity().getWindowManager().getDefaultDisplay().getHeight()/2;
+            int height = (int)getResources().getDimension(R.dimen.baseline_x5);
+            this.openEvaluation(height, y);
+        }
     }
 
     @Override

@@ -68,10 +68,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
 
         this.subscriptions.add(
             super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
-                .filter(passIfNull -> {
-                    Timber.d("has value : %s %s ", passIfNull, progress.getVisibility());
-                    return passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore;
-                })
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore)
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
                     this.swipeRefresh.setRefreshing(false);

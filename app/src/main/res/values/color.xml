@@ -17,6 +17,7 @@
     <color name="selected_blue">#7D95B2</color>
 
     <color name="title_gray">#555555</color>
+    <color name="item_divider">#dddddd</color>
 
     <color name="transparent">#00ffffff</color>
     <color name="translucent">#8affffff</color>
