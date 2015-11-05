@@ -202,6 +202,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_done).hide(true);
+        ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
+        ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         this.password.requestFocus();

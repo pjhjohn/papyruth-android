@@ -1,35 +1,34 @@
 package com.montserrat.app.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.auth.SplashFragment;
+import com.montserrat.app.fragment.auth.LoadingFragment;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.view.FloatingActionControlContainer;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
+import com.montserrat.utils.view.softkeyboard.SoftKeyboardActivity;
 import com.montserrat.utils.view.viewpager.ViewPagerController;
-
-import timber.log.Timber;
 
 /**
  * Activity For Authentication.
  */
-public class AuthActivity extends Activity implements Navigator {
+public class AuthActivity extends SoftKeyboardActivity implements Navigator {
     private FragmentNavigator mNavigator;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
+        this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));
-        mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, SplashFragment.class);
+        mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, LoadingFragment.class);
     }
 
     @Override
@@ -37,24 +36,7 @@ public class AuthActivity extends Activity implements Navigator {
         super.onResume();
         ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
         ViewHolderFactory.getInstance().setContext(this);
-//        this.getKeyboard();
     }
-
-    public void getKeyboard(){
-        final View activityRoot = findViewById(R.id.auth_activity_root);
-        activityRoot.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            int heightDiff = activityRoot.getRootView().getHeight() - activityRoot.getHeight();
-            if(heightDiff > 100){
-                Timber.d("show keyboard!!!");
-//                Fragment authFragament;
-//                if((authFragament = this.getFragmentManager().findFragmentById(R.id.auth_navigator)) instanceof AuthFragment){
-//                    ((AuthFragment)authFragament).logoScaleAnimation(AppConst.ViewPager.Auth.SIGNUP_STEP1, false);
-//                }
-
-            }
-        });
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -121,12 +103,6 @@ public class AuthActivity extends Activity implements Navigator {
         mNavigator.setOnNavigateListener(listener);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
-    }
-
     /* ViewPagerController Mapper */
     private ViewPagerController mViewPagerController;
     public ViewPagerController getViewPagerController() {
@@ -137,6 +113,7 @@ public class AuthActivity extends Activity implements Navigator {
         this.mViewPagerController = mViewPagerController;
     }
 
+    /* Fade-Animated Activity Transition to MainActivity */
     public void startMainActivity() {
         Intent mainIntent = new Intent(AuthActivity.this, MainActivity.class);
         AuthActivity.this.startActivity(mainIntent);
