@@ -39,6 +39,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             });
     }
 
+
     private boolean askmore = true;
     @Override
     public void onResume() {
@@ -46,6 +47,16 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
 
         toolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+
+        this.subscriptions.add(
+            Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page = 1)
+                .map(response -> response.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.notifyDataChanged(evaluations);
+                }, error -> error.printStackTrace())
+        );
 
         this.subscriptions.add(
             super.getRefreshObservable(this.swipeRefresh)
@@ -70,7 +81,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
 
         this.subscriptions.add(
             super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
-                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore)
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && !items.isEmpty() && askmore)
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
                     this.swipeRefresh.setRefreshing(false);
