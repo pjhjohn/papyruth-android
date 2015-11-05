@@ -306,7 +306,7 @@ public class EvaluationStep3Fragment extends Fragment {
         if(User.getInstance().getMandatoryEvaluationCount() < 1){
             Bundle bundle = new Bundle();
             bundle.putBoolean("STANDALONE", true);
-            this.navigator.navigate(MyEvaluationFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
+            this.navigator.navigate(HomeFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
         }else {
             Api.papyruth().users_me(User.getInstance().getAccessToken())
                 .map(response -> response.user)
@@ -314,7 +314,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .subscribe(user -> {
                     User.getInstance().update(user);
-                    this.navigator.navigate(MyEvaluationFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
+                    this.navigator.navigate(HomeFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
                 }, error -> error.printStackTrace());
         }
     }
