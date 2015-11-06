@@ -24,6 +24,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.Circle;
 import com.montserrat.utils.view.CircleAngleAnimation;
+import com.montserrat.utils.view.panningview.PanningView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -39,9 +40,9 @@ import timber.log.Timber;
  */
 
 public class SplashFragment extends Fragment {
-    @InjectView (R.id.splash_background) ImageView background;
-    @InjectView (R.id.splash_circle) Circle circle;
-    @InjectView (R.id.splash_logo) ImageView logo;
+    @InjectView (R.id.splash_background) protected PanningView background;
+    @InjectView (R.id.splash_circle) protected Circle circle;
+    @InjectView (R.id.splash_logo) protected ImageView logo;
     private CompositeSubscription subscriptions;
 
     @Override
@@ -67,10 +68,10 @@ public class SplashFragment extends Fragment {
             response -> {
                 User.getInstance().update(response.user);
                 this.subscriptions.add(Api.papyruth()
-                        .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(proceedToLoadingFragment)
+                    .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(proceedToLoadingFragment)
                 );
             },
             error -> {
@@ -79,10 +80,10 @@ public class SplashFragment extends Fragment {
                         case 401:
                         case 419:
                             this.subscriptions.add(Api.papyruth()
-                                    .get_info()
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(proceedToLoadingFragment)
+                                .get_info()
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(proceedToLoadingFragment)
                             );
                             break;
                         default:
@@ -94,6 +95,7 @@ public class SplashFragment extends Fragment {
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
         /* Background Sliding */
+        background.startPanning();
 
         /* Animation */
         CircleAngleAnimation animCircle = new CircleAngleAnimation(circle, 360);
