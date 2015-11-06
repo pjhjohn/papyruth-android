@@ -29,7 +29,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/word_signup"
                 android:textSize="@dimen/baseline_x3"
-                android:textColor="@color/fg_normal"/>
+                android:textColor="@color/colorchip_green"/>
         </LinearLayout>
         <ProgressBar
             android:id="@+id/signup_progress"

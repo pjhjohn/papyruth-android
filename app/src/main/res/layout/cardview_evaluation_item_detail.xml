@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:background="@drawable/rounded_corner"
+            android:background="@drawable/edittext_rounded_border"
             android:layout_below="@+id/evaluation_item_lecture"
             android:layout_toRightOf="@+id/evaluation_item_avatar"
             android:layout_toEndOf="@+id/evaluation_item_avatar"

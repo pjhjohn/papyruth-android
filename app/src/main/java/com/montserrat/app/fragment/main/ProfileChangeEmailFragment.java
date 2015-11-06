@@ -96,7 +96,7 @@ public class ProfileChangeEmailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        FloatingActionControl.getInstance().setControl(R.layout.fab_done_blue);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
         this.subscriptions.add(this.registerSubmitCallback());

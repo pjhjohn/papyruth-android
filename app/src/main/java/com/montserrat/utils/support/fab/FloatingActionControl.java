@@ -16,6 +16,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-29.
@@ -115,6 +116,16 @@ public class FloatingActionControl {
         }
         this.fab = control instanceof FloatingActionButton? (FloatingActionButton) control : null;
         this.fam = control instanceof FloatingActionMenu? (FloatingActionMenu) control : null;
+        if(this.fam != null) {
+            this.fam.setClosedOnTouchOutside(true);
+            for(int i = 0; i < this.fam.getChildCount(); i++) {
+                if (!(this.fam.getChildAt(i) instanceof FloatingActionButton)) continue;
+                final FloatingActionButton fab_mini = (FloatingActionButton) this.fam.getChildAt(i);
+                fab_mini.setColorNormal(this.fam.getMenuButtonColorNormal());
+                fab_mini.setColorPressed(this.fam.getMenuButtonColorPressed());
+                fab_mini.setColorRipple(this.fam.getMenuButtonColorRipple());
+            }
+        }
         this.container.addView(control);
         if(control instanceof FloatingActionButton) ((FloatingActionButton) control).hide(false);
         else if(control instanceof FloatingActionMenu) ((FloatingActionMenu) control).hideMenuButton(false);
@@ -122,14 +133,10 @@ public class FloatingActionControl {
     }
 
     public boolean isFAB(){
-        if(fab != null)
-            return true;
-        return false;
+        return this.fab != null;
     }
     public boolean isFAM(){
-        if(fam != null)
-            return true;
-        return false;
+        return this.fam != null;
     }
 
     public FloatingActionControl clear() {

@@ -4,10 +4,8 @@
     <color name="bg_accent">#90A4AE</color>
     <color name="bg_highlight">#B0C4CE</color>
 
-    <color name="fg_normal">#1BBC9B</color>
-    <color name="fg_accent">#3BDCBB</color>
-
     <color name="colorchip_red">#E05E5F</color>
+    <color name="colorchip_red_highlight">#FF7E7F</color>
     <color name="colorchip_blue">#546B8D</color>
     <color name="colorchip_blue_highlight">#748BAD</color>
     <color name="colorchip_blue_accent">#546BAD</color>
@@ -46,5 +44,6 @@
     <color name="background_profile_change">#F2F2F2</color>
 
     <color name="disabled">#CCCCCC</color>
+    <color name="disabled_highlight">#EEEEEE</color>
     <color name="hr_settings">#F3F3F3</color>
 </resources>

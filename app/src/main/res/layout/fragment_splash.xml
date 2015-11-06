@@ -7,12 +7,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="3"
-        android:background="@color/fg_accent">
+        android:background="@color/colorchip_green">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:background="@color/fg_accent">
+            android:background="@color/colorchip_green">
             <com.devspark.robototextview.widget.RobotoTextView
                 android:id="@+id/application_title"
                 android:layout_width="match_parent"

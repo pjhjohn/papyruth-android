@@ -94,7 +94,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next).hide(true);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         if(this.subscription.isUnsubscribed()) this.subscription = new CompositeSubscription();

@@ -12,4 +12,4 @@
     android:visibility="invisible"
     fab:fab_colorNormal="@color/bg_normal"
     fab:fab_colorPressed="@color/bg_accent"
-    fab:fab_progress_color="@color/fg_accent"/>
+    fab:fab_progress_color="@color/colorchip_green_highlight"/>

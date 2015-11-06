@@ -82,7 +82,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.downCount.setOnClickListener(this);
         this.setStatus(VoteStatus.NONE);
         this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.fg_accent));
+        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.colorchip_green_highlight));
     }
 
     private void setStatus(VoteStatus newStatus) {

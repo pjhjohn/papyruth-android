@@ -43,7 +43,7 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
     protected void setupSwipeRefresh(SwipeRefreshLayout view) {
         final int toolbarHeight = MetricUtil.getPixels(this.getActivity(), R.attr.actionBarSize);
         view.setProgressViewOffset(false, 0, 2 * toolbarHeight);
-        view.setColorSchemeColors(this.getResources().getColor(R.color.fg_accent));
+        view.setColorSchemeColors(this.getResources().getColor(R.color.colorchip_green_highlight));
     }
 
     protected void setupRecyclerView (RecyclerView view) {

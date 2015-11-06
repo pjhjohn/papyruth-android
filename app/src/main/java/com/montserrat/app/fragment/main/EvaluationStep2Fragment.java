@@ -115,7 +115,7 @@ public class EvaluationStep2Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        FloatingActionControl.getInstance().setControl(R.layout.fab_next);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> {
                 this.navigator.navigate(EvaluationStep3Fragment.class, true);

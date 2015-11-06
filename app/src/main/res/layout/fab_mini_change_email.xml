@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_light_email"
-    fab:fab_colorNormal="@color/colorchip_blue"
-    fab:fab_colorPressed="@color/colorchip_blue_highlight"
+    fab:fab_colorNormal="@color/disabled"
+    fab:fab_colorPressed="@color/disabled_highlight"
     fab:fab_size="mini"
     fab:fab_label="@string/fab_edit_email"/>

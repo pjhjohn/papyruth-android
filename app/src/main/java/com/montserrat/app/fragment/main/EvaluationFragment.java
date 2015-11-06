@@ -359,7 +359,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
     }
     public void setEvaluationFloatingActionControl() {
-        FloatingActionControl.getInstance().setControl(R.layout.fab_comment).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_comment).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
         FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput());

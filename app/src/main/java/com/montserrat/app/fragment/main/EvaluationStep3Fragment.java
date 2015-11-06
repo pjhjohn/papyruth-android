@@ -126,7 +126,7 @@ public class EvaluationStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
-        FloatingActionControl.getInstance().setControl(R.layout.fab_done);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
                 .title(R.string.new_evaluation_submit_title)
