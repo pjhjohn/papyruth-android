@@ -1,12 +1,18 @@
 package com.montserrat.app.fragment.splash;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -16,11 +22,12 @@ import com.montserrat.app.model.response.StatisticsResponse;
 import com.montserrat.app.model.unique.Statistics;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.apis.Api;
+import com.montserrat.utils.view.Circle;
+import com.montserrat.utils.view.CircleAngleAnimation;
 
-import java.util.concurrent.TimeUnit;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.RetrofitError;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -32,31 +39,38 @@ import timber.log.Timber;
  */
 
 public class SplashFragment extends Fragment {
+    @InjectView (R.id.splash_background) ImageView background;
+    @InjectView (R.id.splash_circle) Circle circle;
+    @InjectView (R.id.splash_logo) ImageView logo;
     private CompositeSubscription subscriptions;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
+        ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         return view;
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.reset(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        /* Api Call */
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         this.subscriptions.add(Api.papyruth().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
                 this.subscriptions.add(Api.papyruth()
-                    .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(proceedToLoadingFragment)
+                        .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(proceedToLoadingFragment)
                 );
             },
             error -> {
@@ -65,10 +79,10 @@ public class SplashFragment extends Fragment {
                         case 401:
                         case 419:
                             this.subscriptions.add(Api.papyruth()
-                                .get_info()
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(proceedToLoadingFragment)
+                                    .get_info()
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(proceedToLoadingFragment)
                             );
                             break;
                         default:
@@ -79,13 +93,29 @@ public class SplashFragment extends Fragment {
         ));
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
-        subscriptions.add(Observable
-            .timer(2, TimeUnit.SECONDS)
-            .map(unused -> (StatisticsResponse) null)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(proceedToLoadingFragment)
-        );
+        /* Background Sliding */
+
+        /* Animation */
+        CircleAngleAnimation animCircle = new CircleAngleAnimation(circle, 360);
+        animCircle.setDuration(1500);
+        animCircle.setInterpolator(new AccelerateInterpolator(2.0f));
+        circle.startAnimation(animCircle);
+
+        ValueAnimator animAlpha = ValueAnimator.ofFloat(0.0f, 1.0f);
+        animAlpha.setDuration(2500);
+        animAlpha.setInterpolator(new DecelerateInterpolator(3.0f));
+        animAlpha.addUpdateListener(anim -> {
+            float alpha = (float) animAlpha.getAnimatedValue();
+            logo.setAlpha(alpha);
+        });
+        animAlpha.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                proceedToLoadingFragment.call(null);
+            }
+        });
+        animAlpha.start();
     }
 
     private boolean timerPending = true, requestPending = true;
