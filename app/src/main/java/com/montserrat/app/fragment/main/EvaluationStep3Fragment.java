@@ -77,8 +77,6 @@ public class EvaluationStep3Fragment extends Fragment {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         if(EvaluationForm.getInstance().getBody() != null) {
             this.bodyText.setText(EvaluationForm.getInstance().getBody());
@@ -126,6 +124,9 @@ public class EvaluationStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
+        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+
         FloatingActionControl.getInstance().setControl(R.layout.fab_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)

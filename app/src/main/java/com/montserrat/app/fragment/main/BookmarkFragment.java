@@ -64,11 +64,8 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.favorites = new ArrayList<>();
-
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.toolbar.setTitle(R.string.toolbar_favorite);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+        this.favorites = new ArrayList<>();
     }
 
     @Override
@@ -142,6 +139,10 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     @Override
     public void onResume() {
         super.onResume();
+
+        this.toolbar.setTitle(R.string.toolbar_favorite);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
         this.subscriptions.add(
