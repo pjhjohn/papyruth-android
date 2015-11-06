@@ -87,8 +87,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
         });
 
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         return view;
     }
@@ -130,6 +128,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<AutoCompleteAd
     @Override
     public void onResume() {
         super.onResume();
+        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
         FloatingActionControl.getInstance().clear();
     }
     public void back(){

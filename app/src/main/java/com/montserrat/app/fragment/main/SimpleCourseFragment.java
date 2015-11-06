@@ -69,8 +69,6 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.toolbar.setTitle(R.string.toolbar_search);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         this.refresh.setEnabled(true);
 
         this.setupRecyclerView(recycler);
@@ -125,6 +123,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @Override
     public void onResume() {
         super.onResume();
+        this.toolbar.setTitle(R.string.toolbar_search);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
         this.subscriptions.add(

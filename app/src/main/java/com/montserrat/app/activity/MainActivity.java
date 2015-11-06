@@ -236,7 +236,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     @Override
     public void onNavigationDrawerItemSelected(int position, boolean fromUser) {
         this.terminate = false;
-        if(position == NavigationDrawerUtils.ItemType.SEARCH)
+//        if(position == NavigationDrawerUtils.ItemType.SEARCH)
             AppManager.getInstance().putBoolean(AppConst.Preference.SEARCH, false);
         this.navigate(NavigationDrawerUtils.getFragmentClassOf(position), true, fromUser);
     }

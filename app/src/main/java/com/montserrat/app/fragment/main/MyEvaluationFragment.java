@@ -5,7 +5,6 @@ import android.view.View;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
-import com.montserrat.app.model.MyCommentData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.MyEvaluationAdapter;
@@ -23,7 +22,6 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationAdapter, EvaluationData> {
-    private boolean askmore = true;
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
@@ -41,51 +39,53 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             });
     }
 
+
+    private boolean askmore = true;
     @Override
     public void onResume() {
         super.onResume();
 
-        if(Evaluation.getInstance().getId() != null){
-            this.slave = new EvaluationFragment();
-            int y = getActivity().getWindowManager().getDefaultDisplay().getHeight()/2;
-            int height = (int)getResources().getDimension(R.dimen.baseline_x5);
-            this.openEvaluation(height, y);
-        }
-
         toolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
-        this.subscriptions.add(super.getRefreshObservable(this.swipeRefresh)
-            .flatMap(unused -> {
-                this.swipeRefresh.setRefreshing(true);
-                return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page = 1);
-            })
-            .map(evaluations -> evaluations.evaluations)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(evaluations -> {
-                this.swipeRefresh.setRefreshing(false);
-                this.notifyDataChanged(evaluations);
-            },error -> {
-                this.swipeRefresh.setRefreshing(false);
-                error.printStackTrace();
-            }, () ->{
-                this.swipeRefresh.setRefreshing(false);
-                this.progress.setVisibility(View.GONE);
-            })
+        this.subscriptions.add(
+            Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page = 1)
+                .map(response -> response.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.notifyDataChanged(evaluations);
+                }, error -> error.printStackTrace())
+        );
+
+        this.subscriptions.add(
+            super.getRefreshObservable(this.swipeRefresh)
+                .flatMap(unused -> {
+                    this.swipeRefresh.setRefreshing(true);
+                    return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page = 1);
+                })
+                .map(evaluations -> evaluations.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations -> {
+                    this.swipeRefresh.setRefreshing(false);
+                    this.notifyDataChanged(evaluations);
+                }, error -> {
+                    this.swipeRefresh.setRefreshing(false);
+                    error.printStackTrace();
+                }, () -> {
+                    this.swipeRefresh.setRefreshing(false);
+                    this.progress.setVisibility(View.GONE);
+                })
         );
 
         this.subscriptions.add(
             super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
-                .filter(passIfNull -> {
-                    Timber.d("has value : %s %s ", passIfNull, progress.getVisibility());
-                    return passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore;
-                })
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && !items.isEmpty() && askmore)
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
                     this.swipeRefresh.setRefreshing(false);
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
-                    Timber.d("calling");
                     return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page);
                 })
                 .map(mywritten -> mywritten.evaluations)
@@ -109,8 +109,8 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             this.items.clear();
         }
         askmore = !evaluations.isEmpty();
-        this.items.addAll(evaluations);
         this.adapter.setIsEmptyData(evaluations.isEmpty());
+        this.items.addAll(evaluations);
         this.adapter.notifyDataSetChanged();
         page++;
     }

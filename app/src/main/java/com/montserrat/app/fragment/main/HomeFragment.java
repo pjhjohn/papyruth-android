@@ -38,6 +38,22 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         sinceId = null;
         toolbar.setTitle(R.string.toolbar_title_home);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+
+        this.subscriptions.add(
+            Api.papyruth().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null)
+                .map(response -> response.evaluations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluations->{
+                    this.items.clear();
+                    adapter.setIsEmptyData(evaluations.isEmpty());
+                    this.items.addAll(evaluations);
+                    this.adapter.notifyDataSetChanged();
+                    size = items.size();
+                })
+
+        );
+
         this.subscriptions.add(
             super.getRefreshObservable(this.swipeRefresh)
                 .flatMap(unused -> {
@@ -61,7 +77,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         );
         this.subscriptions.add(
             super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, true)
-                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && !this.items.isEmpty())
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
@@ -105,6 +121,14 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 //                }
                 }, error -> error.printStackTrace())
         );
+
+
+        if(Evaluation.getInstance().getId() != null){
+            this.slave = new EvaluationFragment();
+            int y = getActivity().getWindowManager().getDefaultDisplay().getHeight()/2;
+            int height = (int)getResources().getDimension(R.dimen.baseline_x5);
+            this.openEvaluation(height, y);
+        }
     }
 
     @Override

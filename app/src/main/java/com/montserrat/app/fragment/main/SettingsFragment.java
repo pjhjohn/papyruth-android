@@ -40,8 +40,6 @@ public class SettingsFragment extends Fragment {
         super.onAttach(activity);
         this.navigator = (Navigator) activity;
         this.context = activity;
-        ((MainActivity) activity).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
-        ((MainActivity) activity).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
     }
     @Override
     public void onDetach() {
@@ -67,8 +65,6 @@ public class SettingsFragment extends Fragment {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.toolbar_settings);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         Picasso.with(context).load(R.drawable.ic_light_evaluation).transform(new ColorFilterTransformation(Color.GRAY)).into(termOfServicesIcon);
         Picasso.with(context).load(R.drawable.ic_light_evaluation).transform(new ColorFilterTransformation(Color.GRAY)).into(openSourceLicenseIcon);
         Picasso.with(context).load(R.drawable.logout).transform(new ColorFilterTransformation(Color.GRAY)).into(signoutIcon);
@@ -84,7 +80,11 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        toolbar.setTitle(R.string.toolbar_settings);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         FloatingActionControl.getInstance().hide(true);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
 
         this.subscriptions.add(ViewObservable
             .clicks(this.termOfServices)

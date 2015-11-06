@@ -16,11 +16,10 @@ import com.montserrat.app.fragment.main.SimpleCourseFragment;
 public class NavigationDrawerUtils {
     public static class ItemType {
         public static final int HOME            = 0;
-        public static final int SEARCH          = 1;
-        public static final int BOOKMARK        = 2;
-        public static final int EVALUATION      = 3;
-        public static final int MYEVALUATION    = 4;
-        public static final int MYCOMMENT       = 5;
+        public static final int BOOKMARK        = 1;
+        public static final int EVALUATION      = 2;
+        public static final int MYEVALUATION    = 3;
+        public static final int MYCOMMENT       = 4;
     }
     public int getNavigationDrawerPositionOf(Class<? extends Fragment> fragment) {
         switch(fragment.getSimpleName()) {
@@ -30,7 +29,6 @@ public class NavigationDrawerUtils {
     public static Class<? extends Fragment> getFragmentClassOf(int position) {
         switch(position) {
             case ItemType.HOME          : return HomeFragment.class;
-            case ItemType.SEARCH        : return SimpleCourseFragment.class;
             case ItemType.BOOKMARK      : return BookmarkFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;
             case ItemType.MYEVALUATION  : return MyEvaluationFragment.class;

@@ -46,6 +46,16 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
         this.subscriptions.add(
+            Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page = 1)
+                .map(response -> response.comments)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(comments -> {
+                    this.notifyDataChanged(comments);
+                }, error -> error.printStackTrace())
+        );
+
+        this.subscriptions.add(
             super.getRefreshObservable(this.swipeRefresh)
                 .flatMap(unused -> {
                     this.swipeRefresh.setRefreshing(true);
@@ -68,10 +78,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
 
         this.subscriptions.add(
             super.getRecyclerViewScrollObservable(this.recyclerView, this.toolbar, false)
-                .filter(passIfNull -> {
-                    Timber.d("has value : %s %s ", passIfNull, progress.getVisibility());
-                    return passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore;
-                })
+                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askmore && !items.isEmpty())
                 .flatMap(unused -> {
                     this.progress.setVisibility(View.VISIBLE);
                     this.swipeRefresh.setRefreshing(false);

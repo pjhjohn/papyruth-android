@@ -77,8 +77,6 @@ public class EvaluationStep3Fragment extends Fragment {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         if(EvaluationForm.getInstance().getBody() != null) {
             this.bodyText.setText(EvaluationForm.getInstance().getBody());
@@ -126,6 +124,8 @@ public class EvaluationStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
+        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
@@ -306,7 +306,7 @@ public class EvaluationStep3Fragment extends Fragment {
         if(User.getInstance().getMandatoryEvaluationCount() < 1){
             Bundle bundle = new Bundle();
             bundle.putBoolean("STANDALONE", true);
-            this.navigator.navigate(MyEvaluationFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
+            this.navigator.navigate(HomeFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
         }else {
             Api.papyruth().users_me(User.getInstance().getAccessToken())
                 .map(response -> response.user)
@@ -314,7 +314,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .subscribe(user -> {
                     User.getInstance().update(user);
-                    this.navigator.navigate(MyEvaluationFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
+                    this.navigator.navigate(HomeFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
                 }, error -> error.printStackTrace());
         }
     }

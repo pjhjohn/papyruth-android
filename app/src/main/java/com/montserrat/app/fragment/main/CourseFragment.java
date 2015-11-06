@@ -46,6 +46,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        this.isOpenSlave = false;
         this.navigator = (Navigator) activity;
     }
     @Override
@@ -66,8 +67,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.setupRecyclerView(this.courseRecyclerView);
 
-        this.toolbar.setTitle(R.string.toolbar_title_course);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
 
         this.slave = null;
         this.slaveIsOccupying = false;
@@ -86,7 +85,9 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     @Override
     public void onResume() {
         super.onResume();
-        this.isOpenSlave = false;
+        this.toolbar.setTitle(R.string.toolbar_title_course);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
 

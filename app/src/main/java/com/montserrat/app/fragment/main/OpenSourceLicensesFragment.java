@@ -35,8 +35,6 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.toolbar_osl);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
 
         this.items = this.getLicenses();
 
@@ -54,6 +52,8 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
     @Override
     public void onResume() {
         super.onResume();
+        toolbar.setTitle(R.string.toolbar_osl);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         FloatingActionControl.getInstance().hide(true);
     }
 

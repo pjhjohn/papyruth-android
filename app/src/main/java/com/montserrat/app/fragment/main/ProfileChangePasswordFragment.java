@@ -57,7 +57,6 @@ public class ProfileChangePasswordFragment extends Fragment {
         this.navigator = (Navigator) activity;
         this.context = activity;
         this.res = activity.getResources();
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
     }
     @Override
     public void onDetach() {
@@ -82,8 +81,6 @@ public class ProfileChangePasswordFragment extends Fragment {
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_password_change_prefix), res.getString(R.string.label_password_change_content), res.getString(R.string.label_password_change_postfix))));
         else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_password_change_prefix), res.getString(R.string.label_password_change_content), res.getString(R.string.label_password_change_postfix))));
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.toolbar_edit_profile);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         return view;
     }
 
@@ -97,6 +94,9 @@ public class ProfileChangePasswordFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        toolbar.setTitle(R.string.toolbar_edit_profile);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);

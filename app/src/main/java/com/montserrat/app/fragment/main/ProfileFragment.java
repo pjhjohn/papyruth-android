@@ -38,8 +38,6 @@ public class ProfileFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.navigator = (Navigator) activity;
-        ((MainActivity) activity).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
-        ((MainActivity) activity).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
     }
     @Override
     public void onDetach() {
@@ -70,8 +68,6 @@ public class ProfileFragment extends Fragment {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.toolbar.setTitle(R.string.toolbar_profile);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
         return view;
     }
 
@@ -86,6 +82,11 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Context context = this.getActivity();
+        this.toolbar.setTitle(R.string.toolbar_profile);
+        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
+
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
 
         Picasso.with(context).load(User.getInstance().getUniversityImageUrl()).into(this.universityImage);
