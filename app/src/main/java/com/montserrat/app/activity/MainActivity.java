@@ -208,10 +208,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
 
     @Override
     public boolean back() {
-        Fragment current = this.getFragmentManager().findFragmentById(this.navigatorContainer.getId());
-        if(current instanceof EvaluationStep1Fragment){
-            ((EvaluationStep1Fragment)current).back();
-        }
         return this.mNavigator.back();
     }
 

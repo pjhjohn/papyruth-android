@@ -3,6 +3,7 @@ package com.montserrat.utils.view.search;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         this.context = context;
         this.itemClickListener = listener;
 
-        this.searchResult.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
+        this.searchResult.setLayoutManager(new LinearLayoutManager(context));
         this.searchResult.setAdapter(getAdapter());
         this.query.setPreImeListener(() -> {
             if(this.searchView.getVisibility() == View.VISIBLE)
@@ -95,6 +96,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
             this.subscription = new CompositeSubscription();
             initComponents();
         }
+
     }
 
     @Override
@@ -112,6 +114,20 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         public void onSearchViewShowChanged(boolean show);
     }
 
+    private void searchAutocomplete(String query){
+        Api.papyruth().search_autocomplete(
+            User.getInstance().getAccessToken(),
+            User.getInstance().getUniversityId(),
+            query
+        )
+            .map(response -> response.candidates)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(candidates -> {
+                notifyAutoCompleteDataChanged(candidates);
+            }, error -> error.printStackTrace());
+    }
+
     private final long TEXTDEBOUNCE_MILLISEC = 400;
     private void initComponents(){
         this.subscription.add(
@@ -127,20 +143,12 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 })
                 .debounce(TEXTDEBOUNCE_MILLISEC, TimeUnit.MILLISECONDS)
                 .filter(event -> event.text().toString().length() > 0)
+                .map(event -> event.text().toString())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(event ->
-                        Api.papyruth().search_autocomplete(
-                            User.getInstance().getAccessToken(),
-                            User.getInstance().getUniversityId(),
-                            event.text().toString()
-                        )
+                .subscribe(
+                    query -> this.searchAutocomplete(query)
+                    ,error -> error.printStackTrace()
                 )
-                .map(response -> response.candidates)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(candidates -> {
-                    notifyAutoCompleteDataChanged(candidates);
-                }, error -> error.printStackTrace())
         );
         this.btnClear.setVisibility(View.GONE);
 
@@ -162,6 +170,14 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                     this.hide()
                     , error -> error.printStackTrace())
         );
+
+//        this.query.setOnKeyListener((v, keycode, e) -> {
+//            if (e.getAction() == KeyEvent.ACTION_UP && keycode == KeyEvent.KEYCODE_ENTER) {
+//                this.search.submitQuery();
+//                return true;
+//            }
+//            return false;
+//        });
     }
 
     private void notifyAutoCompleteDataChanged(List<Candidate> candidates){

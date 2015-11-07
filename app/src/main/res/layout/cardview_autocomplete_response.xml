@@ -6,11 +6,12 @@
     android:layout_width="match_parent">
     <ImageView
         android:id="@+id/type_icon"
-        android:layout_width="@dimen/baseline_x7"
-        android:layout_height="@dimen/baseline_x7"
+        android:layout_width="@dimen/baseline_x3"
+        android:layout_height="@dimen/baseline_x3"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:padding="@dimen/baseline_x1.5"
+        android:layout_marginLeft="@dimen/baseline_x2"
         />
     <TextView
         android:id="@+id/content"
@@ -18,7 +19,7 @@
         android:layout_height="@dimen/baseline_x7"
         android:gravity="start|center_vertical"
         android:textSize="@dimen/basefont_x1.5"
-        android:hint="@string/abc_search_hint"
+        android:layout_marginLeft="@dimen/baseline_x4"
         android:layout_gravity="center_vertical"
         android:layout_toRightOf="@id/type_icon"
         android:layout_toEndOf="@id/type_icon"
