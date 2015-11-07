@@ -40,6 +40,8 @@
         <include layout="@layout/fac"/>
         <include layout="@layout/fab_morphed_comment_input"/>
         <include layout="@layout/toolbar"/>
+        <include layout="@layout/toolbar_search"/>
+
     </FrameLayout>
 
     <!--Navigation Drawer-->

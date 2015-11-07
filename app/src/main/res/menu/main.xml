@@ -5,11 +5,16 @@
     <item
         android:title="@string/menu_search"
         android:id="@+id/menu_search"
-        android:icon="@drawable/ic_light_search"
-        android:orderInCategory="1"
         app:actionViewClass="com.montserrat.utils.view.search.CustomSearchView"
+        android:orderInCategory="0"
         app:showAsAction="ifRoom"/>
     <!--android:icon="@drawable/abc_ic_search_api_mtrl_alpha"-->
+    <item
+        android:title="@string/menu_search"
+        android:id="@+id/menu_searchview"
+        android:icon="@drawable/ic_light_lock"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom"/>
     <item
         android:title="@string/menu_settings"
         android:id="@+id/menu_setting"
