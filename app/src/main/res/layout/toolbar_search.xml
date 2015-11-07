@@ -9,41 +9,51 @@
         android:id="@+id/search_view_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/background_stroke_black">
+        android:background="@drawable/background_nostroke_white">
         <ImageView
             android:id="@+id/search_view_back"
             android:layout_alignParentLeft="true"
             android:src="@drawable/ic_light_back"
-            android:layout_width="wrap_content"
+            android:padding="@dimen/baseline_x2"
+            android:layout_width="@dimen/baseline_x7"
             android:layout_height="match_parent"/>
-        <EditText
+        <com.montserrat.utils.view.search.PreImeEditText
             android:id="@+id/search_view_query"
             android:layout_toRightOf="@id/search_view_back"
             android:layout_toEndOf="@id/search_view_back"
+            android:focusable="true"
+            android:background="@drawable/edittext_transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <ImageView
             android:id="@+id/search_view_delete"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_light_clear"
-            android:layout_width="wrap_content"
+            android:padding="@dimen/baseline_x2"
+            android:layout_width="@dimen/baseline_x7"
             android:layout_height="match_parent"/>
     </RelativeLayout>
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <View
             android:id="@+id/search_view_outside"
             android:focusable="true"
             android:clickable="true"
-            android:background="#a0ffffff"
+            android:layout_alignParentTop="true"
+            android:background="@color/background_transparent_clickable"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/search_view_result"
             android:clickable="true"
+            android:layout_alignParentTop="true"
             android:background="#ffffff"
             android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-        </FrameLayout>
+            android:layout_height="100dp"/>
+        <include layout="@layout/hr_toolbar"
+                 android:layout_below="@+id/search_view_result"
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"/>
+    </RelativeLayout>
 </LinearLayout>

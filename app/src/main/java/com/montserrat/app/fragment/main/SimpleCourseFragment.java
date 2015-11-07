@@ -52,6 +52,12 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         this.navigator = (Navigator) activity;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ToolbarSearchView.getInstance().setPartialItemClickListener(null);
+    }
+
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
     @InjectView(R.id.swipe) protected SwipeRefreshLayout refresh;
     @InjectView(R.id.progress) protected View progress;

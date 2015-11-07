@@ -172,7 +172,9 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <!-- simple word -->
     <string name="word_evaluation">evaluaion</string>
     <string name="word_lecture">lecture</string>
+    <string name="word_course">course</string>
     <string name="word_student">student</string>
+    <string name="word_search">search</string>
     <string name="word_university">university</string>
     <string name="word_professor">professor</string>
     <string name="word_signup">Sign Up</string>

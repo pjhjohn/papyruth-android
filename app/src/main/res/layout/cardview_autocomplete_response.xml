@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/autocomplete_layout"
-    android:layout_height="48dp"
+    android:layout_height="@dimen/baseline_x7"
     android:layout_width="match_parent">
     <ImageView
         android:id="@+id/type_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingLeft="16dp"
+        android:layout_width="@dimen/baseline_x7"
+        android:layout_height="@dimen/baseline_x7"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:padding="@dimen/baseline_x1.5"
         />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:textSize="16sp"
         android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/baseline_x7"
+        android:gravity="start|center_vertical"
+        android:textSize="@dimen/basefont_x1.5"
+        android:hint="@string/abc_search_hint"
         android:layout_gravity="center_vertical"
-        android:paddingLeft="72dp"
-        android:paddingRight="16dp"
+        android:layout_toRightOf="@id/type_icon"
+        android:layout_toEndOf="@id/type_icon"
         />
-
-</FrameLayout>
+    <TextView
+        android:id="@+id/type_text"
+        android:background="@drawable/background_round_stroke"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/content"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/basefont_x1"
+        android:layout_marginRight="@dimen/baseline_x3"
+        android:layout_width="@dimen/baseline_x6"
+        android:layout_height="@dimen/baseline_x3"/>
+</RelativeLayout>

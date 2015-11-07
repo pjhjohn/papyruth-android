@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/basefont_x1.2"
             android:gravity="center"
-            android:background="@drawable/edittext_rounded_border"
+            android:background="@drawable/background_round_stroke"
             android:layout_toRightOf="@id/course_item_professor_image"
             android:layout_toEndOf="@id/course_item_professor_image"
             android:layout_marginRight="@dimen/baseline_x2"

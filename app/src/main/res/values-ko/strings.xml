@@ -163,8 +163,10 @@
 
     <!-- simple word -->
     <string name="word_evaluation">강의평가</string>
-    <string name="word_lecture">강의</string>
+    <string name="word_lecture">과목</string>
+    <string name="word_course">강의</string>
     <string name="word_student">학생</string>
+    <string name="word_search">검색</string>
     <string name="word_university">대학교</string>
     <string name="word_professor">교수</string>
     <string name="word_signup">회원가입</string>

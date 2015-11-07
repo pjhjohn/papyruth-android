@@ -7,7 +7,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -56,6 +55,8 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
 
         this.setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        this.attachSoftKeyboardListeners();
+
         FloatingActionControl.getInstance().setContainer(this.fac);
         mCompositeSubscription = new CompositeSubscription();
         mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
@@ -74,17 +75,23 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
 
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
         ViewHolderFactory.getInstance().setContext(this);
-        this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
         ToolbarSearchView.getInstance().initializeToolbarSearchView(this, searchViewToolbar, tempListener);
         ToolbarSearchView.getInstance().setSearchViewListener(show -> {
-            if (show) {
-
-            }
+            if (show)
+                FloatingActionControl.getInstance().hide(false);
+            else
+                FloatingActionControl.getInstance().show(false);
         });
+
+        this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
+//        this.setOnShowSoftKeyboard(keyboardHeight -> FloatingActionControl.getInstance().hide(false));
+//        this.setOnHideSoftKeyboard(() -> FloatingActionControl.getInstance().show(false));
     }
     private RecyclerViewItemClickListener tempListener = (view, position)->{
         ToolbarSearchView.getInstance().setSelectedCandidate(position);
@@ -108,6 +115,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void onBackPressed() {
         if (this.mNavigationDrawer.isOpened()) this.mNavigationDrawer.close();
+        else if (ToolbarSearchView.getInstance().back()) ;
         else if (this.mNavigator.back()) terminate = false;
         else if (terminate) super.onBackPressed();
         else {
@@ -128,7 +136,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         this.itemSetting = menu.findItem(R.id.menu_setting);
 
         this.itemSearch.setOnMenuItemClickListener(item -> {
-            this.searchViewToolbar.setVisibility(View.VISIBLE);
+            ToolbarSearchView.getInstance().show();
             return true;
         });
 

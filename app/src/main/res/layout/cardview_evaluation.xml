@@ -54,7 +54,7 @@
                 android:layout_below="@+id/evaluation_lecture"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:background="@drawable/edittext_rounded_border"
+                android:background="@drawable/background_round_stroke"
                 android:textSize="16sp"/>
 
             <TextView
