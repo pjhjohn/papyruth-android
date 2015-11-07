@@ -24,6 +24,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.Circle;
 import com.montserrat.utils.view.CircleAngleAnimation;
+import com.montserrat.utils.view.DecelerateAccelerateInterpolator;
 import com.montserrat.utils.view.panningview.PanningView;
 
 import butterknife.ButterKnife;
@@ -99,13 +100,13 @@ public class SplashFragment extends Fragment {
 
         /* Animation */
         CircleAngleAnimation animCircle = new CircleAngleAnimation(circle, 360);
-        animCircle.setDuration(1500);
-        animCircle.setInterpolator(new AccelerateInterpolator(2.0f));
+        animCircle.setDuration(1000);
+        animCircle.setInterpolator(new DecelerateAccelerateInterpolator(2.2f));
         circle.startAnimation(animCircle);
 
         ValueAnimator animAlpha = ValueAnimator.ofFloat(0.0f, 1.0f);
         animAlpha.setDuration(2500);
-        animAlpha.setInterpolator(new DecelerateInterpolator(3.0f));
+        animAlpha.setInterpolator(new DecelerateInterpolator(4.0f));
         animAlpha.addUpdateListener(anim -> {
             float alpha = (float) animAlpha.getAnimatedValue();
             logo.setAlpha(alpha);
