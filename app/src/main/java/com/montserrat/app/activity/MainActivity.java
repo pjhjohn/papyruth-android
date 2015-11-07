@@ -1,26 +1,17 @@
 package com.montserrat.app.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.SearchManager;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.AppManager;
@@ -29,8 +20,6 @@ import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SettingsFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
-import com.montserrat.app.model.Candidate;
-import com.montserrat.app.model.unique.User;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
@@ -42,27 +31,21 @@ import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
-import com.montserrat.utils.view.search.CustomSearchView;
 import com.montserrat.utils.view.search.ToolbarSearchView;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import com.montserrat.utils.view.softkeyboard.SoftKeyboardActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends Activity implements NavigationDrawerCallback, Navigator {
+public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
 
     private CompositeSubscription mCompositeSubscription;
     @InjectView(R.id.fac) FloatingActionControlContainer fac;
     @InjectView(R.id.main_navigator) FrameLayout navigatorContainer;
-    @InjectView(R.id.search_result) protected RecyclerView searchResult;
-    @InjectView(R.id.query_result_outside) protected View outsideResult;
     @InjectView(R.id.toolbar) protected Toolbar mToolbar;
     @InjectView(R.id.toolbar_search_view) protected LinearLayout searchViewToolbar;
     private MaterialMenuDrawable mMaterialMenuDrawable;
@@ -87,7 +70,6 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
 
         this.onInitializeMenuOnToolbar(mToolbar.getMenu());
-        List<Candidate> candidates = new ArrayList<>();
         /* Instantiate Multiple ViewPagerManagers */
 
     }
@@ -110,27 +92,6 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         this.navigate(SimpleCourseFragment.class, true);
     };
 
-    public boolean isOverMandatoryEvlauation(){
-        if(User.getInstance().getMandatoryEvaluationCount() > 0) {
-            new MaterialDialog.Builder(this)
-                .content(getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()))
-                .positiveText(R.string.goto_write)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        if(mNavigationDrawer.isOpened())
-                            mNavigationDrawer.close();
-                        navigate(EvaluationStep1Fragment.class, true);
-                    }
-                })
-                .show();
-            return false;
-        }
-        return true;
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -142,8 +103,6 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
 
     private MenuItem itemSearch;
     private MenuItem itemSetting;
-    private CustomSearchView searchView;
-    private EditText editText;
 
     private boolean terminate = false;
     @Override
@@ -167,49 +126,20 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     private boolean onInitializeMenuOnToolbar(Menu menu) {
         this.itemSearch = menu.findItem(R.id.menu_search);
         this.itemSetting = menu.findItem(R.id.menu_setting);
-        this.searchView = (CustomSearchView) itemSearch.getActionView();
-        this.itemSearch.expandActionView();
 
-        menu.findItem(R.id.menu_searchview).setOnMenuItemClickListener(item -> {
+        this.itemSearch.setOnMenuItemClickListener(item -> {
             this.searchViewToolbar.setVisibility(View.VISIBLE);
             return true;
         });
 
-        if(searchView != null) {
-            this.editText = (EditText) searchView.findViewById(R.id.search_src_text);
-            searchView.setQueryHint("Input Search Query");
-
-            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            if (searchManager != null)
-                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            searchView.setIconifiedByDefault(true);
-            this.showCrossBtn(true);
-            this.mToolbar.setOnMenuItemClickListener(item -> {
-                if (item.equals(itemSetting)) {
-                    this.navigate(SettingsFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
-                }
-                return true;
-            });
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-    public void showCrossBtn(boolean remove){
-        try {
-            Field field = SearchView.class.getDeclaredField("mCloseButton");
-            field.setAccessible(true);
-            ImageView img = (ImageView)field.get(MenuItemCompat.getActionView(this.itemSearch));
-            if(remove) {
-                img.setImageDrawable(getResources().getDrawable(R.drawable.transparent));
-            }else {
-                img.setImageDrawable(getResources().getDrawable(R.drawable.ic_light_clear));
+        this.mToolbar.setOnMenuItemClickListener(item -> {
+            if (item.equals(itemSetting)) {
+                this.navigate(SettingsFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
             }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+            return true;
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
 

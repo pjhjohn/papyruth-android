@@ -18,25 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <RelativeLayout
-            android:id="@+id/query_result_outside"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#eee"
-            android:alpha="1"
-            android:visibility="gone"
-            android:focusable="true"
-            android:clickable="true" />
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/search_result"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:focusable="true"
-            android:clickable="true"
-            android:background="#eee"
-            android:alpha="1"
-            android:layout_gravity="center_horizontal|top" />
         <include layout="@layout/fac"/>
         <include layout="@layout/fab_morphed_comment_input"/>
         <include layout="@layout/toolbar"/>
