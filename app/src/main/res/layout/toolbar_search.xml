@@ -14,13 +14,17 @@
             android:id="@+id/search_view_back"
             android:layout_alignParentLeft="true"
             android:src="@drawable/ic_light_back"
-            android:padding="@dimen/baseline_x2"
-            android:layout_width="@dimen/baseline_x7"
-            android:layout_height="match_parent"/>
+            android:layout_marginLeft="@dimen/baseline_x2"
+            android:layout_marginStart="@dimen/baseline_x2"
+            android:layout_width="@dimen/baseline_x3"
+            android:layout_height="@dimen/baseline_x3"
+            android:layout_centerVertical="true"/>
         <com.montserrat.utils.view.search.PreImeEditText
             android:id="@+id/search_view_query"
             android:layout_toRightOf="@id/search_view_back"
             android:layout_toEndOf="@id/search_view_back"
+            android:layout_marginLeft="@dimen/baseline_x4"
+            android:layout_marginStart="@dimen/baseline_x4"
             android:focusable="true"
             android:background="@drawable/edittext_transparent"
             android:singleLine="true"
