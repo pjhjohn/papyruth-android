@@ -60,7 +60,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
         if(rating_value == null || rating_value < 0) this.setRatingBarColor(rating, AppConst.COLOR_NEUTRAL);
         else this.setRatingBarColor(rating, rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
         rating.setRating(rating_value == null || rating_value < 0 ? 5.0f : rating_value);
-        this.pointOverallText.setText(rating_value == null || rating_value < 0 ? "0" : rating_value.toString());
+        this.pointOverallText.setText(rating_value == null || rating_value < 0 ? "0" : String.format("%.1f", rating_value));
     }
 
     public void bind(CourseData course) {
