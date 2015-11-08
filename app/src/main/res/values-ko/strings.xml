@@ -82,6 +82,10 @@
     <string name="fab_evaluation">강의평가 등록하기</string>
     <string name="fab_comment">덧글 달기</string>
 
+
+    <!-- hint -->
+    <string name="hint_search_course">강의 검색</string>
+
     <!--course-->
     <string name="label_point_overall">총점</string>
     <string name="label_point_gpa_satisfaction">학점만족도</string>

@@ -7,40 +7,36 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
-import com.montserrat.app.recyclerview.adapter.AutoCompleteAdapter;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.search.AutoCompletableSearchView;
 import com.montserrat.utils.view.search.ToolbarSearchView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -54,10 +50,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         this.navigator = (Navigator) activity;
     }
 
-    @InjectView(R.id.queryTextView) protected EditText queryTextView;
-//    @InjectView(R.id.query_result) protected RecyclerView queryResult;
+    @InjectView(R.id.queryTextView) protected TextView queryTextView;
     @InjectView(R.id.course_list) protected RecyclerView courseList;
-//    @InjectView(R.id.query_result_outside) protected RelativeLayout resultOutside;
     private CompositeSubscription subscriptions;
 
     private Toolbar toolbar;
@@ -85,6 +79,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         super.onDestroyView();
         ButterKnife.reset(this);
         this.adapter = null;
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, true);
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
@@ -107,7 +102,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     protected CourseItemsAdapter getAdapter() {
         if(this.adapter != null)
             return this.adapter;
-        return new CourseItemsAdapter(this.items, this, R.string.no_data_search);
+        return new CourseItemsAdapter(this.items, this, R.layout.cardview_header_height_zero, R.string.no_data_search);
     }
 
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
@@ -119,11 +114,23 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         super.onResume();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
         FloatingActionControl.getInstance().clear();
 
         ToolbarSearchView.getInstance().setPartialItemClickListener((v, position) -> {
             searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position));
         });
+
+        this.subscriptions.add(
+            ViewObservable.clicks(queryTextView)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    event ->
+                        ToolbarSearchView.getInstance().show()
+                    ,error ->
+                        error.printStackTrace()
+                )
+        );
     }
 
     public void searchCourse(Candidate candidate){

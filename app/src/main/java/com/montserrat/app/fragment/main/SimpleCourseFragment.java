@@ -113,6 +113,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         this.toolbar.setTitle(R.string.toolbar_search);
         ToolbarSearchView.getInstance().setPartialItemClickListener((v, position)->{
             ToolbarSearchView.getInstance().setSelectedCandidate(position);
+            ToolbarSearchView.getInstance().addHistory(ToolbarSearchView.getInstance().getSelectedCandidate());
             this.getSearchResult();
         });
 

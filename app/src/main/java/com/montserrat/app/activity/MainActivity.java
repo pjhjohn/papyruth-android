@@ -81,7 +81,11 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     public void onResume() {
         super.onResume();
         ViewHolderFactory.getInstance().setContext(this);
-        ToolbarSearchView.getInstance().initializeToolbarSearchView(this, searchViewToolbar, tempListener);
+        ToolbarSearchView.getInstance().initializeToolbarSearchView(this, searchViewToolbar, (view, position)->{
+            ToolbarSearchView.getInstance().setSelectedCandidate(position);
+            ToolbarSearchView.getInstance().addHistory(ToolbarSearchView.getInstance().getSelectedCandidate());
+            this.navigate(SimpleCourseFragment.class, true);
+        });
         ToolbarSearchView.getInstance().setSearchViewListener(show -> {
             if (show)
                 FloatingActionControl.getInstance().hide(false);
@@ -93,11 +97,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
 //        this.setOnShowSoftKeyboard(keyboardHeight -> FloatingActionControl.getInstance().hide(false));
 //        this.setOnHideSoftKeyboard(() -> FloatingActionControl.getInstance().show(false));
     }
-    private RecyclerViewItemClickListener tempListener = (view, position)->{
-        ToolbarSearchView.getInstance().setSelectedCandidate(position);
-        Timber.d("click!!");
-        this.navigate(SimpleCourseFragment.class, true);
-    };
 
 
     @Override

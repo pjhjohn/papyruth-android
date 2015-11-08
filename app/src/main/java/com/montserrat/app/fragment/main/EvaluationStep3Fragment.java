@@ -68,6 +68,8 @@ public class EvaluationStep3Fragment extends Fragment {
     @InjectView(R.id.evaluation_hashtags_container) protected LinearLayout hashtagsContainer;
     @InjectView(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
     @InjectView(R.id.evaluation_recommend_hashtag_list) protected LinearLayout recommendHashtag;
+    @InjectView(R.id.lecture) protected TextView lecture;
+    @InjectView(R.id.professor) protected TextView professor;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
@@ -86,6 +88,8 @@ public class EvaluationStep3Fragment extends Fragment {
                 addNewHashtagView(str);
             }
         }
+        this.lecture.setText(EvaluationForm.getInstance().getLectureName());
+        this.professor.setText(EvaluationForm.getInstance().getProfessorName());
 
         /**
          * Get recommended hashtag list from server

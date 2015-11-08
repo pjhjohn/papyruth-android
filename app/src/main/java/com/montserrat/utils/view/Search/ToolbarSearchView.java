@@ -105,8 +105,6 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
             this.partialItemClickListener.onRecyclerViewItemClick(view, position);
         else
             this.itemClickListener.onRecyclerViewItemClick(view, position);
-        this.addHistory(this.candidates.get(position));
-
         this.hide();
     }
 
@@ -147,7 +145,10 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     query -> this.searchAutocomplete(query)
-                    ,error -> error.printStackTrace()
+                    ,error -> {
+                        Timber.d("ERROR : query text error");
+                        error.printStackTrace();
+                    }
                 )
         );
         this.btnClear.setVisibility(View.GONE);
@@ -159,16 +160,21 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 .subscribe(event -> {
                     this.query.setText("");
                     this.notifyAutoCompleteDataChanged(getHistory());
-                }, error -> error.printStackTrace())
+                }, error -> {
+                    Timber.e("ERROR : clear button click event error");
+                    error.printStackTrace();
+                })
         );
 
         this.subscription.add(
             ViewObservable.clicks(this.btnBack)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(event ->
                     this.hide()
-                    , error -> error.printStackTrace())
+                    , error -> {
+                    Timber.e("ERROR : back button click event error");
+                    error.printStackTrace();
+                })
         );
 
 //        this.query.setOnKeyListener((v, keycode, e) -> {

@@ -8,37 +8,21 @@
     android:focusableInTouchMode="true"
     android:paddingTop="?attr/actionBarSize">
 
-    <EditText
+    <TextView
         android:id="@+id/queryTextView"
-        android:hint="@string/hint_lecture"
+        android:text="@string/hint_search_course"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-
+        android:layout_height="@dimen/baseline_x7"
         android:singleLine="true"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="@dimen/basefont_x2"
+        android:background="@color/colorchip_green"
         android:imeOptions="actionSearch"/>
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/course_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/course_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"/>
-
-        <RelativeLayout
-            android:id="@+id/query_result_outside"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:focusable="true"
-            android:clickable="true" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/query_result"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_horizontal|top"
-            android:background="#ffffff"
-            android:overScrollMode="never"/>
-    </FrameLayout>
+        android:overScrollMode="never"/>
 </com.montserrat.utils.view.navigator.NavigatableLinearLayout>

@@ -82,6 +82,9 @@
     <string name="fab_evaluation">New Evaluation</string>
     <string name="fab_comment">New Comment</string>
 
+    <!-- hint -->
+    <string name="hint_search_course">Search Course</string>
+
     <!--course-->
     <string name="label_point_overall">Overall</string>
     <string name="label_point_gpa_satisfaction">Satisfaction</string>
