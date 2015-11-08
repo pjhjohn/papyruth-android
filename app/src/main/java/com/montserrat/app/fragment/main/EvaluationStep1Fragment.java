@@ -80,6 +80,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         ButterKnife.reset(this);
         this.adapter = null;
         ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, true);
+        ToolbarSearchView.getInstance().setPartialItemClickListener(null).setToolbarSearchViewSearchListener(null);
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
@@ -117,9 +118,11 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
         FloatingActionControl.getInstance().clear();
 
-        ToolbarSearchView.getInstance().setPartialItemClickListener((v, position) -> {
+        ToolbarSearchView.getInstance()
+            .setPartialItemClickListener((v, position) -> {
             searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position), null);
-        }).setToolbarSearchViewSearchListener(()->{
+        })
+            .setToolbarSearchViewSearchListener(()->{
             searchCourse(new Candidate(), ToolbarSearchView.getInstance().getSelectedQuery());
         });
 
