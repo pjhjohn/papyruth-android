@@ -93,6 +93,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         super.onDestroyView();
         ButterKnife.reset(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        ToolbarSearchView.getInstance().setToolbarSearchViewSearchListener(null).setPartialItemClickListener(null);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
             ToolbarSearchView.getInstance().setSelectedCandidate(position);
             ToolbarSearchView.getInstance().addHistory(ToolbarSearchView.getInstance().getSelectedCandidate());
             this.getSearchResult();
-        });
+        }).setToolbarSearchViewSearchListener(() ->  this.getSearchResult() );
 
         ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
@@ -143,13 +144,14 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     }
     private void getSearchResult(){
         Candidate candidate = ToolbarSearchView.getInstance().getSelectedCandidate();
+        String query = ToolbarSearchView.getInstance().getSelectedQuery();
         this.subscriptions.add(
             Api.papyruth().search_search(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
                 candidate.lecture_id,
                 candidate.professor_id,
-                null
+                query
             )
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())

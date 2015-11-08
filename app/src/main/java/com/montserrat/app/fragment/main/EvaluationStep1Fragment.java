@@ -118,7 +118,9 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         FloatingActionControl.getInstance().clear();
 
         ToolbarSearchView.getInstance().setPartialItemClickListener((v, position) -> {
-            searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position));
+            searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position), null);
+        }).setToolbarSearchViewSearchListener(()->{
+            searchCourse(new Candidate(), ToolbarSearchView.getInstance().getSelectedQuery());
         });
 
         this.subscriptions.add(
@@ -133,13 +135,13 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         );
     }
 
-    public void searchCourse(Candidate candidate){
+    public void searchCourse(Candidate candidate, String query){
         Api.papyruth().search_search(
             User.getInstance().getAccessToken(),
             User.getInstance().getUniversityId(),
             candidate.lecture_id,
             candidate.professor_id,
-            null
+            query
         )
             .map(response -> response.courses)
             .subscribeOn(Schedulers.io())

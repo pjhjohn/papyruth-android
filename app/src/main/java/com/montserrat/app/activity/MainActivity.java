@@ -38,7 +38,7 @@ import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator {
+public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, ToolbarSearchView.ToolbarSearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
 
@@ -72,7 +72,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
 
         this.onInitializeMenuOnToolbar(mToolbar.getMenu());
         /* Instantiate Multiple ViewPagerManagers */
-
     }
 
 
@@ -86,17 +85,15 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
             ToolbarSearchView.getInstance().addHistory(ToolbarSearchView.getInstance().getSelectedCandidate());
             this.navigate(SimpleCourseFragment.class, true);
         });
-        ToolbarSearchView.getInstance().setSearchViewListener(show -> {
-            if (show)
-                FloatingActionControl.getInstance().hide(false);
-            else
-                FloatingActionControl.getInstance().show(false);
-        });
+        ToolbarSearchView.getInstance()
+            .setSearchViewListener(this);
 
         this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
 //        this.setOnShowSoftKeyboard(keyboardHeight -> FloatingActionControl.getInstance().hide(false));
 //        this.setOnHideSoftKeyboard(() -> FloatingActionControl.getInstance().show(false));
     }
+
+
 
 
     @Override
@@ -213,5 +210,18 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void setOnNavigateListener(NavigationCallback listener) {
         this.mNavigator.setOnNavigateListener(listener);
+    }
+
+    @Override
+    public void onSearchViewShowChanged(boolean show) {
+        if (show)
+            FloatingActionControl.getInstance().hide(false);
+        else
+            FloatingActionControl.getInstance().show(false);
+    }
+
+    @Override
+    public void onSearchByQuery() {
+        this.navigate(SimpleCourseFragment.class, true);
     }
 }

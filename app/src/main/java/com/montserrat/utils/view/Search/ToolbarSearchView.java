@@ -60,6 +60,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
     private RecyclerViewItemClickListener partialItemClickListener;
     private ToolbarSearchViewListener searchViewListener;
     private AutoCompleteAdapter autoCompleteAdapter;
+    private ToolbarSearchViewSearchListener toolbarSearchListener;
 
     private CompositeSubscription subscription;
     private Context context;
@@ -97,33 +98,6 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
             initComponents();
         }
 
-    }
-
-    @Override
-    public void onRecyclerViewItemClick(View view, int position) {
-        if(partialItemClickListener != null)
-            this.partialItemClickListener.onRecyclerViewItemClick(view, position);
-        else
-            this.itemClickListener.onRecyclerViewItemClick(view, position);
-        this.hide();
-    }
-
-    public interface ToolbarSearchViewListener{
-        public void onSearchViewShowChanged(boolean show);
-    }
-
-    private void searchAutocomplete(String query){
-        Api.papyruth().search_autocomplete(
-            User.getInstance().getAccessToken(),
-            User.getInstance().getUniversityId(),
-            query
-        )
-            .map(response -> response.candidates)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(candidates -> {
-                notifyAutoCompleteDataChanged(candidates);
-            }, error -> error.printStackTrace());
     }
 
     private final long TEXTDEBOUNCE_MILLISEC = 400;
@@ -177,13 +151,42 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 })
         );
 
-//        this.query.setOnKeyListener((v, keycode, e) -> {
-//            if (e.getAction() == KeyEvent.ACTION_UP && keycode == KeyEvent.KEYCODE_ENTER) {
-//                this.search.submitQuery();
-//                return true;
-//            }
-//            return false;
-//        });
+        this.query.setOnKeyListener((v, keycode, e) -> {
+            if (e.getAction() == KeyEvent.ACTION_DOWN && (keycode == KeyEvent.KEYCODE_ENTER || keycode == KeyEvent.KEYCODE_SEARCH)) {
+                this.setSelectedQuery(this.query.getText().toString());
+                if(toolbarSearchListener != null)
+                    this.toolbarSearchListener.onSearchByQuery();
+                else
+                    this.searchViewListener.onSearchByQuery();
+                this.hide();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void searchAutocomplete(String query){
+        Api.papyruth().search_autocomplete(
+            User.getInstance().getAccessToken(),
+            User.getInstance().getUniversityId(),
+            query
+        )
+            .map(response -> response.candidates)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(candidates -> {
+                notifyAutoCompleteDataChanged(candidates);
+            }, error -> error.printStackTrace());
+    }
+
+
+    @Override
+    public void onRecyclerViewItemClick(View view, int position) {
+        if(partialItemClickListener != null)
+            this.partialItemClickListener.onRecyclerViewItemClick(view, position);
+        else
+            this.itemClickListener.onRecyclerViewItemClick(view, position);
+        this.hide();
     }
 
     private void notifyAutoCompleteDataChanged(List<Candidate> candidates){
@@ -247,6 +250,10 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         this.searchViewListener = searchViewListener;
         return this;
     }
+    public ToolbarSearchView setToolbarSearchViewSearchListener(ToolbarSearchViewSearchListener listener){
+        this.toolbarSearchListener = listener;
+        return this;
+    }
 
     public AutoCompleteAdapter getAdapter(){
         if(autoCompleteAdapter == null)
@@ -257,14 +264,26 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
     public List<Candidate> getCandidates(){
         return this.candidates;
     }
-    Candidate candidate;
+    private Candidate selectedCandidate;
+    private String selectedQuery;
     public Candidate getSelectedCandidate(){
-        return candidate;
+        return selectedCandidate;
     }
     public ToolbarSearchView setSelectedCandidate(int position){
-        if(candidate == null)
-            candidate = new Candidate();
-        candidate = candidates.get(position);
+        if(selectedCandidate == null)
+            selectedCandidate = new Candidate();
+        selectedCandidate = candidates.get(position);
+        selectedQuery = null;
+        return this;
+    }
+
+    public String getSelectedQuery(){
+        return selectedQuery;
+    }
+
+    public ToolbarSearchView setSelectedQuery(String query){
+        this.selectedQuery = query;
+        this.selectedCandidate = new Candidate();
         return this;
     }
 
@@ -331,5 +350,10 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         return -1;
     }
 
-
+    public interface ToolbarSearchViewListener extends ToolbarSearchViewSearchListener{
+        public void onSearchViewShowChanged(boolean show);
+    }
+    public interface ToolbarSearchViewSearchListener{
+        public void onSearchByQuery();
+    }
 }

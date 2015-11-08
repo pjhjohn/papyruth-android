@@ -23,6 +23,8 @@
             android:layout_toEndOf="@id/search_view_back"
             android:focusable="true"
             android:background="@drawable/edittext_transparent"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <ImageView
