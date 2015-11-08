@@ -37,7 +37,7 @@
             </LinearLayout>
             <RelativeLayout
                 android:id="@+id/evaluation_point_overall"
-                android:background="@color/background_white"
+                android:background="@color/background_overall"
                 android:paddingLeft="@dimen/baseline_x2"
                 android:paddingRight="@dimen/baseline_x2"
                 android:paddingBottom="@dimen/baseline_x1"

@@ -1,52 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_normal">#607D8B</color>
-    <color name="bg_accent">#90A4AE</color>
-    <color name="bg_highlight">#B0C4CE</color>
-
+    <!--Color Chip-->
     <color name="colorchip_red">#E05E5F</color>
+    <color name="colorchip_red_accent">#FF5E5F</color>
     <color name="colorchip_red_highlight">#FF7E7F</color>
+    <color name="colorchip_red_light">#FCEFEF</color>
     <color name="colorchip_blue">#546B8D</color>
-    <color name="colorchip_blue_highlight">#748BAD</color>
     <color name="colorchip_blue_accent">#546BAD</color>
+    <color name="colorchip_blue_highlight">#748BAD</color>
+    <color name="colorchip_blue_light">#E9ECF2</color>
     <color name="colorchip_green">#60CAC6</color>
+    <color name="colorchip_green_accent">#60EAC6</color>
     <color name="colorchip_green_highlight">#80EAE6</color>
+    <color name="colorchip_green_light">#E9F7F7</color>
 
-    <color name="selected_blue">#7D95B2</color>
+    <!--Gray Scale-->
+    <color name="white_10p">#1A1A1A</color>
+    <color name="white_20p">#333333</color>
+    <color name="white_30p">#4D4D4D</color>
+    <color name="white_40p">#666666</color>
+    <color name="white_50p">#808080</color>
+    <color name="white_60p">#999999</color>
+    <color name="white_70p">#B3B3B3</color>
+    <color name="white_80p">#CCCCCC</color>
+    <color name="white_85p">#DADADA</color>
+    <color name="white_90p">#E6E6E6</color>
+    <color name="white_95p">#F3F3F3</color>
+    <color name="white">#FFFFFF</color>
 
-    <color name="title_gray">#555555</color>
-    <color name="item_divider">#dddddd</color>
+    <!--Transparent-->
+    <color name="transparent">#00000000</color>
 
-    <color name="transparent">#00ffffff</color>
-    <color name="translucent">#8affffff</color>
-    <color name="translucent_70p">#B4FFFFFF</color>
-    <color name="white">#ffffffff</color>
-    <color name="nav_filter">#DE000000</color>
+    <!--Translucent-->
+    <color name="black_translucent_54p">#8A000000</color>
+    <color name="icon_material">@color/black_translucent_54p</color><!--Icon values: 54% #000000-->
+    <color name="text_material">#DE000000</color><!--Text values: 87% #000000-->
 
+    <!--Item State-->
+    <color name="item_selected">#E8E8E8</color>
+    <color name="item_pressed">#D6D6D6</color>
+
+    <!--Evaluation Point-->
     <color name="point_overall">#FFC81D</color>
-    <color name="point_easiness">#41B7AE</color>
-    <color name="point_gpa_satisfaction">#546B8D</color>
-    <color name="point_clarity">#E05E5F</color>
+    <color name="point_easiness">@color/colorchip_green</color>
+    <color name="point_gpa_satisfaction">@color/colorchip_blue</color>
+    <color name="point_clarity">@color/colorchip_red</color>
 
-    <color name="button_disable">#76D1CC</color>
+    <!--Background-->
+    <color name="background_profile_change">@color/white_95p</color>
+    <color name="background_overall">@color/white_95p</color>
+    <color name="background_easiness">@color/colorchip_green_light</color>
+    <color name="background_gpa_satisfaction">@color/colorchip_blue_light</color>
+    <color name="background_clarity">@color/colorchip_red_light</color>
 
-    <color name="edittext_solid_default">#C8C8C8</color>
-    <color name="text_hint">#aaaaaa</color>
-    
-    <color name="lecture_type_major">#27B5Af</color>
-    <color name="lecture_type_liberal_arts">#E05E5F</color>
-    <color name="lecture_type_other">#333333</color>
-    
-    <color name="background_white">#F2F2F2</color>
-    <color name="background_gpa_satisfaction">#E9ECF2</color>
-    <color name="background_easiness">#E9F7F7</color>
-    <color name="background_clarity">#FCEFEF</color>
-    <color name="background_contents_brim">#F7F7F7</color>
-    <color name="background_profile_change">#F2F2F2</color>
+    <!--Search Category-->
+    <color name="lecture_type_major">@color/colorchip_green</color>
+    <color name="lecture_type_liberal_arts">@color/colorchip_red</color>
+    <color name="lecture_type_other">@color/disabled</color>
 
-    <color name="background_transparent_clickable">#70000000</color>
+    <!--Legacy Background Color-->
+    <color name="bg_normal">@color/white_70p</color>
+    <color name="bg_accent">@color/white_80p</color>
+    <color name="bg_highlight">@color/white_90p</color>
 
-    <color name="disabled">#CCCCCC</color>
-    <color name="disabled_highlight">#EEEEEE</color>
-    <color name="hr_settings">#F3F3F3</color>
+    <!--Etc-->
+    <color name="disabled">@color/white_80p</color>
+    <color name="disabled_highlight">@color/white_95p</color>
+    <color name="hr_settings">@color/white_95p</color>
 </resources>

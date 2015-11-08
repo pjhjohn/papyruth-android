@@ -40,7 +40,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/edittext_solid_default"/>
+            android:background="@color/bg_accent"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/edittext_solid_default"/>
+            android:background="@color/bg_accent"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -94,7 +94,6 @@
                 android:layout_toRightOf="@+id/loading_evaluation_icon"
                 android:layout_toEndOf="@+id/loading_evaluation_icon"
                 android:textSize="@dimen/loading_text"
-                android:textColor="@color/title_gray"
                 app:textWeight="light"/>
         </RelativeLayout>
 

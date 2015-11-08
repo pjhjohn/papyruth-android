@@ -103,7 +103,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     protected CourseItemsAdapter getAdapter() {
         if(this.adapter != null)
             return this.adapter;
-        return new CourseItemsAdapter(this.items, this, R.layout.cardview_header_height_zero, R.string.no_data_search);
+        return new CourseItemsAdapter(this.items, this, R.layout.cardview_white_0dp, R.string.no_data_search);
     }
 
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {

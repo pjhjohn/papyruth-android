@@ -84,8 +84,8 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 this.hide();
         });
 
-        Picasso.with(context).load(R.drawable.ic_light_clear).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.nav_filter))).into(btnClear);
-        Picasso.with(context).load(R.drawable.ic_light_back).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.nav_filter))).into(btnBack);
+        Picasso.with(context).load(R.drawable.ic_light_clear).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(btnClear);
+        Picasso.with(context).load(R.drawable.ic_light_back).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(btnBack);
 
         if(this.searchView.getVisibility() == View.VISIBLE)
             this.hide();
@@ -198,7 +198,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         param =  searchResult.getLayoutParams();
         if(!this.candidates.isEmpty()) {
             if (this.candidates.size() < 5) {
-                param.height = (int) (56 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
+                param.height = (int) (48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
             } else {
                 param.height = (int) (240 * this.context.getResources().getDisplayMetrics().density);
             }
@@ -351,9 +351,9 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
     }
 
     public interface ToolbarSearchViewListener extends ToolbarSearchViewSearchListener{
-        public void onSearchViewShowChanged(boolean show);
+        void onSearchViewShowChanged(boolean show);
     }
     public interface ToolbarSearchViewSearchListener{
-        public void onSearchByQuery();
+        void onSearchByQuery();
     }
 }

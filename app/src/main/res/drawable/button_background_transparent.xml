@@ -10,7 +10,7 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <stroke android:color="@color/transparent" android:width="2dp"/><!-- Border Color -->
-            <solid android:color="@color/translucent_70p"/><!-- Fill Color -->
+            <solid android:color="@color/icon_material"/><!-- Fill Color -->
             <padding android:left="@dimen/baseline_x1" android:top="@dimen/baseline_x1" android:right="@dimen/baseline_x1" android:bottom="@dimen/baseline_x1"/>
         </shape>
     </item>

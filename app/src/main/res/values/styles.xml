@@ -1,6 +1,6 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
+        <item name="android:textColorHint">#AAA</item>
     </style>
     <style name="loading_highlight_normal">
         <item name="android:textStyle">bold</item>

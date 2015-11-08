@@ -12,54 +12,66 @@
         android:background="@drawable/background_nostroke_white">
         <ImageView
             android:id="@+id/search_view_back"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_light_back"
-            android:layout_marginLeft="@dimen/baseline_x2"
-            android:layout_marginStart="@dimen/baseline_x2"
             android:layout_width="@dimen/baseline_x3"
             android:layout_height="@dimen/baseline_x3"
-            android:layout_centerVertical="true"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/baseline_x2"
+            android:layout_marginStart="@dimen/baseline_x2"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_light_back"
+            android:contentDescription="@string/empty"/>
         <com.montserrat.utils.view.search.PreImeEditText
             android:id="@+id/search_view_query"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_toRightOf="@id/search_view_back"
             android:layout_toEndOf="@id/search_view_back"
             android:layout_marginLeft="@dimen/baseline_x4"
             android:layout_marginStart="@dimen/baseline_x4"
-            android:focusable="true"
+            android:layout_toLeftOf="@+id/search_view_delete"
+            android:layout_toStartOf="@+id/search_view_delete"
+            android:layout_centerVertical="true"
             android:background="@drawable/edittext_transparent"
-            android:singleLine="true"
             android:imeOptions="actionSearch"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:singleLine="true"
+            android:focusable="true"/>
         <ImageView
             android:id="@+id/search_view_delete"
+            android:layout_width="@dimen/baseline_x5"
+            android:layout_height="@dimen/baseline_x5"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/baseline_x1"
             android:src="@drawable/ic_light_clear"
-            android:padding="@dimen/baseline_x2"
-            android:layout_width="@dimen/baseline_x7"
-            android:layout_height="match_parent"/>
+            android:contentDescription="@string/empty"/>
     </RelativeLayout>
-    <RelativeLayout
+    <include layout="@layout/hr_solid"/>
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <View
             android:id="@+id/search_view_outside"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:focusable="true"
             android:clickable="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/background_transparent_clickable"
+            android:background="@color/black_translucent_54p"/>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/search_view_result"
-            android:clickable="true"
-            android:layout_alignParentTop="true"
-            android:background="#ffffff"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"/>
-        <include layout="@layout/hr_toolbar"
-                 android:layout_below="@+id/search_view_result"
-                 android:layout_width="match_parent"
-                 android:layout_height="1dp"/>
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/cardview_white_8dp"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/search_view_result"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/white"
+                android:overScrollMode="never"
+                android:clickable="true"/>
+            <include layout="@layout/cardview_white_8dp"/>
+            <include layout="@layout/hr_toolbar"/>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

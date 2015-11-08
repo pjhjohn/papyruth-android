@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/autocomplete_layout"
-    android:layout_height="@dimen/baseline_x7"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/baseline_x6">
     <ImageView
         android:id="@+id/type_icon"
         android:layout_width="@dimen/baseline_x3"
@@ -12,28 +11,33 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/baseline_x2"
-        />
+        android:layout_marginStart="@dimen/baseline_x2"
+        android:contentDescription="@string/empty"/>
     <TextView
         android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/baseline_x7"
-        android:gravity="start|center_vertical"
-        android:textSize="@dimen/basefont_x1.5"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/baseline_x4"
-        android:layout_gravity="center_vertical"
-        android:layout_toRightOf="@id/type_icon"
-        android:layout_toEndOf="@id/type_icon"
-        />
+        android:layout_marginStart="@dimen/baseline_x4"
+        android:layout_toLeftOf="@+id/type_text"
+        android:layout_toStartOf="@+id/type_text"
+        android:layout_toRightOf="@+id/type_icon"
+        android:layout_toEndOf="@+id/type_icon"
+        android:gravity="start|center_vertical"/>
     <TextView
         android:id="@+id/type_text"
-        android:background="@drawable/background_round_stroke"
+        android:layout_width="@dimen/baseline_x6"
+        android:layout_height="@dimen/baseline_x3"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignBaseline="@id/content"
+        android:background="@drawable/background_round_stroke"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/basefont_x1"
-        android:layout_marginRight="@dimen/baseline_x3"
-        android:layout_width="@dimen/baseline_x6"
-        android:layout_height="@dimen/baseline_x3"/>
+        android:layout_marginLeft="@dimen/baseline_x2"
+        android:layout_marginStart="@dimen/baseline_x2"
+        android:layout_marginRight="@dimen/baseline_x2"
+        android:layout_marginEnd="@dimen/baseline_x2"/>
 </RelativeLayout>

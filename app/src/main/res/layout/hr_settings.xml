@@ -3,6 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="@color/hr_settings"
-    android:layout_marginLeft="@dimen/basefont_x1.5"
-    android:layout_marginRight="@dimen/basefont_x1.5">
+    android:layout_marginLeft="@dimen/baseline_x1.5"
+    android:layout_marginRight="@dimen/baseline_x1.5">
 </FrameLayout>

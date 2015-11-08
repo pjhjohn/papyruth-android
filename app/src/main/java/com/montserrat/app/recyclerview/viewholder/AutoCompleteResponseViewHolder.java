@@ -28,6 +28,7 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder impl
     @InjectView(R.id.autocomplete_layout) protected RelativeLayout layout;
     @InjectView(R.id.type_text) protected TextView typeText;
     private RecyclerViewItemClickListener itemClickListener;
+    private int iconColor;
     public AutoCompleteResponseViewHolder(View parent, RecyclerViewItemClickListener listener) {
         super(parent);
         ButterKnife.inject(this, parent);
@@ -37,22 +38,24 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder impl
         drawable.getPaint().setStyle(Paint.Style.STROKE);
         drawable.getPaint().setColor(0xffdddddd);
         this.layout.setBackgroundDrawable(drawable);
+        this.iconColor = parent.getContext().getResources().getColor(R.color.icon_material);
+        this.itemView.setBackgroundResource(R.drawable.row_selector);
     }
 
     public void bind(Candidate item) {
         final Context context = this.itemView.getContext();
         if (item.lecture_id != null && item.professor_id != null){
-            Picasso.with(context).load(R.drawable.ic_light_new_evaluation).transform(new ColorFilterTransformation(R.color.translucent)).into(this.icon);
+            Picasso.with(context).load(R.drawable.ic_light_new_evaluation).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText(item.lecture_name + " - " +item.professor_name);
             this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_red));
             this.typeText.setText(R.string.word_course);
         }else if(item.lecture_name != null) {
-            Picasso.with(context).load(R.drawable.ic_light_lecture).transform(new ColorFilterTransformation(R.color.translucent)).into(this.icon);
+            Picasso.with(context).load(R.drawable.ic_light_lecture).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText(item.lecture_name);
             this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_blue));
             this.typeText.setText(R.string.word_lecture);
         }else if(item.professor_name != null){
-            Picasso.with(context).load(R.drawable.ic_light_school).transform(new ColorFilterTransformation(R.color.translucent)).into(this.icon);
+            Picasso.with(context).load(R.drawable.ic_light_school).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText((item.professor_name));
             this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_green));
             this.typeText.setText(R.string.word_professor);
