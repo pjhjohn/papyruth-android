@@ -99,7 +99,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     private String duplicatedValidator(String email, String nickcname){
         String errorMsg = null;
         this.subscription.add(Api.papyruth()
-            .validate((email != null ? AppConst.Preference.EMAIL : AppConst.Preference.NICKNAME), (email != null ? email : nickcname))
+            .validate((email != null ? "email" : "nickname"), (email != null ? email : nickcname))
             .map(validator -> validator.validation)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
