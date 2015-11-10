@@ -52,6 +52,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, CommentData> implements OnBack, View.OnClickListener {
     @InjectView(R.id.evaluation_recyclerview) protected RecyclerView evaluationRecyclerView;
@@ -72,6 +73,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
     private float minRadius, maxRadius;
     private int centerX, centerY;
+    private boolean showContentImmediately = false;
 
     private Navigator navigator;
 
@@ -128,6 +130,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onResume() {
         super.onResume();
+        Timber.d("this is Evaluation!!");
+        this.showContentImmediately(this.showContentImmediately);
         this.subscriptions.add(Api.papyruth()
             .get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null)
             .map(response -> response.comments)
@@ -314,7 +318,14 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         }
     }
 
+    public void setShowContentImmediately(boolean show){
+        this.showContentImmediately = show;
+    }
+
     @InjectView(R.id.evaluation_container_cover) protected FrameLayout cover;
+    public void showContentImmediately(boolean show){
+        EvaluationFragment.this.cover.setVisibility( show ? View.GONE : View.VISIBLE);
+    }
     public void showContent(boolean show) {
         ValueAnimator animAlpha = ValueAnimator.ofFloat(show ? 1.0f : 0.0f, show ? 0.0f : 1.0f);
         animAlpha.addUpdateListener(animator -> {

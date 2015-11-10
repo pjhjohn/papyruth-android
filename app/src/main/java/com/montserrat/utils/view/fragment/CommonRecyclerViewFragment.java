@@ -29,6 +29,8 @@ import com.montserrat.utils.view.viewpager.OnBack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.android.app.AppObservable;
+import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -65,7 +67,15 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     public void onResume() {
         super.onResume();
         this.isOpenSlave = false;
-        setFloatingActionControl();
+        Timber.d("is this evaluation alive? %s", Evaluation.getInstance().getId());
+
+
+        if(Evaluation.getInstance().getId() != null){
+            this.slave = new EvaluationFragment();
+            this.openEvaluation();
+        }else{
+            setFloatingActionControl();
+        }
     }
 
     @Override
@@ -110,6 +120,33 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         return true;
     }
 
+    protected void openEvaluation() {
+        isAnimationCanceled = false;
+        isOpenSlave = true;
+        slaveIsOccupying = true;
+
+        this.slaveContainer.setVisibility(View.VISIBLE);
+
+        this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
+
+        ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
+        lpEvaluationContainer.height = screenHeight;
+        this.slaveContainer.setLayoutParams(lpEvaluationContainer);
+
+        if(slave != null) {
+            Timber.d("this slave start!");
+            slave.setShowContentImmediately(true);
+            getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
+
+            slave.setEvaluationFloatingActionControl();
+        }
+
+        this.slaveContainer.setY(0);
+        this.toolbar.setY(-toolbar.getHeight());
+        ToolbarUtil.hide(toolbar);
+        Timber.d("toolbar!! %s %s", toolbar.getY(), 0 - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize));
+
+    }
     // Animation
     protected Integer itemTop, itemHeight, screenHeight;
     protected AnimatorSet animators;
@@ -149,6 +186,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
                 super.onAnimationStart(animation);
                 if(slave != null)getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
                 isAnimationCanceled = false;
+                isOpenSlave = true;
             }
 
             @Override

@@ -122,13 +122,6 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                 }, error -> error.printStackTrace())
         );
 
-
-        if(Evaluation.getInstance().getId() != null){
-            this.slave = new EvaluationFragment();
-            int y = getActivity().getWindowManager().getDefaultDisplay().getHeight()/2;
-            int height = (int)getResources().getDimension(R.dimen.baseline_x5);
-            this.openEvaluation(height, y);
-        }
     }
 
     @Override
@@ -160,6 +153,9 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     @Override
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN));
+        FloatingActionControl.clicks(R.id.fab_new_evaluation)
+            .subscribe(unused ->
+                navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN)
+            ,error -> error.printStackTrace());
     }
 }

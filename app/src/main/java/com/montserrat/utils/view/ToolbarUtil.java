@@ -14,11 +14,14 @@ import android.view.animation.DecelerateInterpolator;
 import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 
+import timber.log.Timber;
+
 /**
  * Created by pjhjohn on 2015-06-19.
  */
 public class ToolbarUtil {
     public static void show(Toolbar toolbar) {
+        Timber.d("toolbar show!!");
         if(toolbar == null) return;
         toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
     }
