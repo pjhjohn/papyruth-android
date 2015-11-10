@@ -109,6 +109,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                         this.btnClear.setVisibility(View.VISIBLE);
                     }else {
                         this.btnClear.setVisibility(View.GONE);
+                        this.autoCompleteAdapter.setHistory(true);
                         this.notifyAutoCompleteDataChanged(getHistory());
                     }
 
@@ -133,6 +134,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     this.query.setText("");
+                    this.autoCompleteAdapter.setHistory(true);
                     this.notifyAutoCompleteDataChanged(getHistory());
                 }, error -> {
                     Timber.e("ERROR : clear button click event error");
@@ -175,6 +177,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(candidates -> {
+                this.autoCompleteAdapter.setHistory(false);
                 notifyAutoCompleteDataChanged(candidates);
             }, error -> error.printStackTrace());
     }
@@ -223,6 +226,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
             ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(this.query, InputMethodManager.SHOW_IMPLICIT);
         }
 
+        this.autoCompleteAdapter.setHistory(true);
         this.notifyAutoCompleteDataChanged(getHistory());
 
         if(searchViewListener != null)

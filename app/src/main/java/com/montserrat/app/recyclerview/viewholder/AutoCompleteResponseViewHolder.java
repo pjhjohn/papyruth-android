@@ -42,20 +42,20 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder impl
         this.itemView.setBackgroundResource(R.drawable.row_selector);
     }
 
-    public void bind(Candidate item) {
+    public void bind(Candidate item, boolean isHistory) {
         final Context context = this.itemView.getContext();
         if (item.lecture_id != null && item.professor_id != null){
-            Picasso.with(context).load(R.drawable.ic_light_new_evaluation).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
+            Picasso.with(context).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_new_evaluation ).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText(item.lecture_name + " - " +item.professor_name);
             this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_red));
             this.typeText.setText(R.string.word_course);
         }else if(item.lecture_name != null) {
-            Picasso.with(context).load(R.drawable.ic_light_lecture).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
+            Picasso.with(context).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_lecture ).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText(item.lecture_name);
             this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_blue));
             this.typeText.setText(R.string.word_lecture);
         }else if(item.professor_name != null){
-            Picasso.with(context).load(R.drawable.ic_light_school).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
+            Picasso.with(context).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_school ).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText((item.professor_name));
             this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_green));
             this.typeText.setText(R.string.word_professor);
