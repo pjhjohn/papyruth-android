@@ -1,6 +1,7 @@
 package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -35,17 +36,18 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
     @InjectView (R.id.evaluation_item_point_overall_star) protected RatingBar pointStar;
     @InjectView (R.id.evaluation_item_point_overall_text) protected TextView pointText;
     @InjectView (R.id.evaluation_item_body) protected TextView body;
-
     private RecyclerViewItemClickListener itemClickListener;
+    private final Context context;
     public EvaluationItemDetailViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
-        itemClickListener = listener;
+        this.itemClickListener = listener;
         this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.lecture.setPaintFlags(this.lecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.colorchip_green_highlight));
+        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
     }
 
     private void setRatingBarColor(int color) {
@@ -55,15 +57,15 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder impl
     }
 
     private void setPoint(Integer point) {
-        if(point == null || point < 0) this.setRatingBarColor(AppConst.COLOR_NEUTRAL);
-        else if(point >= 8) this.setRatingBarColor(AppConst.COLOR_POINT_HIGH);
-        else this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
+        final Resources res = this.context.getResources();
+        if(point == null || point < 0) this.setRatingBarColor(res.getColor(R.color.inactive));
+        else if(point >= 8) this.setRatingBarColor(res.getColor(R.color.point_high));
+        else this.setRatingBarColor(res.getColor(R.color.point_low));
         this.pointStar.setRating(point == null || point < 0 ? 5.0f : point/2f);
         this.pointText.setText(point == null || point < 0 ? "0 " : point.toString()+" ");
     }
 
     public void bind(EvaluationData evaluation) {
-        final Context context = this.itemView.getContext();
         Picasso.with(context).load(evaluation.avatar_url).transform(new CircleTransformation()).into(this.avatar);
         this.category.setText(context.getString(R.string.category_major)); // TODO -> evaluation.category
         this.lecture.setSelected(true);

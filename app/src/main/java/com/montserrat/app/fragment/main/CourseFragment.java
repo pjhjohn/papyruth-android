@@ -86,7 +86,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     public void onResume() {
         super.onResume();
         this.toolbar.setTitle(R.string.toolbar_title_course);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());

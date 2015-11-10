@@ -94,7 +94,7 @@ public class ProfileChangeEmailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         toolbar.setTitle(R.string.toolbar_edit_profile);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
         FloatingActionControl.getButton().setMax(100);

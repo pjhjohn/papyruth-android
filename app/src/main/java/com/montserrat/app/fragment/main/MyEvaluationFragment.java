@@ -2,7 +2,6 @@ package com.montserrat.app.fragment.main;
 
 import android.view.View;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Evaluation;
@@ -19,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationAdapter, EvaluationData> {
 
@@ -46,7 +44,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         super.onResume();
 
         toolbar.setTitle(R.string.nav_item_my_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
 
         this.subscriptions.add(
             Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page = 1)

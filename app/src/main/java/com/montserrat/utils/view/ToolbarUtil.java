@@ -42,6 +42,18 @@ public class ToolbarUtil {
         return animTop;
     }
 
+    public static void registerMenu(Toolbar toolbar, int menuResourceId, Toolbar.OnMenuItemClickListener listener) {
+        toolbar.inflateMenu(menuResourceId);
+        toolbar.setOnMenuItemClickListener(listener);
+        toolbar.setTitleTextColor(Color.WHITE);
+
+    }
+
+    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColorResourceId) {
+        if(toolbar == null) return null;
+        return getColorTransitionAnimatorInner(toolbar, AppManager.getInstance().getMainToolbarColor(), toolbar.getContext().getResources().getColor(toColorResourceId));
+    }
+
     private static ValueAnimator getColorTransitionAnimatorInner(Toolbar toolbar, int fromColor, int toColor) {
         ValueAnimator animColor = new ValueAnimator();
         animColor.setIntValues(fromColor, toColor);
@@ -56,34 +68,5 @@ public class ToolbarUtil {
             }
         });
         return animColor;
-    }
-
-    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int fromColor, int toColor, String name){
-        if(toolbar == null) return null;
-        toolbar.setTitle(name);
-        return getColorTransitionAnimatorInner(toolbar, fromColor, toColor);
-    }
-
-    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColor, String name){
-        if(toolbar == null) return null;
-        toolbar.setTitle(name);
-        return getColorTransitionAnimatorInner(toolbar, AppManager.getInstance().getMainToolbarColor(), toColor);
-    }
-
-    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int fromColor, int toColor) {
-        if(toolbar == null) return null;
-        return getColorTransitionAnimatorInner(toolbar, fromColor, toColor);
-    }
-
-    public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColor) {
-        if(toolbar == null) return null;
-        return getColorTransitionAnimatorInner(toolbar, AppManager.getInstance().getMainToolbarColor(), toColor);
-    }
-
-    public static void registerMenu(Toolbar toolbar, int menuResourceId, Toolbar.OnMenuItemClickListener listener) {
-        toolbar.inflateMenu(menuResourceId);
-        toolbar.setOnMenuItemClickListener(listener);
-        toolbar.setTitleTextColor(Color.WHITE);
-
     }
 }

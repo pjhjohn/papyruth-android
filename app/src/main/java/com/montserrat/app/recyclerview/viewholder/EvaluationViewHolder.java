@@ -67,13 +67,14 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_modify) protected ImageView modify;
     private Integer id;
     private VoteStatus status;
-
+    private final Context context;
     public enum VoteStatus {
         UP, DOWN, NONE
     }
     public EvaluationViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.lecture.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.upIcon.setOnClickListener(this);
@@ -82,17 +83,17 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         this.downCount.setOnClickListener(this);
         this.setStatus(VoteStatus.NONE);
         this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.colorchip_green_highlight));
+        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
     }
 
     private void setStatus(VoteStatus newStatus) {
         this.status = newStatus;
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL)).into(this.upIcon);
-        this.upCount.setTextColor(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(this.upIcon);
+        this.upCount.setTextColor(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL)).into(this.downIcon);
-        this.downCount.setTextColor(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status==VoteStatus.DOWN? R.color.vote_down : R.color.vote_none))).into(this.downIcon);
+        this.downCount.setTextColor(context.getResources().getColor(status==VoteStatus.DOWN? R.color.vote_down : R.color.vote_none));
     }
 
     private void setVoteCount(Integer upCount, Integer downCount) {
@@ -107,24 +108,25 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void setPointRating(TextView prefix, RatingBar rating, TextView text, Integer point) {
         if(point == null || point < 0) {
-            prefix.setTextColor(AppConst.COLOR_NEUTRAL);
-            this.setRatingBarColor(rating, AppConst.COLOR_NEUTRAL);
-            text.setTextColor(AppConst.COLOR_NEUTRAL);
+            prefix.setTextColor(context.getResources().getColor(R.color.inactive));
+            this.setRatingBarColor(rating, context.getResources().getColor(R.color.inactive));
+            text.setTextColor(context.getResources().getColor(R.color.inactive));
             text.setText("N/A");
         } else {
-            prefix.setTextColor(point >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
-            this.setRatingBarColor(rating, point >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
-            text.setTextColor(point >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
+            final int pointColor = context.getResources().getColor(point >= 8? R.color.point_high : R.color.point_low);
+            prefix.setTextColor(pointColor);
+            this.setRatingBarColor(rating, pointColor);
+            text.setTextColor(pointColor);
             text.setText(point >= 10 ? "10" : String.format("%d.0", point));
         } rating.setRating(point == null || point < 0 ? 5.0f : (float)point/2f);
     }
 
     private void setPointProgress(TextView prefix, ProgressBar progress, TextView text, Integer point) {
         if(point == null || point < 0) {
-            prefix.setTextColor(AppConst.COLOR_NEUTRAL);
-            progress.setProgressDrawable(new ColorDrawable(AppConst.COLOR_NEUTRAL));
+            prefix.setTextColor(context.getResources().getColor(R.color.inactive));
+            progress.setProgressDrawable(new ColorDrawable(context.getResources().getColor(R.color.inactive)));
             progress.setProgress(100);
-            text.setTextColor(AppConst.COLOR_NEUTRAL);
+            text.setTextColor(context.getResources().getColor(R.color.inactive));
             text.setText("N/A");
         } else {
             progress.setProgress(point);
@@ -139,7 +141,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     public void bind(Evaluation evaluation) {
-        final Context context = this.itemView.getContext();
         this.id = evaluation.getId();
         this.lecture.setText(evaluation.getLectureName());
         this.timestamp.setText(DateTimeUtil.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.DATE_AND_TIME));
@@ -165,7 +166,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                     float totalWidth = 0;
                     for (String hashtag : response.hashtags) {
                         Evaluation.getInstance().addHashTag(hashtag);
-                        Hashtag tag = new Hashtag(this.itemView.getContext(), hashtag);
+                        Hashtag tag = new Hashtag(context, hashtag);
                         float width = tag.getPaint().measureText((String) tag.getText());
                         if (width + totalWidth > hashtags.getWidth()) break;
                         this.hashtags.addView(tag);
@@ -174,7 +175,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                 });
             });
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.commentIcon);
+        Picasso.with(context).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.commentIcon);
         this.commentCount.setText(evaluation.getCommentCount() == null || evaluation.getCommentCount() < 0 ? "N/A" : String.valueOf(evaluation.getCommentCount()));
 
         if(evaluation.getRequestUserVote() == null) this.setStatus(VoteStatus.NONE);
@@ -182,7 +183,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         else this.setStatus(VoteStatus.DOWN);
 
         this.setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
-//        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_CLARITY)).into(this.modify);
+//        Picasso.with(context).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_CLARITY)).into(this.modify);
         if(User.getInstance().getId().equals(evaluation.getUserId())){
             this.modify.setVisibility(View.VISIBLE);
         }else{

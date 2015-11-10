@@ -29,21 +29,23 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder impl
     @InjectView(R.id.type_text) protected TextView typeText;
     private RecyclerViewItemClickListener itemClickListener;
     private int iconColor;
-    public AutoCompleteResponseViewHolder(View parent, RecyclerViewItemClickListener listener) {
-        super(parent);
-        ButterKnife.inject(this, parent);
-        parent.setOnClickListener(this);
+    private final Context context;
+
+    public AutoCompleteResponseViewHolder(View itemView, RecyclerViewItemClickListener listener) {
+        super(itemView);
+        ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
+        itemView.setOnClickListener(this);
         this.itemClickListener = listener;
         ShapeDrawable drawable = new ShapeDrawable();
         drawable.getPaint().setStyle(Paint.Style.STROKE);
         drawable.getPaint().setColor(0xffdddddd);
         this.layout.setBackgroundDrawable(drawable);
-        this.iconColor = parent.getContext().getResources().getColor(R.color.icon_material);
+        this.iconColor = context.getResources().getColor(R.color.icon_material);
         this.itemView.setBackgroundResource(R.drawable.row_selector);
     }
 
     public void bind(Candidate item) {
-        final Context context = this.itemView.getContext();
         if (item.lecture_id != null && item.professor_id != null){
             Picasso.with(context).load(R.drawable.ic_light_new_evaluation).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText(item.lecture_name + " - " +item.professor_name);

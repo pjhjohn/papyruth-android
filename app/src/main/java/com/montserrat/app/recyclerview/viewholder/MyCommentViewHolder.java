@@ -1,5 +1,6 @@
 package com.montserrat.app.recyclerview.viewholder;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,14 +35,15 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
     @InjectView (R.id.evaluation_item_comment_icon) protected ImageView commentIcon;
     @InjectView (R.id.evaluation_item_comment_count) protected TextView commentCount;
     @InjectView(R.id.evaluation_item_comment) protected RelativeLayout commentContainer;
-
     private RecyclerViewItemClickListener itemClickListener;
+    private final Context context;
     private CompositeSubscription subscription;
     public MyCommentViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
-        itemClickListener = listener;
+        this.itemClickListener = listener;
         this.subscription = new CompositeSubscription();
     }
 
@@ -53,14 +55,12 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
         this.professor.setText(comment.professor_name);
         this.lecture.setText(comment.lecture_name);
         this.category.setText(comment.category);
-        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.colorchip_green_highlight));
+        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.upIcon);
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.downIcon);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.upIcon);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.downIcon);
         this.setVoteCount(comment.up_vote_count, comment.down_vote_count);
     }
-
-
 
     @Override
     public void onClick (View view) {

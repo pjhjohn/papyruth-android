@@ -25,16 +25,17 @@ public class OpenSourceLicenseViewHolder extends RecyclerView.ViewHolder impleme
     @InjectView(R.id.osl_name) TextView name;
     OpenSourceLicenseData data;
     RecyclerViewItemClickListener itemClickListener;
+    private final Context context;
     public OpenSourceLicenseViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
-        itemClickListener = listener;
+        this.itemClickListener = listener;
         this.name.setPaintFlags(this.name.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
     }
 
     public void bind(OpenSourceLicenseData osl) {
-        final Context context = this.itemView.getContext();
         this.data = osl;
         this.name.setText(osl.name);
         Picasso.with(context).load(osl.repoIconResId).transform(new ColorFilterTransformation(Color.GRAY)).into(this.icon);

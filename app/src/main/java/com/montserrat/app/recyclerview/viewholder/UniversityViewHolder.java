@@ -1,5 +1,6 @@
 package com.montserrat.app.recyclerview.viewholder;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -20,17 +21,18 @@ public class UniversityViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.university_item_name) protected TextView name;
     @InjectView(R.id.university_item_image) protected SquareImageView image;
     private RecyclerViewItemClickListener itemClickListener;
-
+    private final Context context;
     public UniversityViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
         this.itemClickListener = listener;
     }
 
     public void bind(UniversityData universityData) {
         this.name.setText(universityData.name);
-        Picasso.with(this.itemView.getContext()).load(universityData.image_url).into(this.image);
+        Picasso.with(context).load(universityData.image_url).into(this.image);
     }
 
     @Override

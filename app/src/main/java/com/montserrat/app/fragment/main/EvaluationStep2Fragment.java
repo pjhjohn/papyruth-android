@@ -16,7 +16,6 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -114,7 +113,7 @@ public class EvaluationStep2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> {

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.FavoriteData;
@@ -141,7 +140,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         super.onResume();
 
         this.toolbar.setTitle(R.string.toolbar_favorite);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.point_clarity).start();
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 

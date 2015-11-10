@@ -1,7 +1,5 @@
 package com.montserrat.app;
 
-import android.graphics.Color;
-
 /**
  * Created by pjhjohn on 2015-04-16.
  */
@@ -35,23 +33,6 @@ public class AppConst {
         public static final String SIMPLE = "yyyy.MM.dd";
         public static final String DATE_AND_TIME = "yy.MM.dd HH:mm";
     }
-
-    public static final int COLOR_POSITIVE = Color.rgb(201, 57, 64);
-    public static final int COLOR_NEGATIVE = Color.rgb(36, 80, 141);
-    public static final int COLOR_NEUTRAL = Color.rgb(100, 100, 100);
-
-    public static final int COLOR_GRAY = Color.rgb(230, 230, 230);
-    public static final int COLOR_GRAY_ACCENT = Color.rgb(242, 242, 242);
-    public static final int COLOR_HIGHLIGHT_YELLOW = Color.rgb(255, 194, 0);
-
-    public static final int COLOR_POINT_OVERALL = Color.rgb(0, 0, 0);
-    public static final int COLOR_POINT_EASINESS = Color.rgb(65, 183, 174);
-    public static final int COLOR_POINT_GPA_SATISFACTION = Color.rgb(84, 107, 141);
-    public static final int COLOR_POINT_CLARITY = Color.rgb(224, 94, 95);
-
-    public static final int COLOR_POINT_LOW = Color.rgb(65, 183, 174);
-    public static final int COLOR_POINT_HIGH = Color.rgb(224, 94, 95);
-
 
     /**
      * Hierachy of ViewPager is directly mapped to FragmentFactory & ViewPagerManager

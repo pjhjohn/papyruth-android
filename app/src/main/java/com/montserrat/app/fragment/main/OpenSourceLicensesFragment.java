@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.OpenSourceLicenseData;
 import com.montserrat.app.recyclerview.adapter.OpenSourceLicensesAdapter;
@@ -53,7 +52,7 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
     public void onResume() {
         super.onResume();
         toolbar.setTitle(R.string.toolbar_osl);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         FloatingActionControl.getInstance().hide(true);
     }
 

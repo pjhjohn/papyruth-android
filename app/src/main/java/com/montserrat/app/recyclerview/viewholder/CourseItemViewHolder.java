@@ -38,11 +38,13 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.course_item_evaluator_icon) protected ImageView evaluatorIcon;
     @InjectView(R.id.course_item_evaluator_count) protected TextView evaluatorCount;
     RecyclerViewItemClickListener itemClickListener;
+    private final Context context;
     public CourseItemViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
-        itemClickListener = listener;
+        this.itemClickListener = listener;
         this.lecture.setPaintFlags(this.lecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.colorchip_green_highlight));
@@ -57,8 +59,8 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void setPointRating(RatingBar rating, Integer point_sum, Integer count) {
         Float rating_value = count == null || count <= 0 ? null : point_sum == null ? null : (float)point_sum / (float)count / 2f;
-        if(rating_value == null || rating_value < 0) this.setRatingBarColor(rating, AppConst.COLOR_NEUTRAL);
-        else this.setRatingBarColor(rating, rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
+        if(rating_value == null || rating_value < 0) this.setRatingBarColor(rating, context.getResources().getColor(R.color.inactive));
+        else this.setRatingBarColor(rating, context.getResources().getColor(rating_value >= 8? R.color.point_high : R.color.point_low));
         rating.setRating(rating_value == null || rating_value < 0 ? 5.0f : rating_value);
         this.pointOverallText.setText(rating_value == null || rating_value < 0 ? "0" : String.format("%.1f", rating_value));
     }

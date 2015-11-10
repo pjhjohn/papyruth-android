@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
-import com.montserrat.app.model.unique.Statistics;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.picasso.ColorFilterTransformation;
@@ -83,7 +82,7 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         final Context context = this.getActivity();
         this.toolbar.setTitle(R.string.toolbar_profile);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
 
