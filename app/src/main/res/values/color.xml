@@ -13,6 +13,7 @@
     <color name="colorchip_green_accent">#60EAC6</color>
     <color name="colorchip_green_highlight">#80EAE6</color>
     <color name="colorchip_green_light">#E9F7F7</color>
+    <color name="colorchip_yellow">#FFC81D</color>
 
     <!--Gray Scale-->
     <color name="white_10p">#1A1A1A</color>
@@ -40,11 +41,22 @@
     <color name="item_selected">#E8E8E8</color>
     <color name="item_pressed">#D6D6D6</color>
 
+    <!--BookMark-->
+    <color name="inactive">@color/white_40p</color>
+    <color name="active">@color/colorchip_yellow</color>
+
+    <!--Vote-->
+    <color name="vote_up">@color/colorchip_red</color>
+    <color name="vote_down">@color/colorchip_blue</color>
+    <color name="vote_none">@color/white_40p</color>
+
     <!--Evaluation Point-->
-    <color name="point_overall">#FFC81D</color>
+    <color name="point_overall">@color/colorchip_yellow</color>
     <color name="point_easiness">@color/colorchip_green</color>
     <color name="point_gpa_satisfaction">@color/colorchip_blue</color>
     <color name="point_clarity">@color/colorchip_red</color>
+    <color name="point_low">@color/colorchip_green</color>
+    <color name="point_high">@color/colorchip_red</color>
 
     <!--Background-->
     <color name="background_profile_change">@color/white_95p</color>
@@ -56,7 +68,7 @@
     <!--Search Category-->
     <color name="lecture_type_major">@color/colorchip_green</color>
     <color name="lecture_type_liberal_arts">@color/colorchip_red</color>
-    <color name="lecture_type_other">@color/disabled</color>
+    <color name="lecture_type_other">@color/white_80p</color>
 
     <!--Legacy Background Color-->
     <color name="bg_normal">@color/white_70p</color>

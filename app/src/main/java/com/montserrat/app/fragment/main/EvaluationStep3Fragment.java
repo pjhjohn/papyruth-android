@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.unique.Evaluation;
@@ -49,15 +48,18 @@ import timber.log.Timber;
 
 public class EvaluationStep3Fragment extends Fragment {
     private Navigator navigator;
+    private Context context;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.navigator = (Navigator) activity;
+        this.context   = activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
         this.navigator = null;
+        this.context   = null;
     }
 
     @InjectView(R.id.evaluation_body_icon) protected ImageView bodyIcon;
@@ -129,7 +131,7 @@ public class EvaluationStep3Fragment extends Fragment {
         super.onResume();
         final Context context = this.getActivity();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
@@ -155,8 +157,8 @@ public class EvaluationStep3Fragment extends Fragment {
                 .build()
                 .show();
         });
-        Picasso.with(context).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.bodyIcon);
-        Picasso.with(context).load(R.drawable.ic_light_tag).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.hashtagsIcon);
+        Picasso.with(context).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.bodyIcon);
+        Picasso.with(context).load(R.drawable.ic_light_tag).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.hashtagsIcon);
         this.bodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.bodyLabel.getPaintFlags());
         this.hashtagsLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.hashtagsLabel.getPaintFlags());
 

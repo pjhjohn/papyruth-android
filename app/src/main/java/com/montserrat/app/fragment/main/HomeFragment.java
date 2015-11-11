@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Evaluation;
@@ -37,7 +36,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         super.onResume();
         sinceId = null;
         toolbar.setTitle(R.string.toolbar_title_home);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_red).start();
 
         this.subscriptions.add(
             Api.papyruth().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, null)

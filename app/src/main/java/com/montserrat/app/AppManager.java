@@ -18,9 +18,7 @@ import timber.log.Timber;
 public class AppManager {
     /* Singleton */
     private static AppManager instance;
-    private AppManager() {
-        mainToolbarColor = AppConst.COLOR_POINT_EASINESS;
-    }
+    private AppManager() {}
     public static AppManager getInstance() {
         if ( instance == null ) return instance = new AppManager();
         else return instance;
@@ -33,6 +31,7 @@ public class AppManager {
 
     public void setContext(Context context) {
         this.context = context;
+        this.mainToolbarColor = context.getResources().getColor(R.color.colorchip_green);
         this.pref = this.context.getSharedPreferences(AppConst.Preference.STORAGE_NAME, Context.MODE_PRIVATE);
     }
 

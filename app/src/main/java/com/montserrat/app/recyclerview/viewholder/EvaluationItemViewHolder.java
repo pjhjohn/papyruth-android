@@ -1,6 +1,7 @@
 package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -43,29 +44,30 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
     @InjectView (R.id.evaluation_item_down_vote_count) protected TextView downCount;
     @InjectView (R.id.evaluation_item_comment_icon) protected ImageView commentIcon;
     @InjectView (R.id.evaluation_item_comment_count) protected TextView commentCount;
-
     private RecyclerViewItemClickListener itemClickListener;
     private VoteStatus status;
-
+    private final Context context;
     public enum VoteStatus {
         UP, DOWN, NONE
     }
+
     public EvaluationItemViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
-        itemClickListener = listener;
+        this.itemClickListener = listener;
         this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
     }
 
     private void setStatus(VoteStatus newStatus) {
         this.status = newStatus;
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL)).into(this.upIcon);
-        this.upCount.setTextColor(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(this.upIcon);
+        this.upCount.setTextColor(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL)).into(this.downIcon);
-        this.downCount.setTextColor(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status==VoteStatus.DOWN? R.color.vote_down : R.color.vote_none))).into(this.downIcon);
+        this.downCount.setTextColor(context.getResources().getColor(status==VoteStatus.DOWN? R.color.vote_down : R.color.vote_none));
     }
 
     private void setVoteCount(Integer upCount, Integer downCount) {
@@ -79,28 +81,28 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
     }
 
     private void setPoint(Integer point) {
+        final Resources res = context.getResources();
         String pointStr;
         if(point == null || point < 0) {
             pointStr = "N/A";
-            this.pointText.setTextColor(AppConst.COLOR_NEUTRAL);
+            this.pointText.setTextColor(res.getColor(R.color.inactive));
+            this.setRatingBarColor(res.getColor(R.color.inactive));
             this.pointStar.setRating(5.0f);
-            this.setRatingBarColor(AppConst.COLOR_NEUTRAL);
         } else if(point >= 8) {
             if(point >= 10) pointStr = "10";
             else pointStr = String.format("%d.0", point);
-            this.pointText.setTextColor(AppConst.COLOR_POINT_HIGH);
-            this.setRatingBarColor(AppConst.COLOR_POINT_HIGH);
+            this.pointText.setTextColor(res.getColor(R.color.point_high));
+            this.setRatingBarColor(res.getColor(R.color.point_high));
         } else {
             pointStr = String.format("%d.0", point);
-            this.pointText.setTextColor(AppConst.COLOR_POINT_LOW);
-            this.setRatingBarColor(AppConst.COLOR_POINT_LOW);
+            this.pointText.setTextColor(res.getColor(R.color.point_low));
+            this.setRatingBarColor(res.getColor(R.color.point_low));
         }
         this.pointText.setText(Html.fromHtml(String.format("%s<strong>%s</strong>", "", pointStr)));
         this.pointStar.setRating(point/2.0f);
     }
 
     public void bind(EvaluationData evaluation) {
-        final Context context = this.itemView.getContext();
         Picasso.with(context).load(evaluation.avatar_url).transform(new CircleTransformation()).into(this.avatar);
         this.timestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
         this.body.setText(evaluation.body);
@@ -109,7 +111,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
         this.hashtags.post(() -> {
             float totalWidth = 0;
             for(int i = 0; i < 5; i ++) {
-                Hashtag hashtag = new Hashtag(this.itemView.getContext(), "hashtag" + i);
+                Hashtag hashtag = new Hashtag(context, "hashtag" + i);
                 float width = hashtag.getPaint().measureText((String)hashtag.getText());
                 if(width + totalWidth > hashtags.getWidth()) break;
                 this.hashtags.addView(hashtag);
@@ -126,7 +128,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder implements
 
         this.setVoteCount(evaluation.up_vote_count, evaluation.down_vote_count);
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.commentIcon);
+        Picasso.with(context).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.commentIcon);
         this.commentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
     }
 

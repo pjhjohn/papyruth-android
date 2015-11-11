@@ -81,7 +81,7 @@ public class SettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         toolbar.setTitle(R.string.toolbar_settings);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_GPA_SATISFACTION).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         FloatingActionControl.getInstance().hide(true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);

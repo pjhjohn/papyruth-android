@@ -114,7 +114,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     public void onResume() {
         super.onResume();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_EASINESS).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
         ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
         FloatingActionControl.getInstance().clear();
 

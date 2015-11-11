@@ -34,29 +34,29 @@ public class MyEvaluationViewHolder extends RecyclerView.ViewHolder implements V
     @InjectView (R.id.evaluation_item_down_vote_count) protected TextView downCount;
     @InjectView (R.id.evaluation_item_comment_icon) protected ImageView commentIcon;
     @InjectView (R.id.evaluation_item_comment_count) protected TextView commentCount;
-
     private RecyclerViewItemClickListener itemClickListener;
+    private final Context context;
     public MyEvaluationViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
-        itemClickListener = listener;
+        this.itemClickListener = listener;
     }
 
     public void bind(EvaluationData evaluation) {
-        final Context context = this.itemView.getContext();
         this.lecture.setText(evaluation.lecture_name);
         this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.professor_name, context.getResources().getString(R.string.professor_postfix))));
         this.body.setText(evaluation.body);
         this.timestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
-        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.colorchip_green_highlight));
+        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
         this.category.setText(R.string.lecture_type_major);
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.upIcon);
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.downIcon);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.upIcon);
+        Picasso.with(context).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.downIcon);
         this.setVoteCount(evaluation.up_vote_count, evaluation.down_vote_count);
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.commentIcon);
+        Picasso.with(context).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.commentIcon);
         this.commentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
     }
 

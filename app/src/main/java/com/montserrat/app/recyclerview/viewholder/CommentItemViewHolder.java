@@ -1,5 +1,6 @@
 package com.montserrat.app.recyclerview.viewholder;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -37,6 +38,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     @InjectView(R.id.comment_item_down_vote_count) protected TextView downCount;
     private int id;
     private VoteStatus status;
+    private final Context context;
     public enum VoteStatus {
         UP, DOWN, NONE
     }
@@ -44,6 +46,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     public CommentItemViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         itemView.setOnClickListener(this);
         this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.upIcon.setOnClickListener(this);
@@ -56,11 +59,11 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     private void setStatus(VoteStatus newStatus) {
         this.status = newStatus;
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL)).into(this.upIcon);
-        this.upCount.setTextColor(status == VoteStatus.UP ? AppConst.COLOR_POSITIVE : AppConst.COLOR_NEUTRAL);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(this.upIcon);
+        this.upCount.setTextColor(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
 
-        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL)).into(this.downIcon);
-        this.downCount.setTextColor(status == VoteStatus.DOWN ? AppConst.COLOR_NEGATIVE : AppConst.COLOR_NEUTRAL);
+        Picasso.with(this.itemView.getContext()).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(this.downIcon);
+        this.downCount.setTextColor(context.getResources().getColor(status==VoteStatus.DOWN? R.color.vote_down : R.color.vote_none));
     }
 
     private void setVoteCount(Integer upCount, Integer downCount) {

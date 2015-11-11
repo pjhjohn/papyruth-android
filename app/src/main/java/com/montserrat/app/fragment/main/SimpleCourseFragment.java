@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
@@ -118,7 +117,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
             this.getSearchResult();
         }).setToolbarSearchViewSearchListener(() ->  this.getSearchResult() );
 
-        ToolbarUtil.getColorTransitionAnimator(toolbar, AppConst.COLOR_POINT_CLARITY).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_red).start();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
 
         this.subscriptions.add(

@@ -1,5 +1,6 @@
 package com.montserrat.app.recyclerview.viewholder;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -18,9 +19,11 @@ public class InformViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.inform_body) protected TextView body;
     @InjectView(R.id.inform_btn_positive) protected Button positiveButton;
     @InjectView(R.id.inform_btn_optional) protected Button optionalButton;
+    private final Context context;
     public InformViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         positiveButton.setOnClickListener(view -> {
             if (listener != null) listener.onRecyclerViewItemClick(view, this.getAdapterPosition());
         });
@@ -30,6 +33,6 @@ public class InformViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(int bodyResourceId) {
-        this.body.setText(this.itemView.getContext().getString(bodyResourceId));
+        this.body.setText(context.getString(bodyResourceId));
     }
 }

@@ -1,7 +1,5 @@
 package com.montserrat.app;
 
-import android.graphics.Color;
-
 /**
  * Created by pjhjohn on 2015-04-16.
  */
@@ -36,23 +34,6 @@ public class AppConst {
         public static final String DATE_AND_TIME = "yy.MM.dd HH:mm";
     }
 
-    public static final int COLOR_POSITIVE = Color.rgb(201, 57, 64);
-    public static final int COLOR_NEGATIVE = Color.rgb(36, 80, 141);
-    public static final int COLOR_NEUTRAL = Color.rgb(100, 100, 100);
-
-    public static final int COLOR_GRAY = Color.rgb(230, 230, 230);
-    public static final int COLOR_GRAY_ACCENT = Color.rgb(242, 242, 242);
-    public static final int COLOR_HIGHLIGHT_YELLOW = Color.rgb(255, 194, 0);
-
-    public static final int COLOR_POINT_OVERALL = Color.rgb(0, 0, 0);
-    public static final int COLOR_POINT_EASINESS = Color.rgb(65, 183, 174);
-    public static final int COLOR_POINT_GPA_SATISFACTION = Color.rgb(84, 107, 141);
-    public static final int COLOR_POINT_CLARITY = Color.rgb(224, 94, 95);
-
-    public static final int COLOR_POINT_LOW = Color.rgb(65, 183, 174);
-    public static final int COLOR_POINT_HIGH = Color.rgb(224, 94, 95);
-
-
     /**
      * Hierachy of ViewPager is directly mapped to FragmentFactory & ViewPagerManager
      * Subclass of ViewPager should be registered as Type of FragmentFactory
@@ -75,26 +56,14 @@ public class AppConst {
         public static final String STORAGE_NAME = "montserrat_sharedpref";
 
         /* Keys */
-        public static final String AUTO_SIGNIN = "auto_signin";
         public static final String ACCESS_TOKEN = "access_token";
         public static final String HISTORY = "history";
-        public static final String SEARCH = "search";
-
-        /* Validate */
-        public static final String EMAIL = "email";
-        public static final String NICKNAME = "nickname";
-
-        /* University info */
-        public static final String INFO_UNIVERSITY_COUNT = "univ_name";
-        public static final String INFO_STUREND_COUNT = "univ_student_count";
-        public static final String INFO_EVALUATION_COUNT = "univ_evaluation_count";
-        public static final String UNIVERSITY_NAME = "info_university";
-        public static final String UNIVERSITY_EVALUATION_COUNT = "info_number_of_evaluation";
-        public static final String UNIVERSITY_STUDENT_COUNT = "info_number_of_student";
     }
+
     public static class Tag{
         public static final String ACTIVE_FRAGMENT = "FRAGMENT";
     }
+
     public static class Menu{
         public static final int MENU_SEARCH = R.id.menu_search;
         public static final int MENU_SETTING = R.id.menu_setting;

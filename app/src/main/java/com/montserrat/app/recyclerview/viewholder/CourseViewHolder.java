@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.User;
@@ -55,15 +54,18 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     @InjectView(R.id.course_evaluator_icon) protected ImageView evaluatorIcon;
     @InjectView(R.id.course_evaluator_count) protected TextView evaluatorCount;
     @InjectView(R.id.course_bookmark) protected ImageView bookmark;
-
     private CompositeSubscription subscription;
+    private final Context context;
+    private final int colorInactive;
     public CourseViewHolder(View itemView) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        this.context = itemView.getContext();
         this.lecture.setPaintFlags(this.lecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.category.setTextColor(itemView.getContext().getResources().getColor(R.color.colorchip_green_highlight));
+        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
         this.subscription = new CompositeSubscription();
+        this.colorInactive = context.getResources().getColor(R.color.inactive);
     }
 
     private void setRatingBarColor(RatingBar rating, int color) {
@@ -74,14 +76,15 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     private void setPointRating(TextView prefix, RatingBar rating, TextView text, Integer point_sum, Integer count) {
         Float rating_value = count == null || count <= 0 ? null : point_sum == null ? null : (float)point_sum / (float)count / 2f;
         if(rating_value == null || rating_value < 0) {
-            prefix.setTextColor(AppConst.COLOR_NEUTRAL);
-            this.setRatingBarColor(rating, AppConst.COLOR_NEUTRAL);
-            text.setTextColor(AppConst.COLOR_NEUTRAL);
+            prefix.setTextColor(colorInactive);
+            this.setRatingBarColor(rating, colorInactive);
+            text.setTextColor(colorInactive);
             text.setText("N/A");
         } else {
-            prefix.setTextColor(rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
-            this.setRatingBarColor(rating, rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
-            text.setTextColor(rating_value >= 8 ? AppConst.COLOR_POINT_HIGH : AppConst.COLOR_POINT_LOW);
+            final int pointColor = context.getResources().getColor(rating_value >= 8? R.color.point_high : R.color.point_low);
+            prefix.setTextColor(pointColor);
+            this.setRatingBarColor(rating, pointColor);
+            text.setTextColor(pointColor);
             text.setText(rating_value >= 10 ? "10" : String.format("%.1f", rating_value));
         } rating.setRating(rating_value == null || rating_value < 0 ? 5.0f : rating_value);
     }
@@ -89,10 +92,10 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     private void setPointProgress(TextView prefix, ProgressBar progress, TextView text, Integer point_sum, Integer count) {
         Integer progress_value = count == null || count <= 0 ? null : point_sum == null ? null : (int)(((float)point_sum / (float)count) * 10);
         if(progress_value == null || progress_value < 0) {
-            prefix.setTextColor(AppConst.COLOR_NEUTRAL);
-            progress.setProgressDrawable(new ColorDrawable(AppConst.COLOR_NEUTRAL));
+            prefix.setTextColor(colorInactive);
+            progress.setProgressDrawable(new ColorDrawable(colorInactive));
             progress.setProgress(100);
-            text.setTextColor(AppConst.COLOR_NEUTRAL);
+            text.setTextColor(colorInactive);
             text.setText("N/A");
         } else {
             progress.setProgress(progress_value);
@@ -101,7 +104,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     }
 
     public void bind(Course course) {
-        final Context context = this.itemView.getContext();
         final Integer count = course.getEvaluationCount();
         this.category.setText(context.getString(R.string.category_major)); // TODO -> evaluation.category
         this.lecture.setText(course.getName());
@@ -126,11 +128,10 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 totalWidth += width;
             }
         });
-        Picasso.with(context).load(R.drawable.ic_light_people).transform(new ColorFilterTransformation(AppConst.COLOR_NEUTRAL)).into(this.evaluatorIcon);
+        Picasso.with(context).load(R.drawable.ic_light_people).transform(new ColorFilterTransformation(colorInactive)).into(this.evaluatorIcon);
         this.evaluatorCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
         Picasso.with(context).load(R.drawable.ic_light_bookmark)
-            .transform(
-                new ColorFilterTransformation(course.getIsFavorite()? AppConst.COLOR_HIGHLIGHT_YELLOW : AppConst.COLOR_GRAY ))
+            .transform(new ColorFilterTransformation(context.getResources().getColor(course.getIsFavorite()? R.color.active : R.color.inactive)))
             .into(this.bookmark);
         this.bookmark.setOnClickListener(this);
         Timber.d("favor %s", Course.getInstance().getIsFavorite());
@@ -143,7 +144,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         }
     }
     private void favorite(boolean setting){
-        final Context context = this.itemView.getContext();
         this.subscription.add(
             Api.papyruth().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), setting)
                 .filter(response -> response.success)
@@ -153,8 +153,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                     response -> {
                         Course.getInstance().setIsFavorite(setting);
                         Picasso.with(context).load(R.drawable.ic_light_bookmark)
-                            .transform(
-                                new ColorFilterTransformation(setting ? AppConst.COLOR_HIGHLIGHT_YELLOW : AppConst.COLOR_GRAY))
+                            .transform(new ColorFilterTransformation(context.getResources().getColor(setting? R.color.active : R.color.inactive)))
                             .into(this.bookmark);
                     }, error -> {
                         error.printStackTrace();
