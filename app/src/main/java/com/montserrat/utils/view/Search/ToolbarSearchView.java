@@ -5,8 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +47,6 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         return ToolbarSearchView.instance;
     }
     @InjectView(R.id.search_view_toolbar) protected RelativeLayout searchViewHeader;
-    @InjectView(R.id.search_view_outside) protected View outsideView;
     @InjectView(R.id.toolbar_search_view) protected LinearLayout toolbarSearchViewContainer;
     @InjectView(R.id.search_view_back) protected ImageView btnBack;
     @InjectView(R.id.search_view_delete) protected ImageView btnClear;
@@ -83,15 +82,25 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
             if(this.searchView.getVisibility() == View.VISIBLE)
                 this.hide();
         });
+        this.searchResult.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if(child != null)
+                    return super.onInterceptTouchEvent(rv, e);
+
+                hide();
+                return true;
+
+            }
+        });
+
 
         Picasso.with(context).load(R.drawable.ic_light_clear).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(btnClear);
         Picasso.with(context).load(R.drawable.ic_light_back).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(btnBack);
 
         if(this.searchView.getVisibility() == View.VISIBLE)
             this.hide();
-        outsideView.setOnClickListener(v->{
-            this.hide();
-        });
 
         if(this.subscription == null) {
             this.subscription = new CompositeSubscription();
@@ -196,19 +205,6 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         this.candidates.clear();
         this.candidates.addAll(candidates);
         this.autoCompleteAdapter.notifyDataSetChanged();
-
-        ViewGroup.LayoutParams param;
-        param =  searchResult.getLayoutParams();
-        if(!this.candidates.isEmpty()) {
-            if (this.candidates.size() < 5) {
-                param.height = (int) (48 * this.candidates.size() * this.context.getResources().getDisplayMetrics().density);
-            } else {
-                param.height = (int) (240 * this.context.getResources().getDisplayMetrics().density);
-            }
-        }else{
-            param.height = 0;
-        }
-        this.searchResult.setLayoutParams(param);
     }
 
     public boolean back(){
@@ -343,11 +339,8 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
     }
 
     public int containsCourse(List<Candidate> candidates, Candidate target) {
-        Timber.d("hash : %s", target.hashCode());
         for (Candidate course : candidates) {
-            Timber.d("hash : %s", course.hashCode());
             if ((course.lecture_id != null && course.lecture_id.equals(target.lecture_id)) || ( course.professor_id != null &&course.professor_id.equals(target.professor_id))) {
-                Timber.d("&& collect!!");
                 return candidates.indexOf(course);
             }
         }

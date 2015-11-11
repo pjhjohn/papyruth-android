@@ -13,9 +13,7 @@ import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
-import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
-import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SettingsFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
@@ -29,14 +27,12 @@ import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
-import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 import com.montserrat.utils.view.search.ToolbarSearchView;
 import com.montserrat.utils.view.softkeyboard.SoftKeyboardActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, ToolbarSearchView.ToolbarSearchViewListener {
     private NavigationDrawerFragment mNavigationDrawer;

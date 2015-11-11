@@ -29,10 +29,7 @@ import com.montserrat.utils.view.viewpager.OnBack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.android.app.AppObservable;
-import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  *
@@ -67,9 +64,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     public void onResume() {
         super.onResume();
         this.isOpenSlave = false;
-        Timber.d("is this evaluation alive? %s", Evaluation.getInstance().getId());
-
-
         if(Evaluation.getInstance().getId() != null){
             this.slave = new EvaluationFragment();
             this.openEvaluation();
@@ -134,7 +128,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         this.slaveContainer.setLayoutParams(lpEvaluationContainer);
 
         if(slave != null) {
-            Timber.d("this slave start!");
             slave.setShowContentImmediately(true);
             getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
 
@@ -144,7 +137,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         this.slaveContainer.setY(0);
         this.toolbar.setY(-toolbar.getHeight());
         ToolbarUtil.hide(toolbar);
-        Timber.d("toolbar!! %s %s", toolbar.getY(), 0 - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize));
 
     }
     // Animation

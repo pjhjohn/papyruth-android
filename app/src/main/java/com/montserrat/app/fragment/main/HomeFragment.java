@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDetailAdapter, EvaluationData> {
 
@@ -125,7 +124,6 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        Timber.d("current position : %s", position);
         if(User.getInstance().needMoreEvaluation()) {
             AlertMandatoryDialog.show(getActivity(), this.navigator);
             return;

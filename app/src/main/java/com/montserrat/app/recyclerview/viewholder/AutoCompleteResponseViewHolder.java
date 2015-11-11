@@ -47,6 +47,7 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder impl
 
     public void bind(Candidate item, boolean isHistory) {
         final Context context = this.itemView.getContext();
+        this.layout.setBackgroundColor(itemView.getResources().getColor(R.color.white));
         if (item.lecture_id != null && item.professor_id != null){
             Picasso.with(context).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_new_evaluation ).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
             this.content.setText(item.lecture_name + " - " +item.professor_name);
