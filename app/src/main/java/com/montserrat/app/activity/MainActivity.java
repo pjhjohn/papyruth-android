@@ -81,9 +81,8 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
             ToolbarSearchView.getInstance().addHistory(ToolbarSearchView.getInstance().getSelectedCandidate());
             this.navigate(SimpleCourseFragment.class, true);
         });
-        ToolbarSearchView.getInstance()
-            .setSearchViewListener(this);
 
+        ToolbarSearchView.getInstance().setSearchViewListener(this);
         this.setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
 //        this.setOnShowSoftKeyboard(keyboardHeight -> FloatingActionControl.getInstance().hide(false));
 //        this.setOnHideSoftKeyboard(() -> FloatingActionControl.getInstance().show(false));

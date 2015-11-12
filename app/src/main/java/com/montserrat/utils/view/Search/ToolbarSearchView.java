@@ -67,7 +67,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
     private List<Candidate> candidates;
 
     public void initializeToolbarSearchView(Context context, LinearLayout searchView, RecyclerViewItemClickListener listener){
-        View view = LayoutInflater.from(context).inflate(R.layout.toolbar_search, searchView);
+        View view = LayoutInflater.from(context).inflate(R.layout.toolbar_search, searchView, true);
         ButterKnife.inject(this, view);
         if(candidates == null)
             this.candidates = new ArrayList<>();
@@ -104,8 +104,8 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
 
         if(this.subscription == null) {
             this.subscription = new CompositeSubscription();
-            initComponents();
         }
+        initComponents();
 
     }
 
@@ -236,7 +236,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
         if(searchViewListener != null)
             searchViewListener.onSearchViewShowChanged(false);
         this.notifyAutoCompleteDataChanged(new ArrayList<>());
-        this.query.setText("");
+        this.query.getText().clear();
         ((InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.query.getWindowToken(), 2);
 
         return this;
