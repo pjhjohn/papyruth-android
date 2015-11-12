@@ -54,6 +54,10 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View
         commentContainer.setVisibility(View.GONE);
         this.professor.setText(comment.professor_name);
         this.lecture.setText(comment.lecture_name);
+
+        //Temp text. API not supported.
+        comment.category = this.itemView.getResources().getString(R.string.category_major);
+
         this.category.setText(comment.category);
         this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
 

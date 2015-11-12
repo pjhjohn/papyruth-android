@@ -106,42 +106,11 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         }
         askmore = !comments.isEmpty();
         adapter.setIsEmptyData(comments.isEmpty());
-        if (comments.isEmpty())
-            this.adapter.notifyDataSetChanged();
         this.items.addAll(comments);
-        this.doOnGetMyWritten(items.size() - comments.size(), items.size() - 1);
+        this.adapter.notifyDataSetChanged();
         page++;
     }
 
-    public void doOnGetMyWritten(int start, int end){
-        if (start > -1)
-            for(int i = start; i <= end; i++){
-                MyCommentData comment = items.get(i);
-                Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), comment.evaluation_id)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                        response->{
-                            comment.lecture_name = response.evaluation.lecture_name;
-                            comment.professor_name = response.evaluation.professor_name;
-                            comment.category = getResources().getString(R.string.category_major);
-
-                            if (checkAllDataLoad(start, end))
-                                this.adapter.notifyDataSetChanged();
-                        },
-                        error -> {
-                            error.printStackTrace();
-                        }
-                    );
-            }
-    }
-    private boolean checkAllDataLoad(int start, int end){
-        for(int i = start; i <= end; i++){
-            if(items.get(i).lecture_name == null)
-                return false;
-        }
-        return true;
-    }
 
 
     @Override
