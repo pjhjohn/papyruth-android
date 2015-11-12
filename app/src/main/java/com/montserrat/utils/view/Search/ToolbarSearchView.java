@@ -142,7 +142,7 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
-                    this.query.setText("");
+                    this.query.getText().clear();
                     this.autoCompleteAdapter.setHistory(true);
                     this.notifyAutoCompleteDataChanged(getHistory());
                 }, error -> {

@@ -30,7 +30,7 @@ public class PreImeEditText  extends EditText {
 
     @Override
     public boolean dispatchKeyEventPreIme(KeyEvent event) {
-        if(listener != null){
+        if(listener != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
             listener.onBackPreIme();
             return true;
         }
