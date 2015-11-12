@@ -33,7 +33,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             .subscribe(response -> {
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
-                this.openEvaluation(view);
+                this.openEvaluation(view, true);
             });
     }
 

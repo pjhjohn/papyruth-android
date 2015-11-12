@@ -138,7 +138,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
             .subscribe(response -> {
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
-                this.openEvaluation(view);
+                this.openEvaluation(view, true);
             });
     }
 

@@ -33,7 +33,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
                 setCommentPosition(this.items.get(position).id);
-                this.openEvaluation(view);
+                this.openEvaluation(view, true);
             });
     }
 

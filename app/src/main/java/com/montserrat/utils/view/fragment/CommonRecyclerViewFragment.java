@@ -66,7 +66,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         this.isOpenSlave = false;
         if(Evaluation.getInstance().getId() != null){
             this.slave = new EvaluationFragment();
-            this.openEvaluation();
+            this.openEvaluation(null, false);
         }else{
             setFloatingActionControl();
         }
@@ -114,37 +114,39 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         return true;
     }
 
-    protected void openEvaluation() {
-        isAnimationCanceled = false;
-        isOpenSlave = true;
-        slaveIsOccupying = true;
-
-        this.slaveContainer.setVisibility(View.VISIBLE);
-
-        this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
-
-        ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
-        lpEvaluationContainer.height = screenHeight;
-        this.slaveContainer.setLayoutParams(lpEvaluationContainer);
-
-        if(slave != null) {
-            slave.setShowContentImmediately(true);
-            getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
-
-            slave.setEvaluationFloatingActionControl();
-        }
-
-        this.slaveContainer.setY(0);
-        this.toolbar.setY(-toolbar.getHeight());
-        ToolbarUtil.hide(toolbar);
-
-    }
     // Animation
     protected Integer itemTop, itemHeight, screenHeight;
     protected AnimatorSet animators;
     protected Boolean isAnimationCanceled;
-    protected void openEvaluation(View view) {
-        openEvaluation(view.getHeight(), (int) view.getY());
+    protected void openEvaluation(View view, boolean animation) {
+        if(view != null && animation)
+            openEvaluation(view.getHeight(), (int) view.getY());
+        else{
+            isAnimationCanceled = false;
+            isOpenSlave = true;
+            slaveIsOccupying = true;
+            animators = new AnimatorSet();
+            this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
+            this.itemHeight = ((int) getActivity().getResources().getDimension(R.dimen.cardview_min_height_extended));
+            this.itemTop = getActivity().findViewById(R.id.toolbar).getBottom();
+
+            this.slaveContainer.setVisibility(View.VISIBLE);
+
+            ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
+            lpEvaluationContainer.height = screenHeight;
+            this.slaveContainer.setLayoutParams(lpEvaluationContainer);
+
+            if(slave != null) {
+                slave.setShowContentImmediately(true);
+                getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
+
+                slave.setEvaluationFloatingActionControl();
+            }
+
+            this.slaveContainer.setY(0);
+            this.toolbar.setY(-toolbar.getHeight());
+            ToolbarUtil.hide(toolbar);
+        }
     }
 
     protected void openEvaluation(int vHeight, int vY){
