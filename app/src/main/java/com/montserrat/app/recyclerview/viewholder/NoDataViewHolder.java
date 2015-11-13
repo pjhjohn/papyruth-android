@@ -14,18 +14,18 @@ import butterknife.InjectView;
  * Created by pjhjohn on 2015-06-29.
  */
 public class NoDataViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.no_data_text) protected TextView body;
-    private final Context context;
-    public NoDataViewHolder(View itemView) {
-        super(itemView);
-        ButterKnife.inject(this, itemView);
-        this.context = itemView.getContext();
+    @InjectView(R.id.no_data_text) protected TextView mBody;
+    private final Context mContext;
+    public NoDataViewHolder(View view) {
+        super(view);
+        ButterKnife.inject(this, view);
+        mContext = view.getContext();
     }
 
-    public void bind(int bodyResourceId) {
-        this.body.setText(context.getString(bodyResourceId));
+    public void bind(int resid) {
+        mBody.setText(resid);
     }
-    public void bind(String bodyText) {
-        this.body.setText(bodyText);
+    public void bind(CharSequence text) {
+        mBody.setText(text);
     }
 }

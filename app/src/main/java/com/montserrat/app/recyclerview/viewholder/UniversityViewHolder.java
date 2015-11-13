@@ -17,26 +17,19 @@ import butterknife.InjectView;
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class UniversityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.university_item_name) protected TextView name;
-    @InjectView(R.id.university_item_image) protected SquareImageView image;
-    private RecyclerViewItemClickListener itemClickListener;
-    private final Context context;
-    public UniversityViewHolder(View itemView, RecyclerViewItemClickListener listener) {
-        super(itemView);
-        ButterKnife.inject(this, itemView);
-        this.context = itemView.getContext();
-        itemView.setOnClickListener(this);
-        this.itemClickListener = listener;
+public class UniversityViewHolder extends RecyclerView.ViewHolder {
+    @InjectView(R.id.university_item_name)  protected TextView mUniversityName;
+    @InjectView(R.id.university_item_image) protected SquareImageView mUniversityImage;
+    private final Context mContext;
+    public UniversityViewHolder(View view, RecyclerViewItemClickListener listener) {
+        super(view);
+        ButterKnife.inject(this, view);
+        mContext = view.getContext();
+        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
     }
 
-    public void bind(UniversityData universityData) {
-        this.name.setText(universityData.name);
-        Picasso.with(context).load(universityData.image_url).into(this.image);
-    }
-
-    @Override
-    public void onClick(View view) {
-        this.itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition());
+    public void bind(UniversityData university) {
+        mUniversityName.setText(university.name);
+        Picasso.with(mContext).load(university.image_url).into(mUniversityImage);
     }
 }

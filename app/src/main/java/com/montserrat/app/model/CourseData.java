@@ -22,6 +22,7 @@ public class CourseData {
     public List<String> hashtags;
     public String professor_photo_url;
     public String name;
+    public String category;
 
     public static CourseData Sample(){
         CourseData courseData = new CourseData();

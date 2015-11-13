@@ -24,7 +24,7 @@
             android:layout_marginLeft="@dimen/baseline_x4"
             android:layout_toRightOf="@id/osl_icon"
             android:layout_toEndOf="@id/osl_icon"
-            android:textStyle="bold"
+            android:textColor="@color/text_material"
             android:textSize="@dimen/basefont_x1.5"/>
     </RelativeLayout>
     <include layout="@layout/hr_settings"/>

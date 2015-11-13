@@ -1,6 +1,7 @@
 package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -22,51 +23,40 @@ import butterknife.InjectView;
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class MyEvaluationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.my_written_body) protected TextView body;
-    @InjectView(R.id.my_written_lecture) protected TextView lecture;
-    @InjectView(R.id.my_written_professor) protected TextView professor;
-    @InjectView(R.id.my_written_timestamp) protected TextView timestamp;
-    @InjectView(R.id.my_written_category) protected TextView category;
-    @InjectView (R.id.evaluation_item_up_vote_icon) protected ImageView upIcon;
-    @InjectView (R.id.evaluation_item_up_vote_count) protected TextView upCount;
-    @InjectView (R.id.evaluation_item_down_vote_icon) protected ImageView downIcon;
-    @InjectView (R.id.evaluation_item_down_vote_count) protected TextView downCount;
-    @InjectView (R.id.evaluation_item_comment_icon) protected ImageView commentIcon;
-    @InjectView (R.id.evaluation_item_comment_count) protected TextView commentCount;
-    private RecyclerViewItemClickListener itemClickListener;
-    private final Context context;
-    public MyEvaluationViewHolder(View itemView, RecyclerViewItemClickListener listener) {
-        super(itemView);
-        ButterKnife.inject(this, itemView);
-        this.context = itemView.getContext();
-        itemView.setOnClickListener(this);
-        this.itemClickListener = listener;
+public class MyEvaluationViewHolder extends RecyclerView.ViewHolder {
+    @InjectView(R.id.evaluation_item_body)              protected TextView mBody;
+    @InjectView(R.id.evaluation_item_lecture)           protected TextView mLecture;
+    @InjectView(R.id.evaluation_item_professor)         protected TextView mProfessor;
+    @InjectView(R.id.evaluation_item_timestamp)         protected TextView mTimestamp;
+    @InjectView(R.id.evaluation_item_category)          protected TextView mCategory;
+    @InjectView(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @InjectView(R.id.evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
+    @InjectView(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @InjectView(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
+    @InjectView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
+    @InjectView(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
+    private final Context mContext;
+    private final Resources mResources;
+    public MyEvaluationViewHolder(View view, RecyclerViewItemClickListener listener) {
+        super(view);
+        ButterKnife.inject(this, view);
+        mContext = view.getContext();
+        mResources = mContext.getResources();
+        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
     }
 
     public void bind(EvaluationData evaluation) {
-        this.lecture.setText(evaluation.lecture_name);
-        this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.professor_name, context.getResources().getString(R.string.professor_postfix))));
-        this.body.setText(evaluation.body);
-        this.timestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
-        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
-        this.category.setText(R.string.lecture_type_major);
-
-        Picasso.with(context).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.upIcon);
-        Picasso.with(context).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.downIcon);
-        this.setVoteCount(evaluation.up_vote_count, evaluation.down_vote_count);
-
-        Picasso.with(context).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.commentIcon);
-        this.commentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
-    }
-
-    @Override
-    public void onClick (View view) {
-        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition());
-    }
-
-    private void setVoteCount(Integer upCount, Integer downCount) {
-        this.upCount.setText(String.valueOf(upCount == null ? 0 : upCount));
-        this.downCount.setText(String.valueOf(downCount == null ? 0 : downCount));
+        mBody.setText(evaluation.body);
+        mLecture.setText(evaluation.lecture_name);
+        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mContext.getResources().getString(R.string.professor_prefix), evaluation.professor_name, mContext.getResources().getString(R.string.professor_postfix))));
+        mTimestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mCategory.setTextColor(mResources.getColor(R.color.colorchip_green_highlight));
+        mCategory.setText(evaluation.category);
+        Picasso.with(mContext).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(mVoteUpIcon);
+        mVoteUpCount.setText(String.valueOf(evaluation.up_vote_count == null ? 0 : evaluation.up_vote_count));
+        Picasso.with(mContext).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(mVoteDownIcon);
+        mVoteDownCount.setText(String.valueOf(evaluation.up_vote_count == null ? 0 : evaluation.up_vote_count));
+        Picasso.with(mContext).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.inactive))).into(mCommentIcon);
+        mCommentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
     }
 }

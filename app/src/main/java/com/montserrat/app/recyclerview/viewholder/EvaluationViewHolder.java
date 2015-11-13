@@ -1,6 +1,7 @@
 package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -31,207 +32,159 @@ import com.squareup.picasso.Picasso;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.evaluation_header) protected RelativeLayout header;
-    @InjectView(R.id.evaluation_lecture) protected TextView lecture;
-    @InjectView(R.id.evaluation_timestamp) protected TextView timestamp;
-    @InjectView(R.id.evaluation_category) protected TextView category;
-    @InjectView(R.id.evaluation_professor) protected TextView professor;
-    @InjectView(R.id.evaluation_avatar) protected ImageView avatar;
-    @InjectView(R.id.evaluation_nickname) protected TextView nickname;
-    @InjectView(R.id.evaluation_body) protected TextView body;
-    @InjectView(R.id.evaluation_point_overall_prefix) protected TextView pointOverallPrefix;
-    @InjectView(R.id.evaluation_point_overall_text) protected TextView pointOverallText;
-    @InjectView(R.id.evaluation_point_overall_star) protected RatingBar pointOverallRating;
-    @InjectView(R.id.evaluation_point_clarity_prefix) protected TextView pointClarityPrefix;
-    @InjectView(R.id.evaluation_point_clarity_text) protected TextView pointClarityText;
-    @InjectView(R.id.evaluation_point_clarity_progress) protected ProgressBar pointClarityProgress;
-    @InjectView(R.id.evaluation_point_gpa_satisfaction_prefix) protected TextView pointGpaSatisfactionPrefix;
-    @InjectView(R.id.evaluation_point_gpa_satisfaction_text) protected TextView pointGpaSatisfactionText;
-    @InjectView(R.id.evaluation_point_gpa_satisfaction_progress) protected ProgressBar pointGpaSatisfactionProgress;
-    @InjectView(R.id.evaluation_point_easiness_prefix) protected TextView pointEasinessPrefix;
-    @InjectView(R.id.evaluation_point_easiness_text) protected TextView pointEasinessText;
-    @InjectView(R.id.evaluation_point_easiness_progress) protected ProgressBar pointEasinessProgress;
-    @InjectView(R.id.evaluation_hashtags) protected LinearLayout hashtags;
-    @InjectView(R.id.evaluation_up_vote_icon) protected ImageView upIcon;
-    @InjectView(R.id.evaluation_up_vote_count) protected TextView upCount;
-    @InjectView(R.id.evaluation_down_vote_icon) protected ImageView downIcon;
-    @InjectView(R.id.evaluation_down_vote_count) protected TextView downCount;
-    @InjectView(R.id.evaluation_comment_icon) protected ImageView commentIcon;
-    @InjectView(R.id.evaluation_comment_count) protected TextView commentCount;
-    @InjectView(R.id.evaluation_modify) protected ImageView modify;
-    private Integer id;
-    private VoteStatus status;
-    private final Context context;
+    @InjectView(R.id.evaluation_header)                          protected RelativeLayout mHeader;
+    @InjectView(R.id.evaluation_lecture)                         protected TextView mLecture;
+    @InjectView(R.id.evaluation_timestamp)                       protected TextView mTimestamp;
+    @InjectView(R.id.evaluation_category)                        protected TextView mCategory;
+    @InjectView(R.id.evaluation_professor)                       protected TextView mProfessor;
+    @InjectView(R.id.evaluation_avatar)                          protected ImageView mAvatar;
+    @InjectView(R.id.evaluation_nickname)                        protected TextView mNickname;
+    @InjectView(R.id.evaluation_body)                            protected TextView mBody;
+    @InjectView(R.id.evaluation_point_overall_prefix)            protected TextView mPointOverallPrefix;
+    @InjectView(R.id.evaluation_point_overall_text)              protected TextView mPointOverallText;
+    @InjectView(R.id.evaluation_point_overall_star)              protected RatingBar mPointOverallRating;
+    @InjectView(R.id.evaluation_point_clarity_prefix)            protected TextView mPointClarityPrefix;
+    @InjectView(R.id.evaluation_point_clarity_text)              protected TextView mPointClarityText;
+    @InjectView(R.id.evaluation_point_clarity_progress)          protected ProgressBar mPointClarityProgress;
+    @InjectView(R.id.evaluation_point_gpa_satisfaction_prefix)   protected TextView mPointGpaSatisfactionPrefix;
+    @InjectView(R.id.evaluation_point_gpa_satisfaction_text)     protected TextView mPointGpaSatisfactionText;
+    @InjectView(R.id.evaluation_point_gpa_satisfaction_progress) protected ProgressBar mPointGpaSatisfactionProgress;
+    @InjectView(R.id.evaluation_point_easiness_prefix)           protected TextView mPointEasinessPrefix;
+    @InjectView(R.id.evaluation_point_easiness_text)             protected TextView mPointEasinessText;
+    @InjectView(R.id.evaluation_point_easiness_progress)         protected ProgressBar mPointEasinessProgress;
+    @InjectView(R.id.evaluation_hashtags)                        protected LinearLayout mHashtags;
+    @InjectView(R.id.evaluation_up_vote_icon)                    protected ImageView mVoteUpIcon;
+    @InjectView(R.id.evaluation_up_vote_count)                   protected TextView mVoteUpCount;
+    @InjectView(R.id.evaluation_down_vote_icon)                  protected ImageView mVoteDownIcon;
+    @InjectView(R.id.evaluation_down_vote_count)                 protected TextView mVoteDownCount;
+    @InjectView(R.id.evaluation_comment_icon)                    protected ImageView mCommentIcon;
+    @InjectView(R.id.evaluation_comment_count)                   protected TextView mCommentCount;
+    @InjectView(R.id.evaluation_modify)                          protected ImageView mModify;
+    private Integer mEvaluationId;
+    private VoteStatus mVoteStatus;
+    private final Context mContext;
+    private final Resources mResources;
     public enum VoteStatus {
         UP, DOWN, NONE
     }
-    public EvaluationViewHolder(View itemView) {
-        super(itemView);
-        ButterKnife.inject(this, itemView);
-        this.context = itemView.getContext();
-        this.nickname.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.lecture.setPaintFlags(this.nickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.upIcon.setOnClickListener(this);
-        this.upCount.setOnClickListener(this);
-        this.downIcon.setOnClickListener(this);
-        this.downCount.setOnClickListener(this);
-        this.setStatus(VoteStatus.NONE);
-        this.category.setPaintFlags(this.category.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
+    public EvaluationViewHolder(View view) {
+        super(view);
+        ButterKnife.inject(this, view);
+        mContext = view.getContext();
+        mResources = mContext.getResources();
+        mLecture.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mCategory.setPaintFlags(mCategory.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mCategory.setTextColor(mResources.getColor(R.color.colorchip_green_highlight));
+        mNickname.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mVoteUpIcon.setOnClickListener(this);
+        mVoteUpCount.setOnClickListener(this);
+        mVoteDownIcon.setOnClickListener(this);
+        mVoteDownCount.setOnClickListener(this);
+        setVoteStatus(VoteStatus.NONE);
     }
 
-    private void setStatus(VoteStatus newStatus) {
-        this.status = newStatus;
 
-        Picasso.with(context).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(this.upIcon);
-        this.upCount.setTextColor(context.getResources().getColor(status == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-
-        Picasso.with(context).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(status==VoteStatus.DOWN? R.color.vote_down : R.color.vote_none))).into(this.downIcon);
-        this.downCount.setTextColor(context.getResources().getColor(status==VoteStatus.DOWN? R.color.vote_down : R.color.vote_none));
-    }
-
-    private void setVoteCount(Integer upCount, Integer downCount) {
-        this.upCount.setText(String.valueOf(upCount == null ? 0 : upCount));
-        this.downCount.setText(String.valueOf(downCount == null ? 0 : downCount));
-    }
-
-    private void setRatingBarColor(RatingBar rating, int color) {
-        LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
-        for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-    }
-
-    private void setPointRating(TextView prefix, RatingBar rating, TextView text, Integer point) {
-        if(point == null || point < 0) {
-            prefix.setTextColor(context.getResources().getColor(R.color.inactive));
-            this.setRatingBarColor(rating, context.getResources().getColor(R.color.inactive));
-            text.setTextColor(context.getResources().getColor(R.color.inactive));
-            text.setText("N/A");
-        } else {
-            final int pointColor = context.getResources().getColor(point >= 8? R.color.point_high : R.color.point_low);
-            prefix.setTextColor(pointColor);
-            this.setRatingBarColor(rating, pointColor);
-            text.setTextColor(pointColor);
-            text.setText(point >= 10 ? "10" : String.format("%d.0", point));
-        } rating.setRating(point == null || point < 0 ? 5.0f : (float)point/2f);
-    }
-
-    private void setPointProgress(TextView prefix, ProgressBar progress, TextView text, Integer point) {
-        if(point == null || point < 0) {
-            prefix.setTextColor(context.getResources().getColor(R.color.inactive));
-            progress.setProgressDrawable(new ColorDrawable(context.getResources().getColor(R.color.inactive)));
-            progress.setProgress(100);
-            text.setTextColor(context.getResources().getColor(R.color.inactive));
-            text.setText("N/A");
-        } else {
-            progress.setProgress(point);
-            text.setText(point >= 10 ? "10" : String.format("%d.0", point));
-        }
-    }
 
     public void bind(Evaluation evaluation, View.OnClickListener listener){
-        this.modify.setOnClickListener(listener);
-        this.header.setOnClickListener(listener);
-        this.bind(evaluation);
+        mModify.setOnClickListener(listener);
+        mHeader.setOnClickListener(listener);
+        bind(evaluation);
     }
 
     public void bind(Evaluation evaluation) {
-        this.id = evaluation.getId();
-        this.lecture.setText(evaluation.getLectureName());
-        this.timestamp.setText(DateTimeUtil.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.DATE_AND_TIME));
-        this.category.setText(context.getString(R.string.category_major)); // TODO -> evaluation.category
-        this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", context.getResources().getString(R.string.professor_prefix), evaluation.getProfessorName(), " "+context.getResources().getString(R.string.professor_postfix))));
-        Picasso.with(this.itemView.getContext()).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(this.avatar);
-        this.nickname.setText(evaluation.getUserNickname());
-        this.body.setText(evaluation.getBody());
-        this.pointOverallPrefix.setText(R.string.label_point_overall);
-        this.setPointRating(this.pointOverallPrefix, this.pointOverallRating, this.pointOverallText, evaluation.getPointOverall());
-        this.pointClarityPrefix.setText(R.string.label_point_clarity);
-        this.setPointProgress(this.pointClarityPrefix, this.pointClarityProgress, this.pointClarityText, evaluation.getPointClarity());
-        this.pointGpaSatisfactionPrefix.setText(R.string.label_point_gpa_satisfaction);
-        this.setPointProgress(this.pointGpaSatisfactionPrefix, this.pointGpaSatisfactionProgress, this.pointGpaSatisfactionText, evaluation.getPointGpaSatisfaction());
-        this.pointEasinessPrefix.setText(R.string.label_point_easiness);
-        this.setPointProgress(this.pointEasinessPrefix, this.pointEasinessProgress, this.pointEasinessText, evaluation.getPointEasiness());
-        this.hashtags.removeAllViews();
-        if(this.id != null) Api.papyruth()
-            .get_evaluation_hashtag(User.getInstance().getAccessToken(), this.id)
+        mEvaluationId = evaluation.getId();
+        mLecture.setText(evaluation.getLectureName());
+        mTimestamp.setText(DateTimeUtil.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.DATE_AND_TIME));
+        mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
+        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
+        Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
+        mNickname.setText(evaluation.getUserNickname());
+        mBody.setText(evaluation.getBody());
+        mPointOverallPrefix.setText(R.string.label_point_overall);
+        setPointRating(mPointOverallPrefix, mPointOverallRating, mPointOverallText, evaluation.getPointOverall());
+        mPointClarityPrefix.setText(R.string.label_point_clarity);
+        setPointProgress(mPointClarityPrefix, mPointClarityProgress, mPointClarityText, evaluation.getPointClarity());
+        mPointGpaSatisfactionPrefix.setText(R.string.label_point_gpa_satisfaction);
+        setPointProgress(mPointGpaSatisfactionPrefix, mPointGpaSatisfactionProgress, mPointGpaSatisfactionText, evaluation.getPointGpaSatisfaction());
+        mPointEasinessPrefix.setText(R.string.label_point_easiness);
+        setPointProgress(mPointEasinessPrefix, mPointEasinessProgress, mPointEasinessText, evaluation.getPointEasiness());
+        mHashtags.removeAllViews();
+        if(mEvaluationId != null) Api.papyruth()
+            .get_evaluation_hashtag(User.getInstance().getAccessToken(), mEvaluationId)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
-                if (response.hashtags != null) this.hashtags.post(() -> {
+                if (response.hashtags != null) mHashtags.post(() -> {
                     float totalWidth = 0;
                     for (String hashtag : response.hashtags) {
                         Evaluation.getInstance().addHashTag(hashtag);
-                        Hashtag tag = new Hashtag(context, hashtag);
+                        Hashtag tag = new Hashtag(mContext, hashtag);
                         float width = tag.getPaint().measureText((String) tag.getText());
-                        if (width + totalWidth > hashtags.getWidth()) break;
-                        this.hashtags.addView(tag);
+                        if (width + totalWidth > mHashtags.getWidth()) break;
+                        mHashtags.addView(tag);
                         totalWidth += width;
                     }
                 });
             });
 
-        Picasso.with(context).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.commentIcon);
-        this.commentCount.setText(evaluation.getCommentCount() == null || evaluation.getCommentCount() < 0 ? "N/A" : String.valueOf(evaluation.getCommentCount()));
+        Picasso.with(mContext).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.inactive))).into(mCommentIcon);
+        mCommentCount.setText(evaluation.getCommentCount() == null || evaluation.getCommentCount() < 0 ? "N/A" : String.valueOf(evaluation.getCommentCount()));
 
-        if(evaluation.getRequestUserVote() == null) this.setStatus(VoteStatus.NONE);
-        else if(evaluation.getRequestUserVote() == 1) this.setStatus(VoteStatus.UP);
-        else this.setStatus(VoteStatus.DOWN);
+        if(evaluation.getRequestUserVote() == null) setVoteStatus(VoteStatus.NONE);
+        else if(evaluation.getRequestUserVote() == 1) setVoteStatus(VoteStatus.UP);
+        else setVoteStatus(VoteStatus.DOWN);
 
-        this.setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
-//        Picasso.with(context).load(R.drawable.ic_light_build).transform(new ColorFilterTransformation(AppConst.COLOR_POINT_CLARITY)).into(this.modify);
-        if(User.getInstance().getId().equals(evaluation.getUserId())){
-            this.modify.setVisibility(View.VISIBLE);
-        }else{
-            this.modify.setVisibility(View.GONE);
-        }
+        setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
+        mModify.setVisibility(User.getInstance().getId()!=null&&User.getInstance().getId().equals(evaluation.getUserId())? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void onClick(View view) {
-        if(this.id == null) return;
+        if(mEvaluationId == null) return;
         switch(view.getId()) {
             case R.id.evaluation_up_vote_icon:
-                if(this.status == VoteStatus.UP) Api.papyruth()
-                    .delete_evaluation_vote(User.getInstance().getAccessToken(), this.id)
+                if(mVoteStatus == VoteStatus.UP) Api.papyruth()
+                    .delete_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
-                        this.setStatus(VoteStatus.NONE);
-                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
+                        setVoteStatus(VoteStatus.NONE);
+                        setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
                 else Api.papyruth()
-                    .post_evaluation_vote(User.getInstance().getAccessToken(), this.id, true)
+                    .post_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId, true)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
-                        this.setStatus(VoteStatus.UP);
-                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
-
+                        setVoteStatus(VoteStatus.UP);
+                        setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
                 break;
             case R.id.evaluation_down_vote_icon:
-                if(this.status == VoteStatus.DOWN) Api.papyruth()
-                    .delete_evaluation_vote(User.getInstance().getAccessToken(), this.id)
+                if(mVoteStatus == VoteStatus.DOWN) Api.papyruth()
+                    .delete_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
-                        this.setStatus(VoteStatus.NONE);
-                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
+                        setVoteStatus(VoteStatus.NONE);
+                        setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
                 else Api.papyruth()
-                    .post_evaluation_vote(User.getInstance().getAccessToken(), this.id, false)
+                    .post_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId, false)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
-                        this.setStatus(VoteStatus.DOWN);
-                        this.setVoteCount(response.up_vote_count, response.down_vote_count);
+                        setVoteStatus(VoteStatus.DOWN);
+                        setVoteCount(response.up_vote_count, response.down_vote_count);
                     });
                 break;
             case R.id.evaluation_up_vote_count:
             case R.id.evaluation_down_vote_count:
                 Api.papyruth()
-                    .get_evaluation_vote(User.getInstance().getAccessToken(), this.id)
+                    .get_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> VotersDialog.show(
                         view.getContext(),
@@ -240,6 +193,45 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                     ));
                 break;
             default : Timber.d("Clicked view : %s", view);
+        }
+    }
+
+    private void setVoteStatus(VoteStatus newStatus) {
+        mVoteStatus = newStatus;
+        Picasso.with(mContext).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
+        mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
+        Picasso.with(mContext).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
+        mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
+    }
+
+    private void setVoteCount(Integer upCount, Integer downCount) {
+        mVoteUpCount.setText(String.valueOf(upCount == null ? 0 : upCount));
+        mVoteDownCount.setText(String.valueOf(downCount == null ? 0 : downCount));
+    }
+
+    private void setPointRating(TextView prefix, RatingBar rating, TextView text, Integer point) {
+        final int pointColor = mResources.getColor(pointInRange(point)? ( point>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
+        prefix.setTextColor(pointColor);
+        text.setTextColor(pointColor);
+        text.setText(pointInRange(point)? ( point>=10?"10":String.format("%d", point)) : "N/A");
+        for(int i = 0; i < 3; i ++) ((LayerDrawable) rating.getProgressDrawable()).getDrawable(i).setColorFilter(pointColor, PorterDuff.Mode.SRC_ATOP);
+        rating.setRating(pointInRange(point) ? (float) point / 2f : 5.0f );
+    }
+
+    private boolean pointInRange(Integer point) {
+        return point!=null && point >= 0 && point <= 10;
+    }
+
+    private void setPointProgress(TextView prefix, ProgressBar progress, TextView text, Integer point) {
+        if(point == null || point < 0) {
+            prefix.setTextColor(mResources.getColor(R.color.point_none));
+            progress.setProgressDrawable(new ColorDrawable(mResources.getColor(R.color.point_none)));
+            progress.setProgress(100);
+            text.setTextColor(mResources.getColor(R.color.point_none));
+            text.setText("N/A");
+        } else {
+            progress.setProgress(point);
+            text.setText(point >= 10 ? "10" : String.format("%d.0", point));
         }
     }
 }

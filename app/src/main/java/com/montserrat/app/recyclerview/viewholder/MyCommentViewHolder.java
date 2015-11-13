@@ -1,6 +1,7 @@
 package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,58 +18,44 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class MyCommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.my_written_body) protected TextView body;
-    @InjectView(R.id.my_written_lecture) protected TextView lecture;
-    @InjectView(R.id.my_written_professor) protected TextView professor;
-    @InjectView(R.id.my_written_timestamp) protected TextView timestamp;
-    @InjectView(R.id.my_written_category) protected TextView category;
-    @InjectView (R.id.evaluation_item_up_vote_icon) protected ImageView upIcon;
-    @InjectView (R.id.evaluation_item_up_vote_count) protected TextView upCount;
-    @InjectView (R.id.evaluation_item_down_vote_icon) protected ImageView downIcon;
-    @InjectView (R.id.evaluation_item_down_vote_count) protected TextView downCount;
-    @InjectView (R.id.evaluation_item_comment_icon) protected ImageView commentIcon;
-    @InjectView (R.id.evaluation_item_comment_count) protected TextView commentCount;
-    @InjectView(R.id.evaluation_item_comment) protected RelativeLayout commentContainer;
-    private RecyclerViewItemClickListener itemClickListener;
-    private final Context context;
-    private CompositeSubscription subscription;
-    public MyCommentViewHolder(View itemView, RecyclerViewItemClickListener listener) {
-        super(itemView);
-        ButterKnife.inject(this, itemView);
-        this.context = itemView.getContext();
-        itemView.setOnClickListener(this);
-        this.itemClickListener = listener;
-        this.subscription = new CompositeSubscription();
+public class MyCommentViewHolder extends RecyclerView.ViewHolder {
+    @InjectView(R.id.evaluation_item_body)              protected TextView mBody;
+    @InjectView(R.id.evaluation_item_lecture)           protected TextView mLecture;
+    @InjectView(R.id.evaluation_item_professor)         protected TextView mProfessor;
+    @InjectView(R.id.evaluation_item_timestamp)         protected TextView mTimestamp;
+    @InjectView(R.id.evaluation_item_category)          protected TextView mCategory;
+    @InjectView(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @InjectView(R.id.evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
+    @InjectView(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @InjectView(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
+    @InjectView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
+    @InjectView(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
+    @InjectView(R.id.evaluation_item_comment)           protected RelativeLayout mComment;
+    private final Context mContext;
+    private final Resources mResources;
+    public MyCommentViewHolder(View view, RecyclerViewItemClickListener listener) {
+        super(view);
+        ButterKnife.inject(this, view);
+        mContext = view.getContext();
+        mResources = mContext.getResources();
+        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, this.getAdapterPosition()));
     }
 
     public void bind(MyCommentData comment) {
-        this.body.setText(comment.body);
-        this.timestamp.setText(DateTimeUtil.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
-
-        commentContainer.setVisibility(View.GONE);
-        this.professor.setText(comment.professor_name);
-        this.lecture.setText(comment.lecture_name);
-        this.category.setText(comment.category);
-        this.category.setTextColor(context.getResources().getColor(R.color.colorchip_green_highlight));
-
-        Picasso.with(context).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.upIcon);
-        Picasso.with(context).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(context.getResources().getColor(R.color.inactive))).into(this.downIcon);
-        this.setVoteCount(comment.up_vote_count, comment.down_vote_count);
-    }
-
-    @Override
-    public void onClick (View view) {
-        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition());
-    }
-
-    private void setVoteCount(Integer upCount, Integer downCount) {
-        this.upCount.setText(String.valueOf(upCount == null ? 0 : upCount));
-        this.downCount.setText(String.valueOf(downCount == null ? 0 : downCount));
+        mBody.setText(comment.body);
+        mLecture.setText(comment.lecture_name);
+        mProfessor.setText(comment.professor_name);
+        mTimestamp.setText(DateTimeUtil.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mCategory.setTextColor(mResources.getColor(R.color.colorchip_green_highlight));
+        mCategory.setText(comment.category);
+        Picasso.with(mContext).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(this.mVoteUpIcon);
+        this.mVoteUpCount.setText(String.valueOf(comment.up_vote_count == null ? 0 : comment.up_vote_count));
+        Picasso.with(mContext).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(this.mVoteDownIcon);
+        this.mVoteDownCount.setText(String.valueOf(comment.down_vote_count == null ? 0 : comment.down_vote_count));
+        mComment.setVisibility(View.GONE);
     }
 }
