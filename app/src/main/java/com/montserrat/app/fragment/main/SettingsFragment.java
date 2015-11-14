@@ -45,8 +45,7 @@ public class SettingsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.navigator = null;
-        ((MainActivity) this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
-        ((MainActivity) this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
+        this.context = null;
     }
 
     @InjectView (R.id.signout_container) protected RelativeLayout signout;
@@ -83,8 +82,8 @@ public class SettingsFragment extends Fragment {
         toolbar.setTitle(R.string.toolbar_settings);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         FloatingActionControl.getInstance().hide(true);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 
         this.subscriptions.add(ViewObservable
             .clicks(this.termOfServices)

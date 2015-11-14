@@ -16,7 +16,9 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.rx.RxValidator;
@@ -115,6 +117,8 @@ public class EvaluationStep2Fragment extends Fragment {
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> {
                 this.navigator.navigate(EvaluationStep3Fragment.class, true);

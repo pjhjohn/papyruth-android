@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 
 import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
@@ -87,8 +88,9 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         super.onResume();
         this.toolbar.setTitle(R.string.toolbar_title_course);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
-
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
 
         if(User.getInstance().needMoreEvaluation()) {

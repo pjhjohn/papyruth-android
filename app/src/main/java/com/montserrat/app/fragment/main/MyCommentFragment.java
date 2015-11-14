@@ -2,7 +2,9 @@ package com.montserrat.app.fragment.main;
 
 import android.view.View;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.MyCommentData;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
@@ -43,6 +45,8 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         super.onResume();
         toolbar.setTitle(R.string.nav_item_my_comment);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
         this.subscriptions.add(
             Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page = 1)

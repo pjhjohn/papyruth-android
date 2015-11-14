@@ -16,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
@@ -133,6 +135,8 @@ public class EvaluationStep3Fragment extends Fragment {
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
                 .title(R.string.new_evaluation_submit_title)

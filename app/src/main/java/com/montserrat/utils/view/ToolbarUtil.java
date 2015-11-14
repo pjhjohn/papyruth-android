@@ -47,9 +47,8 @@ public class ToolbarUtil {
 
     public static void registerMenu(Toolbar toolbar, int menuResourceId, Toolbar.OnMenuItemClickListener listener) {
         toolbar.inflateMenu(menuResourceId);
-        toolbar.setOnMenuItemClickListener(listener);
         toolbar.setTitleTextColor(Color.WHITE);
-
+        if(listener != null) toolbar.setOnMenuItemClickListener(listener);
     }
 
     public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColorResourceId) {

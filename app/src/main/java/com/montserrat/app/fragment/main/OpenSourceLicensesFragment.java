@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.OpenSourceLicenseData;
 import com.montserrat.app.recyclerview.adapter.OpenSourceLicensesAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
@@ -54,6 +56,8 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
         toolbar.setTitle(R.string.toolbar_osl);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         FloatingActionControl.getInstance().hide(true);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
     }
 
     @Override

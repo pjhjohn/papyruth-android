@@ -79,7 +79,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         super.onDestroyView();
         ButterKnife.reset(this);
         this.adapter = null;
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, true);
         ToolbarSearchView.getInstance().setPartialItemClickListener(null).setToolbarSearchViewSearchListener(null);
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
@@ -114,7 +113,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         super.onResume();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().clear();
 
         ToolbarSearchView.getInstance()

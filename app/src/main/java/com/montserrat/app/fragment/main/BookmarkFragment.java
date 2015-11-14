@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
+import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.model.FavoriteData;
 import com.montserrat.app.model.unique.Course;
@@ -138,11 +140,11 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     @Override
     public void onResume() {
         super.onResume();
-
         this.toolbar.setTitle(R.string.toolbar_favorite);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.point_clarity).start();
-
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
         this.subscriptions.add(
             FloatingActionControl

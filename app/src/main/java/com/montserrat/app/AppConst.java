@@ -60,13 +60,12 @@ public class AppConst {
         public static final String HISTORY = "history";
     }
 
-    public static class Tag{
+    public static class Tag {
         public static final String ACTIVE_FRAGMENT = "FRAGMENT";
     }
 
-    public static class Menu{
-        public static final int MENU_SEARCH = R.id.menu_search;
-        public static final int MENU_SETTING = R.id.menu_setting;
-
+    public static class Menu {
+        public static final int SEARCH = R.id.menu_search;
+        public static final int SETTING = R.id.menu_setting;
     }
 }

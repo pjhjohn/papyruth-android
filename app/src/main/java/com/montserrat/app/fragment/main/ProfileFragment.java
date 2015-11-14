@@ -42,8 +42,6 @@ public class ProfileFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.navigator = null;
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, true);
     }
 
     @InjectView (R.id.university_image) protected ImageView universityImage;
@@ -83,8 +81,8 @@ public class ProfileFragment extends Fragment {
         final Context context = this.getActivity();
         this.toolbar.setTitle(R.string.toolbar_profile);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SEARCH, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, true);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
 

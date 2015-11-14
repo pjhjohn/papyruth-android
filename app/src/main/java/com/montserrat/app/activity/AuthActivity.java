@@ -41,61 +41,61 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator {
     @Override
     public void onBackPressed() {
         boolean backed = false;
-        if(this.mViewPagerController.controlTargetContains(mViewPagerController.getCurrentPage())) return;
+        if(mViewPagerController.controlTargetContains(mViewPagerController.getCurrentPage())) return;
         if(mViewPagerController != null && mViewPagerController.back()) backed = true;
-        if(!backed && this.mNavigator.back()) backed = true;
+        if(!backed && mNavigator.back()) backed = true;
         if(!backed) this.finish();
     }
 
-    /* Map Navigator methods to this.navigator */
+    /* Map Navigator methods to mNavigator */
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
-        this.mNavigator.navigate(target, addToBackStack);
+        mNavigator.navigate(target, addToBackStack);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, Navigator.AnimatorType animatorType) {
-        this.mNavigator.navigate(target, addToBackStack, animatorType);
+        mNavigator.navigate(target, addToBackStack, animatorType);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
-        this.mNavigator.navigate(target, addToBackStack, clear);
+        mNavigator.navigate(target, addToBackStack, clear);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, Navigator.AnimatorType animatorType, boolean clear) {
-        this.mNavigator.navigate(target, addToBackStack, animatorType, clear);
+        mNavigator.navigate(target, addToBackStack, animatorType, clear);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack) {
-        this.mNavigator.navigate(target, bundle, addToBackStack);
+        mNavigator.navigate(target, bundle, addToBackStack);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, Navigator.AnimatorType animatorType) {
-        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType);
+        mNavigator.navigate(target, bundle, addToBackStack, animatorType);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, boolean clear) {
-        this.mNavigator.navigate(target, bundle, addToBackStack, clear);
+        mNavigator.navigate(target, bundle, addToBackStack, clear);
     }
 
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, Navigator.AnimatorType animatorType, boolean clear) {
-        this.mNavigator.navigate(target, bundle, addToBackStack, animatorType, clear);
+        mNavigator.navigate(target, bundle, addToBackStack, animatorType, clear);
     }
 
     @Override
     public String getBackStackNameAt(int index) {
-        return this.mNavigator.getBackStackNameAt(index);
+        return mNavigator.getBackStackNameAt(index);
     }
 
     @Override
     public boolean back() {
-        return this.mNavigator.back();
+        return mNavigator.back();
     }
 
     @Override
@@ -109,8 +109,8 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator {
         return mViewPagerController;
     }
 
-    public void setViewPagerController(ViewPagerController mViewPagerController) {
-        this.mViewPagerController = mViewPagerController;
+    public void setViewPagerController(ViewPagerController viewPagerController) {
+        mViewPagerController = viewPagerController;
     }
 
     /* Fade-Animated Activity Transition to MainActivity */
@@ -118,6 +118,6 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator {
         Intent mainIntent = new Intent(AuthActivity.this, MainActivity.class);
         AuthActivity.this.startActivity(mainIntent);
         AuthActivity.this.finish();
-        overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
+        AuthActivity.this.overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
     }
 }

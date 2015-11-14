@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/navigation_drawer_layout"
     android:fitsSystemWindows="true">
     <FrameLayout
         android:id="@+id/activity_root"
@@ -27,7 +27,7 @@
 
     <!--Navigation Drawer-->
     <com.montserrat.utils.view.ScrimInsetsFrameLayout
-        android:id="@+id/drawer_container"
+        android:id="@+id/navigation_drawer_container"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -35,7 +35,7 @@
         app:insetForeground="#4000"
         android:elevation="10dp">
         <fragment
-            android:id="@+id/drawer"
+            android:id="@+id/navigation_drawer"
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"

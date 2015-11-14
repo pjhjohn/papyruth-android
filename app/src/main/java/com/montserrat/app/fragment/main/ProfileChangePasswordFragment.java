@@ -62,7 +62,6 @@ public class ProfileChangePasswordFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.navigator = null;
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, true);
     }
 
     @InjectView (R.id.password_icon) protected ImageView icon;
@@ -96,7 +95,8 @@ public class ProfileChangePasswordFragment extends Fragment {
         super.onResume();
         toolbar.setTitle(R.string.toolbar_edit_profile);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
-        ((MainActivity)this.getActivity()).setMenuItemVisibility(AppConst.Menu.MENU_SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
