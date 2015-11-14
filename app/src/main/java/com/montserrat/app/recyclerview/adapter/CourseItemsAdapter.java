@@ -3,75 +3,61 @@ package com.montserrat.app.recyclerview.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.montserrat.app.R;
-import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.model.CourseData;
 import com.montserrat.app.recyclerview.viewholder.CourseItemViewHolder;
-import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
+import com.montserrat.app.recyclerview.viewholder.PlaceholderViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.List;
 
-/**
- * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
- * Used in {@link SimpleCourseFragment SearchCourseFragment}
- * as an adapter for List-type {@link RecyclerView} to provide course search result
- */
 public class CourseItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private RecyclerViewItemClickListener courseItemClickListener;
-    private List<CourseData> courses;
-    private Integer headerLayoutResourceId;
-    private int resIdNoDataText;
-    private boolean isEmptyData;
+    private RecyclerViewItemClickListener mRecyclerItemClickListener;
+    private List<CourseData> mCourseDataList;
+    private Integer mHeaderViewHolderLayoutResourceId;
+    private boolean mShowPlaceholder;
+    private int mPlaceholderTextResId;
 
-    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, int noDataTextRes) {
-        this(initialCourses, listener, null, noDataTextRes);
+    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, int placeholderTextResId) {
+        this(initialCourses, listener, null, placeholderTextResId);
     }
-    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, Integer headerLayoutResourceId, int resIdNoDataText) {
-        this.courses = initialCourses;
-        this.courseItemClickListener = listener;
-        this.headerLayoutResourceId = headerLayoutResourceId;
-        this.resIdNoDataText = resIdNoDataText;
-        this.isEmptyData = false;
-    }
-
-    public void setIsEmptyData(boolean isEmptyData){
-        this.isEmptyData = isEmptyData;
+    public CourseItemsAdapter(List<CourseData> initialCourses, RecyclerViewItemClickListener listener, Integer resid, int placeholderTextResId) {
+        this.mRecyclerItemClickListener = listener;
+        this.mCourseDataList = initialCourses;
+        this.mHeaderViewHolderLayoutResourceId = resid;
+        this.mShowPlaceholder = false;
+        this.mPlaceholderTextResId = placeholderTextResId;
     }
 
-    public void setResIdNoDataText(int resIdNoDataText){
-        this.resIdNoDataText = resIdNoDataText;
+    public void setShowPlaceholder(boolean show){
+        this.mShowPlaceholder = show;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == ViewHolderFactory.ViewType.HEADER)
-            return ViewHolderFactory.getInstance().create(parent, viewType, courseItemClickListener, headerLayoutResourceId);
-        else return ViewHolderFactory.getInstance().create(parent, viewType, courseItemClickListener);
+        if(viewType == ViewHolderFactory.ViewType.HEADER) return ViewHolderFactory.getInstance().create(parent, viewType, mRecyclerItemClickListener, mHeaderViewHolderLayoutResourceId);
+        else return ViewHolderFactory.getInstance().create(parent, viewType, mRecyclerItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        if(courses.isEmpty() && isEmptyData)
-            ((NoDataViewHolder) holder).bind(this.resIdNoDataText);
-        else
-            ((CourseItemViewHolder) holder).bind(this.courses.get(position - 1));
+        if(mCourseDataList.isEmpty() && mShowPlaceholder) ((PlaceholderViewHolder) holder).bind(this.mPlaceholderTextResId);
+        else ((CourseItemViewHolder) holder).bind(this.mCourseDataList.get(position - getItemOffset()));
     }
 
     public int getItemOffset() {
-        return 1 +(courses.isEmpty() && isEmptyData ? 1 : 0);
+        return 1 + (mCourseDataList.isEmpty() && mShowPlaceholder ? 1 : 0);
     }
     @Override
     public int getItemCount() {
-        return getItemOffset() + (this.courses == null ? 0 : this.courses.size());
+        return getItemOffset() + (this.mCourseDataList == null ? 0 : this.mCourseDataList.size());
     }
 
     @Override
     public int getItemViewType(int position) {
         if(position <= 0) return ViewHolderFactory.ViewType.HEADER;
-        else if(courses.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
+        else if(mCourseDataList.isEmpty() && mShowPlaceholder) return ViewHolderFactory.ViewType.PLACEHOLDER;
         else return ViewHolderFactory.ViewType.COURSE_ITEM;
     }
 }

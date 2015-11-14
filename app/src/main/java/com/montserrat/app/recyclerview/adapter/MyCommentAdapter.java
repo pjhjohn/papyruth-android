@@ -8,7 +8,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.MyCommentData;
 import com.montserrat.app.recyclerview.viewholder.InformViewHolder;
 import com.montserrat.app.recyclerview.viewholder.MyCommentViewHolder;
-import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
+import com.montserrat.app.recyclerview.viewholder.PlaceholderViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
@@ -16,27 +16,22 @@ import java.util.List;
 
 import timber.log.Timber;
 
-/**
- * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
- * Used in {@link com.montserrat.app.fragment.main.HomeFragment HomeFragment}
- * as an adapter for List-type {@link android.support.v7.widget.RecyclerView} to provide latest evaluations to user
- */
 public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String USER_LEARNED_INFORM = "MyWrittenCommentAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
+    private static final String USER_LEARNED_INFORM = "MyCommentAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
+    private RecyclerViewItemClickListener mRecyclerViewItemClickListener;
+    private List<MyCommentData> mMyCommentDataList;
     private boolean mUserLearnedInform;
-    private RecyclerViewItemClickListener itemClickListener;
-    private List<MyCommentData> myWritten;
-    private boolean isEmptyData;
+    private boolean mShowPlaceholder;
 
-    public MyCommentAdapter(List<MyCommentData> initialEvaluations, RecyclerViewItemClickListener listener) {
-        this.myWritten = initialEvaluations;
-        this.itemClickListener = listener;
+    public MyCommentAdapter(List<MyCommentData> initialMyCommentDataList, RecyclerViewItemClickListener listener) {
+        mRecyclerViewItemClickListener = listener;
+        mMyCommentDataList = initialMyCommentDataList;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
-        this.isEmptyData = false;
+        mShowPlaceholder = false;
     }
 
-    public void setIsEmptyData(boolean isEmptyData){
-        this.isEmptyData = isEmptyData;
+    public void setShowPlaceholder(boolean show){
+        mShowPlaceholder = show;
     }
 
     @Override
@@ -52,36 +47,33 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         break;
                     default : Timber.d("Unexpected view #%x", view.getId());
                 }
-            } else this.itemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
+            } else mRecyclerViewItemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
         });
     }
 
-    /**
-     * @param holder
-     * @param position HEADER / INFORM(if not learned) / EVALUATION_ITEM_DETAILs
-     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
-        else if(myWritten.isEmpty() && isEmptyData) ((NoDataViewHolder) holder).bind(R.string.no_data_my_comment);
-        else ((MyCommentViewHolder) holder).bind(this.myWritten.get(position - (mUserLearnedInform ? 1 : 2)));
+        else if (mMyCommentDataList.isEmpty() && mShowPlaceholder) ((PlaceholderViewHolder) holder).bind(R.string.no_data_my_comment);
+        else ((MyCommentViewHolder) holder).bind(mMyCommentDataList.get(position - (mUserLearnedInform ? 1 : 2)));
     }
 
     public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1) +(myWritten.isEmpty() && isEmptyData? 1 : 0);
+        return 1 + (mUserLearnedInform ? 0 : 1) + (mMyCommentDataList.isEmpty() && mShowPlaceholder ? 1 : 0);
     }
 
     @Override
     public int getItemCount() {
-        return getItemOffset() + (this.myWritten == null ? 0 : this.myWritten.size());
+        if (mMyCommentDataList == null) return getItemOffset();
+        return mMyCommentDataList.size() + getItemOffset();
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
-        else if (myWritten.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
-        else return ViewHolderFactory.ViewType.MY_WRITTEN_COMMENT;
+        else if (mMyCommentDataList.isEmpty() && mShowPlaceholder) return ViewHolderFactory.ViewType.PLACEHOLDER;
+        else return ViewHolderFactory.ViewType.MY_COMMENT;
     }
 }

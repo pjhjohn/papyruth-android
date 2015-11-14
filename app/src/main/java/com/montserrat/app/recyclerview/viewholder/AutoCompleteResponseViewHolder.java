@@ -1,12 +1,10 @@
 package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.drawable.ShapeDrawable;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.montserrat.app.R;
@@ -22,52 +20,40 @@ import butterknife.InjectView;
  * Created by pjhjohn on 2015-06-29.
  */
 
-public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.type_icon) protected ImageView icon;
-    @InjectView(R.id.content) protected TextView content;
-    @InjectView(R.id.autocomplete_layout) protected RelativeLayout layout;
-    @InjectView(R.id.type_text) protected TextView typeText;
-    private RecyclerViewItemClickListener itemClickListener;
-    private int iconColor;
-    private final Context context;
+public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder {
+    @InjectView(R.id.type_icon) protected ImageView mIcon;
+    @InjectView(R.id.content)   protected TextView mContent;
+    @InjectView(R.id.type_text) protected TextView mTypeText;
+    private final Context mContext;
+    private final Resources mResources;
+    private int mIconColor;
 
     public AutoCompleteResponseViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
-        this.context = itemView.getContext();
-        itemView.setOnClickListener(this);
-        this.itemClickListener = listener;
-        ShapeDrawable drawable = new ShapeDrawable();
-        drawable.getPaint().setStyle(Paint.Style.STROKE);
-        drawable.getPaint().setColor(0xffdddddd);
-        this.layout.setBackgroundDrawable(drawable);
-        this.iconColor = context.getResources().getColor(R.color.icon_material);
-        this.itemView.setBackgroundResource(R.drawable.row_selector);
+        mContext = itemView.getContext();
+        mResources = mContext.getResources();
+        mIconColor = mResources.getColor(R.color.icon_material);
+        itemView.setBackgroundResource(R.drawable.row_selector);
+        itemView.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, getAdapterPosition()));
     }
 
     public void bind(Candidate item, boolean isHistory) {
-        final Context context = this.itemView.getContext();
-        this.layout.setBackgroundColor(itemView.getResources().getColor(R.color.white));
         if (item.lecture_id != null && item.professor_id != null){
-            Picasso.with(context).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_new_evaluation ).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
-            this.content.setText(item.lecture_name + " - " +item.professor_name);
-            this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_red));
-            this.typeText.setText(R.string.word_course);
+            Picasso.with(mContext).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_new_evaluation ).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
+            mContent.setText(item.lecture_name + " - " + item.professor_name);
+            mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_red));
+            mTypeText.setText(R.string.word_course);
         }else if(item.lecture_name != null) {
-            Picasso.with(context).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_lecture ).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
-            this.content.setText(item.lecture_name);
-            this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_blue));
-            this.typeText.setText(R.string.word_lecture);
+            Picasso.with(mContext).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_lecture ).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
+            mContent.setText(item.lecture_name);
+            mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_blue));
+            mTypeText.setText(R.string.word_lecture);
         }else if(item.professor_name != null){
-            Picasso.with(context).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_school ).transform(new ColorFilterTransformation(this.iconColor)).into(this.icon);
-            this.content.setText((item.professor_name));
-            this.typeText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_round_stroke_green));
-            this.typeText.setText(R.string.word_professor);
+            Picasso.with(mContext).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_school ).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
+            mContent.setText(item.professor_name);
+            mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_green));
+            mTypeText.setText(R.string.word_professor);
         }
-    }
-
-    @Override
-    public void onClick(View view) {
-        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition());
     }
 }

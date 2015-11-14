@@ -57,6 +57,7 @@
     <color name="point_clarity">@color/colorchip_red</color>
     <color name="point_low">@color/colorchip_green</color>
     <color name="point_high">@color/colorchip_red</color>
+    <color name="point_none">@color/white_40p</color>
 
     <!--Background-->
     <color name="background_profile_change">@color/white_95p</color>

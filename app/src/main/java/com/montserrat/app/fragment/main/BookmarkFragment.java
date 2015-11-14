@@ -126,7 +126,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         for (FavoriteData f : favorites){
             this.items.add(f.course);
         }
-        this.adapter.setIsEmptyData(favorites.isEmpty());
+        this.adapter.setShowPlaceholder(favorites.isEmpty());
         this.adapter.notifyDataSetChanged();
 
         if(favorites.size() < 1){

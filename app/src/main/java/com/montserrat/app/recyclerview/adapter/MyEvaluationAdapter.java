@@ -8,7 +8,7 @@ import com.montserrat.app.R;
 import com.montserrat.app.model.EvaluationData;
 import com.montserrat.app.recyclerview.viewholder.InformViewHolder;
 import com.montserrat.app.recyclerview.viewholder.MyEvaluationViewHolder;
-import com.montserrat.app.recyclerview.viewholder.NoDataViewHolder;
+import com.montserrat.app.recyclerview.viewholder.PlaceholderViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
@@ -16,27 +16,22 @@ import java.util.List;
 
 import timber.log.Timber;
 
-/**
- * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
- * Used in {@link com.montserrat.app.fragment.main.HomeFragment HomeFragment}
- * as an adapter for List-type {@link android.support.v7.widget.RecyclerView} to provide latest evaluations to user
- */
 public class MyEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String USER_LEARNED_INFORM = "MyWrittenEvaluationAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
+    private static final String USER_LEARNED_INFORM = "MyEvaluationAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
+    private RecyclerViewItemClickListener mRecyclerViewItemClickListener;
+    private List<EvaluationData> mEvaluationDataList;
     private boolean mUserLearnedInform;
-    private RecyclerViewItemClickListener itemClickListener;
-    private List<EvaluationData> myWritten;
-    private boolean isEmptyData;
+    private boolean mShowPlaceholder;
 
-    public MyEvaluationAdapter(List<EvaluationData> initialEvaluations, RecyclerViewItemClickListener listener) {
-        this.myWritten = initialEvaluations;
-        this.itemClickListener = listener;
+    public MyEvaluationAdapter(List<EvaluationData> initialEvaluationDataList, RecyclerViewItemClickListener listener) {
+        mRecyclerViewItemClickListener = listener;
+        mEvaluationDataList = initialEvaluationDataList;
         mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
-        this.isEmptyData = false;
+        mShowPlaceholder = false;
     }
 
-    public void setIsEmptyData(boolean isEmptyData){
-        this.isEmptyData = isEmptyData;
+    public void setShowPlaceholder(boolean show){
+        mShowPlaceholder = show;
     }
 
     @Override
@@ -52,36 +47,33 @@ public class MyEvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         break;
                     default : Timber.d("Unexpected view #%x", view.getId());
                 }
-            } else this.itemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
+            } else mRecyclerViewItemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
         });
     }
 
-    /**
-     * @param holder
-     * @param position HEADER / INFORM(if not learned) / EVALUATION_ITEM_DETAILs
-     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
         if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
-        else if(myWritten.isEmpty() && isEmptyData) ((NoDataViewHolder) holder).bind(R.string.no_data_my_evaluation);
-        else((MyEvaluationViewHolder) holder).bind(this.myWritten.get(position - (mUserLearnedInform ? 1 : 2)));
+        else if (mEvaluationDataList.isEmpty() && mShowPlaceholder) ((PlaceholderViewHolder) holder).bind(R.string.no_data_my_evaluation);
+        else ((MyEvaluationViewHolder) holder).bind(mEvaluationDataList.get(position - getItemOffset()));
     }
 
     public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1) +(myWritten.isEmpty() && isEmptyData? 1 : 0);
+        return 1 + (mUserLearnedInform ? 0 : 1) + (mEvaluationDataList.isEmpty() && mShowPlaceholder ? 1 : 0);
     }
 
     @Override
     public int getItemCount() {
-        return getItemOffset() + (this.myWritten == null ? 0 : this.myWritten.size());
+        if (mEvaluationDataList == null) return getItemOffset();
+        return mEvaluationDataList.size() + getItemOffset();
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
         if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
-        else if (myWritten.isEmpty() && isEmptyData) return ViewHolderFactory.ViewType.NO_DATA;
-        else return ViewHolderFactory.ViewType.MY_WRITTEN_EVALUATION;
+        else if (mEvaluationDataList.isEmpty() && mShowPlaceholder) return ViewHolderFactory.ViewType.PLACEHOLDER;
+        else return ViewHolderFactory.ViewType.MY_EVALUATION;
     }
 }

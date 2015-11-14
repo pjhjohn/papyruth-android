@@ -60,7 +60,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                     this.swipeRefresh.setRefreshing(true);
                     return Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page = 1);
                 })
-                .map(mywritten -> mywritten.comments)
+                .map(response -> response.comments)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
@@ -85,7 +85,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                     Timber.d("calling");
                     return Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page);
                 })
-                .map(mywritten -> mywritten.comments)
+                .map(response -> response.comments)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
@@ -93,7 +93,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                     notifyDataChanged(comments);
                 }, error -> {
                     error.printStackTrace();
-                }, () ->{
+                }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
                 })
@@ -105,7 +105,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
             this.items.clear();
         }
         askmore = !comments.isEmpty();
-        adapter.setIsEmptyData(comments.isEmpty());
+        adapter.setShowPlaceholder(comments.isEmpty());
         this.items.addAll(comments);
         this.adapter.notifyDataSetChanged();
         page++;

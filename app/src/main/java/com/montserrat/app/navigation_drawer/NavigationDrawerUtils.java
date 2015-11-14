@@ -2,13 +2,11 @@ package com.montserrat.app.navigation_drawer;
 
 import android.app.Fragment;
 
-import com.montserrat.app.fragment.DummyFragment;
 import com.montserrat.app.fragment.main.BookmarkFragment;
 import com.montserrat.app.fragment.main.EvaluationStep1Fragment;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.MyCommentFragment;
 import com.montserrat.app.fragment.main.MyEvaluationFragment;
-import com.montserrat.app.fragment.main.SimpleCourseFragment;
 
 /**
  * Created by pjhjohn on 2015-06-16.

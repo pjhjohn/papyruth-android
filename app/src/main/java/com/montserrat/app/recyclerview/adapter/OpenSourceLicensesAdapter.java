@@ -3,51 +3,42 @@ package com.montserrat.app.recyclerview.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.montserrat.app.AppManager;
-import com.montserrat.app.R;
-import com.montserrat.app.fragment.main.SimpleCourseFragment;
 import com.montserrat.app.model.OpenSourceLicenseData;
-import com.montserrat.app.recyclerview.viewholder.CourseItemViewHolder;
 import com.montserrat.app.recyclerview.viewholder.OpenSourceLicenseViewHolder;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.List;
 
-import timber.log.Timber;
-
-/**
- * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
- * Used in {@link SimpleCourseFragment SearchCourseFragment}
- * as an adapter for List-type {@link RecyclerView} to provide course search result
- */
 public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private RecyclerViewItemClickListener itemClickListener;
-    private List<OpenSourceLicenseData> data;
+    private RecyclerViewItemClickListener mRecyclerViewItemClickListener;
+    private List<OpenSourceLicenseData> mOpenSourceLicenseDataList;
 
-    public OpenSourceLicensesAdapter(List<OpenSourceLicenseData> initialCourses, RecyclerViewItemClickListener listener) {
-        this.data = initialCourses;
-        this.itemClickListener = listener;
+    public OpenSourceLicensesAdapter(List<OpenSourceLicenseData> initialOpenSourceLicenseDataList, RecyclerViewItemClickListener listener) {
+        mRecyclerViewItemClickListener = listener;
+        mOpenSourceLicenseDataList = initialOpenSourceLicenseDataList;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolderFactory.getInstance().create(parent, viewType, itemClickListener::onRecyclerViewItemClick);
+        return ViewHolderFactory.getInstance().create(parent, viewType, mRecyclerViewItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        ((OpenSourceLicenseViewHolder) holder).bind(this.data.get(position - 1));
+        ((OpenSourceLicenseViewHolder) holder).bind(mOpenSourceLicenseDataList.get(position - 1));  // 1 for header
     }
 
     @Override
     public int getItemCount() {
-        return 1 + (this.data == null ? 0 : this.data.size());
+        if (mOpenSourceLicenseDataList == null) return 1;   // 1 for header
+        return mOpenSourceLicenseDataList.size() + 1;       // 1 for header
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position <= 0 ? ViewHolderFactory.ViewType.HEADER : ViewHolderFactory.ViewType.OPEN_SOURCE_LICENSE;
+        if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
+        else return ViewHolderFactory.ViewType.OPEN_SOURCE_LICENSE;
     }
 }

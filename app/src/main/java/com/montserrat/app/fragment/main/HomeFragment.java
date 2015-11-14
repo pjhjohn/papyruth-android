@@ -44,7 +44,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations->{
                     this.items.clear();
-                    adapter.setIsEmptyData(evaluations.isEmpty());
+                    adapter.setShowPlaceholder(evaluations.isEmpty());
                     this.items.addAll(evaluations);
                     this.adapter.notifyDataSetChanged();
                     size = items.size();
@@ -63,7 +63,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
                         this.items.clear();
-                        adapter.setIsEmptyData(evaluations.isEmpty());
+                        adapter.setShowPlaceholder(evaluations.isEmpty());
                         this.items.addAll(evaluations);
                         this.adapter.notifyDataSetChanged();
                         this.swipeRefresh.setRefreshing(false);

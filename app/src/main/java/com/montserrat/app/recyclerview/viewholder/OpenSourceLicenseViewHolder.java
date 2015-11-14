@@ -1,7 +1,6 @@
 package com.montserrat.app.recyclerview.viewholder;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,29 +19,20 @@ import butterknife.InjectView;
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class OpenSourceLicenseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.osl_icon) ImageView icon;
-    @InjectView(R.id.osl_name) TextView name;
-    OpenSourceLicenseData data;
-    RecyclerViewItemClickListener itemClickListener;
-    private final Context context;
-    public OpenSourceLicenseViewHolder(View itemView, RecyclerViewItemClickListener listener) {
-        super(itemView);
-        ButterKnife.inject(this, itemView);
-        this.context = itemView.getContext();
-        itemView.setOnClickListener(this);
-        this.itemClickListener = listener;
-        this.name.setPaintFlags(this.name.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+public class OpenSourceLicenseViewHolder extends RecyclerView.ViewHolder {
+    @InjectView(R.id.osl_icon) protected ImageView mIcon;
+    @InjectView(R.id.osl_name) protected TextView mName;
+    private final Context mContext;
+    public OpenSourceLicenseViewHolder(View view, RecyclerViewItemClickListener listener) {
+        super(view);
+        ButterKnife.inject(this, view);
+        mContext = view.getContext();
+        mName.setPaintFlags(mName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition() - 1));
     }
 
     public void bind(OpenSourceLicenseData osl) {
-        this.data = osl;
-        this.name.setText(osl.name);
-        Picasso.with(context).load(osl.repoIconResId).transform(new ColorFilterTransformation(Color.GRAY)).into(this.icon);
-    }
-
-    @Override
-    public void onClick (View view) {
-        itemClickListener.onRecyclerViewItemClick(view, this.getAdapterPosition() - 1);
+        mName.setText(osl.name);
+        Picasso.with(mContext).load(osl.repoIconResId).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIcon);
     }
 }
