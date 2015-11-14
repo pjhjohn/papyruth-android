@@ -9,4 +9,5 @@
     <string name="hint_gender">성별</string>
     <string name="hint_university">학교</string>
     <string name="hint_entrance">입학년도</string>
+    <string name="hint_search">검색</string>
 </resources>
