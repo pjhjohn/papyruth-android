@@ -20,11 +20,11 @@ public class ViewHolderFactory {
         return instance;
     }
 
-    private Context context = null;
-    private LayoutInflater inflater = null;
+    private Context mContext = null;
+    private LayoutInflater mInflater = null;
     public void setContext(Context context) {
-        this.context = context;
-        this.inflater = LayoutInflater.from(context);
+        this.mContext = context;
+        this.mInflater = LayoutInflater.from(context);
     }
 
     public static class ViewType {
@@ -43,11 +43,12 @@ public class ViewHolderFactory {
         /* item : etc */
         public static final int AUTO_COMPLETE_RESPONSE = 0x80;
         public static final int UNIVERSITY             = 0x90;
-        public static final int MY_WRITTEN_EVALUATION  = 0xa0;
-        public static final int MY_WRITTEN_COMMENT     = 0xb0;
-        public static final int NO_DATA                = 0xc0;
+        public static final int MY_EVALUATION          = 0xa0;
+        public static final int MY_COMMENT             = 0xb0;
+        public static final int PLACEHOLDER            = 0xc0;
         public static final int OPEN_SOURCE_LICENSE    = 0xd0;
     }
+
     public RecyclerView.ViewHolder create(ViewGroup parent, int viewType) {
         return this.create(parent, viewType, null, null);
     }
@@ -55,24 +56,24 @@ public class ViewHolderFactory {
         return this.create(parent, viewType, listener, null);
     }
     public RecyclerView.ViewHolder create(ViewGroup parent, int viewType, RecyclerViewItemClickListener listener, Integer layoutResId) {
-        if(context == null) throw new Resources.NotFoundException("Context Not Found. Must set at some point");
-        if(inflater == null) throw new Resources.NotFoundException("LayoutInflater Not Found. Must set at some point");
+        if(mContext == null) throw new Resources.NotFoundException("Context Not Found. Must set at some point");
+        if(mInflater == null) throw new Resources.NotFoundException("LayoutInflater Not Found. Must set at some point");
         switch(viewType) {
-            case ViewType.HEADER                 : return new               HeaderViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_actionbarsize   , parent, false));
-            case ViewType.INFORM                 : return new               InformViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_inform                , parent, false), listener);
-            case ViewType.COURSE                 : return new               CourseViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course                , parent, false));
-            case ViewType.EVALUATION             : return new           EvaluationViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation            , parent, false));
-            case ViewType.COURSE_ITEM            : return new           CourseItemViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course_item           , parent, false), listener);
-            case ViewType.EVALUATION_ITEM        : return new       EvaluationItemViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation_item       , parent, false), listener);
-            case ViewType.EVALUATION_ITEM_DETAIL : return new EvaluationItemDetailViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation_item_detail, parent, false), listener);
-            case ViewType.COMMENT_ITEM           : return new          CommentItemViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_comment_item          , parent, false), listener);
-            case ViewType.AUTO_COMPLETE_RESPONSE : return new AutoCompleteResponseViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_autocomplete_response , parent, false), listener);
-            case ViewType.UNIVERSITY             : return new           UniversityViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_university_item       , parent, false), listener);
-            case ViewType.MY_WRITTEN_EVALUATION  : return new         MyEvaluationViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written            , parent, false), listener);
-            case ViewType.MY_WRITTEN_COMMENT     : return new            MyCommentViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_written            , parent, false), listener);
-            case ViewType.NO_DATA                : return new               NoDataViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_no_data               , parent, false));
-            case ViewType.OPEN_SOURCE_LICENSE    : return new    OpenSourceLicenseViewHolder(inflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_open_source_license   , parent, false), listener);
-            default : throw new RuntimeException(String.format("There doesn't exist a ViewHolder which has viewType#%d. Make sure to put correct viewType.", viewType));
+            case ViewType.HEADER                 : return new               HeaderViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_actionbarsize   , parent, false));
+            case ViewType.INFORM                 : return new               InformViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_inform                , parent, false), listener);
+            case ViewType.COURSE                 : return new               CourseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course                , parent, false));
+            case ViewType.EVALUATION             : return new           EvaluationViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation            , parent, false));
+            case ViewType.COURSE_ITEM            : return new           CourseItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course_item           , parent, false), listener);
+            case ViewType.EVALUATION_ITEM        : return new       EvaluationItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation_item       , parent, false), listener);
+            case ViewType.EVALUATION_ITEM_DETAIL : return new EvaluationItemDetailViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation_item_detail, parent, false), listener);
+            case ViewType.COMMENT_ITEM           : return new          CommentItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_comment_item          , parent, false), listener);
+            case ViewType.AUTO_COMPLETE_RESPONSE : return new AutoCompleteResponseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_autocomplete_response , parent, false), listener);
+            case ViewType.UNIVERSITY             : return new           UniversityViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_university_item       , parent, false), listener);
+            case ViewType.MY_EVALUATION          : return new         MyEvaluationViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_evaluation         , parent, false), listener);
+            case ViewType.MY_COMMENT             : return new            MyCommentViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_comment            , parent, false), listener);
+            case ViewType.PLACEHOLDER            : return new          PlaceholderViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_placeholder           , parent, false));
+            case ViewType.OPEN_SOURCE_LICENSE    : return new    OpenSourceLicenseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_open_source_license   , parent, false), listener);
+            default : throw new RuntimeException(String.format("Couldn't find any ViewHolder with ViewType#%d. Check whether you put correct ViewType.", viewType));
         }
     }
 }

@@ -13,10 +13,10 @@ import butterknife.InjectView;
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class NoDataViewHolder extends RecyclerView.ViewHolder {
+public class PlaceholderViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.no_data_text) protected TextView mBody;
     private final Context mContext;
-    public NoDataViewHolder(View view) {
+    public PlaceholderViewHolder(View view) {
         super(view);
         ButterKnife.inject(this, view);
         mContext = view.getContext();

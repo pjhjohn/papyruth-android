@@ -86,16 +86,16 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
                     return Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page);
                 })
-                .map(mywritten -> mywritten.evaluations)
+                .map(response -> response.evaluations)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
                     this.progress.setVisibility(View.GONE);
                     this.notifyDataChanged(evaluations);
-                },error -> {
+                }, error -> {
                     this.progress.setVisibility(View.GONE);
                     error.printStackTrace();
-                }, () ->{
+                }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
                 })
@@ -107,7 +107,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             this.items.clear();
         }
         askmore = !evaluations.isEmpty();
-        this.adapter.setIsEmptyData(evaluations.isEmpty());
+        this.adapter.setShowPlaceholder(evaluations.isEmpty());
         this.items.addAll(evaluations);
         this.adapter.notifyDataSetChanged();
         page++;

@@ -10,9 +10,6 @@ import com.montserrat.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.List;
 
-/**
- * Created by SSS on 2015-04-25.
- */
 public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RecyclerViewItemClickListener itemClickListener; // TODO : use if implemented.
     private boolean isHistory;
