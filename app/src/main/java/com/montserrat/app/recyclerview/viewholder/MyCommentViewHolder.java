@@ -32,9 +32,6 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
     @InjectView(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
     @InjectView(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
-    @InjectView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
-    @InjectView(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
-    @InjectView(R.id.evaluation_item_comment)           protected RelativeLayout mComment;
     private final Context mContext;
     private final Resources mResources;
     public MyCommentViewHolder(View view, RecyclerViewItemClickListener listener) {
@@ -46,20 +43,16 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(MyCommentData comment) {
-
-        //Temp text. API not supported.
-        comment.category = this.itemView.getResources().getString(R.string.category_major);
-
+        if(comment.category==null || comment.category.isEmpty()) mCategory.setVisibility(View.GONE);
         mBody.setText(comment.body);
         mLecture.setText(comment.lecture_name);
         mProfessor.setText(comment.professor_name);
         mTimestamp.setText(DateTimeUtil.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
-        mCategory.setTextColor(mResources.getColor(R.color.colorchip_green_highlight));
-        mCategory.setText(comment.category);
+        if(mCategory.getVisibility()==View.VISIBLE) mCategory.setTextColor(mResources.getColor(R.color.colorchip_green_highlight));
+        if(mCategory.getVisibility()==View.VISIBLE) mCategory.setText(comment.category);
         Picasso.with(mContext).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(this.mVoteUpIcon);
-        this.mVoteUpCount.setText(String.valueOf(comment.up_vote_count == null ? 0 : comment.up_vote_count));
+        mVoteUpCount.setText(String.valueOf(comment.up_vote_count == null ? 0 : comment.up_vote_count));
         Picasso.with(mContext).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(this.mVoteDownIcon);
-        this.mVoteDownCount.setText(String.valueOf(comment.down_vote_count == null ? 0 : comment.down_vote_count));
-        mComment.setVisibility(View.GONE);
+        mVoteDownCount.setText(String.valueOf(comment.down_vote_count == null ? 0 : comment.down_vote_count));
     }
 }
