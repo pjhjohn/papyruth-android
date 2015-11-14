@@ -22,6 +22,6 @@ public class SplashActivity extends Activity {
         Intent mainIntent = new Intent(SplashActivity.this, AuthActivity.class);
         SplashActivity.this.startActivity(mainIntent);
         SplashActivity.this.finish();
-        overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
+        SplashActivity.this.overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_static_alpha_1);
     }
 }
