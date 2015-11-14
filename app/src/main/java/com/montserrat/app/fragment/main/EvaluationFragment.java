@@ -75,6 +75,8 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     private int centerX, centerY;
     private boolean showContentImmediately = false;
 
+    private Integer commentId;
+
     private Navigator navigator;
 
     @Override
@@ -176,7 +178,6 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         );
         if (!standalone) return;
         this.setEvaluationFloatingActionControl();
-        this.showContent(true);
     }
 
     private void setComments(List<CommentData> comments) { setComments(comments, false); }
@@ -192,11 +193,12 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         this.adapter.setShowPlaceholder(comments.isEmpty());
         if (reset) this.adapter.notifyDataSetChanged();
         else this.adapter.notifyItemRangeInserted(this.adapter.getItemCount(), comments.size());
+
+        if(commentId != null) focusComment();
     }
 
     private void registerScrollToLoadMoreListener() {
         this.subscriptions.add(this.getRecyclerViewScrollObservable(this.evaluationRecyclerView, this.evaluationToolbar, true)
-            .startWith((Boolean) null)
             .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE)
             .filter(unused -> this.since != null && this.since >= 0)
             .observeOn(AndroidSchedulers.mainThread())
@@ -339,24 +341,51 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (show) EvaluationFragment.this.cover.setVisibility(View.GONE);
+                if (show) {
+                    EvaluationFragment.this.cover.setVisibility(View.GONE);
+                }
             }
         });
         animAlpha.start();
     }
-    public void focusComment(int commentId){
-        final int offset = this.adapter.getItemOffset()+3;
-        for(int i = 0; i < items.size(); i++){
-            if(items.get(i).id == commentId){
-                this.evaluationRecyclerView.scrollToPosition((i+offset >= items.size()) ? items.size()+1 : i+offset);
+    public void setCommentId(int commentId){
+        this.commentId = commentId;
+    }
+
+    public void focusComment(){
+        final int offset = this.adapter.getItemOffset();
+        RecyclerView.State state = new RecyclerView.State();
+
+        Timber.d("focus &&comment : %s", this.commentId);
+
+        Integer index = null;
+        for(int i = 0; i < items.size(); i++) {
+            if (this.commentId.equals(items.get(i).id)) {
+                index = i + offset;
                 break;
             }
         }
+        Timber.d("&& index : %s %s", index, items.size());
+        if(index == null)
+            return;
+//        Timber.d("&&comment mesure : %s, recyclerView %s", this.evaluationRecyclerView.getHeight(), this.evaluationRecyclerView.getChildAt(index).getMeasuredHeight());
+
+//        ((LinearLayoutManager)this.evaluationRecyclerView.getLayoutManager()).scrollToPositionWithOffset(index, 0);
+//        ((LinearLayoutManager)this.evaluationRecyclerView.getLayoutManager()).smoothScrollToPosition(evaluationRecyclerView, state, index);
+//        final int bottom = collapsible_content.getBottom();
+//        final int listViewHeight = this.evaluationRecyclerView.getChildAt(index).getMeasuredHeight();
+//        if (bottom > listViewHeight) {
+//            final int top = collapsible_content.getTop();
+//            if (top > 0) {
+//                mRecyclerView.smoothScrollBy(0, Math.min(bottom - listViewHeight + mRecyclerView.getPaddingBottom(), top));
+//            }
+//        }
+        evaluationRecyclerView.scrollToPosition(index);
+//        ((LinearLayoutManager)evaluationRecyclerView.getLayoutManager()).set;
+
+        this.commentId = null;
     }
-//    public void focusCommentByPosition(int position){
-//        final int offset = this.adapter.getItemOffset()+2;
-//        this.evaluationRecyclerView.scrollToPosition(position+offset);
-//    }
+
     @Override
     protected EvaluationAdapter getAdapter() {
         return new EvaluationAdapter(this.items, this, this);

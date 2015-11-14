@@ -46,6 +46,10 @@ public class MyCommentViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(MyCommentData comment) {
+
+        //Temp text. API not supported.
+        comment.category = this.itemView.getResources().getString(R.string.category_major);
+
         mBody.setText(comment.body);
         mLecture.setText(comment.lecture_name);
         mProfessor.setText(comment.professor_name);
