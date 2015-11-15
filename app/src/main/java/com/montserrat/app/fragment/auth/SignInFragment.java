@@ -131,7 +131,10 @@ public class SignInFragment extends Fragment implements OnPageFocus {
         );
 
         subscriptions.add(ViewObservable.clicks(this.signup).subscribe(
-            unused -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true)
+            unused -> {
+                this.pagerHeader.setVisibility(View.VISIBLE);
+                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+            }
         ));
     }
 
