@@ -99,6 +99,10 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     public void onResume() {
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_lock).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconPassword);
+
+        if(this.pagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4){
+            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(this.password, InputMethodManager.SHOW_FORCED);
+        }
         this.subscription.add(
             Api.papyruth().terms(0)
                 .map(terms -> terms.term)

@@ -80,6 +80,9 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconGender);
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconRealname);
         this.pagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP3);
+        if(this.pagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3){
+            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(this.realname, InputMethodManager.SHOW_FORCED);
+        }
     }
 
     public void showFAC() {

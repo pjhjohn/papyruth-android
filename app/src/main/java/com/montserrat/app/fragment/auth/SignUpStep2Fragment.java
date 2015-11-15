@@ -89,7 +89,9 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconEmail);
         Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconNickname);
-
+        if(this.pagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2){
+            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(this.email, InputMethodManager.SHOW_FORCED);
+        }
         this.pagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP2);
     }
 
