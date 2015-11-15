@@ -6,9 +6,11 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -368,21 +370,14 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         Timber.d("&& index : %s %s", index, items.size());
         if(index == null)
             return;
-//        Timber.d("&&comment mesure : %s, recyclerView %s", this.evaluationRecyclerView.getHeight(), this.evaluationRecyclerView.getChildAt(index).getMeasuredHeight());
-
-//        ((LinearLayoutManager)this.evaluationRecyclerView.getLayoutManager()).scrollToPositionWithOffset(index, 0);
-//        ((LinearLayoutManager)this.evaluationRecyclerView.getLayoutManager()).smoothScrollToPosition(evaluationRecyclerView, state, index);
-//        final int bottom = collapsible_content.getBottom();
-//        final int listViewHeight = this.evaluationRecyclerView.getChildAt(index).getMeasuredHeight();
-//        if (bottom > listViewHeight) {
-//            final int top = collapsible_content.getTop();
-//            if (top > 0) {
-//                mRecyclerView.smoothScrollBy(0, Math.min(bottom - listViewHeight + mRecyclerView.getPaddingBottom(), top));
-//            }
-//        }
-        evaluationRecyclerView.scrollToPosition(index);
-//        ((LinearLayoutManager)evaluationRecyclerView.getLayoutManager()).set;
-
+        LinearSmoothScroller smoothScroller = new LinearSmoothScroller(this.getActivity()) {
+            @Override
+            public PointF computeScrollVectorForPosition(int targetPosition) {
+                return new PointF(0, 0);
+            }
+        };
+        smoothScroller.setTargetPosition(index);
+        evaluationRecyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
         this.commentId = null;
     }
 
