@@ -1,7 +1,11 @@
 package com.montserrat.app.model.unique;
 
+import com.montserrat.app.model.EvaluationData;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -19,6 +23,7 @@ public class EvaluationForm {
     /* FLAG */
     private boolean isEdit;
     private boolean modifyMode;
+    private Integer evaluationId;
 
     /* STEP 1*/
     private String lectureName;
@@ -35,6 +40,7 @@ public class EvaluationForm {
     private String body;
     private List<String> hashtag;
 
+    public Integer getEvaluationId() { return evaluationId; }
     public String  getLectureName () { return lectureName; }
     public String  getProfessorName() { return professorName; }
     public Integer getCourseId() { return courseId; }
@@ -46,6 +52,8 @@ public class EvaluationForm {
     public List<String> getHashtag() {  return hashtag; }
     public boolean isEdit() { return isEdit; }
     public boolean isModifyMode() { return modifyMode; }
+
+    public void setEvaluationId(Integer evaluationId) { this.evaluationId = evaluationId; }
 
     public void setLectureName (String lectureName) { this.lectureName = lectureName; }
     public void setProfessorName (String professorName) { this.professorName = professorName; }
@@ -72,7 +80,9 @@ public class EvaluationForm {
     }
 
     public void initForEdit(Evaluation evaluation){
+        Timber.d("evaluation id %s", evaluation.getId());
         this.modifyMode = true;
+        this.evaluationId = evaluation.getId();
         this.courseId = evaluation.getCourseId();
         this.lectureName = evaluation.getLectureName();
         this.professorName = evaluation.getProfessorName();
@@ -82,6 +92,18 @@ public class EvaluationForm {
         this.pointClarity = evaluation.getPointClarity();
         this.body = evaluation.getBody();
         this.hashtag = evaluation.getHashTag();
+    }
+    public void initForEdit(EvaluationData evaluation){
+        this.modifyMode = true;
+        this.evaluationId = evaluation.id;
+        this.courseId = evaluation.course_id;
+        this.lectureName = evaluation.lecture_name;
+        this.professorName = evaluation.professor_name;
+        this.pointOverall = evaluation.point_overall;
+        this.pointGpaSatisfaction = evaluation.point_gpa_satisfaction;
+        this.pointEasiness = evaluation.point_easiness;
+        this.pointClarity = evaluation.point_clarity;
+        this.body = evaluation.body;
     }
 
     public void clear() {

@@ -35,7 +35,7 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.materialdialog.AlertMandatoryDialog;
+import com.montserrat.utils.support.materialdialog.AlertDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
@@ -413,7 +413,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
         }else if(v.getId() == R.id.evaluation_header){
             if(User.getInstance().needMoreEvaluation())
-                AlertMandatoryDialog.show(getActivity(), navigator);
+                AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
             this.subscriptions.add(
                 Api.papyruth().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
                     .map(response -> response.course)

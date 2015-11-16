@@ -13,7 +13,7 @@ import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.materialdialog.AlertMandatoryDialog;
+import com.montserrat.utils.support.materialdialog.AlertDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
@@ -129,7 +129,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         if(User.getInstance().needMoreEvaluation()) {
-            AlertMandatoryDialog.show(getActivity(), this.navigator);
+            AlertDialog.show(getActivity(), this.navigator, AlertDialog.Type.EVALUATION_MANDATORY);
             return;
         }
         if(isOpenSlave) return;

@@ -19,10 +19,12 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
+import com.montserrat.app.model.response.EvaluationPossibleResponse;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.materialdialog.AlertDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
@@ -33,10 +35,12 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -94,9 +98,35 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         EvaluationForm.getInstance().setProfessorName(this.items.get(position).professor_name);
         EvaluationForm.getInstance().setCourseId(this.items.get(position).id);
 
-        this.navigator.navigate(EvaluationStep2Fragment.class, true);
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), this.items.get(position).id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                if (response.success) {
+                    this.navigator.navigate(EvaluationStep2Fragment.class, true);
+                } else {
+                    EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
+                    AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
+                        .show();
+                }
+            }, error -> {
+                if (error instanceof RetrofitError) {
+                    switch (((RetrofitError) error).getResponse().getStatus()) {
+                        case 400 :
+                            int id = ((EvaluationPossibleResponse)((RetrofitError)error).getBody()).evaluation_id;
+                            EvaluationForm.getInstance().setEvaluationId(id);
+                            AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE).show();
+                            break;
+                        default:
+                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            error.printStackTrace();
+                            break;
+                    }
+                }
+
+            });
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
+
 
     @Override
     protected CourseItemsAdapter getAdapter() {

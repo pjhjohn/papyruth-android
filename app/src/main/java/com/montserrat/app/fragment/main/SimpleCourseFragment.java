@@ -22,7 +22,7 @@ import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.materialdialog.AlertMandatoryDialog;
+import com.montserrat.utils.support.materialdialog.AlertDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
@@ -173,7 +173,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(User.getInstance().needMoreEvaluation()) AlertMandatoryDialog.show(getActivity(), navigator);
+        if(User.getInstance().needMoreEvaluation()) AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
         if(this.items.size() -1 < position){
             Toast.makeText(getActivity().getBaseContext(),"please wait for loading", Toast.LENGTH_LONG).show();
             return;
