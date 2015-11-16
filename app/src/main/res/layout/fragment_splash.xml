@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/bg"
-        custom:panningDurationInMs="2400"/>
+        custom:panningDurationInMs="1200"/>
     <com.montserrat.utils.view.Circle
         android:id="@+id/splash_circle"
         android:layout_width="240dp"

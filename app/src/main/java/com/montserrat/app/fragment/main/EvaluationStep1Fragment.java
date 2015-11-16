@@ -104,6 +104,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                 if (response.success) {
                     this.navigator.navigate(EvaluationStep2Fragment.class, true);
                 } else {
+                    Timber.i("API response is good");
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                     AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
                         .show();
@@ -112,6 +113,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                 if (error instanceof RetrofitError) {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
                         case 400 :
+                            //API response problem : 400 BAD Request BUT normal response.
                             int id = ((EvaluationPossibleResponse)((RetrofitError)error).getBody()).evaluation_id;
                             EvaluationForm.getInstance().setEvaluationId(id);
                             AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE).show();

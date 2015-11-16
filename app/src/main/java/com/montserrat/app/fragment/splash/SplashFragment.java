@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -24,12 +24,14 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.Circle;
 import com.montserrat.utils.view.CircleAngleAnimation;
-import com.montserrat.utils.view.DecelerateAccelerateInterpolator;
 import com.montserrat.utils.view.panningview.PanningView;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -100,13 +102,13 @@ public class SplashFragment extends Fragment {
 
         /* Animation */
         CircleAngleAnimation animCircle = new CircleAngleAnimation(circle, 360);
-        animCircle.setDuration(1000);
-        animCircle.setInterpolator(new DecelerateAccelerateInterpolator(2.2f));
+        animCircle.setDuration(600);
+        animCircle.setInterpolator(new AccelerateDecelerateInterpolator());
         circle.startAnimation(animCircle);
 
         ValueAnimator animAlpha = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animAlpha.setDuration(2500);
-        animAlpha.setInterpolator(new DecelerateInterpolator(4.0f));
+        animAlpha.setDuration(1500);
+        animAlpha.setInterpolator(new DecelerateInterpolator(2.0f));
         animAlpha.addUpdateListener(anim -> {
             float alpha = (float) animAlpha.getAnimatedValue();
             logo.setAlpha(alpha);
@@ -115,7 +117,7 @@ public class SplashFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                proceedToLoadingFragment.call(null);
+                Observable.just((StatisticsResponse) null).delay(300, TimeUnit.MILLISECONDS).subscribe(proceedToLoadingFragment);
             }
         });
         animAlpha.start();
