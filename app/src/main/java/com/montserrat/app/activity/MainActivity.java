@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -66,6 +67,12 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.reset(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
     }
 
     @Override

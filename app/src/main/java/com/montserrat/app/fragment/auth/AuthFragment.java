@@ -84,7 +84,7 @@ public class AuthFragment extends Fragment implements ViewPagerController {
 
     @Override
     public void setCurrentPage (int pageNum, boolean addToBackStack) {
-        this.progress.setProgress(pageNum - 1);
+        this.progress.setProgress(pageNum);
         this.manager.setCurrentPage(pageNum, addToBackStack);
         this.logoScaleAnimation(pageNum, false);
     }
@@ -130,13 +130,12 @@ public class AuthFragment extends Fragment implements ViewPagerController {
 
     @Override
     public boolean popCurrentPage () {
-        if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress() - 1);
         return this.manager.popCurrentPage();
     }
 
     @Override
     public boolean back() {
-        if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress() - 1);
+        if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress()-1);
         if (this.manager.controlTargetContains(this.manager.getCurrentPage())){
             this.popCurrentPage();
             return true;

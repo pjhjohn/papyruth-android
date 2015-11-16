@@ -48,6 +48,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
+        this.progress.setVisibility(View.VISIBLE);
         this.subscriptions.add(
             Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page = 1)
                 .map(response -> response.comments)
@@ -108,6 +109,8 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         if(page < 2) {
             this.items.clear();
         }
+
+        this.progress.setVisibility(View.GONE);
         askmore = !comments.isEmpty();
         adapter.setShowPlaceholder(comments.isEmpty());
         this.items.addAll(comments);

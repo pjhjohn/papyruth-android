@@ -18,6 +18,7 @@ import com.montserrat.utils.view.navigator.FragmentNavigator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -49,6 +50,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
+        this.progress.setVisibility(View.VISIBLE);
         this.subscriptions.add(
             Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), page = 1)
                 .map(response -> response.evaluations)
@@ -58,7 +60,6 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                     this.notifyDataChanged(evaluations);
                 }, error -> error.printStackTrace())
         );
-
         this.subscriptions.add(
             super.getRefreshObservable(this.swipeRefresh)
                 .flatMap(unused -> {
@@ -109,6 +110,8 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         if(page < 2) {
             this.items.clear();
         }
+
+        this.progress.setVisibility(View.GONE);
         askmore = !evaluations.isEmpty();
         this.adapter.setShowPlaceholder(evaluations.isEmpty());
         this.items.addAll(evaluations);

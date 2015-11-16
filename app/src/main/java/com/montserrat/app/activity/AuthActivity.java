@@ -39,6 +39,12 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
+    }
+
+    @Override
     public void onBackPressed() {
         boolean backed = false;
         if(mViewPagerController.controlTargetContains(mViewPagerController.getCurrentPage())) return;

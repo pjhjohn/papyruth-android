@@ -83,15 +83,22 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
                 this.hide();
         });
         this.searchResult.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
+            boolean touchDown = false;
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
-                if(child != null)
+                if(child != null) {
+                    touchDown = false;
                     return super.onInterceptTouchEvent(rv, e);
-
-                hide();
-                return true;
-
+                }else if(e.getAction() == KeyEvent.ACTION_DOWN){
+                    touchDown = !touchDown;
+                }else if(e.getAction() == KeyEvent.ACTION_UP) {
+                    if(touchDown)
+                        hide();
+                    touchDown = false;
+                    return true;
+                }
+                return false;
             }
         });
 
