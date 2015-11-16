@@ -20,6 +20,7 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.EvaluationData;
+import com.montserrat.app.model.response.EvaluationPossibleResponse;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
@@ -38,9 +39,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, EvaluationData> implements OnBack {
     private Navigator navigator;
@@ -263,7 +266,35 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
-        this.navigator.navigate(EvaluationStep2Fragment.class, true);
+
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                if (response.success) {
+                    ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
+                } else {
+                    Timber.i("API response is good");
+                    EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
+                    AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
+                        .show();
+                }
+            }, error -> {
+                if (error instanceof RetrofitError) {
+                    switch (((RetrofitError) error).getResponse().getStatus()) {
+                        case 400 :
+                            //API response problem : 400 BAD Request BUT normal response.
+                            int id = ((EvaluationPossibleResponse)((RetrofitError)error).getBody()).evaluation_id;
+                            EvaluationForm.getInstance().setEvaluationId(id);
+                            AlertDialog.build(getActivity(), ((MainActivity)getActivity()), AlertDialog.Type.EVALUATION_POSSIBLE).show();
+                            break;
+                        default:
+                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            error.printStackTrace();
+                            break;
+                    }
+                }
+
+            });
     }
 
 }
