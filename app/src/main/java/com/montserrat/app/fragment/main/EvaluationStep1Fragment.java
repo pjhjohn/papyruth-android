@@ -20,7 +20,6 @@ import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.Candidate;
 import com.montserrat.app.model.CourseData;
-import com.montserrat.app.model.response.EvaluationPossibleResponse;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
@@ -108,7 +107,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                 if (response.success) {
                     this.navigator.navigate(EvaluationStep2Fragment.class, true);
                 } else {
-                    Timber.i("API response is good");
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                     AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
                         .show();
@@ -116,12 +114,6 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
             }, error -> {
                 if (error instanceof RetrofitError) {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
-                        case 400 :
-                            //API response problem : 400 BAD Request BUT normal response.
-                            int id = ((EvaluationPossibleResponse)((RetrofitError)error).getBody()).evaluation_id;
-                            EvaluationForm.getInstance().setEvaluationId(id);
-                            AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE).show();
-                            break;
                         default:
                             Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                             error.printStackTrace();

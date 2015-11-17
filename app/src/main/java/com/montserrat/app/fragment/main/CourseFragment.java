@@ -273,7 +273,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 if (response.success) {
                     ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
                 } else {
-                    Timber.i("API response is good");
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                     AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
                         .show();
@@ -281,12 +280,6 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
             }, error -> {
                 if (error instanceof RetrofitError) {
                     switch (((RetrofitError) error).getResponse().getStatus()) {
-                        case 400 :
-                            //API response problem : 400 BAD Request BUT normal response.
-                            int id = ((EvaluationPossibleResponse)((RetrofitError)error).getBody()).evaluation_id;
-                            EvaluationForm.getInstance().setEvaluationId(id);
-                            AlertDialog.build(getActivity(), ((MainActivity)getActivity()), AlertDialog.Type.EVALUATION_POSSIBLE).show();
-                            break;
                         default:
                             Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                             error.printStackTrace();
