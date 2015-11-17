@@ -1,6 +1,8 @@
 package com.papyruth.android;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -44,5 +46,15 @@ public class papyruth extends Application {
         /* Picasso Debugging flags */
         Picasso.with(getApplicationContext()).setIndicatorsEnabled(false);
         Picasso.with(getApplicationContext()).setLoggingEnabled(false);
+    }
+
+    /*
+     * MultiDex Support for Pre-Lolipop devices to prevent possible crash with 65536+ methods
+     * in build.gradle - dependency : compile 'com.android.support:multidex:1.0.1'
+     */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }
