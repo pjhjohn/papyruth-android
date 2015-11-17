@@ -110,7 +110,14 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         this.materialNavigationDrawable = new MaterialMenuDrawable(this.getActivity(), Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
         this.materialNavigationDrawable.setIconState(MaterialMenuDrawable.IconState.X);
         this.evaluationToolbar.setNavigationIcon(materialNavigationDrawable);
-        this.evaluationToolbar.setNavigationOnClickListener(unused -> this.getActivity().onBackPressed());
+        this.evaluationToolbar.setNavigationOnClickListener(unused -> {
+            if(mCommentInputActive) {
+                this.morph2FAB();
+                ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
+                closeCommentWindow = true;
+            }
+            this.getActivity().onBackPressed();
+        });
         this.evaluationToolbar.setTitle(R.string.toolbar_title_evaluation);
         ToolbarUtil.registerMenu(this.evaluationToolbar, R.menu.evaluation, null);
 
@@ -394,21 +401,39 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         FloatingActionControl.getButton().setShowProgressBackground(false);
         FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput());
     }
+
+
+    private boolean closeCommentWindow = false;
     @Override
     public boolean onBack() {
-        if (!mCommentInputActive) return false;
-        this.morph2FAB();
-        return true;
+        if (!mCommentInputActive) {
+            return false;
+        }
+        if(closeCommentWindow){
+            return false;
+        }else {
+            closeCommentWindow = true;
+            this.morph2FAB();
+            return true;
+        }
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.evaluation_modify && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
+            if(mCommentInputActive) {
+                this.morph2FAB();
+                ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
+            }
             EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
         }else if(v.getId() == R.id.evaluation_header){
             if(User.getInstance().needMoreEvaluation())
                 AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+            if(mCommentInputActive) {
+                this.morph2FAB();
+                ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
+            }
             this.subscriptions.add(
                 Api.papyruth().get_course(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
                     .map(response -> response.course)
