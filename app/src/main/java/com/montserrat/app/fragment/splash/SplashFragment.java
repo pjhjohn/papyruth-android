@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -101,13 +102,8 @@ public class SplashFragment extends Fragment {
         background.startPanning();
 
         /* Animation */
-        CircleAngleAnimation animCircle = new CircleAngleAnimation(circle, 360);
-        animCircle.setDuration(600);
-        animCircle.setInterpolator(new AccelerateDecelerateInterpolator());
-        circle.startAnimation(animCircle);
-
         ValueAnimator animAlpha = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animAlpha.setDuration(1500);
+        animAlpha.setDuration(600);
         animAlpha.setInterpolator(new DecelerateInterpolator(2.0f));
         animAlpha.addUpdateListener(anim -> {
             float alpha = (float) animAlpha.getAnimatedValue();
@@ -116,11 +112,19 @@ public class SplashFragment extends Fragment {
         animAlpha.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                Observable.just((StatisticsResponse) null).delay(300, TimeUnit.MILLISECONDS).subscribe(proceedToLoadingFragment);
+                Observable.just((StatisticsResponse) null).delay(400, TimeUnit.MILLISECONDS).subscribe(proceedToLoadingFragment);
             }
         });
-        animAlpha.start();
+
+        CircleAngleAnimation animCircle = new CircleAngleAnimation(circle, 360);
+        animCircle.setDuration(600);
+        animCircle.setInterpolator(new AccelerateDecelerateInterpolator());
+        animCircle.setAnimationListener(new Animation.AnimationListener() {
+            @Override public void onAnimationStart(Animation animation) {}
+            @Override public void onAnimationEnd(Animation animation) { animAlpha.start(); }
+            @Override public void onAnimationRepeat(Animation animation) {}
+        });
+        circle.startAnimation(animCircle);
     }
 
     private boolean timerPending = true, requestPending = true;
