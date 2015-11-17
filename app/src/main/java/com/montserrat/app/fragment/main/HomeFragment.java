@@ -14,6 +14,7 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.materialdialog.AlertDialog;
+import com.montserrat.utils.support.retrofit.ApiError;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.CommonRecyclerViewFragment;
@@ -21,6 +22,7 @@ import com.montserrat.utils.view.navigator.FragmentNavigator;
 
 import java.util.concurrent.TimeUnit;
 
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -52,6 +54,16 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                     this.items.addAll(evaluations);
                     this.adapter.notifyDataSetChanged();
                     size = items.size();
+                }, error -> {
+                    ApiError.throwError(error, this.getClass());
+//                    switch (((RetrofitError) error).getResponse().getStatus()){
+//                        case 403 :
+//                            ((MainActivity) getActivity()).activityFinish();
+//                            break;
+//                        default:
+//                            error.printStackTrace();
+//                            break;
+//                    }
                 })
 
         );
