@@ -122,6 +122,8 @@
     <string name="inform_evaluation">강의에 대한 강의평가를 보여주는 페이지입니다.\n\n댓글을 추가하거나 강의평가, 댓글에 투표를 위-아래 위-위-아래</string>
     <string name="inform_mandatory_evaluation">3개 이상의 강의평가를 써야 볼 수 있습니다. \n%d개 남았습니다.</string>
     <string name="goto_write">강의평 작성하기</string>
+    <string name="inform_wrote_evaluation">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
+    <string name="goto_rewrite">강의평 수정하기</string>
     <string name="no_data">No Data</string>
 
     <!-- No data Inform -->

@@ -18,7 +18,6 @@ import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapter, MyCommentData> {
 
@@ -87,7 +86,6 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                     this.progress.setVisibility(View.VISIBLE);
                     this.swipeRefresh.setRefreshing(false);
                     // TODO : handle the case for max_id == 0 : prefer not to request to server
-                    Timber.d("calling");
                     return Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), page);
                 })
                 .map(response -> response.comments)

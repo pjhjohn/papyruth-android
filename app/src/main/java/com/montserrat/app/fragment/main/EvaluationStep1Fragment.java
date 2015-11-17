@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,20 +24,25 @@ import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.materialdialog.AlertDialog;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.search.ToolbarSearchView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -50,7 +56,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         this.navigator = (Navigator) activity;
     }
 
-    @InjectView(R.id.queryTextView) protected TextView queryTextView;
+    @InjectView(R.id.query_text_view) protected TextView queryTextView;
+    @InjectView(R.id.search_icon) protected ImageView searchIcon;
     @InjectView(R.id.course_list) protected RecyclerView courseList;
     private CompositeSubscription subscriptions;
 
@@ -94,9 +101,30 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         EvaluationForm.getInstance().setProfessorName(this.items.get(position).professor_name);
         EvaluationForm.getInstance().setCourseId(this.items.get(position).id);
 
-        this.navigator.navigate(EvaluationStep2Fragment.class, true);
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), this.items.get(position).id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                if (response.success) {
+                    this.navigator.navigate(EvaluationStep2Fragment.class, true);
+                } else {
+                    EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
+                    AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
+                        .show();
+                }
+            }, error -> {
+                if (error instanceof RetrofitError) {
+                    switch (((RetrofitError) error).getResponse().getStatus()) {
+                        default:
+                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            error.printStackTrace();
+                            break;
+                    }
+                }
+
+            });
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
+
 
     @Override
     protected CourseItemsAdapter getAdapter() {
@@ -116,6 +144,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().clear();
+        Picasso.with(getActivity()).load(R.drawable.ic_light_search).transform(new ColorFilterTransformation(R.color.primary_material_dark)).into(searchIcon);
 
         ToolbarSearchView.getInstance()
             .setPartialItemClickListener((v, position) -> {

@@ -20,7 +20,9 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.unique.EvaluationForm;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.support.rx.RxValidator;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -123,6 +125,7 @@ public class EvaluationStep2Fragment extends Fragment {
             .subscribe(unused -> {
                 this.navigator.navigate(EvaluationStep3Fragment.class, true);
             });
+
 
         this.subscriptions.add(Observable
             .combineLatest(

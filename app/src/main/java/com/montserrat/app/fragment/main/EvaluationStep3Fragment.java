@@ -250,7 +250,7 @@ public class EvaluationStep3Fragment extends Fragment {
         if(isModifyMode){
             return Api.papyruth().put_update_evaluation(
                 User.getInstance().getAccessToken(),
-                EvaluationForm.getInstance().getCourseId(),
+                EvaluationForm.getInstance().getEvaluationId(),
                 EvaluationForm.getInstance().getPointOverall(),
                 EvaluationForm.getInstance().getPointGpaSatisfaction(),
                 EvaluationForm.getInstance().getPointEasiness(),
@@ -269,16 +269,14 @@ public class EvaluationStep3Fragment extends Fragment {
         );
     }
 
-    private Integer evaluationID = null;
     private void submitNewEvaluation() {
         this.submitEvaluation(EvaluationForm.getInstance().isModifyMode())
             .filter(response -> response.success)
             .map(response -> {
-                evaluationID = response.evaluation_id;
                 if (hashtagsContainer.getChildCount() > 0) {
                     Api.papyruth().post_evaluation_hashtag(
                         User.getInstance().getAccessToken(),
-                        evaluationID,
+                        EvaluationForm.getInstance().getEvaluationId(),
                         EvaluationForm.getInstance().getHashtag()
                     ).subscribe();
                 }
@@ -286,7 +284,7 @@ public class EvaluationStep3Fragment extends Fragment {
             })
             .flatMap(unused -> Api.papyruth().get_evaluation(
                 User.getInstance().getAccessToken(),
-                evaluationID
+                EvaluationForm.getInstance().getEvaluationId()
             ))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

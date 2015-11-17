@@ -1,6 +1,7 @@
 package com.montserrat.app.activity;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -13,17 +14,20 @@ import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.montserrat.app.AppConst;
+import com.montserrat.app.AppManager;
 import com.montserrat.app.R;
 import com.montserrat.app.fragment.main.HomeFragment;
 import com.montserrat.app.fragment.main.SettingsFragment;
 import com.montserrat.app.fragment.main.SimpleCourseFragment;
+import com.montserrat.app.model.unique.User;
 import com.montserrat.app.navigation_drawer.NavigationDrawerCallback;
 import com.montserrat.app.navigation_drawer.NavigationDrawerFragment;
 import com.montserrat.app.navigation_drawer.NavigationDrawerUtils;
 import com.montserrat.app.recyclerview.viewholder.ViewHolderFactory;
 import com.montserrat.utils.support.fab.FloatingActionControl;
+import com.montserrat.utils.support.retrofit.ApiError;
+import com.montserrat.utils.support.retrofit.ApiErrorCallback;
 import com.montserrat.utils.view.FloatingActionControlContainer;
-import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.navigator.FragmentNavigator;
 import com.montserrat.utils.view.navigator.NavigationCallback;
 import com.montserrat.utils.view.navigator.Navigator;
@@ -32,8 +36,9 @@ import com.montserrat.utils.view.softkeyboard.SoftKeyboardActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
-public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, ToolbarSearchView.ToolbarSearchViewListener {
+public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, ToolbarSearchView.ToolbarSearchViewListener, ApiErrorCallback {
     @InjectView(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
     @InjectView(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
     @InjectView(R.id.toolbar_search_view)      protected LinearLayout searchViewToolbar;
@@ -47,6 +52,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         this.setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         this.attachSoftKeyboardListeners();
+        ApiError.setApiErrorCallback(this);
 
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
@@ -132,7 +138,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         if (mNavigationDrawer.isOpened()) mNavigationDrawer.close();
         else if (ToolbarSearchView.getInstance().back()) /* Does Nothing */;
         else if (mNavigator.back()) mReadyToTerminate = false;
-        else if (mReadyToTerminate) super.onBackPressed();
+        else if (mReadyToTerminate) this.finish();
         else {
             Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();
             mReadyToTerminate = true;
@@ -200,5 +206,19 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void setOnNavigateListener(NavigationCallback listener) {
         mNavigator.setOnNavigateListener(listener);
+    }
+
+    @Override
+    public void activityFinish() {
+        AppManager.getInstance().clear(AppConst.Preference.HISTORY);
+        AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
+        User.getInstance().clear();
+        this.startActivity(new Intent(this, AuthActivity.class));
+        this.finish();
+    }
+
+    @Override
+    public void sendTracker(String cause, String from) {
+        Timber.d("cause : %s, from : %s", cause, from);
     }
 }

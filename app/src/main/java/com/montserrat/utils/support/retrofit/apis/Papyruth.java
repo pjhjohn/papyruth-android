@@ -5,6 +5,7 @@ import com.montserrat.app.model.response.CommentResponse;
 import com.montserrat.app.model.response.CommentsResponse;
 import com.montserrat.app.model.response.CourseResponse;
 import com.montserrat.app.model.response.CoursesResponse;
+import com.montserrat.app.model.response.EvaluationPossibleResponse;
 import com.montserrat.app.model.response.EvaluationResponse;
 import com.montserrat.app.model.response.EvaluationsResponse;
 import com.montserrat.app.model.response.FavoriteCoursesResponse;
@@ -187,6 +188,11 @@ public interface Papyruth {
     Observable<HashtagsResponse> get_evaluation_hashtag(
         @Header("Authorization") String authorization,
         @Path("id") Integer id
+    );
+    @POST("/evaluations/possible")
+    Observable<EvaluationPossibleResponse> post_evaluation_possible(
+        @Header("Authorization") String authorization,
+        @Query("course_id") Integer course_id
     );
 
     /* HOME */

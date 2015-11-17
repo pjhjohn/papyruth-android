@@ -20,13 +20,14 @@ import com.montserrat.app.AppConst;
 import com.montserrat.app.R;
 import com.montserrat.app.activity.MainActivity;
 import com.montserrat.app.model.EvaluationData;
+import com.montserrat.app.model.response.EvaluationPossibleResponse;
 import com.montserrat.app.model.unique.Course;
 import com.montserrat.app.model.unique.Evaluation;
 import com.montserrat.app.model.unique.EvaluationForm;
 import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
-import com.montserrat.utils.support.materialdialog.AlertMandatoryDialog;
+import com.montserrat.utils.support.materialdialog.AlertDialog;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.MetricUtil;
 import com.montserrat.utils.view.ToolbarUtil;
@@ -38,9 +39,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, EvaluationData> implements OnBack {
     private Navigator navigator;
@@ -94,7 +97,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
 
         if(User.getInstance().needMoreEvaluation()) {
-            AlertMandatoryDialog.show(getActivity(), navigator);
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
         }else{
             Api.papyruth()
                 .get_evaluations(
@@ -135,7 +138,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(User.getInstance().needMoreEvaluation()) AlertMandatoryDialog.show(getActivity(), navigator);
+        if(User.getInstance().needMoreEvaluation()) AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
         if(isOpenSlave) return;
@@ -263,7 +266,28 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
-        this.navigator.navigate(EvaluationStep2Fragment.class, true);
+
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                if (response.success) {
+                    ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
+                } else {
+                    EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
+                    AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
+                        .show();
+                }
+            }, error -> {
+                if (error instanceof RetrofitError) {
+                    switch (((RetrofitError) error).getResponse().getStatus()) {
+                        default:
+                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            error.printStackTrace();
+                            break;
+                    }
+                }
+
+            });
     }
 
 }
