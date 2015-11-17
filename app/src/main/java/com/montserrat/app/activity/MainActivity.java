@@ -132,7 +132,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         if (mNavigationDrawer.isOpened()) mNavigationDrawer.close();
         else if (ToolbarSearchView.getInstance().back()) /* Does Nothing */;
         else if (mNavigator.back()) mReadyToTerminate = false;
-        else if (mReadyToTerminate) super.onBackPressed();
+        else if (mReadyToTerminate) this.finish();
         else {
             Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_LONG).show();
             mReadyToTerminate = true;
