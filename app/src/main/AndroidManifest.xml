@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.montserrat.app">
+    package="com.papyruth.android">
 
     <!-- User email autocomplete -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".MontserratApp"
+        android:name=".papyruth"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_title"

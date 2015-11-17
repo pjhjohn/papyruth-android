@@ -26,7 +26,7 @@
     </FrameLayout>
 
     <!--Navigation Drawer-->
-    <com.montserrat.utils.view.ScrimInsetsFrameLayout
+    <com.papyruth.utils.view.ScrimInsetsFrameLayout
         android:id="@+id/navigation_drawer_container"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:name="com.montserrat.app.navigation_drawer.NavigationDrawerFragment"
+            android:name="com.papyruth.android.navigation_drawer.NavigationDrawerFragment"
             app:layout="@layout/fragment_navigation_drawer"/>
-    </com.montserrat.utils.view.ScrimInsetsFrameLayout>
+    </com.papyruth.utils.view.ScrimInsetsFrameLayout>
 </android.support.v4.widget.DrawerLayout>

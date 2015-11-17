@@ -88,7 +88,7 @@
                     <!--android:layout_width="match_parent"/>-->
         </LinearLayout>
     </LinearLayout>
-    <!--<com.montserrat.utils.view.viewpager.FlexibleViewPager-->
+    <!--<FlexibleViewPager-->
         <!--android:id="@+id/signup_container"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"/>-->

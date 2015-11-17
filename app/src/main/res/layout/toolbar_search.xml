@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_light_back"
             android:contentDescription="@string/empty"/>
-        <com.montserrat.utils.view.search.PreImeEditText
+        <com.papyruth.utils.view.search.PreImeEditText
             android:id="@+id/search_view_query"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -1,4 +1,4 @@
-<com.montserrat.utils.view.navigator.NavigatableFrameLayout
+<com.papyruth.utils.view.navigator.NavigatableFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,4 +23,4 @@
             </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
     <include layout="@layout/progress"/>
-</com.montserrat.utils.view.navigator.NavigatableFrameLayout>
+</com.papyruth.utils.view.navigator.NavigatableFrameLayout>

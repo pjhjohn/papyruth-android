@@ -1,4 +1,4 @@
-<com.montserrat.utils.view.navigator.NavigatableFrameLayout
+<com.papyruth.utils.view.navigator.NavigatableFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -105,4 +105,4 @@
             android:textSize="@dimen/loading_text"
             android:text="@string/loading_end_word"/>
     </LinearLayout>
-</com.montserrat.utils.view.navigator.NavigatableFrameLayout>
+</com.papyruth.utils.view.navigator.NavigatableFrameLayout>

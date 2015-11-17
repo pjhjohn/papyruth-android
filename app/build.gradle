@@ -5,11 +5,12 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.montserrat.main"
+        applicationId "com.papyruth.android"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -31,6 +32,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.android.support:support-v13:23.0.1'
+    compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.google.android.gms:play-services-analytics:8.3.0'
+
 //    compile 'com.android.support:palette-v7:23.0.1'
 //    compile 'com.android.support:design:23.0.1'
 //    compile 'com.google.android.gms:play-services-analytics:7.8.0'
@@ -78,3 +82,4 @@ repositories {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.google.gms.google-services'
