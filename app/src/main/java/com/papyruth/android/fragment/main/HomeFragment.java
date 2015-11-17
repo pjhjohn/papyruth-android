@@ -14,7 +14,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.AlertDialog;
-import com.papyruth.utils.support.retrofit.ApiError;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.CommonRecyclerViewFragment;
@@ -54,7 +54,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                     this.adapter.notifyDataSetChanged();
                     size = items.size();
                 }, error -> {
-                    ApiError.throwError(error, this.getClass());
+                    ErrorHandler.throwError(error, this.getClass());
 //                    switch (((RetrofitError) error).getResponse().getStatus()){
 //                        case 403 :
 //                            ((MainActivity) getActivity()).activityFinish();
