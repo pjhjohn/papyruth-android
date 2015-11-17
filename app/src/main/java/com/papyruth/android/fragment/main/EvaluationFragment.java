@@ -34,6 +34,7 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.AlertDialog;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -149,7 +150,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .subscribe(comments -> {
                 setComments(comments, true);
                 registerScrollToLoadMoreListener();
-            })
+            }, error -> ErrorHandler.throwError(error, this))
         );
         this.subscriptions.add(ViewObservable
             .clicks(this.mCommentSubmit)
@@ -181,7 +182,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 this.mCommentText.setText("");
                 FloatingActionControl.getButton().setIndeterminate(false);
                 FloatingActionControl.getButton().setProgress(0, true);
-            })
+            }, error->ErrorHandler.throwError(error, this))
         );
         if (!standalone) return;
         this.setEvaluationFloatingActionControl();
@@ -225,7 +226,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .subscribe(comments -> {
                 this.progress.setVisibility(View.GONE);
                 this.setComments(comments);
-            })
+            }, error->ErrorHandler.throwError(error, this))
         );
     }
 
@@ -399,7 +400,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_comment).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
-        FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput());
+        FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput(), error->ErrorHandler.throwError(error, this));
     }
 
 
@@ -442,7 +443,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                     .subscribe(course -> {
                         Course.getInstance().update(course);
                         ((MainActivity)this.getActivity()).navigate(CourseFragment.class, true);
-                    }, error -> error.printStackTrace())
+                    }, error -> ErrorHandler.throwError(error, this))
             );
         }
     }

@@ -19,6 +19,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.FailureDialog;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
@@ -111,7 +112,7 @@ public class ProfileChangeEmailFragment extends Fragment {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-            })
+            }, error-> ErrorHandler.throwError(error, this))
         );
     }
 
@@ -156,6 +157,7 @@ public class ProfileChangeEmailFragment extends Fragment {
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                         }
                     }
+                    ErrorHandler.throwError(error, this);
                 }
             );
     }

@@ -9,6 +9,7 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.MyCommentAdapter;
 import com.papyruth.android.R;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
@@ -35,7 +36,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                 this.slave = new EvaluationFragment();
                 setCommentPosition(this.items.get(position).id);
                 this.openEvaluation(view, true);
-            });
+            }, error-> ErrorHandler.throwError(error, this));
     }
 
     private boolean askmore = true;
@@ -55,7 +56,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
                     this.notifyDataChanged(comments);
-                }, error -> error.printStackTrace())
+                }, error -> ErrorHandler.throwError(error, this))
         );
 
         this.subscriptions.add(
@@ -72,7 +73,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                     notifyDataChanged(comments);
                 }, error -> {
                     this.swipeRefresh.setRefreshing(false);
-                    error.printStackTrace();
+                    ErrorHandler.throwError(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
@@ -95,7 +96,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
                     this.progress.setVisibility(View.GONE);
                     notifyDataChanged(comments);
                 }, error -> {
-                    error.printStackTrace();
+                    ErrorHandler.throwError(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);

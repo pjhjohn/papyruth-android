@@ -23,6 +23,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -117,8 +118,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                     this.showFAC();
                 },
                 error -> {
-                    Timber.d("duplicate validator error : %s", error);
-                    error.printStackTrace();
+                    ErrorHandler.throwError(error, this);
                 }
             )
         );
@@ -185,7 +185,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                 })
             ).subscribe(event -> {
                 this.showFAC();
-            })
+            }, error->ErrorHandler.throwError(error, this))
         );
 
         this.subscription.add(
@@ -203,7 +203,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                         SignUpForm.getInstance().setNickname(this.nickname.getText().toString());
                         this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
                     },
-                    error -> error.printStackTrace())
+                    error -> ErrorHandler.throwError(error, this))
         );
     }
 

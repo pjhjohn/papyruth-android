@@ -18,6 +18,7 @@ import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.fragment.RecyclerViewFragment;
@@ -79,8 +80,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
                 this.items.addAll(universities);
                 this.adapter.notifyDataSetChanged();
             }, error -> {
-                Timber.d("get university list error : %s", error);
-                error.printStackTrace();
+                ErrorHandler.throwError(error, this);
             })
         );
     }
@@ -112,11 +112,11 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
                         .subscribeOn(Schedulers.io())
                         .subscribe(
                             unuse -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
-                            error -> error.printStackTrace()
+                            error -> ErrorHandler.throwError(error, this)
                         )
                 );
             },
-            error -> Timber.d("page change error %s", error)
+            error -> ErrorHandler.throwError(error, this)
         ));
 
         InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
@@ -167,7 +167,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
                         .subscribeOn(Schedulers.io())
                         .subscribe(
                             unuse -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
-                            error -> error.printStackTrace()
+                            error -> ErrorHandler.throwError(error, this)
                         )
                 );
             })

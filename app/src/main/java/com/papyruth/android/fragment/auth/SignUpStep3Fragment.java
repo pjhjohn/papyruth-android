@@ -19,6 +19,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.rx.RxValidator;
@@ -124,7 +125,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                 String validateName = RxValidator.getErrorMessageRealname.call(event.text().toString());
                 this.realname.setError(validateName);
                 this.showFAC();
-            })
+            },error-> ErrorHandler.throwError(error, this))
         );
 
         this.gender.setOnCheckedChangeListener((group, id) -> this.showFAC());
@@ -145,7 +146,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                         SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
                         this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
                     },
-                    error -> error.printStackTrace())
+                    error -> ErrorHandler.throwError(error, this))
         );
     }
 

@@ -23,6 +23,7 @@ import com.papyruth.android.model.response.EvaluationResponse;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.HashtagDeleteDialog;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
@@ -114,7 +115,7 @@ public class EvaluationStep3Fragment extends Fragment {
                         recommendHashtag.addView(hashtag);
                     }
                 }, error -> {
-                    error.printStackTrace();
+                    ErrorHandler.throwError(error, this);
                 })
         );
 
@@ -160,7 +161,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 })
                 .build()
                 .show();
-        });
+        }, error->ErrorHandler.throwError(error, this));
         Picasso.with(context).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.bodyIcon);
         Picasso.with(context).load(R.drawable.ic_light_tag).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.hashtagsIcon);
         this.bodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.bodyLabel.getPaintFlags());
@@ -181,7 +182,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe(valid -> {
                     this.showFAB(valid);
-                }, error -> Timber.d("error : %s", error))
+                }, error -> ErrorHandler.throwError(error, this))
         );
 
         /**
@@ -202,7 +203,7 @@ public class EvaluationStep3Fragment extends Fragment {
                         this.hashtagsText.setSelection(hashtagsText.getText().length());
                     }else
                         this.hashtagsText.setText("");
-                })
+                },error->ErrorHandler.throwError(error, this))
         );
     }
 
@@ -298,14 +299,7 @@ public class EvaluationStep3Fragment extends Fragment {
                     }
                 },
                 error -> {
-                    if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                        }
-                    }else{
-                        error.printStackTrace();
-                    }
+                    ErrorHandler.throwError(error, this);
                 }
             );
     }
@@ -323,7 +317,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 .subscribe(user -> {
                     User.getInstance().update(user);
                     this.navigator.navigate(HomeFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
-                }, error -> error.printStackTrace());
+                }, error -> ErrorHandler.throwError(error, this));
         }
     }
 }

@@ -21,6 +21,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.AlertDialog;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -128,7 +129,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
             FloatingActionControl
                 .clicks(R.id.fab_new_evaluation)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
+                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true)
+                    ,error->ErrorHandler.throwError(error, this))
         );
         this.subscriptions.add(
             this.getRefreshObservable(this.refresh)
@@ -139,7 +141,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
                         this.refresh.setRefreshing(false);
                         this.getSearchResult();
                     },
-                    error -> Timber.d("search error : %s", error)
+                    error -> ErrorHandler.throwError(error, this)
                 )
         );
 //        toolbarSearch.searchCourse();
@@ -161,7 +163,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(courses -> {
                     this.notifyDataSetChanged(courses);
-                }, error -> error.printStackTrace())
+                }, error -> ErrorHandler.throwError(error, this))
         );
     }
 

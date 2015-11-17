@@ -25,6 +25,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.CourseAdapter;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.AlertDialog;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -93,7 +94,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
-        FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
+        FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm()
+            , error->ErrorHandler.throwError(error, this));
 
         if(User.getInstance().needMoreEvaluation()) {
             AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
@@ -116,7 +118,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     final int offset = this.adapter.getItemOffset();
                     this.adapter.setIsEmptyData(evaluations.isEmpty());
                     this.adapter.notifyItemRangeChanged(offset, this.adapter.getItemCount() - offset);
-                });
+                }, error-> ErrorHandler.throwError(error, this));
         }
     }
 
@@ -149,7 +151,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
                 this.openEvaluation(view);
-            });
+            }, error -> ErrorHandler.throwError(error, this));
     }
 
     /* Animating Slave Views : open & close */
@@ -276,17 +278,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
                         .show();
                 }
-            }, error -> {
-                if (error instanceof RetrofitError) {
-                    switch (((RetrofitError) error).getResponse().getStatus()) {
-                        default:
-                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                            error.printStackTrace();
-                            break;
-                    }
-                }
-
-            });
+            }, error -> ErrorHandler.throwError(error, this));
     }
 
 }

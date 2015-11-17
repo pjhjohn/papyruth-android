@@ -31,6 +31,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.error.SignupError;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -117,8 +118,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                             this.termContents.add("privacy!!"+this.getResources().getString(R.string.lorem_ipsum));
                         }
                     }, error -> {
-                        Timber.d("get Term error", error);
-                        error.printStackTrace();
+                        ErrorHandler.throwError(error, this);
                     }
                 )
         );
@@ -226,7 +226,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 String validatePassword = RxValidator.getErrorMessagePassword.call(event.text().toString());
                 this.password.setError(validatePassword);
                 this.showFAC();
-            })
+            }, error->ErrorHandler.throwError(error, this))
         );
 
         this.subscription.add(
@@ -243,7 +243,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                         SignUpForm.getInstance().setPassword(this.password.getText().toString());
                         this.register();
                     },
-                    error -> error.printStackTrace())
+                    error -> ErrorHandler.throwError(error, this))
         );
     }
 

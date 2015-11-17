@@ -20,6 +20,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.rx.RxValidator;
 import com.papyruth.utils.view.ToolbarUtil;
@@ -122,7 +123,7 @@ public class EvaluationStep2Fragment extends Fragment {
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
             .subscribe(unused -> {
                 this.navigator.navigate(EvaluationStep3Fragment.class, true);
-            });
+            }, error-> ErrorHandler.throwError(error, this));
 
 
         this.subscriptions.add(Observable
@@ -161,7 +162,7 @@ public class EvaluationStep2Fragment extends Fragment {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-            }, error -> Timber.d("error : %s", error))
+            }, error -> ErrorHandler.throwError(error, this))
         );
     }
 

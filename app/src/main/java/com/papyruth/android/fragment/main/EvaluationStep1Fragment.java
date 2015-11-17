@@ -23,6 +23,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.AlertDialog;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
@@ -112,15 +113,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                         .show();
                 }
             }, error -> {
-                if (error instanceof RetrofitError) {
-                    switch (((RetrofitError) error).getResponse().getStatus()) {
-                        default:
-                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                            error.printStackTrace();
-                            break;
-                    }
-                }
-
+                ErrorHandler.throwError(error, this);
             });
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
@@ -161,7 +154,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                     event ->
                         ToolbarSearchView.getInstance().show()
                     ,error ->
-                        error.printStackTrace()
+                        ErrorHandler.throwError(error, this)
                 )
         );
     }
@@ -179,7 +172,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(courses -> {
                 notifyAutoCompleteDataChanged(courses);
-            }, error -> error.printStackTrace());
+            }, error -> ErrorHandler.throwError(error, this));
     }
 
     public void notifyAutoCompleteDataChanged(List<CourseData> courses){

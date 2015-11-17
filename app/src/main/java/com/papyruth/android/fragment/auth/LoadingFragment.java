@@ -20,6 +20,7 @@ import com.papyruth.android.model.UniversityData;
 import com.papyruth.android.model.response.StatisticsResponse;
 import com.papyruth.android.model.unique.Statistics;
 import com.papyruth.android.activity.AuthActivity;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
@@ -113,7 +114,7 @@ public class LoadingFragment extends Fragment {
             .subscribe(unused -> {
                 if(Statistics.getInstance().getUniversity() == null) this.navigator.navigate(AuthFragment.class, false, Navigator.AnimatorType.FADE);
                 else ((AuthActivity)this.getActivity()).startMainActivity(); // Valid AccessToken
-            })
+            }, error-> ErrorHandler.throwError(error, this))
         );
     }
 }

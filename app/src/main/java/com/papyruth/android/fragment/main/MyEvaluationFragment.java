@@ -9,6 +9,7 @@ import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.MyEvaluationAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
@@ -36,7 +37,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
                 this.openEvaluation(view, true);
-            });
+            }, error-> ErrorHandler.throwError(error, this));
     }
 
 
@@ -57,7 +58,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
                     this.notifyDataChanged(evaluations);
-                }, error -> error.printStackTrace())
+                }, error -> ErrorHandler.throwError(error, this))
         );
         this.subscriptions.add(
             super.getRefreshObservable(this.swipeRefresh)
@@ -73,7 +74,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                     this.notifyDataChanged(evaluations);
                 }, error -> {
                     this.swipeRefresh.setRefreshing(false);
-                    error.printStackTrace();
+                    ErrorHandler.throwError(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
@@ -97,7 +98,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                     this.notifyDataChanged(evaluations);
                 }, error -> {
                     this.progress.setVisibility(View.GONE);
-                    error.printStackTrace();
+                    ErrorHandler.throwError(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
@@ -125,6 +126,10 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     @Override
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN));
+        FloatingActionControl.clicks(R.id.fab_new_evaluation)
+            .subscribe(
+                unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN)
+                , error->ErrorHandler.throwError(error, this)
+            );
     }
 }

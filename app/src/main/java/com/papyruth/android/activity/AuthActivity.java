@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.auth.LoadingFragment;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
+import com.papyruth.utils.support.error.ErrorHandlerCallback;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.view.FloatingActionControlContainer;
 import com.papyruth.utils.view.navigator.FragmentNavigator;
@@ -19,7 +20,7 @@ import com.papyruth.utils.view.viewpager.ViewPagerController;
 /**
  * Activity For Authentication.
  */
-public class AuthActivity extends SoftKeyboardActivity implements Navigator {
+public class AuthActivity extends SoftKeyboardActivity implements Navigator, ErrorHandlerCallback {
     private FragmentNavigator mNavigator;
 
     @Override
@@ -125,5 +126,10 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator {
         AuthActivity.this.startActivity(mainIntent);
         AuthActivity.this.finish();
         AuthActivity.this.overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
+    }
+
+    @Override
+    public void sendTracker(String cause, String from, boolean isFatal) {
+
     }
 }

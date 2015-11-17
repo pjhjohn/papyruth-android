@@ -21,6 +21,7 @@ import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.R;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
@@ -150,7 +151,10 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
             FloatingActionControl
                 .clicks(R.id.fab_new_evaluation)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true))
+                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true),
+                    error -> {
+                        ErrorHandler.throwError(error, this);
+                    })
         );
 
         this.subscriptions.add(
@@ -161,7 +165,9 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                 .subscribe(
                     favorites -> {
                         notifyDataChanged(favorites);
-                    }, error -> error.printStackTrace()
+                    }, error -> {
+                        ErrorHandler.throwError(error, this);
+                    }
                 )
         );
 
@@ -182,7 +188,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                         notifyDataChanged(favorites);
                         this.refresh.setRefreshing(false);
                     },
-                    error -> Timber.d("search error : %s", error)
+                    error -> ErrorHandler.throwError(error, this)
                 )
         );
 
@@ -202,7 +208,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                     if (favorites != null) {
                         this.notifyDataChanged(favorites);
                     }
-                }, error -> error.printStackTrace())
+                }, error -> ErrorHandler.throwError(error, this))
         );
     }
 }

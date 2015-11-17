@@ -28,6 +28,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.support.rx.RxValidator;
@@ -114,7 +115,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
             .startWith(false)
             .subscribe(valid -> {
                 this.signin.setEnabled(valid);
-            })
+            }, error-> ErrorHandler.throwError(error, this))
         );
 
         subscriptions.add(
@@ -127,14 +128,14 @@ public class SignInFragment extends Fragment implements OnPageFocus {
                 }))
             )
                 .filter(trigger -> trigger)
-                .subscribe(unused -> doRequest())
+                .subscribe(unused -> doRequest(), error->ErrorHandler.throwError(error, this))
         );
 
         subscriptions.add(ViewObservable.clicks(this.signup).subscribe(
             unused -> {
                 this.pagerHeader.setVisibility(View.VISIBLE);
                 this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-            }
+            }, error->ErrorHandler.throwError(error, this)
         ));
     }
 

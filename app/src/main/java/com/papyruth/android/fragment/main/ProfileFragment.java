@@ -16,6 +16,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.R;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.view.ToolbarUtil;
@@ -100,15 +101,18 @@ public class ProfileFragment extends Fragment {
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_email)
-            .subscribe(unused -> this.navigator.navigate(ProfileChangeEmailFragment.class, true))
-        );
+            .subscribe(unused -> this.navigator.navigate(ProfileChangeEmailFragment.class, true)
+                , error -> ErrorHandler.throwError(error, this)
+            ));
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_nickname)
-            .subscribe(unused -> this.navigator.navigate(ProfileChangeNicknameFragment.class, true))
-        );
+            .subscribe(unused -> this.navigator.navigate(ProfileChangeNicknameFragment.class, true)
+                ,error->ErrorHandler.throwError(error, this)
+            ));
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_edit_password)
-            .subscribe(unused -> this.navigator.navigate(ProfileChangePasswordFragment.class, true))
-        );
+            .subscribe(unused -> this.navigator.navigate(ProfileChangePasswordFragment.class, true)
+                ,error->ErrorHandler.throwError(error, this)
+            ));
     }
 }

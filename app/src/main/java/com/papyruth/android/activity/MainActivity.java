@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
@@ -76,6 +77,18 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.reset(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override
@@ -214,9 +227,13 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         mNavigator.setOnNavigateListener(listener);
     }
 
-
     @Override
-    public void sendTracker(String cause, String from) {
+    public void sendTracker(String cause, String from, boolean isFatal) {
         Timber.d("cause : %s, from : %s", cause, from);
+        mTracker.send(
+            new HitBuilders.ExceptionBuilder()
+                .setDescription(cause)
+                .setFatal(isFatal)
+                .build());
     }
 }

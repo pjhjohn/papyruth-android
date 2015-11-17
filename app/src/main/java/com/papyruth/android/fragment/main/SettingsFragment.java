@@ -20,6 +20,7 @@ import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.R;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.TermOfServicesDialog;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
@@ -95,12 +96,13 @@ public class SettingsFragment extends Fragment {
                     context.getResources().getString(R.string.lorem_ipsum)
                 );
                 dialog.show();
-            })
+            },error->ErrorHandler.throwError(error, this))
         );
 
         this.subscriptions.add(ViewObservable
             .clicks(this.openSourceLicense)
-            .subscribe(unused -> this.navigator.navigate(OpenSourceLicensesFragment.class, true))
+            .subscribe(unused -> this.navigator.navigate(OpenSourceLicensesFragment.class, true)
+            , error->ErrorHandler.throwError(error, this))
         );
 
         this.subscriptions.add(ViewObservable
@@ -111,7 +113,7 @@ public class SettingsFragment extends Fragment {
                 User.getInstance().clear();
                 this.getActivity().startActivity(new Intent(this.getActivity(), AuthActivity.class));
                 this.getActivity().finish();
-            })
+            }, error->ErrorHandler.throwError(error, this))
         );
     }
 }
