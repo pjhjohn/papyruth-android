@@ -137,7 +137,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             .transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive)))
             .into(mBookmark);
         mBookmark.setOnClickListener(this);
-        Timber.d("favor %s", Course.getInstance().getIsFavorite());
     }
 
     @Override

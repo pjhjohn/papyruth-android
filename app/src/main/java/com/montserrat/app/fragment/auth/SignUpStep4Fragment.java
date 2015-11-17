@@ -140,7 +140,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                     imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
                     termPage.show();
                 }
-                Timber.d("term!!");
             }
             @Override
             public void updateDrawState(TextPaint ds) {
@@ -156,7 +155,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                     imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
                     termPage.show();
                 }
-                Timber.d("privacy!!");
             }
             @Override
             public void updateDrawState(TextPaint ds) {

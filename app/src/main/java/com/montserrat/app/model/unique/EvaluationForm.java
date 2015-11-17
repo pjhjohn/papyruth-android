@@ -5,8 +5,6 @@ import com.montserrat.app.model.EvaluationData;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Created by pjhjohn on 2015-04-26.
  */
@@ -80,7 +78,6 @@ public class EvaluationForm {
     }
 
     public void initForEdit(Evaluation evaluation){
-        Timber.d("evaluation id %s", evaluation.getId());
         this.modifyMode = true;
         this.evaluationId = evaluation.getId();
         this.courseId = evaluation.getCourseId();

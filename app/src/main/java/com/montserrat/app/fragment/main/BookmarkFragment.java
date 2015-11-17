@@ -199,7 +199,6 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(favorites -> {
                     this.progress.setVisibility(View.GONE);
-                    Timber.d("hello?");
                     if (favorites != null) {
                         this.notifyDataChanged(favorites);
                     }

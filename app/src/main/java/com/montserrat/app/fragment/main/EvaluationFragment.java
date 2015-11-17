@@ -54,7 +54,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, CommentData> implements OnBack, View.OnClickListener {
     @InjectView(R.id.evaluation_recyclerview) protected RecyclerView evaluationRecyclerView;
@@ -134,7 +133,6 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onResume() {
         super.onResume();
-        Timber.d("this is Evaluation!!");
         this.showContentImmediately(this.showContentImmediately);
         this.subscriptions.add(Api.papyruth()
             .get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null)
@@ -358,8 +356,6 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         final int offset = this.adapter.getItemOffset();
         RecyclerView.State state = new RecyclerView.State();
 
-        Timber.d("focus &&comment : %s", this.commentId);
-
         Integer index = null;
         for(int i = 0; i < items.size(); i++) {
             if (this.commentId.equals(items.get(i).id)) {
@@ -367,7 +363,6 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 break;
             }
         }
-        Timber.d("&& index : %s %s", index, items.size());
         if(index == null)
             return;
         LinearSmoothScroller smoothScroller = new LinearSmoothScroller(this.getActivity()) {

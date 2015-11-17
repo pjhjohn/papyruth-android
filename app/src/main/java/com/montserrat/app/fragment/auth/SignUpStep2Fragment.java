@@ -184,8 +184,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                     this.nickname.setError(RxValidator.getErrorMessageNickname.call(event.text().toString()));
                 })
             ).subscribe(event -> {
-                Timber.d("event class", event.getClass());
-                Timber.d("error msg : %s >< %s", this.email.getError(), this.nickname.getError());
                 this.showFAC();
             })
         );
