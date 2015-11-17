@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +26,13 @@ import com.montserrat.app.model.unique.User;
 import com.montserrat.app.recyclerview.adapter.CourseItemsAdapter;
 import com.montserrat.utils.support.fab.FloatingActionControl;
 import com.montserrat.utils.support.materialdialog.AlertDialog;
+import com.montserrat.utils.support.picasso.ColorFilterTransformation;
 import com.montserrat.utils.support.retrofit.apis.Api;
 import com.montserrat.utils.view.ToolbarUtil;
 import com.montserrat.utils.view.fragment.RecyclerViewFragment;
 import com.montserrat.utils.view.navigator.Navigator;
 import com.montserrat.utils.view.search.ToolbarSearchView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,7 +57,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         this.navigator = (Navigator) activity;
     }
 
-    @InjectView(R.id.queryTextView) protected TextView queryTextView;
+    @InjectView(R.id.query_text_view) protected TextView queryTextView;
+    @InjectView(R.id.search_icon) protected ImageView searchIcon;
     @InjectView(R.id.course_list) protected RecyclerView courseList;
     private CompositeSubscription subscriptions;
 
@@ -148,6 +152,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().clear();
+        Picasso.with(getActivity()).load(R.drawable.ic_light_search).transform(new ColorFilterTransformation(R.color.primary_material_dark)).into(searchIcon);
 
         ToolbarSearchView.getInstance()
             .setPartialItemClickListener((v, position) -> {

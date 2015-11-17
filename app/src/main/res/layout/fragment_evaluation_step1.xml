@@ -8,18 +8,29 @@
     android:focusableInTouchMode="true"
     android:paddingTop="?attr/actionBarSize">
 
-    <TextView
-        android:id="@+id/queryTextView"
-        android:text="@string/hint_search_course"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="@dimen/baseline_x7"
-        android:singleLine="true"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="@dimen/basefont_x2"
-        android:background="@color/colorchip_green"
-        android:imeOptions="actionSearch"/>
+        android:background="@drawable/background_thick_stroke_search">
+        <ImageView
+            android:id="@+id/search_icon"
+            android:src="@drawable/ic_light_search"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="@dimen/baseline_x2"
+            android:layout_marginRight="@dimen/baseline_x2"
+            android:layout_width="@dimen/baseline_x3"
+            android:layout_height="@dimen/baseline_x3"/>
+        <TextView
+            android:id="@+id/query_text_view"
+            android:text="@string/hint_search_course"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x7"
+            android:singleLine="true"
+            android:gravity="start|center_vertical"
+            android:textColor="@color/black_translucent_54p"
+            android:textSize="@dimen/basefont_x1.5"/>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/course_list"
         android:layout_width="match_parent"
