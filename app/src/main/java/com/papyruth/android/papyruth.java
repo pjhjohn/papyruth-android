@@ -12,6 +12,8 @@ import com.papyruth.utils.support.retrofit.RetrofitLogger;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.squareup.picasso.Picasso;
 
+import java.util.Locale;
+
 import retrofit.RestAdapter;
 import timber.log.Timber;
 
@@ -24,8 +26,14 @@ public class papyruth extends Application {
     public synchronized Tracker getTracker(){
         if(tracker == null){
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            tracker = analytics.newTracker(R.xml.global_tracker);
+            tracker = analytics.newTracker(R.xml.ga_tracker);
         }
+        tracker.setAppName(getResources().getString(R.string.app_title));
+        if (User.getInstance().getId() != null){
+            tracker.set("&uid", User.getInstance().getId().toString());
+        }
+        tracker.set("&ul", Locale.getDefault().getDisplayLanguage());
+        tracker.enableAutoActivityTracking(true);
         return tracker;
     }
 

@@ -100,7 +100,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName("MainActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         ViewHolderFactory.getInstance().setContext(this);

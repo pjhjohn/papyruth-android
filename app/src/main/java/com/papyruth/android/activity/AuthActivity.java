@@ -44,7 +44,6 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName("AuthActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
         ViewHolderFactory.getInstance().setContext(this);
