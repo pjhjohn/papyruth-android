@@ -31,6 +31,19 @@
                 android:textSize="@dimen/baseline_x3"
                 android:textColor="@color/colorchip_green"/>
         </LinearLayout>
+        <ImageView
+            android:id="@+id/application_logo_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x8"
+            android:paddingTop="@dimen/baseline_x2"
+            android:paddingRight="@dimen/baseline_x2"
+            android:paddingLeft="@dimen/baseline_x2"
+            android:animateLayoutChanges="true"
+            android:layout_gravity="center"
+            android:src="@drawable/logo_horizontal"
+            android:contentDescription="@string/empty"
+            android:scaleType="fitCenter"
+            android:visibility="gone"/>
         <ProgressBar
             android:id="@+id/signup_progress"
             android:layout_width="match_parent"

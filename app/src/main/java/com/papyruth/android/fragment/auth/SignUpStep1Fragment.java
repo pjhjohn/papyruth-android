@@ -95,6 +95,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
+        getActivity().findViewById(R.id.application_logo_horizontal).setVisibility(View.GONE);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);

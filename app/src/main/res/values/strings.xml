@@ -255,6 +255,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="ga_fragment_main_opensourse">Opensourse Fragment</string>
     <string name="ga_fragment_main_search_result">Search Result Fragment</string>
     <string name="ga_fragment_main_search_view">Search View</string>
+    <string name="forgot_password">Forgot Password?</string>
 
     <!-- GA - event : api call -->
 

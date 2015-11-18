@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
         super.onAttach(activity);
         this.pagerController = ((AuthActivity) activity).getViewPagerController();
         this.pagerHeader = (LinearLayout) activity.findViewById(R.id.pager_header);
+        this.logoHorizontal = (ImageView) activity.findViewById(R.id.application_logo_horizontal);
     }
     @Override
     public void onDetach() {
@@ -77,6 +79,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.sign_up) protected Button signup;
     private CompositeSubscription subscriptions;
     private LinearLayout pagerHeader;
+    private ImageView logoHorizontal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,13 +100,19 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     public void onResume() {
         super.onResume();
         if(this.getUserVisibleHint()) onPageFocused();
-    }
+}
 
     @Override
     public void onPageFocused() {
         FloatingActionControl.getInstance().clear();
-        ((AuthActivity) getActivity()).setOnShowSoftKeyboard(keyboardHeight -> pagerHeader.setVisibility(View.GONE));
-        ((AuthActivity) getActivity()).setOnHideSoftKeyboard(() -> pagerHeader.setVisibility(View.VISIBLE));
+        ((AuthActivity) getActivity()).setOnShowSoftKeyboard(keyboardHeight -> {
+            pagerHeader.setVisibility(View.GONE);
+            logoHorizontal.setVisibility(View.VISIBLE);
+        });
+        ((AuthActivity) getActivity()).setOnHideSoftKeyboard(() -> {
+            pagerHeader.setVisibility(View.VISIBLE);
+            logoHorizontal.setVisibility(View.GONE);
+        });
         this.subscriptions.add(Observable.combineLatest(
             WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
             WidgetObservable.text(passwordField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
