@@ -12,6 +12,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.model.CommentData;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.materialdialog.VotersDialog;
 import com.papyruth.utils.support.picasso.CircleTransformation;
 import com.papyruth.utils.support.picasso.ContrastColorFilterTransformation;
@@ -99,14 +100,14 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                     .subscribe(response -> {
                         setVoteStatus(VoteStatus.NONE);
                         setVoteCount(response.up_vote_count, response.down_vote_count);
-                    });
+                    }, error ->  ErrorHandler.throwError(error, this));
                 else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), mCommentId, true)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         setVoteStatus(VoteStatus.UP);
                         setVoteCount(response.up_vote_count, response.down_vote_count);
-                    });
+                    }, error ->  ErrorHandler.throwError(error, this));
                 break;
             case R.id.comment_item_down_vote_icon:
                 if(mVoteStatus == VoteStatus.DOWN) Api.papyruth()
@@ -115,14 +116,14 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                     .subscribe(response -> {
                         setVoteStatus(VoteStatus.NONE);
                         setVoteCount(response.up_vote_count, response.down_vote_count);
-                    });
+                    }, error ->  ErrorHandler.throwError(error, this));
                 else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), mCommentId, false)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         setVoteStatus(VoteStatus.DOWN);
                         setVoteCount(response.up_vote_count, response.down_vote_count);
-                    });
+                    }, error ->  ErrorHandler.throwError(error, this));
                 break;
             case R.id.comment_item_up_vote_count:
             case R.id.comment_item_down_vote_count:
@@ -133,7 +134,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                         view.getContext(),
                         view.getId() == R.id.comment_item_up_vote_count ? "UP" : "DOWN",
                         view.getId() == R.id.comment_item_up_vote_count ? response.up : response.down
-                    ));
+                    ), error ->  ErrorHandler.throwError(error, this));
                 break;
             default : Timber.d("Clicked view : %s", view);
         }

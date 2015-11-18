@@ -21,6 +21,7 @@ import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.CircleTransformation;
 import com.papyruth.utils.view.navigator.Navigator;
@@ -149,8 +150,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         /* setup Subtitle */
         mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText);
-        User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText);
+        User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText, error -> ErrorHandler.throwError(error, this));
+        User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText, error -> ErrorHandler.throwError(error, this));
     }
 
     public void onClick(View view){

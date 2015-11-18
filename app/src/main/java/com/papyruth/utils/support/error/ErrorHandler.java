@@ -19,38 +19,62 @@ public class ErrorHandler {
         ErrorHandler.callback = callback;
     }
 
-    public static boolean throwError(Throwable error, Fragment errorFrgament){
+    public static boolean throwError(Throwable error, Object object){
         try{
             if(error instanceof RetrofitError) {
                 switch (((RetrofitError) error).getKind()) {
                     case HTTP:
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 403:
-                                if(errorFrgament.getActivity() instanceof MainActivity)
-                                    activityChange(errorFrgament, AuthActivity.class);
+                                error403(error, object);
                                 break;
                             default:
-                                callback.sendTracker(((RetrofitError) error).getUrl(), errorFrgament.getClass().getSimpleName(), false);
-                                error.printStackTrace();
+                                errorHttp(error, object);
                         }
                         break;
 
                     case NETWORK:
+                        errorNetwork(error, object);
                     default:
-                        Timber.d("error check : %s\n%s\n%s", error.getMessage(), ((RetrofitError) error).getUrl(), error.getCause());
-                        callback.sendTracker(error.getMessage(), errorFrgament.getClass().getSimpleName(), false);
-                        error.printStackTrace();
+                        errorDefaultRetrofit(error, object);
                         break;
                 }
             }else{
-                callback.sendTracker(error.getMessage(), errorFrgament.getClass().getSimpleName(), false);
-                error.printStackTrace();
+                errorDefault(error, object);
             }
 
         }catch (Exception e){
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    private static void error403(Throwable error, Object object){
+        if(object instanceof Fragment && ((Fragment) object).getActivity() instanceof MainActivity)
+            activityChange((Fragment) object, AuthActivity.class);
+    }
+    private static void errorHttp(Throwable error, Object object){
+        if(callback != null)
+        callback.sendTracker(((RetrofitError) error).getUrl(), object.getClass().getSimpleName(), false);
+        error.printStackTrace();
+    }
+    private static void errorNetwork(Throwable error, Object object){
+        Timber.d("error check : %s\n%s\n%s", error.getMessage(), ((RetrofitError) error).getUrl(), error.getCause());
+        if(callback != null)
+            callback.sendTracker(error.getMessage(), object.getClass().getSimpleName(), false);
+        error.printStackTrace();
+    }
+    private static void errorDefaultRetrofit(Throwable error, Object object){
+        Timber.d("error check : %s\n%s\n%s", error.getMessage(), ((RetrofitError) error).getUrl(), error.getCause());
+        if(callback != null)
+            callback.sendTracker(error.getMessage(), object.getClass().getSimpleName(), false);
+        error.printStackTrace();
+    }
+    private static void errorDefault(Throwable error, Object object){
+        if(callback != null)
+            callback.sendTracker(error.getMessage(), object.getClass().getSimpleName(), false);
+        error.printStackTrace();
     }
 
     private String setErrorDescription(int status, String message, String url){

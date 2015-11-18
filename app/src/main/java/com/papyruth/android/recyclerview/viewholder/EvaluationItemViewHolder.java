@@ -17,6 +17,7 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.picasso.CircleTransformation;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.picasso.ContrastColorFilterTransformation;
@@ -89,7 +90,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
                         totalWidth += width;
                     }
                 });
-            });
+            }, error ->  ErrorHandler.throwError(error, this));
         setPointRating(evaluation.point_overall);
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
