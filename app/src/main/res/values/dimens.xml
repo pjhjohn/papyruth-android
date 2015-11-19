@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Navigation Drawer-->
     <dimen name="navigation_drawer_width">304dp</dimen>
 
-    <dimen name="cardview_image_side_length">72dp</dimen>
-    <dimen name="cardview_image_padding">@dimen/baseline_x1.5</dimen>
-    <dimen name="cardview_min_height_default">72dp</dimen>
-    <dimen name="cardview_min_height_extended">88dp</dimen>
-
+    <!--Baseline-->
     <dimen name="baseline_x0.5">4dp</dimen>
     <dimen name="baseline_x1">8dp</dimen>
     <dimen name="baseline_x1.5">12dp</dimen>
@@ -19,15 +16,22 @@
     <dimen name="baseline_x8">64dp</dimen>
     <dimen name="baseline_x9">72dp</dimen>
     <dimen name="baseline_x10">80dp</dimen>
+    <dimen name="baseline_x11">88dp</dimen>
     <dimen name="baseline_x12">96dp</dimen>
     <dimen name="baseline_x15">120dp</dimen>
     <dimen name="baseline_x20">160dp</dimen>
 
-    <dimen name="default_height_button">56dp</dimen>
-    <dimen name="padding_icon_with_text">12dp</dimen>
+    <!--Cardview-->
+    <dimen name="cardview_image_side_length">@dimen/baseline_x9</dimen>
+    <dimen name="cardview_image_padding">@dimen/baseline_x2</dimen>
+    <dimen name="cardview_min_height_default">@dimen/baseline_x9</dimen>
+    <dimen name="cardview_min_height_extended">@dimen/baseline_x11</dimen>
 
+    <!--Etc-->
+    <dimen name="default_height_button">@dimen/baseline_x7</dimen>
     <dimen name="loading_text">@dimen/basefont_x2</dimen>
 
+    <!--Text Size in sp-->
     <dimen name="basefont_x1">12sp</dimen>
     <dimen name="basefont_x1.2">14sp</dimen>
     <dimen name="basefont_x1.5">18sp</dimen>
@@ -37,5 +41,4 @@
     <dimen name="basefont_x4">48sp</dimen>
     <dimen name="basefont_x5">60sp</dimen>
     <dimen name="basefont_x6">72sp</dimen>
-
 </resources>

@@ -1,137 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/cardview_min_height_default"
-    android:layout_gravity="center">
+    android:layout_marginBottom="1dp"
+    android:background="@color/white">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/comment_item_avatar"
+        android:layout_width="@dimen/cardview_image_side_length"
+        android:layout_height="@dimen/cardview_image_side_length"
+        android:padding="@dimen/cardview_image_padding"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/empty"/>
+
+    <TextView
+        android:id="@+id/comment_item_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/baseline_x2"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/baseline_x1"
+        android:layout_marginEnd="@dimen/baseline_x1"
+        android:layout_toLeftOf="@+id/comment_item_timestamp"
+        android:layout_toStartOf="@+id/comment_item_timestamp"
+        android:layout_toRightOf="@+id/comment_item_avatar"
+        android:layout_toEndOf="@+id/comment_item_avatar"
+        android:textSize="14sp"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        xmlns:roboto="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/comment_item_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/baseline_x2"
+        android:layout_marginRight="@dimen/baseline_x2"
+        android:layout_marginEnd="@dimen/baseline_x2"
+        android:textSize="14sp"
+        android:textColor="@color/bg_normal"
+        roboto:textWeight="normal"/>
+
+    <TextView
+        android:id="@+id/comment_item_body"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_marginBottom="1dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/baseline_x1"
+        android:layout_below="@id/comment_item_nickname"
+        android:layout_marginRight="@dimen/baseline_x2"
+        android:layout_marginEnd="@dimen/baseline_x2"
+        android:layout_toRightOf="@+id/comment_item_avatar"
+        android:layout_toEndOf="@+id/comment_item_avatar"/>
 
-        <ImageView
-            android:id="@+id/comment_item_avatar"
-            android:layout_width="@dimen/cardview_image_side_length"
-            android:layout_height="@dimen/cardview_image_side_length"
-            android:padding="@dimen/cardview_image_padding"
-            android:contentDescription=""
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+    <LinearLayout
+        android:id="@+id/comment_item_footer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/baseline_x0.5"
+        android:layout_marginRight="@dimen/baseline_x2"
+        android:layout_marginBottom="@dimen/baseline_x0.5"
+        android:layout_marginLeft="@dimen/baseline_x2"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/comment_item_body"
+        android:orientation="horizontal"
+        android:gravity="end">
 
-        <TextView
-            android:id="@+id/comment_item_nickname"
+        <RelativeLayout
+            android:id="@+id/comment_item_up_vote"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x2"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/baseline_x1"
-            android:layout_marginEnd="@dimen/baseline_x1"
-            android:layout_toLeftOf="@+id/comment_item_timestamp"
-            android:layout_toStartOf="@+id/comment_item_timestamp"
-            android:layout_toRightOf="@+id/comment_item_avatar"
-            android:layout_toEndOf="@+id/comment_item_avatar"
-            android:textSize="14sp"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/comment_item_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/bg_normal"
-            android:layout_marginTop="@dimen/baseline_x2"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            <ImageView
+                android:id="@+id/comment_item_up_vote_icon"
+                android:layout_width="@dimen/baseline_x4"
+                android:layout_height="@dimen/baseline_x4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/baseline_x0.5"
+                android:contentDescription="@string/empty"/>
 
-        <TextView
-            android:id="@+id/comment_item_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_below="@id/comment_item_nickname"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_toRightOf="@+id/comment_item_avatar"
-            android:layout_toEndOf="@+id/comment_item_avatar"/>
-
-        <LinearLayout
-            android:id="@+id/comment_item_footer"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/baseline_x3"
-            android:orientation="horizontal"
-            android:gravity="end"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/baseline_x0.5"
-            android:layout_marginBottom="@dimen/baseline_x1"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_below="@+id/comment_item_body">
-
-            <RelativeLayout
-                android:id="@+id/comment_item_up_vote"
+            <com.devspark.robototextview.widget.RobotoTextView
+                xmlns:roboto="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/comment_item_up_vote_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/baseline_x0.5"
-                android:layout_marginRight="@dimen/baseline_x0.5">
+                android:layout_height="@dimen/baseline_x4"
+                android:layout_toRightOf="@+id/comment_item_up_vote_icon"
+                android:layout_toEndOf="@+id/comment_item_up_vote_icon"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/baseline_x0.5"
+                android:paddingRight="@dimen/baseline_x0.5"
+                android:gravity="center"
+                roboto:textWeight="bold"/>
+        </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/comment_item_up_vote_icon"
-                    android:layout_width="@dimen/baseline_x3"
-                    android:layout_height="@dimen/baseline_x3"
-                    android:contentDescription="@string/empty"
-                    android:layout_marginLeft="@dimen/baseline_x0.5"
-                    android:layout_marginRight="@dimen/baseline_x0.5"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"/>
+        <RelativeLayout
+            android:id="@+id/comment_item_down_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/comment_item_up_vote_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_toRightOf="@+id/comment_item_up_vote_icon"
-                    android:layout_toEndOf="@+id/comment_item_up_vote_icon"
-                    android:layout_centerVertical="true"/>
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/comment_item_down_vote_icon"
+                android:layout_width="@dimen/baseline_x4"
+                android:layout_height="@dimen/baseline_x4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/baseline_x0.5"
+                android:contentDescription="@string/empty"/>
 
-            <RelativeLayout
-                android:id="@+id/comment_item_down_vote"
+            <com.devspark.robototextview.widget.RobotoTextView
+                xmlns:roboto="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/comment_item_down_vote_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/baseline_x0.5"
-                android:layout_marginRight="@dimen/baseline_x0.5">
-
-                <ImageView
-                    android:id="@+id/comment_item_down_vote_icon"
-                    android:layout_width="@dimen/baseline_x3"
-                    android:layout_height="@dimen/baseline_x3"
-                    android:contentDescription="@string/empty"
-                    android:layout_marginLeft="@dimen/baseline_x0.5"
-                    android:layout_marginRight="@dimen/baseline_x0.5"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"/>
-
-                <TextView
-                    android:id="@+id/comment_item_down_vote_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_toRightOf="@+id/comment_item_down_vote_icon"
-                    android:layout_toEndOf="@+id/comment_item_down_vote_icon"
-                    android:layout_centerVertical="true"/>
-            </RelativeLayout>
-        </LinearLayout>
-    </RelativeLayout>
-</FrameLayout>
+                android:layout_height="@dimen/baseline_x4"
+                android:layout_toRightOf="@+id/comment_item_down_vote_icon"
+                android:layout_toEndOf="@+id/comment_item_down_vote_icon"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/baseline_x0.5"
+                android:paddingRight="@dimen/baseline_x0.5"
+                android:gravity="center"
+                roboto:textWeight="bold"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
