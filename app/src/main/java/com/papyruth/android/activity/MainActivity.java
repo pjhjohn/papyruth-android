@@ -100,7 +100,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName("MainActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         ViewHolderFactory.getInstance().setContext(this);
@@ -228,7 +227,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     }
 
     @Override
-    public void sendTracker(String cause, String from, boolean isFatal) {
+    public void sendErrorTracker(String cause, String from, boolean isFatal) {
         Timber.d("cause : %s, from : %s", cause, from);
         mTracker.send(
             new HitBuilders.ExceptionBuilder()

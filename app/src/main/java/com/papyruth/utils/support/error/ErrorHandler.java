@@ -53,37 +53,49 @@ public class ErrorHandler {
     private static void error403(Throwable error, Object object){
         if(object instanceof Fragment && ((Fragment) object).getActivity() instanceof MainActivity)
             activityChange((Fragment) object, AuthActivity.class);
+
+        if(callback != null)
+            callback.sendErrorTracker(
+                setErrorDescription(403, error.getMessage(), ((RetrofitError) error).getUrl()),
+                object.getClass().getSimpleName(),
+                false
+            );
     }
     private static void errorHttp(Throwable error, Object object){
         if(callback != null)
-        callback.sendTracker(((RetrofitError) error).getUrl(), object.getClass().getSimpleName(), false);
+            callback.sendErrorTracker(
+                setErrorDescription(((RetrofitError) error).getResponse().getStatus(), error.getMessage(), ((RetrofitError) error).getUrl()),
+                object.getClass().getSimpleName(),
+                false
+            );
         error.printStackTrace();
     }
     private static void errorNetwork(Throwable error, Object object){
         Timber.d("error check : %s\n%s\n%s", error.getMessage(), ((RetrofitError) error).getUrl(), error.getCause());
         if(callback != null)
-            callback.sendTracker(error.getMessage(), object.getClass().getSimpleName(), false);
+            callback.sendErrorTracker(setErrorDescription(error.getMessage(), ((RetrofitError) error).getUrl()), object.getClass().getSimpleName(), false);
         error.printStackTrace();
     }
     private static void errorDefaultRetrofit(Throwable error, Object object){
         Timber.d("error check : %s\n%s\n%s", error.getMessage(), ((RetrofitError) error).getUrl(), error.getCause());
         if(callback != null)
-            callback.sendTracker(error.getMessage(), object.getClass().getSimpleName(), false);
+            callback.sendErrorTracker(setErrorDescription(error.getMessage(), ((RetrofitError) error).getUrl()), object.getClass().getSimpleName(), false);
         error.printStackTrace();
     }
     private static void errorDefault(Throwable error, Object object){
         if(callback != null)
-            callback.sendTracker(error.getMessage(), object.getClass().getSimpleName(), false);
+            callback.sendErrorTracker(setErrorDescription(error.getMessage()), object.getClass().getSimpleName(), false);
         error.printStackTrace();
     }
 
-    private String setErrorDescription(int status, String message, String url){
+
+    private static String setErrorDescription(int status, String message, String url){
         return String.format("error status : <%d>, msg : <%s>, request url : <%s>", status, message, url);
     }
-    private String setErrorDescription(String message, String url){
+    private static String setErrorDescription(String message, String url){
         return String.format("error msg : <%s>, request url : <%s>", message, url);
     }
-    private String setErrorDescription(String message){
+    private static String setErrorDescription(String message){
         return String.format("error msg : <%s>", message);
     }
 

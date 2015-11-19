@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.auth.LoadingFragment;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.utils.support.error.ErrorHandlerCallback;
 import com.papyruth.utils.support.fab.FloatingActionControl;
@@ -17,15 +20,21 @@ import com.papyruth.utils.view.navigator.Navigator;
 import com.papyruth.utils.view.softkeyboard.SoftKeyboardActivity;
 import com.papyruth.utils.view.viewpager.ViewPagerController;
 
+import timber.log.Timber;
+
 /**
  * Activity For Authentication.
  */
 public class AuthActivity extends SoftKeyboardActivity implements Navigator, ErrorHandlerCallback {
     private FragmentNavigator mNavigator;
+    private Tracker mTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mTracker = ((papyruth) getApplication()).getTracker();
+
         this.setContentView(R.layout.activity_auth);
         this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));
@@ -35,6 +44,7 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
         ViewHolderFactory.getInstance().setContext(this);
     }
@@ -129,7 +139,13 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     }
 
     @Override
-    public void sendTracker(String cause, String from, boolean isFatal) {
+    public void sendErrorTracker(String cause, String from, boolean isFatal) {
 
+        Timber.d("cause : %s, from : %s", cause, from);
+        mTracker.send(
+            new HitBuilders.ExceptionBuilder()
+                .setDescription(cause)
+                .setFatal(isFatal)
+                .build());
     }
 }
