@@ -80,19 +80,21 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     public class NavigationDrawerItemViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.nav_item_icon) protected ImageView icon; // 54% #000000
-        @InjectView(R.id.nav_item_text) protected TextView text;  // Roboto Medium, 14sp, 87% #000000
-        private int iconColor;
+        @InjectView(R.id.nav_item_icon) protected ImageView mNavItemIcon;  // 54% #000000
+        @InjectView(R.id.nav_item_label) protected TextView mNavItemLabel; // Roboto Medium, 14sp, 87% #000000
+        private int mIconColor;
+        private final Context mContext;
 
         public NavigationDrawerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
-            this.iconColor = mContext.getResources().getColor(R.color.icon_material);
+            mContext = itemView.getContext();
+            mIconColor = mContext.getResources().getColor(R.color.icon_material);
         }
 
         public void bind(NavigationDrawerItem navigationDrawerItem) {
-            Picasso.with(mContext).load(navigationDrawerItem.getDrawableResourceId()).transform(new ColorFilterTransformation(iconColor)).into(icon);
-            text.setText(navigationDrawerItem.getText());
+            Picasso.with(mContext).load(navigationDrawerItem.getDrawableResourceId()).transform(new ColorFilterTransformation(mIconColor)).into(mNavItemIcon);
+            mNavItemLabel.setText(navigationDrawerItem.getLabel());
         }
     }
 }

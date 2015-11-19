@@ -34,6 +34,7 @@
 
     <!--Translucent-->
     <color name="black_translucent_54p">#8A000000</color>
+    <color name="white_translucent_54p">#8Affffff</color>
     <color name="icon_material">@color/black_translucent_54p</color><!--Icon values: 54% #000000-->
     <color name="text_material">#DE000000</color><!--Text values: 87% #000000-->
 

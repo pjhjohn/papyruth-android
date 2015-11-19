@@ -47,8 +47,8 @@
                     android:paddingTop="@dimen/baseline_x2">
                     <ImageView
                         android:id="@+id/evaluation_hashtags_icon"
-                        android:layout_width="@dimen/nav_icon_length"
-                        android:layout_height="@dimen/nav_icon_length"
+                        android:layout_width="@dimen/baseline_x3"
+                        android:layout_height="@dimen/baseline_x3"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
@@ -57,7 +57,7 @@
                     <TextView
                         android:id="@+id/evaluation_hashtags_label"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/nav_icon_length"
+                        android:layout_height="@dimen/baseline_x3"
                         android:layout_marginStart="@dimen/baseline_x2"
                         android:layout_marginLeft="@dimen/baseline_x2"
                         android:layout_toRightOf="@+id/evaluation_hashtags_icon"
@@ -96,8 +96,8 @@
                     android:paddingTop="@dimen/baseline_x2">
                     <ImageView
                         android:id="@+id/evaluation_body_icon"
-                        android:layout_width="@dimen/nav_icon_length"
-                        android:layout_height="@dimen/nav_icon_length"
+                        android:layout_width="@dimen/baseline_x3"
+                        android:layout_height="@dimen/baseline_x3"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
@@ -106,7 +106,7 @@
                     <TextView
                         android:id="@+id/evaluation_body_label"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/nav_icon_length"
+                        android:layout_height="@dimen/baseline_x3"
                         android:layout_marginStart="@dimen/baseline_x2"
                         android:layout_marginLeft="@dimen/baseline_x2"
                         android:layout_toRightOf="@+id/evaluation_body_icon"
@@ -123,7 +123,6 @@
                         android:layout_below="@+id/evaluation_body_icon"
                         android:background="@color/bg_highlight"/>
                 </RelativeLayout>
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
