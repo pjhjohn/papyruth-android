@@ -16,10 +16,13 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.rx.RxValidator;
@@ -42,6 +45,7 @@ import timber.log.Timber;
 
 public class EvaluationStep2Fragment extends Fragment {
     private Navigator navigator;
+    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -51,6 +55,12 @@ public class EvaluationStep2Fragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.navigator = null;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.lecture) protected TextView lecture;
@@ -115,6 +125,7 @@ public class EvaluationStep2Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);

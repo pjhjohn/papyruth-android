@@ -12,8 +12,11 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.model.UniversityData;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
@@ -43,6 +46,12 @@ import timber.log.Timber;
 
 public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController pagerController;
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -94,6 +103,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     public void onPageFocused() {
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);

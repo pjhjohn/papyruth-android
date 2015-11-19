@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.unique.Course;
@@ -20,6 +22,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
@@ -65,10 +68,12 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @InjectView(R.id.progress) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
+    private Tracker mTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
     }
 
     @Override
@@ -113,6 +118,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_search);
         ToolbarSearchView.getInstance().setPartialItemClickListener((v, position)->{
             ToolbarSearchView.getInstance().setSelectedCandidate(position);

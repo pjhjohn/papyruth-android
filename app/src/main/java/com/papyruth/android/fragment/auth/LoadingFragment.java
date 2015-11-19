@@ -15,11 +15,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.R;
 import com.papyruth.android.model.UniversityData;
 import com.papyruth.android.model.response.StatisticsResponse;
 import com.papyruth.android.model.unique.Statistics;
 import com.papyruth.android.activity.AuthActivity;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
@@ -40,6 +43,12 @@ import rx.subscriptions.CompositeSubscription;
 
 public class LoadingFragment extends Fragment {
     private Navigator navigator;
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -91,6 +100,7 @@ public class LoadingFragment extends Fragment {
     @Override
     public void onResume () {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         DecimalFormat formatter = new DecimalFormat("#,###,###,###");
         if(Statistics.getInstance().getUniversity() == null) {

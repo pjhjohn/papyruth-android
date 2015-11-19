@@ -22,12 +22,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -58,6 +61,12 @@ import static com.papyruth.utils.support.rx.RxValidator.toString;
 public class SignInFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
     private ViewPagerController pagerController;
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -101,6 +110,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused() {
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().clear();
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(keyboardHeight -> pagerHeader.setVisibility(View.GONE));
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(() -> pagerHeader.setVisibility(View.VISIBLE));

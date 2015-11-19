@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.OpenSourceLicenseData;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.OpenSourceLicensesAdapter;
 import com.papyruth.android.R;
 import com.papyruth.utils.support.fab.FloatingActionControl;
@@ -26,10 +29,16 @@ import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
 public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceLicensesAdapter, OpenSourceLicenseData> {
+    private Tracker mTracker;
     @InjectView(R.id.osl_recyclerview) protected RecyclerView oslRecyclerView;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_opensourcelicenses, container, false);
@@ -53,6 +62,7 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_osl);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         FloatingActionControl.getInstance().hide(true);

@@ -12,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.R;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.view.viewpager.FlexibleViewPager;
 import com.papyruth.utils.view.viewpager.ViewPagerController;
 import com.papyruth.utils.view.viewpager.ViewPagerManager;
@@ -26,11 +29,19 @@ import butterknife.InjectView;
 
 public class AuthFragment extends Fragment implements ViewPagerController {
     private ViewPagerManager manager;
+    private Tracker mTracker;
 
     @InjectView(R.id.application_logo) protected ImageView applicationLogo;
     @InjectView(R.id.signup_progress) protected ProgressBar progress;
     @InjectView(R.id.auth_viewpager) protected FlexibleViewPager viewPager;
     @InjectView(R.id.state_name) protected TextView stateName;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
@@ -57,6 +68,7 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     /* Bind this to Activity as ViewPagerController*/
