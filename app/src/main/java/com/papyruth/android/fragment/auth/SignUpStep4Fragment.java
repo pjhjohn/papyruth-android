@@ -61,31 +61,34 @@ import timber.log.Timber;
  */
 
 public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPageUnfocus {
-    private ViewPagerController pagerController;
+    private ViewPagerController mViewPagerController;
+    private Context mContext;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = ((AuthActivity) activity).getViewPagerController();
+        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
+        mContext = activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.pagerController = null;
+        mViewPagerController = null;
+        mContext = null;
     }
 
-    @InjectView(R.id.password) protected EditText password;
-    @InjectView(R.id.icon_password) protected ImageView iconPassword;
-    @InjectView(R.id.agree_term) protected TextView agreeTerm;
-    private MaterialDialog termPage;
-    private List<CharSequence> termContents;
-    private CompositeSubscription subscription;
+    @InjectView(R.id.password)      protected EditText mTextPassword;
+    @InjectView(R.id.icon_password) protected ImageView mIconPassword;
+    @InjectView(R.id.agree_term)    protected TextView mTermOfServicesAgreement;
+    private MaterialDialog mTermOfServicesDialog;
+    private List<CharSequence> mTermOfServicesStringArguments;
+    private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step4, container, false);
         ButterKnife.inject(this, view);
-        this.subscription = new CompositeSubscription();
-        this.termContents = new ArrayList<>();
+        mCompositeSubscription = new CompositeSubscription();
+        mTermOfServicesStringArguments = new ArrayList<>();
         return view;
     }
 
@@ -93,52 +96,50 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
+        if(mCompositeSubscription !=null && !mCompositeSubscription.isUnsubscribed()) mCompositeSubscription.unsubscribe();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_lock).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconPassword);
+        Picasso.with(mContext).load(R.drawable.ic_light_lock).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIconPassword);
 
-        if(this.pagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4){
-            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(this.password, InputMethodManager.SHOW_FORCED);
+        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4){
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextPassword, InputMethodManager.SHOW_FORCED);
         }
-        this.subscription.add(
-            Api.papyruth().terms(0)
-                .map(terms -> terms.term)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    term -> {
-                        if (term != null && term.size() > 0) {
-                            this.termContents.add(term.get(0).body);
-                        }else {
-                            this.termContents.add("term!"+this.getResources().getString(R.string.lorem_ipsum));
-                            this.termContents.add("privacy!!"+this.getResources().getString(R.string.lorem_ipsum));
-                        }
-                    }, error -> {
-                        ErrorHandler.throwError(error, this);
+        mCompositeSubscription.add(Api.papyruth()
+            .terms(0)
+            .map(terms -> terms.term)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                term -> {
+                    if (term != null && term.size() > 0) {
+                        mTermOfServicesStringArguments.add(term.get(0).body);
+                    } else {
+                        mTermOfServicesStringArguments.add("term!" + getResources().getString(R.string.lorem_ipsum));
+                        mTermOfServicesStringArguments.add("privacy!!" + getResources().getString(R.string.lorem_ipsum));
                     }
-                )
+                }, error -> ErrorHandler.throwError(error, this)
+            )
         );
 
-        InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+        InputMethodManager imm = ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
 //        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS);
 
         String term = getString(R.string.term);
         String privacy = getString(R.string.privacy_policy);
-        String agreeTerm = String.format(getString(R.string.agree_terms), term, privacy);
+        String agreeTermStr = String.format(getString(R.string.agree_terms), term, privacy);
 
-        SpannableString spannableText = new SpannableString(agreeTerm);
+        SpannableString spannableText = new SpannableString(agreeTermStr);
 
         ClickableSpan termSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
                 buildTermDialog(0);
-                if(!termPage.isShowing()) {
-                    imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
-                    termPage.show();
+                if(!mTermOfServicesDialog.isShowing()) {
+                    imm.hideSoftInputFromWindow(mTextPassword.getWindowToken(), 0);
+                    mTermOfServicesDialog.show();
                 }
             }
             @Override
@@ -151,9 +152,9 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             @Override
             public void onClick(View widget) {
                 buildTermDialog(1);
-                if(!termPage.isShowing()) {
-                    imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
-                    termPage.show();
+                if(!mTermOfServicesDialog.isShowing()) {
+                    imm.hideSoftInputFromWindow(mTextPassword.getWindowToken(), 0);
+                    mTermOfServicesDialog.show();
                 }
             }
             @Override
@@ -162,18 +163,18 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 ds.setUnderlineText(true);
             }
         };
-        int wordIndex = agreeTerm.indexOf(term);
+        int wordIndex = agreeTermStr.indexOf(term);
         spannableText.setSpan(termSpan, wordIndex, wordIndex+term.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        wordIndex = agreeTerm.indexOf(privacy);
+        wordIndex = agreeTermStr.indexOf(privacy);
         spannableText.setSpan(privacySpan, wordIndex, wordIndex+privacy.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        this.agreeTerm.setText(spannableText);
-        this.agreeTerm.setMovementMethod(LinkMovementMethod.getInstance());
+        mTermOfServicesAgreement.setText(spannableText);
+        mTermOfServicesAgreement.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public void showFAC() {
-        String validatePassword = RxValidator.getErrorMessagePassword.call(this.password.getText().toString());
+        String validatePassword = RxValidator.getErrorMessagePassword.call(mTextPassword.getText().toString());
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
         boolean valid = validatePassword == null;
@@ -188,9 +189,9 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             title = getString(R.string.term);
         else if(number == 1)
             title = getString(R.string.privacy_policy);
-        this.termPage = new MaterialDialog.Builder(this.getActivity())
+        mTermOfServicesDialog = new MaterialDialog.Builder(getActivity())
             .title(title)
-            .content(this.termContents.get(number))
+            .content(mTermOfServicesStringArguments.get(number))
             .positiveText(R.string.agree)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
@@ -208,49 +209,45 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
-        this.password.requestFocus();
+        mTextPassword.requestFocus();
 
-        if(this.subscription.isUnsubscribed())
-            this.subscription = new CompositeSubscription();
+        if(mCompositeSubscription != null && mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
-        if(SignUpForm.getInstance().getPassword() != null){
-            this.password.setText(SignUpForm.getInstance().getPassword());
-            this.showFAC();
-        }else if(this.password.length() > 0){
-            this.showFAC();
-        }
-        this.subscription.add(WidgetObservable
-            .text(this.password)
+        if(SignUpForm.getInstance().getPassword() != null) mTextPassword.setText(SignUpForm.getInstance().getPassword());
+        if(mTextPassword != null) showFAC();
+
+        mCompositeSubscription.add(WidgetObservable
+            .text(mTextPassword)
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(event -> {
                 String validatePassword = RxValidator.getErrorMessagePassword.call(event.text().toString());
-                this.password.setError(validatePassword);
-                this.showFAC();
-            }, error->ErrorHandler.throwError(error, this))
+                mTextPassword.setError(validatePassword);
+                showFAC();
+            }, error -> ErrorHandler.throwError(error, this))
         );
 
-        this.subscription.add(
-            Observable.mergeDelayError(
+        mCompositeSubscription.add(Observable
+            .mergeDelayError(
                 FloatingActionControl.clicks().map(event -> FloatingActionControl.getButton().getVisibility() == View.VISIBLE),
-                Observable.create(observer -> this.password.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                Observable.create(observer -> mTextPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
                     observer.onNext(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
                     return !(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
                 }))
             )
-                .filter(use -> use)
-                .subscribe(
-                    use -> {
-                        SignUpForm.getInstance().setPassword(this.password.getText().toString());
-                        this.register();
-                    },
-                    error -> ErrorHandler.throwError(error, this))
+            .filter(use -> use)
+            .subscribe(
+                use -> {
+                    SignUpForm.getInstance().setPassword(mTextPassword.getText().toString());
+                    submitRegistration();
+                }, error -> ErrorHandler.throwError(error, this)
+            )
         );
     }
 
 
-    private void register(){
-        this.subscription.add(
-            Api.papyruth().users_sign_up(
+    private void submitRegistration() {
+        mCompositeSubscription.add(Api.papyruth()
+            .users_sign_up(
                 SignUpForm.getInstance().getEmail(),
                 SignUpForm.getInstance().getPassword(),
                 SignUpForm.getInstance().getRealname(),
@@ -267,21 +264,20 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                         User.getInstance().update(response.user, response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
                         SignUpForm.getInstance().clear();
-                        SignUpStep4Fragment.this.getActivity().startActivity(new Intent(SignUpStep4Fragment.this.getActivity(), MainActivity.class));
-                        SignUpStep4Fragment.this.getActivity().finish();
-                    } else {
-                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                    }
+                        getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
+                        getActivity().finish();
+                    } else
+                        Toast.makeText(getActivity(), getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                 },
                 error -> {
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400: // Invalid field or lack of required field.
-                                String json = new String(((TypedByteArray)((RetrofitError)error).getResponse().getBody()).getBytes());
+                                String json = new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes());
                                 Gson gson = new Gson();
                                 Timber.d("reason : %s", gson.fromJson(json, SignupError.class).errors.email);
                             case 403: // Failed to SignUp
-                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_up), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), getResources().getString(R.string.failed_sign_up), Toast.LENGTH_LONG).show();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
@@ -294,6 +290,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageUnfocused() {
-        if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 }

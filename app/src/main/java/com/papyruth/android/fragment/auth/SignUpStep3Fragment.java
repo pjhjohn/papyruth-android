@@ -42,29 +42,32 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPageUnfocus {
-    private ViewPagerController pagerController;
+    private ViewPagerController mViewPagerController;
+    private Context mContext;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = ((AuthActivity) activity).getViewPagerController();
+        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
+        mContext = activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.pagerController = null;
+        mViewPagerController = null;
+        mContext = null;
     }
 
-    @InjectView(R.id.gender) protected RadioGroup gender;
-    @InjectView(R.id.realname) protected EditText realname;
-    @InjectView(R.id.icon_gender) protected ImageView iconGender;
-    @InjectView(R.id.icon_realname) protected ImageView iconRealname;
-    private CompositeSubscription subscription;
+    @InjectView(R.id.gender)        protected RadioGroup mRadioGroupGender;
+    @InjectView(R.id.realname)      protected EditText mTextRealname;
+    @InjectView(R.id.icon_gender)   protected ImageView mIconGender;
+    @InjectView(R.id.icon_realname) protected ImageView mIconRealname;
+    private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step3, container, false);
         ButterKnife.inject(this, view);
-        this.subscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeSubscription();
         return view;
     }
 
@@ -72,25 +75,26 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconGender);
-        Picasso.with(this.getActivity().getBaseContext()).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(this.getResources().getColor(R.color.primary_dark_material_dark))).into(this.iconRealname);
-        this.pagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP3);
-        if(this.pagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3){
-            ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(this.realname, InputMethodManager.SHOW_FORCED);
+        Picasso.with(mContext).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
+        Picasso.with(mContext).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
+        mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP3);
+        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3){
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
         }
     }
 
     public void showFAC() {
-        String validateName = RxValidator.getErrorMessageRealname.call(this.realname.getText().toString());
+        String validateName = RxValidator.getErrorMessageRealname.call(mTextRealname.getText().toString());
 
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-        boolean valid = validateName == null && this.gender.getCheckedRadioButtonId() != -1;
+        boolean valid = validateName == null && mRadioGroupGender.getCheckedRadioButtonId() != -1;
 
         if (!visible && valid) FloatingActionControl.getInstance().show(true, 200, TimeUnit.MILLISECONDS);
         else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
@@ -101,57 +105,57 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
-        if(this.subscription.isUnsubscribed()) this.subscription = new CompositeSubscription();
+        if(mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
-        InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+        InputMethodManager imm = ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        imm.showSoftInput(this.realname, InputMethodManager.SHOW_FORCED);
-        this.realname.requestFocus();
+        imm.showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
+        mTextRealname.requestFocus();
 
         if(SignUpForm.getInstance().getRealname() != null){
-            this.realname.setText(SignUpForm.getInstance().getRealname());
-            ((RadioButton)this.gender.findViewById(this.gender.getChildAt((SignUpForm.getInstance().getIsBoy()?0:1)).getId())).setChecked(true);
-            this.showFAC();
+            mTextRealname.setText(SignUpForm.getInstance().getRealname());
+            ((RadioButton) mRadioGroupGender.findViewById(mRadioGroupGender.getChildAt((SignUpForm.getInstance().getIsBoy()?0:1)).getId())).setChecked(true);
+            showFAC();
         }
 
-        if(this.realname.length() > 0 && this.gender.getCheckedRadioButtonId() != -1){
-            this.showFAC();
+        if(mTextRealname.length() > 0 && mRadioGroupGender.getCheckedRadioButtonId() != -1){
+            showFAC();
         }
 
-        this.subscription.add(WidgetObservable
-            .text(this.realname)
+        mCompositeSubscription.add(WidgetObservable
+            .text(mTextRealname)
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(event -> {
                 String validateName = RxValidator.getErrorMessageRealname.call(event.text().toString());
-                this.realname.setError(validateName);
-                this.showFAC();
-            },error-> ErrorHandler.throwError(error, this))
+                mTextRealname.setError(validateName);
+                showFAC();
+            }, error -> ErrorHandler.throwError(error, this))
         );
 
-        this.gender.setOnCheckedChangeListener((group, id) -> this.showFAC());
+        mRadioGroupGender.setOnCheckedChangeListener((group, id) -> showFAC());
 
-
-        this.subscription.add(
-            Observable.mergeDelayError(
+        mCompositeSubscription.add(Observable
+            .mergeDelayError(
                 FloatingActionControl.clicks().map(event -> FloatingActionControl.getButton().getVisibility() == View.VISIBLE),
-                Observable.create(observer -> this.realname.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                Observable.create(observer -> mTextRealname.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
                     observer.onNext(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
                     return !(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
                 }))
             )
-                .filter(use -> use)
-                .subscribe(
-                    use -> {
-                        SignUpForm.getInstance().setRealname(this.realname.getText().toString());
-                        SignUpForm.getInstance().setIsBoy(((RadioButton) this.gender.findViewById(this.gender.getCheckedRadioButtonId())).getText().equals(this.getResources().getString(R.string.gender_male)));
-                        this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-                    },
-                    error -> ErrorHandler.throwError(error, this))
+            .filter(use -> use)
+            .subscribe(
+                use -> {
+                    SignUpForm.getInstance().setRealname(mTextRealname.getText().toString());
+                    SignUpForm.getInstance().setIsBoy(((RadioButton) mRadioGroupGender.findViewById(mRadioGroupGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
+                    mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+                }, error -> ErrorHandler.throwError(error, this)
+            )
         );
     }
 
     @Override
     public void onPageUnfocused() {
-        if(this.subscription !=null && !this.subscription.isUnsubscribed()) this.subscription.unsubscribe();
+        if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 }

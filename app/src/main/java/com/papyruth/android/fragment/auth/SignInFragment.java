@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,34 +58,35 @@ import static com.papyruth.utils.support.rx.RxValidator.toString;
  */
 public class SignInFragment extends Fragment implements OnPageFocus {
     /* Set PageController */
-    private ViewPagerController pagerController;
+    private ViewPagerController mViewPagerController;
+    private ImageView mApplicationLogoHorizontal, mApplicationLogo;
+    private TextView mSignUpLabel;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = ((AuthActivity) activity).getViewPagerController();
-        this.pagerHeader = (LinearLayout) activity.findViewById(R.id.pager_header);
-        this.logoHorizontal = (ImageView) activity.findViewById(R.id.application_logo_horizontal);
+        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
+        mSignUpLabel = (TextView)  activity.findViewById(R.id.signup_label);
+        mApplicationLogo = (ImageView) activity.findViewById(R.id.app_logo);
+        mApplicationLogoHorizontal = (ImageView) activity.findViewById(R.id.app_logo_horizontal);
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.pagerController = null;
+        mViewPagerController = null;
     }
 
-    @InjectView (R.id.email) protected AutoCompleteTextView emailField;
-    @InjectView (R.id.password) protected EditText passwordField;
-    @InjectView (R.id.progress) protected View progress;
-    @InjectView (R.id.sign_in) protected Button signin;
-    @InjectView (R.id.sign_up) protected Button signup;
-    private CompositeSubscription subscriptions;
-    private LinearLayout pagerHeader;
-    private ImageView logoHorizontal;
+    @InjectView (R.id.email)    protected AutoCompleteTextView mTextEmail;
+    @InjectView (R.id.password) protected EditText mTextPassword;
+    @InjectView (R.id.progress) protected View mProgress;
+    @InjectView (R.id.sign_in)  protected Button mButtonSignIn;
+    @InjectView (R.id.sign_up)  protected Button mButtonSignUp;
+    private CompositeSubscription mCompositeSubscriptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
         ButterKnife.inject(this, view);
-        this.subscriptions = new CompositeSubscription();
+        mCompositeSubscriptions = new CompositeSubscription();
         this.initEmailAutoComplete();
         return view;
     }
@@ -93,7 +94,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscriptions !=null && !mCompositeSubscriptions.isUnsubscribed()) mCompositeSubscriptions.unsubscribe();
     }
 
     @Override
@@ -106,93 +107,95 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     public void onPageFocused() {
         FloatingActionControl.getInstance().clear();
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(keyboardHeight -> {
-            pagerHeader.setVisibility(View.GONE);
-            logoHorizontal.setVisibility(View.VISIBLE);
+            mApplicationLogo.setVisibility(View.GONE);
+            mApplicationLogoHorizontal.setVisibility(View.VISIBLE);
         });
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(() -> {
-            pagerHeader.setVisibility(View.VISIBLE);
-            logoHorizontal.setVisibility(View.GONE);
+            mApplicationLogo.setVisibility(View.VISIBLE);
+            mApplicationLogoHorizontal.setVisibility(View.GONE);
         });
-        this.subscriptions.add(Observable.combineLatest(
-            WidgetObservable.text(emailField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
-            WidgetObservable.text(passwordField).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+        mCompositeSubscriptions.add(Observable.combineLatest(
+            WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+            WidgetObservable.text(mTextPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
             (String emailError, String passwordError) -> {
-                emailField.setError(emailError);
-                passwordField.setError(passwordError);
+                mTextEmail.setError(emailError);
+                mTextPassword.setError(passwordError);
                 return emailError == null && passwordError == null;
             })
             .startWith(false)
-            .subscribe(valid -> {
-                this.signin.setEnabled(valid);
-            }, error-> ErrorHandler.throwError(error, this))
+            .subscribe(
+                valid -> mButtonSignIn.setEnabled(valid),
+                error -> ErrorHandler.throwError(error, this)
+            )
         );
 
-        subscriptions.add(
+        mCompositeSubscriptions.add(
             Observable.mergeDelayError(
-                ViewObservable.clicks(this.signin).map(unused -> this.signin.isEnabled()),
-                Observable.create(observer -> this.passwordField.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    observer.onNext(this.signin.isEnabled());
+                ViewObservable.clicks(mButtonSignIn).map(unused -> mButtonSignIn.isEnabled()),
+                Observable.create(observer -> mTextPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                    observer.onNext(mButtonSignIn.isEnabled());
                     observer.onCompleted();
-                    return !this.signin.isEnabled();
+                    return !mButtonSignIn.isEnabled();
                 }))
             )
                 .filter(trigger -> trigger)
-                .subscribe(unused -> doRequest(), error->ErrorHandler.throwError(error, this))
+                .subscribe(unused -> doRequest(), error -> ErrorHandler.throwError(error, this))
         );
 
-        subscriptions.add(ViewObservable.clicks(this.signup).subscribe(
+        mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
             unused -> {
-                this.pagerHeader.setVisibility(View.VISIBLE);
-                this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-            }, error->ErrorHandler.throwError(error, this)
+                mApplicationLogo.setVisibility(View.VISIBLE);
+                mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+            }, error -> ErrorHandler.throwError(error, this)
         ));
     }
 
     private void doRequest() {
-        this.progress.setVisibility(View.VISIBLE);
-        this.subscriptions.add(Api.papyruth()
-            .users_sign_in(emailField.getText().toString(), passwordField.getText().toString())
-            .map(response -> {
-                User.getInstance().update(response.user, response.access_token);
-                AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+        mProgress.setVisibility(View.VISIBLE);
+        mCompositeSubscriptions.add(Api.papyruth()
+                .users_sign_in(mTextEmail.getText().toString(), mTextPassword.getText().toString())
+                .map(response -> {
+                    User.getInstance().update(response.user, response.access_token);
+                    AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
                 return response.success;
             })
-            .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                success -> {
-                    this.progress.setVisibility(View.GONE);
-                    if (success) {
-                        this.subscriptions.add(Api.papyruth()
-                            .refresh_token(User.getInstance().getAccessToken())
-                            .map(user -> user.access_token)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(token -> {
-                                    User.getInstance().setAccessToken(token);
-                                    AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
-                                    this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
-                                    this.getActivity().finish();
-                                }, error -> {
-                                    Timber.d("refresh error : %s", error);
-                                    error.printStackTrace();
-                                }
-                            )
-                        );
-                    } else {
-                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                    }
-                },
-                error -> {
-                    this.progress.setVisibility(View.GONE);
-                    if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 403:
-                                Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                                break;
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                .subscribe(
+                    success -> {
+                        mProgress.setVisibility(View.GONE);
+                        if (success) {
+                            mCompositeSubscriptions.add(Api.papyruth()
+                                    .refresh_token(User.getInstance().getAccessToken())
+                                    .map(user -> user.access_token)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                        token -> {
+                                            User.getInstance().setAccessToken(token);
+                                            AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
+                                            this.getActivity().startActivity(new Intent(this.getActivity(), MainActivity.class));
+                                            this.getActivity().finish();
+                                        }, error -> {
+                                            Timber.d("refresh error : %s", error);
+                                            error.printStackTrace();
+                                        }
+                                    )
+                            );
+                        } else {
+                            Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                         }
+                    },
+                    error -> {
+                        mProgress.setVisibility(View.GONE);
+                        if (error instanceof RetrofitError) {
+                            switch (((RetrofitError) error).getResponse().getStatus()) {
+                                case 403:
+                                    Toast.makeText(this.getActivity(), this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                                    break;
+                                default:
+                                    Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            }
                     }
                 }
             )
@@ -239,7 +242,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
                     android.R.layout.simple_dropdown_item_1line,
                     emails
                 );
-                emailField.setAdapter(adapter);
+                mTextEmail.setAdapter(adapter);
             }
 
             @Override
