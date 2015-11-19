@@ -28,34 +28,31 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class AuthFragment extends Fragment implements ViewPagerController {
-    private ViewPagerManager manager;
+    @InjectView(R.id.app_logo)              protected ImageView mApplicationLogo;
+    @InjectView(R.id.app_logo_horizontal)   protected ImageView mApplicationLogoHorizontal;
+    @InjectView(R.id.auth_viewpager)        protected FlexibleViewPager mAuthViewPager;
+    @InjectView(R.id.signup_progress)       protected ProgressBar mSignUpProgress;
+    @InjectView(R.id.signup_label)          protected TextView mSignUpLabel;
+    private ViewPagerManager mViewPagerManager;
     private Tracker mTracker;
-
-    @InjectView(R.id.application_logo) protected ImageView applicationLogo;
-    @InjectView(R.id.signup_progress) protected ProgressBar progress;
-    @InjectView(R.id.auth_viewpager) protected FlexibleViewPager viewPager;
-    @InjectView(R.id.state_name) protected TextView stateName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTracker = ((papyruth) getActivity().getApplication()).getTracker();
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
         ButterKnife.inject(this, view);
-        this.manager = new ViewPagerManager(
-            this.viewPager,
-            this.getFragmentManager(),
+        mViewPagerManager = new ViewPagerManager(
+            mAuthViewPager,
+            getFragmentManager(),
             AuthFragmentFactory.getInstance(),
             AppConst.ViewPager.Auth.LENGTH
         );
-
-        this.progress.setMax(AppConst.ViewPager.Auth.LENGTH - 1);
-
-        this.viewPager.setPagerController(this);
+        mSignUpProgress.setMax(AppConst.ViewPager.Auth.LENGTH - 1);
+        mAuthViewPager.setPagerController(this);
         return view;
     }
 
@@ -70,8 +67,41 @@ public class AuthFragment extends Fragment implements ViewPagerController {
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
+    public void animateApplicationLogo(boolean animateToSignUpStep) {
+        if(mViewPagerManager.getCurrentPage() != AppConst.ViewPager.Auth.SIGNUP_STEP1) return;
 
-    /* Bind this to Activity as ViewPagerController*/
+        mSignUpProgress.setVisibility(animateToSignUpStep ? View.GONE : View.VISIBLE);
+        mApplicationLogoHorizontal.setVisibility(View.GONE);
+
+        ViewGroup.LayoutParams lpApplicationLogo = mApplicationLogo.getLayoutParams();
+        ViewGroup.LayoutParams lpSignUpLabel = mSignUpLabel.getLayoutParams();
+        final int appLogoHeight = lpApplicationLogo.height;
+        final int appLogoWidth  = lpApplicationLogo.width;
+        final float labelTargetHeight = getResources().getDimension(R.dimen.baseline_x4);
+
+        ValueAnimator animApplicationLogo = animateToSignUpStep? ValueAnimator.ofFloat(1, 2) : ValueAnimator.ofFloat(1, 0.5f);
+        animApplicationLogo.addUpdateListener(
+            animation -> {
+                lpApplicationLogo.height = (int) (appLogoHeight * (float) animation.getAnimatedValue());
+                lpApplicationLogo.width  = (int) (appLogoWidth * (float) animation.getAnimatedValue());
+                mApplicationLogo.setLayoutParams(lpApplicationLogo);
+            });
+
+        ValueAnimator animSignUpLabel = animateToSignUpStep? ValueAnimator.ofFloat(1, 0) : ValueAnimator.ofFloat(0, 1);
+        animSignUpLabel.addUpdateListener(
+            animation -> {
+                lpSignUpLabel.height = (int) (labelTargetHeight * (float) animation.getAnimatedValue());
+                mSignUpLabel.setLayoutParams(lpSignUpLabel);
+                mSignUpLabel.setAlpha((float) animation.getAnimatedValue());
+            }
+        );
+
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.playTogether(animApplicationLogo, animSignUpLabel);
+        animSet.start();
+    }
+
+    /* Bind this to Activity as ViewPagerController */
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -80,95 +110,55 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     @Override
     public void onDetach() {
         super.onDetach();
-        ((AuthActivity) this.getActivity()).setViewPagerController(null);
+        ((AuthActivity) getActivity()).setViewPagerController(null);
     }
 
     /* ViewPagerController */
     @Override
     public Stack<Integer> getHistoryCopy() {
-        return this.manager.getHistoryCopy();
+        return mViewPagerManager.getHistoryCopy();
     }
 
     @Override
     public int getPreviousPage() {
-        return this.manager.getPreviousPage();
+        return mViewPagerManager.getPreviousPage();
     }
 
     @Override
     public void setCurrentPage (int pageNum, boolean addToBackStack) {
-        this.progress.setProgress(pageNum);
-        this.manager.setCurrentPage(pageNum, addToBackStack);
-        this.logoScaleAnimation(pageNum, false);
-    }
-
-    public void logoScaleAnimation(int pageNum, boolean bigger) {
-        ValueAnimator logoAnim;
-        ViewGroup.LayoutParams params = applicationLogo.getLayoutParams();
-        if (pageNum == AppConst.ViewPager.Auth.SIGNUP_STEP1){
-            ValueAnimator nameAnim;
-            ViewGroup.LayoutParams stateNameParams = stateName.getLayoutParams();
-            int height  = params.height, width = params.width;
-            float sHeight = getResources().getDimension(R.dimen.baseline_x4);
-            if (bigger) {
-                logoAnim = ValueAnimator.ofFloat(1, 2);
-                nameAnim = ValueAnimator.ofFloat(1, 0);
-            } else {
-                logoAnim = ValueAnimator.ofFloat(1, 0.5f);
-                nameAnim = ValueAnimator.ofFloat(0, 1);
-            }
-            this.progress.setVisibility(bigger ? View.GONE : View.VISIBLE);
-
-            logoAnim.addUpdateListener(
-                animation -> {
-                    params.height = (int) (height * (float) animation.getAnimatedValue());
-                    params.width = (int) (width * (float) animation.getAnimatedValue());
-                    applicationLogo.setLayoutParams(params);
-                });
-            nameAnim.addUpdateListener(
-                animation -> {
-                    stateNameParams.height = (int) (sHeight * (float) animation.getAnimatedValue());
-                    stateName.setLayoutParams(stateNameParams);
-                    stateName.setAlpha((float)animation.getAnimatedValue());
-                }
-            );
-//            logoAnim.start();
-            AnimatorSet set = new AnimatorSet();
-            set.playTogether(logoAnim, nameAnim);
-            set.start();
-        }else if(pageNum == AppConst.ViewPager.Auth.SIGNIN){
-
-        }
+        mSignUpProgress.setProgress(pageNum);
+        mViewPagerManager.setCurrentPage(pageNum, addToBackStack);
+        animateApplicationLogo(false);
     }
 
     @Override
     public boolean popCurrentPage () {
-        return this.manager.popCurrentPage();
+        return mViewPagerManager.popCurrentPage();
     }
 
     @Override
     public boolean back() {
-        if(this.progress.getProgress() > 0) this.progress.setProgress(this.progress.getProgress()-1);
-        if (this.manager.controlTargetContains(this.manager.getCurrentPage())){
-            this.popCurrentPage();
+        if(mSignUpProgress.getProgress() > 0) mSignUpProgress.setProgress(mSignUpProgress.getProgress() - 1);
+        if (mViewPagerManager.controlTargetContains(mViewPagerManager.getCurrentPage())) {
+            popCurrentPage();
             return true;
         }
-        this.logoScaleAnimation(this.manager.getCurrentPage(), true);
-        return this.manager.back();
+        animateApplicationLogo(true);
+        return mViewPagerManager.back();
     }
 
     @Override
     public void addImeControlFragment(int page) {
-        this.manager.addImeControlFragment(page);
+        mViewPagerManager.addImeControlFragment(page);
     }
 
     @Override
     public boolean controlTargetContains(int number) {
-        return this.manager.controlTargetContains(number);
+        return mViewPagerManager.controlTargetContains(number);
     }
 
     @Override
     public int getCurrentPage() {
-        return this.manager.getCurrentPage();
+        return mViewPagerManager.getCurrentPage();
     }
-
 }

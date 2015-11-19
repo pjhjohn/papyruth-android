@@ -15,12 +15,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.model.UniversityData;
-import com.papyruth.android.papyruth;
-import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
+import com.papyruth.android.model.UniversityData;
 import com.papyruth.android.model.unique.SignUpForm;
+import com.papyruth.android.papyruth;
+import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -38,14 +38,15 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
+
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
 public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
-    private ViewPagerController pagerController;
+    private ViewPagerController mViewPagerController;
+    private Context mContext;
     private Tracker mTracker;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,128 +56,129 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pagerController = ((AuthActivity) activity).getViewPagerController();
+        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
+        mContext = activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.pagerController = null;
+        mViewPagerController = null;
+        mContext = null;
     }
 
-    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView universityList;
-    private CompositeSubscription subscriptions;
+    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView mUniversityRecyclerView;
+    private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
         ButterKnife.inject(this, view);
-        this.subscriptions = new CompositeSubscription();
-        this.setupRecyclerView(this.universityList);
+        mCompositeSubscription = new CompositeSubscription();
+        this.setupRecyclerView(mUniversityRecyclerView);
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        this.subscriptions.add(Api.papyruth()
-            .universities()
-            .map(response -> response.universities)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(universities -> {
-                this.items.clear();
-                this.items.addAll(universities);
-                this.adapter.notifyDataSetChanged();
-            }, error -> {
-                ErrorHandler.throwError(error, this);
-            })
-        );
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCompositeSubscription.add(Api.papyruth()
+            .universities()
+            .map(response -> response.universities)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(universities -> {
+                items.clear();
+                items.addAll(universities);
+                adapter.notifyDataSetChanged();
+            }, error -> ErrorHandler.throwError(error, this))
+        );
     }
 
     @Override
     public void onPageFocused() {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
+//        getActivity().findViewById(R.id.app_logo_horizontal).setVisibility(View.GONE);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
-        if(this.subscriptions.isUnsubscribed()) this.subscriptions = new CompositeSubscription();
+        if(mCompositeSubscription != null && mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
-        this.subscriptions.add(FloatingActionControl.clicks().subscribe(
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
-                InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager imm = ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE));
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                imm.showSoftInput(this.universityList, InputMethodManager.SHOW_FORCED);
-                this.subscriptions.add(
-                    Observable
-                        .timer(300, TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(
-                            unuse -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
-                            error -> ErrorHandler.throwError(error, this)
-                        )
+                imm.showSoftInput(mUniversityRecyclerView, InputMethodManager.SHOW_FORCED);
+                /* TODO : Really need this? */
+                mCompositeSubscription.add(Observable
+                    .timer(300, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                        unused2 -> mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
+                        error -> ErrorHandler.throwError(error, this)
+                    )
                 );
-            },
-            error -> ErrorHandler.throwError(error, this)
+            }, error -> ErrorHandler.throwError(error, this)
         ));
 
-        InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
-        imm.hideSoftInputFromWindow(this.universityList.getWindowToken(), 0);
+        InputMethodManager imm = ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE));
+        imm.hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0);
     }
 
     @Override
     public void onPageUnfocused() {
-        if(this.subscriptions !=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     @Override
     protected UniversityAdapter getAdapter () {
-        return new UniversityAdapter(this.items, this);
+        return new UniversityAdapter(items, this);
     }
 
     @Override
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new GridLayoutManager(this.getActivity(), 2);
+        return new GridLayoutManager(mContext, 2);
     }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        for(int i = 0; i < this.universityList.getChildCount(); i ++) {
-            this.universityList.getChildAt(i).setSelected(false);
-        } view.setSelected(true);
+        for(int i = 0; i < mUniversityRecyclerView.getChildCount(); i ++) mUniversityRecyclerView.getChildAt(i).setSelected(false);
+        view.setSelected(true);
 
-        SignUpForm.getInstance().setUniversityId(this.items.get(position).id);
-        SignUpForm.getInstance().setImageUrl(this.items.get(position).image_url);
+        SignUpForm.getInstance().setUniversityId(items.get(position).id);
+        SignUpForm.getInstance().setImageUrl(items.get(position).image_url);
 
         final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
         String[] years = new String[length];
         for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
-        new MaterialDialog.Builder(this.getActivity())
+        new MaterialDialog.Builder(mContext)
             .title(R.string.dialog_title_entrance_year)
             .negativeText(R.string.cancel)
             .buttonsGravity(GravityEnum.START)
             .items(years)
             .itemsCallback((dialog, v, which, text) -> {
                 SignUpForm.getInstance().setEntranceYear(Integer.parseInt(text.toString()));
-                InputMethodManager imm = ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+                InputMethodManager imm = ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE));
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                imm.showSoftInput(this.universityList, InputMethodManager.SHOW_FORCED);
-                this.subscriptions.add(
-                    Observable
+                imm.showSoftInput(mUniversityRecyclerView, InputMethodManager.SHOW_FORCED);
+                /* TODO : Really need this? */
+                mCompositeSubscription.add(Observable
                         .timer(300, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                            unuse -> this.pagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
+                            unused -> mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
                             error -> ErrorHandler.throwError(error, this)
                         )
                 );

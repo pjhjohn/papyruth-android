@@ -8,9 +8,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.model.CommentData;
 import com.papyruth.android.R;
+import com.papyruth.android.model.CommentData;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.materialdialog.VotersDialog;
@@ -32,12 +33,12 @@ import timber.log.Timber;
 public class CommentItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @InjectView(R.id.comment_item_avatar)           protected ImageView mAvatar;
     @InjectView(R.id.comment_item_nickname)         protected TextView mNickname;
-    @InjectView(R.id.comment_item_timestamp)        protected TextView mTimestamp;
+    @InjectView(R.id.comment_item_timestamp)        protected RobotoTextView mTimestamp;
     @InjectView(R.id.comment_item_body)             protected TextView mBody;
     @InjectView(R.id.comment_item_up_vote_icon)     protected ImageView mVoteUpIcon;
-    @InjectView(R.id.comment_item_up_vote_count)    protected TextView mVoteUpCount;
+    @InjectView(R.id.comment_item_up_vote_count)    protected RobotoTextView mVoteUpCount;
     @InjectView(R.id.comment_item_down_vote_icon)   protected ImageView mVoteDownIcon;
-    @InjectView(R.id.comment_item_down_vote_count)  protected TextView mVoteDownCount;
+    @InjectView(R.id.comment_item_down_vote_count)  protected RobotoTextView mVoteDownCount;
     private int mCommentId;
     private VoteStatus mVoteStatus;
     private final Context mContext;

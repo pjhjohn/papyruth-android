@@ -4,26 +4,23 @@ package com.papyruth.android.navigation_drawer;
  * Created by pjhjohn on 2015-05-19.
  */
 public class NavigationDrawerItem {
-    private String text;
-    private int drawableResourceId;
-    public NavigationDrawerItem(String text, int drawableResourceId) {
-        this.text = text;
-        this.drawableResourceId = drawableResourceId;
+    private String mLabel;
+    private int mDrawableResourceId;
+    public NavigationDrawerItem(String label, int resid) {
+        mLabel = label;
+        mDrawableResourceId = resid;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setLabel(String label) {
+        mLabel = label;
     }
-
-    public String getText() {
-        return this.text;
+    public String getLabel() {
+        return mLabel;
     }
-
-    public void setDrawableResourceId(int resourceId) {
-        this.drawableResourceId = resourceId;
+    public void setDrawableResourceId(int resid) {
+        mDrawableResourceId = resid;
     }
-
     public int getDrawableResourceId() {
-        return this.drawableResourceId;
+        return mDrawableResourceId;
     }
 }

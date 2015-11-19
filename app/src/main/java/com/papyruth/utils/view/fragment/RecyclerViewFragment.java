@@ -31,8 +31,8 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.hideToolbarOnScroll = true;
-        this.hideFloatingActionButtonOnScroll = true;
+        hideToolbarOnScroll = true;
+        hideFloatingActionButtonOnScroll = true;
     }
 
     protected Observable<Boolean> getRefreshObservable(SwipeRefreshLayout view) {
@@ -42,15 +42,14 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
     protected void setupSwipeRefresh(SwipeRefreshLayout view) {
         final int toolbarHeight = MetricUtil.getPixels(this.getActivity(), R.attr.actionBarSize);
         view.setProgressViewOffset(false, 0, 2 * toolbarHeight);
-        view.setColorSchemeColors(this.getResources().getColor(R.color.colorchip_green_highlight));
+        view.setColorSchemeColors(this.getResources().getColor(R.color.colorchip_green));
     }
 
     protected void setupRecyclerView (RecyclerView view) {
-        if(items == null)
-            this.items = new ArrayList<>();
-        this.adapter = this.getAdapter();
+        if(items == null) items = new ArrayList<>();
+        adapter = this.getAdapter();
         view.setLayoutManager(this.getRecyclerViewLayoutManager());
-        view.setAdapter(this.adapter);
+        view.setAdapter(adapter);
     }
 
     protected Observable<Boolean> getRecyclerViewScrollObservable(RecyclerView view, Toolbar toolbar, boolean animateFloatingActionControl) {
@@ -62,13 +61,13 @@ public abstract class RecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<
         .map(show_panels -> {
             if (show_panels == null) return null;
             if ((boolean) show_panels) {
-                if (this.hideToolbarOnScroll) ToolbarUtil.show(toolbar);
-                if (this.hideFloatingActionButtonOnScroll)
+                if (hideToolbarOnScroll) ToolbarUtil.show(toolbar);
+                if (hideFloatingActionButtonOnScroll)
                     FloatingActionControl.getInstance().show(animateFloatingActionControl);
                 return true;
             } else {
-                if (this.hideToolbarOnScroll) ToolbarUtil.hide(toolbar);
-                if (this.hideFloatingActionButtonOnScroll)
+                if (hideToolbarOnScroll) ToolbarUtil.hide(toolbar);
+                if (hideFloatingActionButtonOnScroll)
                     FloatingActionControl.getInstance().hide(animateFloatingActionControl);
                 return false;
             }

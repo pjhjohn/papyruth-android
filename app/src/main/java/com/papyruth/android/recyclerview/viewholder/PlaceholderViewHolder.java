@@ -14,7 +14,7 @@ import butterknife.InjectView;
  * Created by pjhjohn on 2015-06-29.
  */
 public class PlaceholderViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.no_data_text) protected TextView mBody;
+    @InjectView(R.id.placeholder_body) protected TextView mBody;
     private final Context mContext;
     public PlaceholderViewHolder(View view) {
         super(view);

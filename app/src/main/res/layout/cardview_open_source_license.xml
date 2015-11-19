@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/baseline_x7"
@@ -20,12 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/baseline_x4"
             android:layout_marginLeft="@dimen/baseline_x4"
+            android:layout_marginStart="@dimen/baseline_x4"
+            android:layout_marginRight="@dimen/baseline_x2"
+            android:layout_marginEnd="@dimen/baseline_x2"
             android:layout_toRightOf="@id/osl_icon"
             android:layout_toEndOf="@id/osl_icon"
             android:textColor="@color/text_material"
-            android:textSize="@dimen/basefont_x1.5"/>
+            android:textSize="@dimen/basefont_x1.5"
+            android:ellipsize="end"/>
     </RelativeLayout>
     <include layout="@layout/hr_settings"/>
 </LinearLayout>

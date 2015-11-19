@@ -114,8 +114,12 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     /* Toolbar Search */
     @Override
     public void onSearchViewShowChanged(boolean show) {
-        if (show) FloatingActionControl.getInstance().hide(false);
-        else FloatingActionControl.getInstance().show(false);
+        if (show) {
+            FloatingActionControl.getInstance().hide(false);
+//            mTracker.send(new HitBuilders.EventBuilder().build());
+        }else {
+            FloatingActionControl.getInstance().show(false);
+        }
     }
 
     @Override
