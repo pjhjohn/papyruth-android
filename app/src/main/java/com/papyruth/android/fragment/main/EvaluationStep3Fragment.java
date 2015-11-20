@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
@@ -23,6 +25,7 @@ import com.papyruth.android.model.response.EvaluationResponse;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.HashtagDeleteDialog;
@@ -52,6 +55,7 @@ import timber.log.Timber;
 public class EvaluationStep3Fragment extends Fragment {
     private Navigator navigator;
     private Context context;
+    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -63,6 +67,12 @@ public class EvaluationStep3Fragment extends Fragment {
         super.onDetach();
         this.navigator = null;
         this.context   = null;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.evaluation_body_icon) protected ImageView bodyIcon;
@@ -132,6 +142,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         final Context context = this.getActivity();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();

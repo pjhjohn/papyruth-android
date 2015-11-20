@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
@@ -28,6 +31,14 @@ import rx.schedulers.Schedulers;
 public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDetailAdapter, EvaluationData> {
 
     private Integer sinceId = null, maxId = null, firstId = null, size = null;
+    private Tracker mTracker;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -36,6 +47,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         sinceId = null;
         toolbar.setTitle(R.string.toolbar_title_home);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_red).start();

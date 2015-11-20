@@ -12,11 +12,14 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.UniversityData;
 import com.papyruth.android.model.unique.SignUpForm;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
@@ -36,6 +39,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+
 /**
  * Created by pjhjohn on 2015-04-12.
  */
@@ -43,6 +47,12 @@ import rx.subscriptions.CompositeSubscription;
 public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController mViewPagerController;
     private Context mContext;
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -95,6 +105,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     public void onPageFocused() {
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
 //        getActivity().findViewById(R.id.app_logo_horizontal).setVisibility(View.GONE);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);

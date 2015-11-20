@@ -12,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.R;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.view.viewpager.FlexibleViewPager;
 import com.papyruth.utils.view.viewpager.ViewPagerController;
 import com.papyruth.utils.view.viewpager.ViewPagerManager;
@@ -31,7 +34,13 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     @InjectView(R.id.signup_progress)       protected ProgressBar mSignUpProgress;
     @InjectView(R.id.signup_label)          protected TextView mSignUpLabel;
     private ViewPagerManager mViewPagerManager;
+    private Tracker mTracker;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
@@ -53,6 +62,11 @@ public class AuthFragment extends Fragment implements ViewPagerController {
         ButterKnife.reset(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
     public void animateApplicationLogo(boolean animateToSignUpStep) {
         if(mViewPagerManager.getCurrentPage() != AppConst.ViewPager.Auth.SIGNUP_STEP1) return;
 

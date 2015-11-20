@@ -19,10 +19,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
@@ -50,8 +53,15 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus, LoaderManager.LoaderCallbacks<Cursor>{
+
     private ViewPagerController mViewPagerController;
     private Context mContext;
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -136,6 +146,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);

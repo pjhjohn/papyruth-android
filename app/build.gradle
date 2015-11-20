@@ -76,9 +76,13 @@ buildscript {
         classpath 'me.tatarka:gradle-retrolambda:3.2.3'
     }
 }
+
 repositories {
     mavenCentral()
 }
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.google.gms.google-services'
+retrolambda {
+    oldJdk System.getenv("JAVA7_HOME")
+}

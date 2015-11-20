@@ -14,12 +14,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.R;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.TermOfServicesDialog;
@@ -36,6 +39,13 @@ import rx.subscriptions.CompositeSubscription;
 public class SettingsFragment extends Fragment {
     private Navigator navigator;
     private Context context;
+    private Tracker mTracker;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -80,6 +90,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_settings);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         FloatingActionControl.getInstance().hide(true);

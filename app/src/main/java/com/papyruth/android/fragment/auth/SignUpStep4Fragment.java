@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
@@ -31,6 +33,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.error.SignupError;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
@@ -63,6 +66,12 @@ import timber.log.Timber;
 public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPageUnfocus {
     private ViewPagerController mViewPagerController;
     private Context mContext;
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -204,6 +213,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done).hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);

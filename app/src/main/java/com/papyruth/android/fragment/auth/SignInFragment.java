@@ -23,12 +23,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -61,6 +64,12 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     private ViewPagerController mViewPagerController;
     private ImageView mApplicationLogoHorizontal, mApplicationLogo;
     private TextView mSignUpLabel;
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -105,6 +114,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused() {
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().clear();
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(keyboardHeight -> {
             mApplicationLogo.setVisibility(View.GONE);

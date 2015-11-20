@@ -25,6 +25,8 @@ import android.widget.RelativeLayout;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
@@ -33,6 +35,7 @@ import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
@@ -80,6 +83,13 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     private Integer commentId;
 
     private Navigator navigator;
+    private Tracker mTracker;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -141,6 +151,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.showContentImmediately(this.showContentImmediately);
         this.subscriptions.add(Api.papyruth()
             .get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null)

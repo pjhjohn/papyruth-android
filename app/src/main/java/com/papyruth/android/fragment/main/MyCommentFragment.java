@@ -1,12 +1,16 @@
 package com.papyruth.android.fragment.main;
 
+import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.MyCommentData;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.MyCommentAdapter;
 import com.papyruth.android.R;
 import com.papyruth.utils.support.error.ErrorHandler;
@@ -22,6 +26,12 @@ import rx.schedulers.Schedulers;
 
 public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapter, MyCommentData> {
 
+    private Tracker mTracker;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+    }
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         if(isOpenSlave) return;
@@ -43,6 +53,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.nav_item_my_comment);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
