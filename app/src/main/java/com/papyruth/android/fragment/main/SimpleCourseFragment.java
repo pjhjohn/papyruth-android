@@ -181,7 +181,14 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(User.getInstance().needMoreEvaluation()) AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+        if(User.getInstance().isConfirmationEmail()){
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
+            return;
+        }
+        if(User.getInstance().needMoreEvaluation()) {
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+            return;
+        }
         if(this.items.size() -1 < position){
             Toast.makeText(getActivity().getBaseContext(),"please wait for loading", Toast.LENGTH_LONG).show();
             return;

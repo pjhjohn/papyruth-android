@@ -20,6 +20,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
+import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.R;
 import com.papyruth.android.papyruth;
@@ -122,7 +123,7 @@ public class SettingsFragment extends Fragment {
                 AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
                 User.getInstance().clear();
-                this.getActivity().startActivity(new Intent(this.getActivity(), AuthActivity.class));
+                this.getActivity().startActivity(new Intent(this.getActivity(), SplashActivity.class));
                 this.getActivity().finish();
             }, error->ErrorHandler.throwError(error, this))
         );

@@ -151,6 +151,10 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
+        if(User.getInstance().isConfirmationEmail()){
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
+            return;
+        }
         if(User.getInstance().needMoreEvaluation()) {
             AlertDialog.show(getActivity(), this.navigator, AlertDialog.Type.EVALUATION_MANDATORY);
             return;

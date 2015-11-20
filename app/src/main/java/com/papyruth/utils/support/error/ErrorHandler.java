@@ -8,6 +8,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
+import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.unique.User;
 
 import retrofit.RetrofitError;
@@ -52,7 +53,7 @@ public class ErrorHandler {
 
     private static void error403(Throwable error, Object object){
         if(object instanceof Fragment && ((Fragment) object).getActivity() instanceof MainActivity)
-            activityChange((Fragment) object, AuthActivity.class);
+            activityChange((Fragment) object, SplashActivity.class);
 
         if(callback != null)
             callback.sendErrorTracker(
