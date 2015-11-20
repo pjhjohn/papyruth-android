@@ -81,8 +81,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mCategory.setPaintFlags(mCategory.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        mCategory.setTextColor(mResources.getColor(R.color.colorchip_green));  // TODO : Follow category-dependent color
-        mProfessor.setTextColor(mResources.getColor(R.color.colorchip_green)); // TODO : Follow category-dependent color
         mNickname.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLabelClarity.setPaintFlags(mLabelClarity.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
@@ -105,8 +103,8 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         mEvaluationId = evaluation.getId();
         mLecture.setText(evaluation.getLectureName());
         Picasso.with(mContext).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEdit);
-        mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
+        setCategoryProfessorColor(mCategory, mProfessor, evaluation.getCategory());
         Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
         mNickname.setText(evaluation.getUserNickname());
         mTimestamp.setText(DateTimeUtil.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
@@ -213,6 +211,21 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         mVoteDownCount.setText(String.valueOf(downCount == null ? 0 : downCount));
     }
 
+    /* TODO : Better response based on category value */
+    private void setCategoryProfessorColor(TextView category, TextView professor, String value) {
+        int color;
+        if(value == null || value.isEmpty()) {
+            color = mResources.getColor(R.color.lecture_type_etc);
+            category.setText(R.string.lecture_type_etc);
+        } else {
+            color = mResources.getColor(R.color.lecture_type_major);
+            category.setText(R.string.lecture_type_major);
+        }
+        category.setTextColor(color);
+        category.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        professor.setTextColor(color);
+    }
+
     private void setPointRating(TextView label, RatingBar ratingbar, TextView point, Integer value) {
         final int pointColor = mResources.getColor(pointInRange(value)? ( value>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
         label.setTextColor(pointColor);
@@ -222,16 +235,16 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         ratingbar.setRating(pointInRange(value) ? (float) value / 2f : 5.0f);
     }
 
-    private boolean pointInRange(Integer point) {
-        return point!=null && point >= 0 && point <= 10;
-    }
-
     private void setPointProgress(TextView label, TextView point, TextView postfix, Integer value) {
-        if(value == null || value < 0) {
+        if(!pointInRange(value)) {
             label.setTextColor(mResources.getColor(R.color.point_none));
             point.setTextColor(mResources.getColor(R.color.point_none));
             postfix.setTextColor(mResources.getColor(R.color.point_none));
             point.setText("N/A");
-        } else point.setText(value >= 10 ? "10" : String.format("%d", value));
+        } else point.setText(String.valueOf(value));
+    }
+
+    private boolean pointInRange(Integer point) {
+        return point!=null && point >= 0 && point <= 10;
     }
 }
