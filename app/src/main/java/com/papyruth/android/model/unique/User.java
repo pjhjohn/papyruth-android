@@ -30,6 +30,8 @@ public class User {
     private BehaviorSubject<String> bsEmail;
     private BehaviorSubject<String> bsAvatarUrl;
     private Integer mandatory_evaluation_count;
+    private Boolean confirmation_is_needed;
+
     private String  university_image_url;
 
     private User () {
@@ -115,6 +117,8 @@ public class User {
     public void setUniversityImageUrl(String university_image_url) {
         this.university_image_url = university_image_url;
     }
+    public Boolean getConfirmationIsNeeded() { return confirmation_is_needed; }
+    public void setConfirmationIsNeeded(Boolean confirmation_is_needed) { this.confirmation_is_needed = confirmation_is_needed; }
 
     public Integer getId() {
         return id;
@@ -131,6 +135,9 @@ public class User {
     public boolean needMoreEvaluation(){
         return this.mandatory_evaluation_count > 0;
     }
+    public boolean isConfirmationEmail(){
+        return this.confirmation_is_needed;
+    }
 
     public void update(UserData user) {
         this.update(user, null);
@@ -146,6 +153,7 @@ public class User {
         if(user.entrance_year != null) this.setEntranceYear(user.entrance_year);
         if(user.university_name != null) this.setUniversityName(user.university_name);
         if(user.university_image_url != null) this.setUniversityImageUrl(user.university_image_url);
+        if(user.confirmation_is_needed != null) this.setConfirmationIsNeeded(user.confirmation_is_needed);
         if(access_token != null) this.setAccessToken(access_token);
     }
 

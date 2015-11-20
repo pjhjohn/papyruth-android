@@ -98,6 +98,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_course));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_title_course);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
@@ -107,7 +108,9 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm()
             , error->ErrorHandler.throwError(error, this));
 
-        if(User.getInstance().needMoreEvaluation()) {
+        if(User.getInstance().isConfirmationEmail()){
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
+        }else if(User.getInstance().needMoreEvaluation()) {
             AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
         }else{
             Api.papyruth()
@@ -149,7 +152,14 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(User.getInstance().needMoreEvaluation()) AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+        if(User.getInstance().isConfirmationEmail()){
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
+            return;
+        }
+        if(User.getInstance().needMoreEvaluation()) {
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+            return;
+        }
         if(slaveIsOccupying) return;
         if(animators != null && animators.isRunning()) return;
         if(isOpenSlave) return;

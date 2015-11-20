@@ -117,6 +117,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_search_result));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_search);
         ToolbarSearchView.getInstance().setPartialItemClickListener((v, position)->{
@@ -180,7 +181,14 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(User.getInstance().needMoreEvaluation()) AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+        if(User.getInstance().isConfirmationEmail()){
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
+            return;
+        }
+        if(User.getInstance().needMoreEvaluation()) {
+            AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+            return;
+        }
         if(this.items.size() -1 < position){
             Toast.makeText(getActivity().getBaseContext(),"please wait for loading", Toast.LENGTH_LONG).show();
             return;

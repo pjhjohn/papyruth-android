@@ -55,6 +55,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_my_evaluation));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();

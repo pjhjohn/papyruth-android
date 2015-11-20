@@ -151,6 +151,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_evaluation));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.showContentImmediately(this.showContentImmediately);
         this.subscriptions.add(Api.papyruth()
@@ -440,8 +441,15 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
         }else if(v.getId() == R.id.evaluation_lecture){
-            if(User.getInstance().needMoreEvaluation())
+
+            if(User.getInstance().isConfirmationEmail()){
+                AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
+                return;
+            }
+            if(User.getInstance().needMoreEvaluation()) {
                 AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
+                return;
+            }
             if(mCommentInputActive) {
                 this.morph2FAB();
                 ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);

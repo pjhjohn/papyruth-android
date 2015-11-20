@@ -114,6 +114,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
 
     @Override
     public void onPageFocused() {
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signin));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().clear();
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(keyboardHeight -> {

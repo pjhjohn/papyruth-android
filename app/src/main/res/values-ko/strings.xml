@@ -120,6 +120,7 @@
     <string name="inform_mandatory_evaluation">3개 이상의 강의평가를 써야 볼 수 있습니다. \n%d개 남았습니다.</string>
     <string name="goto_write">강의평 작성하기</string>
     <string name="inform_wrote_evaluation">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
+    <string name="inform_email_confirm">가입 확인 메일을 보냈습니다. 메일을 확인해주세요.</string>
     <string name="goto_rewrite">강의평 수정하기</string>
     <string name="no_data">No Data</string>
 

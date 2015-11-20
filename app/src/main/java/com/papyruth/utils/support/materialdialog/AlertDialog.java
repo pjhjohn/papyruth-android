@@ -22,7 +22,7 @@ import rx.schedulers.Schedulers;
  */
 public class AlertDialog {
     public enum Type{
-        EVALUATION_MANDATORY, EVALUATION_POSSIBLE
+        EVALUATION_MANDATORY, EVALUATION_POSSIBLE, NEED_CONFIRMATION
     }
 
     public static MaterialDialog build(Context context, Navigator navigator, Type type) {
@@ -57,6 +57,7 @@ public class AlertDialog {
         switch (type) {
             case EVALUATION_MANDATORY   :   value = context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()); break;
             case EVALUATION_POSSIBLE    :   value = res.getString(R.string.inform_wrote_evaluation); break;
+            case NEED_CONFIRMATION      :   value = res.getString(R.string.inform_email_confirm); break;
         } return value;
     }
 
@@ -66,6 +67,7 @@ public class AlertDialog {
         switch (type) {
             case EVALUATION_MANDATORY   :   value = res.getString(R.string.goto_write); break;
             case EVALUATION_POSSIBLE    :   value = res.getString(R.string.goto_rewrite); break;
+            case NEED_CONFIRMATION      :   value = res.getString(R.string.confirm_positive); break;
         } return value;
     }
 
@@ -86,6 +88,10 @@ public class AlertDialog {
                     .subscribe(response -> {
                         navigator.navigate(EvaluationStep2Fragment.class, true);
                     }, error ->  ErrorHandler.throwError(error, MaterialDialog.class));
+                break;
+            case NEED_CONFIRMATION      :
+                break;
+            default:
                 break;
         }
     }

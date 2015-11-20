@@ -8,38 +8,45 @@
     <string name="ga_activity_splash">Splash Activity</string>
 
     <!-- GA - view : fragment -->
-    <string name="ga_fragment_splash">Splash Fragment</string>
+    <string name="ga_fragment_splash">Splash Activity - Splash Fragment</string>
 
-    <string name="ga_fragment_auth_loading">Loading Fragment</string>
-    <string name="ga_fragment_auth_signin">SignIn Fragment</string>
-    <string name="ga_fragment_auth_signup1">Signup1 Fragment</string>
-    <string name="ga_fragment_auth_signup2">Signup2 Fragment</string>
-    <string name="ga_fragment_auth_signup3">Signup3 Fragment</string>
-    <string name="ga_fragment_auth_signup4">Signup4 Fragment</string>
+    <string name="ga_fragment_auth_loading">Auth Activity - Loading Fragment</string>
+    <string name="ga_fragment_auth_signin">Auth Activity - SignIn Fragment</string>
+    <string name="ga_fragment_auth_signup1">Auth Activity - Signup1 Fragment</string>
+    <string name="ga_fragment_auth_signup2">Auth Activity - Signup2 Fragment</string>
+    <string name="ga_fragment_auth_signup3">Auth Activity - Signup3 Fragment</string>
+    <string name="ga_fragment_auth_signup4">Auth Activity - Signup4 Fragment</string>
 
-    <string name="ga_fragment_main_recent">Recent Fragment</string>
-    <string name="ga_fragment_main_bookmark">Bookmark Frgament</string>
-    <string name="ga_fragment_main_course">Course Fragment</string>
-    <string name="ga_fragment_main_evaluation">Evaluation Fragment</string>
-    <string name="ga_fragment_main_write_evaluation1">Write Evaluation1 Fragment</string>
-    <string name="ga_fragment_main_write_evaluation2">Write Evaluation2 Fragment</string>
-    <string name="ga_fragment_main_write_evaluation3">Write Evaluation3 Fragment</string>
-    <string name="ga_fragment_main_my_evaluation">My Evaluation Fragment</string>
-    <string name="ga_fragment_main_my_comment">My Comment Fragment</string>
-    <string name="ga_fragment_main_profile">Profile Fragment</string>
-    <string name="ga_fragment_main_profile_change_email">Edit Email Fragment</string>
-    <string name="ga_fragment_main_profile_change_nickname">Edit Nickname Fragment</string>
-    <string name="ga_fragment_main_profile_change_password">Edit password Fragment</string>
-    <string name="ga_fragment_main_setting">Setting Fragment</string>
-    <string name="ga_fragment_main_term">Term View</string>
-    <string name="ga_fragment_main_opensourse">Opensourse Fragment</string>
-    <string name="ga_fragment_main_search_result">Search Result Fragment</string>
-    <string name="ga_fragment_main_search_view">Search View</string>
+    <string name="ga_fragment_main_recent">Main Activity - Recent Fragment</string>
+    <string name="ga_fragment_main_bookmark">Main Activity - Bookmark Frgament</string>
+    <string name="ga_fragment_main_course">Main Activity - Course Fragment</string>
+    <string name="ga_fragment_main_evaluation">Main Activity - Evaluation Fragment</string>
+    <string name="ga_fragment_main_write_evaluation1">Main Activity - Write Evaluation1 Fragment</string>
+    <string name="ga_fragment_main_write_evaluation2">Main Activity - Write Evaluation2 Fragment</string>
+    <string name="ga_fragment_main_write_evaluation3">Main Activity - Write Evaluation3 Fragment</string>
+    <string name="ga_fragment_main_my_evaluation">Main Activity - My Evaluation Fragment</string>
+    <string name="ga_fragment_main_my_comment">Main Activity - My Comment Fragment</string>
+    <string name="ga_fragment_main_profile">Main Activity - Profile Fragment</string>
+    <string name="ga_fragment_main_profile_change_email">Main Activity - Edit Email Fragment</string>
+    <string name="ga_fragment_main_profile_change_nickname">Main Activity - Edit Nickname Fragment</string>
+    <string name="ga_fragment_main_profile_change_password">Main Activity - Edit password Fragment</string>
+    <string name="ga_fragment_main_setting">Main Activity - Setting Fragment</string>
+    <string name="ga_fragment_main_term">Main Activity - Term View</string>
+    <string name="ga_fragment_main_opensourse">Main Activity - Opensourse Fragment</string>
+    <string name="ga_fragment_main_search_result">Main Activity - Search Result Fragment</string>
+
+
+    <!-- GA - evant : category -->
+    <string name="ga_category_search_view">Search View</string>
+    <string name="ga_category_evaluation_search_view">Write Evaluation Search View</string>
+    <string name="ga_category_drawer">Menu Drawer</string>
 
     <!-- GA - event : api call -->
 
-    <!-- GA - event : touch -->
-
+    <!-- GA - event : action -->
+    <string name="ga_event_open">Open</string>
+    <string name="ga_event_close">Close</string>
+    <string name="ga_event_click">Open</string>
 
     <!-- GA - event : other -->
 

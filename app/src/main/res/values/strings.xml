@@ -117,6 +117,7 @@
     <string name="inform_mandatory_evaluation">Must write over 3 evaluations.\n Remain %d.</string>
     <string name="goto_write">Write evaluation</string>
     <string name="inform_wrote_evaluation">You wrote evaluation this course. You can rewrite evaluation.</string>
+    <string name="inform_email_confirm">We send confirm mail your account. Check your mail box.</string>
     <string name="goto_rewrite">Rewrite evaluation</string>
     <string name="no_data">No Data</string>
 

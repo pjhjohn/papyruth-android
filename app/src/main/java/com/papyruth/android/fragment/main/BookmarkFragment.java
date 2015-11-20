@@ -145,6 +145,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_bookmark));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_favorite);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();

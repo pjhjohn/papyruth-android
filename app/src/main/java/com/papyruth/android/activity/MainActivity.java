@@ -116,9 +116,16 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     public void onSearchViewShowChanged(boolean show) {
         if (show) {
             FloatingActionControl.getInstance().hide(false);
-//            mTracker.send(new HitBuilders.EventBuilder().build());
+            mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(getResources().getString(R.string.ga_category_search_view))
+                .setAction(getResources().getString(R.string.ga_event_open))
+                .build());
         }else {
             FloatingActionControl.getInstance().show(false);
+            mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(getResources().getString(R.string.ga_category_search_view))
+                .setAction(getResources().getString(R.string.ga_event_close))
+                .build());
         }
     }
 
