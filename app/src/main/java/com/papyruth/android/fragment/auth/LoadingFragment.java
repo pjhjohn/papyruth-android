@@ -100,6 +100,7 @@ public class LoadingFragment extends Fragment {
     @Override
     public void onResume () {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_loading));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         DecimalFormat formatter = new DecimalFormat("#,###,###,###");

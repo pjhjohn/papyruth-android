@@ -146,6 +146,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup2));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);

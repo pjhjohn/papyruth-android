@@ -151,6 +151,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_evaluation));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.showContentImmediately(this.showContentImmediately);
         this.subscriptions.add(Api.papyruth()

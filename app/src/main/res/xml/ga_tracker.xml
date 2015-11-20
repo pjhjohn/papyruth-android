@@ -16,86 +16,11 @@
     <screenName name="com.papyruth.android.activity.SplashActivity">
         SplashActivity
     </screenName>
-    <screenName name="com.papyruth.android.fragment.splash.SplashFragment">
-        SplashFragment
-    </screenName>
-
     <screenName name="com.papyruth.android.activity.AuthActivity">
         AuthActivity
     </screenName>
-    <screenName name="com.papyruth.android.fragment.auth.LoadingFragment">
-        LoadingFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.auth.AuthFragment">
-        AuthFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.auth.SignInFragment">
-        SignInFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.auth.SignUpStep1Fragment">
-        SignUpStep1Fragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.auth.SignUpStep2Fragment">
-        SignUpStep2Fragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.auth.SignUpStep3Fragment">
-        SignUpStep3Fragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.auth.SignUpStep4Fragment">
-        SignUpStep4Fragment
-    </screenName>
-
-
     <screenName name="com.papyruth.android.activity.MainActivity">
         MainActivity
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.HomeFragment">
-        HomeFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.BookmarkFragment">
-        BookmarkFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.CourseFragment">
-        CourseFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.EvaluationFragment">
-        EvaluationFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.EvaluationStep1Fragment">
-        EvaluationStep1Fragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.EvaluationStep2Fragment">
-        EvaluationStep2Fragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.EvaluationStep3Fragment">
-        EvaluationStep3Fragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.MyCommentFragment">
-        MyCommentFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.MyEvaluationFragment">
-        MyEvaluationFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.OpenSourceLicensesFragment">
-        OpenSourceLicensesFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.ProfileFragment">
-        ProfileFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.ProfileChangePasswordFragment">
-        ProfileChangePasswordFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.ProfileChangeNicknameFragment">
-        ProfileChangeNicknameFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.ProfileChangeEmailFragment">
-        ProfileChangeEmailFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.SettingsFragment">
-        SettingsFragment
-    </screenName>
-    <screenName name="com.papyruth.android.fragment.main.SimpleCourseFragment">
-        SimpleCourseFragment
     </screenName>
 
 </resources>

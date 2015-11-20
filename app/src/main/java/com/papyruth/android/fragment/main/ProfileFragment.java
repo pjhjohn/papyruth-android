@@ -88,6 +88,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         final Context context = this.getActivity();
         this.toolbar.setTitle(R.string.toolbar_profile);

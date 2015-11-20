@@ -62,6 +62,7 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_opensourse));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_osl);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();

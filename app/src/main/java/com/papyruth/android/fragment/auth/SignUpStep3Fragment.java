@@ -111,6 +111,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
 
     @Override
     public void onPageFocused() {
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);

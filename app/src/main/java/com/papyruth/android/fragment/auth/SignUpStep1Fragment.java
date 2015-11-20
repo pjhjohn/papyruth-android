@@ -105,6 +105,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     public void onPageFocused() {
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
 //        getActivity().findViewById(R.id.app_logo_horizontal).setVisibility(View.GONE);

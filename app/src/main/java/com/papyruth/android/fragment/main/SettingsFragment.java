@@ -91,6 +91,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_setting));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_settings);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
