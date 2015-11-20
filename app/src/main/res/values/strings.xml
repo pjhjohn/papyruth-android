@@ -219,4 +219,5 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_osl">Open Source Licenses</string>
     <string name="label_tos">Term of Services</string>
     <string name="goto_github_repo">REPOSITORY</string>
+    <string name="point_denominator">/10</string>
 </resources>
