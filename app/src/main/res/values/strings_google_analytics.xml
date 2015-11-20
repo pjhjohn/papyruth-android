@@ -34,12 +34,19 @@
     <string name="ga_fragment_main_term">Main Activity - Term View</string>
     <string name="ga_fragment_main_opensourse">Main Activity - Opensourse Fragment</string>
     <string name="ga_fragment_main_search_result">Main Activity - Search Result Fragment</string>
-    <string name="ga_fragment_main_search_view">Main Activity - Search View</string>
+
+
+    <!-- GA - evant : category -->
+    <string name="ga_category_search_view">Search View</string>
+    <string name="ga_category_evaluation_search_view">Write Evaluation Search View</string>
+    <string name="ga_category_drawer">Menu Drawer</string>
 
     <!-- GA - event : api call -->
 
-    <!-- GA - event : touch -->
-
+    <!-- GA - event : action -->
+    <string name="ga_event_open">Open</string>
+    <string name="ga_event_close">Close</string>
+    <string name="ga_event_click">Open</string>
 
     <!-- GA - event : other -->
 
