@@ -42,11 +42,9 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class CourseFragment extends RecyclerViewFragment<CourseAdapter, EvaluationData> implements OnBack {
     private Navigator navigator;
@@ -102,7 +100,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_title_course);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_green).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);

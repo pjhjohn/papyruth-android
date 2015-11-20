@@ -50,7 +50,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         sinceId = null;
         toolbar.setTitle(R.string.toolbar_title_home);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_red).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 

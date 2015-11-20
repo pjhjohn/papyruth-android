@@ -10,6 +10,6 @@
     android:layout_marginRight="10dp"
     android:src="@drawable/ic_light_comment"
     android:visibility="invisible"
-    fab:fab_colorNormal="@color/bg_normal"
-    fab:fab_colorPressed="@color/bg_accent"
-    fab:fab_progress_color="@color/colorchip_green_highlight"/>
+    fab:fab_colorNormal="@color/fab_evaluation_normal"
+    fab:fab_colorPressed="@color/fab_evaluation_pressed"
+    fab:fab_progress_color="@color/fab_evaluation_progress"/>

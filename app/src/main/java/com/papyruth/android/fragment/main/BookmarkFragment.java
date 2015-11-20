@@ -40,7 +40,6 @@ import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Simple Course Fragment for listing limited contents for Course
@@ -148,7 +147,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_favorite);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.point_clarity).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
         FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);

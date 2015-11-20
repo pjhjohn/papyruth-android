@@ -55,7 +55,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.nav_item_my_comment);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 

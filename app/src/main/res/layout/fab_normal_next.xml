@@ -10,5 +10,5 @@
     android:layout_marginRight="10dp"
     android:src="@drawable/ic_light_next"
     android:visibility="invisible"
-    fab:fab_colorNormal="@color/colorchip_green"
-    fab:fab_colorPressed="@color/colorchip_green_highlight"/>
+    fab:fab_colorNormal="@color/fab_green_normal"
+    fab:fab_colorPressed="@color/fab_green_pressed"/>

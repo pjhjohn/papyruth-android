@@ -12,9 +12,9 @@
     android:paddingLeft="10dp"
     fab:menu_labels_ellipsize="end"
     fab:menu_labels_singleLine="true"
-    fab:menu_colorNormal="@color/colorchip_blue"
-    fab:menu_colorPressed="@color/colorchip_blue_highlight"
-    fab:menu_backgroundColor="#ccffffff">
+    fab:menu_colorNormal="@color/fab_blue_normal"
+    fab:menu_colorPressed="@color/fab_blue_pressed"
+    fab:menu_backgroundColor="@color/fam_background">
     <include layout="@layout/fab_mini_change_email"/>
     <include layout="@layout/fab_mini_change_nickname"/>
     <include layout="@layout/fab_mini_change_password"/>

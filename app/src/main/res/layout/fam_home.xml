@@ -12,8 +12,8 @@
     android:paddingLeft="10dp"
     fab:menu_labels_ellipsize="end"
     fab:menu_labels_singleLine="true"
-    fab:menu_colorNormal="@color/colorchip_red"
-    fab:menu_colorPressed="@color/colorchip_red_highlight"
-    fab:menu_backgroundColor="#ccffffff">
+    fab:menu_colorNormal="@color/fab_red_normal"
+    fab:menu_colorPressed="@color/fab_red_pressed"
+    fab:menu_backgroundColor="@color/fam_background">
     <include layout="@layout/fab_mini_new_evaluation"/>
 </com.github.clans.fab.FloatingActionMenu>

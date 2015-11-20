@@ -91,7 +91,7 @@ public class ProfileFragment extends Fragment {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         final Context context = this.getActivity();
         this.toolbar.setTitle(R.string.toolbar_profile);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 

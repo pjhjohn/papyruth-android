@@ -57,7 +57,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.nav_item_my_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 

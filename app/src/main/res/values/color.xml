@@ -72,6 +72,31 @@
     <color name="lecture_type_liberal_arts">@color/colorchip_red</color>
     <color name="lecture_type_etc">@color/white_40p</color>
 
+    <!--Toolbar-->
+    <color name="toolbar_evaluation">#455A64</color>
+    <color name="toolbar_evaluation_highlight">#657A84</color>
+    <color name="toolbar_red">@color/colorchip_red</color>
+    <color name="toolbar_red_highlight">@color/colorchip_red_highlight</color>
+    <color name="toolbar_green">@color/colorchip_green</color>
+    <color name="toolbar_green_highlight">@color/colorchip_green_highlight</color>
+    <color name="toolbar_blue">@color/colorchip_blue</color>
+    <color name="toolbar_blue_highlight">@color/colorchip_blue_highlight</color>
+
+    <!--Floating Action Button-->
+    <color name="fam_background">#ccffffff</color>
+    <color name="fab_evaluation_normal">@color/toolbar_evaluation</color>
+    <color name="fab_evaluation_pressed">@color/toolbar_evaluation_highlight</color>
+    <color name="fab_evaluation_progress">@color/colorchip_green_highlight</color>
+    <color name="fab_red_normal">@color/toolbar_red</color>
+    <color name="fab_red_pressed">@color/toolbar_red_highlight</color>
+    <color name="fab_red_progress">@color/toolbar_red_highlight</color>
+    <color name="fab_green_normal">@color/toolbar_green</color>
+    <color name="fab_green_pressed">@color/toolbar_green_highlight</color>
+    <color name="fab_green_progress">@color/toolbar_green_highlight</color>
+    <color name="fab_blue_normal">@color/toolbar_blue</color>
+    <color name="fab_blue_pressed">@color/toolbar_blue_highlight</color>
+    <color name="fab_blue_progress">@color/toolbar_blue_highlight</color>
+
     <!--Legacy Background Color-->
     <color name="bg_normal">@color/white_70p</color>
     <color name="bg_accent">@color/white_80p</color>

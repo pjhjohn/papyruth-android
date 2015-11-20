@@ -64,7 +64,7 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_osl);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.colorchip_blue).start();
+        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         FloatingActionControl.getInstance().hide(true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
