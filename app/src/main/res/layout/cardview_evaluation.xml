@@ -54,12 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:paddingTop="1sp"
-                android:paddingLeft="3sp"
-                android:paddingRight="3sp"
-                android:paddingBottom="1sp"
                 android:background="@drawable/background_round_stroke"
-                android:textSize="14sp"/><!-- Category -->
+                android:textSize="12sp"/><!-- Category -->
             <TextView
                 android:id="@+id/evaluation_professor"
                 android:layout_width="wrap_content"
@@ -121,7 +117,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="@dimen/baseline_x0.5"
                 android:gravity="center"
-                android:textColor="@color/bg_normal"
+                android:textColor="@color/timestamp"
                 android:textStyle="normal"
                 android:textSize="14sp"/>
         </RelativeLayout><!-- Avatar & Nickname & Timestamp -->
@@ -167,7 +163,7 @@
                         android:layout_alignParentBottom="true"
                         android:gravity="bottom"
                         android:textSize="40sp"
-                        roboto:fontFamily="roboto_condensed"
+                        roboto:fontFamily="roboto"
                         roboto:textWeight="bold"/><!-- Overall Point -->
                 </RelativeLayout>
                 <RatingBar

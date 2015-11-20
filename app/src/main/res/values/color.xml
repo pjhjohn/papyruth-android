@@ -81,4 +81,5 @@
     <color name="disabled">@color/white_80p</color>
     <color name="disabled_highlight">@color/white_95p</color>
     <color name="hr_settings">@color/white_95p</color>
+    <color name="timestamp">@color/white_60p</color>
 </resources>
