@@ -70,7 +70,7 @@
     <!--Search Category-->
     <color name="lecture_type_major">@color/colorchip_green</color>
     <color name="lecture_type_liberal_arts">@color/colorchip_red</color>
-    <color name="lecture_type_other">@color/white_80p</color>
+    <color name="lecture_type_etc">@color/white_40p</color>
 
     <!--Legacy Background Color-->
     <color name="bg_normal">@color/white_70p</color>
@@ -81,4 +81,5 @@
     <color name="disabled">@color/white_80p</color>
     <color name="disabled_highlight">@color/white_95p</color>
     <color name="hr_settings">@color/white_95p</color>
+    <color name="timestamp">@color/white_60p</color>
 </resources>

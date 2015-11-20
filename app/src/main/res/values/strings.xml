@@ -82,18 +82,16 @@
     <string name="fab_evaluation">New Evaluation</string>
     <string name="fab_comment">New Comment</string>
 
-    <!-- hint -->
-    <string name="hint_search_course">Search Course</string>
-
     <!--course-->
     <string name="label_point_overall">Overall</string>
     <string name="label_point_gpa_satisfaction">Satisfaction</string>
     <string name="label_point_clarity">Clarity</string>
     <string name="label_point_easiness">Easiness</string>
-    <string name="lecture_type_culture">Culture</string>
-    <string name="lecture_type_major">Major</string>
-    <string name="like">LIKE</string>
-    <string name="modify">MODIFY</string>
+
+    <!--Category-->
+    <string name="lecture_type_major">MAJOR</string>
+    <string name="lecture_type_liberal_arts">L.ARTS</string>
+    <string name="lecture_type_etc">ETC</string>
 
     <!--comment-->
     <string name="submit_comment_success">Succeed to register Comment</string>
@@ -220,4 +218,5 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_osl">Open Source Licenses</string>
     <string name="label_tos">Term of Services</string>
     <string name="goto_github_repo">REPOSITORY</string>
+    <string name="point_denominator">/10</string>
 </resources>

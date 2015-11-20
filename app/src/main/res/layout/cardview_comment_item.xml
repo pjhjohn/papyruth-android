@@ -43,7 +43,7 @@
         android:layout_marginRight="@dimen/baseline_x2"
         android:layout_marginEnd="@dimen/baseline_x2"
         android:textSize="14sp"
-        android:textColor="@color/bg_normal"
+        android:textColor="@color/timestamp"
         roboto:textWeight="normal"/>
 
     <TextView

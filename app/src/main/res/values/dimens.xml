@@ -19,6 +19,8 @@
     <dimen name="baseline_x11">88dp</dimen>
     <dimen name="baseline_x12">96dp</dimen>
     <dimen name="baseline_x15">120dp</dimen>
+    <dimen name="baseline_x17">136dp</dimen>
+    <dimen name="baseline_x18">144dp</dimen>
     <dimen name="baseline_x20">160dp</dimen>
 
     <!--Cardview-->

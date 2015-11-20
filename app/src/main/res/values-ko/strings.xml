@@ -82,19 +82,16 @@
     <string name="fab_evaluation">강의평가 등록하기</string>
     <string name="fab_comment">덧글 달기</string>
 
-
-    <!-- hint -->
-    <string name="hint_search_course">강의 검색</string>
-
     <!--course-->
     <string name="label_point_overall">총점</string>
     <string name="label_point_gpa_satisfaction">학점만족도</string>
     <string name="label_point_clarity">강의력</string>
     <string name="label_point_easiness">널널함</string>
-    <string name="lecture_type_culture">교양</string>
+
+    <!--Category-->
     <string name="lecture_type_major">전공</string>
-    <string name="like">좋아요</string>
-    <string name="modify">수정</string>
+    <string name="lecture_type_liberal_arts">교양</string>
+    <string name="lecture_type_etc">기타</string>
 
     <!--comment-->
     <string name="submit_comment_success">댓글을 등록했습니다</string>

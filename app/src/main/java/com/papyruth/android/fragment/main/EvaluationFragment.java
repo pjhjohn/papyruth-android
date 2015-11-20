@@ -432,14 +432,14 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.evaluation_modify && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
+        if(v.getId() == R.id.evaluation_edit && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
             if(mCommentInputActive) {
                 this.morph2FAB();
                 ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
             }
             EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
             ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
-        }else if(v.getId() == R.id.evaluation_header){
+        }else if(v.getId() == R.id.evaluation_lecture){
 
             if(User.getInstance().isConfirmationEmail()){
                 AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);

@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"/>
-
     <FrameLayout
         android:id="@+id/evaluation_container_cover"
         android:layout_width="match_parent"
