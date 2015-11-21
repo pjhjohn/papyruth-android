@@ -54,7 +54,7 @@ public class MyCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home);
+        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home, R.color.inform_my_comment);
         else if (mMyCommentDataList.isEmpty() && mShowPlaceholder) ((PlaceholderViewHolder) holder).bind(R.string.no_data_my_comment);
         else ((MyCommentViewHolder) holder).bind(mMyCommentDataList.get(position - (mUserLearnedInform ? 1 : 2)));
     }

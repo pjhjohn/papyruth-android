@@ -97,6 +97,13 @@
     <color name="fab_blue_pressed">@color/toolbar_blue_highlight</color>
     <color name="fab_blue_progress">@color/toolbar_blue_highlight</color>
 
+    <!--Inform ViewHolder-->
+    <color name="inform_course">@color/toolbar_green_highlight</color>
+    <color name="inform_evaluation">@color/toolbar_evaluation_highlight</color>
+    <color name="inform_evaluation_item_detail">@color/toolbar_red_highlight</color>
+    <color name="inform_my_comment">@color/toolbar_blue_highlight</color>
+    <color name="inform_my_evaluation">@color/toolbar_blue_highlight</color>
+
     <!--Legacy Background Color-->
     <color name="bg_normal">@color/white_70p</color>
     <color name="bg_accent">@color/white_80p</color>

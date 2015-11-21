@@ -58,7 +58,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_evaluation);
+        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_evaluation, R.color.inform_evaluation);
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), mOnClickListener);
         else if (mCommentDataList.isEmpty() && mShowPlaceholder) ((PlaceholderViewHolder) holder).bind(R.string.no_data_comment);
         else ((CommentItemViewHolder) holder).bind(this.mCommentDataList.get(position - getItemOffset()));

@@ -60,7 +60,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= 0) return;
-        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_course);
+        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_course, R.color.inform_course);
         else if (position == 1 + (mUserLearnedInform ? 0 : 1)) ((CourseViewHolder) holder).bind(Course.getInstance());
         else if(evaluations.isEmpty() && isEmptyData)
             ((PlaceholderViewHolder) holder).bind(
