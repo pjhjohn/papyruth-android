@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.R;
@@ -36,19 +37,20 @@ import rx.schedulers.Schedulers;
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
-    @InjectView (R.id.evaluation_item_avatar)             protected ImageView mAvatar;
-    @InjectView (R.id.evaluation_item_timestamp)          protected TextView mTimestamp;
-    @InjectView (R.id.evaluation_item_body)               protected TextView mBody;
-    @InjectView (R.id.evaluation_item_nickname)           protected TextView mNickname;
-    @InjectView (R.id.evaluation_item_hashtags)           protected LinearLayout mHashtags;
-    @InjectView (R.id.evaluation_item_point_overall_text) protected TextView mPointOverallText;
-    @InjectView (R.id.evaluation_item_point_overall_star) protected RatingBar mPointOverallStar;
-    @InjectView (R.id.evaluation_item_up_vote_icon)       protected ImageView mVoteUpIcon;
-    @InjectView (R.id.evaluation_item_up_vote_count)      protected TextView mVoteUpCount;
-    @InjectView (R.id.evaluation_item_down_vote_icon)     protected ImageView mVoteDownIcon;
-    @InjectView (R.id.evaluation_item_down_vote_count)    protected TextView mVoteDownCount;
-    @InjectView (R.id.evaluation_item_comment_icon)       protected ImageView mCommentIcon;
-    @InjectView (R.id.evaluation_item_comment_count)      protected TextView mCommentCount;
+    @InjectView(R.id.evaluation_item_avatar)            protected ImageView mAvatar;
+    @InjectView(R.id.evaluation_item_nickname)          protected TextView mNickname;
+    @InjectView(R.id.evaluation_item_timestamp)         protected RobotoTextView mTimestamp;
+    @InjectView(R.id.evaluation_item_body)              protected TextView mBody;
+    @InjectView(R.id.evaluation_item_overall_label)     protected TextView mLabelOverall;
+    @InjectView(R.id.evaluation_item_overall_point)     protected RobotoTextView mPointOverall;
+    @InjectView(R.id.evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
+    @InjectView(R.id.evaluation_item_hashtags)          protected LinearLayout mHashtags;
+    @InjectView(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @InjectView(R.id.evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
+    @InjectView(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @InjectView(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
+    @InjectView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
+    @InjectView(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
     private final Context mContext;
@@ -62,7 +64,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, itemView);
         mContext = itemView.getContext();
         mResources = mContext.getResources();
-        mNickname.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         itemView.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
     }
 
@@ -72,7 +74,8 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mTimestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
         mBody.setText(evaluation.body);
         mNickname.setText(evaluation.user_nickname);
-
+        mLabelOverall.setText(R.string.label_point_overall);
+        setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
         mHashtags.removeAllViews();
         if(mEvaluationId != null) Api.papyruth()
             .get_evaluation_hashtag(User.getInstance().getAccessToken(), mEvaluationId)
@@ -91,7 +94,6 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
                     }
                 });
             }, error ->  ErrorHandler.throwError(error, this));
-        setPointRating(evaluation.point_overall);
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.request_user_vote == 1) setVoteStatus(VoteStatus.UP);
@@ -115,12 +117,13 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mVoteDownCount.setText(String.valueOf(downCount == null ? 0 : downCount));
     }
 
-    private void setPointRating(Integer point) {
-        final int pointColor = mResources.getColor(pointInRange(point)? ( point>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
-        for(int i = 0; i < 3; i ++) ((LayerDrawable) mPointOverallStar.getProgressDrawable()).getDrawable(i).setColorFilter(pointColor, PorterDuff.Mode.SRC_ATOP);
-        mPointOverallText.setTextColor(pointColor);
-        mPointOverallText.setText(pointInRange(point) ? (point >= 10 ? "10" : String.format("%d", point)) : "N/A");
-        mPointOverallStar.setRating(pointInRange(point) ? (float)point/2f : 5.0f );
+    private void setPointRating(TextView label, RatingBar ratingbar, TextView point, Integer value) {
+        final int pointColor = mResources.getColor(pointInRange(value)? ( value>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
+        label.setTextColor(pointColor);
+        point.setTextColor(pointColor);
+        point.setText(pointInRange(value) ? (value >= 10 ? "10" : String.format("%d.0", value)) : "N/A");
+        for(int i = 0; i < 3; i ++) ((LayerDrawable) ratingbar.getProgressDrawable()).getDrawable(i).setColorFilter(pointColor, PorterDuff.Mode.SRC_ATOP);
+        ratingbar.setRating(pointInRange(value) ? (float) value / 2f : 5.0f);
     }
 
     private boolean pointInRange(Integer point) {

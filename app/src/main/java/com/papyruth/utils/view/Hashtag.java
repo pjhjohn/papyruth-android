@@ -1,18 +1,12 @@
 package com.papyruth.utils.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.papyruth.android.R;
-
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-25.
