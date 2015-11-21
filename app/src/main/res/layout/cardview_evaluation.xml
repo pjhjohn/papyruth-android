@@ -61,7 +61,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/baseline_x1"
             android:layout_marginStart="@dimen/baseline_x1"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="1"/><!-- Professor -->
