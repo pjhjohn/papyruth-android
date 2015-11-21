@@ -28,13 +28,16 @@ import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.TermOfServicesDialog;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
+import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class SettingsFragment extends Fragment {
@@ -133,9 +136,14 @@ public class SettingsFragment extends Fragment {
             .subscribe(unused -> {
                 AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
-                User.getInstance().clear();
-                this.getActivity().startActivity(new Intent(this.getActivity(), SplashActivity.class));
-                this.getActivity().finish();
+                Api.papyruth().users_sign_out(User.getInstance().getAccessToken())
+                    .observeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        User.getInstance().clear();
+                        this.getActivity().startActivity(new Intent(this.getActivity(), SplashActivity.class));
+                        this.getActivity().finish();
+                    }, error -> ErrorHandler.throwError(error, this));
             }, error->ErrorHandler.throwError(error, this))
         );
     }

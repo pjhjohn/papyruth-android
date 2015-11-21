@@ -265,6 +265,10 @@ public interface Papyruth {
         @Query("email") String email,
         @Query("password") String password
     );
+    @POST("/users/sign_out")
+    Observable<UserDataResponse> users_sign_out(
+        @Header("Authorization") String authorization
+    );
     @GET("/users/me")
     Observable<UserDataResponse> users_me(
         @Header("Authorization") String authorization
