@@ -115,4 +115,5 @@
     <color name="disabled_highlight">@color/white_95p</color>
     <color name="hr_settings">@color/white_95p</color>
     <color name="timestamp">@color/white_60p</color>
+    <color name="hashtag">#8C6239</color>
 </resources>

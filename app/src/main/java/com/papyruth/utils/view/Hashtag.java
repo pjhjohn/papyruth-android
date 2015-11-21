@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.papyruth.android.R;
+
 import timber.log.Timber;
 
 /**
@@ -24,7 +26,7 @@ public class Hashtag extends TextView {
 
     private void setup(Context context) {
         this.setGravity(Gravity.CENTER_HORIZONTAL);
-        this.setTextColor(Color.rgb(84, 107, 141));
+        this.setTextColor(context.getResources().getColor(R.color.hashtag));
         this.setPaintFlags(super.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.setPadding(4, 4, 4, 4);
     }

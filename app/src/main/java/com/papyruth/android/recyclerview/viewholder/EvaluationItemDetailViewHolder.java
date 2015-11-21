@@ -45,7 +45,6 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, view);
         mContext = view.getContext();
         mResources = mContext.getResources();
-        mNickname.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mCategory.setPaintFlags(mCategory.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

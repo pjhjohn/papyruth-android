@@ -53,7 +53,7 @@
         android:layout_marginRight="@dimen/baseline_x2"
         android:layout_marginEnd="@dimen/baseline_x2"
         android:textSize="16sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white_30p"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"/><!-- Lecture Title -->
@@ -67,7 +67,7 @@
         android:gravity="end"
         android:textSize="14sp"
         android:textColor="@color/timestamp"
-        roboto:textWeight="light"/><!-- Timestamp -->
+        roboto:textWeight="normal"/><!-- Timestamp -->
     <TextView
         android:id="@+id/evaluation_item_category"
         android:layout_width="wrap_content"
@@ -141,7 +141,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:gravity="bottom"
-                android:textSize="40sp"
+                android:textSize="36sp"
                 roboto:fontFamily="roboto"
                 roboto:textWeight="bold"/><!-- Overall Point -->
         </RelativeLayout>
@@ -150,7 +150,6 @@
             android:progressDrawable="@drawable/ratingbar_16dp"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/baseline_x2"
-            android:layout_marginTop="@dimen/baseline_x0.5"
             android:layout_marginLeft="@dimen/baseline_x0.5"
             android:layout_marginStart="@dimen/baseline_x0.5"
             android:isIndicator="true"
