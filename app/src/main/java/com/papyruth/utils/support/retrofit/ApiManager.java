@@ -67,8 +67,7 @@ public class ApiManager {
             Response response = chain.proceed(request);
             // Re-write response CC header to force use of cache
             return response.newBuilder()
-//                .header("Cache-Control", "public, max-age=86400") // 1 day
-//                .header("Cache-Control", "public, max-age=60") // 1 min
+                .header("Cache-Control", "public, max-age=86400") // 1 day
                 .build();
         });
 
@@ -78,8 +77,8 @@ public class ApiManager {
         /* Build RestAdapter */
         return new RestAdapter.Builder()
             .setEndpoint(String.format("https://%s/api/%s/", AppConst.API_BASE_URL, AppConst.API_VERSION))
-            .setExecutors(executor, executor)
-            .setClient(new OkClient(okHttpClient))
+//            .setExecutors(executor, executor)
+            .setClient(new OkClient(new OkHttpClient()))
             .setLogLevel(loglevel)
             .setLog(logger)
             .build();
