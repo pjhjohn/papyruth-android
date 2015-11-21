@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,11 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.model.CourseData;
-import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.Candidate;
+import com.papyruth.android.model.CourseData;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
@@ -91,7 +93,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         super.onDestroyView();
         ButterKnife.reset(this);
         this.adapter = null;
-        ToolbarSearchView.getInstance().setPartialItemClickListener(null).setToolbarSearchViewSearchListener(null);
+        ToolbarSearchView.getInstance().setPartialItemClickListener(null).setToolbarSearchViewSearchListener(null).setMarginTop(0);
         if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
     }
 
@@ -145,13 +147,23 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         FloatingActionControl.getInstance().clear();
         Picasso.with(getActivity()).load(R.drawable.ic_light_search).transform(new ColorFilterTransformation(R.color.primary_material_dark)).into(searchIcon);
 
+
+        TypedValue value = new TypedValue();
+        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, value, true);
+
+        String s = TypedValue.coerceToString(value.type, value.data);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        float ret = value.getDimension(metrics);
+
         ToolbarSearchView.getInstance()
             .setPartialItemClickListener((v, position) -> {
-            searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position), null);
-        })
-            .setToolbarSearchViewSearchListener(()->{
-            searchCourse(new Candidate(), ToolbarSearchView.getInstance().getSelectedQuery());
-        });
+                searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position), null);
+            })
+            .setToolbarSearchViewSearchListener(() -> {
+                searchCourse(new Candidate(), ToolbarSearchView.getInstance().getSelectedQuery());
+            })
+            .setMarginTop((int)ret);
 
         this.subscriptions.add(
             ViewObservable.clicks(queryTextView)

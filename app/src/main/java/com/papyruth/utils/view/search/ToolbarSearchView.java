@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -291,6 +292,14 @@ public class ToolbarSearchView implements RecyclerViewItemClickListener {
     public ToolbarSearchView setSelectedQuery(String query){
         this.selectedQuery = query;
         this.selectedCandidate = new Candidate();
+        return this;
+    }
+
+    public ToolbarSearchView setMarginTop(int size){
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)this.toolbarSearchViewContainer.getLayoutParams();
+        params.topMargin = size;
+        this.toolbarSearchViewContainer.setLayoutParams(params);
+
         return this;
     }
 
