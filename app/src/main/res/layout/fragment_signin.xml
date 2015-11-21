@@ -76,7 +76,6 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="@dimen/baseline_x1"
                 android:enabled="false"
-                android:focusableInTouchMode="true"
                 android:text="@string/action_sign_in"/>
             <Button style="@style/button_flat_green"
                 android:id="@+id/sign_up"
