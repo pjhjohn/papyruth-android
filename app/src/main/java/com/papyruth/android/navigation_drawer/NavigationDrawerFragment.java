@@ -17,10 +17,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.CircleTransformation;
@@ -41,9 +44,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private boolean mUserLearnedDrawer;
     private View.OnClickListener mNavigationPriorClickListener;
 
+    Tracker mTracker;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
         mUserLearnedDrawer = AppManager.getInstance().getBoolean(PREF_USER_LEARNED_DRAWER, false);
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
@@ -138,6 +144,23 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
                     mUserLearnedDrawer = true;
                     AppManager.getInstance().putBoolean(PREF_USER_LEARNED_DRAWER, true);
                 }
+                mTracker.send(
+                    new HitBuilders.EventBuilder()
+                        .setAction(getString(R.string.navigation_drawer_open))
+                        .setCategory(getString(R.string.ga_category_drawer))
+                        .build()
+                );
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                mTracker.send(
+                    new HitBuilders.EventBuilder()
+                        .setAction(getString(R.string.navigation_drawer_close))
+                        .setCategory(getString(R.string.ga_category_drawer))
+                        .build()
+                );
             }
         };
 

@@ -178,7 +178,14 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void onNavigationDrawerItemSelected(int position, boolean fromUser) {
         mReadyToTerminate = false;
-        this.navigate(NavigationDrawerUtils.getFragmentClassOf(position), true, fromUser);
+        Class<? extends Fragment> fragmentClass = NavigationDrawerUtils.getFragmentClassOf(position);
+        this.navigate(fragmentClass, true, fromUser);
+        mTracker.send(
+            new HitBuilders.EventBuilder(
+                String.format("%s - %s", fragmentClass.getSimpleName(), getString(R.string.ga_category_drawer)),
+                getString(R.string.ga_event_click)
+            ).build()
+        );
     }
 
     /* Map Navigator methods to mNavigator */
