@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
@@ -128,6 +129,7 @@ public class SettingsFragment extends Fragment {
                 .clicks(delHistory)
                 .subscribe(unused -> {
                     AppManager.getInstance().clear(AppConst.Preference.HISTORY);
+                    Toast.makeText(getActivity(), R.string.success_del_history, Toast.LENGTH_LONG).show();
                 }, error->ErrorHandler.throwError(error, this))
         );
 
