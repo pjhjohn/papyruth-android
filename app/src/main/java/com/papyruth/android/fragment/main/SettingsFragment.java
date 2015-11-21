@@ -66,6 +66,7 @@ public class SettingsFragment extends Fragment {
     @InjectView (R.id.osl_icon) protected ImageView openSourceLicenseIcon;
     @InjectView (R.id.tos_container) protected RelativeLayout termOfServices;
     @InjectView (R.id.tos_icon) protected ImageView termOfServicesIcon;
+    @InjectView (R.id.history_delete_container) protected RelativeLayout delHistory;
     @InjectView (R.id.history_delete_icon) protected ImageView delHistoryIcon;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
@@ -121,7 +122,7 @@ public class SettingsFragment extends Fragment {
         );
 
         this.subscriptions.add(ViewObservable
-                .clicks(delHistoryIcon)
+                .clicks(delHistory)
                 .subscribe(unused -> {
                     AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 }, error->ErrorHandler.throwError(error, this))
