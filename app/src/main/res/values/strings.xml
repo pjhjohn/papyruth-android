@@ -220,4 +220,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_del_history">Delete search history</string>
     <string name="goto_github_repo">REPOSITORY</string>
     <string name="point_denominator">/10</string>
+    <string name="forgot_password">forgot password</string>
+    <string name="title_forgot_password">FORGOT PASSWORD</string>
+    <string name="enter_your_email">enter the email address you use to sign in.</string>
 </resources>

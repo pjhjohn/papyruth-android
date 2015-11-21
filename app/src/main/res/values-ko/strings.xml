@@ -212,4 +212,6 @@
     <string name="label_del_history">검색 히스토리 삭제</string>
     <string name="goto_github_repo">REPOSITORY</string>
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
+    <string name="title_forgot_password">비밀번호 찾기</string>
+    <string name="enter_your_email">가입할 때 입력한 이메일을 입력해주세요</string>
 </resources>

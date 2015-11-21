@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
@@ -89,6 +89,7 @@ public class SignInFragment extends Fragment implements OnPageFocus {
     @InjectView (R.id.progress) protected View mProgress;
     @InjectView (R.id.sign_in)  protected Button mButtonSignIn;
     @InjectView (R.id.sign_up)  protected Button mButtonSignUp;
+    @InjectView (R.id.forgot_password)  protected TextView mTextForgotPassword;
     private CompositeSubscription mCompositeSubscriptions;
 
     @Override
@@ -126,18 +127,18 @@ public class SignInFragment extends Fragment implements OnPageFocus {
             mApplicationLogoHorizontal.setVisibility(View.GONE);
         });
         mCompositeSubscriptions.add(Observable.combineLatest(
-            WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
-            WidgetObservable.text(mTextPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
-            (String emailError, String passwordError) -> {
-                mTextEmail.setError(emailError);
-                mTextPassword.setError(passwordError);
-                return emailError == null && passwordError == null;
-            })
-            .startWith(false)
-            .subscribe(
-                valid -> mButtonSignIn.setEnabled(valid),
-                error -> ErrorHandler.throwError(error, this)
-            )
+                WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
+                WidgetObservable.text(mTextPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+                (String emailError, String passwordError) -> {
+                    mTextEmail.setError(emailError);
+                    mTextPassword.setError(passwordError);
+                    return emailError == null && passwordError == null;
+                })
+                .startWith(false)
+                .subscribe(
+                    valid -> mButtonSignIn.setEnabled(valid),
+                    error -> ErrorHandler.throwError(error, this)
+                )
         );
 
         mCompositeSubscriptions.add(
@@ -159,6 +160,29 @@ public class SignInFragment extends Fragment implements OnPageFocus {
                 mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
             }, error -> ErrorHandler.throwError(error, this)
         ));
+
+        this.mCompositeSubscriptions.add(
+            ViewObservable.clicks(this.mTextForgotPassword)
+                .subscribe(event -> {
+                    new MaterialDialog.Builder(getActivity())
+                        .title(R.string.forgot_password)
+                        .content(R.string.enter_your_email)
+                        .input(R.string.hint_email, R.string.empty, (dialog, input) -> {
+                        })
+                        .positiveText(R.string.submit)
+                        .negativeText(R.string.confirm_cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+                                //TODO : ADD fotgot password api
+                            }
+                        })
+                        .build()
+                        .show();
+
+                }, error -> ErrorHandler.throwError(error, this))
+        );
     }
 
     private void doRequest() {
