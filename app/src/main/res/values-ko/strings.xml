@@ -209,6 +209,7 @@
     <string name="label_signout">로그아웃</string>
     <string name="label_osl">오픈 소스 라이센스</string>
     <string name="label_tos">이용 약관</string>
+    <string name="label_del_history">검색 히스토리 삭제</string>
     <string name="goto_github_repo">REPOSITORY</string>
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
 </resources>

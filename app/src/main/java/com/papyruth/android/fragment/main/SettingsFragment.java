@@ -66,6 +66,7 @@ public class SettingsFragment extends Fragment {
     @InjectView (R.id.osl_icon) protected ImageView openSourceLicenseIcon;
     @InjectView (R.id.tos_container) protected RelativeLayout termOfServices;
     @InjectView (R.id.tos_icon) protected ImageView termOfServicesIcon;
+    @InjectView (R.id.history_delete_icon) protected ImageView delHistoryIcon;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
     private MaterialDialog dialog;
@@ -79,6 +80,7 @@ public class SettingsFragment extends Fragment {
         Picasso.with(context).load(R.drawable.ic_light_evaluation).transform(new ColorFilterTransformation(Color.GRAY)).into(termOfServicesIcon);
         Picasso.with(context).load(R.drawable.ic_light_evaluation).transform(new ColorFilterTransformation(Color.GRAY)).into(openSourceLicenseIcon);
         Picasso.with(context).load(R.drawable.logout).transform(new ColorFilterTransformation(Color.GRAY)).into(signoutIcon);
+        Picasso.with(context).load(R.drawable.ic_light_history).transform(new ColorFilterTransformation(Color.GRAY)).into(delHistoryIcon);
         return view;
     }
     @Override
@@ -100,22 +102,29 @@ public class SettingsFragment extends Fragment {
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 
         this.subscriptions.add(ViewObservable
-            .clicks(this.termOfServices)
-            .filter(unused -> this.dialog == null || !this.dialog.isShowing())
-            .subscribe(unused -> {
-                dialog = TermOfServicesDialog.build(
-                    context,
-                    context.getResources().getString(R.string.label_tos),
-                    context.getResources().getString(R.string.lorem_ipsum)
-                );
-                dialog.show();
-            },error->ErrorHandler.throwError(error, this))
+                .clicks(this.termOfServices)
+                .filter(unused -> this.dialog == null || !this.dialog.isShowing())
+                .subscribe(unused -> {
+                    dialog = TermOfServicesDialog.build(
+                        context,
+                        context.getResources().getString(R.string.label_tos),
+                        context.getResources().getString(R.string.lorem_ipsum)
+                    );
+                    dialog.show();
+                }, error -> ErrorHandler.throwError(error, this))
         );
 
         this.subscriptions.add(ViewObservable
             .clicks(this.openSourceLicense)
             .subscribe(unused -> this.navigator.navigate(OpenSourceLicensesFragment.class, true)
             , error->ErrorHandler.throwError(error, this))
+        );
+
+        this.subscriptions.add(ViewObservable
+                .clicks(delHistoryIcon)
+                .subscribe(unused -> {
+                    AppManager.getInstance().clear(AppConst.Preference.HISTORY);
+                }, error->ErrorHandler.throwError(error, this))
         );
 
         this.subscriptions.add(ViewObservable
