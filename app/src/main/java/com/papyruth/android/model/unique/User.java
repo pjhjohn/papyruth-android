@@ -169,6 +169,6 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("[%s][%s][%s][%s][%d][%s][%d][%s]", this.access_token, this.realname, this.nickname, this.email, this.university_id, this.university_name, this.entrance_year, this.is_boy? "male" : "female");
+        return String.format("[%s][%s][%s][%s][%d][%s][%d][%s]", this.access_token, this.realname, this.nickname, this.email, this.university_id, this.university_name, this.entrance_year, (this.is_boy != null ? (this.is_boy? "male" : "female") : "null"));
     }
 }
