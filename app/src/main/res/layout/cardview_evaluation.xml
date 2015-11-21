@@ -38,37 +38,33 @@
             android:layout_alignParentEnd="true"
             android:contentDescription="@string/empty"/><!-- Modify -->
     </RelativeLayout><!--Lecture Title & Edit-->
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="18sp"
         android:paddingLeft="@dimen/baseline_x2"
-        android:paddingRight="@dimen/baseline_x2"
-        android:paddingBottom="@dimen/baseline_x1">
-        <LinearLayout
+        android:paddingRight="@dimen/baseline_x2">
+        <TextView
+            android:id="@+id/evaluation_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/evaluation_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/category_background"
-                android:textSize="12sp"/><!-- Category -->
-            <TextView
-                android:id="@+id/evaluation_professor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/baseline_x1"
-                android:layout_marginStart="@dimen/baseline_x1"
-                android:layout_gravity="center_vertical"
-                android:textSize="16sp"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="1"/><!-- Professor -->
-        </LinearLayout>
-    </FrameLayout><!-- Category & Professor -->
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/evaluation_professor"
+            android:layout_toStartOf="@+id/evaluation_professor"
+            android:background="@drawable/category_background"
+            android:textSize="12sp"/><!-- Category -->
+        <TextView
+            android:id="@+id/evaluation_professor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/baseline_x1"
+            android:layout_marginStart="@dimen/baseline_x1"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="1"/><!-- Professor -->
+    </RelativeLayout><!-- Category & Professor -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

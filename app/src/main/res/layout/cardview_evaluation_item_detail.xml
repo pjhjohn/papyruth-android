@@ -36,7 +36,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:gravity="center"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="1"/><!-- Nickname -->
@@ -53,6 +53,7 @@
         android:layout_marginRight="@dimen/baseline_x2"
         android:layout_marginEnd="@dimen/baseline_x2"
         android:textSize="16sp"
+        android:textColor="@color/black"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"/><!-- Lecture Title -->
@@ -98,11 +99,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/evaluation_item_category"
         android:layout_marginTop="@dimen/baseline_x1"
-        android:layout_marginBottom="@dimen/baseline_x2"
         android:layout_toRightOf="@+id/evaluation_item_evaluator"
         android:layout_toEndOf="@+id/evaluation_item_evaluator"
         android:layout_toLeftOf="@+id/evaluation_item_overall"
         android:layout_toStartOf="@+id/evaluation_item_overall"
+        android:layout_marginRight="@dimen/baseline_x1"
+        android:layout_marginEnd="@dimen/baseline_x1"
+        android:layout_marginBottom="@dimen/baseline_x2"
         android:maxLines="3"
         android:ellipsize="end"/>
 
