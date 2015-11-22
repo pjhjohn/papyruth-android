@@ -137,11 +137,10 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
 
     @Override
     protected void setFloatingActionControl() {
-        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks(R.id.fab_new_evaluation)
-            .subscribe(
-                unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN)
-                , error->ErrorHandler.throwError(error, this)
-            );
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(
+            unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN),
+            error->ErrorHandler.throwError(error, this)
+        );
     }
 }

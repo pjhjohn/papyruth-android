@@ -66,17 +66,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                     this.items.addAll(evaluations);
                     this.adapter.notifyDataSetChanged();
                     size = items.size();
-                }, error -> {
-                    ErrorHandler.throwError(error, this);
-//                    switch (((RetrofitError) error).getResponse().getStatus()){
-//                        case 403 :
-//                            ((MainActivity) getActivity()).activityFinish();
-//                            break;
-//                        default:
-//                            error.printStackTrace();
-//                            break;
-//                    }
-                })
+                }, error -> ErrorHandler.throwError(error, this))
 
         );
 
@@ -181,10 +171,10 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 
     @Override
     protected void setFloatingActionControl() {
-        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks(R.id.fab_new_evaluation)
-            .subscribe(unused ->
-                navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN)
-            ,error -> ErrorHandler.throwError(error, this));
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().subscribe(
+            unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN)
+            ,error -> ErrorHandler.throwError(error, this)
+        );
     }
 }

@@ -18,8 +18,10 @@ import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.CommonRecyclerViewFragment;
+import com.papyruth.utils.view.navigator.FragmentNavigator;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -133,7 +135,11 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
 
     @Override
     protected void setFloatingActionControl() {
-        FloatingActionControl.getInstance().clear();
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().subscribe(
+            unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN),
+            error -> ErrorHandler.throwError(error, this)
+        );
     }
 
     @Override

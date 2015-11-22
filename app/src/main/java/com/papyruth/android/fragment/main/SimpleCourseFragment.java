@@ -127,7 +127,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         }).setToolbarSearchViewSearchListener(() -> this.getSearchResult());
 
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
-        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
