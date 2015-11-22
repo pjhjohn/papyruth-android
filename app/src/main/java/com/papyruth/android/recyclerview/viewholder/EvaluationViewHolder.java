@@ -126,12 +126,20 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             .subscribe(response -> {
                 if (response.hashtags != null) mHashtags.post(() -> {
                     float totalWidth = 0;
+                    int hashtagLines = 1;
+                    mHashtags.addView(new LinearLayout(mContext));
+                    ((LinearLayout) mHashtags.getChildAt(0)).setOrientation(LinearLayout.HORIZONTAL);
                     for (String hashtag : response.hashtags) {
                         Evaluation.getInstance().addHashTag(hashtag);
                         Hashtag tag = new Hashtag(mContext, hashtag);
                         float width = tag.getPaint().measureText((String) tag.getText());
-                        if (width + totalWidth > mHashtags.getWidth()) break;
-                        mHashtags.addView(tag);
+                        if (width + totalWidth > mHashtags.getWidth() && totalWidth > 0) {
+                            mHashtags.addView(new LinearLayout(mContext));
+                            hashtagLines++;
+                            totalWidth = 0;
+                        }
+
+                        ((LinearLayout) mHashtags.getChildAt(hashtagLines - 1)).addView(tag);
                         totalWidth += width;
                     }
                 });

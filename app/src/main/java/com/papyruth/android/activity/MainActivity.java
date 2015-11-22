@@ -17,6 +17,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.fragment.main.SimpleCourseFragment;
+import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.navigation_drawer.NavigationDrawerCallback;
 import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
@@ -179,6 +180,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     public void onNavigationDrawerItemSelected(int position, boolean fromUser) {
         mReadyToTerminate = false;
         Class<? extends Fragment> fragmentClass = NavigationDrawerUtils.getFragmentClassOf(position);
+        Evaluation.getInstance().clear();
         this.navigate(fragmentClass, true, fromUser);
         mTracker.send(
             new HitBuilders.EventBuilder(
