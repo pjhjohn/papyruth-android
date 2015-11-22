@@ -124,6 +124,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             float totalWidth = 0;
             for (String hashtag : course.getHashtags()) {
                 Hashtag tag = new Hashtag(mContext, hashtag);
+                tag.setMaxLines(1);
                 float width = tag.getPaint().measureText((String) tag.getText());
                 if (width + totalWidth > mHashtags.getWidth()) break;
                 mHashtags.addView(tag);

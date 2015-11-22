@@ -21,6 +21,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationFragment;
 import com.papyruth.android.model.unique.Evaluation;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.view.MetricUtil;
 import com.papyruth.utils.view.ToolbarUtil;
@@ -119,96 +120,105 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     protected AnimatorSet animators;
     protected Boolean isAnimationCanceled;
     protected void openEvaluation(View view, boolean animation) {
-        if(view != null && animation)
-            openEvaluation(view.getHeight(), (int) view.getY());
-        else{
-            isAnimationCanceled = false;
-            isOpenSlave = true;
-            slaveIsOccupying = true;
-            animators = new AnimatorSet();
-            this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
-            this.itemHeight = ((int) getActivity().getResources().getDimension(R.dimen.cardview_min_height_extended));
-            this.itemTop = getActivity().findViewById(R.id.toolbar).getBottom();
+        try {
+            if (view != null && animation)
+                openEvaluation(view.getHeight(), (int) view.getY());
+            else {
+                isAnimationCanceled = false;
+                isOpenSlave = true;
+                slaveIsOccupying = true;
+                animators = new AnimatorSet();
+                this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
+                this.itemHeight = ((int) getActivity().getResources().getDimension(R.dimen.cardview_min_height_extended));
+                this.itemTop = getActivity().findViewById(R.id.toolbar).getBottom();
 
-            this.slaveContainer.setVisibility(View.VISIBLE);
+                this.slaveContainer.setVisibility(View.VISIBLE);
 
-            ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
-            lpEvaluationContainer.height = screenHeight;
-            this.slaveContainer.setLayoutParams(lpEvaluationContainer);
+                ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
+                lpEvaluationContainer.height = screenHeight;
+                this.slaveContainer.setLayoutParams(lpEvaluationContainer);
 
-            if(slave != null) {
-                slave.setShowContentImmediately(true);
-                getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
+                if (slave != null) {
+                    slave.setShowContentImmediately(true);
+                    getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
 
-                slave.setEvaluationFloatingActionControl();
+                    slave.setEvaluationFloatingActionControl();
+                }
+
+                this.slaveContainer.setY(0);
+                this.toolbar.setY(-toolbar.getHeight());
+                ToolbarUtil.hide(toolbar);
             }
-
-            this.slaveContainer.setY(0);
-            this.toolbar.setY(-toolbar.getHeight());
-            ToolbarUtil.hide(toolbar);
+        }catch (Exception e){
+            ErrorHandler.throwError(e, this);
         }
     }
 
     protected void openEvaluation(int vHeight, int vY){
-        this.slaveContainer.setVisibility(View.VISIBLE);
-        this.itemHeight = vHeight;
-        this.itemTop = vY;
-        this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
-        ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
+        try {
+            this.slaveContainer.setVisibility(View.VISIBLE);
+            this.itemHeight = vHeight;
+            this.itemTop = vY;
+            this.screenHeight = getActivity().findViewById(R.id.main_navigator).getBottom();
+            ViewGroup.LayoutParams lpEvaluationContainer = slaveContainer.getLayoutParams();
 
-        ValueAnimator animHeight = ValueAnimator.ofInt(vHeight, screenHeight);
-        animHeight.addUpdateListener(animator -> {
-            lpEvaluationContainer.height = (int) animator.getAnimatedValue();
-            this.slaveContainer.setLayoutParams(lpEvaluationContainer);
-        });
+            ValueAnimator animHeight = ValueAnimator.ofInt(vHeight, screenHeight);
+            animHeight.addUpdateListener(animator -> {
+                lpEvaluationContainer.height = (int) animator.getAnimatedValue();
+                this.slaveContainer.setLayoutParams(lpEvaluationContainer);
+            });
 
-        ValueAnimator animTop = ValueAnimator.ofInt(this.itemTop, 0);
-        animTop.addUpdateListener(animator -> {
-            final int itemTop = (int) animator.getAnimatedValue();
-            this.slaveContainer.setY(itemTop);
-            final int toolbarTop = itemTop - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize);
-            this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
-        });
+            ValueAnimator animTop = ValueAnimator.ofInt(this.itemTop, 0);
+            animTop.addUpdateListener(animator -> {
+                final int itemTop = (int) animator.getAnimatedValue();
+                this.slaveContainer.setY(itemTop);
+                final int toolbarTop = itemTop - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize);
+                this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
+            });
 
-        animators = new AnimatorSet();
-        animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
-        animators.playTogether(animHeight, animTop);
-        animators.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_DECELERATION));
-        animators.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                if(slave != null){
-                    getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
-                    if(commentPosition != null)
-                        slave.setCommentId(commentPosition);
+            animators = new AnimatorSet();
+            animators.setDuration(AppConst.ANIM_DURATION_MEDIUM);
+            animators.playTogether(animHeight, animTop);
+            animators.setInterpolator(new DecelerateInterpolator(AppConst.ANIM_DECELERATION));
+            animators.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    if (slave != null) {
+                        getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
+                        if (commentPosition != null)
+                            slave.setCommentId(commentPosition);
+                    }
+                    isAnimationCanceled = false;
+                    isOpenSlave = true;
                 }
-                isAnimationCanceled = false;
-                isOpenSlave = true;
-            }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                super.onAnimationCancel(animation);
-                if(slave != null) getFragmentManager().beginTransaction().remove(slave).commit();
-                isAnimationCanceled = true;
-                isOpenSlave = false;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                if (isAnimationCanceled) {
-                    toolbar.setY(0);
-                } else {
-                    slaveIsOccupying = true;
-                    slave.setEvaluationFloatingActionControl();
-                    slave.showContent(true);
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    super.onAnimationCancel(animation);
+                    if (slave != null)
+                        getFragmentManager().beginTransaction().remove(slave).commit();
+                    isAnimationCanceled = true;
+                    isOpenSlave = false;
                 }
-            }
 
-        });
-        animators.start();
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    if (isAnimationCanceled) {
+                        toolbar.setY(0);
+                    } else {
+                        slaveIsOccupying = true;
+                        slave.setEvaluationFloatingActionControl();
+                        slave.showContent(true);
+                    }
+                }
+
+            });
+            animators.start();
+        }catch (Exception e){
+            ErrorHandler.throwError(e, this);
+        }
     }
 
     protected void closeEvaluation() {

@@ -87,6 +87,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
                     for (String hashtag : response.hashtags) {
                         Evaluation.getInstance().addHashTag(hashtag);
                         Hashtag tag = new Hashtag(mContext, hashtag);
+                        tag.setMaxLines(1);
                         float width = tag.getPaint().measureText((String) tag.getText());
                         if (width + totalWidth > mHashtags.getWidth()) break;
                         mHashtags.addView(tag);

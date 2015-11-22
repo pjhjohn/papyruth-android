@@ -20,11 +20,10 @@ public class Hashtag extends TextView {
     }
 
     private void setup(Context context) {
-        this.setGravity(Gravity.CENTER_HORIZONTAL);
         this.setTextColor(context.getResources().getColor(R.color.hashtag));
         this.setPaintFlags(super.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.setPadding(4, 4, 4, 4);
-        this.setMaxLines(1);
+        this.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         this.setHorizontallyScrolling(false);
         this.setEllipsize(TextUtils.TruncateAt.END);
     }

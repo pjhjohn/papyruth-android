@@ -49,7 +49,6 @@
             android:contentDescription="@string/empty"/>
     </RelativeLayout>
     <include layout="@layout/hr_solid"/>
-    <include layout="@layout/cardview_white_8dp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/search_view_result"
         android:layout_width="match_parent"
@@ -58,6 +57,4 @@
         android:overScrollMode="never"
         android:focusable="true"
         android:clickable="true"/>
-    <include layout="@layout/cardview_white_8dp"/>
-    <include layout="@layout/hr_shadow"/>
 </LinearLayout>

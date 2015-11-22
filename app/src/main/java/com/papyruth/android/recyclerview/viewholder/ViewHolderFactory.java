@@ -47,6 +47,8 @@ public class ViewHolderFactory {
         public static final int MY_COMMENT_ITEM        = 0xb0;
         public static final int PLACEHOLDER            = 0xc0;
         public static final int OPEN_SOURCE_LICENSE    = 0xd0;
+        public static final int HR_SHADOW              = 0xe0;
+        public static final int HR_WHITE               = 0xf0;
     }
 
     public RecyclerView.ViewHolder create(ViewGroup parent, int viewType) {
@@ -73,6 +75,8 @@ public class ViewHolderFactory {
             case ViewType.MY_COMMENT_ITEM        : return new        MyCommentItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_comment            , parent, false), listener);
             case ViewType.PLACEHOLDER            : return new          PlaceholderViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_placeholder           , parent, false));
             case ViewType.OPEN_SOURCE_LICENSE    : return new    OpenSourceLicenseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_open_source_license   , parent, false), listener);
+            case ViewType.HR_SHADOW              : return new                EmptyViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.hr_shadow_toolbar              , parent, false));
+            case ViewType.HR_WHITE               : return new                EmptyViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_8dp             , parent, false));
             default : throw new RuntimeException(String.format("Couldn't find any ViewHolder with ViewType#%d. Check whether you put correct ViewType.", viewType));
         }
     }
