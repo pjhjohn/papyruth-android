@@ -2,6 +2,7 @@ package com.papyruth.utils.view;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -23,6 +24,9 @@ public class Hashtag extends TextView {
         this.setTextColor(context.getResources().getColor(R.color.hashtag));
         this.setPaintFlags(super.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.setPadding(4, 4, 4, 4);
+        this.setMaxLines(1);
+        this.setHorizontallyScrolling(false);
+        this.setEllipsize(TextUtils.TruncateAt.END);
     }
     private void setupAttrs(Context context, AttributeSet attrs) {
 
