@@ -10,6 +10,8 @@ import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RecyclerViewItemClickListener itemClickListener; // TODO : use if implemented.
     private boolean isHistory;
@@ -28,17 +30,30 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((AutoCompleteResponseViewHolder) holder).bind(this.items.get(position), isHistory);
+        if(position < items.size() + getItemHeader() && position > 0)
+            ((AutoCompleteResponseViewHolder) holder).bind(this.items.get(position- getItemHeader()), isHistory);
+    }
+
+    public int getItemHeader(){
+        return items.size() > 0 ? 1 : 0;
+    }
+    public int getItemFooter(){
+        return items.size() > 0 ? 1 : 0;
     }
 
     @Override
     public int getItemCount() {
-        return this.items == null ? 0 : this.items.size();
+        return this.items == null ? 0 : this.items.size() + getItemHeader() + getItemFooter();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return ViewHolderFactory.ViewType.AUTO_COMPLETE_RESPONSE;
+        if(position <= 0)
+            return ViewHolderFactory.ViewType.HR_WHITE;
+        else if(position < items.size() + getItemHeader())
+            return ViewHolderFactory.ViewType.AUTO_COMPLETE_RESPONSE;
+        else
+            return ViewHolderFactory.ViewType.HR_SHADOW;
     }
 
     public void setHistory(boolean isHistory){
