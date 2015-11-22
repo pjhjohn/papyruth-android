@@ -25,7 +25,9 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolderFactory.getInstance().create(parent, viewType, itemClickListener);
+        return ViewHolderFactory.getInstance().create(parent, viewType, ((view, position) -> {
+            itemClickListener.onRecyclerViewItemClick(view, position-getItemHeader());
+        }));
     }
 
     @Override
