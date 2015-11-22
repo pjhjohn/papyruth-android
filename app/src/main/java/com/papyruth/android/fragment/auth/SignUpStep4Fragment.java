@@ -215,7 +215,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     public void onPageFocused() {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup4));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done).hide(true);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green).hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

@@ -6,7 +6,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/viewholder_bg_selector"
     android:layout_marginBottom="1dp"
-    android:padding="@dimen/baseline_x2">
+    android:paddingTop="@dimen/baseline_x2"
+    android:paddingLeft="@dimen/baseline_x2"
+    android:paddingRight="@dimen/baseline_x2"
+    android:paddingBottom="@dimen/baseline_x1">
     <ImageView
         android:id="@+id/evaluation_item_avatar"
         android:layout_width="@dimen/baseline_x5"

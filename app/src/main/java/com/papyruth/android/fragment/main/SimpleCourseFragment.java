@@ -30,6 +30,7 @@ import com.papyruth.utils.support.materialdialog.AlertDialog;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.RecyclerViewFragment;
+import com.papyruth.utils.view.navigator.FragmentNavigator;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.papyruth.utils.view.search.ToolbarSearchView;
 
@@ -127,17 +128,14 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         }).setToolbarSearchViewSearchListener(() -> this.getSearchResult());
 
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
-        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+            unused -> navigator.navigate(EvaluationStep1Fragment.class, true),
+            error -> ErrorHandler.throwError(error, this)
+        );
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
-        this.subscriptions.add(
-            FloatingActionControl
-                .clicks(R.id.fab_new_evaluation)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true)
-                    ,error->ErrorHandler.throwError(error, this))
-        );
         this.subscriptions.add(
             this.getRefreshObservable(this.refresh)
                 .subscribeOn(Schedulers.io())

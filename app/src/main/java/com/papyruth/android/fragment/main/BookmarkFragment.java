@@ -149,19 +149,13 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_favorite);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
-        FloatingActionControl.getInstance().setControl(R.layout.fam_home).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+            unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true),
+            error -> ErrorHandler.throwError(error, this)
+        );
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
-
-        this.subscriptions.add(
-            FloatingActionControl
-                .clicks(R.id.fab_new_evaluation)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true),
-                    error -> {
-                        ErrorHandler.throwError(error, this);
-                    })
-        );
 
         this.subscriptions.add(
             Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page)

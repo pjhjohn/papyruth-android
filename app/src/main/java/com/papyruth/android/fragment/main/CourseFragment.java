@@ -102,11 +102,10 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_title_course);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
-        FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_green).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.throwError(error, this));
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
-        FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm()
-            , error->ErrorHandler.throwError(error, this));
 
         if(User.getInstance().isConfirmationEmail()){
             AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
@@ -266,8 +265,8 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 getFragmentManager().beginTransaction().remove(slave).commit();
                 slaveContainer.setVisibility(View.GONE);
                 slaveIsOccupying = false;
-                FloatingActionControl.getInstance().setControl(R.layout.fam_course).show(true, 200, TimeUnit.MILLISECONDS);
-                FloatingActionControl.clicks(R.id.fab_new_evaluation).subscribe(unused -> navigateToEvaluationForm());
+                FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_green).show(true, 200, TimeUnit.MILLISECONDS);
+                FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.throwError(error, this));
             }
         });
         animators.start();
@@ -288,7 +287,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
 
-        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getCourseId())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
                 if (response.success) {

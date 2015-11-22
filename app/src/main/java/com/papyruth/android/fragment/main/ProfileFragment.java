@@ -111,17 +111,17 @@ public class ProfileFragment extends Fragment {
         this.gender.setText(this.getResources().getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
 
         this.subscriptions.add(FloatingActionControl
-            .clicks(R.id.fab_edit_email)
+            .clicks(R.id.fab_mini_change_email)
             .subscribe(unused -> this.navigator.navigate(ProfileChangeEmailFragment.class, true)
                 , error -> ErrorHandler.throwError(error, this)
             ));
         this.subscriptions.add(FloatingActionControl
-            .clicks(R.id.fab_edit_nickname)
+            .clicks(R.id.fab_mini_change_nickname)
             .subscribe(unused -> this.navigator.navigate(ProfileChangeNicknameFragment.class, true)
                 ,error->ErrorHandler.throwError(error, this)
             ));
         this.subscriptions.add(FloatingActionControl
-            .clicks(R.id.fab_edit_password)
+            .clicks(R.id.fab_mini_change_password)
             .subscribe(unused -> this.navigator.navigate(ProfileChangePasswordFragment.class, true)
                 ,error->ErrorHandler.throwError(error, this)
             ));

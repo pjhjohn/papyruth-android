@@ -6,13 +6,13 @@ import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.MyCommentData;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.android.recyclerview.adapter.MyCommentAdapter;
-import com.papyruth.android.R;
+import com.papyruth.android.recyclerview.adapter.MyCommentItemsAdapter;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -20,11 +20,12 @@ import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.CommonRecyclerViewFragment;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapter, MyCommentData> {
+public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItemsAdapter, MyCommentData> {
 
     private Tracker mTracker;
     @Override
@@ -129,15 +130,17 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentAdapt
         page++;
     }
 
-
-
     @Override
     protected void setFloatingActionControl() {
-        FloatingActionControl.getInstance().clear();
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().subscribe(
+            unused -> navigator.navigate(EvaluationStep1Fragment.class, true),
+            error -> ErrorHandler.throwError(error, this)
+        );
     }
 
     @Override
-    protected MyCommentAdapter getAdapter () {
-        return new MyCommentAdapter(this.items, this);
+    protected MyCommentItemsAdapter getAdapter () {
+        return new MyCommentItemsAdapter(this.items, this);
     }
 }
