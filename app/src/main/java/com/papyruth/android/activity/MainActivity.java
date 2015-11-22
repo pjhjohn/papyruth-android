@@ -95,7 +95,8 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     protected void onPause() {
         super.onPause();
-        ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
+        ToolbarSearchView.getInstance().hide();
+        ((InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
     }
 
     @Override
