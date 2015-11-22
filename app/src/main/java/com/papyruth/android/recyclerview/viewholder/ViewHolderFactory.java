@@ -43,7 +43,7 @@ public class ViewHolderFactory {
         /* item : etc */
         public static final int AUTO_COMPLETE_RESPONSE = 0x80;
         public static final int UNIVERSITY             = 0x90;
-        public static final int MY_EVALUATION          = 0xa0;
+        public static final int MY_EVALUATION_ITEM     = 0xa0;
         public static final int MY_COMMENT_ITEM        = 0xb0;
         public static final int PLACEHOLDER            = 0xc0;
         public static final int OPEN_SOURCE_LICENSE    = 0xd0;
@@ -71,7 +71,7 @@ public class ViewHolderFactory {
             case ViewType.COMMENT_ITEM           : return new          CommentItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_comment_item          , parent, false), listener);
             case ViewType.AUTO_COMPLETE_RESPONSE : return new AutoCompleteResponseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_autocomplete_response , parent, false), listener);
             case ViewType.UNIVERSITY             : return new           UniversityViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_university_item       , parent, false), listener);
-            case ViewType.MY_EVALUATION          : return new         MyEvaluationViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_evaluation         , parent, false), listener);
+            case ViewType.MY_EVALUATION_ITEM     : return new     MyEvaluationItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_evaluation         , parent, false), listener);
             case ViewType.MY_COMMENT_ITEM        : return new        MyCommentItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_comment            , parent, false), listener);
             case ViewType.PLACEHOLDER            : return new          PlaceholderViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_placeholder           , parent, false));
             case ViewType.OPEN_SOURCE_LICENSE    : return new    OpenSourceLicenseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_open_source_license   , parent, false), listener);
