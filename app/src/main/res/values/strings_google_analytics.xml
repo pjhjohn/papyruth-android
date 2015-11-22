@@ -17,6 +17,7 @@
     <string name="ga_fragment_auth_signup3">auth_Signup3</string>
     <string name="ga_fragment_auth_signup4">auth_Signup4</string>
 
+    <string name="ga_fragment_main_recent">main_Recent</string>
     <string name="ga_fragment_main_bookmark">main_Bookmark</string>
     <string name="ga_fragment_main_course">main_Course</string>
     <string name="ga_fragment_main_evaluation">main_Evaluation</string>
