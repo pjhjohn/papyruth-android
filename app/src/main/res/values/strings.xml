@@ -224,4 +224,5 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="forgot_password">forgot password</string>
     <string name="title_forgot_password">FORGOT PASSWORD</string>
     <string name="enter_your_email">enter the email address you use to sign in.</string>
+    <string name="menu_evaluation_edit">Edit Evaluation</string>
 </resources>

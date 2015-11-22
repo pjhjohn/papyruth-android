@@ -65,7 +65,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_up_vote_count)              protected RobotoTextView mVoteUpCount;
     @InjectView(R.id.evaluation_down_vote_icon)             protected ImageView mVoteDownIcon;
     @InjectView(R.id.evaluation_down_vote_count)            protected RobotoTextView mVoteDownCount;
-    @InjectView(R.id.evaluation_edit)                       protected ImageView mEdit;
     @InjectView(R.id.hr_shadow)                             protected FrameLayout mShadow;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
@@ -93,7 +92,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     public void bind(Evaluation evaluation, View.OnClickListener listener){
-        mEdit.setOnClickListener(listener);
         mLecture.setOnClickListener(listener);
         bind(evaluation);
     }
@@ -101,7 +99,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     public void bind(Evaluation evaluation) {
         mEvaluationId = evaluation.getId();
         mLecture.setText(evaluation.getLectureName());
-        Picasso.with(mContext).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEdit);
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
         setCategoryProfessorColor(mCategory, mProfessor, evaluation.getCategory());
         Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
@@ -150,7 +147,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         else setVoteStatus(VoteStatus.DOWN);
 
         setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
-        mEdit.setVisibility(User.getInstance().getId() != null && User.getInstance().getId().equals(evaluation.getUserId()) ? View.VISIBLE : View.GONE);
         mShadow.setVisibility(evaluation.getCommentCount() <= 0? View.GONE : View.VISIBLE);
     }
 

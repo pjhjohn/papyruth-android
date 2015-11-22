@@ -215,4 +215,5 @@
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
     <string name="title_forgot_password">비밀번호 찾기</string>
     <string name="enter_your_email">가입할 때 입력한 이메일을 입력해주세요</string>
+    <string name="menu_evaluation_edit">강의평가 수정</string>
 </resources>
