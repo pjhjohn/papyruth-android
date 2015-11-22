@@ -24,7 +24,6 @@ public class Hashtag extends TextView {
         this.setPaintFlags(super.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         this.setPadding(4, 4, 4, 4);
         this.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-        this.setMaxLines(1);
         this.setHorizontallyScrolling(false);
         this.setEllipsize(TextUtils.TruncateAt.END);
     }
