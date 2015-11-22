@@ -6,19 +6,18 @@ import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.MyCommentData;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.MyCommentItemsAdapter;
-import com.papyruth.android.R;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.CommonRecyclerViewFragment;
-import com.papyruth.utils.view.navigator.FragmentNavigator;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -131,13 +130,11 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
         page++;
     }
 
-
-
     @Override
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(
-            unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN),
+            unused -> navigator.navigate(EvaluationStep1Fragment.class, true),
             error -> ErrorHandler.throwError(error, this)
         );
     }

@@ -145,7 +145,7 @@ public class EvaluationStep3Fragment extends Fragment {
         final Context context = this.getActivity();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
-        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {

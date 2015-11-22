@@ -2,7 +2,7 @@
 <com.github.clans.fab.FloatingActionButton
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fab_done"
+    android:id="@+id/fab_done_green"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|right"
@@ -11,4 +11,5 @@
     android:src="@drawable/ic_light_done"
     android:visibility="invisible"
     fab:fab_colorNormal="@color/fab_green_normal"
-    fab:fab_colorPressed="@color/fab_green_pressed"/>
+    fab:fab_colorPressed="@color/fab_green_pressed"
+    fab:fab_progress_color="@color/fab_green_progress"/>

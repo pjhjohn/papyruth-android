@@ -287,7 +287,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());
 
-        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), Evaluation.getInstance().getCourseId())
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getCourseId())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
                 if (response.success) {
