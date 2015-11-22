@@ -16,6 +16,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.R;
+import com.papyruth.android.fragment.main.HomeFragment;
+import com.papyruth.android.fragment.main.SettingsFragment;
 import com.papyruth.android.fragment.main.SimpleCourseFragment;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.navigation_drawer.NavigationDrawerCallback;
@@ -23,12 +26,9 @@ import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.android.R;
-import com.papyruth.android.fragment.main.HomeFragment;
-import com.papyruth.android.fragment.main.SettingsFragment;
-import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.error.ErrorHandlerCallback;
+import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.view.FloatingActionControlContainer;
 import com.papyruth.utils.view.navigator.FragmentNavigator;
 import com.papyruth.utils.view.navigator.NavigationCallback;
@@ -48,7 +48,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
     private Tracker mTracker;
-
+    private MaterialMenuDrawable mMaterialMenuDrawable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +60,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         ErrorHandler.setApiErrorCallback(this);
 
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
-        MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
         mToolbar.setNavigationIcon(mMaterialMenuDrawable);
         mToolbar.inflateMenu(R.menu.main);
