@@ -149,7 +149,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
 
 
         TypedValue value = new TypedValue();
-        getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, value, true);
+        getActivity().getTheme().resolveAttribute(R.attr.actionBarSize, value, true);
 
         String s = TypedValue.coerceToString(value.type, value.data);
         DisplayMetrics metrics = new DisplayMetrics();
