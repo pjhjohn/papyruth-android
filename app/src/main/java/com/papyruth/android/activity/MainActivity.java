@@ -116,16 +116,15 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     /* Toolbar Search */
     @Override
     public void onSearchViewShowChanged(boolean show) {
+        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_category_search_view));
         if (show) {
             FloatingActionControl.getInstance().hide(false);
-            mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory(getResources().getString(R.string.ga_category_search_view))
+            mTracker.send(builder
                 .setAction(getResources().getString(R.string.ga_event_open))
                 .build());
         }else {
             FloatingActionControl.getInstance().show(false);
-            mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory(getResources().getString(R.string.ga_category_search_view))
+            mTracker.send(builder
                 .setAction(getResources().getString(R.string.ga_event_close))
                 .build());
         }
@@ -185,7 +184,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         this.navigate(fragmentClass, true, fromUser);
         mTracker.send(
             new HitBuilders.EventBuilder(
-                String.format("%s - %s", fragmentClass.getSimpleName(), getString(R.string.ga_category_drawer)),
+                getString(R.string.ga_category_drawer),
                 getString(R.string.ga_event_click)
             ).build()
         );
