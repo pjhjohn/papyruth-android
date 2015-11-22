@@ -10,7 +10,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.android.recyclerview.adapter.MyEvaluationAdapter;
+import com.papyruth.android.recyclerview.adapter.MyEvaluationItemsAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.utils.support.error.ErrorHandler;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationAdapter, EvaluationData> {
+public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationItemsAdapter, EvaluationData> {
 
     private Tracker mTracker;
     @Override
@@ -131,8 +131,8 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         page++;
     }
     @Override
-    protected MyEvaluationAdapter getAdapter () {
-        return new MyEvaluationAdapter(this.items, this);
+    protected MyEvaluationItemsAdapter getAdapter () {
+        return new MyEvaluationItemsAdapter(this.items, this);
     }
 
     @Override

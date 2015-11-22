@@ -46,14 +46,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/my_comment_item_footer"
-        android:layout_toStartOf="@+id/my_comment_item_footer"><!-- Content -->
+        android:layout_toStartOf="@+id/my_comment_item_footer"
+        android:layout_marginRight="@dimen/baseline_x1"
+        android:layout_marginEnd="@dimen/baseline_x1"><!-- Content -->
         <TextView
             android:id="@+id/my_comment_item_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:layout_marginBottom="@dimen/baseline_x1"
+            android:paddingTop="@dimen/baseline_x1"
+            android:paddingBottom="@dimen/baseline_x1"
             android:maxLines="3"
             android:ellipsize="end"/><!-- Comment Body -->
     </RelativeLayout>
