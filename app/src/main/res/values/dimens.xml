@@ -4,6 +4,7 @@
     <dimen name="navigation_drawer_width">304dp</dimen>
 
     <!--Baseline-->
+    <dimen name="baseline_x0.25">2dp</dimen>
     <dimen name="baseline_x0.5">4dp</dimen>
     <dimen name="baseline_x1">8dp</dimen>
     <dimen name="baseline_x1.5">12dp</dimen>
@@ -18,9 +19,13 @@
     <dimen name="baseline_x10">80dp</dimen>
     <dimen name="baseline_x11">88dp</dimen>
     <dimen name="baseline_x12">96dp</dimen>
+    <dimen name="baseline_x13">104dp</dimen>
+    <dimen name="baseline_x14">112dp</dimen>
     <dimen name="baseline_x15">120dp</dimen>
+    <dimen name="baseline_x16">120dp</dimen>
     <dimen name="baseline_x17">136dp</dimen>
     <dimen name="baseline_x18">144dp</dimen>
+    <dimen name="baseline_x19">152dp</dimen>
     <dimen name="baseline_x20">160dp</dimen>
 
     <!--Cardview-->

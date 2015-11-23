@@ -20,8 +20,6 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/evaluation_edit"
-            android:layout_toStartOf="@+id/evaluation_edit"
             android:gravity="center"
             android:textSize="24sp"
             android:textColor="@color/white_30p"
@@ -32,34 +30,37 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="18sp"
         android:paddingLeft="@dimen/baseline_x2"
         android:paddingRight="@dimen/baseline_x2">
-        <TextView
-            android:id="@+id/evaluation_category"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/evaluation_professor"
-            android:layout_toStartOf="@+id/evaluation_professor"
-            android:background="@drawable/category_background"
-            android:textSize="12sp"/><!-- Category -->
-        <TextView
-            android:id="@+id/evaluation_professor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:minHeight="18sp"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/baseline_x1"
-            android:layout_marginStart="@dimen/baseline_x1"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="1"/><!-- Professor -->
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/evaluation_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/category_background"
+                android:textSize="12sp"/><!-- Category -->
+            <TextView
+                android:id="@+id/evaluation_professor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/baseline_x1"
+                android:layout_marginStart="@dimen/baseline_x1"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="1"/><!-- Professor -->
+        </LinearLayout>
     </RelativeLayout><!-- Category & Professor -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/baseline_x2">
+        android:layout_marginBottom="@dimen/baseline_x1">
         <RelativeLayout
             android:id="@+id/evaluation_content_left"
             android:layout_width="@dimen/baseline_x9"
@@ -164,7 +165,7 @@
         </FrameLayout><!-- Overall -->
         <LinearLayout
             android:id="@+id/evaluation_content_right"
-            android:layout_width="@dimen/baseline_x17"
+            android:layout_width="@dimen/baseline_x15"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -177,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/baseline_x2"
                 android:layout_marginEnd="@dimen/baseline_x2"
-                android:layout_marginBottom="@dimen/baseline_x0.5">
+                android:layout_marginBottom="@dimen/baseline_x0.25">
                 <TextView
                     android:id="@+id/evaluation_clarity_label"
                     android:layout_width="match_parent"
@@ -218,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/baseline_x2"
                 android:layout_marginEnd="@dimen/baseline_x2"
-                android:layout_marginBottom="@dimen/baseline_x0.5">
+                android:layout_marginBottom="@dimen/baseline_x0.25">
                 <TextView
                     android:id="@+id/evaluation_easiness_label"
                     android:layout_width="match_parent"
@@ -300,17 +301,17 @@
         android:id="@+id/evaluation_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/baseline_x2"
-        android:paddingLeft="@dimen/baseline_x4"
-        android:paddingRight="@dimen/baseline_x4"/><!-- Body -->
+        android:layout_marginTop="@dimen/baseline_x1"
+        android:paddingLeft="@dimen/baseline_x3"
+        android:paddingRight="@dimen/baseline_x3"/><!-- Body -->
     <LinearLayout
         android:id="@+id/evaluation_hashtags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/baseline_x1"
-        android:paddingLeft="@dimen/baseline_x4"
-        android:paddingRight="@dimen/baseline_x4"/><!-- Hashtag -->
+        android:paddingLeft="@dimen/baseline_x3"
+        android:paddingRight="@dimen/baseline_x3"/><!-- Hashtag -->
     <LinearLayout
         android:id="@+id/evaluation_footer"
         android:layout_width="wrap_content"
