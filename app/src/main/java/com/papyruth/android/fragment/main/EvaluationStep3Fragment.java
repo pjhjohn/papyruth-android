@@ -284,6 +284,7 @@ public class EvaluationStep3Fragment extends Fragment {
         this.submitEvaluation(EvaluationForm.getInstance().isModifyMode())
             .filter(response -> response.success)
             .map(response -> {
+                EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                 if (hashtagsContainer.getChildCount() > 0) {
                     Api.papyruth().post_evaluation_hashtag(
                         User.getInstance().getAccessToken(),
