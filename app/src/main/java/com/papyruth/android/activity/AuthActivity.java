@@ -32,9 +32,7 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mTracker = ((papyruth) getApplication()).getTracker();
-
         this.setContentView(R.layout.activity_auth);
         this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));

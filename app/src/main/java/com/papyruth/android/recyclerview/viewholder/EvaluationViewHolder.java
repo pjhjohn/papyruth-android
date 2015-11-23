@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -24,7 +22,6 @@ import com.papyruth.android.model.unique.User;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.materialdialog.VotersDialog;
 import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.picasso.ContrastColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.DateTimeUtil;
@@ -203,9 +200,9 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void setVoteStatus(VoteStatus newStatus) {
         mVoteStatus = newStatus;
-        Picasso.with(mContext).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_up).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
         mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-        Picasso.with(mContext).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_down).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
         mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
     }
 

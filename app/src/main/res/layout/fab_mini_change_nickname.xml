@@ -5,7 +5,7 @@
     android:id="@+id/fab_mini_change_nickname"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_light_person"
+    android:src="@drawable/ic_light_nickname"
     fab:fab_colorNormal="@color/disabled"
     fab:fab_colorPressed="@color/disabled_highlight"
     fab:fab_size="mini"

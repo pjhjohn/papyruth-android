@@ -111,7 +111,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Picasso.with(mContext).load(R.drawable.ic_light_lock).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIconPassword);
+        Picasso.with(mContext).load(R.drawable.ic_light_password).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIconPassword);
 
         if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4){
             ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextPassword, InputMethodManager.SHOW_FORCED);

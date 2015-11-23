@@ -40,7 +40,7 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Candidate item, boolean isHistory) {
         if (item.lecture_id != null && item.professor_id != null){
-            Picasso.with(mContext).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_new_evaluation ).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
+            Picasso.with(mContext).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_lecture ).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
             mContent.setText(item.lecture_name + " - " + item.professor_name);
             mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_red));
             mTypeText.setText(R.string.word_course);
@@ -50,7 +50,7 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder {
             mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_blue));
             mTypeText.setText(R.string.word_lecture);
         }else if(item.professor_name != null){
-            Picasso.with(mContext).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_school ).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
+            Picasso.with(mContext).load( isHistory ? R.drawable.ic_light_history : R.drawable.ic_light_professor ).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
             mContent.setText(item.professor_name);
             mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_green));
             mTypeText.setText(R.string.word_professor);

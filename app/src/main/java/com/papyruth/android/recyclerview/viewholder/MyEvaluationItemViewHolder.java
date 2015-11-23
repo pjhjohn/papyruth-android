@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -66,15 +65,15 @@ public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
         else if(evaluation.request_user_vote == 1) setVoteStatus(VoteStatus.UP);
         else setVoteStatus(VoteStatus.DOWN);
         setVoteCount(evaluation.up_vote_count, evaluation.down_vote_count);
-        Picasso.with(mContext).load(R.drawable.ic_light_comment_16dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mCommentIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mCommentIcon);
         mCommentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
     }
 
     private void setVoteStatus(VoteStatus newStatus) {
         mVoteStatus = newStatus;
-        Picasso.with(mContext).load(R.drawable.ic_light_chevron_up).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_up).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
         mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-        Picasso.with(mContext).load(R.drawable.ic_light_chevron_down).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_down).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
         mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
     }
 

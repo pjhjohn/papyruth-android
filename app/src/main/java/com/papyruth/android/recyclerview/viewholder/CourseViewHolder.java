@@ -131,7 +131,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 totalWidth += width;
             }
         });
-        Picasso.with(mContext).load(R.drawable.ic_light_people).transform(new ColorFilterTransformation(mColorInactive)).into(mEvaluatorIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new ColorFilterTransformation(mColorInactive)).into(mEvaluatorIcon);
         mEvaluatorCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
         Picasso.with(mContext).load(R.drawable.ic_light_bookmark)
             .transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive)))

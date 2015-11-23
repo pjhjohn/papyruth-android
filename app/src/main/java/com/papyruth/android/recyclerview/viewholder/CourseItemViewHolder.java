@@ -72,7 +72,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
                 totalWidth += width;
             }
         });
-        Picasso.with(mContext).load(R.drawable.ic_light_people).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
         mEvaluationCount.setText(pointInRange(course.evaluation_count) ? String.valueOf(course.evaluation_count) : "N/A");
     }
 
