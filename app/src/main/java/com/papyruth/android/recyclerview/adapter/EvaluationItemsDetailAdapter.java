@@ -3,7 +3,9 @@ package com.papyruth.android.recyclerview.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
+import com.papyruth.android.model.unique.AppTracker;
 import com.papyruth.android.recyclerview.viewholder.EvaluationItemDetailViewHolder;
 import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.recyclerview.viewholder.PlaceholderViewHolder;
@@ -38,12 +40,18 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
             if(!mUserLearnedInform && position == 1) {
+                String action = null;
                 switch(view.getId()) {
                     case R.id.inform_btn_optional :
                         AppManager.getInstance().putBoolean(USER_LEARNED_INFORM, true);
+                        action = parent.getResources().getString(R.string.ga_event_hide_always);
                     case R.id.inform_btn_positive :
                         this.notifyItemRemoved(position);
                         mUserLearnedInform = true;
+                        if(action == null) action = parent.getResources().getString(R.string.ga_event_hide_once);
+                        AppTracker.getInstance().getTracker().send(
+                            new HitBuilders.EventBuilder(parent.getResources().getString(R.string.ga_category_inform), action).build()
+                        );
                         break;
                     default : Timber.d("Unexpected view #%x", view.getId());
                 }

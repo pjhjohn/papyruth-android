@@ -17,6 +17,7 @@
     <string name="ga_fragment_auth_signup3">auth_Signup3</string>
     <string name="ga_fragment_auth_signup4">auth_Signup4</string>
 
+    <string name="ga_fragment_main_recent">main_Recent</string>
     <string name="ga_fragment_main_bookmark">main_Bookmark</string>
     <string name="ga_fragment_main_course">main_Course</string>
     <string name="ga_fragment_main_evaluation">main_Evaluation</string>
@@ -39,7 +40,7 @@
     <string name="ga_category_search_view">Search View</string>
     <string name="ga_category_evaluation_search_view">eval_Search View</string>
     <string name="ga_category_drawer">Menu Drawer</string>
-    <string name="ga_category_inform">Menu Drawer</string>
+    <string name="ga_category_inform">Inform view</string>
 
     <!-- GA - event : api call -->
 
@@ -47,6 +48,8 @@
     <string name="ga_event_open">Open</string>
     <string name="ga_event_close">Close</string>
     <string name="ga_event_click">Open</string>
+    <string name="ga_event_hide_once">Hide Once</string>
+    <string name="ga_event_hide_always">Hide Always</string>
 
     <!-- GA - event : other -->
 

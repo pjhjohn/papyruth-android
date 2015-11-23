@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.papyruth.android.model.unique.AppTracker;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.utils.support.retrofit.ApiManager;
 import com.papyruth.utils.support.retrofit.RetrofitLogger;
@@ -27,6 +28,7 @@ public class papyruth extends Application {
         if(tracker == null){
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             tracker = analytics.newTracker(R.xml.ga_tracker);
+            AppTracker.getInstance().setTracker(this);
         }
         tracker.setAppName(getResources().getString(R.string.app_title));
         if (User.getInstance().getId() != null){
