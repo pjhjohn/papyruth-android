@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="168dp"
-        android:background="@drawable/nav_dummy"
+        android:background="@drawable/nav_logo"
         android:id="@+id/subtitle"
         android:paddingTop="24dp">
 
