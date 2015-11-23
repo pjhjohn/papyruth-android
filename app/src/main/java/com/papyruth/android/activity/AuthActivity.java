@@ -135,7 +135,6 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
         Intent intent = new Intent(AuthActivity.this, MainActivity.class);
         AuthActivity.this.startActivity(intent);
         AuthActivity.this.finish();
-        AuthActivity.this.overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
     }
 
     @Override
