@@ -105,7 +105,6 @@
         android:layout_toStartOf="@+id/evaluation_item_overall"
         android:layout_marginRight="@dimen/baseline_x1"
         android:layout_marginEnd="@dimen/baseline_x1"
-        android:layout_marginBottom="@dimen/baseline_x2"
         android:maxLines="3"
         android:ellipsize="end"/>
 

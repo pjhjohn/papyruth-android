@@ -16,8 +16,8 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getApplication()).getTracker();
         setContentView(R.layout.activity_splash);
+        mTracker = ((papyruth) getApplication()).getTracker();
         this.getFragmentManager().beginTransaction()
             .add(R.id.fragment_container, new SplashFragment())
             .commit();
@@ -33,6 +33,5 @@ public class SplashActivity extends Activity {
         Intent intent = new Intent(SplashActivity.this, AuthActivity.class);
         SplashActivity.this.startActivity(intent);
         SplashActivity.this.finish();
-        SplashActivity.this.overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_static_alpha_1);
     }
 }

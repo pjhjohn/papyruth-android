@@ -82,10 +82,10 @@ public class SettingsFragment extends Fragment {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        Picasso.with(context).load(R.drawable.ic_light_evaluation).transform(new ColorFilterTransformation(Color.GRAY)).into(termOfServicesIcon);
-        Picasso.with(context).load(R.drawable.ic_light_evaluation).transform(new ColorFilterTransformation(Color.GRAY)).into(openSourceLicenseIcon);
-        Picasso.with(context).load(R.drawable.logout).transform(new ColorFilterTransformation(Color.GRAY)).into(signoutIcon);
+        Picasso.with(context).load(R.drawable.ic_light_tos).transform(new ColorFilterTransformation(Color.GRAY)).into(termOfServicesIcon);
+        Picasso.with(context).load(R.drawable.ic_light_osl).transform(new ColorFilterTransformation(Color.GRAY)).into(openSourceLicenseIcon);
         Picasso.with(context).load(R.drawable.ic_light_history).transform(new ColorFilterTransformation(Color.GRAY)).into(delHistoryIcon);
+        Picasso.with(context).load(R.drawable.ic_light_signout).transform(new ColorFilterTransformation(Color.GRAY)).into(signoutIcon);
         return view;
     }
     @Override

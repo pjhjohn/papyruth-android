@@ -112,7 +112,7 @@ public class SplashFragment extends Fragment {
         animAlpha.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                Observable.just((StatisticsResponse) null).delay(400, TimeUnit.MILLISECONDS).subscribe(proceedToLoadingFragment);
+                Observable.just((StatisticsResponse) null).delay(400, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(proceedToLoadingFragment);
             }
         });
 

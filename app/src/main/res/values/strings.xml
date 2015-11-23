@@ -8,10 +8,9 @@
     <string name="nav_item_search">Search</string>
     <string name="nav_item_recommendation">Recommendation</string>
     <string name="nav_item_bookmark">Bookmark</string>
-    <string name="nav_item_evaluation">Evaluation</string>
+    <string name="nav_item_new_evaluation">Evaluation</string>
     <string name="nav_item_my_evaluation">My evaluation</string>
     <string name="nav_item_my_comment">My comment</string>
-    <string name="nav_item_random">Random</string>
 
     <!--toolbar-->
     <string name="toolbar_profile">My profile</string>
@@ -224,4 +223,5 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="forgot_password">forgot password</string>
     <string name="title_forgot_password">FORGOT PASSWORD</string>
     <string name="enter_your_email">enter the email address you use to sign in.</string>
+    <string name="menu_evaluation_edit">Edit Evaluation</string>
 </resources>

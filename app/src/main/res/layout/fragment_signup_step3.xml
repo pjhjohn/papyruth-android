@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:contentDescription="@string/empty"
-            android:src="@drawable/ic_light_person"/>
+            android:src="@drawable/ic_light_realname"/>
         <EditText
             android:id="@+id/realname"
             android:background="@color/transparent"

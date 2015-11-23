@@ -32,9 +32,7 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mTracker = ((papyruth) getApplication()).getTracker();
-
         this.setContentView(R.layout.activity_auth);
         this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));
@@ -135,7 +133,6 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
         Intent intent = new Intent(AuthActivity.this, MainActivity.class);
         AuthActivity.this.startActivity(intent);
         AuthActivity.this.finish();
-        AuthActivity.this.overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
     }
 
     @Override

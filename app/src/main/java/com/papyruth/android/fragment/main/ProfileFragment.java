@@ -103,9 +103,9 @@ public class ProfileFragment extends Fragment {
         this.entrance.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.entrance_postfix)));
         Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(Color.GRAY)).into(this.emailIcon);
         this.email.setText(User.getInstance().getEmail());
-        Picasso.with(context).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(Color.GRAY)).into(this.realnameIcon);
+        Picasso.with(context).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(Color.GRAY)).into(this.realnameIcon);
         this.realname.setText(User.getInstance().getRealname());
-        Picasso.with(context).load(R.drawable.ic_light_person).transform(new ColorFilterTransformation(Color.GRAY)).into(this.nicknameIcon);
+        Picasso.with(context).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(Color.GRAY)).into(this.nicknameIcon);
         this.nickname.setText(User.getInstance().getNickname());
         Picasso.with(context).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(Color.GRAY)).into(this.genderIcon);
         this.gender.setText(this.getResources().getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));

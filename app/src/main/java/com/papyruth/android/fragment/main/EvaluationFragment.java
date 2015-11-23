@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -130,13 +131,21 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             this.getActivity().onBackPressed();
         });
         this.evaluationToolbar.setTitle(R.string.toolbar_title_evaluation);
-        ToolbarUtil.registerMenu(this.evaluationToolbar, R.menu.evaluation, null);
-
+        ToolbarUtil.registerMenu(this.evaluationToolbar, R.menu.evaluation, item -> {
+            if (item.getItemId() != R.id.menu_evaluation_edit) return false;
+            if (Evaluation.getInstance().getUserId().equals(User.getInstance().getId())) {
+                if (mCommentInputActive) {
+                    this.morph2FAB();
+                    ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
+                }
+                EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
+                ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
+            }
+            return true;
+        });
         this.mCommentInputActive = false;
-
         this.since = null;
         this.max = null;
-
         return view;
     }
 
@@ -153,6 +162,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_evaluation));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        this.evaluationToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
         this.showContentImmediately(this.showContentImmediately);
         this.subscriptions.add(Api.papyruth()
             .get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null)
@@ -433,15 +443,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.evaluation_edit && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
-            if(mCommentInputActive) {
-                this.morph2FAB();
-                ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
-            }
-            EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
-            ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
-        }else if(v.getId() == R.id.evaluation_lecture){
-
+        if(v.getId() == R.id.evaluation_lecture) {
             if(User.getInstance().isConfirmationEmail()){
                 AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
                 return;

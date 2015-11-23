@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-    >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/menu_evaluation_edit"
+        android:id="@+id/menu_evaluation_edit"
+        android:icon="@drawable/ic_light_build"
+        android:orderInCategory="1"
+        android:visible="false"
+        app:showAsAction="always"/>
 </menu>

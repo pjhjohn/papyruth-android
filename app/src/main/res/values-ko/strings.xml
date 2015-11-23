@@ -8,8 +8,7 @@
     <string name="nav_item_search">강좌검색</string>
     <string name="nav_item_recommendation">추천강좌</string>
     <string name="nav_item_bookmark">관심강좌</string>
-    <string name="nav_item_evaluation">강의평가 작성</string>
-    <string name="nav_item_random">임의강의</string>
+    <string name="nav_item_new_evaluation">강의평가 작성</string>
     <string name="nav_item_my_evaluation">내가 쓴 강의평가</string>
     <string name="nav_item_my_comment">내가 쓴 댓글</string>
 
@@ -215,4 +214,5 @@
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
     <string name="title_forgot_password">비밀번호 찾기</string>
     <string name="enter_your_email">가입할 때 입력한 이메일을 입력해주세요</string>
+    <string name="menu_evaluation_edit">강의평가 수정</string>
 </resources>

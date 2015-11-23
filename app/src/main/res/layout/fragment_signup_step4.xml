@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:contentDescription="@string/empty"
-            android:src="@drawable/ic_light_lock"/>
+            android:src="@drawable/ic_light_password"/>
         <EditText
             android:id="@+id/password"
             android:background="@color/transparent"
