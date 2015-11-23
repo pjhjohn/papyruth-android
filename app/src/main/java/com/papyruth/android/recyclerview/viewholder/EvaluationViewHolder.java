@@ -118,6 +118,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
+                mHashtags.removeAllViews();
                 if (response.hashtags != null) mHashtags.post(() -> {
                     float totalWidth = 0;
                     int hashtagLines = 1;
