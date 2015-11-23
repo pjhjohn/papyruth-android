@@ -11,6 +11,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.fragment.auth.LoadingFragment;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
+import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.error.ErrorHandlerCallback;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.view.FloatingActionControlContainer;
@@ -33,6 +34,7 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTracker = ((papyruth) getApplication()).getTracker();
+        ErrorHandler.setApiErrorCallback(this);
         this.setContentView(R.layout.activity_auth);
         this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));

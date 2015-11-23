@@ -15,6 +15,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.model.response.StatisticsResponse;
 import com.papyruth.android.AppManager;
@@ -22,6 +24,9 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.unique.Statistics;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.android.papyruth;
+import com.papyruth.utils.support.error.ErrorHandler;
+import com.papyruth.utils.support.error.ErrorHandlerCallback;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.Circle;
 import com.papyruth.utils.view.CircleAngleAnimation;
@@ -43,17 +48,20 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SplashFragment extends Fragment {
+public class SplashFragment extends Fragment implements ErrorHandlerCallback{
     @InjectView (R.id.splash_background) protected PanningView background;
     @InjectView (R.id.splash_circle) protected Circle circle;
     @InjectView (R.id.splash_logo) protected ImageView logo;
     private CompositeSubscription subscriptions;
 
+    private Tracker mTracker;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
         ButterKnife.inject(this, view);
+        ErrorHandler.setApiErrorCallback(this);
         this.subscriptions = new CompositeSubscription();
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
         return view;
     }
     @Override
@@ -68,6 +76,7 @@ public class SplashFragment extends Fragment {
         super.onResume();
         /* Api Call */
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.subscriptions.add(Api.papyruth().users_me(User.getInstance().getAccessToken()).subscribe(
             response -> {
                 User.getInstance().update(response.user);
@@ -94,6 +103,7 @@ public class SplashFragment extends Fragment {
                             Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                     }
                 }
+                ErrorHandler.throwError(error, this);
             }
         ));
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
@@ -158,4 +168,14 @@ public class SplashFragment extends Fragment {
             );
         }
     };
+
+    @Override
+    public void sendErrorTracker(String cause, String from, boolean isFatal) {
+        Timber.d("cause : %s, from : %s", cause, from);
+        mTracker.send(
+            new HitBuilders.ExceptionBuilder()
+                .setDescription(cause)
+                .setFatal(isFatal)
+                .build());
+    }
 }
