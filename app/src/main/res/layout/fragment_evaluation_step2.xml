@@ -78,10 +78,10 @@
                     android:layout_toStartOf="@+id/evaluation_form_overall_point">
                     <RatingBar
                         android:id="@+id/evaluation_form_overall_ratingbar"
-                        android:layout_width="@dimen/baseline_x15"
-                        android:layout_height="@dimen/baseline_x3"
+                        android:layout_width="140dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:progressDrawable="@drawable/ratingbar_24dp"
+                        android:progressDrawable="@drawable/ratingbar_28dp"
                         android:numStars="5"
                         android:max="10"
                         android:progress="0"/>
