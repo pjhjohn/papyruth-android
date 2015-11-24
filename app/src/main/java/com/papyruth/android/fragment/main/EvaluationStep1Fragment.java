@@ -7,14 +7,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -31,13 +28,11 @@ import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.materialdialog.AlertDialog;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.RecyclerViewFragment;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.papyruth.utils.view.search.ToolbarSearchView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -53,23 +48,20 @@ import rx.subscriptions.CompositeSubscription;
  * Searches SimpleCourse for Evaluation on Step 1.
  */
 public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAdapter, CourseData> {
-    private Navigator navigator;
-    private Tracker mTracker;
-
+    private Navigator mNavigator;
+    private Context mContext;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
+        mNavigator = (Navigator) activity;
+        mContext = activity;
     }
 
-    @InjectView(R.id.query_text_view) protected TextView queryTextView;
-    @InjectView(R.id.search_icon) protected ImageView searchIcon;
-    @InjectView(R.id.course_list) protected RecyclerView courseList;
-    private CompositeSubscription subscriptions;
-
-    private Toolbar toolbar;
-
-
+    @InjectView(R.id.evaluation_form_query_button) protected Button mQueryButton;
+    @InjectView(R.id.evaluation_form_query_result) protected RecyclerView mQueryResult;
+    private CompositeSubscription mCompositeSubscription;
+    private Toolbar mToolbar;
+    private Tracker mTracker;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +72,10 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
         ButterKnife.inject(this, view);
-        this.subscriptions = new CompositeSubscription();
-        this.setupRecyclerView(this.courseList);
-
-        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-
+        mCompositeSubscription = new CompositeSubscription();
+        mQueryButton.setText(R.string.toolbar_search);
+        this.setupRecyclerView(mQueryResult);
+        mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;
     }
 
@@ -92,36 +83,33 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        this.adapter = null;
+        adapter = null;
         ToolbarSearchView.getInstance().setPartialItemClickListener(null).setToolbarSearchViewSearchListener(null).setMarginTop(0);
-        if(this.subscriptions!=null&&!this.subscriptions.isUnsubscribed())this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
+        this.mCompositeSubscription.unsubscribe();
     }
-
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(this.items.size() -1 < position){
-            Toast.makeText(getActivity().getBaseContext(), "please wait for loading", Toast.LENGTH_LONG).show();
+        if(items.size() -1 < position) {
+            Toast.makeText(mContext, "please wait for loading", Toast.LENGTH_LONG).show();
             return;
         }
-        EvaluationForm.getInstance().setLectureName(this.items.get(position).name);
-        EvaluationForm.getInstance().setProfessorName(this.items.get(position).professor_name);
-        EvaluationForm.getInstance().setCourseId(this.items.get(position).id);
-
-        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), this.items.get(position).id)
+        final CourseData course = items.get(position);
+        EvaluationForm.getInstance().setCourseId(course.id);
+        EvaluationForm.getInstance().setLectureName(course.name);
+        EvaluationForm.getInstance().setProfessorName(course.professor_name);
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), course.id)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
                 if (response.success) {
-                    this.navigator.navigate(EvaluationStep2Fragment.class, true);
+                    this.mNavigator.navigate(EvaluationStep2Fragment.class, true);
                 } else {
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
-                    AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
-                        .show();
+                    AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_POSSIBLE);
                 }
-            }, error -> {
-                ErrorHandler.throwError(error, this);
-            });
-        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
+            }, error -> ErrorHandler.throwError(error, this));
+        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
 
 
@@ -132,7 +120,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     }
 
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new LinearLayoutManager(this.getActivity());
+        return new LinearLayoutManager(mContext);
     }
 
     @Override
@@ -140,44 +128,34 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_write_evaluation1));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
+        mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        ToolbarUtil.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().clear();
-        Picasso.with(getActivity()).load(R.drawable.ic_light_search).transform(new ColorFilterTransformation(R.color.primary_material_dark)).into(searchIcon);
-
-
-        TypedValue value = new TypedValue();
-        getActivity().getTheme().resolveAttribute(R.attr.actionBarSize, value, true);
-
-        String s = TypedValue.coerceToString(value.type, value.data);
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        float ret = value.getDimension(metrics);
 
         ToolbarSearchView.getInstance()
-            .setPartialItemClickListener((v, position) -> {
-                searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position), null);
-            })
-            .setToolbarSearchViewSearchListener(() -> {
-                searchCourse(new Candidate(), ToolbarSearchView.getInstance().getSelectedQuery());
-            })
-            .setMarginTop((int)ret);
+            .setPartialItemClickListener((v, position) -> searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position), null))
+            .setSearchViewListener(new ToolbarSearchView.ToolbarSearchViewListener() {
+                @Override
+                public void onSearchViewShowChanged(boolean show) {
+                    mQueryButton.setVisibility(show? View.GONE : View.VISIBLE);
+                }
 
-        this.subscriptions.add(
-            ViewObservable.clicks(queryTextView)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    event ->
-                        ToolbarSearchView.getInstance().show()
-                    ,error ->
-                        ErrorHandler.throwError(error, this)
-                )
+                @Override
+                public void onSearchByQuery() {}
+            })
+            .setToolbarSearchViewSearchListener(() -> searchCourse(new Candidate(), ToolbarSearchView.getInstance().getSelectedQuery()))
+            .setMarginTop(0);
+
+        mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(event -> ToolbarSearchView.getInstance().show(), error -> ErrorHandler.throwError(error, this))
         );
     }
 
-    public void searchCourse(Candidate candidate, String query){
+    public void searchCourse(Candidate candidate, String query) {
+        mQueryButton.setText(query); // TODO : query is null when searched by clicked AutoComplete item
         Api.papyruth().search_search(
             User.getInstance().getAccessToken(),
             User.getInstance().getUniversityId(),
@@ -185,17 +163,15 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
             candidate.professor_id,
             query
         )
-            .map(response -> response.courses)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(courses -> {
-                notifyAutoCompleteDataChanged(courses);
-            }, error -> ErrorHandler.throwError(error, this));
+        .map(response -> response.courses)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(this::notifyAutoCompleteDataChanged, error -> ErrorHandler.throwError(error, this));
     }
 
     public void notifyAutoCompleteDataChanged(List<CourseData> courses){
-        this.items.clear();
-        this.items.addAll(courses);
-        this.adapter.notifyDataSetChanged();
+        items.clear();
+        items.addAll(courses);
+        adapter.notifyDataSetChanged();
     }
 }
