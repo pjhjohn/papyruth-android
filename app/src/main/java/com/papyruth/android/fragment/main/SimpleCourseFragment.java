@@ -30,9 +30,8 @@ import com.papyruth.utils.support.materialdialog.AlertDialog;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.RecyclerViewFragment;
-import com.papyruth.utils.view.navigator.FragmentNavigator;
 import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.search.ToolbarSearchView;
+import com.papyruth.utils.view.search.SearchToolbar;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +59,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
     @Override
     public void onDetach() {
         super.onDetach();
-        ToolbarSearchView.getInstance().setPartialItemClickListener(null);
+        SearchToolbar.getInstance().setItemClickListener(null);
     }
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
@@ -100,7 +99,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         super.onDestroyView();
         ButterKnife.reset(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
-        ToolbarSearchView.getInstance().setToolbarSearchViewSearchListener(null).setPartialItemClickListener(null);
+        SearchToolbar.getInstance().setOnSearchByQueryListener(null).setItemClickListener(null);
     }
 
     @Override
@@ -121,11 +120,11 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_search_result));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_search);
-        ToolbarSearchView.getInstance().setPartialItemClickListener((v, position)->{
-            ToolbarSearchView.getInstance().setSelectedCandidate(position);
-            ToolbarSearchView.getInstance().addHistory(ToolbarSearchView.getInstance().getSelectedCandidate());
+        SearchToolbar.getInstance().setItemClickListener((v, position) -> {
+            SearchToolbar.getInstance().setSelectedCandidate(position);
+            SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
             this.getSearchResult();
-        }).setToolbarSearchViewSearchListener(() -> this.getSearchResult());
+        }).setOnSearchByQueryListener(this::getSearchResult);
 
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
@@ -152,8 +151,8 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         this.getSearchResult();
     }
     private void getSearchResult(){
-        Candidate candidate = ToolbarSearchView.getInstance().getSelectedCandidate();
-        String query = ToolbarSearchView.getInstance().getSelectedQuery();
+        Candidate candidate = SearchToolbar.getInstance().getSelectedCandidate();
+        String query = SearchToolbar.getInstance().getSelectedQuery();
         this.subscriptions.add(
             Api.papyruth().search_search(
                 User.getInstance().getAccessToken(),
@@ -165,9 +164,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(courses -> {
-                    this.notifyDataSetChanged(courses);
-                }, error -> ErrorHandler.throwError(error, this))
+                .subscribe(this::notifyDataSetChanged, error -> ErrorHandler.throwError(error, this))
         );
     }
 

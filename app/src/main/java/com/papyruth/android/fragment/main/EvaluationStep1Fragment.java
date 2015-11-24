@@ -32,7 +32,7 @@ import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.fragment.RecyclerViewFragment;
 import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.search.ToolbarSearchView;
+import com.papyruth.utils.view.search.SearchToolbar;
 
 import java.util.List;
 
@@ -74,8 +74,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         ButterKnife.inject(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mQueryButton.setText(R.string.toolbar_search);
-        this.setupRecyclerView(mQueryResult);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        this.setupRecyclerView(mQueryResult);
         return view;
     }
 
@@ -84,7 +84,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         super.onDestroyView();
         ButterKnife.reset(this);
         adapter = null;
-        ToolbarSearchView.getInstance().setPartialItemClickListener(null).setToolbarSearchViewSearchListener(null).setMarginTop(0);
+        SearchToolbar.getInstance().setItemClickListener(null).setOnSearchByQueryListener(null);
         if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
         this.mCompositeSubscription.unsubscribe();
     }
@@ -134,24 +134,21 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().clear();
 
-        ToolbarSearchView.getInstance()
-            .setPartialItemClickListener((v, position) -> searchCourse(ToolbarSearchView.getInstance().getCandidates().get(position), null))
-            .setSearchViewListener(new ToolbarSearchView.ToolbarSearchViewListener() {
-                @Override
-                public void onSearchViewShowChanged(boolean show) {
-                    mQueryButton.setVisibility(show? View.GONE : View.VISIBLE);
-                }
-
-                @Override
-                public void onSearchByQuery() {}
-            })
-            .setToolbarSearchViewSearchListener(() -> searchCourse(new Candidate(), ToolbarSearchView.getInstance().getSelectedQuery()))
-            .setMarginTop(0);
+        SearchToolbar.getInstance()
+            .setItemClickListener((v, position) -> searchCourse(SearchToolbar.getInstance().getCandidates().get(position), null))
+            .setOnVisibilityChangedListener(visible -> mQueryButton.setVisibility(visible ? View.GONE : View.VISIBLE))
+            .setOnSearchByQueryListener(() -> searchCourse(new Candidate(), SearchToolbar.getInstance().getSelectedQuery()));
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(event -> ToolbarSearchView.getInstance().show(), error -> ErrorHandler.throwError(error, this))
+            .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.throwError(error, this))
         );
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SearchToolbar.getInstance().setOnVisibilityChangedListener((MainActivity) getActivity());
     }
 
     public void searchCourse(Candidate candidate, String query) {
