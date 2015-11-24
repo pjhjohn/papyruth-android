@@ -9,6 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.EvaluationForm;
 
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 /**
@@ -50,6 +51,27 @@ public class HashtagDeleteDialog {
                     EvaluationForm.getInstance().removeHashtag(hashtag.getText().toString());
                     dialog.dismiss();
                     action.call(null);
+                }
+
+                @Override
+                public void onNegative(MaterialDialog dialog) {
+                    dialog.dismiss();
+                }
+            })
+            .show();
+    }
+    public static void show(Context context, String text, Func0<Boolean> action) {
+        new MaterialDialog.Builder(context)
+            .title(R.string.hashtag_delete_title)
+            .content(R.string.hashtag_delete_content)
+            .positiveText(R.string.confirm_delete)
+            .negativeText(R.string.confirm_cancel)
+            .callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog dialog) {
+                    dialog.dismiss();
+                    EvaluationForm.getInstance().removeHashtag(text);
+                    action.call();
                 }
 
                 @Override

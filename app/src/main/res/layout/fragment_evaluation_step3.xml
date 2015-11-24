@@ -8,29 +8,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:paddingTop="@dimen/baseline_x3"-->
-            <!--android:paddingBottom="@dimen/baseline_x4"-->
-            <!--android:background="@color/colorchip_green">-->
-            <!--<TextView-->
-                <!--android:id="@+id/lecture"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:textSize="32sp"/>-->
-            <!--<TextView-->
-                <!--android:id="@+id/professor"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/baseline_x2"-->
-                <!--android:gravity="center"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:textSize="24sp"/>-->
-        <!--</LinearLayout>-->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -64,12 +41,13 @@
                         android:layout_toEndOf="@+id/evaluation_hashtags_icon"
                         android:layout_alignBottom="@+id/evaluation_hashtags_icon"
                         android:text="@string/label_evaluation_hashtags"/>
-                    <LinearLayout
+                    <TextView
                         android:id="@+id/evaluation_hashtags_container"
+                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/evaluation_hashtags_icon"
-                        android:orientation="horizontal"/>
+                        android:orientation="vertical"/>
                     <EditText
                         android:id="@+id/evaluation_hashtags_text"
                         android:layout_width="match_parent"
@@ -86,6 +64,7 @@
                     <LinearLayout
                         android:id="@+id/evaluation_recommend_hashtag_list"
                         android:orientation="horizontal"
+                        android:visibility="invisible"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/baseline_x6"/>
                 </HorizontalScrollView>

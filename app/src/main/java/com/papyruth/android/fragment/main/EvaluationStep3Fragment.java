@@ -6,6 +6,10 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +40,8 @@ import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -45,6 +51,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -78,7 +85,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @InjectView(R.id.evaluation_body_text) protected EditText bodyText;
     @InjectView(R.id.evaluation_hashtags_icon) protected ImageView hashtagsIcon;
     @InjectView(R.id.evaluation_hashtags_label) protected TextView hashtagsLabel;
-    @InjectView(R.id.evaluation_hashtags_container) protected LinearLayout hashtagsContainer;
+    @InjectView(R.id.evaluation_hashtags_container) protected TextView hashtagsContainer;
     @InjectView(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
     @InjectView(R.id.evaluation_recommend_hashtag_list) protected LinearLayout recommendHashtag;
 //    @InjectView(R.id.lecture) protected TextView lecture;
@@ -97,9 +104,7 @@ public class EvaluationStep3Fragment extends Fragment {
             this.bodyText.setText(EvaluationForm.getInstance().getBody());
         }
         if(EvaluationForm.getInstance().getHashtag().size() > 0){
-            for(String str : EvaluationForm.getInstance().getHashtag()) {
-                addNewHashtagView(str);
-            }
+            drawHashtag();
         }
 //        this.lecture.setText(EvaluationForm.getInstance().getLectureName());
 //        this.professor.setText(EvaluationForm.getInstance().getProfessorName());
@@ -115,7 +120,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(hashtags -> {
                     for (String string : hashtags) {
-                        TextView hashtag = (TextView) LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.button_hashtag, hashtagsContainer, false);
+                        TextView hashtag = (TextView) LayoutInflater.from(getActivity().getBaseContext()).inflate(R.layout.button_hashtag, recommendHashtag, false);
                         hashtag.setText(string);
                         hashtag.setOnClickListener(event -> {
                             addNewHashtag(string);
@@ -200,7 +205,13 @@ public class EvaluationStep3Fragment extends Fragment {
          */
         this.subscriptions.add(
             WidgetObservable.text(this.hashtagsText)
-                .filter(event -> event.text().length() > 1 && (event.text().charAt(event.text().length() - 1) == ' ' || event.text().charAt(event.text().length() - 1) == '#'))
+                .filter(event -> {
+                    if (event.text().length() > 0 &&  event.text().charAt(0) == '#')
+                        this.recommendHashtag.setVisibility(View.VISIBLE);
+                    else
+                        this.recommendHashtag.setVisibility(View.INVISIBLE);
+                    return event.text().length() > 1 && (event.text().charAt(event.text().length() - 1) == ' ' || event.text().charAt(event.text().length() - 1) == '#');
+                })
                 .subscribe(event -> {
                     final String str = event.text().subSequence(0, event.text().length() - 1).toString();
                     if (str.equals(" ") || str.equals("#")) {
@@ -208,12 +219,13 @@ public class EvaluationStep3Fragment extends Fragment {
                         return;
                     }
                     this.addNewHashtag(str);
-                    if(event.text().charAt(event.text().length() - 1) == '#') {
+                    this.recommendHashtag.setVisibility(View.INVISIBLE);
+                    if (event.text().charAt(event.text().length() - 1) == '#') {
                         this.hashtagsText.setText("#");
                         this.hashtagsText.setSelection(hashtagsText.getText().length());
-                    }else
+                    } else
                         this.hashtagsText.setText("");
-                },error->ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.throwError(error, this))
         );
     }
 
@@ -240,8 +252,9 @@ public class EvaluationStep3Fragment extends Fragment {
     private boolean addNewHashtag(String text){
         if(EvaluationForm.getInstance().getHashtag().contains(text))
             return false;
-        addNewHashtagView(text);
+
         EvaluationForm.getInstance().addHashtag(hashWriter(text, false));
+        drawHashtag();
 
         if(EvaluationForm.getInstance().isModifyMode())
             EvaluationForm.getInstance().setEdit(true);
@@ -249,12 +262,28 @@ public class EvaluationStep3Fragment extends Fragment {
         return true;
     }
 
-    private void addNewHashtagView(String text){
-        Context context = getActivity();
-        TextView hashtag = (TextView) LayoutInflater.from(context).inflate(R.layout.button_hashtag, hashtagsContainer, false);
-        hashtag.setText(hashWriter(text, true));
-        hashtag.setOnClickListener(view -> HashtagDeleteDialog.show(context, hashtagsContainer, hashtag));
-        hashtagsContainer.addView(hashtag);
+    private void drawHashtag(){
+        hashtagsContainer.setText("");
+        String hashs = "";
+
+        for(String item : EvaluationForm.getInstance().getHashtag()) {
+            hashs += hashWriter(item, true) + " ";
+        }
+        SpannableString spannableString = new SpannableString(hashs);
+        for(String item : EvaluationForm.getInstance().getHashtag()){
+            ClickableSpan span = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    HashtagDeleteDialog.show(getActivity(), item, () -> {
+                        drawHashtag();
+                        return true;
+                    });
+                }
+            };
+            spannableString.setSpan(span, hashs.indexOf(item)-1, hashs.indexOf(item)+item.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        hashtagsContainer.setMovementMethod(LinkMovementMethod.getInstance());
+        hashtagsContainer.setText(spannableString);
     }
 
     private Observable<EvaluationResponse> submitEvaluation(boolean isModifyMode){
@@ -285,7 +314,7 @@ public class EvaluationStep3Fragment extends Fragment {
             .filter(response -> response.success)
             .map(response -> {
                 EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
-                if (hashtagsContainer.getChildCount() > 0) {
+                if (EvaluationForm.getInstance().getHashtag().size() > 0) {
                     Api.papyruth().post_evaluation_hashtag(
                         User.getInstance().getAccessToken(),
                         EvaluationForm.getInstance().getEvaluationId(),
