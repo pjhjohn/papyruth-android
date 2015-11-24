@@ -11,7 +11,6 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -19,16 +18,15 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.rx.RxValidator;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.navigator.Navigator;
-import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
@@ -43,17 +41,20 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class EvaluationStep2Fragment extends Fragment {
-    private Navigator navigator;
+    private Navigator mNavigator;
+    private Context mContext;
     private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
+        mNavigator = (Navigator) activity;
+        mContext = activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.navigator = null;
+        mNavigator = null;
+        mContext = null;
     }
 
     @Override
@@ -62,55 +63,46 @@ public class EvaluationStep2Fragment extends Fragment {
         mTracker = ((papyruth) getActivity().getApplication()).getTracker();
     }
 
-    @InjectView(R.id.lecture) protected TextView lecture;
-    @InjectView(R.id.professor) protected TextView professor;
-    @InjectView(R.id.evaluation_point_overall_icon) protected ImageView pointOverallIcon;
-    @InjectView(R.id.evaluation_point_overall_text) protected TextView pointOverallText;
-    @InjectView(R.id.evaluation_point_overall_rating) protected RatingBar pointOverallRatingBar;
-    @InjectView(R.id.evaluation_point_clarity_icon) protected ImageView pointClarityIcon;
-    @InjectView(R.id.evaluation_point_clarity_text) protected TextView pointClarityText;
-    @InjectView(R.id.evaluation_point_clarity_seekbar) protected SeekBar pointClaritySeekBar;
-    @InjectView(R.id.evaluation_point_gpa_satisfaction_icon) protected ImageView pointGpaSatisfactionIcon;
-    @InjectView(R.id.evaluation_point_gpa_satisfaction_text) protected TextView pointGpaSatisfactionText;
-    @InjectView(R.id.evaluation_point_gpa_satisfaction_seekbar) protected SeekBar pointGpaSatisfactionSeekBar;
-    @InjectView(R.id.evaluation_point_easiness_icon) protected ImageView pointEasinessIcon;
-    @InjectView(R.id.evaluation_point_easiness_text) protected TextView pointEasinessText;
-    @InjectView(R.id.evaluation_point_easiness_seekbar) protected SeekBar pointEasinessSeekBar;
-    private CompositeSubscription subscriptions;
-    private Toolbar toolbar;
+    @InjectView(R.id.evaluation_form_lecture)                   protected TextView mLecture;
+    @InjectView(R.id.evaluation_form_professor)                 protected TextView mProfessor;
+    @InjectView(R.id.evaluation_form_overall_ratingbar)         protected RatingBar mRatingBarOverall;
+    @InjectView(R.id.evaluation_form_overall_point)             protected TextView mPointOverall;
+    @InjectView(R.id.evaluation_form_clarity_seekbar)           protected SeekBar mSeekBarClarity;
+    @InjectView(R.id.evaluation_form_clarity_point)             protected TextView mPointClarity;
+    @InjectView(R.id.evaluation_form_easiness_seekbar)          protected SeekBar mSeekBarEasiness;
+    @InjectView(R.id.evaluation_form_easiness_point)            protected TextView mPointEasiness;
+    @InjectView(R.id.evaluation_form_gpa_satisfaction_seekbar)  protected SeekBar mSeekBarGpaSatisfaction;
+    @InjectView(R.id.evaluation_form_gpa_satisfaction_point)    protected TextView mPointGpaSatisfaction;
+    private CompositeSubscription mCompositeSubscription;
+    private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step2, container, false);
         ButterKnife.inject(this, view);
-        this.subscriptions = new CompositeSubscription();
-        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        mCompositeSubscription = new CompositeSubscription();
+        mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
-        final Context context = this.getActivity();
-        this.lecture.setText(EvaluationForm.getInstance().getLectureName());
-        this.professor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
-        this.setRatingBarColor(this.pointOverallRatingBar, getResources().getColor(R.color.point_overall));
-        Picasso.with(context).load(R.drawable.ic_point_overall).into(this.pointOverallIcon);
-        Picasso.with(context).load(R.drawable.ic_point_clarity).into(this.pointClarityIcon);
-        Picasso.with(context).load(R.drawable.ic_point_satisfaction).into(this.pointGpaSatisfactionIcon);
-        Picasso.with(context).load(R.drawable.ic_point_easiness).into(this.pointEasinessIcon);
-        if(EvaluationForm.getInstance().isNextStep()){
-            this.pointOverallRatingBar.setProgress(EvaluationForm.getInstance().getPointOverall());
-            this.pointClaritySeekBar.setProgress(EvaluationForm.getInstance().getPointClarity());
-            this.pointGpaSatisfactionSeekBar.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
-            this.pointEasinessSeekBar.setProgress(EvaluationForm.getInstance().getPointEasiness());
-            this.pointOverallText.setText(EvaluationForm.getInstance().getPointOverall().toString());
-            this.pointClarityText.setText(EvaluationForm.getInstance().getPointClarity().toString());
-            this.pointGpaSatisfactionText.setText(EvaluationForm.getInstance().getPointGpaSatisfaction().toString());
-            this.pointEasinessText.setText(EvaluationForm.getInstance().getPointEasiness().toString());
+        mLecture.setText(EvaluationForm.getInstance().getLectureName());
+        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
+        LayerDrawable ldRatingBarOverall = (LayerDrawable) mRatingBarOverall.getProgressDrawable();
+        for(int i = 0; i < 3; i ++) ldRatingBarOverall.getDrawable(i).setColorFilter(mContext.getResources().getColor(R.color.point_overall), PorterDuff.Mode.SRC_ATOP);
+        if(EvaluationForm.getInstance().isNextStep()) {
+            mRatingBarOverall.setProgress(EvaluationForm.getInstance().getPointOverall());
+            mSeekBarClarity.setProgress(EvaluationForm.getInstance().getPointClarity());
+            mSeekBarGpaSatisfaction.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
+            mSeekBarEasiness.setProgress(EvaluationForm.getInstance().getPointEasiness());
+            mPointOverall.setText(String.valueOf(EvaluationForm.getInstance().getPointOverall()));
+            mPointClarity.setText(String.valueOf(EvaluationForm.getInstance().getPointClarity()));
+            mPointGpaSatisfaction.setText(String.valueOf(EvaluationForm.getInstance().getPointGpaSatisfaction()));
+            mPointEasiness.setText(String.valueOf(EvaluationForm.getInstance().getPointEasiness()));
             FloatingActionControl.getInstance().show(true);
-        }else {
-            this.pointOverallText.setText("0");
-            this.pointClarityText.setText("0");
-            this.pointGpaSatisfactionText.setText("0");
-            this.pointEasinessText.setText("0");
+        } else {
+            mPointOverall.setText("0");
+            mPointClarity.setText("0");
+            mPointGpaSatisfaction.setText("0");
+            mPointEasiness.setText("0");
         }
-
         return view;
     }
 
@@ -118,7 +110,8 @@ public class EvaluationStep2Fragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     @Override
@@ -126,46 +119,44 @@ public class EvaluationStep2Fragment extends Fragment {
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_write_evaluation2));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
+        mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        ToolbarUtil.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread())
-            .subscribe(unused -> {
-                this.navigator.navigate(EvaluationStep3Fragment.class, true);
-            }, error-> ErrorHandler.throwError(error, this));
+        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+            unused -> mNavigator.navigate(EvaluationStep3Fragment.class, true),
+            error -> ErrorHandler.throwError(error, this)
+        );
 
 
-        this.subscriptions.add(Observable
+        mCompositeSubscription.add(Observable
             .combineLatest(
-                RxValidator.createObservableRatingBar(this.pointOverallRatingBar, true)
-                    .map(rating -> RxValidator.assignRatingValue.call(this.pointOverallText, rating))
+                RxValidator.createObservableRatingBar(mRatingBarOverall, true)
+                    .map(rating -> RxValidator.assignRatingValue.call(mPointOverall, rating))
                     .map(rating -> {
                         EvaluationForm.getInstance().setPointOverall((int) (rating * 2));
                         return RxValidator.isFloatValueInRange.call(rating);
                     }),
-                RxValidator.createObservableSeekBar(this.pointGpaSatisfactionSeekBar, true)
-                    .map(progress -> RxValidator.assignProgressValue.call(this.pointGpaSatisfactionText, progress))
+                RxValidator.createObservableSeekBar(mSeekBarGpaSatisfaction, true)
+                    .map(progress -> RxValidator.assignProgressValue.call(mPointGpaSatisfaction, progress))
                     .map(progress -> {
                         EvaluationForm.getInstance().setPointGpaSatisfaction(progress);
                         return RxValidator.isIntegerValueInRange.call(progress);
                     }),
-                RxValidator.createObservableSeekBar(this.pointEasinessSeekBar, true)
-                    .map(progress -> RxValidator.assignProgressValue.call(this.pointEasinessText, progress))
+                RxValidator.createObservableSeekBar(mSeekBarEasiness, true)
+                    .map(progress -> RxValidator.assignProgressValue.call(mPointEasiness, progress))
                     .map(progress -> {
                         EvaluationForm.getInstance().setPointEasiness(progress);
                         return RxValidator.isIntegerValueInRange.call(progress);
                     }),
-                RxValidator.createObservableSeekBar(this.pointClaritySeekBar, true)
-                    .map(progress -> RxValidator.assignProgressValue.call(this.pointClarityText, progress))
+                RxValidator.createObservableSeekBar(mSeekBarClarity, true)
+                    .map(progress -> RxValidator.assignProgressValue.call(mPointClarity, progress))
                     .map(progress -> {
                         EvaluationForm.getInstance().setPointClarity(progress);
                         return RxValidator.isIntegerValueInRange.call(progress);
                     }),
-                (a, b, c, d) -> {
-                    return EvaluationForm.getInstance().isNextStep();
-                }
+                (a, b, c, d) -> EvaluationForm.getInstance().isNextStep()
             )
             .startWith(EvaluationForm.getInstance().isNextStep())
             .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -175,10 +166,5 @@ public class EvaluationStep2Fragment extends Fragment {
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
             }, error -> ErrorHandler.throwError(error, this))
         );
-    }
-
-    private void setRatingBarColor(RatingBar rating, int color) {
-        LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
-        for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 }
