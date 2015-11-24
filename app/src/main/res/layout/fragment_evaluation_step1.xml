@@ -1,38 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.papyruth.utils.view.navigator.NavigatableLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="?attr/actionBarSize"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:paddingTop="?attr/actionBarSize">
-
+    android:focusableInTouchMode="true">
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/baseline_x7"
-        android:background="@drawable/background_thick_stroke_search">
-        <ImageView
-            android:id="@+id/search_icon"
-            android:src="@drawable/ic_light_search"
-            android:layout_gravity="left|center_vertical"
-            android:layout_marginLeft="@dimen/baseline_x2"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_width="@dimen/baseline_x3"
-            android:layout_height="@dimen/baseline_x3"/>
-        <TextView
-            android:id="@+id/query_text_view"
-            android:text="@string/hint_search_course"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/evaluation_form_query_button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/baseline_x7"
+            android:padding="@dimen/baseline_x2"
+            android:background="@color/toolbar_green"
             android:singleLine="true"
-            android:gravity="start|center_vertical"
-            android:textColor="@color/black_translucent_54p"
-            android:textSize="@dimen/basefont_x1.5"/>
+            android:textSize="18sp"
+            android:textColor="@color/white"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/course_list"
+        android:id="@+id/evaluation_form_query_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"/>
