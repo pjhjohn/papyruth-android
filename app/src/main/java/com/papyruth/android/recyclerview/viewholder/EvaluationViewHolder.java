@@ -131,6 +131,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                         if (width + totalWidth > mHashtags.getWidth() && totalWidth > 0) {
                             mHashtags.addView(new LinearLayout(mContext));
                             hashtagLines++;
+                            ((LinearLayout) mHashtags.getChildAt(hashtagLines-1)).setOrientation(LinearLayout.HORIZONTAL);
                             totalWidth = 0;
                         }
 

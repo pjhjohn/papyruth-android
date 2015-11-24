@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
@@ -176,7 +177,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         spannableText.setSpan(termSpan, wordIndex, wordIndex+term.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         wordIndex = agreeTermStr.indexOf(privacy);
-        spannableText.setSpan(privacySpan, wordIndex, wordIndex+privacy.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableText.setSpan(privacySpan, wordIndex, wordIndex + privacy.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         mTermOfServicesAgreement.setText(spannableText);
         mTermOfServicesAgreement.setMovementMethod(LinkMovementMethod.getInstance());
