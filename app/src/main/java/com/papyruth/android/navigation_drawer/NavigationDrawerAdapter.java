@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papyruth.android.R;
+import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
+import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.squareup.picasso.Picasso;
 
@@ -22,12 +24,16 @@ import butterknife.InjectView;
  * Used in {@link NavigationDrawerFragment NavFragment}
  * as an adapter for List-type {@link RecyclerView} to provide global navigation for the application
  */
-public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.NavigationDrawerItemViewHolder> {
+public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<NavigationDrawerItem> mData;
     private NavigationDrawerCallback mNavigationDrawerCallback;
     private View mSelectedView;
     private int mSelectedPosition;
     private Context mContext;
+
+    private static final int HR_INDEX = 2;
+    private static final int VIEWTYPE_HR = 0x00;
+    private static final int VIEWTYPE_ITEM = 0x10;
 
     public NavigationDrawerAdapter(Context context, List<NavigationDrawerItem> data) {
         mData = data;
@@ -43,30 +49,48 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     @Override
-    public NavigationDrawerItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final NavigationDrawerItemViewHolder viewHolder = new NavigationDrawerItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
-        viewHolder.itemView.setClickable(true);
-        viewHolder.itemView.setOnClickListener(view -> {
-            if (mSelectedView != null) mSelectedView.setSelected(false);
-            mSelectedPosition = viewHolder.getAdapterPosition();
-            view.setSelected(true);
-            mSelectedView = view;
-            if (mNavigationDrawerCallback != null)
-                mNavigationDrawerCallback.onNavigationDrawerItemSelected(viewHolder.getAdapterPosition(), true);
-        });
-        viewHolder.itemView.setBackgroundResource(R.drawable.row_selector);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final RecyclerView.ViewHolder viewHolder;
+        if(viewType == VIEWTYPE_HR){
+            viewHolder = new VoidViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.hr_drawer, parent, false));
+
+        }else{
+            viewHolder = new NavigationDrawerItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
+            viewHolder.itemView.setClickable(true);
+            viewHolder.itemView.setOnClickListener(view -> {
+                if (mSelectedView != null) mSelectedView.setSelected(false);
+                mSelectedPosition = viewHolder.getAdapterPosition();
+                view.setSelected(true);
+                mSelectedView = view;
+                if (mNavigationDrawerCallback != null)
+                    mNavigationDrawerCallback.onNavigationDrawerItemSelected(viewHolder.getAdapterPosition(), true);
+            });
+            viewHolder.itemView.setBackgroundResource(R.drawable.row_selector);
+        }
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(NavigationDrawerItemViewHolder holder, int position) {
-        holder.bind(mData.get(position));
-        if (mSelectedPosition == position) {
-            if (mSelectedView != null) mSelectedView.setSelected(false);
-            mSelectedPosition = position;
-            mSelectedView = holder.itemView;
-            mSelectedView.setSelected(true);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(position != HR_INDEX) {
+            ((NavigationDrawerItemViewHolder) holder).bind(mData.get(position - (position > HR_INDEX ? getItemOffset() : 0)));
+            if (mSelectedPosition == position) {
+                if (mSelectedView != null) mSelectedView.setSelected(false);
+                mSelectedPosition = position;
+                mSelectedView = holder.itemView;
+                mSelectedView.setSelected(true);
+            }
         }
+    }
+
+    public int getItemOffset(){
+        return 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position == HR_INDEX) return VIEWTYPE_HR;
+        else return VIEWTYPE_ITEM;
     }
 
     public void selectPosition(int position) {
@@ -76,7 +100,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
     @Override
     public int getItemCount() {
-        return mData != null ? mData.size() : 0;
+        return (mData != null ? mData.size() : 0) + getItemOffset();
     }
 
     public class NavigationDrawerItemViewHolder extends RecyclerView.ViewHolder {

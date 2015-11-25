@@ -78,8 +78,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         /* recyclerview items */
         mNavigationDrawerItems = new ArrayList<>();
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_home), R.drawable.ic_light_latest_evaluation));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_bookmark), R.drawable.ic_light_bookmark));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_new_evaluation), R.drawable.ic_light_new_evaluation));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_bookmark), R.drawable.ic_light_bookmark));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_my_evaluation), R.drawable.ic_light_my_evaluation));
         mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_my_comment), R.drawable.ic_light_my_comment));
 

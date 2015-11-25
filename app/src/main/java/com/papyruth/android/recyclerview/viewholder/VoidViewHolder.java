@@ -6,8 +6,8 @@ import android.view.View;
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class HeaderViewHolder extends RecyclerView.ViewHolder {
-    public HeaderViewHolder(View view) {
+public class VoidViewHolder extends RecyclerView.ViewHolder {
+    public VoidViewHolder(View view) {
         super(view);
     }
 }

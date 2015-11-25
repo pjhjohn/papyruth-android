@@ -61,7 +61,7 @@ public class ViewHolderFactory {
         if(mContext == null) throw new Resources.NotFoundException("Context Not Found. Must set at some point");
         if(mInflater == null) throw new Resources.NotFoundException("LayoutInflater Not Found. Must set at some point");
         switch(viewType) {
-            case ViewType.HEADER                 : return new               HeaderViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_actionbarsize   , parent, false));
+            case ViewType.HEADER                 : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_actionbarsize   , parent, false));
             case ViewType.INFORM                 : return new               InformViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_inform                , parent, false), listener);
             case ViewType.COURSE                 : return new               CourseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course                , parent, false));
             case ViewType.EVALUATION             : return new           EvaluationViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation            , parent, false));
@@ -75,8 +75,8 @@ public class ViewHolderFactory {
             case ViewType.MY_COMMENT_ITEM        : return new        MyCommentItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_comment            , parent, false), listener);
             case ViewType.PLACEHOLDER            : return new          PlaceholderViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_placeholder           , parent, false));
             case ViewType.OPEN_SOURCE_LICENSE    : return new    OpenSourceLicenseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_open_source_license   , parent, false), listener);
-            case ViewType.HR_SHADOW              : return new                EmptyViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.hr_shadow_toolbar              , parent, false));
-            case ViewType.HR_WHITE               : return new                EmptyViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_8dp             , parent, false));
+            case ViewType.HR_SHADOW              : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.hr_shadow_toolbar              , parent, false));
+            case ViewType.HR_WHITE               : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_8dp             , parent, false));
             default : throw new RuntimeException(String.format("Couldn't find any ViewHolder with ViewType#%d. Check whether you put correct ViewType.", viewType));
         }
     }
