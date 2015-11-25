@@ -41,7 +41,6 @@ public class Candidate {
         Candidate candidate = (Candidate) object;
         return (this.lecture_id!= null && this.lecture_id.equals(candidate.lecture_id))
             || (this.professor_id!=null && this.professor_id.equals(candidate.professor_id));
-
     }
 
     @Override

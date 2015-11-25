@@ -34,26 +34,26 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-06-29.
  */
 public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.course_category)                        protected TextView mCategory;
-    @InjectView(R.id.course_lecture)                         protected TextView mLecture;
-    @InjectView(R.id.course_professor)                       protected TextView mProfessor;
-    @InjectView(R.id.course_professor_image)                 protected ImageView mProfessorImage;
-    @InjectView(R.id.course_point_overall_prefix)            protected TextView mPointOverallPrefix;
-    @InjectView(R.id.course_point_overall_text)              protected TextView mPointOverallText;
-    @InjectView(R.id.course_point_overall_star)              protected RatingBar mPointOverallStar;
-    @InjectView(R.id.course_point_clarity_prefix)            protected TextView mPointClarityPrefix;
-    @InjectView(R.id.course_point_clarity_text)              protected TextView mPointClarityText;
-    @InjectView(R.id.course_point_clarity_progress)          protected ProgressBar mPointClarityProgress;
-    @InjectView(R.id.course_point_gpa_satisfaction_prefix)   protected TextView mPointGpaSatisfactionPrefix;
-    @InjectView(R.id.course_point_gpa_satisfaction_text)     protected TextView mPointGpaSatisfactionText;
-    @InjectView(R.id.course_point_gpa_satisfaction_progress) protected ProgressBar mPointGpaSatisfactionProgress;
-    @InjectView(R.id.course_point_easiness_prefix)           protected TextView mPointEasinessPrefix;
-    @InjectView(R.id.course_point_easiness_text)             protected TextView mPointEasinessText;
-    @InjectView(R.id.course_point_easiness_progress)         protected ProgressBar mPointEasinessProgress;
-    @InjectView(R.id.course_hashtags)                        protected LinearLayout mHashtags;
-    @InjectView(R.id.course_evaluator_icon)                  protected ImageView mEvaluatorIcon;
-    @InjectView(R.id.course_evaluator_count)                 protected TextView mEvaluatorCount;
-    @InjectView(R.id.course_bookmark)                        protected ImageView mBookmark;
+    @InjectView(R.id.course_professor_image)                protected ImageView mProfessorImage;
+    @InjectView(R.id.course_lecture)                        protected TextView mLecture;
+    @InjectView(R.id.course_bookmark)                       protected ImageView mBookmark;
+    @InjectView(R.id.course_category)                       protected TextView mCategory;
+    @InjectView(R.id.course_professor)                      protected TextView mProfessor;
+    @InjectView(R.id.course_overall_label)                  protected TextView mLabelOverall;
+    @InjectView(R.id.course_overall_ratingbar)              protected RatingBar mRatingBarOverall;
+    @InjectView(R.id.course_overall_point)                  protected TextView mPointOverall;
+    @InjectView(R.id.course_clarity_label)                  protected TextView mLabelClarity;
+    @InjectView(R.id.course_clarity_progressbar)            protected ProgressBar mProgressBarClarity;
+    @InjectView(R.id.course_clarity_point)                  protected TextView mPointClarity;
+    @InjectView(R.id.course_easiness_label)                 protected TextView mLabelEasiness;
+    @InjectView(R.id.course_easiness_progressbar)           protected ProgressBar mProgressBarEasiness;
+    @InjectView(R.id.course_easiness_point)                 protected TextView mPointEasiness;
+    @InjectView(R.id.course_gpa_satisfaction_label)         protected TextView mLabelGpaSatisfaction;
+    @InjectView(R.id.course_gpa_satisfaction_progressbar)   protected ProgressBar mProgressBarGpaSatisfaction;
+    @InjectView(R.id.course_gpa_satisfaction_point)         protected TextView mPointGpaSatisfaction;
+    @InjectView(R.id.course_hashtags)                       protected LinearLayout mHashtags;
+    @InjectView(R.id.course_evaluation_icon)                protected ImageView mEvaluationIcon;
+    @InjectView(R.id.course_evaluation_count)               protected TextView mEvaluationCount;
     private CompositeSubscription mCompositeSubscription;
     private final Context mContext;
     private final Resources mResources;
@@ -65,9 +65,12 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mCategory.setPaintFlags(mCategory.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        mCategory.setTextColor(mResources.getColor(R.color.colorchip_green_highlight));
         mCompositeSubscription = new CompositeSubscription();
         mColorInactive = mResources.getColor(R.color.inactive);
+        mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mLabelClarity.setPaintFlags(mLabelClarity.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mLabelEasiness.setPaintFlags(mLabelEasiness.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        mLabelGpaSatisfaction.setPaintFlags(mLabelGpaSatisfaction.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
     }
 
     private void setRatingBarColor(RatingBar rating, int color) {
@@ -107,18 +110,19 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
 
     public void bind(Course course) {
         final Integer count = course.getEvaluationCount();
+        setCategoryProfessorColor(mCategory, mProfessor, course.getCategory());
         mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
         mLecture.setText(course.getName());
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix))));
         Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
-        mPointOverallPrefix.setText(R.string.label_point_overall);
-        setPointRating(mPointOverallPrefix, mPointOverallStar, mPointOverallText, course.getPointOverall(), count);
-        mPointClarityPrefix.setText(R.string.label_point_clarity);
-        setPointProgress(mPointClarityPrefix, mPointClarityProgress, mPointClarityText, course.getPointClarity(), count);
-        mPointGpaSatisfactionPrefix.setText(R.string.label_point_gpa_satisfaction);
-        setPointProgress(mPointGpaSatisfactionPrefix, mPointGpaSatisfactionProgress, mPointGpaSatisfactionText, course.getPointGpaSatisfaction(), count);
-        mPointEasinessPrefix.setText(R.string.label_point_easiness);
-        setPointProgress(mPointEasinessPrefix, mPointEasinessProgress, mPointEasinessText, course.getPointEasiness(), count);
+        mLabelOverall.setText(R.string.label_point_overall_average);
+        setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), count);
+        mLabelClarity.setText(R.string.label_point_clarity);
+        setPointProgress(mLabelClarity, mProgressBarClarity, mPointClarity, course.getPointClarity(), count);
+        mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
+        setPointProgress(mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, course.getPointGpaSatisfaction(), count);
+        mLabelEasiness.setText(R.string.label_point_easiness);
+        setPointProgress(mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
         mHashtags.removeAllViews();
         if(course.getHashtags()!=null) mHashtags.post(() -> {
             float totalWidth = 0;
@@ -131,8 +135,8 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 totalWidth += width;
             }
         });
-        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new ColorFilterTransformation(mColorInactive)).into(mEvaluatorIcon);
-        mEvaluatorCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
+        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new ColorFilterTransformation(mColorInactive)).into(mEvaluationIcon);
+        mEvaluationCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
         Picasso.with(mContext).load(R.drawable.ic_light_bookmark)
             .transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive)))
             .into(mBookmark);
@@ -156,10 +160,22 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                         Picasso.with(mContext).load(R.drawable.ic_light_bookmark)
                             .transform(new ColorFilterTransformation(mResources.getColor(favorite ? R.color.active : R.color.inactive)))
                             .into(mBookmark);
-                    }, error -> {
-                        error.printStackTrace();
-                    }
+                    }, Throwable::printStackTrace
                 )
         );
+    }
+
+    private void setCategoryProfessorColor(TextView category, TextView professor, String value) {
+        int color;
+        if(value == null || value.isEmpty()) {
+            color = mResources.getColor(R.color.lecture_type_etc);
+            category.setText(R.string.lecture_type_etc);
+        } else {
+            color = mResources.getColor(R.color.lecture_type_major);
+            category.setText(R.string.lecture_type_major);
+        }
+        category.setTextColor(color);
+        category.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        professor.setTextColor(color);
     }
 }
