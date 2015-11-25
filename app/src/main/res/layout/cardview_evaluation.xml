@@ -165,7 +165,7 @@
         </FrameLayout><!-- Overall -->
         <LinearLayout
             android:id="@+id/evaluation_content_right"
-            android:layout_width="@dimen/baseline_x15"
+            android:layout_width="@dimen/baseline_x17"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"

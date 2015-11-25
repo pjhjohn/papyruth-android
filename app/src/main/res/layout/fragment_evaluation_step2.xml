@@ -141,11 +141,9 @@
                     android:layout_toStartOf="@+id/evaluation_form_clarity_point">
                     <SeekBar
                         android:id="@+id/evaluation_form_clarity_seekbar"
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="@dimen/baseline_x3"
                         android:layout_gravity="center"
-                        android:paddingLeft="@dimen/baseline_x2"
-                        android:paddingRight="@dimen/baseline_x2"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_clarity"
                         android:thumb="@drawable/progressbar_thumb_clarity"
@@ -209,11 +207,9 @@
                     android:layout_toStartOf="@+id/evaluation_form_easiness_point">
                     <SeekBar
                         android:id="@+id/evaluation_form_easiness_seekbar"
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="@dimen/baseline_x3"
                         android:layout_gravity="center"
-                        android:paddingLeft="@dimen/baseline_x2"
-                        android:paddingRight="@dimen/baseline_x2"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_easiness"
                         android:thumb="@drawable/progressbar_thumb_easiness"
@@ -276,11 +272,9 @@
                     android:layout_toStartOf="@+id/evaluation_form_gpa_satisfaction_point">
                     <SeekBar
                         android:id="@+id/evaluation_form_gpa_satisfaction_seekbar"
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="@dimen/baseline_x3"
                         android:layout_gravity="center"
-                        android:paddingLeft="@dimen/baseline_x2"
-                        android:paddingRight="@dimen/baseline_x2"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_gpa_satisfaction"
                         android:thumb="@drawable/progressbar_thumb_gpa_satisfaction"
