@@ -33,4 +33,21 @@ public class Candidate {
     public String toString() {
         return String.format("professor : id-<%s>, name-<%s>  lecture : id-<%s>, name-<%s>", professor_id, professor_name, lecture_id, lecture_name);
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || getClass() != object.getClass()) return false;
+        Candidate candidate = (Candidate) object;
+        return (this.lecture_id!= null && this.lecture_id.equals(candidate.lecture_id))
+            || (this.professor_id!=null && this.professor_id.equals(candidate.professor_id));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = (37 * hash) + (null == lecture_id   ? 0 :   lecture_id.hashCode());
+        hash = (37 * hash) + (null == professor_id ? 0 : professor_id.hashCode());
+        return hash;
+    }
 }

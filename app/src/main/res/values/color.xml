@@ -105,15 +105,13 @@
     <color name="inform_my_comment">@color/toolbar_blue_highlight</color>
     <color name="inform_my_evaluation">@color/toolbar_blue_highlight</color>
 
-    <!--Legacy Background Color-->
-    <color name="bg_normal">@color/white_70p</color>
-    <color name="bg_accent">@color/white_80p</color>
-    <color name="bg_highlight">@color/white_90p</color>
-
     <!--Etc-->
     <color name="disabled">@color/white_80p</color>
     <color name="disabled_highlight">@color/white_95p</color>
     <color name="hr_settings">@color/white_95p</color>
     <color name="timestamp">@color/white_60p</color>
     <color name="hashtag">#8C6239</color>
+    <color name="background_recyclerview">@color/white_90p</color>
+    <color name="background_placeholder">@color/white_70p</color>
+    <color name="background_progressbar">@color/white_90p</color>
 </resources>

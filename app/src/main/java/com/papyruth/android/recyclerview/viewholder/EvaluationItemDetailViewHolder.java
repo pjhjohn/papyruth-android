@@ -34,8 +34,6 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.evaluation_item_category)             protected TextView mCategory;
     @InjectView(R.id.evaluation_item_professor)            protected TextView mProfessor;
     @InjectView(R.id.evaluation_item_body)                 protected TextView mBody;
-    @InjectView(R.id.evaluation_item_overall_label)        protected TextView mLabelOverall;
-    @InjectView(R.id.evaluation_item_overall_point)        protected RobotoTextView mPointOverall;
     @InjectView(R.id.evaluation_item_overall_ratingbar)    protected RatingBar mRatingBarOverall;
 
     private final Context mContext;
@@ -47,7 +45,6 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mCategory.setPaintFlags(mCategory.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, getAdapterPosition()));
     }
 
@@ -60,8 +57,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         mTimestamp.setText(DateTimeUtil.timeago(mContext, evaluation.created_at));
         mBody.setText(evaluation.body);
         mNickname.setText(evaluation.user_nickname);
-        mLabelOverall.setText(R.string.label_point_overall);
-        setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
+        setPointRating(mRatingBarOverall, evaluation.point_overall);
     }
 
     /* TODO : Better response based on category value */
@@ -79,11 +75,8 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         professor.setTextColor(color);
     }
 
-    private void setPointRating(TextView label, RatingBar ratingbar, TextView point, Integer value) {
+    private void setPointRating(RatingBar ratingbar, Integer value) {
         final int pointColor = mResources.getColor(pointInRange(value)? ( value>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
-        label.setTextColor(pointColor);
-        point.setTextColor(pointColor);
-        point.setText(pointInRange(value) ? (value >= 10 ? "10" : String.format("%d.0", value)) : "N/A");
         for(int i = 0; i < 3; i ++) ((LayerDrawable) ratingbar.getProgressDrawable()).getDrawable(i).setColorFilter(pointColor, PorterDuff.Mode.SRC_ATOP);
         ratingbar.setRating(pointInRange(value) ? (float) value / 2f : 5.0f);
     }

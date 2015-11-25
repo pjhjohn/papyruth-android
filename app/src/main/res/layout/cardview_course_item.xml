@@ -4,44 +4,66 @@
     xmlns:roboto="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/viewholder_bg_selector"
+    android:background="@drawable/background_pressed_selector"
     android:layout_marginBottom="1dp"
     android:padding="@dimen/baseline_x1">
     <ImageView
         android:id="@+id/course_item_professor_image"
         android:layout_width="@dimen/baseline_x7"
         android:layout_height="@dimen/baseline_x7"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginRight="@dimen/baseline_x1"
         android:layout_marginEnd="@dimen/baseline_x1"
+        android:layout_alignBottom="@+id/course_item_overall_ratingbar"
         android:padding="@dimen/baseline_x0.5"
         android:contentDescription="@string/empty"/><!-- Professor Image -->
     <TextView
         android:id="@+id/course_item_lecture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/baseline_x1"
         android:layout_toRightOf="@+id/course_item_professor_image"
         android:layout_toEndOf="@+id/course_item_professor_image"
-        android:layout_toLeftOf="@+id/course_item_overall"
-        android:layout_toStartOf="@+id/course_item_overall"
+        android:layout_toLeftOf="@+id/course_item_overall_label"
+        android:layout_toStartOf="@+id/course_item_overall_label"
         android:layout_marginRight="@dimen/baseline_x2"
         android:layout_marginEnd="@dimen/baseline_x2"
+        android:layout_alignBaseline="@+id/course_item_overall_point"
         android:textSize="16sp"
         android:textColor="@color/white_30p"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"/><!-- Lecture Title -->
     <TextView
+        android:id="@+id/course_item_overall_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/course_item_overall_point"
+        android:layout_toLeftOf="@+id/course_item_overall_point"
+        android:layout_toStartOf="@+id/course_item_overall_point"
+        android:layout_marginRight="@dimen/baseline_x1"
+        android:layout_marginEnd="@dimen/baseline_x1"
+        android:singleLine="true"
+        android:gravity="end"/><!-- Overall Label -->
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/course_item_overall_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/baseline_x1"
+        android:layout_marginEnd="@dimen/baseline_x1"
+        android:textSize="36sp"
+        roboto:fontFamily="roboto"
+        roboto:textWeight="bold"/><!-- Overall Point -->
+    <TextView
         android:id="@+id/course_item_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/course_item_lecture"
         android:layout_toRightOf="@+id/course_item_professor_image"
         android:layout_toEndOf="@+id/course_item_professor_image"
+        android:layout_alignBottom="@+id/course_item_overall_ratingbar"
         android:background="@drawable/category_background"
         android:textSize="12sp"/><!-- Category -->
     <TextView
@@ -52,67 +74,34 @@
         android:layout_toEndOf="@+id/course_item_category"
         android:layout_marginLeft="@dimen/baseline_x0.5"
         android:layout_marginStart="@dimen/baseline_x0.5"
-        android:layout_toLeftOf="@+id/course_item_overall"
-        android:layout_toStartOf="@+id/course_item_overall"
-        android:layout_alignBaseline="@id/course_item_category"
+        android:layout_toLeftOf="@+id/course_item_overall_ratingbar"
+        android:layout_toStartOf="@+id/course_item_overall_ratingbar"
+        android:layout_alignBottom="@+id/course_item_overall_ratingbar"
         android:layout_gravity="center_vertical"
         android:textSize="14sp"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"/><!-- Professor -->
-    <LinearLayout
-        android:id="@+id/course_item_overall"
+    <RatingBar
+        android:id="@+id/course_item_overall_ratingbar"
+        android:layout_below="@+id/course_item_overall_point"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_height="@dimen/baseline_x2"
+        android:layout_marginLeft="@dimen/baseline_x0.5"
+        android:layout_marginStart="@dimen/baseline_x0.5"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/baseline_x1"
         android:layout_marginEnd="@dimen/baseline_x1"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/course_item_overall_score"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end">
-            <TextView
-                android:id="@+id/course_item_overall_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/course_item_overall_point"
-                android:layout_toLeftOf="@+id/course_item_overall_point"
-                android:layout_toStartOf="@+id/course_item_overall_point"
-                android:layout_marginRight="@dimen/baseline_x1"
-                android:layout_marginEnd="@dimen/baseline_x1"
-                android:singleLine="true"
-                android:gravity="end"/><!-- Overall Label -->
-            <com.devspark.robototextview.widget.RobotoTextView
-                android:id="@+id/course_item_overall_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:gravity="bottom"
-                android:textSize="36sp"
-                roboto:fontFamily="roboto"
-                roboto:textWeight="bold"/><!-- Overall Point -->
-        </RelativeLayout>
-        <RatingBar
-            android:id="@+id/course_item_overall_ratingbar"
-            android:progressDrawable="@drawable/ratingbar_16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/baseline_x2"
-            android:layout_marginLeft="@dimen/baseline_x0.5"
-            android:layout_marginStart="@dimen/baseline_x0.5"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:max="10"/>
-    </LinearLayout>
+        android:progressDrawable="@drawable/ratingbar_16dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:max="10"/><!-- Overall RatingBar -->
     <RelativeLayout
         android:id="@+id/course_item_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/course_item_overall"
+        android:layout_below="@+id/course_item_overall_ratingbar"
         android:layout_marginTop="@dimen/baseline_x1"
         android:layout_marginLeft="@dimen/baseline_x1"
         android:layout_marginRight="@dimen/baseline_x1">
@@ -125,7 +114,7 @@
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/course_item_statistics"
             android:layout_toStartOf="@+id/course_item_statistics"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"/><!-- Hashtags -->
         <LinearLayout
             android:id="@+id/course_item_statistics"
             android:layout_width="wrap_content"
@@ -145,7 +134,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:padding="@dimen/baseline_x0.5"
-                    android:contentDescription="@string/empty"/>
+                    android:contentDescription="@string/empty"/><!-- Evaluation Icon -->
                 <com.devspark.robototextview.widget.RobotoTextView
                     xmlns:roboto="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/course_item_evaluation_count"
@@ -157,8 +146,8 @@
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/>
-            </RelativeLayout>
-        </LinearLayout>
-    </RelativeLayout>
+                    roboto:textWeight="bold"/><!-- Evaluation Count -->
+            </RelativeLayout><!-- Evaluation -->
+        </LinearLayout><!-- Statistics -->
+    </RelativeLayout><!-- Footer -->
 </RelativeLayout>

@@ -56,7 +56,7 @@
                         android:singleLine="true"
                         android:layout_marginTop="@dimen/baseline_x1"
                         android:layout_below="@+id/evaluation_hashtags_container"
-                        android:background="@color/bg_highlight"/>
+                        android:background="@color/white"/>
                 </RelativeLayout>
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                         android:inputType="textMultiLine"
                         android:layout_marginTop="@dimen/baseline_x1"
                         android:layout_below="@+id/evaluation_body_icon"
-                        android:background="@color/bg_highlight"/>
+                        android:background="@color/white"/>
                 </RelativeLayout>
             </LinearLayout>
         </ScrollView>

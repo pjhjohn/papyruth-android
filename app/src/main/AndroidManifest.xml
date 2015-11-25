@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_title"
-        android:theme="@style/Papyruth.Theme">
+        android:theme="@style/Papyruth.Theme.Base">
 
         <!-- Activities -->
         <activity
@@ -35,7 +35,8 @@
             android:name=".activity.MainActivity"
             android:label="@string/app_title"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:theme="@style/Papyruth.Theme.Main">
         </activity>
 
         <!-- Google Play Services -->

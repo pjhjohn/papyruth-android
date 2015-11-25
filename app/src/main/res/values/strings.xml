@@ -83,6 +83,7 @@
 
     <!--course-->
     <string name="label_point_overall">Overall</string>
+    <string name="label_point_overall_average">Avg. Overall</string>
     <string name="label_point_gpa_satisfaction">Satisfaction</string>
     <string name="label_point_clarity">Clarity</string>
     <string name="label_point_easiness">Easiness</string>

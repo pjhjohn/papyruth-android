@@ -40,7 +40,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/bg_accent"/>
+            android:background="@color/white_80p"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/bg_accent"/>
+            android:background="@color/white_80p"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

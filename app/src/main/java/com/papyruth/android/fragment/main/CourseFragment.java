@@ -69,6 +69,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     }
 
     @InjectView(R.id.course_recyclerview) protected RecyclerView courseRecyclerView;
+    @InjectView(R.id.progress) protected View progress;
     private Toolbar toolbar;
     private CompositeSubscription subscriptions;
 
@@ -79,6 +80,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.subscriptions = new CompositeSubscription();
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.setupRecyclerView(this.courseRecyclerView);
+
 
 
         this.slave = null;
@@ -132,6 +134,10 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     this.adapter.notifyItemRangeChanged(offset, this.adapter.getItemCount() - offset);
                 }, error-> ErrorHandler.throwError(error, this));
         }
+
+        super.getRecyclerViewScrollObservable(this.courseRecyclerView, this.toolbar, true)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe();
     }
 
     @InjectView(R.id.evaluation_container) protected FrameLayout slaveContainer;

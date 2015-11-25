@@ -8,6 +8,6 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:background="@drawable/background_stroke_gray"
+        android:background="@drawable/background_placeholder"
         android:textSize="@dimen/basefont_x1.5"/>
 </RelativeLayout>

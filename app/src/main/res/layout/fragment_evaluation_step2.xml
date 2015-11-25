@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/baseline_x2"
-            android:background="@color/toolbar_green">
+            android:background="@color/toolbar_green_highlight">
             <TextView
                 android:id="@+id/evaluation_form_lecture"
                 android:layout_width="match_parent"
@@ -78,10 +78,10 @@
                     android:layout_toStartOf="@+id/evaluation_form_overall_point">
                     <RatingBar
                         android:id="@+id/evaluation_form_overall_ratingbar"
-                        android:layout_width="@dimen/baseline_x15"
-                        android:layout_height="@dimen/baseline_x3"
+                        android:layout_width="140dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:progressDrawable="@drawable/ratingbar_24dp"
+                        android:progressDrawable="@drawable/ratingbar_28dp"
                         android:numStars="5"
                         android:max="10"
                         android:progress="0"/>
@@ -141,11 +141,9 @@
                     android:layout_toStartOf="@+id/evaluation_form_clarity_point">
                     <SeekBar
                         android:id="@+id/evaluation_form_clarity_seekbar"
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="@dimen/baseline_x3"
                         android:layout_gravity="center"
-                        android:paddingLeft="@dimen/baseline_x2"
-                        android:paddingRight="@dimen/baseline_x2"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_clarity"
                         android:thumb="@drawable/progressbar_thumb_clarity"
@@ -209,11 +207,9 @@
                     android:layout_toStartOf="@+id/evaluation_form_easiness_point">
                     <SeekBar
                         android:id="@+id/evaluation_form_easiness_seekbar"
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="@dimen/baseline_x3"
                         android:layout_gravity="center"
-                        android:paddingLeft="@dimen/baseline_x2"
-                        android:paddingRight="@dimen/baseline_x2"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_easiness"
                         android:thumb="@drawable/progressbar_thumb_easiness"
@@ -276,11 +272,9 @@
                     android:layout_toStartOf="@+id/evaluation_form_gpa_satisfaction_point">
                     <SeekBar
                         android:id="@+id/evaluation_form_gpa_satisfaction_seekbar"
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="@dimen/baseline_x3"
                         android:layout_gravity="center"
-                        android:paddingLeft="@dimen/baseline_x2"
-                        android:paddingRight="@dimen/baseline_x2"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_gpa_satisfaction"
                         android:thumb="@drawable/progressbar_thumb_gpa_satisfaction"

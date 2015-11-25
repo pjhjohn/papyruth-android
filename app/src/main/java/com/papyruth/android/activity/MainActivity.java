@@ -33,34 +33,32 @@ import com.papyruth.utils.view.FloatingActionControlContainer;
 import com.papyruth.utils.view.navigator.FragmentNavigator;
 import com.papyruth.utils.view.navigator.NavigationCallback;
 import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.search.ToolbarSearchView;
+import com.papyruth.utils.view.search.SearchToolbar;
 import com.papyruth.utils.view.softkeyboard.SoftKeyboardActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import timber.log.Timber;
 
-public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, ToolbarSearchView.ToolbarSearchViewListener, ErrorHandlerCallback {
+public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, ErrorHandlerCallback {
     @InjectView(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
     @InjectView(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
-    @InjectView(R.id.toolbar_search_view)      protected LinearLayout searchViewToolbar;
+    @InjectView(R.id.search_toolbar_root)      protected LinearLayout mSearchToolbarRoot;
     @InjectView(R.id.toolbar)                  protected Toolbar mToolbar;
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
     private Tracker mTracker;
-    private MaterialMenuDrawable mMaterialMenuDrawable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getApplication()).getTracker();
-
         this.setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
         this.attachSoftKeyboardListeners();
+        mTracker = ((papyruth) getApplication()).getTracker();
+        ButterKnife.inject(this);
         ErrorHandler.setApiErrorCallback(this);
-
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
-        mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
         mToolbar.setNavigationIcon(mMaterialMenuDrawable);
         mToolbar.inflateMenu(R.menu.main);
@@ -74,6 +72,31 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         this.createToolbarOptionsMenu(mToolbar.getMenu());
     }
 
+    private MenuItem mMenuItemSearch;
+    private MenuItem mMenuItemSetting;
+    public void setMenuItemVisibility(int menuItemId, boolean visible) {
+        switch(menuItemId) {
+            case AppConst.Menu.SEARCH  : mMenuItemSearch.setVisible(visible); break;
+            case AppConst.Menu.SETTING : mMenuItemSetting.setVisible(visible); break;
+        }
+    }
+
+    private boolean createToolbarOptionsMenu(Menu menu) {
+        mMenuItemSearch  = menu.findItem(AppConst.Menu.SEARCH);
+        mMenuItemSearch.setOnMenuItemClickListener(item -> {
+            SearchToolbar.getInstance().show();
+            return true;
+        });
+
+        mMenuItemSetting = menu.findItem(AppConst.Menu.SETTING);
+        mMenuItemSetting.setOnMenuItemClickListener(item -> {
+            this.navigate(SettingsFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
+            return true;
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -81,21 +104,9 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
-        ToolbarSearchView.getInstance().hide();
+        SearchToolbar.getInstance().hide();
         ((InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
     }
 
@@ -103,21 +114,41 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     public void onResume() {
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
         ViewHolderFactory.getInstance().setContext(this);
-        ToolbarSearchView.getInstance().initializeToolbarSearchView(this, searchViewToolbar, (view, position) -> {
-            ToolbarSearchView.getInstance().setSelectedCandidate(position);
-            ToolbarSearchView.getInstance().addHistory(ToolbarSearchView.getInstance().getSelectedCandidate());
+        SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, position) -> {
+            SearchToolbar.getInstance().setSelectedCandidate(position);
+            SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
             this.navigate(SimpleCourseFragment.class, true);
         });
-        ToolbarSearchView.getInstance().setSearchViewListener(this);
+        SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
+    }
+
+    /* Google Analytics */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
+    @Override
+    public void sendErrorTracker(String cause, String from, boolean isFatal) {
+        Timber.d("cause : %s, from : %s", cause, from);
+        mTracker.send(
+            new HitBuilders.ExceptionBuilder()
+                .setDescription(cause)
+                .setFatal(isFatal)
+                .build());
     }
 
     /* Toolbar Search */
     @Override
-    public void onSearchViewShowChanged(boolean show) {
+    public void onVisibilityChanged(boolean visible) {
         HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_category_search_view));
-        if (show) {
+        if (visible) {
             FloatingActionControl.getInstance().hide(false);
             mTracker.send(builder
                 .setAction(getResources().getString(R.string.ga_event_open))
@@ -135,38 +166,12 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         this.navigate(SimpleCourseFragment.class, true);
     }
 
-    /* Menu Control */
-    private MenuItem mMenuItemSearch;
-    private MenuItem mMenuItemSetting;
-    public void setMenuItemVisibility(int menuItemId, boolean visible) {
-        switch(menuItemId) {
-            case AppConst.Menu.SEARCH  : mMenuItemSearch.setVisible(visible); break;
-            case AppConst.Menu.SETTING : mMenuItemSetting.setVisible(visible); break;
-        }
-    }
-
-    private boolean createToolbarOptionsMenu(Menu menu) {
-        mMenuItemSearch  = menu.findItem(AppConst.Menu.SEARCH);
-        mMenuItemSearch.setOnMenuItemClickListener(item -> {
-            ToolbarSearchView.getInstance().show();
-            return true;
-        });
-
-        mMenuItemSetting = menu.findItem(AppConst.Menu.SETTING);
-        mMenuItemSetting.setOnMenuItemClickListener(item -> {
-            this.navigate(SettingsFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
-            return true;
-        });
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
     /* Double Back-Pressed Termination of MainActivity */
     private boolean mReadyToTerminate = false;
     @Override
     public void onBackPressed() {
         if (mNavigationDrawer.isOpened()) mNavigationDrawer.close();
-        else if (ToolbarSearchView.getInstance().back()) /* Does Nothing */;
+        else if (SearchToolbar.getInstance().back()) /* Does Nothing */;
         else if (mNavigator.back()) mReadyToTerminate = false;
         else if (mReadyToTerminate) this.finish();
         else {
@@ -244,15 +249,5 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void setOnNavigateListener(NavigationCallback listener) {
         mNavigator.setOnNavigateListener(listener);
-    }
-
-    @Override
-    public void sendErrorTracker(String cause, String from, boolean isFatal) {
-        Timber.d("cause : %s, from : %s", cause, from);
-        mTracker.send(
-            new HitBuilders.ExceptionBuilder()
-                .setDescription(cause)
-                .setFatal(isFatal)
-                .build());
     }
 }

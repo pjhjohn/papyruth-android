@@ -58,7 +58,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return ViewHolderFactory.ViewType.HR_SHADOW;
     }
 
-    public void setHistory(boolean isHistory){
+    public void setIsHistory(boolean isHistory){
         this.isHistory = isHistory;
     }
 }
