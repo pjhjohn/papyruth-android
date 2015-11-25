@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="bottom"
-    android:background="@color/bg_accent">
+    android:layout_gravity="bottom">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/evaluation_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"/>
+        android:overScrollMode="never"
+        android:background="@color/background_recyclerview"/>
     <FrameLayout
         android:id="@+id/evaluation_container_cover"
         android:layout_width="match_parent"

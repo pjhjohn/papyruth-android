@@ -3,7 +3,7 @@
     <item
         android:id="@android:id/background">
         <shape>
-            <solid android:color="@color/bg_highlight"/>
+            <solid android:color="@color/background_progressbar"/>
             <corners android:radius="@dimen/baseline_x1"/>
         </shape>
     </item>
@@ -11,7 +11,7 @@
     <item
         android:id="@android:id/secondaryProgress">
         <shape>
-            <solid android:color="@color/bg_highlight"/>
+            <solid android:color="@color/background_progressbar"/>
             <corners android:radius="@dimen/baseline_x1"/>
         </shape>
     </item>

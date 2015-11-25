@@ -134,7 +134,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public void setup(int fragment_id, DrawerLayout drawerLayout, Toolbar toolbar) {
         mFragmentContainerView = (View) this.getActivity().findViewById(fragment_id).getParent();
         mDrawerLayout = drawerLayout;
-        mDrawerLayout.setStatusBarBackground(R.color.bg_normal);
         mDrawerListener = new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(View drawerView) {
