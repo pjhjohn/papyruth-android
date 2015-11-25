@@ -38,8 +38,7 @@
             android:gravity="center"
             android:textSize="12sp"
             android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="1"/><!-- Nickname -->
+            android:ellipsize="end"/><!-- Nickname -->
     </RelativeLayout><!-- Avatar & Nickname -->
     <TextView
         android:id="@+id/evaluation_item_lecture"
@@ -55,8 +54,7 @@
         android:textSize="16sp"
         android:textColor="@color/white_30p"
         android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="1"/><!-- Lecture Title -->
+        android:ellipsize="end"/><!-- Lecture Title -->
     <com.devspark.robototextview.widget.RobotoTextView
         android:id="@+id/evaluation_item_timestamp"
         android:layout_width="wrap_content"
@@ -102,8 +100,7 @@
             android:layout_gravity="center_vertical"
             android:textSize="14sp"
             android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="1"/><!-- Professor -->
+            android:ellipsize="end"/><!-- Professor -->
         <RatingBar
             android:id="@+id/evaluation_item_overall_ratingbar"
             android:layout_width="wrap_content"

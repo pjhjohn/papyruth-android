@@ -23,9 +23,8 @@
             android:gravity="center"
             android:textSize="24sp"
             android:textColor="@color/white_30p"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="1"/><!-- Lecture Title -->
+            android:maxLines="2"
+            android:ellipsize="end"/><!-- Lecture Title -->
     </RelativeLayout><!--Lecture Title & Edit-->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,9 +51,8 @@
                 android:layout_marginLeft="@dimen/baseline_x1"
                 android:layout_marginStart="@dimen/baseline_x1"
                 android:textSize="14sp"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="1"/><!-- Professor -->
+                android:maxLines="2"
+                android:ellipsize="end"/><!-- Professor -->
         </LinearLayout>
     </RelativeLayout><!-- Category & Professor -->
     <RelativeLayout
@@ -92,8 +90,7 @@
                 android:gravity="center"
                 android:textSize="14sp"
                 android:singleLine="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="1"/>
+                android:ellipsize="end"/>
             <TextView
                 android:id="@+id/evaluation_timestamp"
                 android:layout_width="wrap_content"

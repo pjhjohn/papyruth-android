@@ -32,8 +32,7 @@
         android:textSize="16sp"
         android:textColor="@color/white_30p"
         android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="1"/><!-- Lecture Title -->
+        android:ellipsize="end"/><!-- Lecture Title -->
     <TextView
         android:id="@+id/course_item_overall_label"
         android:layout_width="wrap_content"
@@ -80,8 +79,7 @@
         android:layout_gravity="center_vertical"
         android:textSize="14sp"
         android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="1"/><!-- Professor -->
+        android:ellipsize="end"/><!-- Professor -->
     <RatingBar
         android:id="@+id/course_item_overall_ratingbar"
         android:layout_below="@+id/course_item_overall_point"

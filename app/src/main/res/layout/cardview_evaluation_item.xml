@@ -34,8 +34,7 @@
         android:textSize="14sp"
         android:textColor="@color/white_30p"
         android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="1"/><!-- Nickname -->
+        android:ellipsize="end"/><!-- Nickname -->
     <com.devspark.robototextview.widget.RobotoTextView
         android:id="@+id/evaluation_item_timestamp"
         android:layout_width="wrap_content"

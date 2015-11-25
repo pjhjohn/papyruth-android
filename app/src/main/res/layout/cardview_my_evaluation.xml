@@ -24,8 +24,7 @@
         android:textSize="16sp"
         android:textColor="@color/white_30p"
         android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="1"/><!-- Lecture Title -->
+        android:ellipsize="end"/><!-- Lecture Title -->
     <com.devspark.robototextview.widget.RobotoTextView
         android:id="@+id/my_evaluation_item_timestamp"
         android:layout_width="wrap_content"

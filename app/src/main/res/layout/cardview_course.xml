@@ -65,7 +65,7 @@
                 android:id="@+id/course_professor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/course_lecture"
+                android:layout_below="@+id/course_lecture"
                 android:layout_marginTop="@dimen/baseline_x1"
                 android:layout_marginLeft="@dimen/baseline_x0.5"
                 android:layout_marginStart="@dimen/baseline_x0.5"
@@ -76,9 +76,8 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="end"
                 android:textSize="14sp"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="1"/><!-- Professor -->
+                android:maxLines="2"
+                android:ellipsize="end"/><!-- Professor -->
         </RelativeLayout><!--Header : Professor Image / Lecture / Bookmark / Category / Professor-->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -129,15 +128,14 @@
         </RelativeLayout><!--Overall-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x1">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/course_clarity_label"
                 android:layout_width="@dimen/baseline_x10"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignBaseline="@+id/course_clarity_point"
                 android:textColor="@color/point_clarity"
                 android:textSize="14sp"
                 android:gravity="center"/>
@@ -145,7 +143,6 @@
                 android:id="@+id/course_clarity_progressbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x1"
-                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/course_clarity_label"
                 android:layout_toEndOf="@+id/course_clarity_label"
                 android:layout_marginLeft="@dimen/baseline_x1"
@@ -154,6 +151,8 @@
                 android:layout_toStartOf="@+id/course_clarity_point"
                 android:layout_marginRight="@dimen/baseline_x2"
                 android:layout_marginEnd="@dimen/baseline_x2"
+                android:layout_alignBottom="@+id/course_clarity_point"
+                android:layout_marginBottom="@dimen/baseline_x1"
                 android:progressDrawable="@drawable/progressbar_clarity"
                 android:indeterminateOnly="false"
                 android:max="100"/>
@@ -161,7 +160,6 @@
                 android:id="@+id/course_clarity_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:textSize="24sp"
@@ -171,15 +169,14 @@
         </RelativeLayout><!--Clarity-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x1">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/course_easiness_label"
                 android:layout_width="@dimen/baseline_x10"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignBaseline="@+id/course_easiness_point"
                 android:textColor="@color/point_easiness"
                 android:textSize="14sp"
                 android:gravity="center"/>
@@ -187,7 +184,6 @@
                 android:id="@+id/course_easiness_progressbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x1"
-                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/course_easiness_label"
                 android:layout_toEndOf="@+id/course_easiness_label"
                 android:layout_marginLeft="@dimen/baseline_x1"
@@ -196,6 +192,8 @@
                 android:layout_toStartOf="@+id/course_easiness_point"
                 android:layout_marginRight="@dimen/baseline_x2"
                 android:layout_marginEnd="@dimen/baseline_x2"
+                android:layout_alignBottom="@+id/course_easiness_point"
+                android:layout_marginBottom="@dimen/baseline_x1"
                 android:progressDrawable="@drawable/progressbar_easiness"
                 android:indeterminateOnly="false"
                 android:max="100"/>
@@ -203,7 +201,6 @@
                 android:id="@+id/course_easiness_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:textSize="24sp"
@@ -213,15 +210,14 @@
         </RelativeLayout><!--Easiness-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x1">
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/course_gpa_satisfaction_label"
                 android:layout_width="@dimen/baseline_x10"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignBaseline="@+id/course_gpa_satisfaction_point"
                 android:textColor="@color/point_gpa_satisfaction"
                 android:textSize="14sp"
                 android:gravity="center"/>
@@ -229,7 +225,6 @@
                 android:id="@+id/course_gpa_satisfaction_progressbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x1"
-                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/course_gpa_satisfaction_label"
                 android:layout_toEndOf="@+id/course_gpa_satisfaction_label"
                 android:layout_marginLeft="@dimen/baseline_x1"
@@ -238,6 +233,8 @@
                 android:layout_toStartOf="@+id/course_gpa_satisfaction_point"
                 android:layout_marginRight="@dimen/baseline_x2"
                 android:layout_marginEnd="@dimen/baseline_x2"
+                android:layout_alignBottom="@+id/course_gpa_satisfaction_point"
+                android:layout_marginBottom="@dimen/baseline_x1"
                 android:progressDrawable="@drawable/progressbar_gpa_satisfaction"
                 android:indeterminateOnly="false"
                 android:max="100"/>
@@ -245,7 +242,6 @@
                 android:id="@+id/course_gpa_satisfaction_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:textSize="24sp"
@@ -256,8 +252,7 @@
         <RelativeLayout
             android:id="@+id/course_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/baseline_x1">
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:id="@+id/course_hashtags"
                 android:layout_width="match_parent"
