@@ -96,6 +96,13 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
             return;
         }
         final CourseData course = items.get(position);
+
+        this.nextEvaluatonStep(course);
+
+        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
+    }
+
+    private void nextEvaluatonStep(CourseData course){
         EvaluationForm.getInstance().setCourseId(course.id);
         EvaluationForm.getInstance().setLectureName(course.name);
         EvaluationForm.getInstance().setProfessorName(course.professor_name);
@@ -109,9 +116,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                     AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_POSSIBLE);
                 }
             }, error -> ErrorHandler.throwError(error, this));
-        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
-
 
     @Override
     protected CourseItemsAdapter getAdapter() {
@@ -140,8 +145,8 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
             .setOnSearchByQueryListener(() -> searchCourse(new Candidate(), SearchToolbar.getInstance().getSelectedQuery()));
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.throwError(error, this))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.throwError(error, this))
         );
     }
 
@@ -152,7 +157,13 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     }
 
     public void searchCourse(Candidate candidate, String query) {
-        mQueryButton.setText(query); // TODO : query is null when searched by clicked AutoComplete item
+        if(candidate.lecture_id != null){
+            mQueryButton.setText(candidate.lecture_name);
+        } else if(candidate.professor_id != null) {
+            mQueryButton.setText(candidate.professor_name);
+        }else if(query != null){
+            mQueryButton.setText(query);
+        }
         Api.papyruth().search_search(
             User.getInstance().getAccessToken(),
             User.getInstance().getUniversityId(),
@@ -163,7 +174,14 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         .map(response -> response.courses)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(this::notifyAutoCompleteDataChanged, error -> ErrorHandler.throwError(error, this));
+        .subscribe(response -> {
+            if(candidate.lecture_id != null && candidate.professor_id != null & response.size() > 0){
+                nextEvaluatonStep(response.get(0));
+            }else {
+                notifyAutoCompleteDataChanged(response);
+            }
+        }
+            , error -> ErrorHandler.throwError(error, this));
     }
 
     public void notifyAutoCompleteDataChanged(List<CourseData> courses){
