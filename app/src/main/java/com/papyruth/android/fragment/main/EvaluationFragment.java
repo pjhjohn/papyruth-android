@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -444,7 +443,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.evaluation_lecture) {
-            if(User.getInstance().isConfirmationEmail()){
+            if(User.getInstance().needEmailConfirmed()){
                 AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
                 return;
             }

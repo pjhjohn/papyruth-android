@@ -176,7 +176,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(User.getInstance().isConfirmationEmail()){
+        if(User.getInstance().needEmailConfirmed()){
             AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
             return;
         }

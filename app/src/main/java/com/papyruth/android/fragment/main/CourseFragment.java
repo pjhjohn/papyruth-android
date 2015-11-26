@@ -109,7 +109,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
-        if(User.getInstance().isConfirmationEmail()){
+        if(User.getInstance().needEmailConfirmed()){
             AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
         }else if(User.getInstance().needMoreEvaluation()) {
             AlertDialog.show(getActivity(), navigator, AlertDialog.Type.EVALUATION_MANDATORY);
@@ -157,7 +157,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        if(User.getInstance().isConfirmationEmail()){
+        if(User.getInstance().needEmailConfirmed()){
             AlertDialog.show(getActivity(), navigator, AlertDialog.Type.NEED_CONFIRMATION);
             return;
         }
