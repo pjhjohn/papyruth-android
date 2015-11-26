@@ -59,7 +59,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
             viewHolder.itemView.setOnClickListener(view -> {
                 if (mSelectedView != null) mSelectedView.setSelected(false);
                 mSelectedViewHolderPosition = viewHolder.getAdapterPosition();
-                view.setSelected(true);
                 mSelectedView = view;
                 if (mNavigationDrawerCallback != null)
                     mNavigationDrawerCallback.onNavigationDrawerItemSelected(mSelectedViewHolderPosition, true);
