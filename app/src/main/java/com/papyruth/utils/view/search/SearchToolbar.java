@@ -1,5 +1,8 @@
 package com.papyruth.utils.view.search;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +40,7 @@ import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by SSS on 2015-11-06.
@@ -93,7 +98,12 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
                 } else if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     isActionDown = true;
                 } else if (event.getAction() == KeyEvent.ACTION_UP) {
-                    if (isActionDown) hide();
+                    if (isActionDown) {
+                        if(mAlphaAnimation != null && mAlphaAnimation.isRunning() && mRootView.getVisibility() == View.VISIBLE){
+                            mAlphaAnimation.cancel();
+                        }
+                        hide();
+                    }
                     isActionDown = false;
                     return true;
                 }
@@ -134,7 +144,12 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
 
         mCompositeSubscription.add(ViewObservable.clicks(mBackIcon)
             .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe(event ->hide(), Throwable::printStackTrace)
+            .subscribe(event -> {
+                if(mAlphaAnimation != null && mAlphaAnimation.isRunning() && mRootView.getVisibility() == View.VISIBLE){
+                    mAlphaAnimation.cancel();
+                }
+                hide();
+            }, Throwable::printStackTrace)
         );
 
         mQueryText.setOnKeyListener((v, keycode, e) -> {
@@ -178,25 +193,103 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
 
     public boolean back() {
         if(mRootView.getVisibility() != View.VISIBLE) return false;
+        if(mAlphaAnimation != null && mAlphaAnimation.isRunning()){
+            mAlphaAnimation.cancel();
+        }
         hide();
         return true;
     }
+    private ValueAnimator mAlphaAnimation;
+    private static final int ANIM_DURATION = 600;
+    private float mAlphaValue = 0.0f;
+    private boolean mIsAnimCancel = false;
     public SearchToolbar show() {
-        mRootView.setVisibility(View.VISIBLE);
-        mQueryText.requestFocus();
-        if(mQueryText.requestFocus()) ((InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mQueryText, InputMethodManager.SHOW_IMPLICIT);
+        mAlphaAnimation = ValueAnimator.ofFloat(0.0f, 1.0f);
+        mAlphaAnimation.setDuration(ANIM_DURATION);
+        mAlphaAnimation.setInterpolator(new DecelerateInterpolator(2.0f));
+        mAlphaAnimation.addUpdateListener(anim -> {
+            mAlphaValue = ((float) anim.getAnimatedValue());
+            mRootView.setAlpha(mAlphaValue);
+        });
+        mAlphaAnimation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mRootView.setVisibility(View.VISIBLE);
+                mQueryText.setFocusable(true);
+                if (mOnVisibilityChangedListener != null)
+                    mOnVisibilityChangedListener.onVisibilityChanged(true);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                mIsAnimCancel = true;
+                hide();
+                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (!mIsAnimCancel) {
+                    mRootView.setAlpha(1.0f);
+                    mRootView.setVisibility(View.VISIBLE);
+                    if (mQueryText.requestFocus())
+                        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mQueryText, InputMethodManager.SHOW_IMPLICIT);
+                }else{
+                    ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
+                }
+                mIsAnimCancel = false;
+            }
+        });
+        mAlphaAnimation.start();
+
         mAutoCompleteAdapter.setIsHistory(true);
         notifyAutoCompleteDataChanged(getHistory());
-        if(mOnVisibilityChangedListener != null) mOnVisibilityChangedListener.onVisibilityChanged(true);
         return this;
     }
     public SearchToolbar hide() {
-        mRootView.setVisibility(View.GONE);
-        mQueryText.clearFocus();
-        mQueryText.getText().clear();
-        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
+        mAlphaAnimation = ValueAnimator.ofFloat(mAlphaValue, 0.0f);
+        mAlphaAnimation.setDuration(ANIM_DURATION);
+        mAlphaAnimation.setInterpolator(new DecelerateInterpolator(2.0f));
+        mAlphaAnimation.addUpdateListener(anim -> {
+            mRootView.setAlpha(((float) anim.getAnimatedValue()));
+        });
+        mAlphaAnimation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationResume(Animator animation) {
+                super.onAnimationResume(animation);
+                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mQueryText.clearFocus();
+                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);                if(mOnVisibilityChangedListener != null) mOnVisibilityChangedListener.onVisibilityChanged(false);
+                if(mOnVisibilityChangedListener != null) mOnVisibilityChangedListener.onVisibilityChanged(false);
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                mRootView.setVisibility(View.GONE);
+                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mRootView.setVisibility(View.GONE);
+                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
+            }
+        });
+        mAlphaAnimation.start();
+
         notifyAutoCompleteDataChanged(new ArrayList<>());
-        if(mOnVisibilityChangedListener != null) mOnVisibilityChangedListener.onVisibilityChanged(false);
         return this;
     }
 
