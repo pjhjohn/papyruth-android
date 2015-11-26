@@ -12,7 +12,7 @@
         android:paddingTop="@dimen/baseline_x2"
         android:paddingLeft="@dimen/baseline_x2"
         android:paddingRight="@dimen/baseline_x2"
-        android:paddingBottom="@dimen/baseline_x1">
+        android:paddingBottom="@dimen/baseline_x0.5">
         <TextView
             android:id="@+id/evaluation_lecture"
             android:layout_width="match_parent"
@@ -31,29 +31,32 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/baseline_x2"
         android:paddingRight="@dimen/baseline_x2">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="18sp"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_centerInParent="true">
             <TextView
                 android:id="@+id/evaluation_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:background="@drawable/category_background"
-                android:textSize="12sp"/><!-- Category -->
+                android:textSize="14sp"/><!-- Category -->
             <TextView
                 android:id="@+id/evaluation_professor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/evaluation_category"
+                android:layout_toEndOf="@+id/evaluation_category"
                 android:layout_marginLeft="@dimen/baseline_x1"
                 android:layout_marginStart="@dimen/baseline_x1"
-                android:textSize="14sp"
+                android:layout_alignBaseline="@+id/evaluation_category"
+                android:textSize="16sp"
                 android:maxLines="2"
                 android:ellipsize="end"/><!-- Professor -->
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout><!-- Category & Professor -->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -116,7 +119,7 @@
             android:layout_toEndOf="@+id/evaluation_content_left"
             android:layout_marginLeft="@dimen/baseline_x1"
             android:layout_marginRight="@dimen/baseline_x1"
-            android:layout_alignBottom="@id/evaluation_content_left">
+            android:layout_alignBottom="@+id/evaluation_content_left">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -166,7 +169,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@id/evaluation_content_left"
+            android:layout_alignBottom="@+id/evaluation_content_left"
             android:orientation="vertical"
             android:gravity="bottom">
             <RelativeLayout
@@ -347,7 +350,8 @@
         <RelativeLayout
             android:id="@+id/evaluation_down_vote"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/baseline_x1">
             <ImageView
                 android:id="@+id/evaluation_down_vote_icon"
                 android:layout_width="@dimen/baseline_x4"
