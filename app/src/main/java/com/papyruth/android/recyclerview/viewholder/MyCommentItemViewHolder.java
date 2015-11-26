@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papyruth.android.AppConst;
-import com.papyruth.android.model.MyCommentData;
 import com.papyruth.android.R;
-import com.papyruth.utils.support.picasso.ContrastColorFilterTransformation;
+import com.papyruth.android.model.MyCommentData;
+import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.utils.view.DateTimeUtil;
 import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
@@ -57,9 +57,9 @@ public class MyCommentItemViewHolder extends RecyclerView.ViewHolder {
 
     private void setVoteStatus(VoteStatus newStatus) {
         mVoteStatus = newStatus;
-        Picasso.with(mContext).load(R.drawable.ic_light_vote_up).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_up).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
         mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-        Picasso.with(mContext).load(R.drawable.ic_light_vote_down).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_down).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
         mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
     }
 

@@ -14,14 +14,13 @@ import android.widget.TextView;
 
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
+import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
-import com.papyruth.utils.support.picasso.ContrastColorFilterTransformation;
+import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.DateTimeUtil;
 import com.papyruth.utils.view.Hashtag;
@@ -101,15 +100,15 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         else setVoteStatus(VoteStatus.DOWN);
         setVoteCount(evaluation.up_vote_count, evaluation.down_vote_count);
 
-        Picasso.with(mContext).load(R.drawable.ic_light_comment).transform(new ColorFilterTransformation(mResources.getColor(R.color.inactive))).into(mCommentIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_comment).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(mCommentIcon);
         mCommentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
     }
 
     private void setVoteStatus(VoteStatus newStatus) {
         mVoteStatus = newStatus;
-        Picasso.with(mContext).load(R.drawable.ic_light_vote_up).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_up).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
         mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-        Picasso.with(mContext).load(R.drawable.ic_light_vote_down).transform(new ContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_vote_down).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
         mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
     }
 
