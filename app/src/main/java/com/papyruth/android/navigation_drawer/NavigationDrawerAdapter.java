@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papyruth.android.R;
-import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.squareup.picasso.Picasso;
@@ -63,7 +62,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 view.setSelected(true);
                 mSelectedView = view;
                 if (mNavigationDrawerCallback != null)
-                    mNavigationDrawerCallback.onNavigationDrawerItemSelected(viewHolder.getAdapterPosition(), true);
+                    mNavigationDrawerCallback.onNavigationDrawerItemSelected(this.getChangedItemPosition(viewHolder.getAdapterPosition()), true);
             });
             viewHolder.itemView.setBackgroundResource(R.drawable.row_selector);
         }
@@ -73,7 +72,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(position != HR_INDEX) {
-            ((NavigationDrawerItemViewHolder) holder).bind(mData.get(position - (position > HR_INDEX ? getItemOffset() : 0)));
+            ((NavigationDrawerItemViewHolder) holder).bind(mData.get(this.getChangedItemPosition(position)));
             if (mSelectedPosition == position) {
                 if (mSelectedView != null) mSelectedView.setSelected(false);
                 mSelectedPosition = position;
@@ -81,6 +80,10 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 mSelectedView.setSelected(true);
             }
         }
+    }
+
+    public int getChangedItemPosition(int position){
+        return  position - (position > HR_INDEX ? getItemOffset() : 0);
     }
 
     public int getItemOffset(){

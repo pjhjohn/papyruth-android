@@ -14,8 +14,8 @@ import com.papyruth.android.fragment.main.MyEvaluationFragment;
 public class NavigationDrawerUtils {
     public static class ItemType {
         public static final int HOME            = 0;
-        public static final int BOOKMARK        = 1;
-        public static final int EVALUATION      = 2;
+        public static final int EVALUATION      = 1;
+        public static final int BOOKMARK        = 2;
         public static final int MYEVALUATION    = 3;
         public static final int MYCOMMENT       = 4;
     }
@@ -27,8 +27,8 @@ public class NavigationDrawerUtils {
     public static Class<? extends Fragment> getFragmentClassOf(int position) {
         switch(position) {
             case ItemType.HOME          : return HomeFragment.class;
-            case ItemType.BOOKMARK      : return BookmarkFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;
+            case ItemType.BOOKMARK      : return BookmarkFragment.class;
             case ItemType.MYEVALUATION  : return MyEvaluationFragment.class;
             case ItemType.MYCOMMENT     : return MyCommentFragment.class;
             default: return null;
