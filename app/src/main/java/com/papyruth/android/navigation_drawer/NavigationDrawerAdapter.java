@@ -27,7 +27,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private List<NavigationDrawerItem> mData;
     private NavigationDrawerCallback mNavigationDrawerCallback;
     private View mSelectedView;
-    private int mSelectedPosition;
+    private int mSelectedViewHolderPosition;
     private Context mContext;
 
     private static final int HR_INDEX = 2;
@@ -58,13 +58,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
             viewHolder.itemView.setClickable(true);
             viewHolder.itemView.setOnClickListener(view -> {
                 if (mSelectedView != null) mSelectedView.setSelected(false);
-                mSelectedPosition = viewHolder.getAdapterPosition();
+                mSelectedViewHolderPosition = viewHolder.getAdapterPosition();
                 view.setSelected(true);
                 mSelectedView = view;
                 if (mNavigationDrawerCallback != null)
-                    mNavigationDrawerCallback.onNavigationDrawerItemSelected(this.getChangedItemPosition(viewHolder.getAdapterPosition()), true);
+                    mNavigationDrawerCallback.onNavigationDrawerItemSelected(mSelectedViewHolderPosition, true);
             });
-            viewHolder.itemView.setBackgroundResource(R.drawable.row_selector);
         }
         return viewHolder;
     }
@@ -72,18 +71,17 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(position != HR_INDEX) {
-            ((NavigationDrawerItemViewHolder) holder).bind(mData.get(this.getChangedItemPosition(position)));
-            if (mSelectedPosition == position) {
+            ((NavigationDrawerItemViewHolder) holder).bind(mData.get(this.getItemsPosition(position)));
+            if (mSelectedViewHolderPosition == position) {
                 if (mSelectedView != null) mSelectedView.setSelected(false);
-                mSelectedPosition = position;
                 mSelectedView = holder.itemView;
                 mSelectedView.setSelected(true);
             }
         }
     }
 
-    public int getChangedItemPosition(int position){
-        return  position - (position > HR_INDEX ? getItemOffset() : 0);
+    public int getItemsPosition(int viewHolderPosition){
+        return  viewHolderPosition - (viewHolderPosition > HR_INDEX ? getItemOffset() : 0);
     }
 
     public int getItemOffset(){
@@ -97,7 +95,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void selectPosition(int position) {
-        mSelectedPosition = position;
+        mSelectedViewHolderPosition = position;
         notifyItemChanged(position);
     }
 
