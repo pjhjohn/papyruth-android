@@ -17,7 +17,7 @@ import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
+import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.utils.view.Hashtag;
 import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
@@ -72,7 +72,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
                 totalWidth += width;
             }
         });
-        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
         mEvaluationCount.setText(pointInRange(course.evaluation_count) ? String.valueOf(course.evaluation_count) : "N/A");
     }
 

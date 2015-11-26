@@ -20,6 +20,7 @@ import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.utils.support.picasso.CircleTransformation;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
+import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.Hashtag;
 import com.squareup.picasso.Picasso;
@@ -135,11 +136,9 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 totalWidth += width;
             }
         });
-        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new ColorFilterTransformation(mColorInactive)).into(mEvaluationIcon);
+        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mColorInactive)).into(mEvaluationIcon);
         mEvaluationCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
-        Picasso.with(mContext).load(R.drawable.ic_light_bookmark)
-            .transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive)))
-            .into(mBookmark);
+        Picasso.with(mContext).load(R.drawable.ic_light_bookmark).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
         mBookmark.setOnClickListener(this);
     }
 
