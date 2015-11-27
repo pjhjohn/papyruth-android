@@ -87,7 +87,7 @@
     <color name="fam_background">#ccffffff</color>
     <color name="fab_evaluation_normal">@color/toolbar_evaluation</color>
     <color name="fab_evaluation_pressed">@color/toolbar_evaluation_highlight</color>
-    <color name="fab_evaluation_progress">@color/colorchip_green_highlight</color>
+    <color name="fab_evaluation_progress">@color/toolbar_evaluation_highlight</color>
     <color name="fab_red_normal">@color/toolbar_red</color>
     <color name="fab_red_pressed">@color/toolbar_red_highlight</color>
     <color name="fab_red_progress">@color/toolbar_red_highlight</color>

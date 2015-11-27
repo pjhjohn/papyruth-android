@@ -287,6 +287,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 setVisibility(false);
+                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
         mAnimator.start();
