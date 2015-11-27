@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -58,7 +58,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     @InjectView(R.id.search_toolbar_root)                   protected LinearLayout mRootView;
     @InjectView(R.id.search_toolbar_back_icon)              protected ImageView mBackIcon;
     @InjectView(R.id.search_toolbar_material_progressbar)   protected MaterialProgressBar mMaterialProgressBar;
-    @InjectView(R.id.search_toolbar_query_text)             protected PreImeEditText mQueryText;
+    @InjectView(R.id.search_toolbar_query_text)             protected EditText mQueryText;
     @InjectView(R.id.search_toolbar_query_clear_icon)       protected ImageView mQueryClearIcon;
     @InjectView(R.id.search_toolbar_query_result)           protected RecyclerView mQueryResult;
 
@@ -72,6 +72,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     private Resources mResources;
     private List<Candidate> mCandidates;
 
+    private static final long THROTTLE_MILLISECONDS = 600;
+
     public void init(Context context, ViewGroup root, RecyclerViewItemClickListener defaultRecyclerViewItemClickListener) {
         View view = LayoutInflater.from(context).inflate(R.layout.toolbar_search, root, true);
         ButterKnife.inject(this, view);
@@ -83,9 +85,10 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         Picasso.with(mContext).load(R.drawable.ic_light_clear).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mQueryClearIcon);
         Picasso.with(mContext).load(R.drawable.ic_light_back).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mBackIcon);
 
-        mQueryText.setPreImeListener(() -> {
-            if (root.getVisibility() == View.VISIBLE) hide();
-        });
+        mRootView.setAlpha(0);
+        mRootView.setVisibility(View.GONE);
+        mBackIcon.setVisibility(View.VISIBLE);
+        mMaterialProgressBar.setVisibility(View.GONE);
         mQueryClearIcon.setVisibility(View.GONE);
         mQueryResult.setLayoutManager(new LinearLayoutManager(context));
         mQueryResult.setAdapter(getAdapter());
@@ -101,8 +104,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
                     isActionDown = true;
                 } else if (event.getAction() == KeyEvent.ACTION_UP) {
                     if (isActionDown) {
-                        if(mAlphaAnimation != null && mAlphaAnimation.isRunning() && mRootView.getVisibility() == View.VISIBLE){
-                            mAlphaAnimation.cancel();
+                        if(mAnimator != null && mAnimator.isRunning() && mRootView.getVisibility() == View.VISIBLE){
+                            mAnimator.cancel();
                         }
                         hide();
                     }
@@ -112,12 +115,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
                 return false;
             }
         });
-        if(root.getVisibility() == View.VISIBLE) hide();
-        bindEvents();
-    }
 
-    private static final long DEBOUNCE_MILLISECONDS = 400;
-    private void bindEvents() {
         mCompositeSubscription.add(WidgetObservable.text(mQueryText)
             .map(event -> event.text().toString())
             .observeOn(AndroidSchedulers.mainThread())
@@ -135,14 +133,13 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
                 animators.start();
                 return query;
             })
-            .debounce(DEBOUNCE_MILLISECONDS, TimeUnit.MILLISECONDS)
+            .throttleLast(THROTTLE_MILLISECONDS, TimeUnit.MILLISECONDS)
             .filter(query -> !query.isEmpty())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(this::searchAutocomplete, Throwable::printStackTrace)
         );
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryClearIcon)
-            .observeOn(Schedulers.io())
             .subscribeOn(AndroidSchedulers.mainThread())
             .subscribe(event -> {
                 mQueryText.getText().clear();
@@ -154,9 +151,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         mCompositeSubscription.add(ViewObservable.clicks(mBackIcon)
             .subscribeOn(AndroidSchedulers.mainThread())
             .subscribe(event -> {
-                if(mAlphaAnimation != null && mAlphaAnimation.isRunning() && mRootView.getVisibility() == View.VISIBLE){
-                    mAlphaAnimation.cancel();
-                }
+                if(mAnimator != null && mAnimator.isRunning()) mAnimator.cancel();
                 hide();
             }, Throwable::printStackTrace)
         );
@@ -222,101 +217,80 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
 
     public boolean back() {
         if(mRootView.getVisibility() != View.VISIBLE) return false;
-        if(mAlphaAnimation != null && mAlphaAnimation.isRunning()){
-            mAlphaAnimation.cancel();
-        }
+        if(mAnimator != null && mAnimator.isRunning()) mAnimator.cancel();
         hide();
         return true;
     }
-    private ValueAnimator mAlphaAnimation;
-    private static final int ANIM_DURATION = 200;
-    private float mAlphaValue = 0.0f;
-    private boolean mIsAnimCancel = false;
-    public SearchToolbar show() {
-        mAlphaAnimation = ValueAnimator.ofFloat(0.0f, 1.0f);
-        mAlphaAnimation.setDuration(ANIM_DURATION);
-        mAlphaAnimation.setInterpolator(new DecelerateInterpolator(2.0f));
-        mAlphaAnimation.addUpdateListener(anim -> {
-            mAlphaValue = (float) anim.getAnimatedValue();
-            mRootView.setAlpha((float) anim.getAnimatedValue());
-        });
-        mAlphaAnimation.addListener(new AnimatorListenerAdapter() {
+
+
+    private boolean mSearchToolbarOpened = false;
+    public boolean isOpened() {
+        return mSearchToolbarOpened;
+    }
+    public void showSoftKeyboard() {
+        mQueryText.requestFocus();
+        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mQueryText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    private void setVisibility(boolean visible) {
+        if(mRootView != null) mRootView.setVisibility(visible? View.VISIBLE : View.GONE);
+        if(mOnVisibilityChangedListener != null) mOnVisibilityChangedListener.onVisibilityChanged(visible);
+    }
+
+    private ValueAnimator mAnimator;
+    public void show() {
+        mAnimator = AnimatorUtil.FADE_IN(mRootView);
+        mAnimator.addListener(new AnimatorListenerAdapter() {
+            boolean canceled = false;
+
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
-                mRootView.setVisibility(View.VISIBLE);
-                mQueryText.setFocusable(true);
-                if (mOnVisibilityChangedListener != null)
-                    mOnVisibilityChangedListener.onVisibilityChanged(true);
+                setVisibility(true);
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
-                mIsAnimCancel = true;
+                canceled = true;
                 hide();
-                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                if (!mIsAnimCancel) {
+                if (!canceled) {
+                    mQueryText.setFocusable(true);
                     mRootView.setAlpha(1.0f);
-                    mRootView.setVisibility(View.VISIBLE);
-                    if (mQueryText.requestFocus())
-                        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mQueryText, InputMethodManager.SHOW_IMPLICIT);
-                }else{
-                    ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
-                }
-                mIsAnimCancel = false;
+                    showSoftKeyboard();
+                    mSearchToolbarOpened = true;
+                } else canceled = false;
             }
         });
-        mAlphaAnimation.start();
+        mAnimator.start();
 
         mAutoCompleteAdapter.setIsHistory(true);
         notifyAutoCompleteDataChanged(getHistory());
-        return this;
     }
-    public SearchToolbar hide() {
-        mAlphaAnimation = ValueAnimator.ofFloat(mAlphaValue, 0.0f);
-        mAlphaAnimation.setDuration(ANIM_DURATION);
-        mAlphaAnimation.setInterpolator(new DecelerateInterpolator(2.0f));
-        mAlphaAnimation.addUpdateListener(anim -> {
-            mRootView.setAlpha(((float) anim.getAnimatedValue()));
-        });
-        mAlphaAnimation.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationResume(Animator animation) {
-                super.onAnimationResume(animation);
-                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
-            }
-
+    public void hide() {
+        mAnimator = AnimatorUtil.FADE_OUT(mRootView);
+        mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 mQueryText.clearFocus();
-                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);                if(mOnVisibilityChangedListener != null) mOnVisibilityChangedListener.onVisibilityChanged(false);
-                if(mOnVisibilityChangedListener != null) mOnVisibilityChangedListener.onVisibilityChanged(false);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                super.onAnimationCancel(animation);
-                this.onAnimationEnd(animation);
+                mQueryText.getText().clear();
+                mSearchToolbarOpened = false;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                mRootView.setVisibility(View.GONE);
-                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
+                setVisibility(false);
             }
         });
-        mAlphaAnimation.start();
-
+        mAnimator.start();
         notifyAutoCompleteDataChanged(new ArrayList<>());
-        return this;
     }
 
     public AutoCompleteAdapter getAdapter() {
@@ -370,7 +344,6 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     private static final int HISTORY_SIZE = 10;
     public boolean addToHistory(Candidate newCandidate) {
         if(newCandidate.lecture_id == null && newCandidate.professor_id == null) return false;
-        HistoryData history = new HistoryData();
         List<Candidate> candidates;
         if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
             candidates = ((HistoryData) AppManager.getInstance().getStringParsed(
@@ -384,8 +357,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         while(candidates.size() >= HISTORY_SIZE) candidates.remove(candidates.size() - 1);
         candidates.add(0, newCandidate);
 
-        history.candidates = candidates;
-        AppManager.getInstance().putStringParsed(AppConst.Preference.HISTORY, history);
+        AppManager.getInstance().putStringParsed(AppConst.Preference.HISTORY, new HistoryData(candidates));
         return true;
     }
 

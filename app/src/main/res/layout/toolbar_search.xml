@@ -34,7 +34,7 @@
                 style="@style/Widget.MaterialProgressBar.ProgressBar.Small"
                 android:visibility="gone"/>
         </RelativeLayout>
-        <com.papyruth.utils.view.search.PreImeEditText
+        <EditText
             android:id="@+id/search_toolbar_query_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

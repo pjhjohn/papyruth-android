@@ -10,6 +10,10 @@ public class HistoryData {
     public List<Candidate> candidates;
 
     public HistoryData() {
-        candidates = new ArrayList<>();
+        this.candidates = new ArrayList<>();
+    }
+
+    public HistoryData(List<Candidate> candidates) {
+        this.candidates = candidates;
     }
 }

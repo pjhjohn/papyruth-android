@@ -10,7 +10,7 @@ import android.view.animation.LinearInterpolator;
  * Created by pjhjohn on 2015-11-27.
  */
 public class AnimatorUtil {
-    public static Animator FADE_IN(View view) {
+    public static ValueAnimator FADE_IN(View view) {
         ValueAnimator animator = ValueAnimator.ofFloat(view.getAlpha(), 1);
         animator.setDuration(200);
         animator.setInterpolator(new LinearInterpolator());
@@ -33,7 +33,7 @@ public class AnimatorUtil {
         return animator;
     }
 
-    public static Animator FADE_OUT(View view) {
+    public static ValueAnimator FADE_OUT(View view) {
         ValueAnimator animator = ValueAnimator.ofFloat(view.getAlpha(), 0);
         animator.setDuration(200);
         animator.setInterpolator(new LinearInterpolator());
