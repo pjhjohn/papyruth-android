@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
@@ -45,7 +43,6 @@ import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -53,26 +50,15 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus, LoaderManager.LoaderCallbacks<Cursor>{
-
     private ViewPagerController mViewPagerController;
     private Context mContext;
     private Tracker mTracker;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
-    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mViewPagerController = ((AuthActivity) activity).getViewPagerController();
         mContext = activity;
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mViewPagerController = null;
-        mContext = null;
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.email)         protected EditText mTextEmail;
@@ -107,41 +93,40 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP2);
     }
 
-    private boolean mDuplicatedEmail = false;
-    private boolean mDuplicatedNickname = false;
-
+    private boolean mNextButtonEnabled;
     /* TODO : Validate Separately. email != null is not a good way to check type */
-    private String validateDuplication(String email, String nickcname){
-        String errorMsg = null;
-        mCompositeSubscription.add(Api.papyruth()
-            .validate((email != null ? "email" : "nickname"), (email != null ? email : nickcname))
-            .map(validator -> validator.validation)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                success -> {
-                    if (success) {
-                        if (email != null) mDuplicatedEmail = true;
-                        else mDuplicatedNickname = true;
-                    } else {
-                        if (email != null) mTextEmail.setError(getResources().getString(R.string.duplicated_email));
-                        else mTextNickname.setError(getResources().getString(R.string.duplicated_nickname));
-                    }
-                    showFAC();
-                }, error -> ErrorHandler.throwError(error, this)
-            )
-        );
-        return errorMsg;
+    private Observable<String> getEmailValidationObservable(TextView emailTextView) {
+        return WidgetObservable.text(emailTextView)
+            .map(event -> {
+                mNextButtonEnabled = false;
+                return event;
+            })
+            .map(event -> event.text().toString())
+            .flatMap(email -> {
+                final String errorMessage = RxValidator.getErrorMessageEmail.call(email);
+                if (errorMessage == null) return Api.papyruth()
+                    .users_sign_up_validate("email", email)
+                    .map(validator -> validator.validation)
+                    .map(valid -> valid ? null : getResources().getString(R.string.duplicated_email));
+                else return Observable.just(errorMessage);
+            }).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void showFAC() {
-        String validateNickname = RxValidator.getErrorMessageNickname.call(mTextNickname.getText().toString());
-        String validateEmail = RxValidator.getErrorMessageEmail.call(mTextEmail.getText().toString());
-
-        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-        boolean valid = validateEmail == null && validateNickname == null && mDuplicatedEmail && mDuplicatedNickname;
-        if (!visible && valid) FloatingActionControl.getInstance().show(true);
-        else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+    private Observable<String> getNicknameValidationObservable(TextView nicknameTextView) {
+        return WidgetObservable.text(nicknameTextView)
+            .map(event -> {
+                mNextButtonEnabled = false;
+                return event;
+            })
+            .map(event -> event.text().toString())
+            .flatMap(nickname -> {
+                final String errorMessage = RxValidator.getErrorMessageNickname.call(nickname);
+                if (errorMessage == null) return Api.papyruth()
+                    .users_sign_up_validate("nickname", nickname)
+                    .map(validator -> validator.validation)
+                    .map(valid -> valid ? null : getResources().getString(R.string.duplicated_nickname));
+                else return Observable.just(errorMessage);
+            }).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -151,75 +136,66 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         FloatingActionControl.getInstance().hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
-        InputMethodManager imm = ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        imm.showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
-
-        mTextEmail.requestFocus();
-
-        if(mCompositeSubscription.isUnsubscribed())
-            mCompositeSubscription = new CompositeSubscription();
-
-        if(SignUpForm.getInstance().getNickname() != null){
-            if(emailNotAssigned()) mTextEmail.setText(SignUpForm.getInstance().getEmail());
-            mTextNickname.setText(SignUpForm.getInstance().getNickname());
-            validateDuplication(mTextEmail.getText().toString(), null);
-            validateDuplication(null, mTextNickname.getText().toString());
-            showFAC();
-        }else if(mTextEmail.length() > 0 && mTextNickname.length() > 0){
-            validateDuplication(mTextEmail.getText().toString(), null);
-            validateDuplication(null, mTextNickname.getText().toString());
-        }
-
-
-        mCompositeSubscription.add(Observable.merge(
-            WidgetObservable.text(mTextEmail)
-                .debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .doOnNext(event -> {
-                    mDuplicatedEmail = false;
-                    validateDuplication(event.text().toString(), null);
-                    mTextEmail.setError(RxValidator.getErrorMessageEmail.call(event.text().toString()));
-                }),
-            WidgetObservable.text(mTextNickname)
-                .debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .doOnNext(event -> {
-                    mDuplicatedNickname = false;
-                    validateDuplication(null, event.text().toString());
-                    mTextNickname.setError(RxValidator.getErrorMessageNickname.call(event.text().toString()));
-                })
-            ).subscribe(event -> {
-                showFAC();
-            }, error -> ErrorHandler.throwError(error, this))
-        );
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
         mCompositeSubscription.add(
-            Observable.mergeDelayError(
-                FloatingActionControl.clicks().map(event -> FloatingActionControl.getButton().getVisibility() == View.VISIBLE),
-                Observable.create(observer -> mTextNickname.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    observer.onNext(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
-                    return !(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
-                }))
-            )
-                .filter(use -> use)
-                .subscribe(
-                    use -> {
-                        SignUpForm.getInstance().setEmail(mTextEmail.getText().toString());
-                        SignUpForm.getInstance().setNickname(mTextNickname.getText().toString());
-                        mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                    },
-                    error -> ErrorHandler.throwError(error, this))
+            Observable.combineLatest(
+                getEmailValidationObservable(mTextEmail),
+                getNicknameValidationObservable(mTextNickname),
+                (String emailError, String nicknameError) -> {
+                    mTextEmail.setError(emailError);
+                    mTextNickname.setError(nicknameError);
+                    return emailError == null && nicknameError == null;
+                }
+            ).observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
+                if (valid) mNextButtonEnabled = true;
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+            }, Throwable::printStackTrace)
         );
+
+        mCompositeSubscription.add(FloatingActionControl.clicks()
+                .subscribe(
+                    unused -> {
+                        if (mNextButtonEnabled) {
+                            SignUpForm.getInstance().setEmail(mTextEmail.getText().toString());
+                            SignUpForm.getInstance().setNickname(mTextNickname.getText().toString());
+                            mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                        }
+                    }
+                )
+        );
+
+        if(mTextEmail.getText().toString().isEmpty()) {
+            final String email = SignUpForm.getInstance().getEmail();
+            if(email != null) mTextEmail.setText(email);
+            else mTextEmail.getText().clear();
+        } else mTextEmail.setText(mTextEmail.getText());
+        if(mTextNickname.getText().toString().isEmpty()) {
+            final String nickname = SignUpForm.getInstance().getNickname();
+            if(nickname != null) mTextNickname.setText(nickname);
+            else mTextNickname.getText().clear();
+        } else mTextNickname.setText(mTextNickname.getText());
+
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
+            mTextEmail.requestFocus();
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
+        });
+
     }
 
     @Override
     public void onPageUnfocused() {
-        if(mCompositeSubscription !=null && !mCompositeSubscription.isUnsubscribed()) mCompositeSubscription.unsubscribe();
+        if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
-    /* For reading contacts to set initial email of user from device */
+    /* LoaderManager.LoaderCallbacks<Cursor> : For initial email of user from device */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
-        return new CursorLoader(getActivity(),
+        return new CursorLoader(
+            mContext,
             // Retrieve data rows for the device user's 'profile' contact.
             Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
             ProfileQuery.PROJECTION,
@@ -236,7 +212,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) emails.add(cursor.getString(ProfileQuery.ADDRESS));
-        if(emails.size()>0 && emailNotAssigned()) mTextEmail.setText(emails.get(0));
+        if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getEmail() == null) SignUpForm.getInstance().setEmail(emails.get(0));
     }
 
     @Override

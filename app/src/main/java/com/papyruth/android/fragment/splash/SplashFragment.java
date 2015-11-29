@@ -150,7 +150,7 @@ public class SplashFragment extends Fragment implements ErrorHandlerCallback{
         if (authFailed) ((SplashActivity) this.getActivity()).startAuthActivity();
         else {
             this.subscriptions.add(Api.papyruth()
-                .refresh_token(User.getInstance().getAccessToken())
+                .users_refresh_token(User.getInstance().getAccessToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

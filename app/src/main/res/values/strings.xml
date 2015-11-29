@@ -221,8 +221,8 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="success_del_history">All search history delete</string>
     <string name="goto_github_repo">REPOSITORY</string>
     <string name="point_denominator">/10</string>
-    <string name="forgot_password">forgot password</string>
-    <string name="title_forgot_password">FORGOT PASSWORD</string>
+    <string name="password_recovery">Forgot Password?</string>
+    <string name="password_recovery_title">Password Recovery</string>
     <string name="enter_your_email">enter the email address you use to sign in.</string>
     <string name="menu_evaluation_edit">Edit Evaluation</string>
 </resources>

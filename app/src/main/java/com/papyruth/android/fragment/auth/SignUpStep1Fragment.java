@@ -48,22 +48,13 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     private ViewPagerController mViewPagerController;
     private Context mContext;
     private Tracker mTracker;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
-    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mViewPagerController = ((AuthActivity) activity).getViewPagerController();
         mContext = activity;
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mViewPagerController = null;
-        mContext = null;
+        mTracker = ((papyruth) activity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView mUniversityRecyclerView;
@@ -75,7 +66,6 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         ButterKnife.inject(this, view);
         mCompositeSubscription = new CompositeSubscription();
         this.setupRecyclerView(mUniversityRecyclerView);
-
         return view;
     }
 
@@ -108,17 +98,17 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
-//        getActivity().findViewById(R.id.app_logo_horizontal).setVisibility(View.GONE);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
-        if(mCompositeSubscription != null && mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused ->
+            ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0)
+        );
 
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
-                InputMethodManager imm = ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE));
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                imm.showSoftInput(mUniversityRecyclerView, InputMethodManager.SHOW_FORCED);
+                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mUniversityRecyclerView, InputMethodManager.SHOW_FORCED);
                 /* TODO : Really need this? */
                 mCompositeSubscription.add(Observable
                     .timer(300, TimeUnit.MILLISECONDS)
@@ -131,9 +121,6 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
                 );
             }, error -> ErrorHandler.throwError(error, this)
         ));
-
-        InputMethodManager imm = ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE));
-        imm.hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0);
     }
 
     @Override
@@ -175,13 +162,12 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
                 imm.showSoftInput(mUniversityRecyclerView, InputMethodManager.SHOW_FORCED);
                 /* TODO : Really need this? */
                 mCompositeSubscription.add(Observable
-                        .timer(300, TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(
-                            unused -> mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
-                            error -> ErrorHandler.throwError(error, this)
-                        )
+                    .timer(300, TimeUnit.MILLISECONDS, Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        unused -> mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
+                        error -> ErrorHandler.throwError(error, this)
+                    )
                 );
             })
             .build()
