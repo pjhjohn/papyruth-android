@@ -62,6 +62,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     private RecyclerViewItemClickListener mDefaultRecyclerViewItemClickListener;
     private RecyclerViewItemClickListener mRecyclerViewItemClickListener;
     private OnVisibilityChangedListener mOnVisibilityChangedListener;
+    private OnSearchByQueryListener mDefaultOnSearchByQueryListener;
     private OnSearchByQueryListener mOnSearchByQueryListener;
     private AutoCompleteAdapter mAutoCompleteAdapter;
     private CompositeSubscription mCompositeSubscription;
@@ -69,12 +70,13 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     private Resources mResources;
     private List<Candidate> mCandidates;
 
-    public void init(Context context, ViewGroup root, RecyclerViewItemClickListener defaultRecyclerViewItemClickListener) {
+    public void init(Context context, ViewGroup root, RecyclerViewItemClickListener defaultRecyclerViewItemClickListener, OnSearchByQueryListener searchByQueryListener) {
         View view = LayoutInflater.from(context).inflate(R.layout.toolbar_search, root, true);
         ButterKnife.inject(this, view);
         mContext = context;
         mResources = context.getResources();
         mDefaultRecyclerViewItemClickListener = defaultRecyclerViewItemClickListener;
+        mDefaultOnSearchByQueryListener = searchByQueryListener;
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
         if(mCandidates == null) mCandidates = new ArrayList<>();
 
@@ -156,6 +158,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
             if (e.getAction() == KeyEvent.ACTION_DOWN && (keycode == KeyEvent.KEYCODE_ENTER || keycode == KeyEvent.KEYCODE_SEARCH)) {
                 setSelectedQuery(mQueryText.getText().toString());
                 if (mOnSearchByQueryListener != null) mOnSearchByQueryListener.onSearchByQuery();
+                else mDefaultOnSearchByQueryListener.onSearchByQuery();
                 hide();
                 return true;
             }
@@ -284,6 +287,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 mRootView.setVisibility(View.GONE);
+                mQueryText.getText().clear();
                 ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mQueryText.getWindowToken(), 2);
             }
         });

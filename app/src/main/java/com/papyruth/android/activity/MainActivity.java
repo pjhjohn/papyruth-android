@@ -119,6 +119,8 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
             SearchToolbar.getInstance().setSelectedCandidate(position);
             SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
             this.navigate(SimpleCourseFragment.class, true);
+        }, () -> {
+            this.navigate(SimpleCourseFragment.class, true);
         });
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
     }
