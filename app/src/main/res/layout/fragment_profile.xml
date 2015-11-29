@@ -218,6 +218,48 @@
                     android:textSize="@dimen/basefont_x1.5"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
+            <RelativeLayout
+            android:id="@+id/univ_mail_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x7">
+            <ImageView
+                android:id="@+id/univ_mail_icon"
+                android:layout_width="@dimen/baseline_x3"
+                android:layout_height="@dimen/baseline_x3"
+                android:layout_marginLeft="@dimen/baseline_x2"
+                android:layout_marginStart="@dimen/baseline_x2"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/empty"/>
+            <TextView
+                android:id="@+id/univ_mail_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/baseline_x4"
+                android:layout_marginStart="@dimen/baseline_x4"
+                android:layout_toRightOf="@+id/univ_mail_icon"
+                android:layout_toEndOf="@+id/univ_mail_icon"
+                android:layout_toLeftOf="@+id/univ_mail_text"
+                android:layout_toStartOf="@+id/univ_mail_text"
+                android:text="@string/label_university_mail"
+                android:textStyle="bold"
+                android:textSize="@dimen/basefont_x1.5"/>
+            <TextView
+                android:id="@+id/univ_mail_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/baseline_x2"
+                android:layout_marginStart="@dimen/baseline_x2"
+                android:layout_marginRight="@dimen/baseline_x3"
+                android:layout_marginEnd="@dimen/baseline_x3"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textSize="@dimen/basefont_x1.5"/>
+        </RelativeLayout>
+            <include layout="@layout/hr_settings"/>
         </LinearLayout>
     </RelativeLayout>
 </com.papyruth.utils.view.navigator.NavigatableFrameLayout>

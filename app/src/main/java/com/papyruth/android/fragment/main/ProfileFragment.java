@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -22,6 +23,7 @@ import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
+import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -59,6 +62,9 @@ public class ProfileFragment extends Fragment {
     @InjectView (R.id.entrance) protected TextView entrance;
     @InjectView (R.id.email_icon) protected ImageView emailIcon;
     @InjectView (R.id.email_text) protected TextView email;
+    @InjectView (R.id.univ_mail_icon) protected ImageView univEmailIcon;
+    @InjectView (R.id.univ_mail_text) protected TextView univEmail;
+    @InjectView (R.id.univ_mail_container) protected RelativeLayout univEmailContainer;
     @InjectView (R.id.realname_icon) protected ImageView realnameIcon;
     @InjectView (R.id.realname_text) protected TextView realname;
     @InjectView (R.id.nickname_icon) protected ImageView nicknameIcon;
@@ -109,6 +115,9 @@ public class ProfileFragment extends Fragment {
         this.nickname.setText(User.getInstance().getNickname());
         Picasso.with(context).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(Color.GRAY)).into(this.genderIcon);
         this.gender.setText(this.getResources().getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
+        Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(Color.GRAY)).into(this.univEmailIcon);
+        this.univEmail.setText(User.getInstance().getUniversity_email() != null ? User.getInstance().getUniversity_email() : getResources().getString(R.string.label_university_email));
+
 
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_email)
@@ -118,12 +127,20 @@ public class ProfileFragment extends Fragment {
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_nickname)
             .subscribe(unused -> this.navigator.navigate(ProfileChangeNicknameFragment.class, true)
-                ,error->ErrorHandler.throwError(error, this)
+                , error -> ErrorHandler.throwError(error, this)
             ));
         this.subscriptions.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_password)
             .subscribe(unused -> this.navigator.navigate(ProfileChangePasswordFragment.class, true)
-                ,error->ErrorHandler.throwError(error, this)
+                , error -> ErrorHandler.throwError(error, this)
             ));
+        this.subscriptions.add(
+            ViewObservable
+                .clicks(this.univEmailContainer)
+                .filter(event -> User.getInstance().getUniversity_email() == null)
+                .subscribe(
+                    unused -> this.navigator.navigate(ProfileUniversityEmailFragment.class, true)
+                    , error -> ErrorHandler.throwError(error, this)
+                ));
     }
 }

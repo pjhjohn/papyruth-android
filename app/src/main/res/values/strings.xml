@@ -188,10 +188,17 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_realname">REALNAME</string>
     <string name="label_nickname">NICKNAME</string>
     <string name="label_gender">GENDER</string>
+    <string name="label_university_mail">University Email</string>
     <string name="label_email_change">ENTER NEW EMAIL ADDRESS TO CHANGE</string>
     <string name="label_email_change_prefix">ENTER</string>
     <string name="label_email_change_content">NEW EMAIL ADDRESS</string>
     <string name="label_email_change_postfix">TO CHANGE</string>
+
+    <string name="label_university_email">Need to confirm university email</string>
+    <string name="hint_university_email">ENTER UNIVERSITY EMAIL</string>
+    <string name="label_university_email_prefix">ENTER</string>
+    <string name="label_university_email_content">UNIVERSITY</string>
+    <string name="label_university_email_postfix">EMAIL</string>
 
     <string name="label_nickname_change">ENTER NEW NICKNAME TO CHANGE</string>
     <string name="label_nickname_change_prefix">ENTER</string>

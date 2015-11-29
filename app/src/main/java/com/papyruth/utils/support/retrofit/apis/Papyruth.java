@@ -279,6 +279,11 @@ public interface Papyruth {
         @Query("old_password") String old_password,
         @Query("new_password") String new_password
     );
+    @POST("/users/me/university_email")
+    Observable<SimpleResponse> users_me_univ_email(
+        @Header("Authorization") String authorization,
+        @Query("email") String univ_email
+    );
     @POST("/users/me/edit")
     Observable<UserDataResponse> users_me_edit_email(
         @Header("Authorization") String authorization,

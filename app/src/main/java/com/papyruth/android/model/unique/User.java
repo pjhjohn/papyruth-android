@@ -24,6 +24,7 @@ public class User {
     private Boolean is_boy;
     private Integer university_id;
     private String  university_name;
+    private String  university_email;
     private Integer entrance_year;
     private String  avatar_url;
     private BehaviorSubject<String> bsNickname;
@@ -132,6 +133,9 @@ public class User {
     public void setMandatoryEvaluationCount(Integer mandatory_evaluation_count) {
         this.mandatory_evaluation_count = mandatory_evaluation_count;
     }
+    public String getUniversity_email() { return university_email; }
+    public void setUniversity_email(String university_email) { this.university_email = university_email; }
+
     public boolean needMoreEvaluation(){
         return this.mandatory_evaluation_count > 0;
     }
