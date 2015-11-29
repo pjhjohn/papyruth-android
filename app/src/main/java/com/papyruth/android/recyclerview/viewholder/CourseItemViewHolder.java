@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -18,7 +17,6 @@ import com.papyruth.android.R;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.utils.support.picasso.CircleTransformation;
 import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.view.Hashtag;
 import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -36,7 +34,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.course_item_overall_label)      protected TextView mLabelOverall;
     @InjectView(R.id.course_item_overall_point)      protected RobotoTextView mPointOverall;
     @InjectView(R.id.course_item_overall_ratingbar)  protected RatingBar mRatingBarOverall;
-    @InjectView(R.id.course_item_hashtags)           protected LinearLayout mHashtags;
+    @InjectView(R.id.course_item_hashtags)           protected TextView mHashtags;
     @InjectView(R.id.course_item_evaluation_icon)    protected ImageView mEvaluationIcon;
     @InjectView(R.id.course_item_evaluation_count)   protected TextView mEvaluationCount;
     private final Context mContext;
@@ -60,18 +58,13 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
         mLabelOverall.setText(R.string.label_point_overall);
         if (course.point_overall != null && course.evaluation_count != null && course.evaluation_count != 0) setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, (float) course.point_overall / (float) course.evaluation_count);
         else setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, -1);
-        mHashtags.removeAllViews();
-        if(course.hashtags!=null) mHashtags.post(() -> {
-            float totalWidth = 0;
-            for (String hashtag : course.hashtags) {
-                Hashtag tag = new Hashtag(mContext, hashtag);
-                tag.setMaxLines(1);
-                float width = tag.getPaint().measureText((String) tag.getText());
-                if (width + totalWidth > mHashtags.getWidth()) break;
-                mHashtags.addView(tag);
-                totalWidth += width;
-            }
-        });
+
+        String hashtagText = "";
+        for(String hashtag : course.hashtags){
+            hashtagText += "#"+hashtag+" ";
+        }
+        this.mHashtags.setText(hashtagText);
+
         Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
         mEvaluationCount.setText(pointInRange(course.evaluation_count) ? String.valueOf(course.evaluation_count) : "N/A");
     }

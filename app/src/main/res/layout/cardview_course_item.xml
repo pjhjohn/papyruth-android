@@ -103,16 +103,17 @@
         android:layout_marginTop="@dimen/baseline_x1"
         android:layout_marginLeft="@dimen/baseline_x1"
         android:layout_marginRight="@dimen/baseline_x1">
-        <LinearLayout
+        <TextView
             android:id="@+id/course_item_hashtags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/course_item_statistics"
             android:layout_toStartOf="@+id/course_item_statistics"
-            android:layout_centerVertical="true"/><!-- Hashtags -->
+            android:textColor="@color/hashtag"
+            android:layout_centerVertical="true"
+            android:singleLine="true"/><!-- Hashtags -->
         <LinearLayout
             android:id="@+id/course_item_statistics"
             android:layout_width="wrap_content"
