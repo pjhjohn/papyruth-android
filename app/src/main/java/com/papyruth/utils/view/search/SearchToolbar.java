@@ -70,6 +70,9 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     private Resources mResources;
     private List<Candidate> mCandidates;
 
+    private boolean mIsOpen;
+    private boolean mIsInitialized = false;
+
     public void init(Context context, ViewGroup root, RecyclerViewItemClickListener defaultRecyclerViewItemClickListener, OnSearchByQueryListener searchByQueryListener) {
         View view = LayoutInflater.from(context).inflate(R.layout.toolbar_search, root, true);
         ButterKnife.inject(this, view);
@@ -79,6 +82,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         mDefaultOnSearchByQueryListener = searchByQueryListener;
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
         if(mCandidates == null) mCandidates = new ArrayList<>();
+        mIsOpen = false;
+        mIsInitialized = true;
 
         Picasso.with(mContext).load(R.drawable.ic_light_clear).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mQueryClearIcon);
         Picasso.with(mContext).load(R.drawable.ic_light_back).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mBackIcon);
@@ -214,6 +219,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
             mAlphaValue = ((float) anim.getAnimatedValue());
             mRootView.setAlpha(mAlphaValue);
         });
+        mIsOpen = true;
         mAlphaAnimation.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -259,6 +265,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         mAlphaAnimation.addUpdateListener(anim -> {
             mRootView.setAlpha(((float) anim.getAnimatedValue()));
         });
+        mIsOpen = false;
         mAlphaAnimation.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationResume(Animator animation) {
@@ -295,6 +302,13 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
 
         notifyAutoCompleteDataChanged(new ArrayList<>());
         return this;
+    }
+
+    public boolean isOpen(){
+        return mIsOpen;
+    }
+    public boolean isInitialized(){
+        return mIsInitialized;
     }
 
     public AutoCompleteAdapter getAdapter() {

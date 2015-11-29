@@ -106,7 +106,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     protected void onPause() {
         super.onPause();
-        SearchToolbar.getInstance().hide();
+//        SearchToolbar.getInstance().hide();
         ((InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
     }
 
@@ -115,13 +115,15 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         super.onResume();
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         ViewHolderFactory.getInstance().setContext(this);
-        SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, position) -> {
-            SearchToolbar.getInstance().setSelectedCandidate(position);
-            SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
-            this.navigate(SimpleCourseFragment.class, true);
-        }, () -> {
-            this.navigate(SimpleCourseFragment.class, true);
-        });
+        if (!SearchToolbar.getInstance().isInitialized()) {
+            SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, position) -> {
+                SearchToolbar.getInstance().setSelectedCandidate(position);
+                SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
+                this.navigate(SimpleCourseFragment.class, true);
+            }, () -> {
+                this.navigate(SimpleCourseFragment.class, true);
+            });
+        }
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
     }
 
