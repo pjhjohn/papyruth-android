@@ -9,24 +9,38 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white">
-        <ImageView
-            android:id="@+id/search_toolbar_back_icon"
+        <RelativeLayout
+            android:id="@+id/search_toolbar_navigation_icon"
             android:layout_width="@dimen/baseline_x3"
             android:layout_height="@dimen/baseline_x3"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/baseline_x2"
-            android:layout_marginStart="@dimen/baseline_x2"
-            android:src="@drawable/ic_light_back"
-            android:contentDescription="@string/empty"/>
-        <com.papyruth.utils.view.search.PreImeEditText
+            android:layout_marginStart="@dimen/baseline_x2">
+            <ImageView
+                android:id="@+id/search_toolbar_back_icon"
+                android:layout_width="@dimen/baseline_x3"
+                android:layout_height="@dimen/baseline_x3"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_light_back"
+                android:contentDescription="@string/empty"/>
+            <com.papyruth.utils.support.materialprogressbar.MaterialProgressBar
+                android:id="@+id/search_toolbar_material_progressbar"
+                android:layout_width="@dimen/baseline_x3"
+                android:layout_height="@dimen/baseline_x3"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                style="@style/Widget.MaterialProgressBar.ProgressBar.Small"
+                android:visibility="gone"/>
+        </RelativeLayout>
+        <EditText
             android:id="@+id/search_toolbar_query_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/search_toolbar_back_icon"
-            android:layout_toEndOf="@id/search_toolbar_back_icon"
+            android:layout_toRightOf="@+id/search_toolbar_navigation_icon"
+            android:layout_toEndOf="@+id/search_toolbar_navigation_icon"
             android:layout_marginLeft="@dimen/baseline_x4"
             android:layout_marginStart="@dimen/baseline_x4"
             android:layout_toLeftOf="@+id/search_toolbar_query_clear_icon"

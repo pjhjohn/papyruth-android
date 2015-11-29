@@ -5,9 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -36,8 +34,11 @@ import com.papyruth.utils.view.navigator.Navigator;
 import com.papyruth.utils.view.search.SearchToolbar;
 import com.papyruth.utils.view.softkeyboard.SoftKeyboardActivity;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import timber.log.Timber;
 
 public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, ErrorHandlerCallback {
@@ -64,12 +65,32 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         mToolbar.inflateMenu(R.menu.main);
         mToolbar.setTitleTextColor(Color.WHITE);
 
+        mMenuItemSearch  = mToolbar.getMenu().findItem(AppConst.Menu.SEARCH);
+        mMenuItemSearch.setOnMenuItemClickListener(item -> {
+            SearchToolbar.getInstance().show();
+            return true;
+        });
+        mMenuItemSetting = mToolbar.getMenu().findItem(AppConst.Menu.SETTING);
+        mMenuItemSetting.setOnMenuItemClickListener(item -> {
+            this.navigate(SettingsFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
+            return true;
+        });
+        super.onCreateOptionsMenu(mToolbar.getMenu());
+
         mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawer.setup(R.id.navigation_drawer, mNavigationDrawerLayout, mToolbar);
         mNavigationDrawer.update();
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
 
-        this.createToolbarOptionsMenu(mToolbar.getMenu());
+        ViewHolderFactory.getInstance().setContext(this);
+        SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, position) -> {
+            SearchToolbar.getInstance().setSelectedCandidate(position);
+            SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
+            this.navigate(SimpleCourseFragment.class, true);
+        }, () -> {
+            this.navigate(SimpleCourseFragment.class, true);
+        });
+        SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
     }
 
     private MenuItem mMenuItemSearch;
@@ -81,22 +102,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         }
     }
 
-    private boolean createToolbarOptionsMenu(Menu menu) {
-        mMenuItemSearch  = menu.findItem(AppConst.Menu.SEARCH);
-        mMenuItemSearch.setOnMenuItemClickListener(item -> {
-            SearchToolbar.getInstance().show();
-            return true;
-        });
-
-        mMenuItemSetting = menu.findItem(AppConst.Menu.SETTING);
-        mMenuItemSetting.setOnMenuItemClickListener(item -> {
-            this.navigate(SettingsFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
-            return true;
-        });
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -104,26 +109,10 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-//        SearchToolbar.getInstance().hide();
-        ((InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
+        if(SearchToolbar.getInstance().isOpened()) Observable.timer(100, TimeUnit.MILLISECONDS).subscribe(unused -> SearchToolbar.getInstance().showSoftKeyboard());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        ViewHolderFactory.getInstance().setContext(this);
-        if (!SearchToolbar.getInstance().isInitialized()) {
-            SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, position) -> {
-                SearchToolbar.getInstance().setSelectedCandidate(position);
-                SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
-                this.navigate(SimpleCourseFragment.class, true);
-            }, () -> {
-                this.navigate(SimpleCourseFragment.class, true);
-            });
-        }
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
     }
 

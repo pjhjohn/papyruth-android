@@ -305,11 +305,11 @@ public interface Papyruth {
         @Query("page") Integer page
     );
     @POST("/users/refresh_token")
-    Observable<UserDataResponse> refresh_token(
+    Observable<UserDataResponse> users_refresh_token(
         @Header("Authorization") String authorization
     );
     @POST("/users/sign_up/validate")
-    Observable<SignUpValidateResponse> validate(
+    Observable<SignUpValidateResponse> users_sign_up_validate(
         @Query("name") String name,
         @Query("value") String value
     );
