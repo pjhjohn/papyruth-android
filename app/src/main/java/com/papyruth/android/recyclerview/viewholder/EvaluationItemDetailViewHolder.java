@@ -55,7 +55,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s </strong>%s", mResources.getString(R.string.professor_prefix), evaluation.professor_name, mResources.getString(R.string.professor_postfix))));
         setCategoryProfessorColor(mCategory, mProfessor, evaluation.category);
         mTimestamp.setText(DateTimeUtil.timeago(mContext, evaluation.created_at));
-        mBody.setText(evaluation.body);
+        mBody.setText(evaluation.body.replace('\n', ' '));
         mNickname.setText(evaluation.user_nickname);
         setPointRating(mRatingBarOverall, evaluation.point_overall);
     }
