@@ -53,6 +53,9 @@ public class User {
         this.entrance_year   = null;
         this.avatar_url      = null;
         this.university_image_url = null;
+        this.university_email = null;
+        this.confirmed = null;
+        this.mandatory_evaluation_count = null;
     }
 
     public String getAccessToken () {
@@ -159,6 +162,7 @@ public class User {
         if(user.university_name != null) this.setUniversityName(user.university_name);
         if(user.university_image_url != null) this.setUniversityImageUrl(user.university_image_url);
         if(user.confirmed != null) this.setConfirmed(user.confirmed);
+        if(user.university_email != null) this.setUniversity_email(user.university_email);
         if(access_token != null) this.setAccessToken(access_token);
     }
 
