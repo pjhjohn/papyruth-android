@@ -19,7 +19,10 @@
     <string name="toolbar_title_course">강의 정보</string>
     <string name="toolbar_title_new_evaluation">강의평가 쓰기</string>
     <string name="toolbar_profile">내 정보</string>
-    <string name="toolbar_edit_profile">내 정보 수정</string>
+    <string name="toolbar_profile_register_university_email">학교 이메일 등록</string>
+    <string name="toolbar_profile_change_email">이메일 변경</string>
+    <string name="toolbar_profile_change_nickname">닉네임 변경</string>
+    <string name="toolbar_profile_change_password">비밀번호 변경</string>
     <string name="toolbar_favorite">관심 강좌</string>
     <string name="toolbar_search">강의 검색</string>
     <string name="toolbar_settings">설정</string>
@@ -73,8 +76,6 @@
     <string name="gender_female">여자</string>
     <string name="entrance_prompt">입학 년도를 선택해 주세요</string>
     <string name="entrance_postfix">  학번</string>
-    <string name="hint_lecture">강좌 제목</string>
-    <string name="hint_professor">교수님 성함</string>
     <string name="confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
     <string name="submit_evaluation_success">강의평가 등록에 성공하였습니다</string>
     <string name="submit_evaluation_fail">강의평가 등록에 실패하였습니다</string>
@@ -99,9 +100,10 @@
     <string name="dialog_title_confirm_submit">양식 제출 확인</string>
     <string name="dialog_content_configm_submit">양식을 제출하시겠습니까?</string>
     <string name="dialog_title_entrance_year">입학 년도를 선택해주세요</string>
-    <string name="fab_edit_email">메일 변경</string>
-    <string name="fab_edit_nickname">닉네임 변경</string>
-    <string name="fab_edit_password">비밀번호 변경</string>
+    <string name="fab_change_email">메일 변경</string>
+    <string name="fab_change_nickname">닉네임 변경</string>
+    <string name="fab_change_password">비밀번호 변경</string>
+    <string name="fab_register_universtiy_email">학교 이메일 등록</string>
     <string name="failed_passwd">비밀번호 변경에 실패하였습니다</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
@@ -183,10 +185,8 @@
 
     <string name="sample_univ_email_prefix">sample</string>
     <string name="sample_univ_email_postfix">\@snu.ac.kr</string>
-    <string name="sample_univ_email">sample\@snu.ac.kr</string>
 
-    <string name="label_university_email">학교 이메일 인증이 필요합니다</string>
-    <string name="hint_university_email">학교 이메일 주소를 적어주세요</string>
+    <string name="label_university_email">인증이 필요합니다</string>
     <string name="label_university_email_prefix"></string>
     <string name="label_university_email_content">학교 이메일 주소</string>
     <string name="label_university_email_postfix">를 적어주세요</string>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -19,11 +18,10 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.activity.AuthActivity;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.R;
 import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
@@ -82,10 +80,10 @@ public class SettingsFragment extends Fragment {
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        Picasso.with(context).load(R.drawable.ic_light_tos).transform(new ColorFilterTransformation(Color.GRAY)).into(termOfServicesIcon);
-        Picasso.with(context).load(R.drawable.ic_light_osl).transform(new ColorFilterTransformation(Color.GRAY)).into(openSourceLicenseIcon);
-        Picasso.with(context).load(R.drawable.ic_light_history).transform(new ColorFilterTransformation(Color.GRAY)).into(delHistoryIcon);
-        Picasso.with(context).load(R.drawable.ic_light_signout).transform(new ColorFilterTransformation(Color.GRAY)).into(signoutIcon);
+        Picasso.with(context).load(R.drawable.ic_light_tos).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(termOfServicesIcon);
+        Picasso.with(context).load(R.drawable.ic_light_osl).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(openSourceLicenseIcon);
+        Picasso.with(context).load(R.drawable.ic_light_history).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(delHistoryIcon);
+        Picasso.with(context).load(R.drawable.ic_light_signout).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(signoutIcon);
         return view;
     }
     @Override
@@ -107,16 +105,16 @@ public class SettingsFragment extends Fragment {
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 
         this.subscriptions.add(ViewObservable
-                .clicks(this.termOfServices)
-                .filter(unused -> this.dialog == null || !this.dialog.isShowing())
-                .subscribe(unused -> {
-                    dialog = TermOfServicesDialog.build(
-                        context,
-                        context.getResources().getString(R.string.label_tos),
-                        context.getResources().getString(R.string.lorem_ipsum)
-                    );
-                    dialog.show();
-                }, error -> ErrorHandler.throwError(error, this))
+            .clicks(this.termOfServices)
+            .filter(unused -> this.dialog == null || !this.dialog.isShowing())
+            .subscribe(unused -> {
+                dialog = TermOfServicesDialog.build(
+                    context,
+                    context.getResources().getString(R.string.label_tos),
+                    context.getResources().getString(R.string.lorem_ipsum)
+                );
+                dialog.show();
+            }, error -> ErrorHandler.throwError(error, this))
         );
 
         this.subscriptions.add(ViewObservable

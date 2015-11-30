@@ -13,13 +13,16 @@
     <string name="nav_item_my_comment">My comment</string>
 
     <!--toolbar-->
-    <string name="toolbar_profile">My profile</string>
-    <string name="toolbar_edit_profile">Edit profile</string>
     <string name="toolbar_title_course">Course Overview</string>
     <string name="toolbar_title_new_evaluation">New Evaluation</string>
     <string name="toolbar_title_home">Latest Evaluations</string>
     <string name="toolbar_title_new_comment">New Comment</string>
     <string name="toolbar_title_evaluation">Evaluation</string>
+    <string name="toolbar_profile">My profile</string>
+    <string name="toolbar_profile_register_university_email">Reginster University Email</string>
+    <string name="toolbar_profile_change_email">Change Email</string>
+    <string name="toolbar_profile_change_nickname">Change Nickname</string>
+    <string name="toolbar_profile_change_password">Change Password</string>
     <string name="toolbar_favorite">Favorite Course</string>
     <string name="toolbar_search">Search Course</string>
     <string name="toolbar_settings">Settings</string>
@@ -73,8 +76,6 @@
     <string name="gender_female">Female</string>
     <string name="entrance_prompt">Please select entrance year</string>
     <string name="entrance_postfix"/>
-    <string name="hint_lecture">Lecture Title</string>
-    <string name="hint_professor">Professor Name</string>
     <string name="confirm_exit">Press again to close application</string>
     <string name="submit_evaluation_success">Succeed to register Evaluation</string>
     <string name="submit_evaluation_fail">Failed to register Evaluation</string>
@@ -99,9 +100,10 @@
     <string name="dialog_title_confirm_submit">Confirm Submission</string>
     <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
     <string name="dialog_title_entrance_year">Please select your entrance year</string>
-    <string name="fab_edit_email">Change Email Address</string>
-    <string name="fab_edit_nickname">Change Nickname</string>
-    <string name="fab_edit_password">Change Password</string>
+    <string name="fab_change_email">Change Email Address</string>
+    <string name="fab_change_nickname">Change Nickname</string>
+    <string name="fab_change_password">Change Password</string>
+    <string name="fab_register_universtiy_email">Register University Email</string>
     <string name="failed_passwd">Failed to change password</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
@@ -194,8 +196,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_email_change_content">NEW EMAIL ADDRESS</string>
     <string name="label_email_change_postfix">TO CHANGE</string>
 
-    <string name="label_university_email">Need to confirm university email</string>
-    <string name="hint_university_email">ENTER UNIVERSITY EMAIL</string>
+    <string name="label_university_email">Confirmation Required</string>
     <string name="label_university_email_prefix">ENTER</string>
     <string name="label_university_email_content">UNIVERSITY</string>
     <string name="label_university_email_postfix">EMAIL</string>

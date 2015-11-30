@@ -136,8 +136,8 @@ public class User {
     public void setMandatoryEvaluationCount(Integer mandatory_evaluation_count) {
         this.mandatory_evaluation_count = mandatory_evaluation_count;
     }
-    public String getUniversity_email() { return university_email; }
-    public void setUniversity_email(String university_email) { this.university_email = university_email; }
+    public String getUniversityEmail() { return university_email; }
+    public void setUniversityEmail(String university_email) { this.university_email = university_email; }
 
     public boolean needMoreEvaluation(){
         return this.mandatory_evaluation_count > 0;
@@ -162,7 +162,7 @@ public class User {
         if(user.university_name != null) this.setUniversityName(user.university_name);
         if(user.university_image_url != null) this.setUniversityImageUrl(user.university_image_url);
         if(user.confirmed != null) this.setConfirmed(user.confirmed);
-        if(user.university_email != null) this.setUniversity_email(user.university_email);
+        if(user.university_email != null) this.setUniversityEmail(user.university_email);
         if(access_token != null) this.setAccessToken(access_token);
     }
 
