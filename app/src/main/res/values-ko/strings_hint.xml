@@ -11,4 +11,7 @@
     <string name="hint_entrance">입학년도</string>
     <string name="hint_search">검색</string>
     <string name="hint_search_course">강의 검색</string>
+    <string name="hint_lecture">강좌명</string>
+    <string name="hint_professor">교수명</string>
+    <string name="hint_register_university_email">sample\@snu.ac.kr</string>
 </resources>

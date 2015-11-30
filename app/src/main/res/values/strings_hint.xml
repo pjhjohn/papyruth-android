@@ -12,4 +12,7 @@
     <string name="hint_entrance">Entrance Year</string>
     <string name="hint_search">Search</string>
     <string name="hint_search_course">Search Course</string>
+    <string name="hint_lecture">Lecture Title</string>
+    <string name="hint_professor">Professor Name</string>
+    <string name="hint_register_university_email">sample\@snu.ac.kr</string>
 </resources>

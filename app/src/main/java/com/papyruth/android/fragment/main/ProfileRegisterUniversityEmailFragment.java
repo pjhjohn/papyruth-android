@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -51,7 +49,7 @@ import static com.papyruth.utils.support.rx.RxValidator.toString;
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileUniversityEmailFragment extends Fragment {
+public class ProfileRegisterUniversityEmailFragment extends Fragment {
     private Navigator navigator;
     private Context context;
     private Resources res;
@@ -74,23 +72,21 @@ public class ProfileUniversityEmailFragment extends Fragment {
         this.navigator = null;
     }
 
-    @InjectView (R.id.email_icon) protected ImageView icon;
-    @InjectView (R.id.email_label) protected TextView label;
-    @InjectView (R.id.email_text) protected EditText email;
+    @InjectView (R.id.university_email_icon)    protected ImageView icon;
+    @InjectView (R.id.university_email_label)   protected TextView label;
+    @InjectView (R.id.university_email_text)    protected EditText email;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile_change_email, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_register_university_email, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-        Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(Color.GRAY)).into(this.icon);
+        Picasso.with(context).load(R.drawable.ic_light_university_email).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
         else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
-//        this.email.setHint(User.getInstance().getUniversity_email() != null ? User.getInstance().getUniversity_email() : getResources().getString(R.string.sample_univ_email));
-        this.email.setHint(getResources().getString(R.string.sample_univ_email));
-        this.email.setText(User.getInstance().getUniversity_email());
+        this.email.setText(User.getInstance().getUniversityEmail());
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;
     }
@@ -107,7 +103,7 @@ public class ProfileUniversityEmailFragment extends Fragment {
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile_change_email));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        toolbar.setTitle(R.string.toolbar_edit_profile);
+        toolbar.setTitle(R.string.toolbar_profile_register_university_email);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
@@ -116,17 +112,17 @@ public class ProfileUniversityEmailFragment extends Fragment {
         FloatingActionControl.getButton().setShowProgressBackground(false);
         this.subscriptions.add(this.registerSubmitCallback());
         this.subscriptions.add(WidgetObservable
-                .text(this.email)
-                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .map(toString)
-                .map(RxValidator.getErrorMessageEmail)
-                .startWith((String) null)
-                .map(error -> error == null)
-                .subscribe(valid -> {
-                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-                }, error -> ErrorHandler.throwError(error, this))
+            .text(this.email)
+            .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .map(toString)
+            .map(RxValidator.getErrorMessageEmail)
+            .startWith((String) null)
+            .map(error -> error == null)
+            .subscribe(valid -> {
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+            }, error -> ErrorHandler.throwError(error, this))
         );
     }
 
@@ -151,7 +147,7 @@ public class ProfileUniversityEmailFragment extends Fragment {
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
                     if (response.success) {
-                        User.getInstance().setUniversity_email(email.getText().toString());
+                        User.getInstance().setUniversityEmail(email.getText().toString());
                         this.navigator.back();
                     } else {
                         // TODO : Failed to Update User Profile

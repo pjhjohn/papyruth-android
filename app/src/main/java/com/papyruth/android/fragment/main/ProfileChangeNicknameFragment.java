@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -84,7 +83,7 @@ public class ProfileChangeNicknameFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_change_nickname, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-        Picasso.with(context).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(Color.GRAY)).into(this.icon);
+        Picasso.with(context).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
         else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
         this.nickname.setText(User.getInstance().getNickname());
@@ -104,7 +103,7 @@ public class ProfileChangeNicknameFragment extends Fragment {
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile_change_nickname));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        toolbar.setTitle(R.string.toolbar_edit_profile);
+        toolbar.setTitle(R.string.toolbar_profile_change_nickname);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
@@ -113,17 +112,17 @@ public class ProfileChangeNicknameFragment extends Fragment {
         FloatingActionControl.getButton().setShowProgressBackground(false);
         this.subscriptions.add(this.registerSubmitCallback());
         this.subscriptions.add(WidgetObservable
-                .text(this.nickname)
-                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .map(toString)
-                .map(RxValidator.getErrorMessageNickname)
-                .startWith((String) null)
-                .map(error -> error == null)
-                .subscribe(valid -> {
-                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-                }, error-> ErrorHandler.throwError(error, this))
+            .text(this.nickname)
+            .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .map(toString)
+            .map(RxValidator.getErrorMessageNickname)
+            .startWith((String) null)
+            .map(error -> error == null)
+            .subscribe(valid -> {
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+            }, error -> ErrorHandler.throwError(error, this))
         );
     }
 

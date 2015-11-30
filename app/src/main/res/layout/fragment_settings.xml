@@ -9,11 +9,11 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/app_logo"
-            android:layout_width="@dimen/baseline_x20"
-            android:layout_height="@dimen/baseline_x20"
+            android:layout_width="@dimen/baseline_x15"
+            android:layout_height="@dimen/baseline_x15"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/baseline_x1"
+            android:layout_marginTop="@dimen/baseline_x2"
             android:src="@drawable/logo"
             android:contentDescription="@string/empty"/>
         <TextView
@@ -26,7 +26,7 @@
             android:layout_marginBottom="@dimen/baseline_x1"
             android:gravity="center"
             android:text="@string/app_sub_title"
-            android:textSize="@dimen/basefont_x1.5"/>
+            android:textSize="18sp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -68,7 +68,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="@string/label_tos"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
@@ -102,7 +102,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="@string/label_osl"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
@@ -136,7 +136,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="@string/label_del_history"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
@@ -170,7 +170,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="@string/label_signout"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
         </LinearLayout>

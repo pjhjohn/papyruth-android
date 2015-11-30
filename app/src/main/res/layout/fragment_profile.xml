@@ -9,8 +9,8 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/university_image"
-            android:layout_width="@dimen/baseline_x20"
-            android:layout_height="@dimen/baseline_x20"
+            android:layout_width="@dimen/baseline_x15"
+            android:layout_height="@dimen/baseline_x15"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/baseline_x1"
@@ -28,9 +28,9 @@
             android:layout_marginTop="@dimen/baseline_x0.5"
             android:gravity="center"
             android:textStyle="bold"
-            android:textSize="@dimen/basefont_x1.5"/>
+            android:textSize="18sp"/>
         <TextView
-            android:id="@+id/entrance"
+            android:id="@+id/entrance_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -39,7 +39,8 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/university_name"
             android:layout_marginBottom="@dimen/baseline_x1"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textSize="16sp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,7 +49,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/entrance">
+            android:layout_below="@+id/entrance_year">
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
                 android:id="@+id/email_container"
@@ -66,30 +67,78 @@
                     android:contentDescription="@string/empty"/>
                 <TextView
                     android:id="@+id/email_label"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/baseline_x4"
                     android:layout_marginStart="@dimen/baseline_x4"
                     android:layout_toRightOf="@+id/email_icon"
                     android:layout_toEndOf="@+id/email_icon"
-                    android:layout_toLeftOf="@+id/email_text"
-                    android:layout_toStartOf="@+id/email_text"
                     android:text="@string/label_email"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
                 <TextView
                     android:id="@+id/email_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/email_label"
+                    android:layout_toEndOf="@+id/email_label"
                     android:layout_marginLeft="@dimen/baseline_x2"
                     android:layout_marginStart="@dimen/baseline_x2"
                     android:layout_marginRight="@dimen/baseline_x3"
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="16sp"/>
+            </RelativeLayout>
+            <include layout="@layout/hr_settings"/>
+            <RelativeLayout
+                android:id="@+id/university_email_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/baseline_x7">
+                <ImageView
+                    android:id="@+id/university_email_icon"
+                    android:layout_width="@dimen/baseline_x3"
+                    android:layout_height="@dimen/baseline_x3"
+                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_marginStart="@dimen/baseline_x2"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:contentDescription="@string/empty"/>
+                <TextView
+                    android:id="@+id/university_email_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/baseline_x4"
+                    android:layout_marginStart="@dimen/baseline_x4"
+                    android:layout_toRightOf="@+id/university_email_icon"
+                    android:layout_toEndOf="@+id/university_email_icon"
+                    android:text="@string/label_university_mail"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/university_email_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/university_email_label"
+                    android:layout_toEndOf="@+id/university_email_label"
+                    android:layout_marginLeft="@dimen/baseline_x2"
+                    android:layout_marginStart="@dimen/baseline_x2"
+                    android:layout_marginRight="@dimen/baseline_x3"
+                    android:layout_marginEnd="@dimen/baseline_x3"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
@@ -108,30 +157,33 @@
                     android:contentDescription="@string/empty"/>
                 <TextView
                     android:id="@+id/realname_label"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/baseline_x4"
                     android:layout_marginStart="@dimen/baseline_x4"
                     android:layout_toRightOf="@+id/realname_icon"
                     android:layout_toEndOf="@+id/realname_icon"
-                    android:layout_toLeftOf="@+id/realname_text"
-                    android:layout_toStartOf="@+id/realname_text"
                     android:text="@string/label_realname"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
                 <TextView
                     android:id="@+id/realname_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/realname_label"
+                    android:layout_toEndOf="@+id/realname_label"
                     android:layout_marginLeft="@dimen/baseline_x2"
                     android:layout_marginStart="@dimen/baseline_x2"
                     android:layout_marginRight="@dimen/baseline_x3"
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
@@ -150,30 +202,33 @@
                     android:contentDescription="@string/empty"/>
                 <TextView
                     android:id="@+id/nickname_label"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/baseline_x4"
                     android:layout_marginStart="@dimen/baseline_x4"
                     android:layout_toRightOf="@+id/nickname_icon"
                     android:layout_toEndOf="@+id/nickname_icon"
-                    android:layout_toLeftOf="@+id/nickname_text"
-                    android:layout_toStartOf="@+id/nickname_text"
                     android:text="@string/label_nickname"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
                 <TextView
                     android:id="@+id/nickname_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/nickname_label"
+                    android:layout_toEndOf="@+id/nickname_label"
                     android:layout_marginLeft="@dimen/baseline_x2"
                     android:layout_marginStart="@dimen/baseline_x2"
                     android:layout_marginRight="@dimen/baseline_x3"
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
@@ -192,73 +247,34 @@
                     android:contentDescription="@string/empty"/>
                 <TextView
                     android:id="@+id/gender_label"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/baseline_x4"
                     android:layout_marginStart="@dimen/baseline_x4"
                     android:layout_toRightOf="@+id/gender_icon"
                     android:layout_toEndOf="@+id/gender_icon"
-                    android:layout_toLeftOf="@+id/gender_text"
-                    android:layout_toStartOf="@+id/gender_text"
                     android:text="@string/label_gender"
                     android:textStyle="bold"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:textSize="16sp"/>
                 <TextView
                     android:id="@+id/gender_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/gender_label"
+                    android:layout_toEndOf="@+id/gender_label"
                     android:layout_marginLeft="@dimen/baseline_x2"
                     android:layout_marginStart="@dimen/baseline_x2"
                     android:layout_marginRight="@dimen/baseline_x3"
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:textSize="@dimen/basefont_x1.5"/>
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
-            <RelativeLayout
-            android:id="@+id/univ_mail_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/baseline_x7">
-            <ImageView
-                android:id="@+id/univ_mail_icon"
-                android:layout_width="@dimen/baseline_x3"
-                android:layout_height="@dimen/baseline_x3"
-                android:layout_marginLeft="@dimen/baseline_x2"
-                android:layout_marginStart="@dimen/baseline_x2"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:contentDescription="@string/empty"/>
-            <TextView
-                android:id="@+id/univ_mail_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/baseline_x4"
-                android:layout_marginStart="@dimen/baseline_x4"
-                android:layout_toRightOf="@+id/univ_mail_icon"
-                android:layout_toEndOf="@+id/univ_mail_icon"
-                android:layout_toLeftOf="@+id/univ_mail_text"
-                android:layout_toStartOf="@+id/univ_mail_text"
-                android:text="@string/label_university_mail"
-                android:textStyle="bold"
-                android:textSize="@dimen/basefont_x1.5"/>
-            <TextView
-                android:id="@+id/univ_mail_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/baseline_x2"
-                android:layout_marginStart="@dimen/baseline_x2"
-                android:layout_marginRight="@dimen/baseline_x3"
-                android:layout_marginEnd="@dimen/baseline_x3"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:textSize="@dimen/basefont_x1.5"/>
-        </RelativeLayout>
             <include layout="@layout/hr_settings"/>
         </LinearLayout>
     </RelativeLayout>

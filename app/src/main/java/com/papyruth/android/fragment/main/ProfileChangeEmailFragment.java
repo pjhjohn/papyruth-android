@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -84,7 +83,7 @@ public class ProfileChangeEmailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_change_email, container, false);
         ButterKnife.inject(this, view);
         this.subscriptions = new CompositeSubscription();
-        Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(Color.GRAY)).into(this.icon);
+        Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_email_change_prefix), res.getString(R.string.label_email_change_content), res.getString(R.string.label_email_change_postfix))));
         else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_email_change_prefix), res.getString(R.string.label_email_change_content), res.getString(R.string.label_email_change_postfix))));
         this.email.setText(User.getInstance().getEmail());
@@ -104,7 +103,7 @@ public class ProfileChangeEmailFragment extends Fragment {
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile_change_email));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        toolbar.setTitle(R.string.toolbar_edit_profile);
+        toolbar.setTitle(R.string.toolbar_profile_change_email);
         ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);

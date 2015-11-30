@@ -3,7 +3,7 @@ package com.papyruth.android.fragment.main;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -11,20 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.R;
 import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
-import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
@@ -33,55 +31,48 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-05-19.
  */
 public class ProfileFragment extends Fragment {
-    private Navigator navigator;
+    private Navigator mNavigator;
     private Tracker mTracker;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
-    }
+    private Context mContext;
+    private Resources mResources;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.navigator = null;
+        mNavigator = (Navigator) activity;
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mContext = activity;
+        mResources = mContext.getResources();
     }
 
-    @InjectView (R.id.university_image) protected ImageView universityImage;
-    @InjectView (R.id.university_name) protected TextView universityName;
-    @InjectView (R.id.entrance) protected TextView entrance;
-    @InjectView (R.id.email_icon) protected ImageView emailIcon;
-    @InjectView (R.id.email_text) protected TextView email;
-    @InjectView (R.id.univ_mail_icon) protected ImageView univEmailIcon;
-    @InjectView (R.id.univ_mail_text) protected TextView univEmail;
-    @InjectView (R.id.univ_mail_container) protected RelativeLayout univEmailContainer;
-    @InjectView (R.id.realname_icon) protected ImageView realnameIcon;
-    @InjectView (R.id.realname_text) protected TextView realname;
-    @InjectView (R.id.nickname_icon) protected ImageView nicknameIcon;
-    @InjectView (R.id.nickname_text) protected TextView nickname;
-    @InjectView (R.id.gender_icon) protected ImageView genderIcon;
-    @InjectView (R.id.gender_text) protected TextView gender;
-
-    private CompositeSubscription subscriptions;
-    private Toolbar toolbar;
+    @InjectView(R.id.university_image)      protected ImageView mUniversityImage;
+    @InjectView(R.id.university_name)       protected TextView mUniversityName;
+    @InjectView(R.id.entrance_year)         protected TextView mEntranceYear;
+    @InjectView(R.id.email_icon)            protected ImageView mEmailIcon;
+    @InjectView(R.id.email_text)            protected TextView mEmailText;
+    @InjectView(R.id.university_email_icon) protected ImageView mUniversityEmailIcon;
+    @InjectView(R.id.university_email_text) protected TextView mUniversityEmailText;
+    @InjectView(R.id.realname_icon)         protected ImageView mRealnameIcon;
+    @InjectView(R.id.realname_text)         protected TextView mRealnameText;
+    @InjectView(R.id.nickname_icon)         protected ImageView mNicknameIcon;
+    @InjectView(R.id.nickname_text)         protected TextView mNicknameText;
+    @InjectView(R.id.gender_icon)           protected ImageView mGenderIcon;
+    @InjectView(R.id.gender_text)           protected TextView mGenderText;
+    private CompositeSubscription mCompositeSubscription;
+    private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.inject(this, view);
-        this.subscriptions = new CompositeSubscription();
-        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        mCompositeSubscription = new CompositeSubscription();
+        mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;
     }
 
@@ -89,7 +80,8 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     @Override
@@ -97,52 +89,44 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        final Context context = this.getActivity();
-        this.toolbar.setTitle(R.string.toolbar_profile);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
+        mToolbar.setTitle(R.string.toolbar_profile);
+        ToolbarUtil.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
-        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(universityName.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityName.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-        Picasso.with(context).load(User.getInstance().getUniversityImageUrl()).into(this.universityImage);
-        this.universityName.setText(User.getInstance().getUniversityName());
-        this.entrance.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.entrance_postfix)));
-        Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(Color.GRAY)).into(this.emailIcon);
-        this.email.setText(User.getInstance().getEmail());
-        Picasso.with(context).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(Color.GRAY)).into(this.realnameIcon);
-        this.realname.setText(User.getInstance().getRealname());
-        Picasso.with(context).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(Color.GRAY)).into(this.nicknameIcon);
-        this.nickname.setText(User.getInstance().getNickname());
-        Picasso.with(context).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(Color.GRAY)).into(this.genderIcon);
-        this.gender.setText(this.getResources().getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
-        Picasso.with(context).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(Color.GRAY)).into(this.univEmailIcon);
-        this.univEmail.setText(User.getInstance().getUniversity_email() != null ? User.getInstance().getUniversity_email() : getResources().getString(R.string.label_university_email));
+        Picasso.with(mContext).load(User.getInstance().getUniversityImageUrl()).into(mUniversityImage);
+        mUniversityName.setText(User.getInstance().getUniversityName());
+        mEntranceYear.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.entrance_postfix)));
+        Picasso.with(mContext).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEmailIcon);
+        mEmailText.setText(User.getInstance().getEmail());
+        Picasso.with(mContext).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mRealnameIcon);
+        mRealnameText.setText(User.getInstance().getRealname());
+        Picasso.with(mContext).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mNicknameIcon);
+        mNicknameText.setText(User.getInstance().getNickname());
+        Picasso.with(mContext).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mGenderIcon);
+        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
+        Picasso.with(mContext).load(R.drawable.ic_light_university_email).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
+        mUniversityEmailText.setText(User.getInstance().getUniversityEmail() != null ? User.getInstance().getUniversityEmail() : mResources.getString(R.string.label_university_email));
 
-
-        this.subscriptions.add(FloatingActionControl
+        mCompositeSubscription.add(FloatingActionControl
+            .clicks(R.id.fab_mini_register_university_email)
+            .filter(unused -> User.getInstance().getUniversityEmail() == null)
+            .subscribe(unused -> mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true), error -> ErrorHandler.throwError(error, this))
+        );
+        mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_email)
-            .subscribe(unused -> this.navigator.navigate(ProfileChangeEmailFragment.class, true)
-                , error -> ErrorHandler.throwError(error, this)
-            ));
-        this.subscriptions.add(FloatingActionControl
+            .subscribe(unused -> mNavigator.navigate(ProfileChangeEmailFragment.class, true), error -> ErrorHandler.throwError(error, this))
+        );
+        mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_nickname)
-            .subscribe(unused -> this.navigator.navigate(ProfileChangeNicknameFragment.class, true)
-                , error -> ErrorHandler.throwError(error, this)
-            ));
-        this.subscriptions.add(FloatingActionControl
+            .subscribe(unused -> mNavigator.navigate(ProfileChangeNicknameFragment.class, true), error -> ErrorHandler.throwError(error, this))
+        );
+        mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_password)
-            .subscribe(unused -> this.navigator.navigate(ProfileChangePasswordFragment.class, true)
-                , error -> ErrorHandler.throwError(error, this)
-            ));
-        this.subscriptions.add(
-            ViewObservable
-                .clicks(this.univEmailContainer)
-                .filter(event -> User.getInstance().getUniversity_email() == null)
-                .subscribe(
-                    unused -> this.navigator.navigate(ProfileUniversityEmailFragment.class, true)
-                    , error -> ErrorHandler.throwError(error, this)
-                ));
+            .subscribe(unused -> mNavigator.navigate(ProfileChangePasswordFragment.class, true), error -> ErrorHandler.throwError(error, this))
+        );
     }
 }
