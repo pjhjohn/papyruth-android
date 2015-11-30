@@ -29,8 +29,8 @@ public class SplashActivity extends Activity {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
-    public void startAuthActivity() {
-        Intent intent = new Intent(SplashActivity.this, AuthActivity.class);
+    public void startActivity(Class<? extends Activity> activityClass){
+        Intent intent = new Intent(SplashActivity.this, activityClass);
         SplashActivity.this.startActivity(intent);
         SplashActivity.this.finish();
     }

@@ -8,7 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.R;
-import com.papyruth.android.fragment.auth.LoadingFragment;
+import com.papyruth.android.fragment.auth.AuthFragment;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.utils.support.error.ErrorHandler;
@@ -38,7 +38,7 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
         this.setContentView(R.layout.activity_auth);
         this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));
-        mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, LoadingFragment.class);
+        mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, AuthFragment.class);
     }
 
     @Override

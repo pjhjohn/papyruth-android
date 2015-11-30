@@ -18,11 +18,12 @@ import android.widget.ImageView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.model.response.StatisticsResponse;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
+import com.papyruth.android.activity.AuthActivity;
+import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
-import com.papyruth.android.model.unique.Statistics;
+import com.papyruth.android.model.response.StatisticsResponse;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
@@ -39,7 +40,7 @@ import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -77,35 +78,34 @@ public class SplashFragment extends Fragment implements ErrorHandlerCallback{
         /* Api Call */
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        this.subscriptions.add(Api.papyruth().users_me(User.getInstance().getAccessToken()).subscribe(
-            response -> {
-                User.getInstance().update(response.user);
-                this.subscriptions.add(Api.papyruth()
-                    .universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(proceedToLoadingFragment)
-                );
-            },
-            error -> {
-                if (error instanceof RetrofitError) {
-                    switch (((RetrofitError) error).getResponse().getStatus()) {
-                        case 401:
-                        case 419:
-                            this.subscriptions.add(Api.papyruth()
-                                .get_info()
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(proceedToLoadingFragment)
-                            );
-                            break;
-                        default:
-                            Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                    }
+
+        this.subscriptions.add( Api.papyruth().users_me( User.getInstance().getAccessToken() )
+            .subscribe(
+                response -> {
+                    User.getInstance().update(response.user);
+                    requestPending = false;
+                    proceedToActivity.call();
+                },
+                error -> {
+                    if (error instanceof RetrofitError) {
+                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                            case 401:
+                            case 419:
+                                User.getInstance().clear();
+                                requestPending = false;
+                                proceedToActivity.call();
+                                break;
+                            default:
+                                ErrorHandler.throwError(error, this);
+                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                                break;
+                        }
+                    }else
+                        ErrorHandler.throwError(error, this);
                 }
-                ErrorHandler.throwError(error, this);
-            }
-        ));
+            ));
+
+
         ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
         /* Background Sliding */
@@ -122,7 +122,12 @@ public class SplashFragment extends Fragment implements ErrorHandlerCallback{
         animAlpha.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                Observable.just((StatisticsResponse) null).delay(400, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(proceedToLoadingFragment);
+                Observable.just((StatisticsResponse) null).delay(400, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                    response -> {
+                        timerPending = false;
+                        proceedToActivity.call();
+                    }
+                );
             }
         });
 
@@ -138,36 +143,30 @@ public class SplashFragment extends Fragment implements ErrorHandlerCallback{
     }
 
     private boolean timerPending = true, requestPending = true;
-    private Action1<StatisticsResponse> proceedToLoadingFragment = statistics -> {
-        boolean authFailed = true;
-        Statistics.getInstance().update(statistics);
-        if (statistics != null) {
-            requestPending = false;
-            authFailed = statistics.university == null;
-        } else timerPending = false;
-
+    private Action0 proceedToActivity = () -> {
         if (timerPending||requestPending) return;
-        if (authFailed) ((SplashActivity) this.getActivity()).startAuthActivity();
-        else {
-            this.subscriptions.add(Api.papyruth()
-                .users_refresh_token(User.getInstance().getAccessToken())
+
+        if(User.getInstance().getAccessToken() != null) {
+            this.subscriptions.add( Api.papyruth().users_refresh_token( User.getInstance().getAccessToken() )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     response -> {
                         User.getInstance().setAccessToken(response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                        ((SplashActivity) this.getActivity()).startAuthActivity();
+                        ((SplashActivity) this.getActivity()).startActivity(MainActivity.class);
                     },
                     error -> {
                         Timber.d("refresh error : %s", error);
                         error.printStackTrace();
-                        ((SplashActivity) this.getActivity()).startAuthActivity();
+                        ((SplashActivity) this.getActivity()).startActivity(AuthActivity.class);
                     }
                 )
             );
-        }
+        }else
+            ((SplashActivity) this.getActivity()).startActivity(AuthActivity.class);
     };
+
 
     @Override
     public void sendErrorTracker(String cause, String from, boolean isFatal) {
