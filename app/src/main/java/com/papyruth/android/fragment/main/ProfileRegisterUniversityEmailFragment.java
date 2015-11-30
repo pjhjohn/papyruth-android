@@ -136,7 +136,7 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
             })
             .observeOn(Schedulers.io())
             .flatMap(unused ->
-                Api.papyruth().users_me_univ_email(
+                Api.papyruth().users_me_university_email(
                     User.getInstance().getAccessToken(),
                     this.email.getText().toString()
                 ))
