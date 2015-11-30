@@ -2,32 +2,72 @@ package com.papyruth.utils.view;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.papyruth.android.R;
+import com.papyruth.android.model.unique.EvaluationForm;
+import com.papyruth.utils.support.materialdialog.HashtagDeleteDialog;
+
+import java.util.List;
+
+import rx.functions.Func0;
 
 /**
  * Created by pjhjohn on 2015-06-25.
  */
-public class Hashtag extends TextView {
-    public Hashtag(Context context, String value) {
-        super(context);
-        this.setup(context);
-        this.setText("#"+value);
+public class Hashtag{
+
+    public static String addHashPrefix(String text){
+
+        if(text.charAt(0) != '#')
+            return "#" + text + " ";
+
+        return text+" ";
     }
 
-    private void setup(Context context) {
-        this.setTextColor(context.getResources().getColor(R.color.hashtag));
-        this.setPaintFlags(super.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        this.setPadding(4, 4, 4, 4);
-        this.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-        this.setHorizontallyScrolling(false);
-        this.setEllipsize(TextUtils.TruncateAt.END);
-    }
-    private void setupAttrs(Context context, AttributeSet attrs) {
+    public static String removeHashPrefix(String text){
+        if(text.charAt(0) == '#')
+            return text.substring(1);
 
+        return text;
+    }
+
+    public static SpannableString getClickableHashtag(Context context, List<String> hashtags, Func0<Boolean> action){
+        String hashtagString = "";
+
+        for(String hashtagItem : EvaluationForm.getInstance().getHashtag()) {
+            hashtagString += addHashPrefix(hashtagItem);
+        }
+
+        SpannableString spannableString = new SpannableString(hashtagString);
+
+        for(String item : EvaluationForm.getInstance().getHashtag()){
+            ClickableSpan span = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    HashtagDeleteDialog.show(context, item, action);
+                }
+            };
+            spannableString.setSpan(span, hashtagString.indexOf(item)-1, hashtagString.indexOf(item)+item.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        return spannableString;
+    }
+
+    public static String getHashtag(List<String> hashtags){
+        String hashtagString = "";
+
+        for(String hashtagItem : hashtags){
+            hashtagString += addHashPrefix(hashtagItem);
+        }
+
+        return hashtagString;
     }
 }

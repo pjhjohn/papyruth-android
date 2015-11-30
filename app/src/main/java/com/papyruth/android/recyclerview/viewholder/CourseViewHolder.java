@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -52,7 +51,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     @InjectView(R.id.course_gpa_satisfaction_label)         protected TextView mLabelGpaSatisfaction;
     @InjectView(R.id.course_gpa_satisfaction_progressbar)   protected ProgressBar mProgressBarGpaSatisfaction;
     @InjectView(R.id.course_gpa_satisfaction_point)         protected TextView mPointGpaSatisfaction;
-    @InjectView(R.id.course_hashtags)                       protected LinearLayout mHashtags;
+    @InjectView(R.id.course_hashtags)                       protected TextView mHashtags;
     @InjectView(R.id.course_evaluation_icon)                protected ImageView mEvaluationIcon;
     @InjectView(R.id.course_evaluation_count)               protected TextView mEvaluationCount;
     private CompositeSubscription mCompositeSubscription;
@@ -124,18 +123,9 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         setPointProgress(mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, course.getPointGpaSatisfaction(), count);
         mLabelEasiness.setText(R.string.label_point_easiness);
         setPointProgress(mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
-        mHashtags.removeAllViews();
-        if(course.getHashtags()!=null) mHashtags.post(() -> {
-            float totalWidth = 0;
-            for (String hashtag : course.getHashtags()) {
-                Hashtag tag = new Hashtag(mContext, hashtag);
-                tag.setMaxLines(1);
-                float width = tag.getPaint().measureText((String) tag.getText());
-                if (width + totalWidth > mHashtags.getWidth()) break;
-                mHashtags.addView(tag);
-                totalWidth += width;
-            }
-        });
+
+        this.mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
+
         Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mColorInactive)).into(mEvaluationIcon);
         mEvaluationCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
         Picasso.with(mContext).load(R.drawable.ic_light_bookmark).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);

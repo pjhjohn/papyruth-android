@@ -253,15 +253,15 @@
             android:id="@+id/course_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
+            <TextView
                 android:id="@+id/course_hashtags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_toLeftOf="@+id/course_statistics"
                 android:layout_toStartOf="@+id/course_statistics"
+                android:textColor="@color/hashtag"
                 android:layout_centerVertical="true"/><!-- Hashtags -->
             <LinearLayout
                 android:id="@+id/course_statistics"

@@ -8,7 +8,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
-import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.picasso.CircleTransformation;
@@ -43,7 +41,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.evaluation_item_overall_label)     protected TextView mLabelOverall;
     @InjectView(R.id.evaluation_item_overall_point)     protected RobotoTextView mPointOverall;
     @InjectView(R.id.evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
-    @InjectView(R.id.evaluation_item_hashtags)          protected LinearLayout mHashtags;
+    @InjectView(R.id.evaluation_item_hashtags)          protected TextView mHashtags;
     @InjectView(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
     @InjectView(R.id.evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
     @InjectView(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
@@ -75,24 +73,13 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mNickname.setText(evaluation.user_nickname);
         mLabelOverall.setText(R.string.label_point_overall);
         setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
-        mHashtags.removeAllViews();
+
         if(mEvaluationId != null) Api.papyruth()
             .get_evaluation_hashtag(User.getInstance().getAccessToken(), mEvaluationId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
-                if (response.hashtags != null) mHashtags.post(() -> {
-                    float totalWidth = 0;
-                    for (String hashtag : response.hashtags) {
-                        Evaluation.getInstance().addHashTag(hashtag);
-                        Hashtag tag = new Hashtag(mContext, hashtag);
-                        tag.setMaxLines(1);
-                        float width = tag.getPaint().measureText((String) tag.getText());
-                        if (width + totalWidth > mHashtags.getWidth()) break;
-                        mHashtags.addView(tag);
-                        totalWidth += width;
-                    }
-                });
+                this.mHashtags.setText(Hashtag.getHashtag(response.hashtags));
             }, error ->  ErrorHandler.throwError(error, this));
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);

@@ -17,6 +17,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.utils.support.picasso.CircleTransformation;
 import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.utils.view.Hashtag;
 import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -59,11 +60,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
         if (course.point_overall != null && course.evaluation_count != null && course.evaluation_count != 0) setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, (float) course.point_overall / (float) course.evaluation_count);
         else setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, -1);
 
-        String hashtagText = "";
-        for(String hashtag : course.hashtags){
-            hashtagText += "#"+hashtag+" ";
-        }
-        this.mHashtags.setText(hashtagText);
+        this.mHashtags.setText(Hashtag.getHashtag(course.hashtags));
 
         Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
         mEvaluationCount.setText(pointInRange(course.evaluation_count) ? String.valueOf(course.evaluation_count) : "N/A");

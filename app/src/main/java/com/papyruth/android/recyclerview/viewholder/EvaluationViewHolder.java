@@ -10,7 +10,6 @@ import android.text.Html;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -57,7 +56,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_gpa_satisfaction_point)     protected RobotoTextView mPointGpaSatisfaction;
     @InjectView(R.id.evaluation_gpa_satisfaction_postfix)   protected RobotoTextView mPostfixGpaSatisfaction;
     @InjectView(R.id.evaluation_body)                       protected TextView mBody;
-    @InjectView(R.id.evaluation_hashtags)                   protected LinearLayout mHashtags;
+    @InjectView(R.id.evaluation_hashtags)                   protected TextView mHashtags;
     @InjectView(R.id.evaluation_up_vote_icon)               protected ImageView mVoteUpIcon;
     @InjectView(R.id.evaluation_up_vote_count)              protected RobotoTextView mVoteUpCount;
     @InjectView(R.id.evaluation_down_vote_icon)             protected ImageView mVoteDownIcon;
@@ -112,33 +111,12 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         setPointProgress(mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
 
         mBody.setText(evaluation.getBody());
-        mHashtags.removeAllViews();
         if(mEvaluationId != null) Api.papyruth()
             .get_evaluation_hashtag(User.getInstance().getAccessToken(), mEvaluationId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
-                mHashtags.removeAllViews();
-                if (response.hashtags != null) mHashtags.post(() -> {
-                    float totalWidth = 0;
-                    int hashtagLines = 1;
-                    mHashtags.addView(new LinearLayout(mContext));
-                    ((LinearLayout) mHashtags.getChildAt(0)).setOrientation(LinearLayout.HORIZONTAL);
-                    for (String hashtag : response.hashtags) {
-                        Evaluation.getInstance().addHashTag(hashtag);
-                        Hashtag tag = new Hashtag(mContext, hashtag);
-                        float width = tag.getPaint().measureText((String) tag.getText());
-                        if (width + totalWidth > mHashtags.getWidth() && totalWidth > 0) {
-                            mHashtags.addView(new LinearLayout(mContext));
-                            hashtagLines++;
-                            ((LinearLayout) mHashtags.getChildAt(hashtagLines-1)).setOrientation(LinearLayout.HORIZONTAL);
-                            totalWidth = 0;
-                        }
-
-                        ((LinearLayout) mHashtags.getChildAt(hashtagLines - 1)).addView(tag);
-                        totalWidth += width;
-                    }
-                });
+                mHashtags.setText(Hashtag.getHashtag(response.hashtags));
             }, error ->  ErrorHandler.throwError(error, this));
 
         if(evaluation.getRequestUserVote() == null) setVoteStatus(VoteStatus.NONE);

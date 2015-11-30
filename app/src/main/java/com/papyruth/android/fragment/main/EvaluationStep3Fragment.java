@@ -36,6 +36,7 @@ import com.papyruth.utils.support.materialdialog.HashtagDeleteDialog;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
 import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.support.rx.RxValidator;
+import com.papyruth.utils.view.Hashtag;
 import com.papyruth.utils.view.ToolbarUtil;
 import com.papyruth.utils.view.navigator.Navigator;
 import com.squareup.picasso.Picasso;
@@ -264,26 +265,14 @@ public class EvaluationStep3Fragment extends Fragment {
 
     private void drawHashtag(){
         hashtagsContainer.setText("");
-        String hashs = "";
-
-        for(String item : EvaluationForm.getInstance().getHashtag()) {
-            hashs += hashWriter(item, true) + " ";
-        }
-        SpannableString spannableString = new SpannableString(hashs);
-        for(String item : EvaluationForm.getInstance().getHashtag()){
-            ClickableSpan span = new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    HashtagDeleteDialog.show(getActivity(), item, () -> {
-                        drawHashtag();
-                        return true;
-                    });
-                }
-            };
-            spannableString.setSpan(span, hashs.indexOf(item)-1, hashs.indexOf(item)+item.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
         hashtagsContainer.setMovementMethod(LinkMovementMethod.getInstance());
-        hashtagsContainer.setText(spannableString);
+        hashtagsContainer.setText(
+            Hashtag.getClickableHashtag(
+                getActivity(), EvaluationForm.getInstance().getHashtag(), () -> {
+                    drawHashtag();
+                    return true;
+                })
+        );
     }
 
     private Observable<EvaluationResponse> submitEvaluation(boolean isModifyMode){

@@ -121,16 +121,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/evaluation_item_content"
         android:layout_marginTop="@dimen/baseline_x1">
-        <LinearLayout
+        <TextView
             android:id="@+id/evaluation_item_hashtags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/evaluation_item_statistics"
             android:layout_toStartOf="@+id/evaluation_item_statistics"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:textColor="@color/hashtag"/>
         <LinearLayout
             android:id="@+id/evaluation_item_statistics"
             android:layout_width="wrap_content"
