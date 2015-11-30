@@ -1,25 +1,15 @@
 package com.papyruth.utils.support.rx;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.papyruth.android.R;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
+import com.papyruth.android.R;
 import com.papyruth.android.model.unique.EvaluationForm;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
 import rx.Observable;
-import rx.android.view.ViewObservable;
 import rx.android.widget.OnTextChangeEvent;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -60,26 +50,6 @@ public class RxValidator {
         else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
         else return AppManager.getInstance().getString(R.string.field_invalid_nickname);
     };
-
-    /* for RadioGroup Validation. */
-    public static Observable<Integer> createObservableRadioGroup(RadioGroup group) {
-        List<RadioButton> buttons = new ArrayList<>();
-        Queue<ViewGroup> queue = new LinkedList<>();
-        queue.add(group);
-        while (!queue.isEmpty()) {
-            ViewGroup head = queue.remove();
-            for (int i = 0; i < head.getChildCount(); i++) {
-                View child = head.getChildAt(i);
-                if (child instanceof ViewGroup) {
-                    queue.add((ViewGroup) child);
-                } else if (child instanceof RadioButton) {
-                    buttons.add((RadioButton) child);
-                }
-            }
-        }
-        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId()).startWith(group.getCheckedRadioButtonId());
-    }
-    public static Func1<Integer, Boolean> isValidRadioButton = id -> id != -1;
 
     /* for SeekBar Validation */
     public static Func1<Integer, Boolean> isIntegerValueInRange = value -> value != null && value >= 0 && value <= 10;

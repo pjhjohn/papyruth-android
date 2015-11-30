@@ -89,12 +89,16 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(mContext).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIconEmail);
         Picasso.with(mContext).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIconNickname);
-        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
         mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP2);
+        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) {
+            final View focusedView = getActivity().getWindow().getCurrentFocus();
+            Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
+                unused -> ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextEmail, InputMethodManager.SHOW_FORCED)
+            );
+        }
     }
 
     private boolean mNextButtonEnabled;
-    /* TODO : Validate Separately. email != null is not a good way to check type */
     private Observable<String> getEmailValidationObservable(TextView emailTextView) {
         return WidgetObservable.text(emailTextView)
             .map(event -> {
@@ -133,7 +137,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     public void onPageFocused() {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup2));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        FloatingActionControl.getInstance().hide(true);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
         ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
@@ -155,17 +159,15 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             }, Throwable::printStackTrace)
         );
 
-        mCompositeSubscription.add(FloatingActionControl.clicks()
-                .subscribe(
-                    unused -> {
-                        if (mNextButtonEnabled) {
-                            SignUpForm.getInstance().setEmail(mTextEmail.getText().toString());
-                            SignUpForm.getInstance().setNickname(mTextNickname.getText().toString());
-                            mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                        }
-                    }
-                )
-        );
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
+            unused -> {
+                if (mNextButtonEnabled) {
+                    SignUpForm.getInstance().setEmail(mTextEmail.getText().toString());
+                    SignUpForm.getInstance().setNickname(mTextNickname.getText().toString());
+                    mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
+                }
+            }
+        ));
 
         if(mTextEmail.getText().toString().isEmpty()) {
             final String email = SignUpForm.getInstance().getEmail();
@@ -180,9 +182,8 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
             mTextEmail.requestFocus();
-            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
+            ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
         });
-
     }
 
     @Override

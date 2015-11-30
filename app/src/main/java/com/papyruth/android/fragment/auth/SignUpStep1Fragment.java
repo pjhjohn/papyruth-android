@@ -107,19 +107,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
-            unused -> {
-                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mUniversityRecyclerView, InputMethodManager.SHOW_FORCED);
-                /* TODO : Really need this? */
-                mCompositeSubscription.add(Observable
-                    .timer(300, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                        unused2 -> mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
-                        error -> ErrorHandler.throwError(error, this)
-                    )
-                );
-            }, error -> ErrorHandler.throwError(error, this)
+            unused -> mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true)
         ));
     }
 
@@ -157,20 +145,8 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
             .items(years)
             .itemsCallback((dialog, v, which, text) -> {
                 SignUpForm.getInstance().setEntranceYear(Integer.parseInt(text.toString()));
-                InputMethodManager imm = ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE));
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                imm.showSoftInput(mUniversityRecyclerView, InputMethodManager.SHOW_FORCED);
-                /* TODO : Really need this? */
-                mCompositeSubscription.add(Observable
-                    .timer(300, TimeUnit.MILLISECONDS, Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        unused -> mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true),
-                        error -> ErrorHandler.throwError(error, this)
-                    )
-                );
+                mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, true);
             })
-            .build()
             .show();
     }
 }

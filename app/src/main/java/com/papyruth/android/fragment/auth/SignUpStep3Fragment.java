@@ -25,18 +25,24 @@ import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
 import com.papyruth.utils.support.fab.FloatingActionControl;
 import com.papyruth.utils.support.picasso.ColorFilterTransformation;
+import com.papyruth.utils.support.retrofit.apis.Api;
 import com.papyruth.utils.support.rx.RxValidator;
 import com.papyruth.utils.view.viewpager.OnPageFocus;
 import com.papyruth.utils.view.viewpager.OnPageUnfocus;
 import com.papyruth.utils.view.viewpager.ViewPagerController;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 
@@ -49,21 +55,11 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     private Context mContext;
     private Tracker mTracker;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
-    }
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mViewPagerController = ((AuthActivity) activity).getViewPagerController();
         mContext = activity;
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mViewPagerController = null;
-        mContext = null;
+        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.gender)        protected RadioGroup mRadioGroupGender;
@@ -94,19 +90,42 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         Picasso.with(mContext).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
         Picasso.with(mContext).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
         mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP3);
-        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3){
-            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
+        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
+            final View focusedView = getActivity().getWindow().getCurrentFocus();
+            Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
+                unused -> ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextRealname, InputMethodManager.SHOW_FORCED)
+            );
         }
     }
 
-    public void showFAC() {
-        String validateName = RxValidator.getErrorMessageRealname.call(mTextRealname.getText().toString());
+    private boolean mNextButtonEnabled;
+    private Observable<String> getRealnameValidationObservable(TextView realnameTextView) {
+        return WidgetObservable.text(realnameTextView)
+            .map(event -> {
+                mNextButtonEnabled = false;
+                return event;
+            })
+            .map(event -> event.text().toString())
+            .map(RxValidator.getErrorMessageRealname)
+            .observeOn(AndroidSchedulers.mainThread());
+    }
 
-        boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-        boolean valid = validateName == null && mRadioGroupGender.getCheckedRadioButtonId() != -1;
-
-        if (!visible && valid) FloatingActionControl.getInstance().show(true, 200, TimeUnit.MILLISECONDS);
-        else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+    private Observable<Integer> getGenderValidationObservable(RadioGroup group) {
+        List<RadioButton> buttons = new ArrayList<>();
+        Queue<ViewGroup> queue = new LinkedList<>();
+        queue.add(group);
+        while (!queue.isEmpty()) {
+            ViewGroup head = queue.remove();
+            for (int i = 0; i < head.getChildCount(); i++) {
+                View child = head.getChildAt(i);
+                if (child instanceof ViewGroup) {
+                    queue.add((ViewGroup) child);
+                } else if (child instanceof RadioButton) {
+                    buttons.add((RadioButton) child);
+                }
+            }
+        }
+        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId());
     }
 
     @Override
@@ -118,50 +137,60 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
         if(mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
-        InputMethodManager imm = ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        imm.showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
-        mTextRealname.requestFocus();
-
-        if(SignUpForm.getInstance().getRealname() != null){
-            mTextRealname.setText(SignUpForm.getInstance().getRealname());
-            ((RadioButton) mRadioGroupGender.findViewById(mRadioGroupGender.getChildAt((SignUpForm.getInstance().getIsBoy()?0:1)).getId())).setChecked(true);
-            showFAC();
-        }
-
-        if(mTextRealname.length() > 0 && mRadioGroupGender.getCheckedRadioButtonId() != -1){
-            showFAC();
-        }
-
-        mCompositeSubscription.add(WidgetObservable
-            .text(mTextRealname)
-            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .subscribe(event -> {
-                String validateName = RxValidator.getErrorMessageRealname.call(event.text().toString());
-                mTextRealname.setError(validateName);
-                showFAC();
-            }, error -> ErrorHandler.throwError(error, this))
+        mCompositeSubscription.add(
+            Observable.combineLatest(
+                getRealnameValidationObservable(mTextRealname),
+                getGenderValidationObservable(mRadioGroupGender),
+                (String realnameError, Integer checkedId) -> {
+                    mTextRealname.setError(realnameError);
+                    Queue<ViewGroup> queue = new LinkedList<>();
+                    queue.add(mRadioGroupGender);
+                    while (!queue.isEmpty()) {
+                        ViewGroup head = queue.remove();
+                        for (int i = 0; i < head.getChildCount(); i++) {
+                            View child = head.getChildAt(i);
+                            if (child instanceof ViewGroup) {
+                                queue.add((ViewGroup) child);
+                            } else if (child instanceof RadioButton) {
+                                ((RadioButton) child).setError(checkedId < 0? mContext.getString(R.string.field_invalid_gender) : null);
+                            }
+                        }
+                    }
+                    return realnameError == null && (checkedId == R.id.gender_male || checkedId == R.id.gender_female);
+                }
+            ).observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
+                if (valid) mNextButtonEnabled = true;
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+            }, Throwable::printStackTrace)
         );
 
-        mRadioGroupGender.setOnCheckedChangeListener((group, id) -> showFAC());
-
-        mCompositeSubscription.add(Observable
-            .mergeDelayError(
-                FloatingActionControl.clicks().map(event -> FloatingActionControl.getButton().getVisibility() == View.VISIBLE),
-                Observable.create(observer -> mTextRealname.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    observer.onNext(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
-                    return !(FloatingActionControl.getButton().getVisibility() == View.VISIBLE);
-                }))
-            )
-            .filter(use -> use)
-            .subscribe(
-                use -> {
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
+            unused -> {
+                if (mNextButtonEnabled) {
                     SignUpForm.getInstance().setRealname(mTextRealname.getText().toString());
-                    SignUpForm.getInstance().setIsBoy(((RadioButton) mRadioGroupGender.findViewById(mRadioGroupGender.getCheckedRadioButtonId())).getText().equals(getResources().getString(R.string.gender_male)));
+                    final int checkedGenderRadioButtonId = mRadioGroupGender.getCheckedRadioButtonId();
+                    if (checkedGenderRadioButtonId >= 0) SignUpForm.getInstance().setIsBoy(checkedGenderRadioButtonId == R.id.gender_male);
                     mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
-                }, error -> ErrorHandler.throwError(error, this)
-            )
-        );
+                }
+            }
+        ));
+
+        if(mTextRealname.getText().toString().isEmpty()) {
+            final String realname = SignUpForm.getInstance().getRealname();
+            if(realname != null) mTextRealname.setText(realname);
+            else mTextRealname.getText().clear();
+        } else mTextRealname.setText(mTextRealname.getText());
+        if(mRadioGroupGender.getCheckedRadioButtonId() < 0) {
+            final Boolean isboy = SignUpForm.getInstance().getIsBoy();
+            if(isboy != null) mRadioGroupGender.check(isboy? R.id.gender_male : R.id.gender_female);
+        } else mRadioGroupGender.check(mRadioGroupGender.getCheckedRadioButtonId());
+
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
+            mTextRealname.requestFocus();
+            ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
+        });
     }
 
     @Override

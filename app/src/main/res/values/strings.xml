@@ -35,7 +35,7 @@
     <string name="agree_terms">If you sign up, you agree to the %1$s and %2$s.</string>
     <string name="agree">Agree</string>
     <string name="back">Disagree</string>
-    <string name="term">Term</string>
+    <string name="terms_of_use">Terms and Conditions</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="duplicated_email">duplicated email</string>
     <string name="duplicated_nickname">duplicated nickname</string>
