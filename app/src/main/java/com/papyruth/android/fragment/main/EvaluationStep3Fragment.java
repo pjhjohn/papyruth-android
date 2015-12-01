@@ -6,10 +6,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +27,16 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.materialdialog.HashtagDeleteDialog;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.support.rx.RxValidator;
-import com.papyruth.utils.view.Hashtag;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.navigator.Navigator;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -52,7 +46,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -150,7 +143,7 @@ public class EvaluationStep3Fragment extends Fragment {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         final Context context = this.getActivity();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
+        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);

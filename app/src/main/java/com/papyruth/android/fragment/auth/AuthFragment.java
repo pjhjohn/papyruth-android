@@ -18,9 +18,9 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.view.viewpager.FlexibleViewPager;
-import com.papyruth.utils.view.viewpager.ViewPagerController;
-import com.papyruth.utils.view.viewpager.ViewPagerManager;
+import com.papyruth.support.utility.viewpager.FlexibleViewPager;
+import com.papyruth.support.utility.viewpager.ViewPagerController;
+import com.papyruth.support.utility.viewpager.ViewPagerManager;
 
 import java.util.Stack;
 

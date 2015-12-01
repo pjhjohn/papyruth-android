@@ -24,15 +24,15 @@ import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.error.ErrorHandlerCallback;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.view.FloatingActionControlContainer;
-import com.papyruth.utils.view.navigator.FragmentNavigator;
-import com.papyruth.utils.view.navigator.NavigationCallback;
-import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.search.SearchToolbar;
-import com.papyruth.utils.view.softkeyboard.SoftKeyboardActivity;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorHandlerCallback;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.utility.customview.FloatingActionControlContainer;
+import com.papyruth.support.utility.navigator.FragmentNavigator;
+import com.papyruth.support.utility.navigator.NavigationCallback;
+import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.search.SearchToolbar;
+import com.papyruth.support.utility.softkeyboard.SoftKeyboardActivity;
 
 import java.util.concurrent.TimeUnit;
 

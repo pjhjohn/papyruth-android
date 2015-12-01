@@ -37,15 +37,15 @@ import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.materialdialog.AlertDialog;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.MetricUtil;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.fragment.RecyclerViewFragment;
-import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.viewpager.OnBack;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.MetricHelper;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.viewpager.OnBack;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -130,7 +130,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             this.getActivity().onBackPressed();
         });
         this.evaluationToolbar.setTitle(R.string.toolbar_title_evaluation);
-        ToolbarUtil.registerMenu(this.evaluationToolbar, R.menu.evaluation, item -> {
+        ToolbarHelper.registerMenu(this.evaluationToolbar, R.menu.evaluation, item -> {
             if (item.getItemId() != R.id.menu_evaluation_edit) return false;
             if (Evaluation.getInstance().getUserId().equals(User.getInstance().getId())) {
                 if (mCommentInputActive) {
@@ -255,7 +255,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         mRevealTarget.setVisibility(View.VISIBLE);
         final FloatingActionButton fab = FloatingActionControl.getButton();
         centerX = (fab.getLeft() + fab.getRight()) / 2;
-        centerY = (fab.getHeight() + MetricUtil.toPixels(getActivity(), 16)) / 2;
+        centerY = (fab.getHeight() + MetricHelper.toPixels(getActivity(), 16)) / 2;
         minRadius = 0.0f;
         maxRadius = (float) Math.sqrt(Math.pow(mRevealContainer.getWidth(), 2) + Math.pow(mRevealContainer.getHeight(), 2));
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

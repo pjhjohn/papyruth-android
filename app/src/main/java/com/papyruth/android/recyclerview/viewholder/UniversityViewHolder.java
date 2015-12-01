@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import com.papyruth.android.R;
 import com.papyruth.android.model.UniversityData;
-import com.papyruth.utils.view.SquareImageView;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.customview.SquareImageView;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;

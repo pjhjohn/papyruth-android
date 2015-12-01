@@ -12,7 +12,7 @@ import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.recyclerview.viewholder.MyEvaluationItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.PlaceholderViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
 import java.util.List;
 

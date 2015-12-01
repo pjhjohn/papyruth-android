@@ -24,14 +24,14 @@ import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.materialdialog.AlertDialog;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.fragment.RecyclerViewFragment;
-import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.search.SearchToolbar;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.search.SearchToolbar;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -126,7 +126,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
             this.getSearchResult();
         }).setOnSearchByQueryListener(this::getSearchResult);
 
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
+        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> navigator.navigate(EvaluationStep1Fragment.class, true),

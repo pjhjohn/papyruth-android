@@ -25,14 +25,14 @@ import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.materialdialog.AlertDialog;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.fragment.RecyclerViewFragment;
-import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.search.SearchToolbar;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.search.SearchToolbar;
 
 import java.util.List;
 
@@ -134,7 +134,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_write_evaluation1));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
+        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().clear();

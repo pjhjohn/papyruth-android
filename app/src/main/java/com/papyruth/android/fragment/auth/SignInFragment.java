@@ -33,13 +33,13 @@ import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.support.rx.RxValidator;
-import com.papyruth.utils.view.AnimatorUtil;
-import com.papyruth.utils.view.viewpager.OnPageFocus;
-import com.papyruth.utils.view.viewpager.ViewPagerController;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.viewpager.OnPageFocus;
+import com.papyruth.support.utility.viewpager.ViewPagerController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.papyruth.utils.support.rx.RxValidator.toString;
+import static com.papyruth.support.opensource.rx.RxValidator.toString;
 
 /**
  * Created by mrl on 2015-04-07.
@@ -177,7 +177,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     }
 
     private void requestSignIn() {
-        AnimatorUtil.FADE_IN(mProgress).start();
+        AnimatorHelper.FADE_IN(mProgress).start();
         mCompositeSubscriptions.add(Api.papyruth()
             .users_sign_in(mTextEmail.getText().toString(), mTextPassword.getText().toString())
             .map(response -> {
@@ -189,7 +189,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 success -> {
-                    AnimatorUtil.FADE_OUT(mProgress).start();
+                    AnimatorHelper.FADE_OUT(mProgress).start();
                     if (success) Api.papyruth()
                         .users_refresh_token(User.getInstance().getAccessToken())
                         .map(user -> user.access_token)
@@ -209,7 +209,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
                     else Toast.makeText(mContext, this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                 },
                 error -> {
-                    AnimatorUtil.FADE_OUT(mProgress).start();
+                    AnimatorHelper.FADE_OUT(mProgress).start();
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 403:

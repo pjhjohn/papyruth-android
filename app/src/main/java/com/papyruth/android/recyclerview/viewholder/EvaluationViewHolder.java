@@ -18,13 +18,13 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.materialdialog.VotersDialog;
-import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.DateTimeUtil;
-import com.papyruth.utils.view.Hashtag;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.materialdialog.VotersDialog;
+import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.customview.Hashtag;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -99,7 +99,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         setCategoryProfessorColor(mCategory, mProfessor, evaluation.getCategory());
         Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
         mNickname.setText(evaluation.getUserNickname());
-        mTimestamp.setText(DateTimeUtil.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
+        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
 
         mLabelOverall.setText(R.string.label_point_overall);
         setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());

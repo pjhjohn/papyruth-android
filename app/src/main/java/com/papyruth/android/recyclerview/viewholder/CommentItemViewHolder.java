@@ -13,13 +13,13 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CommentData;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.materialdialog.VotersDialog;
-import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.DateTimeUtil;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.materialdialog.VotersDialog;
+import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -81,7 +81,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
 
         Picasso.with(mContext).load(comment.avatar_url).transform(new CircleTransformation()).into(mAvatar);
         mNickname.setText(comment.user_nickname);
-        mTimestamp.setText(DateTimeUtil.timestamp(comment.updated_at, AppConst.DateFormat.DATE_AND_TIME));
+        mTimestamp.setText(DateTimeHelper.timestamp(comment.updated_at, AppConst.DateFormat.DATE_AND_TIME));
         mBody.setText(comment.body);
 
         if(comment.request_user_vote == null) setVoteStatus(VoteStatus.NONE);

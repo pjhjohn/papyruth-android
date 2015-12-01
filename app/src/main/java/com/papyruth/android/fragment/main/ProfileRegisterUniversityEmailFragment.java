@@ -21,14 +21,14 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.materialdialog.FailureDialog;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.support.rx.RxValidator;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.navigator.Navigator;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.FailureDialog;
+import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -44,7 +44,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.papyruth.utils.support.rx.RxValidator.toString;
+import static com.papyruth.support.opensource.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-05-19.
@@ -104,7 +104,7 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile_change_email));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_profile_register_university_email);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
+        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);

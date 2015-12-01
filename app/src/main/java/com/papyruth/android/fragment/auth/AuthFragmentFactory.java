@@ -3,7 +3,7 @@ package com.papyruth.android.fragment.auth;
 import android.app.Fragment;
 
 import com.papyruth.android.AppConst;
-import com.papyruth.utils.view.viewpager.IFragmentFactory;
+import com.papyruth.support.utility.viewpager.IFragmentFactory;
 
 /**
  * Created by pjhjohn on 2015-04-09.

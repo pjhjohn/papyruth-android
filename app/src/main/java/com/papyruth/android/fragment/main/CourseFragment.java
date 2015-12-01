@@ -28,15 +28,15 @@ import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.CourseAdapter;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.materialdialog.AlertDialog;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.MetricUtil;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.fragment.RecyclerViewFragment;
-import com.papyruth.utils.view.navigator.Navigator;
-import com.papyruth.utils.view.viewpager.OnBack;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.MetricHelper;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.viewpager.OnBack;
 
 import java.util.concurrent.TimeUnit;
 
@@ -103,7 +103,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_course));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_title_course);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
+        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_green).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.throwError(error, this));
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
@@ -201,7 +201,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         animTop.addUpdateListener(animator -> {
             final int itemTop = (int) animator.getAnimatedValue();
             this.slaveContainer.setY(itemTop);
-            final int toolbarTop = itemTop - MetricUtil.getPixels(this.toolbar.getContext(), R.attr.actionBarSize);
+            final int toolbarTop = itemTop - MetricHelper.getPixels(this.toolbar.getContext(), R.attr.actionBarSize);
             this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
         });
 
@@ -252,7 +252,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         animTop.addUpdateListener(animator -> {
             final int itemTop = (int) animator.getAnimatedValue();
             this.slaveContainer.setY(itemTop);
-            final int toolbarTop = itemTop - MetricUtil.getPixels(toolbar.getContext(), R.attr.actionBarSize);
+            final int toolbarTop = itemTop - MetricHelper.getPixels(toolbar.getContext(), R.attr.actionBarSize);
             this.toolbar.setY(toolbarTop >= 0 ? 0 : toolbarTop);
         });
 

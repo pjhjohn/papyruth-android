@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.papyruth.android.R;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
 /**
  * Created by pjhjohn on 2015-06-29.

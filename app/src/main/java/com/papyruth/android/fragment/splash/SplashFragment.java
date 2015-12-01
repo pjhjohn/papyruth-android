@@ -28,12 +28,12 @@ import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.response.UserDataResponse;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.error.ErrorHandlerCallback;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.Circle;
-import com.papyruth.utils.view.CircleAngleAnimation;
-import com.papyruth.utils.view.panningview.PanningView;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorHandlerCallback;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.customview.Circle;
+import com.papyruth.support.utility.customview.CircleAngleAnimation;
+import com.papyruth.support.utility.panningview.PanningView;
 
 import java.util.concurrent.TimeUnit;
 

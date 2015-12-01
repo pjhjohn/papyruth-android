@@ -16,13 +16,13 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.DateTimeUtil;
-import com.papyruth.utils.view.Hashtag;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -68,7 +68,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
     public void bind(EvaluationData evaluation) {
         mEvaluationId = evaluation.id;
         Picasso.with(mContext).load(evaluation.avatar_url).transform(new CircleTransformation()).into(mAvatar);
-        mTimestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
         mBody.setText(evaluation.body);
         mNickname.setText(evaluation.user_nickname);
         mLabelOverall.setText(R.string.label_point_overall);

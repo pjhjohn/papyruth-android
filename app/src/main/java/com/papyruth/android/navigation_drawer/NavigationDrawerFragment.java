@@ -24,10 +24,10 @@ import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.view.navigator.Navigator;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

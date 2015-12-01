@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.papyruth.android.R;
 import com.papyruth.android.model.Candidate;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;

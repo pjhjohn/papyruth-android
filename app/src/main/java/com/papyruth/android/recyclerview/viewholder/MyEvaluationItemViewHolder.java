@@ -14,9 +14,9 @@ import android.widget.TextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
-import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.view.DateTimeUtil;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -53,7 +53,7 @@ public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(EvaluationData evaluation) {
         mLecture.setText(evaluation.lecture_name);
-        mTimestamp.setText(DateTimeUtil.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
         mBody.setText(evaluation.body);
 
         final int colorOverall = mResources.getColor(pointInRange(evaluation.point_overall)? ( evaluation.point_overall>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);

@@ -13,12 +13,12 @@ import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.adapter.MyEvaluationItemsAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.fragment.CommonRecyclerViewFragment;
-import com.papyruth.utils.view.navigator.FragmentNavigator;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
+import com.papyruth.support.utility.navigator.FragmentNavigator;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +58,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_my_evaluation));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.nav_item_my_evaluation);
-        ToolbarUtil.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
+        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 

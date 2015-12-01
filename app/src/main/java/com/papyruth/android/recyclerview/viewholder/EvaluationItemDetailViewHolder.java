@@ -15,9 +15,9 @@ import android.widget.TextView;
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
-import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.view.DateTimeUtil;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -54,7 +54,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         mLecture.setText(evaluation.lecture_name);
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s </strong>%s", mResources.getString(R.string.professor_prefix), evaluation.professor_name, mResources.getString(R.string.professor_postfix))));
         setCategoryProfessorColor(mCategory, mProfessor, evaluation.category);
-        mTimestamp.setText(DateTimeUtil.timeago(mContext, evaluation.created_at));
+        mTimestamp.setText(DateTimeHelper.timeago(mContext, evaluation.created_at));
         mBody.setText(evaluation.body.replace('\n', ' '));
         mNickname.setText(evaluation.user_nickname);
         setPointRating(mRatingBarOverall, evaluation.point_overall);

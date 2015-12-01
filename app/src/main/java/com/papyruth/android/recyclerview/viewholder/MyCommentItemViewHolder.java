@@ -11,9 +11,9 @@ import android.widget.TextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.MyCommentData;
-import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.view.DateTimeUtil;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -47,7 +47,7 @@ public class MyCommentItemViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(MyCommentData comment) {
         mLecture.setText(comment.lecture_name);
-        mTimestamp.setText(DateTimeUtil.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mTimestamp.setText(DateTimeHelper.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
         mBody.setText(comment.body);
         if(comment.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
         else if(comment.request_user_vote == 1) setVoteStatus(VoteStatus.UP);

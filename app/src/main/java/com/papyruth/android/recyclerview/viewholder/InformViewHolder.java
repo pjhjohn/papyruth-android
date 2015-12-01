@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.papyruth.android.R;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

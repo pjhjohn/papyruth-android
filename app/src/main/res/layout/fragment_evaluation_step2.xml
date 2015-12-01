@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.papyruth.utils.view.navigator.NavigatableFrameLayout
+<com.papyruth.support.utility.navigator.NavigatableFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:roboto="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -297,4 +297,4 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-</com.papyruth.utils.view.navigator.NavigatableFrameLayout>
+</com.papyruth.support.utility.navigator.NavigatableFrameLayout>

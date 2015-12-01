@@ -26,7 +26,7 @@
     </FrameLayout>
 
     <!--Navigation Drawer-->
-    <com.papyruth.utils.view.ScrimInsetsFrameLayout
+    <com.papyruth.support.utility.customview.ScrimInsetsFrameLayout
         android:id="@+id/navigation_drawer_container"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="wrap_content"
@@ -41,5 +41,5 @@
             android:fitsSystemWindows="true"
             android:name="com.papyruth.android.navigation_drawer.NavigationDrawerFragment"
             app:layout="@layout/fragment_navigation_drawer"/>
-    </com.papyruth.utils.view.ScrimInsetsFrameLayout>
+    </com.papyruth.support.utility.customview.ScrimInsetsFrameLayout>
 </android.support.v4.widget.DrawerLayout>

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.papyruth.android.R;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
+import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

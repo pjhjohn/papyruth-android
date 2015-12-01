@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import com.papyruth.android.model.UniversityData;
 import com.papyruth.android.recyclerview.viewholder.UniversityViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
 import java.util.List;
 

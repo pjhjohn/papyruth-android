@@ -15,10 +15,10 @@ import android.widget.TextView;
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CourseData;
-import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.view.Hashtag;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;

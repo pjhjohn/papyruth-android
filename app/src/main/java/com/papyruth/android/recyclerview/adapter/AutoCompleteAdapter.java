@@ -6,11 +6,9 @@ import android.view.ViewGroup;
 import com.papyruth.android.model.Candidate;
 import com.papyruth.android.recyclerview.viewholder.AutoCompleteResponseViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.utils.view.recycler.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
 import java.util.List;
-
-import timber.log.Timber;
 
 public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RecyclerViewItemClickListener itemClickListener; // TODO : use if implemented.

@@ -17,11 +17,11 @@ import android.widget.TextView;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.utils.support.picasso.CircleTransformation;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
-import com.papyruth.utils.support.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.utils.support.retrofit.apis.Api;
-import com.papyruth.utils.view.Hashtag;
+import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
+import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.customview.Hashtag;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;

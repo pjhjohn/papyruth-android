@@ -8,9 +8,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.model.unique.AppTracker;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.utils.support.retrofit.ApiManager;
-import com.papyruth.utils.support.retrofit.RetrofitLogger;
-import com.papyruth.utils.support.retrofit.apis.Api;
+import com.papyruth.support.opensource.retrofit.ApiManager;
+import com.papyruth.support.opensource.retrofit.RetrofitLogger;
+import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;

@@ -20,11 +20,11 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
-import com.papyruth.utils.support.error.ErrorHandler;
-import com.papyruth.utils.support.fab.FloatingActionControl;
-import com.papyruth.utils.support.picasso.ColorFilterTransformation;
-import com.papyruth.utils.view.ToolbarUtil;
-import com.papyruth.utils.view.navigator.Navigator;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
+import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
@@ -90,7 +90,7 @@ public class ProfileFragment extends Fragment {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_profile);
-        ToolbarUtil.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
+        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 
