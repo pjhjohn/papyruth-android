@@ -99,7 +99,7 @@ public class SplashFragment extends Fragment {
                 return Observable.just(UserDataResponse.ERROR());
             })
             .flatMap(response -> { // Handles User-data fetch
-                if(response.success) {
+                if(response != null && response.user != null){
                     User.getInstance().update(response.user);
                     return Api.papyruth().users_refresh_token(User.getInstance().getAccessToken());
                 } else return Observable.just(UserDataResponse.ERROR());
@@ -108,7 +108,7 @@ public class SplashFragment extends Fragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 response -> { // Handles Access-token refresh
-                    if(response.success) {
+                    if(response != null && response.access_token != null){
                         User.getInstance().setAccessToken(response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
                     } else User.getInstance().clear();

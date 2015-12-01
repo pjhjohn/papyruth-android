@@ -30,6 +30,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
+import com.papyruth.support.opensource.materialdialog.InputDialog;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -68,18 +69,19 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
-        mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.app_logo_horizontal);
-        mApplicationLogo = (ImageView) mActivity.findViewById(R.id.app_logo);
+        mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.auth_app_logo_horizontal);
+        mApplicationLogo = (ImageView) mActivity.findViewById(R.id.auth_app_logo);
         mViewPagerController = mActivity.getViewPagerController();
         mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
-    @InjectView (R.id.email)            protected AutoCompleteTextView mTextEmail;
-    @InjectView (R.id.password)         protected EditText mTextPassword;
-    @InjectView (R.id.progress)         protected View mProgress;
-    @InjectView (R.id.sign_in)          protected Button mButtonSignIn;
-    @InjectView (R.id.sign_up)          protected Button mButtonSignUp;
-    @InjectView (R.id.password_recovery)protected TextView mTextPasswordRecovery;
+    @InjectView (R.id.signin_email_text)            protected AutoCompleteTextView mTextEmail;
+    @InjectView (R.id.signin_password_text)         protected EditText mTextPassword;
+    @InjectView (R.id.signin_button)                protected Button mButtonSignIn;
+    @InjectView (R.id.signin_signup_button)         protected Button mButtonSignUp;
+    @InjectView (R.id.signin_password_recovery)     protected TextView mTextPasswordRecovery;
+    @InjectView (R.id.progress)                     protected View mProgress;
+
     private CompositeSubscription mCompositeSubscriptions;
 
     @Override
@@ -151,22 +153,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
 
         this.mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
             .subscribe(
-                event -> new MaterialDialog.Builder(mActivity)
-                    .title(R.string.password_recovery_title)
-                    .content(R.string.enter_your_email)
-                    .input(R.string.hint_email, R.string.empty, (dialog, input) -> {
-                    })
-                    .positiveText(R.string.submit)
-                    .negativeText(R.string.confirm_cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            //TODO : ADD fotgot password api
-                        }
-                    })
-                    .build()
-                    .show()
+                event -> InputDialog.show(getActivity())
                 , error -> ErrorHandler.handle(error, this)
             )
         );

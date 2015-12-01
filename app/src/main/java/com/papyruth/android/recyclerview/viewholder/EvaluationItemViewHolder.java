@@ -16,12 +16,13 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -48,6 +49,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
     @InjectView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
     @InjectView(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
+    @InjectView(R.id.progress)                          protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
     private final Context mContext;
@@ -66,6 +68,8 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(EvaluationData evaluation) {
+        mProgressbar.setVisibility(View.VISIBLE);
+
         mEvaluationId = evaluation.id;
         Picasso.with(mContext).load(evaluation.avatar_url).transform(new CircleTransformation()).into(mAvatar);
         mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
@@ -79,8 +83,12 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
+                AnimatorHelper.FADE_OUT(mProgressbar).start();
                 this.mHashtags.setText(Hashtag.getHashtag(response.hashtags));
-            }, error ->  ErrorHandler.handle(error, this));
+            }, error -> {
+                AnimatorHelper.FADE_OUT(mProgressbar).start();
+                ErrorHandler.handle(error, this);
+            });
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.request_user_vote == 1) setVoteStatus(VoteStatus.UP);

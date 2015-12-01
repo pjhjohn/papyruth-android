@@ -8,7 +8,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/app_logo"
+            android:id="@+id/auth_app_logo"
             android:layout_width="@dimen/baseline_x20"
             android:layout_height="@dimen/baseline_x20"
             android:layout_gravity="center"
@@ -18,7 +18,7 @@
             android:contentDescription="@string/empty"/>
 
         <ImageView
-            android:id="@+id/app_logo_horizontal"
+            android:id="@+id/auth_app_logo_horizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/baseline_x8"
             android:layout_gravity="center"
@@ -32,7 +32,7 @@
             android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/signup_label"
+            android:id="@+id/auth_signup_label"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -42,7 +42,7 @@
             android:textColor="@color/colorchip_green"/>
 
         <ProgressBar
-            android:id="@+id/signup_progress"
+            android:id="@+id/auth_signup_progress"
             android:layout_width="match_parent"
             android:layout_height="@dimen/baseline_x0.5"
             android:progressDrawable="@drawable/progressbar_signup"

@@ -59,10 +59,10 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
-    @InjectView(R.id.gender)        protected RadioGroup mRadioGroupGender;
-    @InjectView(R.id.realname)      protected EditText mTextRealname;
-    @InjectView(R.id.icon_gender)   protected ImageView mIconGender;
-    @InjectView(R.id.icon_realname) protected ImageView mIconRealname;
+    @InjectView(R.id.signup_gender_radiogroup)        protected RadioGroup mRadioGroupGender;
+    @InjectView(R.id.signup_realname_text)      protected EditText mTextRealname;
+    @InjectView(R.id.signup_gender_icon)   protected ImageView mIconGender;
+    @InjectView(R.id.signup_realname_icon) protected ImageView mIconRealname;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
@@ -153,7 +153,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                             }
                         }
                     }
-                    return realnameError == null && (checkedId == R.id.gender_male || checkedId == R.id.gender_female);
+                    return realnameError == null && (checkedId == R.id.signup_gender_radio_male || checkedId == R.id.signup_gender_radio_female);
                 }
             ).observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
                 if (valid) mNextButtonEnabled = true;
@@ -168,7 +168,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                 if (mNextButtonEnabled) {
                     SignUpForm.getInstance().setRealname(mTextRealname.getText().toString());
                     final int checkedGenderRadioButtonId = mRadioGroupGender.getCheckedRadioButtonId();
-                    if (checkedGenderRadioButtonId >= 0) SignUpForm.getInstance().setIsBoy(checkedGenderRadioButtonId == R.id.gender_male);
+                    if (checkedGenderRadioButtonId >= 0) SignUpForm.getInstance().setIsBoy(checkedGenderRadioButtonId == R.id.signup_gender_radio_male);
                     mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
                 }
             }
@@ -181,7 +181,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         } else mTextRealname.setText(mTextRealname.getText());
         if(mRadioGroupGender.getCheckedRadioButtonId() < 0) {
             final Boolean isboy = SignUpForm.getInstance().getIsBoy();
-            if(isboy != null) mRadioGroupGender.check(isboy? R.id.gender_male : R.id.gender_female);
+            if(isboy != null) mRadioGroupGender.check(isboy? R.id.signup_gender_radio_male : R.id.signup_gender_radio_female);
         } else mRadioGroupGender.check(mRadioGroupGender.getCheckedRadioButtonId());
 
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {

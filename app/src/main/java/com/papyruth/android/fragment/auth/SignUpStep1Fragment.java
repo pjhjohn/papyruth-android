@@ -56,7 +56,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
-    @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView mUniversityRecyclerView;
+    @InjectView (R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
