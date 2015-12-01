@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.unique.User;

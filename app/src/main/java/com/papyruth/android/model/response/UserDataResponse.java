@@ -9,4 +9,12 @@ public class UserDataResponse {
     public UserData user;
     public String access_token;
     public Boolean success;
+
+    public static UserDataResponse ERROR() {
+        UserDataResponse response = new UserDataResponse();
+        response.user = null;
+        response.access_token = null;
+        response.success = false;
+        return response;
+    }
 }

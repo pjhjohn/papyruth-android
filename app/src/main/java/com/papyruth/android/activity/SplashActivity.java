@@ -29,8 +29,8 @@ public class SplashActivity extends Activity {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
-    public void startActivity(Class<? extends Activity> activityClass){
-        Intent intent = new Intent(SplashActivity.this, activityClass);
+    public void startActivity(Class<? extends Activity> targetActivityClass){
+        Intent intent = new Intent(SplashActivity.this, targetActivityClass);
         SplashActivity.this.startActivity(intent);
         SplashActivity.this.finish();
     }

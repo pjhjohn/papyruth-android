@@ -3,20 +3,20 @@
     android:layout_height="match_parent">
     <com.papyruth.utils.view.panningview.PanningView
         xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/splash_background"
+        android:id="@+id/splash_background_panning"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/bg"
         custom:panningDurationInMs="1200"/>
     <com.papyruth.utils.view.Circle
-        android:id="@+id/splash_circle"
+        android:id="@+id/splash_background_circle"
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:alpha="0.9"/>
     <ImageView
-        android:id="@+id/splash_logo"
+        android:id="@+id/splash_application_logo"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_centerHorizontal="true"

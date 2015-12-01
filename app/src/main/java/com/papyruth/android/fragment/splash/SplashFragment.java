@@ -3,6 +3,7 @@ package com.papyruth.android.fragment.splash;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -23,7 +25,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
-import com.papyruth.android.model.response.StatisticsResponse;
+import com.papyruth.android.model.response.UserDataResponse;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.utils.support.error.ErrorHandler;
@@ -40,7 +42,6 @@ import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -50,88 +51,109 @@ import timber.log.Timber;
  */
 
 public class SplashFragment extends Fragment implements ErrorHandlerCallback{
-    @InjectView (R.id.splash_background) protected PanningView background;
-    @InjectView (R.id.splash_circle) protected Circle circle;
-    @InjectView (R.id.splash_logo) protected ImageView logo;
-    private CompositeSubscription subscriptions;
-
+    @InjectView (R.id.splash_background_panning)    protected PanningView mSplashBackgroundPanning;
+    @InjectView (R.id.splash_background_circle)     protected Circle mSplashBackgroundCircle;
+    @InjectView (R.id.splash_application_logo)      protected ImageView mSplashApplicationLogo;
+    private CompositeSubscription mCompositeSubscription;
     private Tracker mTracker;
+    private SplashActivity mActivity;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mTracker = ((papyruth) activity.getApplication()).getTracker();
+        mActivity = (SplashActivity) activity;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
         ButterKnife.inject(this, view);
         ErrorHandler.setApiErrorCallback(this);
-        this.subscriptions = new CompositeSubscription();
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mCompositeSubscription = new CompositeSubscription();
+        mSplashBackgroundPanning.startPanning();
+        User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         return view;
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mCompositeSubscription != null) mCompositeSubscription.unsubscribe();
+        mActivity.finish();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        /* Api Call */
-        User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mActivity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
-        this.subscriptions.add( Api.papyruth().users_me( User.getInstance().getAccessToken() )
-            .subscribe(
-                response -> {
+        mCompositeSubscription.add(Api.papyruth()
+            .users_me(User.getInstance().getAccessToken())
+            .onErrorResumeNext(throwable -> {
+                Timber.d("Error : @GET(\"/users/me\")");
+                return Observable.just(UserDataResponse.ERROR());
+            })
+            .flatMap(response -> { // Handles User-data fetch
+                if(response.success) {
                     User.getInstance().update(response.user);
+                    return Api.papyruth().users_refresh_token(User.getInstance().getAccessToken());
+                } else return Observable.just(UserDataResponse.ERROR());
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                response -> { // Handles Access-token refresh
+                    if(response.success) {
+                        User.getInstance().setAccessToken(response.access_token);
+                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+                    } else User.getInstance().clear();
                     requestPending = false;
-                    proceedToActivity.call();
+                    startActivity();
                 },
-                error -> {
+                error -> { // Collects all exceptions
+                    boolean handled = false;
                     if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
+                        switch(((RetrofitError) error).getResponse().getStatus()) {
                             case 401:
                             case 419:
-                                User.getInstance().clear();
-                                requestPending = false;
-                                proceedToActivity.call();
-                                break;
-                            default:
-                                ErrorHandler.throwError(error, this);
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                                handled = true;
+                                Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                                 break;
                         }
-                    }else
+                    }
+                    if (!handled) {
+                        Timber.e("Unhandled Exception. Throws to ErrorHandler");
+                        error.printStackTrace();
                         ErrorHandler.throwError(error, this);
+                    }
+                    User.getInstance().clear();
+                    requestPending = false;
+                    startActivity();
                 }
-            ));
-
-
-        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getActivity().getWindow().getDecorView().getRootView().getWindowToken(), 0);
-
-        /* Background Sliding */
-        background.startPanning();
+            )
+        );
 
         /* Animation */
         ValueAnimator animAlpha = ValueAnimator.ofFloat(0.0f, 1.0f);
         animAlpha.setDuration(600);
         animAlpha.setInterpolator(new DecelerateInterpolator(2.0f));
-        animAlpha.addUpdateListener(anim -> {
-            float alpha = (float) animAlpha.getAnimatedValue();
-            logo.setAlpha(alpha);
-        });
+        animAlpha.addUpdateListener(anim -> mSplashApplicationLogo.setAlpha((float) animAlpha.getAnimatedValue()));
         animAlpha.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                Observable.just((StatisticsResponse) null).delay(400, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                    response -> {
-                        timerPending = false;
-                        proceedToActivity.call();
-                    }
-                );
+            @Override public void onAnimationEnd(Animator animation) {
+                Observable.timer(400, TimeUnit.MILLISECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
+                    timerPending = false;
+                    startActivity();
+                });
             }
         });
-
-        CircleAngleAnimation animCircle = new CircleAngleAnimation(circle, 360);
+        CircleAngleAnimation animCircle = new CircleAngleAnimation(mSplashBackgroundCircle, 360);
         animCircle.setDuration(600);
         animCircle.setInterpolator(new AccelerateDecelerateInterpolator());
         animCircle.setAnimationListener(new Animation.AnimationListener() {
@@ -139,42 +161,23 @@ public class SplashFragment extends Fragment implements ErrorHandlerCallback{
             @Override public void onAnimationEnd(Animation animation) { animAlpha.start(); }
             @Override public void onAnimationRepeat(Animation animation) {}
         });
-        circle.startAnimation(animCircle);
+        mSplashBackgroundCircle.startAnimation(animCircle);
     }
 
     private boolean timerPending = true, requestPending = true;
-    private Action0 proceedToActivity = () -> {
-        if (timerPending||requestPending) return;
-
-        if(User.getInstance().getAccessToken() != null) {
-            this.subscriptions.add( Api.papyruth().users_refresh_token( User.getInstance().getAccessToken() )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    response -> {
-                        User.getInstance().setAccessToken(response.access_token);
-                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                        ((SplashActivity) this.getActivity()).startActivity(MainActivity.class);
-                    },
-                    error -> {
-                        Timber.d("refresh error : %s", error);
-                        error.printStackTrace();
-                        ((SplashActivity) this.getActivity()).startActivity(AuthActivity.class);
-                    }
-                )
-            );
-        }else
-            ((SplashActivity) this.getActivity()).startActivity(AuthActivity.class);
-    };
-
+    private void startActivity() {
+        if (timerPending || requestPending) return;
+        if (User.getInstance().getAccessToken() == null) mActivity.startActivity(AuthActivity.class);
+        else mActivity.startActivity(MainActivity.class);
+    }
 
     @Override
     public void sendErrorTracker(String cause, String from, boolean isFatal) {
         Timber.d("cause : %s, from : %s", cause, from);
-        mTracker.send(
-            new HitBuilders.ExceptionBuilder()
-                .setDescription(cause)
-                .setFatal(isFatal)
-                .build());
+        mTracker.send(new HitBuilders.ExceptionBuilder()
+            .setDescription(cause)
+            .setFatal(isFatal)
+            .build()
+        );
     }
 }
