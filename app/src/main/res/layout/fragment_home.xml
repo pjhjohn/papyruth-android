@@ -1,0 +1,30 @@
+<com.papyruth.support.utility.navigator.NavigatableFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/home_swipe_refresh">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/home_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="ifContentScrolls"
+                android:scrollbars="vertical"
+                android:layout_gravity="top"/>
+            <FrameLayout
+                android:id="@+id/home_empty_state"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <FrameLayout
+            android:id="@+id/evaluation_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+    <include layout="@layout/progress"/>
+</com.papyruth.support.utility.navigator.NavigatableFrameLayout>
