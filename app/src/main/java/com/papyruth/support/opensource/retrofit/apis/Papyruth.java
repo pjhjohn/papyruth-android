@@ -126,6 +126,11 @@ public interface Papyruth {
         @Query("point_clarity") Integer point_clarity,
         @Query("body") String body
     );
+    @POST("/evaluations/possible")
+    Observable<EvaluationPossibleResponse> post_evaluation_possible(
+        @Header("Authorization") String authorization,
+        @Query("course_id") Integer course_id
+    );
     @GET("/evaluations/{id}")
     Observable<EvaluationResponse> get_evaluation(
         @Header("Authorization") String authorization,
@@ -178,21 +183,10 @@ public interface Papyruth {
         @Path("id") Integer id,
         @Query("hashtags[]") List<String> hashtags
     );
-    @POST("/evaluations/{id}/hashtag/delete")
-    Observable<VoidResponse> delete_evaluation_hashtag(
-        @Header("Authorization") String authorization,
-        @Path("id") Integer id,
-        @Query("hashtags[]") List<String> hashtags
-    );
     @GET("/evaluations/{id}/hashtag")
     Observable<HashtagsResponse> get_evaluation_hashtag(
         @Header("Authorization") String authorization,
         @Path("id") Integer id
-    );
-    @POST("/evaluations/possible")
-    Observable<EvaluationPossibleResponse> post_evaluation_possible(
-        @Header("Authorization") String authorization,
-        @Query("course_id") Integer course_id
     );
 
     /* HOME */
@@ -260,6 +254,11 @@ public interface Papyruth {
         @Query("university_id") Integer university_id,
         @Query("entrance_year") Integer entrance_year
     );
+    @POST("/users/sign_up/validate")
+    Observable<SignUpValidateResponse> users_sign_up_validate(
+        @Query("name") String name,
+        @Query("value") String value
+    );
     @POST("/users/sign_in")
     Observable<UserDataResponse> users_sign_in(
         @Query("email") String email,
@@ -267,6 +266,10 @@ public interface Papyruth {
     );
     @POST("/users/sign_out")
     Observable<UserDataResponse> users_sign_out(
+        @Header("Authorization") String authorization
+    );
+    @POST("/users/refresh_token")
+    Observable<UserDataResponse> users_refresh_token(
         @Header("Authorization") String authorization
     );
     @GET("/users/me")
@@ -278,11 +281,6 @@ public interface Papyruth {
         @Header("Authorization") String authorization,
         @Query("old_password") String old_password,
         @Query("new_password") String new_password
-    );
-    @POST("/users/me/university_email")
-    Observable<SimpleResponse> users_me_university_email(
-        @Header("Authorization") String authorization,
-        @Query("email") String univ_email
     );
     @POST("/users/me/edit")
     Observable<UserDataResponse> users_me_edit_email(
@@ -309,13 +307,14 @@ public interface Papyruth {
         @Header("Authorization") String authorization,
         @Query("page") Integer page
     );
-    @POST("/users/refresh_token")
-    Observable<UserDataResponse> users_refresh_token(
-        @Header("Authorization") String authorization
+    @GET("/users/email")
+    Observable<SimpleResponse> users_email(
+        @Header("Authorization") String authorization,
+        @Query("type") Integer type
     );
-    @POST("/users/sign_up/validate")
-    Observable<SignUpValidateResponse> users_sign_up_validate(
-        @Query("name") String name,
-        @Query("value") String value
+    @POST("/users/me/university_email")
+    Observable<SimpleResponse> users_me_university_email(
+        @Header("Authorization") String authorization,
+        @Query("email") String univ_email
     );
 }
