@@ -18,13 +18,14 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.materialdialog.VotersDialog;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -62,6 +63,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_down_vote_icon)             protected ImageView mVoteDownIcon;
     @InjectView(R.id.evaluation_down_vote_count)            protected RobotoTextView mVoteDownCount;
     @InjectView(R.id.hr_shadow)                             protected FrameLayout mShadow;
+    @InjectView(R.id.progress)                              protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
     private final Context mContext;
@@ -93,6 +95,8 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     public void bind(Evaluation evaluation) {
+        mProgressbar.setVisibility(View.VISIBLE);
+
         mEvaluationId = evaluation.getId();
         mLecture.setText(evaluation.getLectureName());
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
@@ -116,8 +120,12 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
+                AnimatorHelper.FADE_OUT(mProgressbar).start();
                 mHashtags.setText(Hashtag.getHashtag(response.hashtags));
-            }, error ->  ErrorHandler.handle(error, this));
+            }, error ->  {
+                AnimatorHelper.FADE_OUT(mProgressbar).start();
+                ErrorHandler.handle(error, this);
+            });
 
         if(evaluation.getRequestUserVote() == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.getRequestUserVote() == 1) setVoteStatus(VoteStatus.UP);

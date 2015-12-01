@@ -225,4 +225,5 @@
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
+    <include layout="@layout/viewholder_progress"/>
 </RelativeLayout>
