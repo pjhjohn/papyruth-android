@@ -164,6 +164,11 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
                             super.onPositive(dialog);
                             //TODO : ADD fotgot password api
                         }
+
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            super.onNegative(dialog);
+                        }
                     })
                     .build()
                     .show()
