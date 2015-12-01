@@ -174,8 +174,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         /* setup Subtitle */
         mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText, error -> ErrorHandler.throwError(error, this));
-        User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText, error -> ErrorHandler.throwError(error, this));
+        User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText, error -> ErrorHandler.handle(error, this));
+        User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText, error -> ErrorHandler.handle(error, this));
     }
 
     public void onClick(View view){

@@ -66,7 +66,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                     this.items.addAll(evaluations);
                     this.adapter.notifyDataSetChanged();
                     size = items.size();
-                }, error -> ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.handle(error, this))
 
         );
 
@@ -86,7 +86,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                         this.adapter.notifyDataSetChanged();
                         this.swipeRefresh.setRefreshing(false);
                         size = items.size();
-                    }, error -> ErrorHandler.throwError(error, this),
+                    }, error -> ErrorHandler.handle(error, this),
                     () -> {
                         this.swipeRefresh.setRefreshing(false);
                     })
@@ -135,7 +135,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 //                    if (sinceId == null) sinceId = id;
 //                    else if (sinceId > id) sinceId = id;
 //                }
-                }, error -> ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.handle(error, this))
         );
 
     }
@@ -161,7 +161,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
                 this.openEvaluation(view, true);
-            }, error->ErrorHandler.throwError(error, this));
+            }, error->ErrorHandler.handle(error, this));
     }
 
     @Override
@@ -174,7 +174,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(
             unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN)
-            ,error -> ErrorHandler.throwError(error, this)
+            ,error -> ErrorHandler.handle(error, this)
         );
     }
 }

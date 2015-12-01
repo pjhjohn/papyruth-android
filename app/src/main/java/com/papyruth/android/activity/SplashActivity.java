@@ -9,8 +9,11 @@ import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.splash.SplashFragment;
 import com.papyruth.android.papyruth;
+import com.papyruth.support.utility.error.ErrorHandlerCallback;
 
-public class SplashActivity extends Activity {
+import timber.log.Timber;
+
+public class SplashActivity extends Activity implements ErrorHandlerCallback {
 
     private Tracker mTracker;
     @Override
@@ -33,5 +36,15 @@ public class SplashActivity extends Activity {
         Intent intent = new Intent(SplashActivity.this, targetActivityClass);
         SplashActivity.this.startActivity(intent);
         SplashActivity.this.finish();
+    }
+
+    @Override
+    public void sendErrorTracker(String cause, String from, boolean isFatal) {
+        Timber.d("cause : %s, from : %s", cause, from);
+        mTracker.send(new HitBuilders.ExceptionBuilder()
+            .setDescription(cause)
+            .setFatal(isFatal)
+            .build()
+        );
     }
 }

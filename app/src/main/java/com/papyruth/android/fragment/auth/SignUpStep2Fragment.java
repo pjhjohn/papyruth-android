@@ -50,15 +50,15 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus, LoaderManager.LoaderCallbacks<Cursor>{
+    private AuthActivity mActivity;
     private ViewPagerController mViewPagerController;
-    private Context mContext;
     private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
-        mContext = activity;
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mActivity = (AuthActivity) activity;
+        mViewPagerController = mActivity.getViewPagerController();
+        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
     @InjectView(R.id.email)         protected EditText mTextEmail;
@@ -87,13 +87,13 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Picasso.with(mContext).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIconEmail);
-        Picasso.with(mContext).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIconNickname);
+        Picasso.with(mActivity).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconEmail);
+        Picasso.with(mActivity).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconNickname);
         mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP2);
         if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) {
-            final View focusedView = getActivity().getWindow().getCurrentFocus();
+            final View focusedView = mActivity.getWindow().getCurrentFocus();
             Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
-                unused -> ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextEmail, InputMethodManager.SHOW_FORCED)
+                unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextEmail, InputMethodManager.SHOW_FORCED)
             );
         }
     }
@@ -138,8 +138,8 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup2));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
-        ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
-        ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
+        mActivity.setOnShowSoftKeyboard(null);
+        mActivity.setOnHideSoftKeyboard(null);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
         mCompositeSubscription.add(
@@ -182,7 +182,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
 
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
             mTextEmail.requestFocus();
-            ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
+            ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
         });
     }
 
@@ -196,7 +196,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
         return new CursorLoader(
-            mContext,
+            mActivity,
             // Retrieve data rows for the device user's 'profile' contact.
             Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
             ProfileQuery.PROJECTION,

@@ -126,7 +126,7 @@ public class EvaluationStep2Fragment extends Fragment {
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> mNavigator.navigate(EvaluationStep3Fragment.class, true),
-            error -> ErrorHandler.throwError(error, this)
+            error -> ErrorHandler.handle(error, this)
         );
 
 
@@ -164,7 +164,7 @@ public class EvaluationStep2Fragment extends Fragment {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-            }, error -> ErrorHandler.throwError(error, this))
+            }, error -> ErrorHandler.handle(error, this))
         );
     }
 }

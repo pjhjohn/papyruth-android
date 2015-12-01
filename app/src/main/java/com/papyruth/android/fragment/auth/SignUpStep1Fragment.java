@@ -45,16 +45,15 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnPageFocus, OnPageUnfocus {
+    private AuthActivity mActivity;
     private ViewPagerController mViewPagerController;
-    private Context mContext;
     private Tracker mTracker;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
-        mContext = activity;
-        mTracker = ((papyruth) activity.getApplication()).getTracker();
+        mActivity = (AuthActivity) activity;
+        mViewPagerController = mActivity.getViewPagerController();
+        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.signup_univ_recyclerview) protected RecyclerView mUniversityRecyclerView;
@@ -89,7 +88,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
                 items.clear();
                 items.addAll(universities);
                 adapter.notifyDataSetChanged();
-            }, error -> ErrorHandler.throwError(error, this))
+            }, error -> ErrorHandler.handle(error, this))
         );
     }
 
@@ -98,11 +97,11 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
-        ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
-        ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
+        mActivity.setOnShowSoftKeyboard(null);
+        mActivity.setOnHideSoftKeyboard(null);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused ->
-            ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0)
+            ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0)
         );
 
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
@@ -124,7 +123,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @Override
     public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new GridLayoutManager(mContext, 2);
+        return new GridLayoutManager(mActivity, 2);
     }
 
     @Override
@@ -138,7 +137,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
         String[] years = new String[length];
         for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
-        new MaterialDialog.Builder(mContext)
+        new MaterialDialog.Builder(mActivity)
             .title(R.string.dialog_title_entrance_year)
             .negativeText(R.string.cancel)
             .buttonsGravity(GravityEnum.START)

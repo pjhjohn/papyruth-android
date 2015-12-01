@@ -152,7 +152,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true),
-            error -> ErrorHandler.throwError(error, this)
+            error -> ErrorHandler.handle(error, this)
         );
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
@@ -166,7 +166,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                     favorites -> {
                         notifyDataChanged(favorites);
                     }, error -> {
-                        ErrorHandler.throwError(error, this);
+                        ErrorHandler.handle(error, this);
                     }
                 )
         );
@@ -188,7 +188,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                         notifyDataChanged(favorites);
                         this.refresh.setRefreshing(false);
                     },
-                    error -> ErrorHandler.throwError(error, this)
+                    error -> ErrorHandler.handle(error, this)
                 )
         );
 
@@ -208,7 +208,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
                     if (favorites != null) {
                         this.notifyDataChanged(favorites);
                     }
-                }, error -> ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.handle(error, this))
         );
     }
 }

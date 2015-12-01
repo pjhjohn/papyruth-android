@@ -121,7 +121,7 @@ public class ProfileChangePasswordFragment extends Fragment {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (visible && !valid) FloatingActionControl.getInstance().hide(true);
                 else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-            }, error-> ErrorHandler.throwError(error, this))
+            }, error-> ErrorHandler.handle(error, this))
         );
     }
 
@@ -166,7 +166,7 @@ public class ProfileChangePasswordFragment extends Fragment {
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                         }
                     }
-                    ErrorHandler.throwError(error, this);
+                    ErrorHandler.handle(error, this);
                 }
             );
     }

@@ -114,13 +114,13 @@ public class SettingsFragment extends Fragment {
                     context.getResources().getString(R.string.lorem_ipsum)
                 );
                 dialog.show();
-            }, error -> ErrorHandler.throwError(error, this))
+            }, error -> ErrorHandler.handle(error, this))
         );
 
         this.subscriptions.add(ViewObservable
             .clicks(this.openSourceLicense)
             .subscribe(unused -> this.navigator.navigate(OpenSourceLicensesFragment.class, true)
-            , error->ErrorHandler.throwError(error, this))
+            , error->ErrorHandler.handle(error, this))
         );
 
         this.subscriptions.add(ViewObservable
@@ -128,7 +128,7 @@ public class SettingsFragment extends Fragment {
                 .subscribe(unused -> {
                     AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                     Toast.makeText(getActivity(), R.string.success_del_history, Toast.LENGTH_LONG).show();
-                }, error->ErrorHandler.throwError(error, this))
+                }, error->ErrorHandler.handle(error, this))
         );
 
         this.subscriptions.add(ViewObservable
@@ -143,8 +143,8 @@ public class SettingsFragment extends Fragment {
                         User.getInstance().clear();
                         this.getActivity().startActivity(new Intent(this.getActivity(), SplashActivity.class));
                         this.getActivity().finish();
-                    }, error -> ErrorHandler.throwError(error, this));
-            }, error->ErrorHandler.throwError(error, this))
+                    }, error -> ErrorHandler.handle(error, this));
+            }, error->ErrorHandler.handle(error, this))
         );
     }
 }

@@ -171,7 +171,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .subscribe(comments -> {
                 setComments(comments, true);
                 registerScrollToLoadMoreListener();
-            }, error -> ErrorHandler.throwError(error, this))
+            }, error -> ErrorHandler.handle(error, this))
         );
         this.subscriptions.add(ViewObservable
             .clicks(this.mCommentSubmit)
@@ -203,7 +203,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                 this.mCommentText.setText("");
                 FloatingActionControl.getButton().setIndeterminate(false);
                 FloatingActionControl.getButton().setProgress(0, true);
-            }, error->ErrorHandler.throwError(error, this))
+            }, error->ErrorHandler.handle(error, this))
         );
         if (!standalone) return;
         this.setEvaluationFloatingActionControl();
@@ -247,7 +247,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
             .subscribe(comments -> {
                 this.progress.setVisibility(View.GONE);
                 this.setComments(comments);
-            }, error->ErrorHandler.throwError(error, this))
+            }, error->ErrorHandler.handle(error, this))
         );
     }
 
@@ -421,7 +421,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_comment).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
-        FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput(), error->ErrorHandler.throwError(error, this));
+        FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput(), error->ErrorHandler.handle(error, this));
     }
 
 
@@ -463,7 +463,7 @@ public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, 
                     .subscribe(course -> {
                         Course.getInstance().update(course);
                         ((MainActivity)this.getActivity()).navigate(CourseFragment.class, true);
-                    }, error -> ErrorHandler.throwError(error, this))
+                    }, error -> ErrorHandler.handle(error, this))
             );
         }
     }

@@ -80,7 +80,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
                 this.mHashtags.setText(Hashtag.getHashtag(response.hashtags));
-            }, error ->  ErrorHandler.throwError(error, this));
+            }, error ->  ErrorHandler.handle(error, this));
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.request_user_vote == 1) setVoteStatus(VoteStatus.UP);

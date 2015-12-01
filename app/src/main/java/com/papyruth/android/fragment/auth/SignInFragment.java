@@ -3,9 +3,7 @@ package com.papyruth.android.fragment.auth;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,7 +28,6 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -62,20 +59,19 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
  * Created by mrl on 2015-04-07.
  */
 public class SignInFragment extends Fragment implements OnPageFocus, LoaderManager.LoaderCallbacks<Cursor> {
-    /* Set PageController */
+    private AuthActivity mActivity;
     private ImageView mApplicationLogoHorizontal, mApplicationLogo;
     private ViewPagerController mViewPagerController;
-    private Context mContext;
     private Tracker mTracker;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mApplicationLogoHorizontal = (ImageView) activity.findViewById(R.id.app_logo_horizontal);
-        mApplicationLogo = (ImageView) activity.findViewById(R.id.app_logo);
-        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
-        mContext = activity;
-        mTracker = ((papyruth) activity.getApplication()).getTracker();
+        mActivity = (AuthActivity) activity;
+        mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.app_logo_horizontal);
+        mApplicationLogo = (ImageView) mActivity.findViewById(R.id.app_logo);
+        mViewPagerController = mActivity.getViewPagerController();
+        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.email)            protected AutoCompleteTextView mTextEmail;
@@ -106,18 +102,18 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     public void onResume() {
         super.onResume();
         if(this.getUserVisibleHint()) onPageFocused();
-}
+    }
 
     @Override
     public void onPageFocused() {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signin));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().clear();
-        ((AuthActivity) getActivity()).setOnShowSoftKeyboard(keyboardHeight -> {
+        mActivity.setOnShowSoftKeyboard(keyboardHeight -> {
             mApplicationLogo.setVisibility(View.GONE);
             mApplicationLogoHorizontal.setVisibility(View.VISIBLE);
         });
-        ((AuthActivity) getActivity()).setOnHideSoftKeyboard(() -> {
+        mActivity.setOnHideSoftKeyboard(() -> {
             mApplicationLogo.setVisibility(View.VISIBLE);
             mApplicationLogoHorizontal.setVisibility(View.GONE);
         });
@@ -130,7 +126,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
                 return emailError == null && passwordError == null;
             })
             .startWith(false)
-            .subscribe(mButtonSignIn::setEnabled, error -> ErrorHandler.throwError(error, this))
+            .subscribe(mButtonSignIn::setEnabled, error -> ErrorHandler.handle(error, this))
         );
 
         mCompositeSubscriptions.add(
@@ -143,19 +139,19 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
                 }))
             )
             .filter(trigger -> trigger)
-            .subscribe(unused -> requestSignIn(), error -> ErrorHandler.throwError(error, this))
+            .subscribe(unused -> requestSignIn(), error -> ErrorHandler.handle(error, this))
         );
 
         mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
             unused -> {
                 mApplicationLogo.setVisibility(View.VISIBLE);
                 mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
-            }, error -> ErrorHandler.throwError(error, this)
+            }, error -> ErrorHandler.handle(error, this)
         ));
 
         this.mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
             .subscribe(
-                event -> new MaterialDialog.Builder(mContext)
+                event -> new MaterialDialog.Builder(mActivity)
                     .title(R.string.password_recovery_title)
                     .content(R.string.enter_your_email)
                     .input(R.string.hint_email, R.string.empty, (dialog, input) -> {
@@ -171,7 +167,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
                     })
                     .build()
                     .show()
-                , error -> ErrorHandler.throwError(error, this)
+                , error -> ErrorHandler.handle(error, this)
             )
         );
     }
@@ -199,21 +195,20 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
                             token -> {
                                 User.getInstance().setAccessToken(token);
                                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
-                                this.getActivity().startActivity(new Intent(mContext, MainActivity.class));
-                                this.getActivity().finish();
+                                mActivity.startMainActivity();
                             }, error -> {
                                 Timber.d("refresh error : %s", error);
                                 error.printStackTrace();
                             }
                         );
-                    else Toast.makeText(mContext, this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                    else Toast.makeText(mActivity, this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                 },
                 error -> {
                     AnimatorHelper.FADE_OUT(mProgress).start();
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 403:
-                                Toast.makeText(mContext, this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                                Toast.makeText(mActivity, this.getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
@@ -228,7 +223,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
-            mContext,
+            mActivity,
             Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
             ProfileQuery.PROJECTION,
             ContactsContract.Contacts.Data.MIMETYPE + " = ?",
@@ -242,7 +237,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
         List<String> emails = new ArrayList<>();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) emails.add(cursor.getString(ProfileQuery.ADDRESS));
         /* Add to Emails View */
-        mTextEmail.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_dropdown_item_1line, emails));
+        mTextEmail.setAdapter(new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, emails));
     }
 
     @Override

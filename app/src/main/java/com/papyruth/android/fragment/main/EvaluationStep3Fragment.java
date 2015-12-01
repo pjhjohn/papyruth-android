@@ -122,7 +122,7 @@ public class EvaluationStep3Fragment extends Fragment {
                         recommendHashtag.addView(hashtag);
                     }
                 }, error -> {
-                    ErrorHandler.throwError(error, this);
+                    ErrorHandler.handle(error, this);
                 })
         );
 
@@ -170,7 +170,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 })
                 .build()
                 .show();
-        }, error->ErrorHandler.throwError(error, this));
+        }, error->ErrorHandler.handle(error, this));
         Picasso.with(context).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.bodyIcon);
         Picasso.with(context).load(R.drawable.ic_light_tag).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.hashtagsIcon);
         this.bodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.bodyLabel.getPaintFlags());
@@ -191,7 +191,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe(valid -> {
                     this.showFAB(valid);
-                }, error -> ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.handle(error, this))
         );
 
         /**
@@ -219,7 +219,7 @@ public class EvaluationStep3Fragment extends Fragment {
                         this.hashtagsText.setSelection(hashtagsText.getText().length());
                     } else
                         this.hashtagsText.setText("");
-                }, error -> ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.handle(error, this))
         );
     }
 
@@ -321,7 +321,7 @@ public class EvaluationStep3Fragment extends Fragment {
                     }
                 },
                 error -> {
-                    ErrorHandler.throwError(error, this);
+                    ErrorHandler.handle(error, this);
                 }
             );
     }
@@ -339,7 +339,7 @@ public class EvaluationStep3Fragment extends Fragment {
                 .subscribe(user -> {
                     User.getInstance().update(user);
                     this.navigator.navigate(HomeFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
-                }, error -> ErrorHandler.throwError(error, this));
+                }, error -> ErrorHandler.handle(error, this));
         }
     }
 }

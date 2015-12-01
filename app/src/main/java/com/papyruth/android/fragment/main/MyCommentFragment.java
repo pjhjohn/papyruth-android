@@ -47,7 +47,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
                 this.slave = new EvaluationFragment();
                 setCommentPosition(this.items.get(position).id);
                 this.openEvaluation(view, true);
-            }, error-> ErrorHandler.throwError(error, this));
+            }, error-> ErrorHandler.handle(error, this));
     }
 
     private boolean askmore = true;
@@ -69,7 +69,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
                     this.notifyDataChanged(comments);
-                }, error -> ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.handle(error, this))
         );
 
         this.subscriptions.add(
@@ -86,7 +86,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
                     notifyDataChanged(comments);
                 }, error -> {
                     this.swipeRefresh.setRefreshing(false);
-                    ErrorHandler.throwError(error, this);
+                    ErrorHandler.handle(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
@@ -109,7 +109,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
                     this.progress.setVisibility(View.GONE);
                     notifyDataChanged(comments);
                 }, error -> {
-                    ErrorHandler.throwError(error, this);
+                    ErrorHandler.handle(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
@@ -135,7 +135,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(
             unused -> navigator.navigate(EvaluationStep1Fragment.class, true),
-            error -> ErrorHandler.throwError(error, this)
+            error -> ErrorHandler.handle(error, this)
         );
     }
 

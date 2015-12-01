@@ -114,19 +114,19 @@ public class ProfileFragment extends Fragment {
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_register_university_email)
             .filter(unused -> User.getInstance().getUniversityEmail() == null)
-            .subscribe(unused -> mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true), error -> ErrorHandler.throwError(error, this))
+            .subscribe(unused -> mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_email)
-            .subscribe(unused -> mNavigator.navigate(ProfileChangeEmailFragment.class, true), error -> ErrorHandler.throwError(error, this))
+            .subscribe(unused -> mNavigator.navigate(ProfileChangeEmailFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_nickname)
-            .subscribe(unused -> mNavigator.navigate(ProfileChangeNicknameFragment.class, true), error -> ErrorHandler.throwError(error, this))
+            .subscribe(unused -> mNavigator.navigate(ProfileChangeNicknameFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_password)
-            .subscribe(unused -> mNavigator.navigate(ProfileChangePasswordFragment.class, true), error -> ErrorHandler.throwError(error, this))
+            .subscribe(unused -> mNavigator.navigate(ProfileChangePasswordFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
     }
 }

@@ -87,7 +87,7 @@ public class AlertDialog {
                     .subscribeOn(Schedulers.io())
                     .subscribe(response -> {
                         navigator.navigate(EvaluationStep2Fragment.class, true);
-                    }, error ->  ErrorHandler.throwError(error, MaterialDialog.class));
+                    }, error ->  ErrorHandler.handle(error, MaterialDialog.class));
                 break;
             case NEED_CONFIRMATION      :
                 break;

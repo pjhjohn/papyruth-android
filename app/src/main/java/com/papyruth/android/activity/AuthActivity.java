@@ -11,10 +11,9 @@ import com.papyruth.android.R;
 import com.papyruth.android.fragment.auth.AuthFragment;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.error.ErrorHandlerCallback;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
+import com.papyruth.support.utility.error.ErrorHandlerCallback;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -34,7 +33,6 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTracker = ((papyruth) getApplication()).getTracker();
-        ErrorHandler.setApiErrorCallback(this);
         this.setContentView(R.layout.activity_auth);
         this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));
@@ -139,12 +137,11 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
 
     @Override
     public void sendErrorTracker(String cause, String from, boolean isFatal) {
-
         Timber.d("cause : %s, from : %s", cause, from);
-        mTracker.send(
-            new HitBuilders.ExceptionBuilder()
-                .setDescription(cause)
-                .setFatal(isFatal)
-                .build());
+        mTracker.send(new HitBuilders.ExceptionBuilder()
+            .setDescription(cause)
+            .setFatal(isFatal)
+            .build()
+        );
     }
 }

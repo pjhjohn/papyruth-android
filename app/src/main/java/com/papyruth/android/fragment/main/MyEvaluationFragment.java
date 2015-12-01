@@ -47,7 +47,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
                 this.openEvaluation(view, true);
-            }, error-> ErrorHandler.throwError(error, this));
+            }, error-> ErrorHandler.handle(error, this));
     }
 
 
@@ -70,7 +70,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(evaluations -> {
                     this.notifyDataChanged(evaluations);
-                }, error -> ErrorHandler.throwError(error, this))
+                }, error -> ErrorHandler.handle(error, this))
         );
         this.subscriptions.add(
             super.getRefreshObservable(this.swipeRefresh)
@@ -86,7 +86,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                     this.notifyDataChanged(evaluations);
                 }, error -> {
                     this.swipeRefresh.setRefreshing(false);
-                    ErrorHandler.throwError(error, this);
+                    ErrorHandler.handle(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
@@ -110,7 +110,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
                     this.notifyDataChanged(evaluations);
                 }, error -> {
                     this.progress.setVisibility(View.GONE);
-                    ErrorHandler.throwError(error, this);
+                    ErrorHandler.handle(error, this);
                 }, () -> {
                     this.swipeRefresh.setRefreshing(false);
                     this.progress.setVisibility(View.GONE);
@@ -140,7 +140,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(
             unused -> navigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN),
-            error -> ErrorHandler.throwError(error, this)
+            error -> ErrorHandler.handle(error, this)
         );
     }
 }

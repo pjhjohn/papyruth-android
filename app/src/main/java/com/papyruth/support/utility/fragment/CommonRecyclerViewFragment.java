@@ -150,7 +150,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
                 ToolbarHelper.hide(toolbar);
             }
         }catch (Exception e){
-            ErrorHandler.throwError(e, this);
+            ErrorHandler.handle(e, this);
         }
     }
 
@@ -217,7 +217,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
             });
             animators.start();
         }catch (Exception e){
-            ErrorHandler.throwError(e, this);
+            ErrorHandler.handle(e, this);
         }
     }
 

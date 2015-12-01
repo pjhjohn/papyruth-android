@@ -105,7 +105,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
         this.toolbar.setTitle(R.string.toolbar_title_course);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_green).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.throwError(error, this));
+        FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.handle(error, this));
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
@@ -132,7 +132,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     final int offset = this.adapter.getItemOffset();
                     this.adapter.setIsEmptyData(evaluations.isEmpty());
                     this.adapter.notifyItemRangeChanged(offset, this.adapter.getItemCount() - offset);
-                }, error-> ErrorHandler.throwError(error, this));
+                }, error-> ErrorHandler.handle(error, this));
         }
 
         super.getRecyclerViewScrollObservable(this.courseRecyclerView, this.toolbar, true)
@@ -176,7 +176,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 Evaluation.getInstance().update(response.evaluation);
                 this.slave = new EvaluationFragment();
                 this.openEvaluation(view);
-            }, error -> ErrorHandler.throwError(error, this));
+            }, error -> ErrorHandler.handle(error, this));
     }
 
     /* Animating Slave Views : open & close */
@@ -272,7 +272,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                 slaveContainer.setVisibility(View.GONE);
                 slaveIsOccupying = false;
                 FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_green).show(true, 200, TimeUnit.MILLISECONDS);
-                FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.throwError(error, this));
+                FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.handle(error, this));
             }
         });
         animators.start();
@@ -303,7 +303,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
                     AlertDialog.build(getActivity(), navigator, AlertDialog.Type.EVALUATION_POSSIBLE)
                         .show();
                 }
-            }, error -> ErrorHandler.throwError(error, this));
+            }, error -> ErrorHandler.handle(error, this));
     }
 
 }

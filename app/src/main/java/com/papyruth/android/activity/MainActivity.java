@@ -24,10 +24,9 @@ import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
 import com.papyruth.android.papyruth;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.error.ErrorHandlerCallback;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
+import com.papyruth.support.utility.error.ErrorHandlerCallback;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -57,7 +56,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         this.attachSoftKeyboardListeners();
         mTracker = ((papyruth) getApplication()).getTracker();
         ButterKnife.inject(this);
-        ErrorHandler.setApiErrorCallback(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
@@ -130,11 +128,11 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     @Override
     public void sendErrorTracker(String cause, String from, boolean isFatal) {
         Timber.d("cause : %s, from : %s", cause, from);
-        mTracker.send(
-            new HitBuilders.ExceptionBuilder()
+        mTracker.send(new HitBuilders.ExceptionBuilder()
                 .setDescription(cause)
                 .setFatal(isFatal)
-                .build());
+                .build()
+        );
     }
 
     /* Toolbar Search */

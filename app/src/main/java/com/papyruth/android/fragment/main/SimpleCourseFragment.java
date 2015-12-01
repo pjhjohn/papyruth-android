@@ -130,7 +130,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> navigator.navigate(EvaluationStep1Fragment.class, true),
-            error -> ErrorHandler.throwError(error, this)
+            error -> ErrorHandler.handle(error, this)
         );
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
@@ -144,7 +144,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
                         this.refresh.setRefreshing(false);
                         this.getSearchResult();
                     },
-                    error -> ErrorHandler.throwError(error, this)
+                    error -> ErrorHandler.handle(error, this)
                 )
         );
 //        toolbarSearch.searchCourse();
@@ -164,7 +164,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::notifyDataSetChanged, error -> ErrorHandler.throwError(error, this))
+                .subscribe(this::notifyDataSetChanged, error -> ErrorHandler.handle(error, this))
         );
     }
 

@@ -115,7 +115,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                     AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_POSSIBLE);
                 }
-            }, error -> ErrorHandler.throwError(error, this));
+            }, error -> ErrorHandler.handle(error, this));
     }
 
     @Override
@@ -146,7 +146,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.throwError(error, this))
+                .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.handle(error, this))
         );
     }
 
@@ -181,7 +181,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
                 notifyAutoCompleteDataChanged(response);
             }
         }
-            , error -> ErrorHandler.throwError(error, this));
+            , error -> ErrorHandler.handle(error, this));
     }
 
     public void notifyAutoCompleteDataChanged(List<CourseData> courses){

@@ -48,15 +48,15 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPageUnfocus {
+    private AuthActivity mActivity;
     private ViewPagerController mViewPagerController;
-    private Context mContext;
     private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mViewPagerController = ((AuthActivity) activity).getViewPagerController();
-        mContext = activity;
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mActivity = (AuthActivity) activity;
+        mViewPagerController = mActivity.getViewPagerController();
+        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
     @InjectView(R.id.gender)        protected RadioGroup mRadioGroupGender;
@@ -84,13 +84,13 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
     @Override
     public void onResume() {
         super.onResume();
-        Picasso.with(mContext).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
-        Picasso.with(mContext).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
+        Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
+        Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
         mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP3);
         if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
-            final View focusedView = getActivity().getWindow().getCurrentFocus();
+            final View focusedView = mActivity.getWindow().getCurrentFocus();
             Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
-                unused -> ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextRealname, InputMethodManager.SHOW_FORCED)
+                unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextRealname, InputMethodManager.SHOW_FORCED)
             );
         }
     }
@@ -130,8 +130,8 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
-        ((AuthActivity) getActivity()).setOnShowSoftKeyboard(null);
-        ((AuthActivity) getActivity()).setOnHideSoftKeyboard(null);
+        mActivity.setOnShowSoftKeyboard(null);
+        mActivity.setOnHideSoftKeyboard(null);
         if(mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
         mCompositeSubscription.add(
@@ -149,7 +149,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                             if (child instanceof ViewGroup) {
                                 queue.add((ViewGroup) child);
                             } else if (child instanceof RadioButton) {
-                                ((RadioButton) child).setError(checkedId < 0? mContext.getString(R.string.field_invalid_gender) : null);
+                                ((RadioButton) child).setError(checkedId < 0? mActivity.getString(R.string.field_invalid_gender) : null);
                             }
                         }
                     }
@@ -186,7 +186,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
 
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
             mTextRealname.requestFocus();
-            ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
+            ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
         });
     }
 
