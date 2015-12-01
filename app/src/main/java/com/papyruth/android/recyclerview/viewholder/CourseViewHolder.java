@@ -127,7 +127,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         this.mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
 
         Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mColorInactive)).into(mEvaluationIcon);
-        mEvaluationCount.setText(count == null || count < 0 ? "N/A" : String.valueOf(count));
+        mEvaluationCount.setText(String.valueOf(count == null ? 0 : String.valueOf(count)));
         Picasso.with(mContext).load(R.drawable.ic_light_bookmark).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
         mBookmark.setOnClickListener(this);
     }

@@ -63,7 +63,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
         this.mHashtags.setText(Hashtag.getHashtag(course.hashtags));
 
         Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
-        mEvaluationCount.setText(pointInRange(course.evaluation_count) ? String.valueOf(course.evaluation_count) : "N/A");
+        mEvaluationCount.setText(String.valueOf(course.evaluation_count == null ? 0 : String.valueOf(course.evaluation_count)));
     }
 
     private void setCategoryProfessorColor(TextView category, TextView professor, String value) {
