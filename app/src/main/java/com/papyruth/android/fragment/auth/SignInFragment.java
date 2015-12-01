@@ -30,6 +30,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.papyruth;
+import com.papyruth.support.opensource.materialdialog.InputDialog;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -152,27 +153,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
 
         this.mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
             .subscribe(
-                event -> new MaterialDialog.Builder(mActivity)
-                    .title(R.string.password_recovery_title)
-                    .content(R.string.enter_your_email)
-                    .input(R.string.hint_email, R.string.empty, (dialog, input) -> {
-                    })
-                    .positiveText(R.string.submit)
-                    .negativeText(R.string.confirm_cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            //TODO : ADD fotgot password api
-                        }
-
-                        @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            super.onNegative(dialog);
-                        }
-                    })
-                    .build()
-                    .show()
+                event -> InputDialog.show(getActivity())
                 , error -> ErrorHandler.handle(error, this)
             )
         );
