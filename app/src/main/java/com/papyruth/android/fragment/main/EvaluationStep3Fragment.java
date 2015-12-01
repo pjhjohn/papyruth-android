@@ -234,20 +234,11 @@ public class EvaluationStep3Fragment extends Fragment {
         return false;
     }
 
-    private String hashWriter(String text, boolean adder){
-        if(text.charAt(0) != '#' && adder)
-            return "#" + text;
-        else if(text.charAt(0) == '#' && !adder)
-            return text.substring(1);
-
-        return text;
-    }
-
     private boolean addNewHashtag(String text){
         if(EvaluationForm.getInstance().getHashtag().contains(text))
             return false;
 
-        EvaluationForm.getInstance().addHashtag(hashWriter(text, false));
+        EvaluationForm.getInstance().addHashtag(Hashtag.removeHashPrefix(text));
         drawHashtag();
 
         if(EvaluationForm.getInstance().isModifyMode())
