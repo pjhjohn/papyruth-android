@@ -11,32 +11,32 @@
         android:layout_weight="0.5"
         android:padding="@dimen/baseline_x2">
         <ImageView
-            android:id="@+id/icon_realname"
+            android:id="@+id/signup_realname_icon"
             android:layout_width="@dimen/baseline_x3"
             android:layout_height="@dimen/baseline_x3"
-            android:layout_gravity="center_vertical"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:contentDescription="@string/empty"
             android:src="@drawable/ic_light_realname"/>
         <EditText
-            android:id="@+id/realname"
-            android:background="@color/transparent"
+            android:id="@+id/signup_realname_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/icon_realname"
-            android:layout_toEndOf="@+id/icon_realname"
+            android:layout_toRightOf="@+id/signup_realname_icon"
+            android:layout_toEndOf="@+id/signup_realname_icon"
             android:layout_marginLeft="@dimen/baseline_x4"
             android:layout_marginStart="@dimen/baseline_x4"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:inputType="text|textNoSuggestions"
             android:hint="@string/hint_realname"
-            android:textSize="16sp"/>
+            android:textSize="@dimen/basefont_x1.3"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
         android:layout_weight="0.5"
         android:padding="@dimen/baseline_x2">
         <ImageView
-            android:id="@+id/icon_gender"
+            android:id="@+id/signup_gender_icon"
             android:layout_width="@dimen/baseline_x3"
             android:layout_height="@dimen/baseline_x3"
             android:layout_gravity="center_vertical"
@@ -54,34 +54,35 @@
             android:contentDescription="@string/empty"
             android:src="@drawable/ic_light_gender"/>
         <RadioGroup
-            android:id="@+id/gender"
+            android:id="@+id/signup_gender_radiogroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/icon_gender"
-            android:layout_toEndOf="@+id/icon_gender"
             android:layout_marginLeft="@dimen/baseline_x4"
             android:layout_marginStart="@dimen/baseline_x4"
+            android:layout_toRightOf="@+id/signup_gender_icon"
+            android:layout_toEndOf="@+id/signup_gender_icon"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:orientation="horizontal">
             <RadioButton
-                android:layout_weight="0.5"
+                android:id="@+id/signup_gender_radio_male"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/primary_dark_material_light"
-                android:text="@string/gender_male"
-                android:textSize="16sp"
-                android:id="@+id/gender_male"/>
+                android:layout_weight="0.5"
+                android:layout_marginRight="@dimen/baseline_x2.5"
+                android:layout_marginEnd="@dimen/baseline_x2.5"
+                android:textColor="@color/white_50p"
+                android:textSize="@dimen/basefont_x1.3"
+                android:text="@string/gender_male"/>
             <RadioButton
-                android:layout_weight="0.5"
+                android:id="@+id/signup_gender_radio_female"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/primary_dark_material_light"
-                android:text="@string/gender_female"
-                android:textSize="16sp"
-                android:id="@+id/gender_female"/>
+                android:layout_weight="0.5"
+                android:textColor="@color/white_50p"
+                android:textSize="@dimen/basefont_x1.3"
+                android:text="@string/gender_female"/>
         </RadioGroup>
     </RelativeLayout>
 </LinearLayout>

@@ -9,6 +9,7 @@
     <dimen name="baseline_x1">8dp</dimen>
     <dimen name="baseline_x1.5">12dp</dimen>
     <dimen name="baseline_x2">16dp</dimen>
+    <dimen name="baseline_x2.5">20dp</dimen>
     <dimen name="baseline_x3">24dp</dimen>
     <dimen name="baseline_x4">32dp</dimen>
     <dimen name="baseline_x5">40dp</dimen>
@@ -41,6 +42,7 @@
     <!--Text Size in sp-->
     <dimen name="basefont_x1">12sp</dimen>
     <dimen name="basefont_x1.2">14sp</dimen>
+    <dimen name="basefont_x1.3">16sp</dimen>
     <dimen name="basefont_x1.5">18sp</dimen>
     <dimen name="basefont_x2">24sp</dimen>
     <dimen name="basefont_x2.5">30sp</dimen>

@@ -73,9 +73,9 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
-    @InjectView(R.id.password)      protected EditText mTextPassword;
-    @InjectView(R.id.icon_password) protected ImageView mIconPassword;
-    @InjectView(R.id.agree_term)    protected TextView mTextAgreement;
+    @InjectView(R.id.signup_password_text)      protected EditText mTextPassword;
+    @InjectView(R.id.signup_password_icon) protected ImageView mIconPassword;
+    @InjectView(R.id.signup_term)    protected TextView mTextAgreement;
     private List<CharSequence> mTermsOfServiceStringArguments;
     private CompositeSubscription mCompositeSubscription;
 

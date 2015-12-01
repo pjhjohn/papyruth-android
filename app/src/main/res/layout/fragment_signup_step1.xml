@@ -1,15 +1,15 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/signup_univ_recyclerview"
-        android:scrollbars="vertical"
+        android:id="@+id/signup_university_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:scrollbars="vertical"/>
 </FrameLayout>

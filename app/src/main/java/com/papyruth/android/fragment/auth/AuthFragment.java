@@ -28,11 +28,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class AuthFragment extends Fragment implements ViewPagerController {
-    @InjectView(R.id.app_logo)              protected ImageView mApplicationLogo;
-    @InjectView(R.id.app_logo_horizontal)   protected ImageView mApplicationLogoHorizontal;
+    @InjectView(R.id.auth_app_logo)              protected ImageView mApplicationLogo;
+    @InjectView(R.id.auth_app_logo_horizontal)   protected ImageView mApplicationLogoHorizontal;
     @InjectView(R.id.auth_viewpager)        protected FlexibleViewPager mAuthViewPager;
-    @InjectView(R.id.signup_progress)       protected ProgressBar mSignUpProgress;
-    @InjectView(R.id.signup_label)          protected TextView mSignUpLabel;
+    @InjectView(R.id.auth_signup_progress)       protected ProgressBar mSignUpProgress;
+    @InjectView(R.id.auth_signup_label)          protected TextView mSignUpLabel;
     private ViewPagerManager mViewPagerManager;
     private Tracker mTracker;
 

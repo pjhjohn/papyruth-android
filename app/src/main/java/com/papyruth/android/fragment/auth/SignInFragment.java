@@ -68,18 +68,19 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
-        mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.app_logo_horizontal);
-        mApplicationLogo = (ImageView) mActivity.findViewById(R.id.app_logo);
+        mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.auth_app_logo_horizontal);
+        mApplicationLogo = (ImageView) mActivity.findViewById(R.id.auth_app_logo);
         mViewPagerController = mActivity.getViewPagerController();
         mTracker = ((papyruth) mActivity.getApplication()).getTracker();
     }
 
-    @InjectView (R.id.email)            protected AutoCompleteTextView mTextEmail;
-    @InjectView (R.id.password)         protected EditText mTextPassword;
-    @InjectView (R.id.progress)         protected View mProgress;
-    @InjectView (R.id.sign_in)          protected Button mButtonSignIn;
-    @InjectView (R.id.sign_up)          protected Button mButtonSignUp;
-    @InjectView (R.id.password_recovery)protected TextView mTextPasswordRecovery;
+    @InjectView (R.id.signin_email_text)            protected AutoCompleteTextView mTextEmail;
+    @InjectView (R.id.signin_password_text)         protected EditText mTextPassword;
+    @InjectView (R.id.signin_button)                protected Button mButtonSignIn;
+    @InjectView (R.id.signin_signup_button)         protected Button mButtonSignUp;
+    @InjectView (R.id.signin_password_recovery)     protected TextView mTextPasswordRecovery;
+    @InjectView (R.id.progress)                     protected View mProgress;
+
     private CompositeSubscription mCompositeSubscriptions;
 
     @Override

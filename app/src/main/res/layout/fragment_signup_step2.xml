@@ -11,7 +11,7 @@
         android:layout_weight="0.5"
         android:padding="@dimen/baseline_x2">
         <ImageView
-            android:id="@+id/icon_email"
+            android:id="@+id/signup_email_icon"
             android:layout_width="@dimen/baseline_x3"
             android:layout_height="@dimen/baseline_x3"
             android:layout_gravity="center_vertical"
@@ -21,22 +21,22 @@
             android:contentDescription="@string/empty"
             android:src="@drawable/ic_light_email"/>
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/signup_email_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/signup_email_icon"
+            android:layout_toEndOf="@+id/signup_email_icon"
+            android:layout_marginLeft="@dimen/baseline_x4"
+            android:layout_marginStart="@dimen/baseline_x4"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:background="@color/transparent"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/icon_email"
-            android:layout_toEndOf="@+id/icon_email"
-            android:layout_marginLeft="@dimen/baseline_x4"
-            android:layout_marginStart="@dimen/baseline_x4"
             android:inputType="textEmailAddress|textNoSuggestions"
-            android:hint="@string/hint_email"
-            android:textSize="16sp"/>
+            android:textSize="@dimen/basefont_x1.3"
+            android:hint="@string/hint_email"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,29 +44,29 @@
         android:layout_weight="0.5"
         android:padding="@dimen/baseline_x2">
         <ImageView
-            android:id="@+id/icon_nickname"
+            android:id="@+id/signup_nickname_icon"
             android:layout_width="@dimen/baseline_x3"
             android:layout_height="@dimen/baseline_x3"
-            android:layout_gravity="center_vertical"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/empty"
             android:src="@drawable/ic_light_nickname"/>
         <EditText
-            android:id="@+id/nickname"
-            android:background="@color/transparent"
+            android:id="@+id/signup_nickname_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/icon_nickname"
-            android:layout_toEndOf="@+id/icon_nickname"
+            android:layout_toRightOf="@+id/signup_nickname_icon"
+            android:layout_toEndOf="@+id/signup_nickname_icon"
             android:layout_marginLeft="@dimen/baseline_x4"
             android:layout_marginStart="@dimen/baseline_x4"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/transparent"
             android:inputType="text|textNoSuggestions"
-            android:hint="@string/hint_nickname"
-            android:textSize="16sp"/>
+            android:textSize="@dimen/basefont_x1.3"
+            android:hint="@string/hint_nickname"/>
     </RelativeLayout>
 </LinearLayout>
