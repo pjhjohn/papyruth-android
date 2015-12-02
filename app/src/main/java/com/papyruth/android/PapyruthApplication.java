@@ -7,7 +7,6 @@ import android.support.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.papyruth.android.model.unique.AppTracker;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.ApiManager;
 import com.papyruth.support.opensource.retrofit.RetrofitLogger;
@@ -25,20 +24,18 @@ import timber.log.Timber;
  * MontserratApp.onCreate handles application initialization which should be called once.
  */
 public class PapyruthApplication extends Application {
-    private static Tracker tracker;
-    public synchronized Tracker getTracker(){
-        if(tracker == null){
+    private Tracker mTracker;
+    synchronized public Tracker getTracker() {
+        if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            tracker = analytics.newTracker(R.xml.ga_tracker);
-            AppTracker.getInstance().setTracker(this);
+            mTracker = analytics.newTracker(R.xml.ga_tracker);
         }
-        tracker.setAppName(getResources().getString(R.string.app_title));
-        if (User.getInstance().getId() != null){
-            tracker.set("&uid", User.getInstance().getId().toString());
-        }
-        tracker.set("&ul", Locale.getDefault().getDisplayLanguage());
-        tracker.enableAutoActivityTracking(true);
-        return tracker;
+        mTracker.setAppName(getResources().getString(R.string.app_title));
+        mTracker.set("&uid", User.getInstance().getId() == null ? "null" : User.getInstance().getId().toString());
+        mTracker.set("&ul", Locale.getDefault().getDisplayLanguage());
+        mTracker.enableAutoActivityTracking(true);
+        AppTracker.getInstance().setTracker(mTracker);
+        return mTracker;
     }
 
     @Override

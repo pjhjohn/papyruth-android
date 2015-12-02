@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.model.unique.AppTracker;
+import com.papyruth.android.AppTracker;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.CourseViewHolder;

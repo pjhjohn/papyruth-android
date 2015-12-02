@@ -12,7 +12,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
-import com.papyruth.android.model.unique.AppTracker;
+import com.papyruth.android.AppTracker;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.EvaluationItemDetailViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;

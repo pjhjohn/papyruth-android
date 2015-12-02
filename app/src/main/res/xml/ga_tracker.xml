@@ -3,7 +3,6 @@
     <string name="ga_trackingId">UA-69817792-1</string>
     <bool name="ga_autoActivityTracking">true</bool>
 
-
     <!-- Timeout after stopping till new session start -->
     <integer name="ga_sessionTimeout">600</integer>
 
@@ -22,5 +21,4 @@
     <screenName name="com.papyruth.android.activity.MainActivity">
         MainActivity
     </screenName>
-
 </resources>

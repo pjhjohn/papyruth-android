@@ -1,31 +1,21 @@
-package com.papyruth.android.model.unique;
-
-import android.app.Application;
+package com.papyruth.android;
 
 import com.google.android.gms.analytics.Tracker;
-import com.papyruth.android.PapyruthApplication;
 
 public class AppTracker {
     private static AppTracker instance = null;
-
+    private AppTracker() {}
     public static synchronized AppTracker getInstance() {
         if(AppTracker.instance == null) AppTracker.instance = new AppTracker();
         return AppTracker.instance;
     }
 
-    private Tracker tracker;
-    private Application app;
-
+    private Tracker mTracker;
     public Tracker getTracker() {
-        return ((PapyruthApplication) app).getTracker();
+        return mTracker;
     }
-
     public AppTracker setTracker(Tracker tracker) {
-        this.tracker = tracker;
-        return this;
-    }
-    public AppTracker setTracker(Application application) {
-        this.app = application;
+        mTracker = tracker;
         return this;
     }
 }
