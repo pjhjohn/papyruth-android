@@ -120,7 +120,7 @@
     <string name="inform_mandatory_evaluation">3개 이상의 강의평가를 써야 볼 수 있습니다. \n%d개 남았습니다.</string>
     <string name="goto_write">강의평 작성하기</string>
     <string name="inform_wrote_evaluation">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
-    <string name="inform_email_confirm">가입 확인 메일을 보냈습니다. 메일을 확인해주세요.</string>
+    <string name="inform_email_confirm">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
     <string name="goto_rewrite">강의평 수정하기</string>
     <string name="no_data">No Data</string>
 
@@ -205,6 +205,9 @@
     <string name="change_university_email_title">학교 이메일 등록 실패</string>
     <string name="change_nickname_title">닉네임 변경 실패</string>
     <string name="change_password_title">비밀번호 변경 실패</string>
+
+    <string name="success_send_email">이메일 전송 성공</string>
+    <string name="failure_send_email">이메일 전송 실패</string>
 
     <string name="failure_content_prefix"></string>
     <string name="failure_content_postfix"></string>

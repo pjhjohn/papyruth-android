@@ -2,6 +2,7 @@ package com.papyruth.support.opensource.materialdialog;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.R;
@@ -34,7 +35,7 @@ public class AlertDialog {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
                     super.onPositive(dialog);
-                    doPositive(navigator, type);
+                    doPositive(context, navigator, type);
                 }
 
                 @Override
@@ -71,7 +72,7 @@ public class AlertDialog {
         } return value;
     }
 
-    private static void doPositive(Navigator navigator, Type type) {
+    private static void doPositive(Context context, Navigator navigator, Type type) {
         switch (type) {
             case EVALUATION_MANDATORY   :   navigator.navigate(EvaluationStep1Fragment.class, true); break;
             case EVALUATION_POSSIBLE    :
@@ -87,9 +88,22 @@ public class AlertDialog {
                     .subscribeOn(Schedulers.io())
                     .subscribe(response -> {
                         navigator.navigate(EvaluationStep2Fragment.class, true);
-                    }, error ->  ErrorHandler.handle(error, MaterialDialog.class));
+                    }, error -> ErrorHandler.handle(error, MaterialDialog.class));
                 break;
             case NEED_CONFIRMATION      :
+                Api.papyruth().users_email(User.getInstance().getAccessToken(), 0)
+                    .map(response -> response.success)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                        success -> {
+                            if (success) {
+                                Toast.makeText(context, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(context, R.string.failure_send_email, Toast.LENGTH_SHORT).show();
+                            }
+                        }, error -> ErrorHandler.handle(error, MaterialDialog.class)
+                    );
                 break;
             default:
                 break;

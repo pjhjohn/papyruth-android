@@ -117,7 +117,7 @@
     <string name="inform_mandatory_evaluation">Must write over 3 evaluations.\n Remain %d.</string>
     <string name="goto_write">Write evaluation</string>
     <string name="inform_wrote_evaluation">You wrote evaluation this course. You can rewrite evaluation.</string>
-    <string name="inform_email_confirm">We send confirm mail your account. Check your mail box.</string>
+    <string name="inform_email_confirm">We send confirm mail your account.\nDo you want to resend email?</string>
     <string name="goto_rewrite">Rewrite evaluation</string>
     <string name="no_data">No Data</string>
 
@@ -211,6 +211,9 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="change_university_email_title">university email</string>
     <string name="change_nickname_title">nickname</string>
     <string name="change_password_title">password</string>
+
+    <string name="success_send_email">Email send success</string>
+    <string name="failure_send_email">Email send fail</string>
 
     <string name="failure_content_prefix">Could not register new </string>
     <string name="failure_content_postfix"></string>
