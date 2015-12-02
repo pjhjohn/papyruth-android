@@ -45,6 +45,11 @@
             android:value="@integer/google_play_services_version">
         </meta-data>
 
+        <!-- fabric -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="be51cbc46e35f42a1b681c1e870c22eae990c6a5" />
+
         <!-- Google Analytics -->
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background dispatching on non-Google Play devices -->
         <receiver

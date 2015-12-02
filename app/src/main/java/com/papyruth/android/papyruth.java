@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.model.unique.AppTracker;
@@ -13,6 +14,7 @@ import com.papyruth.support.opensource.retrofit.RetrofitLogger;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.squareup.picasso.Picasso;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.Locale;
 
 import retrofit.RestAdapter;
@@ -42,6 +44,7 @@ public class papyruth extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         /* Timber */
         Timber.plant(new Timber.DebugTree());
