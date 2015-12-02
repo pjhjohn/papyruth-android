@@ -53,12 +53,13 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mNavigator = (Navigator) activity;
     }
 
     @InjectView(R.id.home_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     @InjectView(R.id.home_recycler_view) protected RecyclerView mRecyclerView;
     @InjectView(R.id.home_empty_state)   protected FrameLayout mEmptyState;
-    @InjectView(R.id.progress) protected View mProgress;
+    @InjectView(R.id.material_progress_large) protected View mProgress;
     protected CompositeSubscription mCompositeSubscription;
     protected Toolbar mToolbar;
     EvaluationItemsDetailAdapter mAdapter;
@@ -73,7 +74,7 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
         mSwipeRefresh.setEnabled(true);
         initSwipeRefresh(mSwipeRefresh);
 
-        mAdapter = new EvaluationItemsDetailAdapter(mSwipeRefresh, mEmptyState, mProgress, this);
+        mAdapter = new EvaluationItemsDetailAdapter(mContext, mSwipeRefresh, mEmptyState, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -106,7 +107,6 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
-
         mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
         mCompositeSubscription.add(getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
             .filter(passIfNull -> passIfNull == null && mProgress.getVisibility() != View.VISIBLE)
@@ -138,7 +138,6 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
                 this.openEvaluation(view, true);
             }, error -> ErrorHandler.handle(error, this));
     }
-
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(
@@ -258,7 +257,6 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
                         mEvaluationFragment.showContent(true);
                     }
                 }
-
             });
             mAnimatorSet.start();
         } catch (Exception e) {

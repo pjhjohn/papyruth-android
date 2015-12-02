@@ -12,5 +12,5 @@
         android:id="@+id/evaluation_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <include layout="@layout/progress"/>
+    <include layout="@layout/material_progressbar_large"/>
 </com.papyruth.support.utility.navigator.NavigatableFrameLayout>

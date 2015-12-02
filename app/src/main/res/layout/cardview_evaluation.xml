@@ -379,5 +379,5 @@
         </LinearLayout><!--Footer : Vote Up/Down-->
         <include layout="@layout/hr_shadow"/>
     </LinearLayout>
-    <include layout="@layout/viewholder_progress"/>
+    <include layout="@layout/material_progressbar_medium"/>
 </FrameLayout>

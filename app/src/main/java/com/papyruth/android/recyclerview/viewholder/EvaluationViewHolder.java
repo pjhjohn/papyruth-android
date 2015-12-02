@@ -63,7 +63,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_down_vote_icon)             protected ImageView mVoteDownIcon;
     @InjectView(R.id.evaluation_down_vote_count)            protected RobotoTextView mVoteDownCount;
     @InjectView(R.id.hr_shadow)                             protected FrameLayout mShadow;
-    @InjectView(R.id.progress)                              protected View mProgressbar;
+    @InjectView(R.id.material_progress_medium)              protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
     private final Context mContext;
