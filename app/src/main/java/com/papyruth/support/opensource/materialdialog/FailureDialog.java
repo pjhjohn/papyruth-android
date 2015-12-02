@@ -12,7 +12,7 @@ import com.papyruth.android.R;
 
 public class FailureDialog {
     public enum Type {
-        CHANGE_EMAIL,
+        UNIVERSITY_EMAIL,
         CHANGE_NICKNAME,
         CHANGE_PASSWORD
     }
@@ -39,7 +39,7 @@ public class FailureDialog {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case CHANGE_EMAIL   : value = res.getString(R.string.change_email_title); break;
+            case UNIVERSITY_EMAIL: value = res.getString(R.string.change_university_email_title); break;
             case CHANGE_NICKNAME: value = res.getString(R.string.change_nickname_title); break;
             case CHANGE_PASSWORD: value = res.getString(R.string.change_password_title); break;
         } return String.format("%s %s %s", res.getString(R.string.failure_title_prefix), value, res.getString(R.string.failure_title_postfix));
@@ -49,7 +49,7 @@ public class FailureDialog {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case CHANGE_EMAIL   : value = res.getString(R.string.change_email_content); break;
+            case UNIVERSITY_EMAIL: value = res.getString(R.string.change_university_email_content); break;
             case CHANGE_NICKNAME: value = res.getString(R.string.change_nickname_content); break;
             case CHANGE_PASSWORD: value = res.getString(R.string.change_password_content); break;
         } return String.format("%s %s %s", res.getString(R.string.failure_content_prefix), value, res.getString(R.string.failure_content_postfix));

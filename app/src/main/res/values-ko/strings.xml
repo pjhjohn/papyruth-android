@@ -20,7 +20,6 @@
     <string name="toolbar_title_new_evaluation">강의평가 쓰기</string>
     <string name="toolbar_profile">내 정보</string>
     <string name="toolbar_profile_register_university_email">학교 이메일 등록</string>
-    <string name="toolbar_profile_change_email">이메일 변경</string>
     <string name="toolbar_profile_change_nickname">닉네임 변경</string>
     <string name="toolbar_profile_change_password">비밀번호 변경</string>
     <string name="toolbar_favorite">관심 강좌</string>
@@ -100,7 +99,6 @@
     <string name="dialog_title_confirm_submit">양식 제출 확인</string>
     <string name="dialog_content_configm_submit">양식을 제출하시겠습니까?</string>
     <string name="dialog_title_entrance_year">입학 년도를 선택해주세요</string>
-    <string name="fab_change_email">메일 변경</string>
     <string name="fab_change_nickname">닉네임 변경</string>
     <string name="fab_change_password">비밀번호 변경</string>
     <string name="fab_register_universtiy_email">학교 이메일 등록</string>
@@ -186,15 +184,11 @@
     <string name="sample_univ_email_prefix">sample</string>
     <string name="sample_univ_email_postfix">\@snu.ac.kr</string>
 
-    <string name="label_university_email">인증이 필요합니다</string>
+    <string name="label_university_email_need">인증이 필요합니다</string>
+    <string name="label_university_email">학교 이메일 주소를 적어주세요</string>
     <string name="label_university_email_prefix"></string>
     <string name="label_university_email_content">학교 이메일 주소</string>
     <string name="label_university_email_postfix">를 적어주세요</string>
-
-    <string name="label_email_change">변경하실 이메일 주소를 적어주세요</string>
-    <string name="label_email_change_prefix"></string>
-    <string name="label_email_change_content">변경하실 이메일 주소</string>
-    <string name="label_email_change_postfix">를 적어주세요</string>
 
     <string name="label_nickname_change">변경하실 닉네임을 적어주세요</string>
     <string name="label_nickname_change_prefix"></string>
@@ -208,13 +202,13 @@
 
     <string name="failure_title_prefix"></string>
     <string name="failure_title_postfix"></string>
-    <string name="change_email_title">이메일 변경 실패</string>
+    <string name="change_university_email_title">학교 이메일 등록 실패</string>
     <string name="change_nickname_title">닉네임 변경 실패</string>
     <string name="change_password_title">비밀번호 변경 실패</string>
 
     <string name="failure_content_prefix"></string>
     <string name="failure_content_postfix"></string>
-    <string name="change_email_content">중복된 이메일 입니다</string>
+    <string name="change_university_email_content">중복된 학교 이메일입니다</string>
     <string name="change_nickname_content">중복된 닉네임 입니다</string>
     <string name="change_password_content">기존 비밀번호가 틀립니다</string>
     <string name="label_signout">로그아웃</string>

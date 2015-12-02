@@ -24,7 +24,7 @@
             android:layout_marginBottom="@dimen/baseline_x1"
             android:layout_above="@+id/university_email_text"
             android:gravity="center"
-            android:text="@string/label_email_change"
+            android:text="@string/label_university_email"
             android:layout_centerVertical="true"/>
         <EditText
             android:id="@+id/university_email_text"

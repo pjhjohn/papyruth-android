@@ -20,7 +20,6 @@
     <string name="toolbar_title_evaluation">Evaluation</string>
     <string name="toolbar_profile">My profile</string>
     <string name="toolbar_profile_register_university_email">Reginster University Email</string>
-    <string name="toolbar_profile_change_email">Change Email</string>
     <string name="toolbar_profile_change_nickname">Change Nickname</string>
     <string name="toolbar_profile_change_password">Change Password</string>
     <string name="toolbar_favorite">Favorite Course</string>
@@ -100,7 +99,6 @@
     <string name="dialog_title_confirm_submit">Confirm Submission</string>
     <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
     <string name="dialog_title_entrance_year">Please select your entrance year</string>
-    <string name="fab_change_email">Change Email Address</string>
     <string name="fab_change_nickname">Change Nickname</string>
     <string name="fab_change_password">Change Password</string>
     <string name="fab_register_universtiy_email">Register University Email</string>
@@ -191,12 +189,9 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_nickname">NICKNAME</string>
     <string name="label_gender">GENDER</string>
     <string name="label_university_mail">University Email</string>
-    <string name="label_email_change">ENTER NEW EMAIL ADDRESS TO CHANGE</string>
-    <string name="label_email_change_prefix">ENTER</string>
-    <string name="label_email_change_content">NEW EMAIL ADDRESS</string>
-    <string name="label_email_change_postfix">TO CHANGE</string>
 
-    <string name="label_university_email">Confirmation Required</string>
+    <string name="label_university_email_need">Confirmation Required</string>
+    <string name="label_university_email">ENTER UNIVERSITY EMAIL</string>
     <string name="label_university_email_prefix">ENTER</string>
     <string name="label_university_email_content">UNIVERSITY</string>
     <string name="label_university_email_postfix">EMAIL</string>
@@ -213,13 +208,13 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
 
     <string name="failure_title_prefix">Failed to change </string>
     <string name="failure_title_postfix"></string>
-    <string name="change_email_title">email address</string>
+    <string name="change_university_email_title">university email</string>
     <string name="change_nickname_title">nickname</string>
     <string name="change_password_title">password</string>
 
     <string name="failure_content_prefix">Could not register new </string>
     <string name="failure_content_postfix"></string>
-    <string name="change_email_content">email address : Duplicate Email</string>
+    <string name="change_university_email_content">university email : Duplicate Email</string>
     <string name="change_nickname_content">nickname : Duplicate Nickname</string>
     <string name="change_password_content">password : Current Password not correct</string>
     <string name="label_signout">Sign Out</string>

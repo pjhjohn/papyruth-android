@@ -109,16 +109,12 @@ public class ProfileFragment extends Fragment {
         Picasso.with(mContext).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mGenderIcon);
         mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
         Picasso.with(mContext).load(R.drawable.ic_light_university_email).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
-        mUniversityEmailText.setText(User.getInstance().getUniversityEmail() != null ? User.getInstance().getUniversityEmail() : mResources.getString(R.string.label_university_email));
+        mUniversityEmailText.setText(User.getInstance().getUniversityEmail() != null ? User.getInstance().getUniversityEmail() : mResources.getString(R.string.label_university_email_need));
 
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_register_university_email)
             .filter(unused -> User.getInstance().getUniversityEmail() == null)
             .subscribe(unused -> mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true), error -> ErrorHandler.handle(error, this))
-        );
-        mCompositeSubscription.add(FloatingActionControl
-            .clicks(R.id.fab_mini_change_email)
-            .subscribe(unused -> mNavigator.navigate(ProfileChangeEmailFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_change_nickname)

@@ -101,7 +101,7 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile_change_email));
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile_change_university_email));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_profile_register_university_email);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
@@ -160,7 +160,7 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400:
-                                FailureDialog.show(this.getActivity(), FailureDialog.Type.CHANGE_EMAIL);
+                                FailureDialog.show(this.getActivity(), FailureDialog.Type.UNIVERSITY_EMAIL);
                                 this.subscriptions.add(this.registerSubmitCallback());
                                 break;
                             default:

@@ -27,8 +27,8 @@
     <string name="ga_fragment_main_my_evaluation">main_My Evaluation</string>
     <string name="ga_fragment_main_my_comment">main_My Comment</string>
     <string name="ga_fragment_main_profile">main_Profile</string>
-    <string name="ga_fragment_main_profile_change_email">main_Edit Email</string>
     <string name="ga_fragment_main_profile_change_nickname">main_Edit Nickname</string>
+    <string name="ga_fragment_main_profile_change_university_email">Main_univ_email</string>
     <string name="ga_fragment_main_profile_change_password">main_Edit password</string>
     <string name="ga_fragment_main_setting">main_Setting</string>
     <string name="ga_fragment_main_term">main_Term View</string>
