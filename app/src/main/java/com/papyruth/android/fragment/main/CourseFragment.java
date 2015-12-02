@@ -69,7 +69,7 @@ public class CourseFragment extends RecyclerViewFragment<CourseAdapter, Evaluati
     }
 
     @InjectView(R.id.course_recyclerview) protected RecyclerView courseRecyclerView;
-    @InjectView(R.id.progress) protected View progress;
+    @InjectView(R.id.material_progress_large) protected View progress;
     private Toolbar toolbar;
     private CompositeSubscription subscriptions;
 

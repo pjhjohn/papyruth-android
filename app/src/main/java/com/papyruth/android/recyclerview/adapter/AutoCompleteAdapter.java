@@ -53,7 +53,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         else if(position < items.size() + getItemHeader())
             return ViewHolderFactory.ViewType.AUTO_COMPLETE_RESPONSE;
         else
-            return ViewHolderFactory.ViewType.HR_SHADOW;
+            return ViewHolderFactory.ViewType.TOOLBAR_SHADOW;
     }
 
     public void setIsHistory(boolean isHistory){

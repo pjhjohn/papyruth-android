@@ -64,7 +64,7 @@ public class SimpleCourseFragment extends RecyclerViewFragment<CourseItemsAdapte
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
     @InjectView(R.id.swipe) protected SwipeRefreshLayout refresh;
-    @InjectView(R.id.progress) protected View progress;
+    @InjectView(R.id.material_progress_large) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
     private Tracker mTracker;

@@ -61,7 +61,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
 
     @InjectView(R.id.recyclerview) protected RecyclerView recycler;
     @InjectView(R.id.swipe) protected SwipeRefreshLayout refresh;
-    @InjectView(R.id.progress) protected View progress;
+    @InjectView(R.id.material_progress_large) protected View progress;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 

@@ -16,5 +16,5 @@
         android:layout_height="match_parent"
         android:background="@color/white"/>
     <include layout="@layout/toolbar_evaluation"/>
-    <include layout="@layout/progress"/>
+    <include layout="@layout/material_progressbar_large"/>
 </FrameLayout>

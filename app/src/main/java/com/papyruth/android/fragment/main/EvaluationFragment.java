@@ -62,7 +62,7 @@ import rx.subscriptions.CompositeSubscription;
 public class EvaluationFragment extends RecyclerViewFragment<EvaluationAdapter, CommentData> implements OnBack, View.OnClickListener {
     @InjectView(R.id.evaluation_recyclerview) protected RecyclerView evaluationRecyclerView;
     @InjectView(R.id.toolbar_evaluation) protected Toolbar evaluationToolbar;
-    @InjectView(R.id.progress) protected View progress;
+    @InjectView(R.id.material_progress_large) protected View progress;
     private boolean mCommentInputActive;
     private CompositeSubscription subscriptions;
     private MaterialMenuDrawable materialNavigationDrawable;

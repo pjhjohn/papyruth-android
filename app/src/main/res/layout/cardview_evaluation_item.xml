@@ -225,5 +225,5 @@
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
-    <include layout="@layout/viewholder_progress"/>
+    <include layout="@layout/material_progressbar_medium"/>
 </RelativeLayout>

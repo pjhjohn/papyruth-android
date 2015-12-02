@@ -45,7 +45,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
 
     @InjectView(R.id.recyclerview) protected RecyclerView recyclerView;
     @InjectView (R.id.swipe) protected SwipeRefreshLayout swipeRefresh;
-    @InjectView (R.id.progress) protected View progress;
+    @InjectView (R.id.material_progress_large) protected View progress;
     protected CompositeSubscription subscriptions;
     protected Toolbar toolbar;
 

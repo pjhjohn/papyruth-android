@@ -49,7 +49,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
     @InjectView(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
     @InjectView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
     @InjectView(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
-    @InjectView(R.id.progress)                          protected View mProgressbar;
+    @InjectView(R.id.material_progress_medium)          protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
     private final Context mContext;

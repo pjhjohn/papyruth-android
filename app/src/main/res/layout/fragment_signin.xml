@@ -82,7 +82,7 @@
                 android:text="@string/action_sign_up"
                 style="@style/button_flat_green"/>
         </LinearLayout>
-        <include layout="@layout/progress"/>
+        <include layout="@layout/material_progressbar_large"/>
     </RelativeLayout>
 
 

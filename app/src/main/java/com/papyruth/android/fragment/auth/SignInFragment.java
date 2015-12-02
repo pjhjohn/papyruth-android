@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
@@ -80,7 +79,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     @InjectView (R.id.signin_button)                protected Button mButtonSignIn;
     @InjectView (R.id.signin_signup_button)         protected Button mButtonSignUp;
     @InjectView (R.id.signin_password_recovery)     protected TextView mTextPasswordRecovery;
-    @InjectView (R.id.progress)                     protected View mProgress;
+    @InjectView (R.id.material_progress_large)                     protected View mProgress;
 
     private CompositeSubscription mCompositeSubscriptions;
 

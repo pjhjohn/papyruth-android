@@ -22,5 +22,5 @@
                 android:layout_gravity="left|top" />
             </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
-    <include layout="@layout/progress"/>
+    <include layout="@layout/material_progressbar_large"/>
 </com.papyruth.support.utility.navigator.NavigatableFrameLayout>
