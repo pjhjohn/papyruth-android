@@ -23,7 +23,7 @@ import rx.schedulers.Schedulers;
  */
 public class AlertDialog {
     public enum Type{
-        EVALUATION_MANDATORY, EVALUATION_POSSIBLE, NEED_CONFIRMATION
+        EVALUATION_MANDATORY, EVALUATION_POSSIBLE, NEED_CONFIRMATION, NEED_UNIVERSITY_CONFIRMATION
     }
 
     public static MaterialDialog build(Context context, Navigator navigator, Type type) {
@@ -56,9 +56,10 @@ public class AlertDialog {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case EVALUATION_MANDATORY   :   value = context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()); break;
-            case EVALUATION_POSSIBLE    :   value = res.getString(R.string.inform_wrote_evaluation); break;
-            case NEED_CONFIRMATION      :   value = res.getString(R.string.inform_email_confirm); break;
+            case EVALUATION_MANDATORY           :   value = context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()); break;
+            case EVALUATION_POSSIBLE            :   value = res.getString(R.string.inform_wrote_evaluation); break;
+            case NEED_CONFIRMATION              :   value = res.getString(R.string.inform_email_confirm); break;
+            case NEED_UNIVERSITY_CONFIRMATION   :   value = res.getString(R.string.inform_email_university_confirm); break;
         } return value;
     }
 
@@ -66,16 +67,18 @@ public class AlertDialog {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case EVALUATION_MANDATORY   :   value = res.getString(R.string.goto_write); break;
-            case EVALUATION_POSSIBLE    :   value = res.getString(R.string.goto_rewrite); break;
-            case NEED_CONFIRMATION      :   value = res.getString(R.string.confirm_positive); break;
+            case EVALUATION_MANDATORY           :   value = res.getString(R.string.goto_write); break;
+            case EVALUATION_POSSIBLE            :   value = res.getString(R.string.goto_rewrite); break;
+            case NEED_CONFIRMATION              :   value = res.getString(R.string.confirm_positive); break;
+            case NEED_UNIVERSITY_CONFIRMATION   :   value = res.getString(R.string.confirm_positive); break;
         } return value;
     }
 
     private static void doPositive(Context context, Navigator navigator, Type type) {
+        Integer emailType = null;
         switch (type) {
-            case EVALUATION_MANDATORY   :   navigator.navigate(EvaluationStep1Fragment.class, true); break;
-            case EVALUATION_POSSIBLE    :
+            case EVALUATION_MANDATORY           :   navigator.navigate(EvaluationStep1Fragment.class, true); break;
+            case EVALUATION_POSSIBLE            :
                 Observable.combineLatest(
                     Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId()),
                     Api.papyruth().get_evaluation_hashtag(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId()),
@@ -90,8 +93,11 @@ public class AlertDialog {
                         navigator.navigate(EvaluationStep2Fragment.class, true);
                     }, error -> ErrorHandler.handle(error, MaterialDialog.class));
                 break;
-            case NEED_CONFIRMATION      :
-                Api.papyruth().users_email(User.getInstance().getAccessToken(), 0)
+            case NEED_CONFIRMATION              :
+                emailType = 0;
+            case NEED_UNIVERSITY_CONFIRMATION   :
+                if(emailType == null) emailType = 1;
+                Api.papyruth().users_email(User.getInstance().getAccessToken(), emailType)
                     .map(response -> response.success)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())

@@ -32,6 +32,7 @@ public class User {
     private BehaviorSubject<String> bsAvatarUrl;
     private Integer mandatory_evaluation_count;
     private Boolean confirmed;
+    private Boolean university_confirmed;
 
     private String  university_image_url;
 
@@ -123,6 +124,8 @@ public class User {
     }
     public Boolean getConfirmed() { return confirmed; }
     public void setConfirmed(Boolean confirmed) { this.confirmed = confirmed; }
+    public Boolean getUniversityConfirmed() { return university_confirmed; }
+    public void setUniversityConfirmed(Boolean university_confirmed) { this.university_confirmed = university_confirmed; }
 
     public Integer getId() {
         return id;
@@ -162,6 +165,7 @@ public class User {
         if(user.university_name != null) this.setUniversityName(user.university_name);
         if(user.university_image_url != null) this.setUniversityImageUrl(user.university_image_url);
         if(user.confirmed != null) this.setConfirmed(user.confirmed);
+        if(user.university_confirmed != null) this.setUniversityConfirmed(user.university_confirmed);
         if(user.university_email != null) this.setUniversityEmail(user.university_email);
         if(access_token != null) this.setAccessToken(access_token);
     }

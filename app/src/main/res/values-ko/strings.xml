@@ -121,6 +121,7 @@
     <string name="goto_write">강의평 작성하기</string>
     <string name="inform_wrote_evaluation">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
     <string name="inform_email_confirm">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
+    <string name="inform_email_university_confirm">학교 메일 계정으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
     <string name="goto_rewrite">강의평 수정하기</string>
     <string name="no_data">No Data</string>
 
@@ -155,6 +156,7 @@
     <string name="hashtag_delete_title">해시태그 삭제</string>
     <string name="hashtag_delete_content">해당 해시태그를 삭제하시겠습니까?</string>
     <string name="confirm_delete">삭제</string>
+    <string name="confirm_university_email">학교 메일이 인증되지 않았습니다</string>
 
     <!-- loading -->
     <string name="loading_number_of_university">" 개의 대학에서"</string>

@@ -118,6 +118,7 @@
     <string name="goto_write">Write evaluation</string>
     <string name="inform_wrote_evaluation">You wrote evaluation this course. You can rewrite evaluation.</string>
     <string name="inform_email_confirm">We send confirm mail your account.\nDo you want to resend email?</string>
+    <string name="inform_email_university_confirm">We send email your university account.\nDo you want to resend email?</string>
     <string name="goto_rewrite">Rewrite evaluation</string>
     <string name="no_data">No Data</string>
 
@@ -152,6 +153,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="my_profile">My profile</string>
     <string name="exit">EXIT</string>
     <string name="opensourse_license">Open sourse License</string>
+    <string name="confirm_university_email">University email do not confirmed</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

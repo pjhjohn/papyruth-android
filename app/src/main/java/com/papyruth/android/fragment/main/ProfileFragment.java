@@ -20,6 +20,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.PapyruthApplication;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
@@ -111,18 +112,26 @@ public class ProfileFragment extends Fragment {
         Picasso.with(mContext).load(R.drawable.ic_light_university_email).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
         mUniversityEmailText.setText(User.getInstance().getUniversityEmail() != null ? User.getInstance().getUniversityEmail() : mResources.getString(R.string.label_university_email_need));
 
+        if(!User.getInstance().getUniversityConfirmed()) {
+            mUniversityEmailText.setError(getResources().getString(R.string.confirm_university_email));
+            mUniversityEmailText.setClickable(true);
+            mUniversityEmailText.setOnClickListener(v -> {
+                AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.NEED_UNIVERSITY_CONFIRMATION);
+            });
+        }
+
         mCompositeSubscription.add(FloatingActionControl
-            .clicks(R.id.fab_mini_register_university_email)
-            .filter(unused -> User.getInstance().getUniversityEmail() == null)
-            .subscribe(unused -> mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true), error -> ErrorHandler.handle(error, this))
+                .clicks(R.id.fab_mini_register_university_email)
+                .filter(unused -> User.getInstance().getUniversityEmail() == null)
+                .subscribe(unused -> mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
         mCompositeSubscription.add(FloatingActionControl
-            .clicks(R.id.fab_mini_change_nickname)
-            .subscribe(unused -> mNavigator.navigate(ProfileChangeNicknameFragment.class, true), error -> ErrorHandler.handle(error, this))
+                .clicks(R.id.fab_mini_change_nickname)
+                .subscribe(unused -> mNavigator.navigate(ProfileChangeNicknameFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
         mCompositeSubscription.add(FloatingActionControl
-            .clicks(R.id.fab_mini_change_password)
-            .subscribe(unused -> mNavigator.navigate(ProfileChangePasswordFragment.class, true), error -> ErrorHandler.handle(error, this))
+                .clicks(R.id.fab_mini_change_password)
+                .subscribe(unused -> mNavigator.navigate(ProfileChangePasswordFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
     }
 }
