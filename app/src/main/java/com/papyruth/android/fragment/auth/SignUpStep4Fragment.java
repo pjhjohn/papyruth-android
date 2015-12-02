@@ -31,7 +31,7 @@ import com.papyruth.android.model.TermData;
 import com.papyruth.android.model.error.SignupError;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
@@ -70,7 +70,7 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mViewPagerController = mActivity.getViewPagerController();
-        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView(R.id.signup_password_text)      protected EditText mTextPassword;

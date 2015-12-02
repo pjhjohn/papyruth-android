@@ -26,7 +26,7 @@ import com.papyruth.android.model.response.EvaluationResponse;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
@@ -71,7 +71,7 @@ public class EvaluationStep3Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.evaluation_body_icon) protected ImageView bodyIcon;

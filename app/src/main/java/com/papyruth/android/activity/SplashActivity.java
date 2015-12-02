@@ -8,7 +8,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.splash.SplashFragment;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.utility.error.ErrorHandlerCallback;
 
 import timber.log.Timber;
@@ -20,7 +20,7 @@ public class SplashActivity extends Activity implements ErrorHandlerCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        mTracker = ((papyruth) getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getApplication()).getTracker();
         this.getFragmentManager().beginTransaction()
             .add(R.id.fragment_container, new SplashFragment())
             .commit();

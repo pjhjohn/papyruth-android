@@ -21,7 +21,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.EvaluationForm;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.rx.RxValidator;
@@ -60,7 +60,7 @@ public class EvaluationStep2Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.evaluation_form_lecture)                   protected TextView mLecture;

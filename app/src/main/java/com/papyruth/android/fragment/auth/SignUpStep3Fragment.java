@@ -20,7 +20,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.rx.RxValidator;
@@ -56,7 +56,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mViewPagerController = mActivity.getViewPagerController();
-        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView(R.id.signup_gender_radiogroup)        protected RadioGroup mRadioGroupGender;

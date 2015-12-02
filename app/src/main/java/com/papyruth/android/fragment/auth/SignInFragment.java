@@ -28,7 +28,7 @@ import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.opensource.materialdialog.InputDialog;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -71,7 +71,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
         mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.auth_app_logo_horizontal);
         mApplicationLogo = (ImageView) mActivity.findViewById(R.id.auth_app_logo);
         mViewPagerController = mActivity.getViewPagerController();
-        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.signin_email_text)            protected AutoCompleteTextView mTextEmail;

@@ -17,7 +17,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.utility.viewpager.FlexibleViewPager;
 import com.papyruth.support.utility.viewpager.ViewPagerController;
 import com.papyruth.support.utility.viewpager.ViewPagerManager;
@@ -39,7 +39,7 @@ public class AuthFragment extends Fragment implements ViewPagerController {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -9,7 +9,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.auth.AuthFragment;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
@@ -32,7 +32,7 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getApplication()).getTracker();
         this.setContentView(R.layout.activity_auth);
         this.attachSoftKeyboardListeners();
         FloatingActionControl.getInstance().setContainer((FloatingActionControlContainer) this.findViewById(R.id.fac));

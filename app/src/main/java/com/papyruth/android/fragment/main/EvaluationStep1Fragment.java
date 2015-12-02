@@ -23,7 +23,7 @@ import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -65,7 +65,7 @@ public class EvaluationStep1Fragment extends RecyclerViewFragment<CourseItemsAda
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
 
     @Override

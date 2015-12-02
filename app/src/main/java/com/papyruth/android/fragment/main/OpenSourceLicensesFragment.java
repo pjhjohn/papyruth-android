@@ -13,7 +13,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.OpenSourceLicenseData;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.OpenSourceLicensesAdapter;
 import com.papyruth.android.R;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -37,7 +37,7 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

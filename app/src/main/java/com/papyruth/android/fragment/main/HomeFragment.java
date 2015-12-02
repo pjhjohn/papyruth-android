@@ -24,7 +24,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.papyruth.android.R;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -52,7 +52,7 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
         mNavigator = (Navigator) activity;
     }
 

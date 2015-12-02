@@ -9,7 +9,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.MyEvaluationItemsAdapter;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
@@ -32,7 +32,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
     @Override
     public void onRecyclerViewItemClick(View view, int position) {

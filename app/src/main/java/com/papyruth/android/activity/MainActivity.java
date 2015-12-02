@@ -22,7 +22,7 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.navigation_drawer.NavigationDrawerCallback;
 import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
@@ -54,7 +54,7 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         this.attachSoftKeyboardListeners();
-        mTracker = ((papyruth) getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getApplication()).getTracker();
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);

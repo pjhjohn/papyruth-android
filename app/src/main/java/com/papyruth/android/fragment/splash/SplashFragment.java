@@ -27,7 +27,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.response.UserDataResponse;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Circle;
 import com.papyruth.support.utility.customview.CircleAngleAnimation;
@@ -59,7 +59,7 @@ public class SplashFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mTracker = ((papyruth) activity.getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) activity.getApplication()).getTracker();
         mActivity = (SplashActivity) activity;
     }
     @Override

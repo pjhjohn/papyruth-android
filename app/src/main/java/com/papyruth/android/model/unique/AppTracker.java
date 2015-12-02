@@ -3,7 +3,7 @@ package com.papyruth.android.model.unique;
 import android.app.Application;
 
 import com.google.android.gms.analytics.Tracker;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 
 public class AppTracker {
     private static AppTracker instance = null;
@@ -17,7 +17,7 @@ public class AppTracker {
     private Application app;
 
     public Tracker getTracker() {
-        return ((papyruth) app).getTracker();
+        return ((PapyruthApplication) app).getTracker();
     }
 
     public AppTracker setTracker(Tracker tracker) {

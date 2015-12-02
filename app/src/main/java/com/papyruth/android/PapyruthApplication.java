@@ -24,7 +24,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-05-07.
  * MontserratApp.onCreate handles application initialization which should be called once.
  */
-public class papyruth extends Application {
+public class PapyruthApplication extends Application {
     private static Tracker tracker;
     public synchronized Tracker getTracker(){
         if(tracker == null){

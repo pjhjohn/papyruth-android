@@ -22,7 +22,7 @@ import com.papyruth.android.model.FavoriteData;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.R;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -68,7 +68,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((papyruth) getActivity().getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
 
         this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         this.favorites = new ArrayList<>();

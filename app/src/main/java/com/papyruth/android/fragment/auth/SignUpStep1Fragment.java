@@ -19,7 +19,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.UniversityData;
 import com.papyruth.android.model.unique.SignUpForm;
-import com.papyruth.android.papyruth;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -53,7 +53,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mViewPagerController = mActivity.getViewPagerController();
-        mTracker = ((papyruth) mActivity.getApplication()).getTracker();
+        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
