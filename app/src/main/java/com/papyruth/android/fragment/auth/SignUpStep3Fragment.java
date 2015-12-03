@@ -122,7 +122,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                 }
             }
         }
-        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId());
+        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event ->  event.view().getId()).startWith(group.getCheckedRadioButtonId());
     }
 
     @Override
@@ -148,8 +148,6 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                             View child = head.getChildAt(i);
                             if (child instanceof ViewGroup) {
                                 queue.add((ViewGroup) child);
-                            } else if (child instanceof RadioButton) {
-                                ((RadioButton) child).setError(checkedId < 0? mActivity.getString(R.string.field_invalid_gender) : null);
                             }
                         }
                     }
