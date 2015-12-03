@@ -28,12 +28,15 @@ public class UserData {
     public String confirmed_at;
     public String reset_password_token;
     public String reset_password_sent_at;
+    public Integer mandatory_evaluation_count;
     public String created_at;
     public String updated_at;
-    public String university_name;
     public String university_email;
     public Boolean university_confirmed;
-    public String avatar_url;
-    public Integer mandatory_evaluation_count;
+    public String university_confirmed_at;
+    public String university_confirmation_sent_at;
+    public String university_confirmation_token;
+    public String university_name;
     public String university_image_url;
+    public String avatar_url;
 }
