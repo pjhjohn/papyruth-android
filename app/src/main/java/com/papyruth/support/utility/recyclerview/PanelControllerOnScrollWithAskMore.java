@@ -12,11 +12,6 @@ public abstract class PanelControllerOnScrollWithAskMore extends PanelController
     public PanelControllerOnScrollWithAskMore(int numOfItemsLeftToAskMore) {
         this.numOfItemsLeftToAskMore = numOfItemsLeftToAskMore;
     }
-
-    private boolean isRequestPending = false;
-    public void setIsRequestPending(boolean isPending) {
-        this.isRequestPending = isPending;
-    }
     public void setNumOfItemsLeftToAskMore (int numOfItemsLeftToAskMore) {
         this.numOfItemsLeftToAskMore = numOfItemsLeftToAskMore;
     }
@@ -30,13 +25,13 @@ public abstract class PanelControllerOnScrollWithAskMore extends PanelController
         final int nItemVisible = manager.getChildCount();
         final int nItemTotal = manager.getItemCount();
         int iItemVisibleLast  = -1;
+
         /* Only Accepts Linear&Grid LayoutManager, not STAGGERED_GRID. GridLayoutManager is subclass of LinearLayoutManager */
-        if (manager instanceof LinearLayoutManager) {
-            iItemVisibleLast  = ((LinearLayoutManager) manager).findLastVisibleItemPosition();
-        } else throw new RuntimeException("Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager");
+        if (manager instanceof LinearLayoutManager) iItemVisibleLast  = ((LinearLayoutManager) manager).findLastVisibleItemPosition();
+        else throw new RuntimeException("Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager");
 
         /* FOR ASK_MORE */
-        if (!isRequestPending && ((nItemTotal - iItemVisibleLast) <= numOfItemsLeftToAskMore || (nItemTotal - iItemVisibleLast) == 0 && nItemTotal > nItemVisible )) {
+        if (((nItemTotal - iItemVisibleLast) <= numOfItemsLeftToAskMore || (nItemTotal - iItemVisibleLast) == 0 && nItemTotal > nItemVisible )) {
             onAskMore(recyclerView.getAdapter().getItemCount(), numOfItemsLeftToAskMore, iItemVisibleLast);
         }
     }

@@ -13,6 +13,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Keep;
 
+import com.papyruth.android.AppConst;
+
 /**
  * A backported {@code Drawable} for indeterminate circular {@code ProgressBar}.
  */
@@ -23,11 +25,6 @@ public class IndeterminateProgressDrawable extends IndeterminateProgressDrawable
     private static final RectF RECT_BOUND = new RectF(-21, -21, 21, 21);
     private static final RectF RECT_PADDED_BOUND = new RectF(-24, -24, 24, 24);
     private static final RectF RECT_PROGRESS = new RectF(-19, -19, 19, 19);
-    private static final int[] defaultColorScheme = new int[]{
-            Color.parseColor("#E05E5F"),
-            Color.parseColor("#546B8D"),
-            Color.parseColor("#60CAC6"),
-    };
     private int mProgressIntrinsicSize;
     private int mPaddedIntrinsicSize;
 
@@ -49,7 +46,7 @@ public class IndeterminateProgressDrawable extends IndeterminateProgressDrawable
         mAnimators = new Animator[] {
                 Animators.createIndeterminate(mRingPathTransform),
                 Animators.createIndeterminateRotation(mRingRotation),
-                Animators.createIndeterminateColorScheme(this, defaultColorScheme)
+                Animators.createIndeterminateColorScheme(this, AppConst.DEFAULT_PROGRESSBAR_COLOR_SCHEME(context))
         };
     }
 

@@ -39,7 +39,7 @@ public abstract class ScrollableFragment extends Fragment {
     protected void initSwipeRefresh(SwipeRefreshLayout view) {
         final int toolbarHeight = MetricHelper.getPixels(mContext, R.attr.actionBarSize);
         view.setProgressViewOffset(false, 0, 2 * toolbarHeight);
-        view.setColorSchemeColors(mContext.getResources().getColor(R.color.colorchip_green));
+        view.setColorSchemeColors(AppConst.DEFAULT_PROGRESSBAR_COLOR_SCHEME(mContext));
     }
 
     protected Observable<Boolean> getSwipeRefreshObservable(SwipeRefreshLayout view) {

@@ -1,5 +1,8 @@
 package com.papyruth.android;
 
+import android.content.Context;
+import android.graphics.Color;
+
 /**
  * Created by pjhjohn on 2015-04-16.
  */
@@ -48,6 +51,14 @@ public class AppConst {
             public static final int SIGNUP_STEP3 = 3;
             public static final int SIGNUP_STEP4 = 4;
         }
+    }
+
+    public static int[] DEFAULT_PROGRESSBAR_COLOR_SCHEME(Context context) {
+        return new int[] {
+            context.getResources().getColor(R.color.colorchip_green_highlight),
+            context.getResources().getColor(R.color.colorchip_blue_highlight),
+            context.getResources().getColor(R.color.colorchip_red_highlight)
+        };
     }
 
     /* Preferences */
