@@ -45,7 +45,7 @@ import com.papyruth.support.utility.helper.MetricHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.fragment.RecyclerViewFragment;
 import com.papyruth.support.utility.navigator.Navigator;
-import com.papyruth.support.utility.viewpager.OnBack;
+import com.papyruth.support.utility.navigator.OnBack;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

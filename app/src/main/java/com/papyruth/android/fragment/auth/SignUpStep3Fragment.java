@@ -17,16 +17,13 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.rx.RxValidator;
-import com.papyruth.support.utility.viewpager.OnPageFocus;
-import com.papyruth.support.utility.viewpager.OnPageUnfocus;
-import com.papyruth.support.utility.viewpager.ViewPagerController;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -47,15 +44,15 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPageUnfocus {
+public class SignUpStep3Fragment extends Fragment {
     private AuthActivity mActivity;
-    private ViewPagerController mViewPagerController;
+    private com.papyruth.support.utility.navigator.Navigator mNavigator;
     private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
-        mViewPagerController = mActivity.getViewPagerController();
+        mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
         mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
@@ -86,47 +83,12 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
         Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
-        mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP3);
-        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP3) {
-            final View focusedView = mActivity.getWindow().getCurrentFocus();
-            Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
-                unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextRealname, InputMethodManager.SHOW_FORCED)
-            );
-        }
-    }
+        final View focusedView = mActivity.getWindow().getCurrentFocus();
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
+            unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextRealname, InputMethodManager.SHOW_FORCED)
+        );
+        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP3);
 
-    private boolean mNextButtonEnabled;
-    private Observable<String> getRealnameValidationObservable(TextView realnameTextView) {
-        return WidgetObservable.text(realnameTextView)
-            .map(event -> {
-                mNextButtonEnabled = false;
-                return event;
-            })
-            .map(event -> event.text().toString())
-            .map(RxValidator.getErrorMessageRealname)
-            .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    private Observable<Integer> getGenderValidationObservable(RadioGroup group) {
-        List<RadioButton> buttons = new ArrayList<>();
-        Queue<ViewGroup> queue = new LinkedList<>();
-        queue.add(group);
-        while (!queue.isEmpty()) {
-            ViewGroup head = queue.remove();
-            for (int i = 0; i < head.getChildCount(); i++) {
-                View child = head.getChildAt(i);
-                if (child instanceof ViewGroup) {
-                    queue.add((ViewGroup) child);
-                } else if (child instanceof RadioButton) {
-                    buttons.add((RadioButton) child);
-                }
-            }
-        }
-        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event ->  event.view().getId()).startWith(group.getCheckedRadioButtonId());
-    }
-
-    @Override
-    public void onPageFocused() {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
@@ -167,7 +129,7 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
                     SignUpForm.getInstance().setRealname(mTextRealname.getText().toString());
                     final int checkedGenderRadioButtonId = mRadioGroupGender.getCheckedRadioButtonId();
                     if (checkedGenderRadioButtonId >= 0) SignUpForm.getInstance().setIsBoy(checkedGenderRadioButtonId == R.id.signup_gender_radio_male);
-                    mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP4, true);
+                    mNavigator.navigate(SignUpStep4Fragment.class, true);
                 }
             }
         ));
@@ -183,14 +145,38 @@ public class SignUpStep3Fragment extends Fragment implements OnPageFocus, OnPage
         } else mRadioGroupGender.check(mRadioGroupGender.getCheckedRadioButtonId());
 
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
-            mTextRealname.requestFocus();
+            if(mTextRealname != null) mTextRealname.requestFocus();
             ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
         });
     }
 
-    @Override
-    public void onPageUnfocused() {
-        if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
-        mCompositeSubscription.unsubscribe();
+    private boolean mNextButtonEnabled;
+    private Observable<String> getRealnameValidationObservable(TextView realnameTextView) {
+        return WidgetObservable.text(realnameTextView)
+            .map(event -> {
+                mNextButtonEnabled = false;
+                return event;
+            })
+            .map(event -> event.text().toString())
+            .map(RxValidator.getErrorMessageRealname)
+            .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<Integer> getGenderValidationObservable(RadioGroup group) {
+        List<RadioButton> buttons = new ArrayList<>();
+        Queue<ViewGroup> queue = new LinkedList<>();
+        queue.add(group);
+        while (!queue.isEmpty()) {
+            ViewGroup head = queue.remove();
+            for (int i = 0; i < head.getChildCount(); i++) {
+                View child = head.getChildAt(i);
+                if (child instanceof ViewGroup) {
+                    queue.add((ViewGroup) child);
+                } else if (child instanceof RadioButton) {
+                    buttons.add((RadioButton) child);
+                }
+            }
+        }
+        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event ->  event.view().getId()).startWith(group.getCheckedRadioButtonId());
     }
 }

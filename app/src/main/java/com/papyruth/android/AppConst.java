@@ -1,7 +1,6 @@
 package com.papyruth.android;
 
 import android.content.Context;
-import android.graphics.Color;
 
 /**
  * Created by pjhjohn on 2015-04-16.
@@ -37,12 +36,7 @@ public class AppConst {
         public static final String DATE_AND_TIME = "yy.MM.dd HH:mm";
     }
 
-    /**
-     * Hierachy of ViewPager is directly mapped to FragmentFactory & ViewPagerManager
-     * Subclass of ViewPager should be registered as Type of FragmentFactory
-     */
-    public static class ViewPager {
-        /* For Auth Activity */
+    public static class Navigator {
         public static class Auth {
             public static final int LENGTH       = 5;
             public static final int SIGNIN       = 0;

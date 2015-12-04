@@ -17,14 +17,4 @@ public class ErrorHandler {
             }
         } else return ErrorDefault.handle(throwable, object);
     }
-
-    public static String setErrorDescription(String errorMsg, String requestUrl, int statusCode) {
-        return String.format("Status Code : <%d>\nMessage : <%s>\nRequest url : <%s>", statusCode, errorMsg, requestUrl);
-    }
-    public static String setErrorDescription(String errorMsg, String requestUrl) {
-        return String.format("Message : <%s>\nRequest url : <%s>", errorMsg, requestUrl);
-    }
-    public static String setErrorDescription(String errorMsg) {
-        return String.format("Message : <%s>", errorMsg);
-    }
 }

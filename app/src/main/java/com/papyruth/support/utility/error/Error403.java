@@ -24,9 +24,9 @@ public class Error403 {
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;
-            if (fragment instanceof ErrorHandlerCallback) {
-                ((ErrorHandlerCallback) fragment).sendErrorTracker(
-                    ErrorHandler.setErrorDescription(throwable.getMessage(), throwable.getUrl(), 403),
+            if (fragment instanceof Error.OnReportToGoogleAnalytics) {
+                ((Error.OnReportToGoogleAnalytics) fragment).onReportToGoogleAnalytics(
+                    Error.getDescription(throwable.getMessage(), throwable.getUrl(), 403),
                     object.getClass().getSimpleName(),
                     false
                 );
@@ -34,9 +34,9 @@ public class Error403 {
             }
             if (fragment.getActivity() != null) {
                 Activity activity = fragment.getActivity();
-                if (!sentToTracker && activity instanceof ErrorHandlerCallback) {
-                    ((ErrorHandlerCallback) activity).sendErrorTracker(
-                        ErrorHandler.setErrorDescription(throwable.getMessage(), throwable.getUrl(), 403),
+                if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
+                    ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
+                        Error.getDescription(throwable.getMessage(), throwable.getUrl(), 403),
                         object.getClass().getSimpleName(),
                         false
                     );

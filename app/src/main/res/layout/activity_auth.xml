@@ -4,13 +4,57 @@
     android:id="@+id/activity_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-    <FrameLayout
-        android:id="@+id/auth_navigator"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="@drawable/bg_tabby"
+    android:background="@drawable/bg_tabby">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/transparent">
+        <ImageView
+            android:id="@+id/auth_app_logo"
+            android:layout_width="@dimen/baseline_x20"
+            android:layout_height="@dimen/baseline_x20"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/baseline_x2"
+            android:animateLayoutChanges="true"
+            android:src="@drawable/logo"
+            android:contentDescription="@string/empty"/>
+        <ImageView
+            android:id="@+id/auth_app_logo_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x8"
+            android:layout_gravity="center"
+            android:paddingTop="@dimen/baseline_x2"
+            android:paddingRight="@dimen/baseline_x2"
+            android:paddingLeft="@dimen/baseline_x2"
+            android:animateLayoutChanges="true"
+            android:src="@drawable/logo_horizontal"
+            android:contentDescription="@string/empty"
+            android:scaleType="fitCenter"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/auth_signup_label"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/word_signup"
+            android:textSize="@dimen/basefont_x1.5"
+            android:textColor="@color/colorchip_green"/>
+        <ProgressBar
+            android:id="@+id/auth_signup_progress"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x0.5"
+            android:progressDrawable="@drawable/progressbar_signup"
+            android:visibility="gone"
+            android:indeterminateOnly="false"/>
+        <FrameLayout
+            android:id="@+id/auth_navigator"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </LinearLayout>
     <include layout="@layout/fac"/>
 </FrameLayout>

@@ -29,24 +29,23 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
-import com.papyruth.support.opensource.materialdialog.InputDialog;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.InputDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.PermissionHelper;
-import com.papyruth.support.utility.viewpager.OnPageFocus;
-import com.papyruth.support.utility.viewpager.ViewPagerController;
+import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.navigator.OnBack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
@@ -65,20 +64,20 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
 /**
  * Created by mrl on 2015-04-07.
  */
-public class SignInFragment extends Fragment implements OnPageFocus, LoaderManager.LoaderCallbacks<Cursor> {
+public class SignInFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private AuthActivity mActivity;
-    private ImageView mApplicationLogoHorizontal, mApplicationLogo;
-    private ViewPagerController mViewPagerController;
+    private Navigator mNavigator;
     private Tracker mTracker;
+    private ImageView mApplicationLogoHorizontal, mApplicationLogo;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
+        mNavigator = (Navigator) activity;
+        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
         mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.auth_app_logo_horizontal);
         mApplicationLogo = (ImageView) mActivity.findViewById(R.id.auth_app_logo);
-        mViewPagerController = mActivity.getViewPagerController();
-        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.signin_email_text)            protected AutoCompleteTextView mTextEmail;
@@ -124,11 +123,6 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     @Override
     public void onResume() {
         super.onResume();
-        if(this.getUserVisibleHint()) onPageFocused();
-    }
-
-    @Override
-    public void onPageFocused() {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signin));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().clear();
@@ -168,7 +162,8 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
         mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
             unused -> {
                 mApplicationLogo.setVisibility(View.VISIBLE);
-                mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, true);
+                mNavigator.navigate(SignUpStep1Fragment.class, true);
+                mActivity.animateApplicationLogo(false);
             }, error -> ErrorHandler.handle(error, this)
         ));
 

@@ -26,7 +26,7 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.helper.MetricHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
-import com.papyruth.support.utility.viewpager.OnBack;
+import com.papyruth.support.utility.navigator.OnBack;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

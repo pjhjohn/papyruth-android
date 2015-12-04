@@ -37,7 +37,7 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.viewpager.OnBack;
+import com.papyruth.support.utility.navigator.OnBack;
 
 import java.util.concurrent.TimeUnit;
 

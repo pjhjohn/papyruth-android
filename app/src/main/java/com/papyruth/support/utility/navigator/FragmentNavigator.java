@@ -12,7 +12,6 @@ import com.papyruth.android.R;
 import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.helper.ToolbarHelper;
-import com.papyruth.support.utility.viewpager.OnBack;
 
 
 /**

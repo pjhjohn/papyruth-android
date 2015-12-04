@@ -21,17 +21,15 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
-import com.papyruth.support.utility.viewpager.OnPageFocus;
-import com.papyruth.support.utility.viewpager.OnPageUnfocus;
-import com.papyruth.support.utility.viewpager.ViewPagerController;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,20 +47,20 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPageUnfocus, LoaderManager.LoaderCallbacks<Cursor>{
+public class SignUpStep2Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private AuthActivity mActivity;
-    private ViewPagerController mViewPagerController;
+    private Navigator mNavigator;
     private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
-        mViewPagerController = mActivity.getViewPagerController();
+        mNavigator = (Navigator) activity;
         mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
-    @InjectView(R.id.signup_email_text)         protected EditText mTextEmail;
-    @InjectView(R.id.signup_nickname_text)      protected EditText mTextNickname;
+    @InjectView(R.id.signup_email_text)    protected EditText mTextEmail;
+    @InjectView(R.id.signup_nickname_text) protected EditText mTextNickname;
     @InjectView(R.id.signup_email_icon)    protected ImageView mIconEmail;
     @InjectView(R.id.signup_nickname_icon) protected ImageView mIconNickname;
     private CompositeSubscription mCompositeSubscription;
@@ -89,13 +87,61 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(mActivity).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconEmail);
         Picasso.with(mActivity).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconNickname);
-        mViewPagerController.addImeControlFragment(AppConst.ViewPager.Auth.SIGNUP_STEP2);
-        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP2) {
-            final View focusedView = mActivity.getWindow().getCurrentFocus();
-            Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
-                unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextEmail, InputMethodManager.SHOW_FORCED)
-            );
-        }
+        final View focusedView = mActivity.getWindow().getCurrentFocus();
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
+            unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextEmail, InputMethodManager.SHOW_FORCED)
+        );
+        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP2);
+
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup2));
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
+        mActivity.setOnShowSoftKeyboard(null);
+        mActivity.setOnHideSoftKeyboard(null);
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
+
+        mCompositeSubscription.add(
+            Observable.combineLatest(
+                getEmailValidationObservable(mTextEmail),
+                getNicknameValidationObservable(mTextNickname),
+                (String emailError, String nicknameError) -> {
+                    mTextEmail.setError(emailError);
+                    mTextNickname.setError(nicknameError);
+                    return emailError == null && nicknameError == null;
+                }
+            ).observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
+                if (valid) mNextButtonEnabled = true;
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+            }, Throwable::printStackTrace)
+        );
+
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
+            unused -> {
+                if (mNextButtonEnabled) {
+                    SignUpForm.getInstance().setEmail(mTextEmail.getText().toString());
+                    SignUpForm.getInstance().setNickname(mTextNickname.getText().toString());
+                    mNavigator.navigate(SignUpStep3Fragment.class, true);
+                }
+            }
+        ));
+
+        if(mTextEmail.getText().toString().isEmpty()) {
+            final String email = SignUpForm.getInstance().getEmail();
+            if(email != null) mTextEmail.setText(email);
+            else mTextEmail.getText().clear();
+        } else mTextEmail.setText(mTextEmail.getText());
+        if(mTextNickname.getText().toString().isEmpty()) {
+            final String nickname = SignUpForm.getInstance().getNickname();
+            if(nickname != null) mTextNickname.setText(nickname);
+            else mTextNickname.getText().clear();
+        } else mTextNickname.setText(mTextNickname.getText());
+
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
+            mTextEmail.requestFocus();
+            ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
+        });
     }
 
     private boolean mNextButtonEnabled;
@@ -131,65 +177,6 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
                     .map(valid -> valid ? null : getResources().getString(R.string.duplicated_nickname));
                 else return Observable.just(errorMessage);
             }).observeOn(AndroidSchedulers.mainThread());
-    }
-
-    @Override
-    public void onPageFocused() {
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup2));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
-        mActivity.setOnShowSoftKeyboard(null);
-        mActivity.setOnHideSoftKeyboard(null);
-        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
-
-        mCompositeSubscription.add(
-            Observable.combineLatest(
-                getEmailValidationObservable(mTextEmail),
-                getNicknameValidationObservable(mTextNickname),
-                (String emailError, String nicknameError) -> {
-                    mTextEmail.setError(emailError);
-                    mTextNickname.setError(nicknameError);
-                    return emailError == null && nicknameError == null;
-                }
-            ).observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
-                if (valid) mNextButtonEnabled = true;
-                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if (!visible && valid) FloatingActionControl.getInstance().show(true);
-                else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-            }, Throwable::printStackTrace)
-        );
-
-        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
-            unused -> {
-                if (mNextButtonEnabled) {
-                    SignUpForm.getInstance().setEmail(mTextEmail.getText().toString());
-                    SignUpForm.getInstance().setNickname(mTextNickname.getText().toString());
-                    mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP3, true);
-                }
-            }
-        ));
-
-        if(mTextEmail.getText().toString().isEmpty()) {
-            final String email = SignUpForm.getInstance().getEmail();
-            if(email != null) mTextEmail.setText(email);
-            else mTextEmail.getText().clear();
-        } else mTextEmail.setText(mTextEmail.getText());
-        if(mTextNickname.getText().toString().isEmpty()) {
-            final String nickname = SignUpForm.getInstance().getNickname();
-            if(nickname != null) mTextNickname.setText(nickname);
-            else mTextNickname.getText().clear();
-        } else mTextNickname.setText(mTextNickname.getText());
-
-        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
-            mTextEmail.requestFocus();
-            ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
-        });
-    }
-
-    @Override
-    public void onPageUnfocused() {
-        if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
-        mCompositeSubscription.unsubscribe();
     }
 
     /* LoaderManager.LoaderCallbacks<Cursor> : For initial email of user from device */

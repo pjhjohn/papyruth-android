@@ -6,14 +6,14 @@ import android.os.Bundle;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.splash.SplashFragment;
-import com.papyruth.android.PapyruthApplication;
-import com.papyruth.support.utility.error.ErrorHandlerCallback;
+import com.papyruth.support.utility.error.Error;
 
 import timber.log.Timber;
 
-public class SplashActivity extends Activity implements ErrorHandlerCallback {
+public class SplashActivity extends Activity implements Error.OnReportToGoogleAnalytics {
 
     private Tracker mTracker;
     @Override
@@ -39,12 +39,8 @@ public class SplashActivity extends Activity implements ErrorHandlerCallback {
     }
 
     @Override
-    public void sendErrorTracker(String cause, String from, boolean isFatal) {
-        Timber.d("cause : %s, from : %s", cause, from);
-        mTracker.send(new HitBuilders.ExceptionBuilder()
-            .setDescription(cause)
-            .setFatal(isFatal)
-            .build()
-        );
+    public void onReportToGoogleAnalytics(String description, String source, boolean fatal) {
+        Timber.d("SplashActivity.onReportToGoogleAnalytics from %s\nCause : %s", source, description);
+        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(fatal).build());
     }
 }

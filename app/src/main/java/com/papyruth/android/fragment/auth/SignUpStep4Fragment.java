@@ -37,9 +37,6 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.viewpager.OnPageFocus;
-import com.papyruth.support.utility.viewpager.OnPageUnfocus;
-import com.papyruth.support.utility.viewpager.ViewPagerController;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,15 +58,15 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPageUnfocus {
+public class SignUpStep4Fragment extends Fragment {
     private AuthActivity mActivity;
-    private ViewPagerController mViewPagerController;
+    private com.papyruth.support.utility.navigator.Navigator mNavigator;
     private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
-        mViewPagerController = mActivity.getViewPagerController();
+        mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
         mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
@@ -101,12 +98,11 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         super.onResume();
         Picasso.with(mActivity).load(R.drawable.ic_light_password).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconPassword);
         InputMethodManager imm = ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE));
-        if(mViewPagerController.getCurrentPage() == AppConst.ViewPager.Auth.SIGNUP_STEP4) {
-            final View focusedView = mActivity.getWindow().getCurrentFocus();
-            Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
-                unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextPassword, InputMethodManager.SHOW_FORCED)
-            );
-        }
+        final View focusedView = mActivity.getWindow().getCurrentFocus();
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
+            unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextPassword, InputMethodManager.SHOW_FORCED)
+        );
+        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP4);
 
         Api.papyruth().terms(0)
             .map(terms -> terms.term)
@@ -172,22 +168,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
         mTextAgreement.setText(ss);
         mTextAgreement.setMovementMethod(LinkMovementMethod.getInstance());
-    }
 
-    private boolean mSubmitButtonEnabled;
-    private Observable<String> getPasswordValidationObservable(TextView passwordTextView) {
-        return WidgetObservable.text(passwordTextView)
-            .map(event -> {
-                mSubmitButtonEnabled = false;
-                return event;
-            })
-            .map(event -> event.text().toString())
-            .map(RxValidator.getErrorMessagePassword)
-            .observeOn(AndroidSchedulers.mainThread());
-    }
 
-    @Override
-    public void onPageFocused() {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup4));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green).hide(true);
@@ -198,11 +180,11 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
         mCompositeSubscription.add(
             getPasswordValidationObservable(mTextPassword)
-            .map(passwordError -> {
-                mTextPassword.setError(passwordError);
-                return passwordError == null;
-            })
-            .observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
+                .map(passwordError -> {
+                    mTextPassword.setError(passwordError);
+                    return passwordError == null;
+                })
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
                 if (valid) mSubmitButtonEnabled = true;
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (!visible && valid) FloatingActionControl.getInstance().show(true);
@@ -226,11 +208,22 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         } else mTextPassword.setText(mTextPassword.getText());
 
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
-            mTextPassword.requestFocus();
+            if(mTextPassword != null) mTextPassword.requestFocus();
             ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextPassword, InputMethodManager.SHOW_FORCED);
         });
     }
 
+    private boolean mSubmitButtonEnabled;
+    private Observable<String> getPasswordValidationObservable(TextView passwordTextView) {
+        return WidgetObservable.text(passwordTextView)
+            .map(event -> {
+                mSubmitButtonEnabled = false;
+                return event;
+            })
+            .map(event -> event.text().toString())
+            .map(RxValidator.getErrorMessagePassword)
+            .observeOn(AndroidSchedulers.mainThread());
+    }
 
     private void submitSignUpForm() {
         if(validateSignUpForm()) {
@@ -270,11 +263,11 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                                         errorMessage = getResources().getString(R.string.failed_sign_up);
                                     Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
 
-                                    if(gson.fromJson(json, SignupError.class).errors.email != null || gson.fromJson(json, SignupError.class).errors.nickname != null){
-                                        this.mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, false);
+                                    if(gson.fromJson(json, SignupError.class).errors.email != null || gson.fromJson(json, SignupError.class).errors.nickname != null) {
+                                        mNavigator.navigate(SignUpStep2Fragment.class, true);
                                     }else if(!validateSignUpForm()){
                                     }else{
-                                        this.mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, false);
+                                        mNavigator.navigate(SignUpStep1Fragment.class, true);
                                     }
                                     break;
                                 case 403: // Failed to SignUp
@@ -294,38 +287,36 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
         int movePosition = -1;
         SignUpForm form = SignUpForm.getInstance();
 
-        if(form.getUniversityId() == null){
+        if(form.getUniversityId() == null) {
             alertMsg = getResources().getString(R.string.field_invalid_university);
-            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP1;
-        }else if(form.getEntranceYear() == null){
+            movePosition = AppConst.Navigator.Auth.SIGNUP_STEP1;
+        } else if(form.getEntranceYear() == null) {
             alertMsg = getResources().getString(R.string.field_invalid_entrance_year);
-            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP1;
-        }else if(form.getEmail() == null || !RxValidator.isValidEmail.call(form.getEmail())){
+            movePosition = AppConst.Navigator.Auth.SIGNUP_STEP1;
+        } else if(form.getEmail() == null || !RxValidator.isValidEmail.call(form.getEmail())) {
             alertMsg = getResources().getString(R.string.field_invalid_email);
-            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP2;
-        }else if(form.getNickname() == null || !RxValidator.isValidNickname.call(form.getNickname())){
+            movePosition = AppConst.Navigator.Auth.SIGNUP_STEP2;
+        } else if(form.getNickname() == null || !RxValidator.isValidNickname.call(form.getNickname())) {
             alertMsg = getResources().getString(R.string.field_invalid_nickname);
-            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP2;
-        }else if(form.getRealname() == null || !RxValidator.isValidRealname.call(form.getRealname())){
+            movePosition = AppConst.Navigator.Auth.SIGNUP_STEP2;
+        } else if(form.getRealname() == null || !RxValidator.isValidRealname.call(form.getRealname())) {
             alertMsg = getResources().getString(R.string.field_invalid_realname);
-            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP3;
-        }else if(form.getIsBoy() == null){
+            movePosition = AppConst.Navigator.Auth.SIGNUP_STEP3;
+        } else if(form.getIsBoy() == null) {
             alertMsg = getResources().getString(R.string.field_invalid_gender);
-            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP3;
-        }else if(form.getPassword() == null){
+            movePosition = AppConst.Navigator.Auth.SIGNUP_STEP3;
+        } else if(form.getPassword() == null) {
             alertMsg = getResources().getString(R.string.field_invalid_password);
-        }else {
+        } else {
             return true;
         }
 
         Toast.makeText(getActivity(), alertMsg, Toast.LENGTH_SHORT).show();
-        this.mViewPagerController.setCurrentPage(movePosition, false);
+        switch (movePosition) {
+            case AppConst.Navigator.Auth.SIGNUP_STEP1 : mNavigator.navigate(SignInFragment.class, false, true); break;
+            case AppConst.Navigator.Auth.SIGNUP_STEP2 : mNavigator.navigate(SignInFragment.class, false, true); break;
+            case AppConst.Navigator.Auth.SIGNUP_STEP3 : mNavigator.navigate(SignInFragment.class, false, true); break;
+        }
         return false;
-    }
-
-    @Override
-    public void onPageUnfocused() {
-        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
-        mCompositeSubscription.unsubscribe();
     }
 }

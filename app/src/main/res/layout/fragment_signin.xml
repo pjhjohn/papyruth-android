@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<com.papyruth.support.utility.navigator.NavigatableFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/signin_email_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +26,6 @@
             android:hint="@string/hint_email"
             android:focusable="true"
             android:focusableInTouchMode="true"/>
-
         <EditText
             android:id="@+id/signin_password_text"
             android:layout_width="match_parent"
@@ -84,6 +86,4 @@
         </LinearLayout>
         <include layout="@layout/material_progressbar_large"/>
     </RelativeLayout>
-
-
-
+</com.papyruth.support.utility.navigator.NavigatableFrameLayout>

@@ -15,9 +15,9 @@ public class ErrorNetwork {
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;
-            if (fragment instanceof ErrorHandlerCallback) {
-                ((ErrorHandlerCallback) fragment).sendErrorTracker(
-                    ErrorHandler.setErrorDescription(throwable.getMessage(), throwable.getUrl()),
+            if (fragment instanceof Error.OnReportToGoogleAnalytics) {
+                ((Error.OnReportToGoogleAnalytics) fragment).onReportToGoogleAnalytics(
+                    Error.getDescription(throwable.getMessage(), throwable.getUrl()),
                     object.getClass().getSimpleName(),
                     false
                 );
@@ -25,9 +25,9 @@ public class ErrorNetwork {
             }
             if (fragment.getActivity() != null) {
                 Activity activity = fragment.getActivity();
-                if (!sentToTracker && activity instanceof ErrorHandlerCallback) {
-                    ((ErrorHandlerCallback) activity).sendErrorTracker(
-                        ErrorHandler.setErrorDescription(throwable.getMessage(), throwable.getUrl()),
+                if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
+                    ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
+                        Error.getDescription(throwable.getMessage(), throwable.getUrl()),
                         object.getClass().getSimpleName(),
                         false
                     );

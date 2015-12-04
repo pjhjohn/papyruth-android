@@ -14,6 +14,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.HomeFragment;
 import com.papyruth.android.fragment.main.SettingsFragment;
@@ -22,11 +23,10 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.navigation_drawer.NavigationDrawerCallback;
 import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
-import com.papyruth.support.utility.error.ErrorHandlerCallback;
+import com.papyruth.support.utility.error.Error;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -40,7 +40,7 @@ import butterknife.InjectView;
 import rx.Observable;
 import timber.log.Timber;
 
-public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, ErrorHandlerCallback {
+public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, Error.OnReportToGoogleAnalytics {
     @InjectView(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
     @InjectView(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
     @InjectView(R.id.search_toolbar_root)      protected LinearLayout mSearchToolbarRoot;
@@ -114,49 +114,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
     }
 
-    /* Google Analytics */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-    @Override
-    public void sendErrorTracker(String cause, String from, boolean isFatal) {
-        Timber.d("cause : %s, from : %s", cause, from);
-        mTracker.send(new HitBuilders.ExceptionBuilder()
-                .setDescription(cause)
-                .setFatal(isFatal)
-                .build()
-        );
-    }
-
-    /* Toolbar Search */
-    @Override
-    public void onVisibilityChanged(boolean visible) {
-        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_category_search_view));
-        if (visible) {
-            FloatingActionControl.getInstance().hide(false);
-            mTracker.send(builder
-                .setAction(getResources().getString(R.string.ga_event_open))
-                .build());
-        }else {
-            FloatingActionControl.getInstance().show(false);
-            mTracker.send(builder
-                .setAction(getResources().getString(R.string.ga_event_close))
-                .build());
-        }
-    }
-
-    @Override
-    public void onSearchByQuery() {
-        this.navigate(SimpleCourseFragment.class, true);
-    }
-
     /* Double Back-Pressed Termination of MainActivity */
     private boolean mReadyToTerminate = false;
     @Override
@@ -186,57 +143,85 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
         );
     }
 
-    /* Map Navigator methods to mNavigator */
+    /* Toolbar Search */
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_category_search_view));
+        if (visible) {
+            FloatingActionControl.getInstance().hide(false);
+            mTracker.send(builder
+                .setAction(getResources().getString(R.string.ga_event_open))
+                .build());
+        }else {
+            FloatingActionControl.getInstance().show(false);
+            mTracker.send(builder
+                .setAction(getResources().getString(R.string.ga_event_close))
+                .build());
+        }
+    }
+    @Override
+    public void onSearchByQuery() {
+        this.navigate(SimpleCourseFragment.class, true);
+    }
+
+    /* Google Analytics */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
+    @Override
+    public void onReportToGoogleAnalytics(String description, String source, boolean fatal) {
+        Timber.d("MainActivity.onReportToGoogleAnalytics from %s\nCause : %s", source, description);
+        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(fatal).build());
+    }
+
+    /* Bind FragmentNavigator methods to mNavigator */
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack) {
         mNavigator.navigate(target, addToBackStack);
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType) {
         mNavigator.navigate(target, addToBackStack, animatorType);
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, boolean clear) {
         mNavigator.navigate(target, addToBackStack, clear);
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
         mNavigator.navigate(target, addToBackStack, animatorType, clear);
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack) {
         mNavigator.navigate(target, bundle, addToBackStack);
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType) {
         mNavigator.navigate(target, bundle, addToBackStack, animatorType);
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, boolean clear) {
         mNavigator.navigate(target, bundle, addToBackStack, clear);
     }
-
     @Override
     public void navigate(Class<? extends Fragment> target, Bundle bundle, boolean addToBackStack, AnimatorType animatorType, boolean clear) {
         mNavigator.navigate(target, bundle, addToBackStack, animatorType, clear);
     }
-
     @Override
     public String getBackStackNameAt(int index) {
         return mNavigator.getBackStackNameAt(index);
     }
-
     @Override
     public boolean back() {
         return mNavigator.back();
     }
-
     @Override
     public void setOnNavigateListener(NavigationCallback listener) {
         mNavigator.setOnNavigateListener(listener);
