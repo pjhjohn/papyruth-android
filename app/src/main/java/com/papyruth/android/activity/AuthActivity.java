@@ -1,17 +1,13 @@
 package com.papyruth.android.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -28,8 +24,6 @@ import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
 import com.papyruth.support.utility.error.Error;
-import com.papyruth.support.utility.helper.AnimatorHelper;
-import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -42,7 +36,7 @@ import timber.log.Timber;
 /**
  * Activity For Authentication.
  */
-public class AuthActivity extends SoftKeyboardActivity implements com.papyruth.support.utility.navigator.Navigator, Error.OnReportToGoogleAnalytics, ActivityCompat.OnRequestPermissionsResultCallback {
+public class AuthActivity extends SoftKeyboardActivity implements com.papyruth.support.utility.navigator.Navigator, Error.OnReportToGoogleAnalytics {
     @InjectView(R.id.fac)                       protected FloatingActionControlContainer mFloatingActionControlContainer;
     @InjectView(R.id.auth_app_logo)             protected ImageView mApplicationLogo;
     @InjectView(R.id.auth_app_logo_horizontal)  protected ImageView mApplicationLogoHorizontal;
@@ -120,28 +114,6 @@ public class AuthActivity extends SoftKeyboardActivity implements com.papyruth.s
     @Override
     public void onBackPressed() {
         if(!mNavigator.back()) this.finish();
-    }
-
-    /* API23+ Runtime Permission */
-    @Override
-    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PermissionHelper.PERMISSION_CONTACTS:
-                if (PermissionHelper.verifyPermissions(grantResults)) {
-                    // TODO : Something with permission
-                } else {
-                    String message = PermissionHelper.getRationalMessage(this, PermissionHelper.PERMISSION_CONTACTS);
-                    PermissionHelper.showRationalDialog(this, message);
-                } break;
-            case PermissionHelper.PERMISSION_READ_CONTACTS :
-                if (PermissionHelper.verifyPermissions(grantResults)) {
-                    // TODO : Something with permission
-                } else {
-                    String message = PermissionHelper.getRationalMessage(this, PermissionHelper.PERMISSION_READ_CONTACTS);
-                    PermissionHelper.showRationalDialog(this, message);
-                } break;
-            default : break;
-        }
     }
 
     /* Fade-Animated Activity Transition to MainActivity */

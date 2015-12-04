@@ -95,7 +95,7 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
         mActivity.setOnHideSoftKeyboard(null);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused ->
-                ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0)
+            ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0)
         );
         mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP1);
 

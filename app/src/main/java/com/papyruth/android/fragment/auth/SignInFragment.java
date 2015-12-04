@@ -4,14 +4,8 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,7 +35,6 @@ import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.Navigator;
-import com.papyruth.support.utility.navigator.OnBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +57,7 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
 /**
  * Created by mrl on 2015-04-07.
  */
-public class SignInFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SignInFragment extends Fragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
     private Tracker mTracker;
@@ -94,22 +87,7 @@ public class SignInFragment extends Fragment implements LoaderManager.LoaderCall
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
         ButterKnife.inject(this, view);
         mCompositeSubscriptions = new CompositeSubscription();
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            Timber.d("Current Build Version : %d", Build.VERSION.SDK_INT);
-            getLoaderManager().initLoader(0, null, this);
-        } else if(PermissionHelper.checkAndRequestPermission(this, PermissionHelper.PERMISSION_CONTACTS, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.GET_ACCOUNTS)) {
-            Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-            Account[] accounts = AccountManager.get(mActivity).getAccounts();
-            Timber.d("# of registered accounts : %d", accounts.length);
-            for (Account account : accounts) {
-                if (emailPattern.matcher(account.name).matches()) {
-                    String possibleEmail = account.name;
-                    Timber.d("AccountManager Email : %s", possibleEmail);
-                }
-            }
-            getLoaderManager().initLoader(0, null, this);
-        } else Timber.d("Permission Failed/Denied");
-
+        mTextEmail.setAdapter(new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, getEmails()));
         return view;
     }
     @Override
@@ -222,46 +200,31 @@ public class SignInFragment extends Fragment implements LoaderManager.LoaderCall
         );
     }
 
-    /* LoaderManager.LoaderCallbacks<Cursor> : For email auto-complete suggestion */
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(
-            mActivity,
-            Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-            ProfileQuery.PROJECTION,
-            ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-            new String[] { ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE },
-            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+    private List<String> getEmails() {
         List<String> emails = new ArrayList<>();
-        Timber.d("onLoadFinished with cursor : %s", cursor);
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            Timber.d("Email : %s", cursor.getString(ProfileQuery.ADDRESS));
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-        }
-        Timber.d("onLoadFinished cursor search ended");
-        /* Add to Emails View */
-        mTextEmail.setAdapter(new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, emails));
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        for (Account account : getAccounts()) {
+            if (emailPattern.matcher(account.name).matches()) {
+                if(emails.contains(account.name)) continue;
+                emails.add(account.name);
+            }
+        } return emails;
     }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {}
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-            ContactsContract.CommonDataKinds.Email.ADDRESS,
-            ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
+    private Account[] getAccounts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return AccountManager.get(mActivity).getAccounts();
+        else if (PermissionHelper.checkAndRequestPermission(this, PermissionHelper.PERMISSION_GET_ACCOUNTS, android.Manifest.permission.GET_ACCOUNTS)) {
+            return AccountManager.get(mActivity).getAccounts();
+        } else return new Account[0];
     }
 
+    /* API23+ Runtime Permission */
     @Override
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        mActivity.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != PermissionHelper.PERMISSION_GET_ACCOUNTS) return;
+        if (PermissionHelper.verifyPermissions(grantResults)) {
+            mTextEmail.setAdapter(new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, getEmails()));
+        } else PermissionHelper.showRationalDialog(mActivity, PermissionHelper.getRationalMessage(mActivity, PermissionHelper.PERMISSION_GET_ACCOUNTS));
     }
 }

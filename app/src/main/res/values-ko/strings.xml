@@ -233,8 +233,6 @@
     <!--Permission-->
     <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
     <string name="permission_get_accounts">permission_get_accounts</string>
-    <string name="permission_read_contacts_rational">permission_read_contacts_rational</string>
-    <string name="permission_read_contacts">permission_read_contacts</string>
     <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
     <string name="dialog_btn_settings">SETTINGS</string>
     <string name="dialog_btn_close">CLOSE</string>

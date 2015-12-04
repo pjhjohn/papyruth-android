@@ -24,8 +24,7 @@ import java.util.List;
  * Created by mrl on 2015-12-03.
  */
 public class PermissionHelper {
-    public static final int PERMISSION_CONTACTS = 0x1;
-    public static final int PERMISSION_READ_CONTACTS = 0x2;
+    public static final int PERMISSION_GET_ACCOUNTS = 0x1;
 
     public static boolean checkAndRequestPermission(Activity activity, int permissionRequestCode, String... permissions) {
         String[] requiredPermissions = getRequiredPermissions(activity, permissions);
@@ -77,10 +76,8 @@ public class PermissionHelper {
 
     public static String getRationalMessage(Context context, int code) {
         switch (code) {
-            case PERMISSION_CONTACTS:
+            case PERMISSION_GET_ACCOUNTS:
                 return getRationalMessage(context, context.getString(R.string.permission_get_accounts_rational), context.getString(R.string.permission_get_accounts));
-            case PERMISSION_READ_CONTACTS :
-                return getRationalMessage(context, context.getString(R.string.permission_read_contacts_rational), context.getString(R.string.permission_read_contacts));
         } return "";
     }
 

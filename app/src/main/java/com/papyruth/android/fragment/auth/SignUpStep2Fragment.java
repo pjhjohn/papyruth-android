@@ -1,15 +1,13 @@
 package com.papyruth.android.fragment.auth;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.LoaderManager;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +27,14 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,7 +47,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SignUpStep2Fragment extends Fragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
     private Tracker mTracker;
@@ -70,7 +70,8 @@ public class SignUpStep2Fragment extends Fragment implements LoaderManager.Loade
         View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
         ButterKnife.inject(this, view);
         mCompositeSubscription = new CompositeSubscription();
-//        getLoaderManager().initLoader(0, null, this);
+        List<String> emails = getEmails();
+        if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getEmail() == null) SignUpForm.getInstance().setEmail(emails.get(0));
         return view;
     }
 
@@ -179,42 +180,6 @@ public class SignUpStep2Fragment extends Fragment implements LoaderManager.Loade
             }).observeOn(AndroidSchedulers.mainThread());
     }
 
-    /* LoaderManager.LoaderCallbacks<Cursor> : For initial email of user from device */
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle arguments) {
-        return new CursorLoader(
-            mActivity,
-            // Retrieve data rows for the device user's 'profile' contact.
-            Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-            ProfileQuery.PROJECTION,
-            // Select only email addresses.
-            ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-            new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
-            // Show primary email addresses first. Note that there won't be
-            // a primary email address if the user hasn't specified one.
-            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC"
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) emails.add(cursor.getString(ProfileQuery.ADDRESS));
-        if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getEmail() == null) SignUpForm.getInstance().setEmail(emails.get(0));
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {}
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-            ContactsContract.CommonDataKinds.Email.ADDRESS,
-            ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
     private boolean emailNotAssigned() {
         return SignUpForm.getInstance().getEmail() == null
             || SignUpForm.getInstance().getEmail().length() <= 0
@@ -222,8 +187,32 @@ public class SignUpStep2Fragment extends Fragment implements LoaderManager.Loade
             || mTextEmail.getText().length() <= 0;
     }
 
+    private List<String> getEmails() {
+        List<String> emails = new ArrayList<>();
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        for (Account account : getAccounts()) {
+            if (emailPattern.matcher(account.name).matches()) {
+                if(emails.contains(account.name)) continue;
+                emails.add(account.name);
+            }
+        } return emails;
+    }
+
+    private Account[] getAccounts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return AccountManager.get(mActivity).getAccounts();
+        else if (PermissionHelper.checkAndRequestPermission(this, PermissionHelper.PERMISSION_GET_ACCOUNTS, android.Manifest.permission.GET_ACCOUNTS)) {
+            return AccountManager.get(mActivity).getAccounts();
+        } else return new Account[0];
+    }
+
+    /* API23+ Runtime Permission */
     @Override
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        mActivity.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != PermissionHelper.PERMISSION_GET_ACCOUNTS) return;
+        if (PermissionHelper.verifyPermissions(grantResults)) {
+            List<String> emails = getEmails();
+            if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getEmail() == null) SignUpForm.getInstance().setEmail(emails.get(0));
+        } else PermissionHelper.showRationalDialog(mActivity, PermissionHelper.getRationalMessage(mActivity, PermissionHelper.PERMISSION_GET_ACCOUNTS));
     }
 }
