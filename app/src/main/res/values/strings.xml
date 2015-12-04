@@ -55,6 +55,9 @@
     <string name="field_invalid_nickname">Nickname is too long</string>
     <string name="field_invalid_gender">There is no such gender.</string>
     <string name="field_invalid_entrance_year">Invalid range of entrance year</string>
+    <string name="field_invalid_university">University not selected</string>
+    <string name="field_exist_email">Email already exists</string>
+    <string name="field_exist_nickname">Nicaname already exists</string>
 
     <!--common-->
     <string name="next">Next</string>

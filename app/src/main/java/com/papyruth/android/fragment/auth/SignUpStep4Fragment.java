@@ -25,18 +25,18 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.TermData;
 import com.papyruth.android.model.error.SignupError;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.viewpager.OnPageFocus;
 import com.papyruth.support.utility.viewpager.OnPageUnfocus;
 import com.papyruth.support.utility.viewpager.ViewPagerController;
@@ -115,7 +115,6 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
             .subscribe(
                 term -> {
                     if (term == null || term.isEmpty()) return;
-                    Timber.d("size : %d", term.size());
                     for (TermData data : term) mTermsOfServiceStringArguments.add(data.body);
                 }, error -> ErrorHandler.handle(error, this)
             );
@@ -234,7 +233,8 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
 
 
     private void submitSignUpForm() {
-        Api.papyruth().users_sign_up(
+        if(validateSignUpForm()) {
+            Api.papyruth().users_sign_up(
                 SignUpForm.getInstance().getEmail(),
                 SignUpForm.getInstance().getPassword(),
                 SignUpForm.getInstance().getRealname(),
@@ -243,33 +243,84 @@ public class SignUpStep4Fragment extends Fragment implements OnPageFocus, OnPage
                 SignUpForm.getInstance().getUniversityId(),
                 SignUpForm.getInstance().getEntranceYear()
             )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                response -> {
-                    if (response.success) {
-                        User.getInstance().update(response.user, response.access_token);
-                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                        SignUpForm.getInstance().clear();
-                        mActivity.startMainActivity();
-                    } else Toast.makeText(mActivity, getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
-                },
-                error -> {
-                    if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 400: // Invalid field or lack of required field.
-                                String json = new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes());
-                                Gson gson = new Gson();
-                                Timber.d("reason : %s", gson.fromJson(json, SignupError.class).errors.email);
-                            case 403: // Failed to SignUp
-                                Toast.makeText(mActivity, getResources().getString(R.string.failed_sign_up), Toast.LENGTH_LONG).show();
-                                break;
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    response -> {
+                        if (response.success) {
+                            User.getInstance().update(response.user, response.access_token);
+                            AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
+                            SignUpForm.getInstance().clear();
+                            mActivity.startMainActivity();
+                        } else
+                            Toast.makeText(mActivity, getResources().getString(R.string.failed_sign_in), Toast.LENGTH_LONG).show();
+                    },
+                    error -> {
+                        if (error instanceof RetrofitError) {
+                            switch (((RetrofitError) error).getResponse().getStatus()) {
+                                case 400: // Invalid field or lack of required field.
+                                    String json = new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes());
+                                    Gson gson = new Gson();
+                                    String errorMessage = "";
+                                    if(gson.fromJson(json, SignupError.class).errors.email != null)
+                                        errorMessage = getResources().getString(R.string.field_exist_email);
+                                    else if(gson.fromJson(json, SignupError.class).errors.nickname != null)
+                                        errorMessage = getResources().getString(R.string.field_exist_nickname);
+                                    else
+                                        errorMessage = getResources().getString(R.string.failed_sign_up);
+                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+
+                                    if(gson.fromJson(json, SignupError.class).errors.email != null || gson.fromJson(json, SignupError.class).errors.nickname != null){
+                                        this.mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP2, false);
+                                    }else if(!validateSignUpForm()){
+                                    }else{
+                                        this.mViewPagerController.setCurrentPage(AppConst.ViewPager.Auth.SIGNUP_STEP1, false);
+                                    }
+                                    break;
+                                case 403: // Failed to SignUp
+                                    Toast.makeText(mActivity, getResources().getString(R.string.failed_sign_up), Toast.LENGTH_LONG).show();
+                                    break;
+                                default:
+                                    Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                            }
                         }
                     }
-                }
-            );
+                );
+        }
+    }
+
+    private boolean validateSignUpForm(){
+        String alertMsg;
+        int movePosition = -1;
+        SignUpForm form = SignUpForm.getInstance();
+
+        if(form.getUniversityId() == null){
+            alertMsg = getResources().getString(R.string.field_invalid_university);
+            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP1;
+        }else if(form.getEntranceYear() == null){
+            alertMsg = getResources().getString(R.string.field_invalid_entrance_year);
+            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP1;
+        }else if(form.getEmail() == null || !RxValidator.isValidEmail.call(form.getEmail())){
+            alertMsg = getResources().getString(R.string.field_invalid_email);
+            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP2;
+        }else if(form.getNickname() == null || !RxValidator.isValidNickname.call(form.getNickname())){
+            alertMsg = getResources().getString(R.string.field_invalid_nickname);
+            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP2;
+        }else if(form.getRealname() == null || !RxValidator.isValidRealname.call(form.getRealname())){
+            alertMsg = getResources().getString(R.string.field_invalid_realname);
+            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP3;
+        }else if(form.getIsBoy() == null){
+            alertMsg = getResources().getString(R.string.field_invalid_gender);
+            movePosition = AppConst.ViewPager.Auth.SIGNUP_STEP3;
+        }else if(form.getPassword() == null){
+            alertMsg = getResources().getString(R.string.field_invalid_password);
+        }else {
+            return true;
+        }
+
+        Toast.makeText(getActivity(), alertMsg, Toast.LENGTH_SHORT).show();
+        this.mViewPagerController.setCurrentPage(movePosition, false);
+        return false;
     }
 
     @Override

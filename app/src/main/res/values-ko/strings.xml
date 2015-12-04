@@ -55,6 +55,9 @@
     <string name="field_invalid_nickname">닉네임이 너무 깁니다</string>
     <string name="field_invalid_gender">존재하지 않는 성별입니다</string>
     <string name="field_invalid_entrance_year">해당 입학년도는 지원되지 않습니다</string>
+    <string name="field_invalid_university">학교가 선택되지 않았습니다</string>
+    <string name="field_exist_email">이메일이 중복되었습니다</string>
+    <string name="field_exist_nickname">닉네임이 중복되었습니다</string>
 
     <!--common-->
     <string name="next">다음</string>
