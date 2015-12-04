@@ -72,7 +72,7 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
         View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
         ButterKnife.inject(this, view);
         mCompositeSubscription = new CompositeSubscription();
-        getLoaderManager().initLoader(0, null, this);
+//        getLoaderManager().initLoader(0, null, this);
         return view;
     }
 
@@ -233,5 +233,10 @@ public class SignUpStep2Fragment extends Fragment implements OnPageFocus, OnPage
             || SignUpForm.getInstance().getEmail().length() <= 0
             || mTextEmail.getText() == null
             || mTextEmail.getText().length() <= 0;
+    }
+
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
+        mActivity.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

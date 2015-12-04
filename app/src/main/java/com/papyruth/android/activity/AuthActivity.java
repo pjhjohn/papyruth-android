@@ -3,6 +3,7 @@ package com.papyruth.android.activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -14,6 +15,7 @@ import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
 import com.papyruth.support.utility.error.ErrorHandlerCallback;
+import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -25,7 +27,7 @@ import timber.log.Timber;
 /**
  * Activity For Authentication.
  */
-public class AuthActivity extends SoftKeyboardActivity implements Navigator, ErrorHandlerCallback {
+public class AuthActivity extends SoftKeyboardActivity implements Navigator, ErrorHandlerCallback, ActivityCompat.OnRequestPermissionsResultCallback {
     private FragmentNavigator mNavigator;
     private Tracker mTracker;
 
@@ -143,5 +145,27 @@ public class AuthActivity extends SoftKeyboardActivity implements Navigator, Err
             .setFatal(isFatal)
             .build()
         );
+    }
+
+    /* Runtime Permission */
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PermissionHelper.PERMISSION_CONTACTS:
+                if (PermissionHelper.verifyPermissions(grantResults)) {
+                    // TODO : Something with permission
+                } else {
+                    String message = PermissionHelper.getRationalMessage(this, PermissionHelper.PERMISSION_CONTACTS);
+                    PermissionHelper.showRationalDialog(this, message);
+                } break;
+            case PermissionHelper.PERMISSION_READ_CONTACTS :
+                if (PermissionHelper.verifyPermissions(grantResults)) {
+                    // TODO : Something with permission
+                } else {
+                    String message = PermissionHelper.getRationalMessage(this, PermissionHelper.PERMISSION_READ_CONTACTS);
+                    PermissionHelper.showRationalDialog(this, message);
+                } break;
+            default : break;
+        }
     }
 }

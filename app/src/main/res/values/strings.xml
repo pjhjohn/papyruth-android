@@ -233,4 +233,14 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="password_recovery_title">Password Recovery</string>
     <string name="enter_your_email">enter the email address you use to sign in.</string>
     <string name="menu_evaluation_edit">Edit Evaluation</string>
+
+    <!--Permission-->
+    <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
+    <string name="permission_get_accounts">permission_get_accounts</string>
+    <string name="permission_read_contacts_rational">permission_read_contacts_rational</string>
+    <string name="permission_read_contacts">permission_read_contacts</string>
+    <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
+    <string name="dialog_btn_settings">SETTINGS</string>
+    <string name="dialog_btn_close">CLOSE</string>
+    <string name="permission_title">permission_title</string>
 </resources>

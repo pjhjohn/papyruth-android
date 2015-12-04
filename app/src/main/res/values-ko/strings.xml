@@ -226,4 +226,14 @@
     <string name="password_recovery_title">비밀번호 찾기</string>
     <string name="enter_your_email">가입할 때 입력한 이메일을 입력해주세요</string>
     <string name="menu_evaluation_edit">강의평가 수정</string>
+
+    <!--Permission-->
+    <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
+    <string name="permission_get_accounts">permission_get_accounts</string>
+    <string name="permission_read_contacts_rational">permission_read_contacts_rational</string>
+    <string name="permission_read_contacts">permission_read_contacts</string>
+    <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
+    <string name="dialog_btn_settings">SETTINGS</string>
+    <string name="dialog_btn_close">CLOSE</string>
+    <string name="permission_title">permission_title</string>
 </resources>

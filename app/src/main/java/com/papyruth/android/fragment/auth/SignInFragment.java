@@ -1,5 +1,7 @@
 package com.papyruth.android.fragment.auth;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
@@ -7,8 +9,10 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,12 +39,15 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.viewpager.OnPageFocus;
 import com.papyruth.support.utility.viewpager.ViewPagerController;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.Manifest;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -88,7 +95,22 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
         ButterKnife.inject(this, view);
         mCompositeSubscriptions = new CompositeSubscription();
-        getLoaderManager().initLoader(0, null, this);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Timber.d("Current Build Version : %d", Build.VERSION.SDK_INT);
+            getLoaderManager().initLoader(0, null, this);
+        } else if(PermissionHelper.checkAndRequestPermission(this, PermissionHelper.PERMISSION_CONTACTS, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.GET_ACCOUNTS)) {
+            Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+            Account[] accounts = AccountManager.get(mActivity).getAccounts();
+            Timber.d("# of registered accounts : %d", accounts.length);
+            for (Account account : accounts) {
+                if (emailPattern.matcher(account.name).matches()) {
+                    String possibleEmail = account.name;
+                    Timber.d("AccountManager Email : %s", possibleEmail);
+                }
+            }
+            getLoaderManager().initLoader(0, null, this);
+        } else Timber.d("Permission Failed/Denied");
+
         return view;
     }
     @Override
@@ -150,7 +172,7 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
             }, error -> ErrorHandler.handle(error, this)
         ));
 
-        this.mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
+        mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
             .subscribe(
                 event -> InputDialog.show(getActivity())
                 , error -> ErrorHandler.handle(error, this)
@@ -221,7 +243,12 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) emails.add(cursor.getString(ProfileQuery.ADDRESS));
+        Timber.d("onLoadFinished with cursor : %s", cursor);
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            Timber.d("Email : %s", cursor.getString(ProfileQuery.ADDRESS));
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+        }
+        Timber.d("onLoadFinished cursor search ended");
         /* Add to Emails View */
         mTextEmail.setAdapter(new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, emails));
     }
@@ -236,5 +263,10 @@ public class SignInFragment extends Fragment implements OnPageFocus, LoaderManag
         };
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
+    }
+
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
+        mActivity.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
