@@ -9,7 +9,7 @@ public interface RecyclerViewItemObjectClickListener {
     /**
      * Callback function for item click within RecyclerView
      * @param view view of clicked item
-     * @param position position in adapter
+     * @param object item in adapter
      */
-    void onRecyclerViewItemClick(View view, Object position);
+    void onRecyclerViewItemObjectClick(View view, Object object);
 }

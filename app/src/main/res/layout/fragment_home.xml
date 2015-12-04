@@ -30,5 +30,4 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </FrameLayout>
-    <include layout="@layout/material_progressbar_large"/>
 </com.papyruth.support.utility.navigator.NavigatableFrameLayout>

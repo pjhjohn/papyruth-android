@@ -9,58 +9,64 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/white">
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/evaluation_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/baseline_x2"
-            android:paddingLeft="@dimen/baseline_x2"
-            android:paddingRight="@dimen/baseline_x2"
-            android:paddingBottom="@dimen/baseline_x0.5">
-            <TextView
-                android:id="@+id/evaluation_lecture"
+            android:orientation="vertical">
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:gravity="center"
-                android:textSize="24sp"
-                android:textColor="@color/white_30p"
-                android:maxLines="2"
-                android:ellipsize="end"/><!-- Lecture Title -->
-        </RelativeLayout><!--Lecture Title & Edit-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/baseline_x2"
-            android:paddingRight="@dimen/baseline_x2">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="18sp"
-                android:layout_centerInParent="true">
+                android:paddingTop="@dimen/baseline_x2"
+                android:paddingLeft="@dimen/baseline_x2"
+                android:paddingRight="@dimen/baseline_x2"
+                android:paddingBottom="@dimen/baseline_x0.5">
                 <TextView
-                    android:id="@+id/evaluation_category"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/evaluation_lecture"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:background="@drawable/category_background"
-                    android:textSize="14sp"/><!-- Category -->
-                <TextView
-                    android:id="@+id/evaluation_professor"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textColor="@color/white_30p"
+                    android:maxLines="2"
+                    android:ellipsize="end"/><!-- Lecture Title -->
+            </RelativeLayout><!--Lecture Title & Edit-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/baseline_x2"
+                android:paddingRight="@dimen/baseline_x2">
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/evaluation_category"
-                    android:layout_toEndOf="@+id/evaluation_category"
-                    android:layout_marginLeft="@dimen/baseline_x1"
-                    android:layout_marginStart="@dimen/baseline_x1"
-                    android:layout_alignBaseline="@+id/evaluation_category"
-                    android:textSize="16sp"
-                    android:maxLines="2"
-                    android:ellipsize="end"/><!-- Professor -->
-            </RelativeLayout>
-        </RelativeLayout><!-- Category & Professor -->
+                    android:minHeight="18sp"
+                    android:layout_centerInParent="true">
+                    <TextView
+                        android:id="@+id/evaluation_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:background="@drawable/category_background"
+                        android:textSize="14sp"/><!-- Category -->
+                    <TextView
+                        android:id="@+id/evaluation_professor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/evaluation_category"
+                        android:layout_toEndOf="@+id/evaluation_category"
+                        android:layout_marginLeft="@dimen/baseline_x1"
+                        android:layout_marginStart="@dimen/baseline_x1"
+                        android:layout_alignBaseline="@+id/evaluation_category"
+                        android:textSize="16sp"
+                        android:maxLines="2"
+                        android:ellipsize="end"/><!-- Professor -->
+                </RelativeLayout>
+            </RelativeLayout><!-- Category & Professor -->
+        </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -377,7 +383,6 @@
                     roboto:textWeight="bold"/><!-- Vote Down Count -->
             </RelativeLayout><!-- Body -->
         </LinearLayout><!--Footer : Vote Up/Down-->
-        <include layout="@layout/hr_shadow"/>
     </LinearLayout>
     <include layout="@layout/material_progressbar_medium"/>
 </FrameLayout>

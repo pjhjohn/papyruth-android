@@ -137,7 +137,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                         view.getId() == R.id.comment_item_up_vote_count ? response.up : response.down
                     ), error ->  ErrorHandler.handle(error, this));
                 break;
-            default : Timber.d("Clicked view : %s", view);
+            default : break;
         }
     }
 }

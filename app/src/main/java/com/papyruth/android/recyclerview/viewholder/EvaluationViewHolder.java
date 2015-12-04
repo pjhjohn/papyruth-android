@@ -10,6 +10,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.papyruth.support.utility.customview.Hashtag;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -38,6 +40,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @InjectView(R.id.evaluation_header)                     protected LinearLayout mHeader;
     @InjectView(R.id.evaluation_lecture)                    protected TextView mLecture;
     @InjectView(R.id.evaluation_category)                   protected TextView mCategory;
     @InjectView(R.id.evaluation_professor)                  protected TextView mProfessor;
@@ -62,7 +65,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @InjectView(R.id.evaluation_up_vote_count)              protected RobotoTextView mVoteUpCount;
     @InjectView(R.id.evaluation_down_vote_icon)             protected ImageView mVoteDownIcon;
     @InjectView(R.id.evaluation_down_vote_count)            protected RobotoTextView mVoteDownCount;
-    @InjectView(R.id.hr_shadow)                             protected FrameLayout mShadow;
     @InjectView(R.id.material_progress_medium)              protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
@@ -71,9 +73,10 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     public enum VoteStatus {
         UP, DOWN, NONE
     }
-    public EvaluationViewHolder(View view) {
+    public EvaluationViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
         ButterKnife.inject(this, view);
+        if(listener != null) mHeader.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
         mContext = view.getContext();
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
@@ -132,7 +135,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         else setVoteStatus(VoteStatus.DOWN);
 
         setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
-        mShadow.setVisibility(evaluation.getCommentCount() <= 0? View.GONE : View.VISIBLE);
     }
 
     @Override

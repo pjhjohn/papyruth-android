@@ -22,11 +22,13 @@ import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
+import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.papyruth.android.R;
+import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -59,7 +61,6 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
     @InjectView(R.id.home_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     @InjectView(R.id.home_recycler_view) protected RecyclerView mRecyclerView;
     @InjectView(R.id.home_empty_state)   protected FrameLayout mEmptyState;
-    @InjectView(R.id.material_progress_large) protected View mProgress;
     protected CompositeSubscription mCompositeSubscription;
     protected Toolbar mToolbar;
     EvaluationItemsDetailAdapter mAdapter;
@@ -69,7 +70,7 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
         ButterKnife.inject(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
-        /* View Initialization */
+        /* Initialize SwipeRefresh & RecyclerView */
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         mSwipeRefresh.setEnabled(true);
         initSwipeRefresh(mSwipeRefresh);
@@ -78,6 +79,7 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(mAdapter);
 
+        /* Initialize Others */
         mEvaluationFragment = null;
         mEvaluationIsOccupying = false;
         return view;
@@ -109,34 +111,38 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
 
         mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
         mCompositeSubscription.add(getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
-            .filter(passIfNull -> passIfNull == null && mProgress.getVisibility() != View.VISIBLE)
+            .filter(passIfNull -> passIfNull == null)
             .subscribe(unused -> mAdapter.loadMore())
         );
     }
 
     @Override
-    public void onRecyclerViewItemClick(View view, Object object) {
-        EvaluationData data = (EvaluationData) object;
-        if(User.getInstance().needEmailConfirmed()) {
-            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.NEED_CONFIRMATION);
-            return;
+    public void onRecyclerViewItemObjectClick(View view, Object object) {
+        if(object instanceof EvaluationData) {
+            EvaluationData data = (EvaluationData) object;
+            if (User.getInstance().needEmailConfirmed()) {
+                AlertDialog.show(mContext, mNavigator, AlertDialog.Type.NEED_CONFIRMATION);
+                return;
+            }
+            if (User.getInstance().needMoreEvaluation()) {
+                AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_MANDATORY);
+                return;
+            }
+            if (mEvaluationOpened) return;
+            if (mEvaluationIsOccupying) return;
+            if (mAnimatorSet != null && mAnimatorSet.isRunning()) return;
+            mEvaluationOpened = true;
+            Api.papyruth()
+                .get_evaluation(User.getInstance().getAccessToken(), data.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    Evaluation.getInstance().update(response.evaluation);
+                    mEvaluationFragment = new EvaluationFragment();
+                    this.openEvaluation(view, true);
+                }, error -> ErrorHandler.handle(error, this));
+        }  else if(object instanceof Footer) {
+            mRecyclerView.getLayoutManager().scrollToPosition(0);
         }
-        if(User.getInstance().needMoreEvaluation()) {
-            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_MANDATORY);
-            return;
-        }
-        if(mEvaluationOpened) return;
-        if(mEvaluationIsOccupying) return;
-        if(mAnimatorSet != null && mAnimatorSet.isRunning()) return;
-        mEvaluationOpened = true;
-        Api.papyruth()
-            .get_evaluation(User.getInstance().getAccessToken(), data.id)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                Evaluation.getInstance().update(response.evaluation);
-                mEvaluationFragment = new EvaluationFragment();
-                this.openEvaluation(view, true);
-            }, error -> ErrorHandler.handle(error, this));
     }
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);

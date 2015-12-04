@@ -6,13 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
+import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
-import com.papyruth.android.AppTracker;
+import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.EvaluationItemDetailViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
@@ -37,7 +39,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     private SwipeRefreshLayout mSwipeRefresh;
     private View mEmptyState;
     private List<EvaluationData> mEvaluations;
-    private RecyclerViewItemObjectClickListener mRecyclerViewItemClickListener;
+    private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
     private boolean mHideShadow;
     private Integer mSinceId;
@@ -47,15 +49,17 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     private int mIndexShadow; // UNDER SINGLE if exists, -1 otherwise
     private int mIndexContent;// UNDER SHADOW if exists.
     private int mIndexFooter; // AT LAST
-    private RelativeLayout mMaterialProgressBar;
     private FrameLayout mShadow;
+    private View mFooterBorder;
+    private RelativeLayout mFooterMaterialProgressBar;
+    private ImageView mFooterFullyLoadedIndicator;
 
     public EvaluationItemsDetailAdapter(Context context, SwipeRefreshLayout swiperefresh, View emptystate, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
         mEvaluations = new ArrayList<>();
-        mRecyclerViewItemClickListener = listener;
+        mRecyclerViewItemObjectClickListener = listener;
         mHideInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
         mSinceId = null;
         mIndexHeader = 0;
@@ -69,7 +73,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewholder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-            if(!mHideInform && position == 1) {
+            if(!mHideInform && position == mIndexInform) {
                 String action = null;
                 switch(view.getId()) {
                     case R.id.inform_btn_optional :
@@ -87,22 +91,24 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
                         break;
                     default : Timber.d("Unexpected view #%x", view.getId());
                 }
-            } else mRecyclerViewItemClickListener.onRecyclerViewItemClick(view, mEvaluations.get(position - mIndexContent));
+            }
+            else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
+            else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mEvaluations.get(position - mIndexContent));
         });
         if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);
-        if (viewholder instanceof FooterViewHolder) mMaterialProgressBar = (RelativeLayout) viewholder.itemView.findViewById(R.id.material_progress_medium);
+        if (viewholder instanceof FooterViewHolder) {
+            mFooterBorder = viewholder.itemView.findViewById(R.id.footer_border);
+            mFooterMaterialProgressBar = (RelativeLayout) viewholder.itemView.findViewById(R.id.material_progress_medium);
+            mFooterFullyLoadedIndicator = (ImageView) viewholder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
+        }
         return viewholder;
     }
 
-    /**
-     * @param holder
-     * @param position HEADER / INFORM(if not learned) / EVALUATION_ITEM_DETAILs
-     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= mIndexHeader) return;
         if (position == mIndexInform) {((InformViewHolder) holder).bind(R.string.inform_home, R.color.inform_evaluation_item_detail); return; }
-//        else if (position == mIndexSingle) ((WhateverComesAfterInformSolelyViewHolder) holder).bind(correspondingData);
+        if (position == mIndexSingle) return;
         if (position == mIndexShadow) return;
         if (position == mIndexFooter) return;
         ((EvaluationItemDetailViewHolder) holder).bind(mEvaluations.get(position - mIndexContent));
@@ -117,7 +123,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (position <= mIndexHeader) return ViewHolderFactory.ViewType.HEADER;
         if (position == mIndexInform) return ViewHolderFactory.ViewType.INFORM;
-//        if (position == mIndexSingle) return ViewholderFactory.ViewType.WHATEVER_COMES_AFTER_INFORM_SOLELY
+        if (position == mIndexSingle) ;
         if (position == mIndexShadow) return ViewHolderFactory.ViewType.SHADOW;
         if (position == mIndexFooter) return ViewHolderFactory.ViewType.FOOTER;
         return ViewHolderFactory.ViewType.EVALUATION_ITEM_DETAIL;
@@ -133,6 +139,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
             AnimatorHelper.FADE_IN(mEmptyState).start();
+            AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
         } else {
             mSinceId = mEvaluations.get(mEvaluations.size()-1).id;
@@ -144,8 +151,11 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
             AnimatorHelper.FADE_OUT(mEmptyState).start();
+            AnimatorHelper.FADE_IN(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
+        if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
+        else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
     }
 
     /* IAdapter methods*/
@@ -161,6 +171,8 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
                     mSwipeRefresh.setRefreshing(false);
                     mEvaluations.clear();
                     mEvaluations.addAll(evaluations);
+                    mLoading = false;
+                    mFullyLoaded = false;
                     reconfigure();
                 }, error -> {
                     mSwipeRefresh.setRefreshing(false);
@@ -170,11 +182,14 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     private Boolean mLoading;
+    private Boolean mFullyLoaded;
     @Override
     public void loadMore() {
         if(mLoading != null && mLoading) return;
         mLoading = true;
-        if(mMaterialProgressBar != null) AnimatorHelper.FADE_IN(mMaterialProgressBar).start();
+        if(mFullyLoaded != null && mFullyLoaded) return;
+        mFullyLoaded = false;
+        if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         Api.papyruth()
             .get_evaluations(
                 User.getInstance().getAccessToken(),
@@ -188,14 +203,17 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(evaluations -> {
+                if (evaluations != null) {
+                    if(evaluations.isEmpty()) mFullyLoaded = true;
+                    else mEvaluations.addAll(evaluations);
+                }
+                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
-                if(mMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mMaterialProgressBar).start();
-                if (evaluations != null) mEvaluations.addAll(evaluations);
                 reconfigure();
             }, error -> {
-                mLoading = false;
-                if(mMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mMaterialProgressBar).start();
                 ErrorHandler.handle(error, this);
+                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                mLoading = false;
             });
     }
 }

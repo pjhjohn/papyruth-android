@@ -66,7 +66,7 @@ public class ViewHolderFactory {
             case ViewType.HEADER                 : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_actionbarsize   , parent, false));
             case ViewType.INFORM                 : return new               InformViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_inform                , parent, false), listener);
             case ViewType.COURSE                 : return new               CourseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course                , parent, false));
-            case ViewType.EVALUATION             : return new           EvaluationViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation            , parent, false));
+            case ViewType.EVALUATION             : return new           EvaluationViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation            , parent, false), listener);
             case ViewType.COURSE_ITEM            : return new           CourseItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_course_item           , parent, false), listener);
             case ViewType.EVALUATION_ITEM        : return new       EvaluationItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation_item       , parent, false), listener);
             case ViewType.EVALUATION_ITEM_DETAIL : return new EvaluationItemDetailViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_evaluation_item_detail, parent, false), listener);
@@ -79,7 +79,7 @@ public class ViewHolderFactory {
             case ViewType.OPEN_SOURCE_LICENSE    : return new    OpenSourceLicenseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_open_source_license   , parent, false), listener);
             case ViewType.TOOLBAR_SHADOW         : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_toolbar_shadow        , parent, false));
             case ViewType.HR_WHITE               : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_8dp             , parent, false));
-            case ViewType.FOOTER                 : return new               FooterViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_footer                , parent, false));
+            case ViewType.FOOTER                 : return new               FooterViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_footer                , parent, false), listener);
             case ViewType.SHADOW                 : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_shadow                , parent, false));
             default : throw new RuntimeException(String.format("Couldn't find any ViewHolder with ViewType#%d. Check whether you put correct ViewType.", viewType));
         }

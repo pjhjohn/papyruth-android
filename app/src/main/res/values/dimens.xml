@@ -38,7 +38,7 @@
     <!--Etc-->
     <dimen name="default_height_button">@dimen/baseline_x7</dimen>
     <dimen name="loading_text">@dimen/basefont_x2</dimen>
-    <dimen name="cardview_footer_height">76dp</dimen>
+    <dimen name="cardview_footer_height">@dimen/baseline_x15</dimen>
 
     <!--Text Size in sp-->
     <dimen name="basefont_x1">12sp</dimen>

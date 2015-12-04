@@ -186,8 +186,8 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
                     super.onAnimationStart(animation);
                     if (slave != null) {
                         getFragmentManager().beginTransaction().add(R.id.evaluation_container, slave).commit();
-                        if (commentPosition != null)
-                            slave.setCommentId(commentPosition);
+//                        if (commentPosition != null)
+//                            slave.setCommentId(commentPosition);
                     }
                     isAnimationCanceled = false;
                     isOpenSlave = true;

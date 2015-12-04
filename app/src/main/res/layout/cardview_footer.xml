@@ -2,6 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_footer_height"
-    android:background="@color/transparent">
+    android:background="@drawable/background_pressed_selector_transparent">
+    <View
+        android:id="@+id/footer_border"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/baseline_x0.25"
+        android:background="@color/white_80p"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/footer_fully_loaded_indicator"
+        android:layout_width="@dimen/baseline_x3"
+        android:layout_height="@dimen/baseline_x3"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/empty"
+        android:visibility="gone"/>
     <include layout="@layout/material_progressbar_medium"/>
 </RelativeLayout>

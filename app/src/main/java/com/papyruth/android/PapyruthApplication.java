@@ -41,6 +41,7 @@ public class PapyruthApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        /* Fabric for Crashlytics */
         Fabric.with(this, new Crashlytics());
 
         /* Timber */
