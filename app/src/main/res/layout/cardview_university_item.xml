@@ -21,5 +21,5 @@
         android:paddingBottom="@dimen/baseline_x1.5"
         android:paddingLeft="@dimen/baseline_x1.5"
         android:gravity="center"
-        android:textSize="@dimen/basefont_x1.5"/>
+        android:textSize="16sp"/>
 </RelativeLayout>

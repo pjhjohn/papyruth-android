@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -67,17 +68,19 @@ public class AuthActivity extends Activity implements com.papyruth.support.utili
         ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
     }
 
-    public void setCurrentSignUpStep(int step) {
+    public void setCurrentAuthStep(int step) {
         ValueAnimator animator = ValueAnimator.ofInt(mSignUpProgress.getProgress(), step * 100);
         animator.setDuration(200);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.addUpdateListener(anim -> mSignUpProgress.setProgress((int) anim.getAnimatedValue()));
         animator.start();
-    }
-
-    public void animateApplicationLogo(boolean toSignInFragment) {
-        if(toSignInFragment) AnimatorHelper.FADE_OUT(mSignUpLabel).start();
-        else AnimatorHelper.FADE_IN(mSignUpLabel).start();
+        if(step <= AppConst.Navigator.Auth.SIGNIN) {
+            AnimatorHelper.FADE_OUT(mSignUpLabel).start();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        } else {
+            AnimatorHelper.FADE_IN(mSignUpLabel).start();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
     }
 
     /* Finishes Activity unless FragmentNavigator handled the event */

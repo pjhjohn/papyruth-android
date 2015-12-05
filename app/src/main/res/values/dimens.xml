@@ -8,6 +8,7 @@
     <dimen name="baseline_x0.25">2dp</dimen>
     <dimen name="baseline_x0.5">4dp</dimen>
     <dimen name="baseline_x1">8dp</dimen>
+    <dimen name="baseline_x1.25">10dp</dimen>
     <dimen name="baseline_x1.5">12dp</dimen>
     <dimen name="baseline_x2">16dp</dimen>
     <dimen name="baseline_x2.5">20dp</dimen>
@@ -38,18 +39,6 @@
 
     <!--Etc-->
     <dimen name="default_height_button">@dimen/baseline_x7</dimen>
-    <dimen name="loading_text">@dimen/basefont_x2</dimen>
     <dimen name="cardview_footer_height">@dimen/baseline_x15</dimen>
 
-    <!--Text Size in sp-->
-    <dimen name="basefont_x1">12sp</dimen>
-    <dimen name="basefont_x1.2">14sp</dimen>
-    <dimen name="basefont_x1.3">16sp</dimen>
-    <dimen name="basefont_x1.5">18sp</dimen>
-    <dimen name="basefont_x2">24sp</dimen>
-    <dimen name="basefont_x2.5">30sp</dimen>
-    <dimen name="basefont_x3">36sp</dimen>
-    <dimen name="basefont_x4">48sp</dimen>
-    <dimen name="basefont_x5">60sp</dimen>
-    <dimen name="basefont_x6">72sp</dimen>
 </resources>

@@ -36,7 +36,7 @@
         android:background="@drawable/background_round_stroke"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="@dimen/basefont_x1"
+        android:textSize="12sp"
         android:layout_marginLeft="@dimen/baseline_x2"
         android:layout_marginStart="@dimen/baseline_x2"
         android:layout_marginRight="@dimen/baseline_x2"

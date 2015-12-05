@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +97,7 @@ public class SignInFragment extends Fragment {
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signin));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNIN);
         FloatingActionControl.getInstance().clear();
         mCompositeSubscriptions.add(Observable.combineLatest(
             WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
@@ -110,8 +110,6 @@ public class SignInFragment extends Fragment {
             .startWith(false)
             .subscribe(mButtonSignIn::setEnabled, error -> ErrorHandler.handle(error, this))
         );
-
-        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNIN);
 
         mCompositeSubscriptions.add(
             Observable.mergeDelayError(
@@ -129,7 +127,6 @@ public class SignInFragment extends Fragment {
         mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
             unused -> {
                 mNavigator.navigate(SignUpStep1Fragment.class, true);
-                mActivity.animateApplicationLogo(false);
             }, error -> ErrorHandler.handle(error, this)
         ));
 

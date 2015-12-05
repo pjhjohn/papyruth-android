@@ -23,7 +23,7 @@
         <EditText
             android:id="@+id/signup_password_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/signup_password_icon"
             android:layout_toEndOf="@+id/signup_password_icon"
             android:layout_marginLeft="@dimen/baseline_x4"
@@ -33,7 +33,7 @@
             android:layout_centerVertical="true"
             android:background="@color/transparent"
             android:inputType="textPassword"
-            android:textSize="@dimen/basefont_x1.3"
+            android:textSize="16sp"
             android:hint="@string/hint_password"/>
     </RelativeLayout>
     <RelativeLayout
@@ -48,7 +48,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:textSize="@dimen/basefont_x1.3"
+            android:textSize="16sp"
             android:text="@string/agree_terms"/>
     </RelativeLayout>
 </com.papyruth.support.utility.navigator.NavigatableLinearLayout>

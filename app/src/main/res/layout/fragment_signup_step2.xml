@@ -23,7 +23,7 @@
         <EditText
             android:id="@+id/signup_email_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/signup_email_icon"
             android:layout_toEndOf="@+id/signup_email_icon"
             android:layout_marginLeft="@dimen/baseline_x4"
@@ -35,7 +35,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:inputType="textEmailAddress"
-            android:textSize="@dimen/basefont_x1.3"
+            android:textSize="16sp"
             android:hint="@string/hint_email"/>
     </RelativeLayout>
     <RelativeLayout
@@ -56,7 +56,7 @@
         <EditText
             android:id="@+id/signup_nickname_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/signup_nickname_icon"
             android:layout_toEndOf="@+id/signup_nickname_icon"
             android:layout_marginLeft="@dimen/baseline_x4"
@@ -66,7 +66,7 @@
             android:layout_centerVertical="true"
             android:background="@color/transparent"
             android:inputType="text"
-            android:textSize="@dimen/basefont_x1.3"
+            android:textSize="16sp"
             android:hint="@string/hint_nickname"/>
     </RelativeLayout>
 </com.papyruth.support.utility.navigator.NavigatableLinearLayout>

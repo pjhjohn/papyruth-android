@@ -83,16 +83,15 @@ public class SignUpStep3Fragment extends Fragment {
         super.onResume();
         Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
         Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP3);
         final View focusedView = mActivity.getWindow().getCurrentFocus();
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
             unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextRealname, InputMethodManager.SHOW_FORCED)
         );
-        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP3);
 
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
-        if(mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
         mCompositeSubscription.add(
             Observable.combineLatest(

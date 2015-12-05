@@ -102,7 +102,11 @@ public class SignUpStep4Fragment extends Fragment {
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
             unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextPassword, InputMethodManager.SHOW_FORCED)
         );
-        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP4);
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup4));
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP4);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green).hide(true);
+        mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         Api.papyruth().terms(0)
             .map(terms -> terms.term)
@@ -129,10 +133,11 @@ public class SignUpStep4Fragment extends Fragment {
                     imm.hideSoftInputFromWindow(mTextPassword.getWindowToken(), 0);
                     new MaterialDialog.Builder(mActivity)
                         .title(R.string.terms_of_use)
-                        .content(mTermsOfServiceStringArguments.size() > 0? mTermsOfServiceStringArguments.get(0) : getString(R.string.lorem_ipsum))
+                        .content(mTermsOfServiceStringArguments.size() > 0 ? mTermsOfServiceStringArguments.get(0) : getString(R.string.lorem_ipsum))
                         .positiveText(R.string.close)
                         .show();
                 }
+
                 @Override
                 public void updateDrawState(TextPaint ds) {
                     super.updateDrawState(ds);
@@ -151,10 +156,11 @@ public class SignUpStep4Fragment extends Fragment {
                 public void onClick(View widget) {
                     new MaterialDialog.Builder(mActivity)
                         .title(R.string.privacy_policy)
-                        .content(mTermsOfServiceStringArguments.size() > 1? mTermsOfServiceStringArguments.get(1) : getString(R.string.lorem_ipsum))
+                        .content(mTermsOfServiceStringArguments.size() > 1 ? mTermsOfServiceStringArguments.get(1) : getString(R.string.lorem_ipsum))
                         .positiveText(R.string.close)
                         .show();
                 }
+
                 @Override
                 public void updateDrawState(TextPaint ds) {
                     super.updateDrawState(ds);
@@ -168,13 +174,6 @@ public class SignUpStep4Fragment extends Fragment {
 
         mTextAgreement.setText(ss);
         mTextAgreement.setMovementMethod(LinkMovementMethod.getInstance());
-
-
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup4));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green).hide(true);
-        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
-        mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         mCompositeSubscription.add(
             getPasswordValidationObservable(mTextPassword)

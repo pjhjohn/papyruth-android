@@ -46,7 +46,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemClickListener, OnBack {
+public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemClickListener {
     private AuthActivity mActivity;
     private Navigator mNavigator;
     private Tracker mTracker;
@@ -86,6 +86,18 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
     @Override
     public void onResume() {
         super.onResume();
+        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP1);
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
+        if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
+            if (mUniversityRecyclerView != null)
+                ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0);
+        });
+
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> mNavigator.navigate(SignUpStep2Fragment.class, true)));
+
         Api.papyruth()
             .universities()
             .map(response -> response.universities)
@@ -96,20 +108,6 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
                 mUniversities.addAll(universities);
                 mAdapter.notifyDataSetChanged();
             }, error -> ErrorHandler.handle(error, this));
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
-        if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
-        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
-            if (mUniversityRecyclerView != null)
-                ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0);
-        });
-        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP1);
-
-        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
-        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
-            unused -> mNavigator.navigate(SignUpStep2Fragment.class, true)
-        ));
     }
 
     @Override
@@ -133,11 +131,5 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
                 mNavigator.navigate(SignUpStep2Fragment.class, true);
             })
             .show();
-    }
-
-    @Override
-    public boolean onBack() {
-        mActivity.animateApplicationLogo(true);
-        return false;
     }
 }
