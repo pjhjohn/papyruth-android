@@ -41,6 +41,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -100,6 +101,16 @@ public class SignUpStep3Fragment extends Fragment {
 
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
 
+        if(mTextRealname.getText().toString().isEmpty()) {
+            final String realname = SignUpForm.getInstance().getRealname();
+            if(realname != null) mTextRealname.setText(realname);
+            else mTextRealname.getText().clear();
+        } else mTextRealname.setText(mTextRealname.getText());
+        if(mRadioGroupGender.getCheckedRadioButtonId() < 0) {
+            final Boolean isboy = SignUpForm.getInstance().getIsBoy();
+            if(isboy != null) mRadioGroupGender.check(isboy? R.id.signup_gender_radio_male : R.id.signup_gender_radio_female);
+        } else mRadioGroupGender.check(mRadioGroupGender.getCheckedRadioButtonId());
+
         mCompositeSubscription.add(
             Observable.combineLatest(
                 getRealnameValidationObservable(mTextRealname),
@@ -138,16 +149,6 @@ public class SignUpStep3Fragment extends Fragment {
             }
         ));
 
-        if(mTextRealname.getText().toString().isEmpty()) {
-            final String realname = SignUpForm.getInstance().getRealname();
-            if(realname != null) mTextRealname.setText(realname);
-            else mTextRealname.getText().clear();
-        } else mTextRealname.setText(mTextRealname.getText());
-        if(mRadioGroupGender.getCheckedRadioButtonId() < 0) {
-            final Boolean isboy = SignUpForm.getInstance().getIsBoy();
-            if(isboy != null) mRadioGroupGender.check(isboy? R.id.signup_gender_radio_male : R.id.signup_gender_radio_female);
-        } else mRadioGroupGender.check(mRadioGroupGender.getCheckedRadioButtonId());
-
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
             if(mTextRealname != null) mTextRealname.requestFocus();
             ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
@@ -156,7 +157,7 @@ public class SignUpStep3Fragment extends Fragment {
 
     private boolean mNextButtonEnabled;
     private Observable<String> getRealnameValidationObservable(TextView realnameTextView) {
-        return WidgetObservable.text(realnameTextView)
+        Observable<String> observable =  WidgetObservable.text(realnameTextView)
             .map(event -> {
                 mNextButtonEnabled = false;
                 return event;
@@ -164,6 +165,11 @@ public class SignUpStep3Fragment extends Fragment {
             .map(event -> event.text().toString())
             .map(RxValidator.getErrorMessageRealname)
             .observeOn(AndroidSchedulers.mainThread());
+
+        if(SignUpForm.getInstance().getRealname() != null)
+            observable =  observable.startWith(RxValidator.getErrorMessageRealname.call(realnameTextView.getText().toString()));
+
+        return observable;
     }
 
     private Observable<Integer> getGenderValidationObservable(RadioGroup group) {
@@ -181,6 +187,6 @@ public class SignUpStep3Fragment extends Fragment {
                 }
             }
         }
-        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event ->  event.view().getId()).startWith(group.getCheckedRadioButtonId());
+        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId()).startWith(mRadioGroupGender.getCheckedRadioButtonId());
     }
 }
