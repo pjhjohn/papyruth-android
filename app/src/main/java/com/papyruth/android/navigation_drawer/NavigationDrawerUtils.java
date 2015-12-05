@@ -16,21 +16,17 @@ public class NavigationDrawerUtils {
         public static final int HOME            = 0;
         public static final int EVALUATION      = 1;
         public static final int BOOKMARK        = 2;
-        public static final int MYEVALUATION    = 3;
-        public static final int MYCOMMENT       = 4;
+        public static final int MY_EVALUATION   = 3;
+        public static final int MY_COMMENT      = 4;
     }
-    public int getNavigationDrawerPositionOf(Class<? extends Fragment> fragment) {
-        switch(fragment.getSimpleName()) {
-            default : return 0; // TODO : implement
-        }
-    }
+
     public static Class<? extends Fragment> getFragmentClassOf(int position) {
         switch(position) {
             case ItemType.HOME          : return HomeFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;
             case ItemType.BOOKMARK      : return BookmarkFragment.class;
-            case ItemType.MYEVALUATION  : return MyEvaluationFragment.class;
-            case ItemType.MYCOMMENT     : return MyCommentFragment.class;
+            case ItemType.MY_EVALUATION : return MyEvaluationFragment.class;
+            case ItemType.MY_COMMENT    : return MyCommentFragment.class;
             default: return null;
         }
     }

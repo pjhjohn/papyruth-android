@@ -36,7 +36,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter {
-    private static final String USER_LEARNED_INFORM = "EvaluationAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
+    private static final String HIDE_INFORM = "EvaluationAdapter.mHideInform";
     private final Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
     private View mEmptyState;
@@ -62,7 +62,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mEmptyState = emptystate;
         mComments = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
-        mHideInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
+        mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
         mSinceId = null;
         mIndexHeader = 0;
         mIndexInform = mHideInform? -1 : 1;
@@ -79,7 +79,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 String action = null;
                 switch(view.getId()) {
                     case R.id.inform_btn_optional :
-                        AppManager.getInstance().putBoolean(USER_LEARNED_INFORM, true);
+                        AppManager.getInstance().putBoolean(HIDE_INFORM, true);
                         action = parent.getResources().getString(R.string.ga_event_hide_always);
                     case R.id.inform_btn_positive :
                         notifyItemRemoved(position);

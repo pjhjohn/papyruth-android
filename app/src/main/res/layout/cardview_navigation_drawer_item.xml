@@ -4,16 +4,16 @@
     android:layout_height="@dimen/baseline_x6"
     android:background="@drawable/row_selector">
     <ImageView
-        android:id="@+id/nav_item_icon"
+        android:id="@+id/navigation_drawer_item_icon"
+        android:layout_gravity="center_vertical"
         android:layout_width="@dimen/baseline_x3"
         android:layout_height="@dimen/baseline_x3"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/baseline_x2"
         android:layout_marginLeft="@dimen/baseline_x2"
         android:contentDescription="@string/empty"/>
     <com.devspark.robototextview.widget.RobotoTextView
         xmlns:roboto="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/nav_item_label"
+        android:id="@+id/navigation_drawer_item_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

@@ -37,154 +37,126 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallback {
-    private static final String STATE_SELECTED_POSITION = "selected_nav_position";
-    private static final String PREF_USER_LEARNED_DRAWER = "user_learned_nav";
-    private int mCurrentSelectedPosition = 0;
-    private boolean mFromSavedInstanceState;
-    private boolean mUserLearnedDrawer;
-    private View.OnClickListener mNavigationPriorClickListener;
-
-    Tracker mTracker;
-
+    private NavigationDrawerCallback mNavigationDrawerCallback;
+    private Navigator mNavigator;
+    private Activity mActivity;
+    private Tracker mTracker;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
-        mUserLearnedDrawer = AppManager.getInstance().getBoolean(PREF_USER_LEARNED_DRAWER, false);
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+        mTracker  = ((PapyruthApplication) activity.getApplicationContext()).getTracker();
+        try {
+            mNavigationDrawerCallback = (NavigationDrawerCallback) activity;
+            mNavigator = (Navigator) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement OnClickCategory");
         }
     }
 
-    @InjectView(R.id.subtitle) protected RelativeLayout mSubtitle;
-    @InjectView(R.id.subtitle_nickname) protected TextView mSubtitleNickname;
-    @InjectView(R.id.subtitle_email) protected TextView mSubtitleEmail;
-    @InjectView(R.id.subtitle_avatar) protected ImageView mSubtitleAvatar;
-    @InjectView(R.id.nav_recyclerview) protected RecyclerView mDrawerList;
+    private static final String SELECTED_POSITION   = "NavigationDrawerFragment.SelectedPosition";
+    private static final String USER_LEARNED_DRAWER = "NavigationDrawerFragment.UserLearnedDrawer";
+    private boolean mUserLearnedDrawer;
+    private boolean mFromSavedInstanceState;
+    private int mCurrentSelectedPosition = 0;
+    private View.OnClickListener mNavigationPriorClickListener;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mUserLearnedDrawer = AppManager.getInstance().getBoolean(USER_LEARNED_DRAWER, false);
+        if (savedInstanceState != null) {
+            mFromSavedInstanceState = true;
+            mCurrentSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION);
+        }
+    }
+
+    @InjectView(R.id.navigation_drawer_header)          protected RelativeLayout mHeader;
+    @InjectView(R.id.navigation_drawer_header_nickname) protected TextView mUserNickname;
+    @InjectView(R.id.navigation_drawer_header_email)    protected TextView mUserEmail;
+    @InjectView(R.id.navigation_drawer_header_avatar)   protected ImageView mUserAvatar;
+    @InjectView(R.id.navigation_drawer_recyclerview)    protected RecyclerView mNavigationRecyclerView;
     private NavigationDrawerAdapter mNavigationDrawerAdapter;
-    private List<NavigationDrawerItem> mNavigationDrawerItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         ButterKnife.inject(this, view);
-        /* subtitle */
-        mSubtitle.setOnClickListener(subtitleView -> {
+        mHeader.setOnClickListener(subtitleView -> {
             mNavigator.navigate(ProfileFragment.class, true);
             if (mDrawerLayout != null) mDrawerLayout.closeDrawer(mFragmentContainerView);
         });
 
         /* recyclerview items */
-        mNavigationDrawerItems = new ArrayList<>();
-        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_home), R.drawable.ic_light_latest_evaluation));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_new_evaluation), R.drawable.ic_light_new_evaluation));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_bookmark), R.drawable.ic_light_bookmark));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_my_evaluation), R.drawable.ic_light_my_evaluation));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(this.getString(R.string.nav_item_my_comment), R.drawable.ic_light_my_comment));
+        List<NavigationDrawerItem> mNavigationDrawerItems = new ArrayList<>();
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_home),          R.drawable.ic_light_latest_evaluation));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_new_evaluation),R.drawable.ic_light_new_evaluation));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_bookmark),      R.drawable.ic_light_bookmark));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_evaluation), R.drawable.ic_light_my_evaluation));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_comment),    R.drawable.ic_light_my_comment));
 
-
-        mNavigationDrawerAdapter = new NavigationDrawerAdapter(this.getActivity(), this.mNavigationDrawerItems);
+        mNavigationDrawerAdapter = new NavigationDrawerAdapter(mActivity, mNavigationDrawerItems);
         mNavigationDrawerAdapter.setClickCategoryCallback(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mDrawerList.setLayoutManager(layoutManager);
-        mDrawerList.setHasFixedSize(true);
-        mDrawerList.setAdapter(this.mNavigationDrawerAdapter);
-        this.select(mCurrentSelectedPosition, false);
+        mNavigationRecyclerView.setLayoutManager(layoutManager);
+        mNavigationRecyclerView.setHasFixedSize(true);
+        mNavigationRecyclerView.setAdapter(mNavigationDrawerAdapter);
+        selectDrawerItem(mCurrentSelectedPosition, false);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        outState.putInt(SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
-    private NavigationDrawerCallback mCallbacks;
-    private Navigator mNavigator;
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (NavigationDrawerCallback) activity;
-            mNavigator = (Navigator) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement OnClickCategory");
-        }
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallbacks = null;
-        mNavigator = null;
-    }
-
-    private boolean isDrawerOpened;
     private DrawerLayout mDrawerLayout;
-    private DrawerLayout.DrawerListener mDrawerListener;
     private View mFragmentContainerView;
-    public void setup(int fragment_id, DrawerLayout drawerLayout, Toolbar toolbar) {
-        mFragmentContainerView = (View) this.getActivity().findViewById(fragment_id).getParent();
+    public void setup(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
+        mFragmentContainerView = (View) mActivity.findViewById(fragmentId).getParent();
         mDrawerLayout = drawerLayout;
-        mDrawerListener = new DrawerLayout.SimpleDrawerListener() {
+        DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 if (!NavigationDrawerFragment.this.isAdded()) return;
                 if (!mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
-                    AppManager.getInstance().putBoolean(PREF_USER_LEARNED_DRAWER, true);
+                    AppManager.getInstance().putBoolean(USER_LEARNED_DRAWER, true);
                 }
-                mTracker.send(
-                    new HitBuilders.EventBuilder()
-                        .setAction(getString(R.string.navigation_drawer_open))
-                        .setCategory(getString(R.string.ga_category_drawer))
-                        .build()
-                );
+                mTracker.send(new HitBuilders.EventBuilder().setAction(getString(R.string.navigation_drawer_open)).setCategory(getString(R.string.ga_category_drawer)).build());
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                mTracker.send(
-                    new HitBuilders.EventBuilder()
-                        .setAction(getString(R.string.navigation_drawer_close))
-                        .setCategory(getString(R.string.ga_category_drawer))
-                        .build()
-                );
+                mTracker.send(new HitBuilders.EventBuilder().setAction(getString(R.string.navigation_drawer_close)).setCategory(getString(R.string.ga_category_drawer)).build());
             }
-
         };
         mDrawerLayout.setDrawerListener(mDrawerListener);
 
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) mDrawerLayout.openDrawer(mFragmentContainerView);
         else mDrawerLayout.closeDrawer(mFragmentContainerView);
 
-        toolbar.setNavigationOnClickListener(
-            this::onClick
-        );
+        toolbar.setNavigationOnClickListener(view -> {
+            if(mNavigationPriorClickListener == null) {
+                FloatingActionControl.getInstance().closeMenuButton(true);
+                this.open();
+            } else mNavigationPriorClickListener.onClick(view);
+        });
 
         /* setup Subtitle */
-        mSubtitleNickname.setPaintFlags(mSubtitleNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        User.getInstance().getNicknameObservable().subscribe(mSubtitleNickname::setText, error -> ErrorHandler.handle(error, this));
-        User.getInstance().getEmailObservable().subscribe(mSubtitleEmail::setText, error -> ErrorHandler.handle(error, this));
-    }
-
-    public void onClick(View view){
-        if(mNavigationPriorClickListener == null) {
-            FloatingActionControl.getInstance().closeMenuButton(true);
-            if (isDrawerOpened) this.close();
-            else this.open();
-        } else if(!isDrawerOpened) mNavigationPriorClickListener.onClick(view);
-
+        mUserNickname.setPaintFlags(mUserNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+        User.getInstance().getNicknameObservable().subscribe(mUserNickname::setText, error -> ErrorHandler.handle(error, this));
+        User.getInstance().getEmailObservable().subscribe(mUserEmail::setText, error -> ErrorHandler.handle(error, this));
     }
 
     public void setOnNavigationIconClickListener(View.OnClickListener listener) {
@@ -194,13 +166,13 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     /* Drawer Actions */
     @Override
     public void onNavigationDrawerItemSelected(int position, boolean navigate) {
-        this.select(position, navigate);
+        selectDrawerItem(position, navigate);
     }
-    public void select(int position, boolean navigate) {
+    public void selectDrawerItem(int position, boolean navigate) {
         mCurrentSelectedPosition = position;
         if (mDrawerLayout != null) mDrawerLayout.closeDrawer(mFragmentContainerView);
-        if (mCallbacks != null && navigate) mCallbacks.onNavigationDrawerItemSelected(mNavigationDrawerAdapter.getItemsPosition(position), true);
-        if (mDrawerList.getAdapter() != null) ((NavigationDrawerAdapter) mDrawerList.getAdapter()).selectPosition(position);
+        if (mNavigationDrawerCallback != null && navigate) mNavigationDrawerCallback.onNavigationDrawerItemSelected(mNavigationDrawerAdapter.getItemsPosition(position), true);
+        if (mNavigationRecyclerView.getAdapter() != null) ((NavigationDrawerAdapter) mNavigationRecyclerView.getAdapter()).selectPosition(position);
     }
     public boolean isOpened() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
@@ -213,19 +185,16 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
     public void update() {
         final String avatarUrl = User.getInstance().getAvatarUrl();
-        if (avatarUrl != null) Picasso.with(this.getActivity()).load(avatarUrl).transform(new CircleTransformation()).into(mSubtitleAvatar);
-        else Picasso.with(this.getActivity()).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(mSubtitleAvatar);
+        if (avatarUrl != null) Picasso.with(mActivity).load(avatarUrl).transform(new CircleTransformation()).into(mUserAvatar);
+        else Picasso.with(mActivity).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(mUserAvatar);
     }
 
-    /* Menu */
+    /* Menu : TODO - What exactly this does? */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_search:
-                // TODO : Transition to editText on ActionBar
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            case R.id.menu_search : return true;
+            default : return super.onOptionsItemSelected(item);
         }
     }
 }

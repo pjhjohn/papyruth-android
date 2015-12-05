@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papyruth.android.R;
-import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.squareup.picasso.Picasso;
 
@@ -24,18 +23,16 @@ import butterknife.InjectView;
  * as an adapter for List-type {@link RecyclerView} to provide global navigation for the application
  */
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<NavigationDrawerItem> mData;
+    private List<NavigationDrawerItem> mNavigationDrawerItems;
     private NavigationDrawerCallback mNavigationDrawerCallback;
     private View mSelectedView;
     private int mSelectedViewHolderPosition;
     private Context mContext;
 
-    private static final int HR_INDEX = 2;
-    private static final int VIEWTYPE_HR = 0x00;
-    private static final int VIEWTYPE_ITEM = 0x10;
+    private static final int POSITION_SEPARATOR = 2;
 
     public NavigationDrawerAdapter(Context context, List<NavigationDrawerItem> data) {
-        mData = data;
+        mNavigationDrawerItems = data;
         mContext = context;
     }
 
@@ -49,48 +46,35 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final RecyclerView.ViewHolder viewHolder;
-        if(viewType == VIEWTYPE_HR){
-            viewHolder = new VoidViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.hr_drawer, parent, false));
-
-        }else{
-            viewHolder = new NavigationDrawerItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
-            viewHolder.itemView.setClickable(true);
-            viewHolder.itemView.setOnClickListener(view -> {
-                if (mSelectedView != null) mSelectedView.setSelected(false);
-                mSelectedViewHolderPosition = viewHolder.getAdapterPosition();
-                mSelectedView = view;
-                if (mNavigationDrawerCallback != null)
-                    mNavigationDrawerCallback.onNavigationDrawerItemSelected(mSelectedViewHolderPosition, true);
-            });
-        }
-        return viewHolder;
+        switch (viewType) {
+            case NavigationDrawerItemSeparatorViewHolder.VIEWTYPE :
+                return new NavigationDrawerItemSeparatorViewHolder(LayoutInflater.from(mContext).inflate(R.layout.hr_drawer, parent, false));
+            case NavigationDrawerItemViewHolder.VIEWTYPE :
+                RecyclerView.ViewHolder viewholder = new NavigationDrawerItemViewHolder(LayoutInflater.from(mContext).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
+                viewholder.itemView.setClickable(true);
+                viewholder.itemView.setOnClickListener(view -> {
+                    if (mSelectedView != null) mSelectedView.setSelected(false);
+                    mSelectedViewHolderPosition = viewholder.getAdapterPosition();
+                    mSelectedView = view;
+                    if (mNavigationDrawerCallback != null) mNavigationDrawerCallback.onNavigationDrawerItemSelected(mSelectedViewHolderPosition, true);
+                });
+                break;
+        } return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(position != HR_INDEX) {
-            ((NavigationDrawerItemViewHolder) holder).bind(mData.get(this.getItemsPosition(position)));
-            if (mSelectedViewHolderPosition == position) {
-                if (mSelectedView != null) mSelectedView.setSelected(false);
-                mSelectedView = holder.itemView;
-                mSelectedView.setSelected(true);
-            }
+        if(position == POSITION_SEPARATOR) return;
+        ((NavigationDrawerItemViewHolder) holder).bind(mNavigationDrawerItems.get(this.getItemsPosition(position)));
+        if (mSelectedViewHolderPosition == position) {
+            if (mSelectedView != null) mSelectedView.setSelected(false);
+            mSelectedView = holder.itemView;
+            mSelectedView.setSelected(true);
         }
     }
 
-    public int getItemsPosition(int viewHolderPosition){
-        return  viewHolderPosition - (viewHolderPosition > HR_INDEX ? getItemOffset() : 0);
-    }
-
-    public int getItemOffset(){
-        return 1;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if(position == HR_INDEX) return VIEWTYPE_HR;
-        else return VIEWTYPE_ITEM;
+    public int getItemsPosition(int position) {
+        return position > POSITION_SEPARATOR ? position - 1 : position;
     }
 
     public void selectPosition(int position) {
@@ -99,26 +83,39 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @Override
-    public int getItemCount() {
-        return (mData != null ? mData.size() : 0) + getItemOffset();
+    public int getItemViewType(int position) {
+        return position == POSITION_SEPARATOR ? NavigationDrawerItemSeparatorViewHolder.VIEWTYPE : NavigationDrawerItemViewHolder.VIEWTYPE;
     }
 
+    @Override
+    public int getItemCount() {
+        return 1 + (mNavigationDrawerItems != null ? mNavigationDrawerItems.size() : 0);
+    }
+
+    /* ViewHolders */
+    public class NavigationDrawerItemSeparatorViewHolder extends RecyclerView.ViewHolder {
+        public static final int VIEWTYPE = 0x1;
+        public NavigationDrawerItemSeparatorViewHolder(View view) {
+            super(view);
+        }
+    }
     public class NavigationDrawerItemViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.nav_item_icon) protected ImageView mNavItemIcon;  // 54% #000000
-        @InjectView(R.id.nav_item_label) protected TextView mNavItemLabel; // Roboto Medium, 14sp, 87% #000000
-        private int mIconColor;
+        public static final int VIEWTYPE = 0x2;
+        @InjectView(R.id.navigation_drawer_item_icon)  protected ImageView mNavigationDrawerItemIcon; // 54% #000000
+        @InjectView(R.id.navigation_drawer_item_label) protected TextView mNavigationDrawerItemLabel; // Roboto Medium, 14sp, 87% #000000
+        private int mColorIconMaterial;
         private final Context mContext;
 
         public NavigationDrawerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             mContext = itemView.getContext();
-            mIconColor = mContext.getResources().getColor(R.color.icon_material);
+            mColorIconMaterial = mContext.getResources().getColor(R.color.icon_material);
         }
 
         public void bind(NavigationDrawerItem navigationDrawerItem) {
-            Picasso.with(mContext).load(navigationDrawerItem.getDrawableResourceId()).transform(new ColorFilterTransformation(mIconColor)).into(mNavItemIcon);
-            mNavItemLabel.setText(navigationDrawerItem.getLabel());
+            Picasso.with(mContext).load(navigationDrawerItem.getDrawableResourceId()).transform(new ColorFilterTransformation(mColorIconMaterial)).into(mNavigationDrawerItemIcon);
+            mNavigationDrawerItemLabel.setText(navigationDrawerItem.getLabel());
         }
     }
 }
