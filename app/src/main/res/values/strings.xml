@@ -156,7 +156,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="my_profile">My profile</string>
     <string name="exit">EXIT</string>
     <string name="opensourse_license">Open sourse License</string>
-    <string name="confirm_university_email">University email do not confirmed</string>
+    <string name="confirm_university_email">Email Not Confirmed</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

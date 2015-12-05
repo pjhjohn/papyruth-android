@@ -113,7 +113,7 @@ public class ProfileFragment extends Fragment {
         mUniversityEmailText.setText(User.getInstance().getUniversityEmail() != null ? User.getInstance().getUniversityEmail() : mResources.getString(R.string.label_university_email_need));
 
         if(!User.getInstance().getUniversityConfirmed()) {
-            mUniversityEmailText.setError(getResources().getString(R.string.confirm_university_email));
+            mUniversityEmailText.setText(R.string.confirm_university_email);
             mUniversityEmailText.setClickable(true);
             mUniversityEmailText.setOnClickListener(v -> {
                 AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.NEED_UNIVERSITY_CONFIRMATION);

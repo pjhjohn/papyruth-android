@@ -41,7 +41,7 @@
                 android:id="@+id/tos_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x7"
-                android:background="@drawable/button_background_settings">
+                android:background="@drawable/background_pressed_selector_white">
                 <ImageView
                     android:id="@+id/tos_icon"
                     android:layout_width="@dimen/baseline_x3"
@@ -75,7 +75,7 @@
                 android:id="@+id/osl_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x7"
-                android:background="@drawable/button_background_settings">
+                android:background="@drawable/background_pressed_selector_white">
                 <ImageView
                     android:id="@+id/osl_icon"
                     android:layout_width="@dimen/baseline_x3"
@@ -109,7 +109,7 @@
                 android:id="@+id/history_delete_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x7"
-                android:background="@drawable/button_background_settings">
+                android:background="@drawable/background_pressed_selector_white">
                 <ImageView
                     android:id="@+id/history_delete_icon"
                     android:layout_width="@dimen/baseline_x3"
@@ -143,7 +143,7 @@
                 android:id="@+id/signout_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x7"
-                android:background="@drawable/button_background_settings">
+                android:background="@drawable/background_pressed_selector_white">
                 <ImageView
                     android:id="@+id/signout_icon"
                     android:layout_width="@dimen/baseline_x3"

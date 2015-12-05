@@ -159,7 +159,7 @@
     <string name="hashtag_delete_title">해시태그 삭제</string>
     <string name="hashtag_delete_content">해당 해시태그를 삭제하시겠습니까?</string>
     <string name="confirm_delete">삭제</string>
-    <string name="confirm_university_email">학교 메일이 인증되지 않았습니다</string>
+    <string name="confirm_university_email">미인증 상태</string>
 
     <!-- loading -->
     <string name="loading_number_of_university">" 개의 대학에서"</string>
