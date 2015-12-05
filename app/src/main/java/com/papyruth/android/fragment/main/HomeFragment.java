@@ -61,9 +61,9 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
     @InjectView(R.id.home_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     @InjectView(R.id.home_recycler_view) protected RecyclerView mRecyclerView;
     @InjectView(R.id.home_empty_state)   protected FrameLayout mEmptyState;
-    protected CompositeSubscription mCompositeSubscription;
-    protected Toolbar mToolbar;
-    EvaluationItemsDetailAdapter mAdapter;
+    private CompositeSubscription mCompositeSubscription;
+    private Toolbar mToolbar;
+    private EvaluationItemsDetailAdapter mAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);

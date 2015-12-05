@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,10 +26,14 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -43,7 +48,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter, UniversityData> implements OnBack {
+public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemClickListener, OnBack {
     private AuthActivity mActivity;
     private Navigator mNavigator;
     private Tracker mTracker;
@@ -57,12 +62,18 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
 
     @InjectView (R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
     private CompositeSubscription mCompositeSubscription;
+    private List<UniversityData> mUniversities;
+    private UniversityAdapter mAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
         ButterKnife.inject(this, view);
         mCompositeSubscription = new CompositeSubscription();
-        this.setupRecyclerView(mUniversityRecyclerView);
+
+        mUniversities = new ArrayList<>();
+        mAdapter = new UniversityAdapter(mUniversities, this);
+        mUniversityRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 2));
+        mUniversityRecyclerView.setAdapter(mAdapter);
         return view;
     }
 
@@ -77,17 +88,16 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     @Override
     public void onResume() {
         super.onResume();
-        mCompositeSubscription.add(Api.papyruth()
+        Api.papyruth()
             .universities()
             .map(response -> response.universities)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(universities -> {
-                items.clear();
-                items.addAll(universities);
-                adapter.notifyDataSetChanged();
-            }, error -> ErrorHandler.handle(error, this))
-        );
+                mUniversities.clear();
+                mUniversities.addAll(universities);
+                mAdapter.notifyDataSetChanged();
+            }, error -> ErrorHandler.handle(error, this));
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
@@ -106,22 +116,12 @@ public class SignUpStep1Fragment extends RecyclerViewFragment<UniversityAdapter,
     }
 
     @Override
-    protected UniversityAdapter getAdapter () {
-        return new UniversityAdapter(items, this);
-    }
-
-    @Override
-    public RecyclerView.LayoutManager getRecyclerViewLayoutManager() {
-        return new GridLayoutManager(mActivity, 2);
-    }
-
-    @Override
     public void onRecyclerViewItemClick(View view, int position) {
         for(int i = 0; i < mUniversityRecyclerView.getChildCount(); i ++) mUniversityRecyclerView.getChildAt(i).setSelected(false);
         view.setSelected(true);
 
-        SignUpForm.getInstance().setUniversityId(items.get(position).id);
-        SignUpForm.getInstance().setImageUrl(items.get(position).image_url);
+        SignUpForm.getInstance().setUniversityId(mUniversities.get(position).id);
+        SignUpForm.getInstance().setImageUrl(mUniversities.get(position).image_url);
 
         final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
         String[] years = new String[length];

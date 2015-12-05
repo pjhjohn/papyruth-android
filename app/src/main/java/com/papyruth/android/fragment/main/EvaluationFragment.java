@@ -82,7 +82,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @InjectView(R.id.evaluation_empty_state)    protected FrameLayout mEmptyState;
     @InjectView(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription;
-    EvaluationAdapter mAdapter;
+    private EvaluationAdapter mAdapter;
     private boolean mCommentInputActive;
     private boolean mStandalone;
 
