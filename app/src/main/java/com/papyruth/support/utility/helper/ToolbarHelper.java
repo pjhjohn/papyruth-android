@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.Toolbar;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -48,7 +49,7 @@ public class ToolbarHelper {
 
     public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColorResourceId) {
         if(toolbar == null) return null;
-        return getColorTransitionAnimatorInner(toolbar, AppManager.getInstance().getMainToolbarColor(), toolbar.getContext().getResources().getColor(toColorResourceId));
+        return getColorTransitionAnimatorInner(toolbar, ((ColorDrawable) toolbar.getBackground()).getColor(), toolbar.getContext().getResources().getColor(toColorResourceId));
     }
 
     private static ValueAnimator getColorTransitionAnimatorInner(Toolbar toolbar, int fromColor, int toColor) {
@@ -61,7 +62,6 @@ public class ToolbarHelper {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 toolbar.setBackgroundColor(toColor);
-                AppManager.getInstance().setMainToolbarColor(toColor);
             }
         });
         return animColor;

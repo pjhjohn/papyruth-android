@@ -61,6 +61,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         mToolbar.setNavigationIcon(mMaterialMenuDrawable);
         mToolbar.inflateMenu(R.menu.main);
         mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar_red));
 
         mMenuItemSearch  = mToolbar.getMenu().findItem(AppConst.Menu.SEARCH);
         mMenuItemSearch.setOnMenuItemClickListener(item -> {

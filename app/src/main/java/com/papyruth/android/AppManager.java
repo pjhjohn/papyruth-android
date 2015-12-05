@@ -128,13 +128,4 @@ public class AppManager {
     public boolean contains(String key){
         return this.pref.contains(key);
     }
-
-    public int getMainToolbarColor() {
-        return this.mainToolbarColor;
-    }
-
-    public void setMainToolbarColor(int color) {
-        this.mainToolbarColor = color;
-    }
-
 }

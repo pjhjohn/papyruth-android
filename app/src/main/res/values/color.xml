@@ -83,6 +83,12 @@
     <color name="toolbar_blue">@color/colorchip_blue</color>
     <color name="toolbar_blue_highlight">@color/colorchip_blue_highlight</color>
 
+    <!--Status Bar-->
+    <color name="status_bar_evaluation">@color/toolbar_evaluation_highlight</color>
+    <color name="status_bar_red">@color/toolbar_red_highlight</color>
+    <color name="status_bar_green">@color/toolbar_green_highlight</color>
+    <color name="status_bar_blue">@color/toolbar_blue_highlight</color>
+
     <!--Floating Action Button-->
     <color name="fam_background">#ccffffff</color>
     <color name="fab_evaluation_normal">@color/toolbar_evaluation</color>
@@ -99,11 +105,12 @@
     <color name="fab_blue_progress">@color/toolbar_blue_highlight</color>
 
     <!--Inform ViewHolder-->
-    <color name="inform_course">@color/toolbar_green_highlight</color>
-    <color name="inform_evaluation">@color/toolbar_evaluation_highlight</color>
-    <color name="inform_evaluation_item_detail">@color/toolbar_red_highlight</color>
-    <color name="inform_my_comment">@color/toolbar_blue_highlight</color>
-    <color name="inform_my_evaluation">@color/toolbar_blue_highlight</color>
+    <color name="inform_course">@color/toolbar_green</color>
+    <color name="inform_evaluation_form">@color/toolbar_green</color>
+    <color name="inform_evaluation">@color/toolbar_evaluation</color>
+    <color name="inform_evaluation_item_detail">@color/toolbar_red</color>
+    <color name="inform_my_comment">@color/toolbar_blue</color>
+    <color name="inform_my_evaluation">@color/toolbar_blue</color>
 
     <!--Etc-->
     <color name="disabled">@color/white_80p</color>

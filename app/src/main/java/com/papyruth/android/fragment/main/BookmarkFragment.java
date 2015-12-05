@@ -16,19 +16,20 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.FavoriteData;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.R;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.helper.StatusBarHelper;
+import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 
 import java.util.ArrayList;
@@ -149,6 +150,7 @@ public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, C
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.toolbar.setTitle(R.string.toolbar_favorite);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true),

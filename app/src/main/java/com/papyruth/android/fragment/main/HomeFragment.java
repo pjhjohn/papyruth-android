@@ -20,26 +20,26 @@ import android.widget.FrameLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.EvaluationItemsDetailAdapter;
-import com.papyruth.android.R;
-import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.helper.MetricHelper;
+import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.Navigator;
-import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.navigator.OnBack;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -98,16 +98,18 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
     public void onResume() {
         super.onResume();
         mEvaluationOpened = false;
-        if(Evaluation.getInstance().getId() != null){
-            mEvaluationFragment = new EvaluationFragment();
-            openEvaluation(null, false);
-        } else setFloatingActionControl();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_recent));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_title_home);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
+
+        if(Evaluation.getInstance().getId() != null){
+            mEvaluationFragment = new EvaluationFragment();
+            openEvaluation(null, false);
+        } else setFloatingActionControl();
 
         mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
         mCompositeSubscription.add(getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
@@ -193,13 +195,13 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
                 if (mEvaluationFragment != null) {
                     mEvaluationFragment.setShowContentImmediately(true);
                     getFragmentManager().beginTransaction().add(R.id.evaluation_container, mEvaluationFragment).commit();
-
                     mEvaluationFragment.setEvaluationFloatingActionControl();
                 }
 
                 mEvaluationContainer.setY(0);
                 mToolbar.setY(-mToolbar.getHeight());
                 ToolbarHelper.hide(mToolbar);
+                StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_evaluation);
             }
         }catch (Exception e){
             ErrorHandler.handle(e, this);
@@ -261,6 +263,7 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
                         mEvaluationIsOccupying = true;
                         mEvaluationFragment.setEvaluationFloatingActionControl();
                         mEvaluationFragment.showContent(true);
+                        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_evaluation);
                     }
                 }
             });
@@ -305,6 +308,7 @@ public class HomeFragment extends ScrollableFragment implements RecyclerViewItem
                 mEvaluationIsOccupying = false;
                 setFloatingActionControl();
                 Evaluation.getInstance().clear();
+                StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
             }
         });
         mAnimatorSet.start();

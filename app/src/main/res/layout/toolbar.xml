@@ -3,7 +3,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorchip_green"
+    android:background="@color/toolbar_red"
     />
     <!--android:background="?attr/colorPrimary"-->
     <!--following properties are used for setting custom toolbar style-->
