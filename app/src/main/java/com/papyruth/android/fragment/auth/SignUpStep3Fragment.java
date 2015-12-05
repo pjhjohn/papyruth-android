@@ -24,6 +24,8 @@ import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -56,6 +58,7 @@ public class SignUpStep3Fragment extends Fragment {
         mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
+    @InjectView(R.id.signup_step3_container) protected NavigatableLinearLayout mContainer;
     @InjectView(R.id.signup_gender_radiogroup)        protected RadioGroup mRadioGroupGender;
     @InjectView(R.id.signup_realname_text)      protected EditText mTextRealname;
     @InjectView(R.id.signup_gender_icon)   protected ImageView mIconGender;
@@ -81,6 +84,10 @@ public class SignUpStep3Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mContainer.setOnBackListner(() -> {
+            this.mNavigator.navigate(SignUpStep2Fragment.class, false, Navigator.AnimatorType.SLIDE_TO_LEFT);
+            return true;
+        });
         Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
         Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));

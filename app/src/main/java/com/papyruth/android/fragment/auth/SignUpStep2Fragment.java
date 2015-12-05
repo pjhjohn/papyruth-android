@@ -28,6 +28,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.helper.PermissionHelper;
+import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
@@ -59,6 +60,7 @@ public class SignUpStep2Fragment extends Fragment {
         mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
+    @InjectView(R.id.signup_step2_container) protected NavigatableLinearLayout mContainer;
     @InjectView(R.id.signup_email_text)    protected EditText mTextEmail;
     @InjectView(R.id.signup_nickname_text) protected EditText mTextNickname;
     @InjectView(R.id.signup_email_icon)    protected ImageView mIconEmail;
@@ -86,6 +88,11 @@ public class SignUpStep2Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mContainer.setOnBackListner(() -> {
+            this.mNavigator.navigate(SignUpStep1Fragment.class, false, Navigator.AnimatorType.SLIDE_TO_LEFT);
+            return true;
+        });
+
         Picasso.with(mActivity).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconEmail);
         Picasso.with(mActivity).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconNickname);
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup2));

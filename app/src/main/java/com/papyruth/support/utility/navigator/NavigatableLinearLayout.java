@@ -2,6 +2,7 @@ package com.papyruth.support.utility.navigator;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
 /**
@@ -38,5 +39,21 @@ public class NavigatableLinearLayout extends LinearLayout {
     public void setYFraction(float yFraction) {
         int height = this.getContext().getResources().getDisplayMetrics().heightPixels;
         setY((height > 0) ? (yFraction * height) : 0);
+    }
+
+    private OnBack onBackListener;
+    public void setOnBackListner(OnBack onBackListner){
+        this.onBackListener = onBackListner;
+    }
+
+    @Override
+    public boolean dispatchKeyEventPreIme(KeyEvent event) {
+        if(event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+            if(onBackListener != null) {
+                onBackListener.onBack();
+                return true;
+            }
+        }
+        return super.dispatchKeyEventPreIme(event);
     }
 }

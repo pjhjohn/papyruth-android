@@ -37,6 +37,8 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ public class SignUpStep4Fragment extends Fragment {
         mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
+    @InjectView(R.id.signup_step4_container) protected NavigatableLinearLayout mContainer;
     @InjectView(R.id.signup_password_text)      protected EditText mTextPassword;
     @InjectView(R.id.signup_password_icon) protected ImageView mIconPassword;
     @InjectView(R.id.signup_term)    protected TextView mTextAgreement;
@@ -96,6 +99,10 @@ public class SignUpStep4Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mContainer.setOnBackListner(() -> {
+            this.mNavigator.navigate(SignUpStep3Fragment.class, false, Navigator.AnimatorType.SLIDE_TO_LEFT);
+            return true;
+        });
         Picasso.with(mActivity).load(R.drawable.ic_light_password).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconPassword);
         InputMethodManager imm = ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE));
         final View focusedView = mActivity.getWindow().getCurrentFocus();
