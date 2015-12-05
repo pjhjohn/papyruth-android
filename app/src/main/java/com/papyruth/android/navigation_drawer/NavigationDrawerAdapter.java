@@ -58,7 +58,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     mSelectedView = view;
                     if (mNavigationDrawerCallback != null) mNavigationDrawerCallback.onNavigationDrawerItemSelected(mSelectedViewHolderPosition, true);
                 });
-                break;
+                return viewholder;
         } return null;
     }
 
