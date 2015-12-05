@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_translucent_54p"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:background="@color/transparent"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:inputType="textEmailAddress|textNoSuggestions"
+            android:inputType="textEmailAddress"
             android:textSize="@dimen/basefont_x1.3"
             android:hint="@string/hint_email"/>
     </RelativeLayout>
@@ -65,7 +65,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@color/transparent"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="text"
             android:textSize="@dimen/basefont_x1.3"
             android:hint="@string/hint_nickname"/>
     </RelativeLayout>

@@ -2,21 +2,21 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/white_90p"/><!-- Fill Color -->
-            <stroke android:width="1dp" android:color="@color/white_90p"/><!-- Border Color -->
+            <solid android:color="#33000000"/><!-- Fill Color -->
+            <stroke android:width="1dp" android:color="@color/white_80p"/><!-- Border Color -->
             <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp"/>
         </shape>
     </item>
     <item android:state_selected="true">
         <shape>
-            <solid android:color="@color/white_80p"/><!-- Fill Color -->
+            <solid android:color="#66000000"/><!-- Fill Color -->
             <stroke android:width="1dp" android:color="@color/white_80p"/><!-- Border Color -->
             <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp"/>
         </shape>
     </item>
     <item android:state_pressed="false" android:state_selected="false">
         <shape>
-            <solid android:color="@color/white"/><!-- Fill Color -->
+            <solid android:color="@color/transparent"/><!-- Fill Color -->
             <stroke android:width="1px" android:color="@color/white_80p"/><!-- Border Color -->
             <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp"/>
         </shape>

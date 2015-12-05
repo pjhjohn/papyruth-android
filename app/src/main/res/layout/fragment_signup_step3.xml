@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_translucent_54p"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:background="@color/transparent"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:inputType="text|textNoSuggestions"
+            android:inputType="text"
             android:hint="@string/hint_realname"
             android:textSize="@dimen/basefont_x1.3"/>
     </RelativeLayout>

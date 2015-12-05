@@ -1,5 +1,6 @@
 package com.papyruth.android.activity;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,7 +32,6 @@ import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.search.SearchToolbar;
-import com.papyruth.support.utility.softkeyboard.SoftKeyboardActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +40,7 @@ import butterknife.InjectView;
 import rx.Observable;
 import timber.log.Timber;
 
-public class MainActivity extends SoftKeyboardActivity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, Error.OnReportToGoogleAnalytics {
+public class MainActivity extends Activity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, Error.OnReportToGoogleAnalytics {
     @InjectView(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
     @InjectView(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
     @InjectView(R.id.search_toolbar_root)      protected LinearLayout mSearchToolbarRoot;
@@ -53,7 +53,6 @@ public class MainActivity extends SoftKeyboardActivity implements NavigationDraw
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
-        this.attachSoftKeyboardListeners();
         mTracker = ((PapyruthApplication) getApplication()).getTracker();
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);

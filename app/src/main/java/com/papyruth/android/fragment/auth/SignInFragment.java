@@ -61,25 +61,20 @@ public class SignInFragment extends Fragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
     private Tracker mTracker;
-    private ImageView mApplicationLogoHorizontal, mApplicationLogo;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mNavigator = (Navigator) activity;
         mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
-        mApplicationLogoHorizontal = (ImageView) mActivity.findViewById(R.id.auth_app_logo_horizontal);
-        mApplicationLogo = (ImageView) mActivity.findViewById(R.id.auth_app_logo);
     }
 
-    @InjectView (R.id.signin_email_text)            protected AutoCompleteTextView mTextEmail;
-    @InjectView (R.id.signin_password_text)         protected EditText mTextPassword;
-    @InjectView (R.id.signin_button)                protected Button mButtonSignIn;
-    @InjectView (R.id.signin_signup_button)         protected Button mButtonSignUp;
-    @InjectView (R.id.signin_password_recovery)     protected TextView mTextPasswordRecovery;
-    @InjectView (R.id.material_progress_large)                     protected View mProgress;
-
+    @InjectView (R.id.signin_email_text)        protected AutoCompleteTextView mTextEmail;
+    @InjectView (R.id.signin_password_text)     protected EditText mTextPassword;
+    @InjectView (R.id.signin_button)            protected Button mButtonSignIn;
+    @InjectView (R.id.signin_signup_button)     protected Button mButtonSignUp;
+    @InjectView (R.id.signin_password_recovery) protected TextView mTextPasswordRecovery;
+    @InjectView (R.id.material_progress_large)  protected View mProgress;
     private CompositeSubscription mCompositeSubscriptions;
 
     @Override
@@ -104,14 +99,6 @@ public class SignInFragment extends Fragment {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signin));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().clear();
-        mActivity.setOnShowSoftKeyboard(keyboardHeight -> {
-            mApplicationLogo.setVisibility(View.GONE);
-            mApplicationLogoHorizontal.setVisibility(View.VISIBLE);
-        });
-        mActivity.setOnHideSoftKeyboard(() -> {
-            mApplicationLogo.setVisibility(View.VISIBLE);
-            mApplicationLogoHorizontal.setVisibility(View.GONE);
-        });
         mCompositeSubscriptions.add(Observable.combineLatest(
             WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
             WidgetObservable.text(mTextPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
@@ -123,6 +110,8 @@ public class SignInFragment extends Fragment {
             .startWith(false)
             .subscribe(mButtonSignIn::setEnabled, error -> ErrorHandler.handle(error, this))
         );
+
+        mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNIN);
 
         mCompositeSubscriptions.add(
             Observable.mergeDelayError(
@@ -139,17 +128,13 @@ public class SignInFragment extends Fragment {
 
         mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
             unused -> {
-                mApplicationLogo.setVisibility(View.VISIBLE);
                 mNavigator.navigate(SignUpStep1Fragment.class, true);
                 mActivity.animateApplicationLogo(false);
             }, error -> ErrorHandler.handle(error, this)
         ));
 
         mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
-            .subscribe(
-                event -> InputDialog.show(getActivity())
-                , error -> ErrorHandler.handle(error, this)
-            )
+            .subscribe(event -> InputDialog.show(mActivity), error -> ErrorHandler.handle(error, this))
         );
     }
 

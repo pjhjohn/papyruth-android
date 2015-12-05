@@ -25,8 +25,6 @@ import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.RecyclerViewFragment;
-import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
@@ -101,12 +99,11 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
-        mActivity.setOnShowSoftKeyboard(null);
-        mActivity.setOnHideSoftKeyboard(null);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
-        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused ->
-            ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0)
-        );
+        Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
+            if (mUniversityRecyclerView != null)
+                ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0);
+        });
         mActivity.setCurrentSignUpStep(AppConst.Navigator.Auth.SIGNUP_STEP1);
 
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();

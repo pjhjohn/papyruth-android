@@ -173,8 +173,6 @@ public class SignUpStep4Fragment extends Fragment {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup4));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green).hide(true);
-        mActivity.setOnShowSoftKeyboard(null);
-        mActivity.setOnHideSoftKeyboard(null);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
         mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 

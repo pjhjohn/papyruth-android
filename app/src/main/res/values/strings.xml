@@ -186,7 +186,7 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="word_search">search</string>
     <string name="word_university">university</string>
     <string name="word_professor">professor</string>
-    <string name="word_signup">Sign Up</string>
+    <string name="word_signup">SIGN UP</string>
     <string name="please_connect_to_internet">Please check your network status</string>
 
     <string name="label_email">EMAIL</string>

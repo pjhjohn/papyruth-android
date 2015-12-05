@@ -1,12 +1,10 @@
 package com.papyruth.android.activity;
 
-import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -24,10 +22,10 @@ import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
 import com.papyruth.support.utility.error.Error;
+import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
-import com.papyruth.support.utility.softkeyboard.SoftKeyboardActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -36,9 +34,8 @@ import timber.log.Timber;
 /**
  * Activity For Authentication.
  */
-public class AuthActivity extends SoftKeyboardActivity implements com.papyruth.support.utility.navigator.Navigator, Error.OnReportToGoogleAnalytics {
+public class AuthActivity extends Activity implements com.papyruth.support.utility.navigator.Navigator, Error.OnReportToGoogleAnalytics {
     @InjectView(R.id.fac)                       protected FloatingActionControlContainer mFloatingActionControlContainer;
-    @InjectView(R.id.auth_app_logo)             protected ImageView mApplicationLogo;
     @InjectView(R.id.auth_app_logo_horizontal)  protected ImageView mApplicationLogoHorizontal;
     @InjectView(R.id.auth_signup_progress)      protected ProgressBar mSignUpProgress;
     @InjectView(R.id.auth_signup_label)         protected TextView mSignUpLabel;
@@ -49,7 +46,6 @@ public class AuthActivity extends SoftKeyboardActivity implements com.papyruth.s
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
-        this.attachSoftKeyboardListeners();
         mTracker = ((PapyruthApplication) getApplication()).getTracker();
         ButterKnife.inject(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
@@ -80,34 +76,8 @@ public class AuthActivity extends SoftKeyboardActivity implements com.papyruth.s
     }
 
     public void animateApplicationLogo(boolean toSignInFragment) {
-        mApplicationLogoHorizontal.setVisibility(View.GONE);
-
-        ViewGroup.LayoutParams lpApplicationLogo = mApplicationLogo.getLayoutParams();
-        ViewGroup.LayoutParams lpSignUpLabel = mSignUpLabel.getLayoutParams();
-        final int appLogoHeight = lpApplicationLogo.height;
-        final int appLogoWidth  = lpApplicationLogo.width;
-        final float labelTargetHeight = getResources().getDimension(R.dimen.baseline_x4);
-
-        ValueAnimator animApplicationLogo = toSignInFragment? ValueAnimator.ofFloat(1, 2) : ValueAnimator.ofFloat(1, 0.5f);
-        animApplicationLogo.addUpdateListener(
-            animation -> {
-                lpApplicationLogo.height = (int) (appLogoHeight * (float) animation.getAnimatedValue());
-                lpApplicationLogo.width = (int) (appLogoWidth * (float) animation.getAnimatedValue());
-                mApplicationLogo.setLayoutParams(lpApplicationLogo);
-            });
-
-        ValueAnimator animSignUpLabel = toSignInFragment? ValueAnimator.ofFloat(1, 0) : ValueAnimator.ofFloat(0, 1);
-        animSignUpLabel.addUpdateListener(
-            animation -> {
-                lpSignUpLabel.height = (int) (labelTargetHeight * (float) animation.getAnimatedValue());
-                mSignUpLabel.setLayoutParams(lpSignUpLabel);
-                mSignUpLabel.setAlpha((float) animation.getAnimatedValue());
-            }
-        );
-
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animApplicationLogo, animSignUpLabel);
-        animSet.start();
+        if(toSignInFragment) AnimatorHelper.FADE_OUT(mSignUpLabel).start();
+        else AnimatorHelper.FADE_IN(mSignUpLabel).start();
     }
 
     /* Finishes Activity unless FragmentNavigator handled the event */

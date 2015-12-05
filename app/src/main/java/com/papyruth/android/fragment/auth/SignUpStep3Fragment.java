@@ -92,8 +92,6 @@ public class SignUpStep3Fragment extends Fragment {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
-        mActivity.setOnShowSoftKeyboard(null);
-        mActivity.setOnHideSoftKeyboard(null);
         if(mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
 
         mCompositeSubscription.add(
