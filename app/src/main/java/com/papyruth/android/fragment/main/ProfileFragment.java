@@ -16,14 +16,15 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
-import com.papyruth.support.opensource.materialdialog.AlertDialog;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
@@ -92,6 +93,7 @@ public class ProfileFragment extends Fragment {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_profile);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 

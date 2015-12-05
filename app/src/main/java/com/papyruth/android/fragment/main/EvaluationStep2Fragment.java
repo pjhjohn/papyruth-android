@@ -18,13 +18,14 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.EvaluationForm;
-import com.papyruth.android.PapyruthApplication;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 
@@ -121,6 +122,7 @@ public class EvaluationStep2Fragment extends Fragment {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);

@@ -11,15 +11,16 @@ import android.view.ViewGroup;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.OpenSourceLicenseData;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.OpenSourceLicensesAdapter;
-import com.papyruth.android.R;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.OpenSourceLicenseDialog;
-import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.helper.StatusBarHelper;
+import com.papyruth.support.utility.helper.ToolbarHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,7 @@ public class OpenSourceLicensesFragment extends RecyclerViewFragment<OpenSourceL
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_osl);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
         FloatingActionControl.getInstance().hide(true);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);

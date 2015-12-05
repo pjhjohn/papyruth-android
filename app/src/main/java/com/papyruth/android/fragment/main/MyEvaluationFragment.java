@@ -6,18 +6,19 @@ import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
+import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
+import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.MyEvaluationItemsAdapter;
-import com.papyruth.android.R;
-import com.papyruth.android.model.EvaluationData;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
+import com.papyruth.support.utility.helper.StatusBarHelper;
+import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 
 import java.util.List;
@@ -59,6 +60,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 

@@ -35,7 +35,6 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
-import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -57,7 +56,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack {
     private Tracker mTracker;

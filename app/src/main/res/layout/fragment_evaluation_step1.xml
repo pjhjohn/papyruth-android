@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/baseline_x7"
             android:padding="@dimen/baseline_x2"
-            android:background="@color/toolbar_green_highlight"
+            android:background="@color/inform_evaluation_form"
             android:singleLine="true"
             android:textSize="18sp"
             android:textColor="@color/white"/>

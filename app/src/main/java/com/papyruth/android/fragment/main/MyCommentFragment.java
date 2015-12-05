@@ -6,18 +6,19 @@ import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.MyCommentData;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.recyclerview.adapter.MyCommentItemsAdapter;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.helper.ToolbarHelper;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
+import com.papyruth.support.utility.helper.StatusBarHelper;
+import com.papyruth.support.utility.helper.ToolbarHelper;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -58,6 +59,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.nav_item_my_comment);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
