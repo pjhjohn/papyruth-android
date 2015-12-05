@@ -25,6 +25,7 @@ import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.navigator.NavigatableFrameLayout;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
@@ -40,6 +41,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 
 /**
@@ -59,6 +61,7 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
     }
 
     @InjectView (R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
+    @InjectView (R.id.signup_step1_container) protected NavigatableFrameLayout mContainer;
     private CompositeSubscription mCompositeSubscription;
     private List<UniversityData> mUniversities;
     private UniversityAdapter mAdapter;

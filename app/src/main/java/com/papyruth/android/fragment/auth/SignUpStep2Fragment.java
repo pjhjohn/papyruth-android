@@ -89,7 +89,7 @@ public class SignUpStep2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         mContainer.setOnBackListner(() -> {
-            this.mNavigator.navigate(SignUpStep1Fragment.class, false, Navigator.AnimatorType.SLIDE_TO_LEFT);
+            this.mNavigator.back();
             return true;
         });
 

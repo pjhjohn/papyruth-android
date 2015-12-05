@@ -100,7 +100,7 @@ public class SignUpStep4Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         mContainer.setOnBackListner(() -> {
-            this.mNavigator.navigate(SignUpStep3Fragment.class, false, Navigator.AnimatorType.SLIDE_TO_LEFT);
+            this.mNavigator.back();
             return true;
         });
         Picasso.with(mActivity).load(R.drawable.ic_light_password).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconPassword);

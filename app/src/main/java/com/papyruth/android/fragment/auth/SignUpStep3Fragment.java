@@ -86,7 +86,7 @@ public class SignUpStep3Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         mContainer.setOnBackListner(() -> {
-            this.mNavigator.navigate(SignUpStep2Fragment.class, false, Navigator.AnimatorType.SLIDE_TO_LEFT);
+            this.mNavigator.back();
             return true;
         });
         Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
