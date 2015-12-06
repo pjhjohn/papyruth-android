@@ -38,7 +38,6 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
-import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -103,6 +102,7 @@ public class SignUpStep4Fragment extends Fragment {
             this.mNavigator.back();
             return true;
         });
+        Timber.d("%s", SignUpForm.getInstance().toString());
         Picasso.with(mActivity).load(R.drawable.ic_light_password).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconPassword);
         InputMethodManager imm = ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE));
         final View focusedView = mActivity.getWindow().getCurrentFocus();
@@ -199,14 +199,14 @@ public class SignUpStep4Fragment extends Fragment {
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
                 if (mSubmitButtonEnabled) {
-                    SignUpForm.getInstance().setPassword(mTextPassword.getText().toString());
+                    SignUpForm.getInstance().setValidPassword();
                     submitSignUpForm();
                 }
             }
         ));
 
         if(mTextPassword.getText().toString().isEmpty()) {
-            final String password = SignUpForm.getInstance().getPassword();
+            final String password = SignUpForm.getInstance().getTempSavePassword();
             if(password != null) mTextPassword.setText(password);
             else mTextPassword.getText().clear();
         } else mTextPassword.setText(mTextPassword.getText());
@@ -225,18 +225,21 @@ public class SignUpStep4Fragment extends Fragment {
                 return event;
             })
             .map(event -> event.text().toString())
-            .map(RxValidator.getErrorMessagePassword)
+            .map(password -> {
+                SignUpForm.getInstance().setTempSavePassword(password);
+                return RxValidator.getErrorMessagePassword.call(password);
+            })
             .observeOn(AndroidSchedulers.mainThread());
     }
 
     private void submitSignUpForm() {
         if(validateSignUpForm()) {
             Api.papyruth().users_sign_up(
-                SignUpForm.getInstance().getEmail(),
-                SignUpForm.getInstance().getPassword(),
-                SignUpForm.getInstance().getRealname(),
-                SignUpForm.getInstance().getNickname(),
-                SignUpForm.getInstance().getIsBoy(),
+                SignUpForm.getInstance().getValidEmail(),
+                SignUpForm.getInstance().getValidPassword(),
+                SignUpForm.getInstance().getValidRealname(),
+                SignUpForm.getInstance().getValidNickname(),
+                SignUpForm.getInstance().getValidIsBoy(),
                 SignUpForm.getInstance().getUniversityId(),
                 SignUpForm.getInstance().getEntranceYear()
             )
@@ -297,19 +300,19 @@ public class SignUpStep4Fragment extends Fragment {
         } else if(form.getEntranceYear() == null) {
             alertMsg = getResources().getString(R.string.field_invalid_entrance_year);
             movePosition = AppConst.Navigator.Auth.SIGNUP_STEP1;
-        } else if(form.getEmail() == null || !RxValidator.isValidEmail.call(form.getEmail())) {
+        } else if(form.getValidEmail() == null || !RxValidator.isValidEmail.call(form.getValidEmail())) {
             alertMsg = getResources().getString(R.string.field_invalid_email);
             movePosition = AppConst.Navigator.Auth.SIGNUP_STEP2;
-        } else if(form.getNickname() == null || !RxValidator.isValidNickname.call(form.getNickname())) {
+        } else if(form.getValidNickname() == null || !RxValidator.isValidNickname.call(form.getValidNickname())) {
             alertMsg = getResources().getString(R.string.field_invalid_nickname);
             movePosition = AppConst.Navigator.Auth.SIGNUP_STEP2;
-        } else if(form.getRealname() == null || !RxValidator.isValidRealname.call(form.getRealname())) {
+        } else if(form.getValidRealname() == null || !RxValidator.isValidRealname.call(form.getValidRealname())) {
             alertMsg = getResources().getString(R.string.field_invalid_realname);
             movePosition = AppConst.Navigator.Auth.SIGNUP_STEP3;
-        } else if(form.getIsBoy() == null) {
+        } else if(form.getValidIsBoy() == null) {
             alertMsg = getResources().getString(R.string.field_invalid_gender);
             movePosition = AppConst.Navigator.Auth.SIGNUP_STEP3;
-        } else if(form.getPassword() == null) {
+        } else if(form.getValidPassword() == null) {
             alertMsg = getResources().getString(R.string.field_invalid_password);
         } else {
             return true;

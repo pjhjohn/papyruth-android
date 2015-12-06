@@ -25,7 +25,6 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
-import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -89,6 +88,7 @@ public class SignUpStep3Fragment extends Fragment {
             this.mNavigator.back();
             return true;
         });
+        Timber.d("%s", SignUpForm.getInstance().toString());
         Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
         Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
@@ -102,12 +102,12 @@ public class SignUpStep3Fragment extends Fragment {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
 
         if(mTextRealname.getText().toString().isEmpty()) {
-            final String realname = SignUpForm.getInstance().getRealname();
+            final String realname = SignUpForm.getInstance().getTempSaveRealname();
             if(realname != null) mTextRealname.setText(realname);
             else mTextRealname.getText().clear();
         } else mTextRealname.setText(mTextRealname.getText());
         if(mRadioGroupGender.getCheckedRadioButtonId() < 0) {
-            final Boolean isboy = SignUpForm.getInstance().getIsBoy();
+            final Boolean isboy = SignUpForm.getInstance().getTempSaveIsBoy();
             if(isboy != null) mRadioGroupGender.check(isboy? R.id.signup_gender_radio_male : R.id.signup_gender_radio_female);
         } else mRadioGroupGender.check(mRadioGroupGender.getCheckedRadioButtonId());
 
@@ -141,9 +141,8 @@ public class SignUpStep3Fragment extends Fragment {
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
                 if (mNextButtonEnabled) {
-                    SignUpForm.getInstance().setRealname(mTextRealname.getText().toString());
-                    final int checkedGenderRadioButtonId = mRadioGroupGender.getCheckedRadioButtonId();
-                    if (checkedGenderRadioButtonId >= 0) SignUpForm.getInstance().setIsBoy(checkedGenderRadioButtonId == R.id.signup_gender_radio_male);
+                    SignUpForm.getInstance().setValidRealname();
+                    SignUpForm.getInstance().setValidIsBoy();
                     mNavigator.navigate(SignUpStep4Fragment.class, true);
                 }
             }
@@ -163,10 +162,13 @@ public class SignUpStep3Fragment extends Fragment {
                 return event;
             })
             .map(event -> event.text().toString())
-            .map(RxValidator.getErrorMessageRealname)
+            .map(realname -> {
+                SignUpForm.getInstance().setTempSaveRealname(realname);
+                return RxValidator.getErrorMessageRealname.call(realname);
+            })
             .observeOn(AndroidSchedulers.mainThread());
 
-        if(SignUpForm.getInstance().getRealname() != null)
+        if(SignUpForm.getInstance().getTempSaveRealname() != null)
             observable =  observable.startWith(RxValidator.getErrorMessageRealname.call(realnameTextView.getText().toString()));
 
         return observable;
@@ -187,6 +189,10 @@ public class SignUpStep3Fragment extends Fragment {
                 }
             }
         }
-        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> event.view().getId()).startWith(mRadioGroupGender.getCheckedRadioButtonId());
+        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> {
+            if(event.view().getId() > 0) SignUpForm.getInstance().setTempSaveIsBoy(event.view().getId() == R.id.signup_gender_radio_male);
+            else SignUpForm.getInstance().setTempSaveIsBoy(null);
+            return event.view().getId();
+        }).startWith(mRadioGroupGender.getCheckedRadioButtonId());
     }
 }

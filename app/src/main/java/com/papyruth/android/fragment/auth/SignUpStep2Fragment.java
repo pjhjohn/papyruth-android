@@ -43,6 +43,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
@@ -73,7 +74,7 @@ public class SignUpStep2Fragment extends Fragment {
         ButterKnife.inject(this, view);
         mCompositeSubscription = new CompositeSubscription();
         List<String> emails = getEmails();
-        if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getEmail() == null) SignUpForm.getInstance().setEmail(emails.get(0));
+        if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getTempSaveEmail() == null) SignUpForm.getInstance().setTempSaveEmail(emails.get(0));
         return view;
     }
 
@@ -92,6 +93,7 @@ public class SignUpStep2Fragment extends Fragment {
             this.mNavigator.back();
             return true;
         });
+        Timber.d("%s", SignUpForm.getInstance().toString());
 
         Picasso.with(mActivity).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconEmail);
         Picasso.with(mActivity).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconNickname);
@@ -124,20 +126,20 @@ public class SignUpStep2Fragment extends Fragment {
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
                 if (mNextButtonEnabled) {
-                    SignUpForm.getInstance().setEmail(mTextEmail.getText().toString());
-                    SignUpForm.getInstance().setNickname(mTextNickname.getText().toString());
+                    SignUpForm.getInstance().setValidEmail();
+                    SignUpForm.getInstance().setValidNickname();
                     mNavigator.navigate(SignUpStep3Fragment.class, true);
                 }
             }
         ));
 
         if(mTextEmail.getText().toString().isEmpty()) {
-            final String email = SignUpForm.getInstance().getEmail();
+            final String email = SignUpForm.getInstance().getTempSaveEmail();
             if(email != null) mTextEmail.setText(email);
             else mTextEmail.getText().clear();
         } else mTextEmail.setText(mTextEmail.getText());
         if(mTextNickname.getText().toString().isEmpty()) {
-            final String nickname = SignUpForm.getInstance().getNickname();
+            final String nickname = SignUpForm.getInstance().getTempSaveNickname();
             if(nickname != null) mTextNickname.setText(nickname);
             else mTextNickname.getText().clear();
         } else mTextNickname.setText(mTextNickname.getText());
@@ -157,6 +159,7 @@ public class SignUpStep2Fragment extends Fragment {
             })
             .map(event -> event.text().toString())
             .flatMap(email -> {
+                SignUpForm.getInstance().setTempSaveEmail(email);
                 final String errorMessage = RxValidator.getErrorMessageEmail.call(email);
                 if (errorMessage == null) return Api.papyruth()
                     .users_sign_up_validate("email", email)
@@ -174,6 +177,7 @@ public class SignUpStep2Fragment extends Fragment {
             })
             .map(event -> event.text().toString())
             .flatMap(nickname -> {
+                SignUpForm.getInstance().setTempSaveNickname(nickname);
                 final String errorMessage = RxValidator.getErrorMessageNickname.call(nickname);
                 if (errorMessage == null) return Api.papyruth()
                     .users_sign_up_validate("nickname", nickname)
@@ -184,8 +188,8 @@ public class SignUpStep2Fragment extends Fragment {
     }
 
     private boolean emailNotAssigned() {
-        return SignUpForm.getInstance().getEmail() == null
-            || SignUpForm.getInstance().getEmail().length() <= 0
+        return SignUpForm.getInstance().getTempSaveEmail() == null
+            || SignUpForm.getInstance().getTempSaveEmail().length() <= 0
             || mTextEmail.getText() == null
             || mTextEmail.getText().length() <= 0;
     }
@@ -215,7 +219,7 @@ public class SignUpStep2Fragment extends Fragment {
         if (requestCode != PermissionHelper.PERMISSION_GET_ACCOUNTS) return;
         if (PermissionHelper.verifyPermissions(grantResults)) {
             List<String> emails = getEmails();
-            if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getEmail() == null) SignUpForm.getInstance().setEmail(emails.get(0));
+            if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getTempSaveEmail() == null) SignUpForm.getInstance().setTempSaveEmail(emails.get(0));
         } else PermissionHelper.showRationalDialog(mActivity, PermissionHelper.getRationalMessage(mActivity, PermissionHelper.PERMISSION_GET_ACCOUNTS));
     }
 }
