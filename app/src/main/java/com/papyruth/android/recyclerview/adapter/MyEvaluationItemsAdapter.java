@@ -1,87 +1,220 @@
 package com.papyruth.android.recyclerview.adapter;
 
+import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
-import com.papyruth.android.AppTracker;
-import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.AppManager;
+import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
+import com.papyruth.android.model.Footer;
+import com.papyruth.android.model.unique.User;
+import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
+import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.recyclerview.viewholder.MyEvaluationItemViewHolder;
-import com.papyruth.android.recyclerview.viewholder.PlaceholderViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
+import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String USER_LEARNED_INFORM = "MyEvaluationAdapter.mUserLearnedInform"; // Inform is UNIQUE per Adapter.
-    private RecyclerViewItemClickListener mRecyclerViewItemClickListener;
-    private List<EvaluationData> mEvaluationDataList;
-    private boolean mUserLearnedInform;
-    private boolean mShowPlaceholder;
-
-    public MyEvaluationItemsAdapter(List<EvaluationData> initialEvaluationDataList, RecyclerViewItemClickListener listener) {
-        mRecyclerViewItemClickListener = listener;
-        mEvaluationDataList = initialEvaluationDataList;
-        mUserLearnedInform = AppManager.getInstance().getBoolean(USER_LEARNED_INFORM, false);
-        mShowPlaceholder = false;
-    }
-
-    public void setShowPlaceholder(boolean show){
-        mShowPlaceholder = show;
+public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter{
+    private static final String HIDE_INFORM = "MyEvaluationAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
+    private List<EvaluationData> mMyEvaluation;
+    private SwipeRefreshLayout mSwipeRefresh;
+    private View mEmptyState;
+    private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
+    private boolean mHideInform;
+    private boolean mHideShadow;
+    private Integer mPage;
+    private int mIndexHeader; // INDEX 0
+    private int mIndexInform; // UNDER HEADER unless user learned inform, -1 otherwise
+    private int mIndexSingle; // UNDER INFORM if exists, -1 otherwise
+    private int mIndexShadow; // UNDER SINGLE if exists, -1 otherwise
+    private int mIndexContent;// UNDER SHADOW if exists.
+    private int mIndexFooter; // AT LAST
+    private FrameLayout mShadow;
+    private View mFooterBorder;
+    private RelativeLayout mFooterMaterialProgressBar;
+    private ImageView mFooterFullyLoadedIndicator;
+//
+    public MyEvaluationItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, View emptystate, RecyclerViewItemObjectClickListener listener) {
+        mSwipeRefresh = swiperefresh;
+        mEmptyState = emptystate;
+        mMyEvaluation = new ArrayList<>();
+        mRecyclerViewItemObjectClickListener = listener;
+        mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
+        mPage = 1;
+        mIndexHeader = 0;
+        mIndexInform = mHideInform ? -1 : 1;
+        mIndexSingle = -1;
+        mIndexShadow = mHideShadow ? -1 : 1 + (mHideInform ? 0 : 1);
+        mIndexContent = 1 + (mHideShadow ? 0 : 1) + (mHideInform ? 0 : 1);
+        mIndexFooter = mMyEvaluation.size() + mIndexContent;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-            if(!mUserLearnedInform && position == 1) {
+        RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
+            if (!mHideInform && position == mIndexInform) {
                 String action = null;
-                switch(view.getId()) {
-                    case R.id.inform_btn_optional :
-                        AppManager.getInstance().putBoolean(USER_LEARNED_INFORM, true);
+                switch (view.getId()) {
+                    case R.id.inform_btn_optional:
+                        AppManager.getInstance().putBoolean(HIDE_INFORM, true);
                         action = parent.getResources().getString(R.string.ga_event_hide_always);
-                    case R.id.inform_btn_positive :
-                        this.notifyItemRemoved(position);
-                        mUserLearnedInform = true;
-                        if(action == null) action = parent.getResources().getString(R.string.ga_event_hide_once);
+                    case R.id.inform_btn_positive:
+                        notifyItemRemoved(position);
+                        mHideInform = true;
+                        mHideShadow = true;
+                        if (action == null)
+                            action = parent.getResources().getString(R.string.ga_event_hide_once);
                         AppTracker.getInstance().getTracker().send(
                             new HitBuilders.EventBuilder(parent.getResources().getString(R.string.ga_category_inform), action).build()
                         );
+                        reconfigure();
                         break;
-                    default : Timber.d("Unexpected view #%x", view.getId());
+                    default:
+                        Timber.d("Unexpected view #%x", view.getId());
                 }
-            } else mRecyclerViewItemClickListener.onRecyclerViewItemClick(view, position - getItemOffset());
+            } else if (position == mIndexFooter) {
+                if (mFullyLoaded)
+                    mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY);
+            } else
+                mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mMyEvaluation.get(position - mIndexContent));
         });
+        if (viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder)
+            mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
+        if (viewHolder instanceof FooterViewHolder) {
+            mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
+            mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
+            mFooterFullyLoadedIndicator = (ImageView) viewHolder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
+        }
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position <= 0) return;
-        if (position == (mUserLearnedInform ? 0 : 1)) ((InformViewHolder) holder).bind(R.string.inform_home, R.color.inform_my_evaluation);
-        else if (mEvaluationDataList.isEmpty() && mShowPlaceholder) ((PlaceholderViewHolder) holder).bind(R.string.no_data_my_evaluation);
-        else ((MyEvaluationItemViewHolder) holder).bind(mEvaluationDataList.get(position - getItemOffset()));
-    }
-
-    public int getItemOffset() {
-        return 1 + (mUserLearnedInform ? 0 : 1) + (mEvaluationDataList.isEmpty() && mShowPlaceholder ? 1 : 0);
+        if (position <= mIndexHeader) return;
+        if (position == mIndexInform) {
+            ((InformViewHolder) holder).bind(R.string.inform_home, R.color.inform_my_comment);
+            return;
+        }
+        if (position == mIndexSingle) return;
+        if (position == mIndexShadow) return;
+        if (position == mIndexFooter) return;
+        ((MyEvaluationItemViewHolder) holder).bind(mMyEvaluation.get(position - mIndexContent));
     }
 
     @Override
     public int getItemCount() {
-        if (mEvaluationDataList == null) return getItemOffset();
-        return mEvaluationDataList.size() + getItemOffset();
+        return mIndexFooter + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position <= 0) return ViewHolderFactory.ViewType.HEADER;
-        if (position == (mUserLearnedInform ? 0 : 1)) return ViewHolderFactory.ViewType.INFORM;
-        else if (mEvaluationDataList.isEmpty() && mShowPlaceholder) return ViewHolderFactory.ViewType.PLACEHOLDER;
-        else return ViewHolderFactory.ViewType.MY_EVALUATION_ITEM;
+        if (position <= mIndexHeader) return ViewHolderFactory.ViewType.HEADER;
+        if (position == mIndexInform) return ViewHolderFactory.ViewType.INFORM;
+        if (position == mIndexSingle) ;
+        if (position == mIndexShadow) return ViewHolderFactory.ViewType.SHADOW;
+        if (position == mIndexFooter) return ViewHolderFactory.ViewType.FOOTER;
+        return ViewHolderFactory.ViewType.MY_EVALUATION_ITEM;
+    }
+
+
+    private void reconfigure(){
+        if(mMyEvaluation.isEmpty()){
+            mIndexHeader = 0;
+            mIndexInform = mHideInform? -1 : 1;
+            mIndexSingle = -1;
+            mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
+            mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
+            mIndexFooter = mMyEvaluation.size() + mIndexContent;
+            notifyDataSetChanged();
+            AnimatorHelper.FADE_IN(mEmptyState).start();
+            AnimatorHelper.FADE_OUT(mFooterBorder).start();
+            mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+        }else{
+            mPage ++;
+            mIndexHeader = 0;
+            mIndexInform = mHideInform? -1 : 1;
+            mIndexSingle = -1;
+            mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
+            mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
+            mIndexFooter = mMyEvaluation.size() + mIndexContent;
+            notifyDataSetChanged();
+            AnimatorHelper.FADE_OUT(mEmptyState).start();
+            AnimatorHelper.FADE_IN(mFooterBorder).start();
+            mShadow.setBackgroundResource(R.drawable.shadow_white);
+        }
+        if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
+        else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
+    }
+
+
+    @Override
+    public void refresh() {
+        mSwipeRefresh.setRefreshing(true);
+        Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), mPage = 1)
+            .map(response -> response.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(myEvaluations -> {
+                mSwipeRefresh.setRefreshing(false);
+                mMyEvaluation.clear();
+                mMyEvaluation.addAll(myEvaluations);
+                mLoading = false;
+                mFullyLoaded = false;
+                reconfigure();
+            }, error -> {
+                mSwipeRefresh.setRefreshing(false);
+                ErrorHandler.handle(error, this);
+                error.printStackTrace();
+            });
+    }
+    private Boolean mLoading;
+    private Boolean mFullyLoaded;
+    @Override
+    public void loadMore() {
+        if(mLoading != null && mLoading) return;
+        mLoading = true;
+        if(mFullyLoaded != null && mFullyLoaded) return;
+        mFullyLoaded = false;
+        if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
+        Api.papyruth()
+            .users_me_evaluations(
+                User.getInstance().getAccessToken(),
+                mPage == null ? null : mPage
+            )
+            .map(response -> response.evaluations)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(myEvaluation -> {
+                if (myEvaluation != null) {
+                    if(myEvaluation.isEmpty()) mFullyLoaded = true;
+                    else mMyEvaluation.addAll(myEvaluation);
+                }
+                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                mLoading = false;
+                reconfigure();
+            }, error -> {
+                ErrorHandler.handle(error, this);
+                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                mLoading = false;
+            });
     }
 }
