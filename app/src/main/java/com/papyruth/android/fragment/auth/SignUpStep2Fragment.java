@@ -8,9 +8,11 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -93,7 +95,6 @@ public class SignUpStep2Fragment extends Fragment {
             this.mNavigator.back();
             return true;
         });
-        Timber.d("%s", SignUpForm.getInstance().toString());
 
         Picasso.with(mActivity).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconEmail);
         Picasso.with(mActivity).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconNickname);
@@ -125,13 +126,23 @@ public class SignUpStep2Fragment extends Fragment {
 
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
-                if (mNextButtonEnabled) {
-                    SignUpForm.getInstance().setValidEmail();
-                    SignUpForm.getInstance().setValidNickname();
-                    mNavigator.navigate(SignUpStep3Fragment.class, true);
-                }
+                proceedNextStep();
             }
         ));
+        mTextEmail.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_NEXT) {
+                mTextNickname.requestFocus();
+                return true;
+            }
+            return false;
+        });
+        mTextNickname.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_NEXT) {
+                proceedNextStep();
+                return true;
+            }
+            return false;
+        });
 
         if(mTextEmail.getText().toString().isEmpty()) {
             final String email = SignUpForm.getInstance().getTempSaveEmail();
@@ -148,6 +159,14 @@ public class SignUpStep2Fragment extends Fragment {
             mTextEmail.requestFocus();
             ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextEmail, InputMethodManager.SHOW_FORCED);
         });
+    }
+
+    private void proceedNextStep(){
+        if (mNextButtonEnabled) {
+            SignUpForm.getInstance().setValidEmail();
+            SignUpForm.getInstance().setValidNickname();
+            mNavigator.navigate(SignUpStep3Fragment.class, true);
+        }
     }
 
     private boolean mNextButtonEnabled;

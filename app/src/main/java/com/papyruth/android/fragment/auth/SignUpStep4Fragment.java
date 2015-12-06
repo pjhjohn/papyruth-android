@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -102,7 +103,6 @@ public class SignUpStep4Fragment extends Fragment {
             this.mNavigator.back();
             return true;
         });
-        Timber.d("%s", SignUpForm.getInstance().toString());
         Picasso.with(mActivity).load(R.drawable.ic_light_password).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconPassword);
         InputMethodManager imm = ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE));
         final View focusedView = mActivity.getWindow().getCurrentFocus();
@@ -198,12 +198,17 @@ public class SignUpStep4Fragment extends Fragment {
 
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
-                if (mSubmitButtonEnabled) {
-                    SignUpForm.getInstance().setValidPassword();
-                    submitSignUpForm();
-                }
+                proceedSubmit();
             }
         ));
+
+        mTextPassword.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_NEXT) {
+                proceedSubmit();
+                return true;
+            }
+            return false;
+        });
 
         if(mTextPassword.getText().toString().isEmpty()) {
             final String password = SignUpForm.getInstance().getTempSavePassword();
@@ -215,6 +220,13 @@ public class SignUpStep4Fragment extends Fragment {
             if(mTextPassword != null) mTextPassword.requestFocus();
             ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextPassword, InputMethodManager.SHOW_FORCED);
         });
+    }
+
+    private void proceedSubmit(){
+        if (mSubmitButtonEnabled) {
+            SignUpForm.getInstance().setValidPassword();
+            submitSignUpForm();
+        }
     }
 
     private boolean mSubmitButtonEnabled;

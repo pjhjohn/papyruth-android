@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,7 +89,6 @@ public class SignUpStep3Fragment extends Fragment {
             this.mNavigator.back();
             return true;
         });
-        Timber.d("%s", SignUpForm.getInstance().toString());
         Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
         Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
@@ -138,13 +138,17 @@ public class SignUpStep3Fragment extends Fragment {
             }, Throwable::printStackTrace)
         );
 
+        mTextRealname.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_NEXT) {
+                proceedNextStep();
+                return true;
+            }
+            return false;
+        });
+
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
             unused -> {
-                if (mNextButtonEnabled) {
-                    SignUpForm.getInstance().setValidRealname();
-                    SignUpForm.getInstance().setValidIsBoy();
-                    mNavigator.navigate(SignUpStep4Fragment.class, true);
-                }
+                proceedNextStep();
             }
         ));
 
@@ -152,6 +156,14 @@ public class SignUpStep3Fragment extends Fragment {
             if(mTextRealname != null) mTextRealname.requestFocus();
             ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
         });
+    }
+
+    private void proceedNextStep(){
+        if (mNextButtonEnabled) {
+            SignUpForm.getInstance().setValidRealname();
+            SignUpForm.getInstance().setValidIsBoy();
+            mNavigator.navigate(SignUpStep4Fragment.class, true);
+        }
     }
 
     private boolean mNextButtonEnabled;
