@@ -43,8 +43,8 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     protected int page = 1;
     private Integer commentPosition = null;
 
-    @InjectView(R.id.recyclerview) protected RecyclerView recyclerView;
-    @InjectView (R.id.swipe) protected SwipeRefreshLayout swipeRefresh;
+    @InjectView(R.id.common_recycler_view) protected RecyclerView recyclerView;
+    @InjectView (R.id.common_swipe_refresh) protected SwipeRefreshLayout swipeRefresh;
     @InjectView (R.id.material_progress_large) protected View progress;
     protected CompositeSubscription subscriptions;
     protected Toolbar toolbar;
@@ -100,7 +100,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     }
 
 
-    @InjectView(R.id.evaluation_container) protected FrameLayout slaveContainer;
+    @InjectView(R.id.common_evaluation_container) protected FrameLayout slaveContainer;
     protected EvaluationFragment slave;
     protected Boolean  slaveIsOccupying;
     protected Boolean isOpenSlave;

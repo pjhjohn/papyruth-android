@@ -9,19 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/common_swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/swipe">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview"
+            android:layout_height="match_parent">
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                android:layout_gravity="left|top" />
+                android:background="@color/transparent">
+                <include layout="@layout/empty_state_home"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/common_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_gravity="top"/>
+            </FrameLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
         <FrameLayout
-            android:id="@+id/evaluation_container"
+            android:id="@+id/common_evaluation_container"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </FrameLayout>
