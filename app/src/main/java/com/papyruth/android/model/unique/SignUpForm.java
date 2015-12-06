@@ -1,5 +1,10 @@
 package com.papyruth.android.model.unique;
 
+import com.papyruth.android.model.UniversityData;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by SSS on 2015-07-19.
  */
@@ -10,6 +15,8 @@ public class SignUpForm {
         return SignUpForm.instance;
     }
 
+    private List<UniversityData> universityList;
+
     private Integer university_id;
     private String image_url;
     private Integer entrance_year;
@@ -18,6 +25,7 @@ public class SignUpForm {
     private SignUpFormData validSignUpFormData;
 
     private SignUpForm(){
+        universityList = new ArrayList<>();
         this.tempSavedFormData = new SignUpFormData();
         this.validSignUpFormData = new SignUpFormData();
         this.clear();
@@ -26,9 +34,14 @@ public class SignUpForm {
         this.university_id = null;
         this.entrance_year = null;
         this.image_url  = null;
+        this.universityList.clear();
         this.tempSavedFormData.clear();
         this.validSignUpFormData.clear();
     }
+
+    public List<UniversityData> getUniversityList() { return universityList; }
+    public void setUniversityList(List<UniversityData> universityList) { this.universityList = universityList; }
+
     public Integer getUniversityId() {return university_id;}
     public Integer getEntranceYear() {return entrance_year;}
     public String getImageUrl() {return image_url;}

@@ -25,6 +25,7 @@ import com.papyruth.android.AppManager;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
+import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.InputDialog;
@@ -98,6 +99,7 @@ public class SignInFragment extends Fragment {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signin));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNIN);
+        SignUpForm.getInstance().clear();
         FloatingActionControl.getInstance().clear();
         mCompositeSubscriptions.add(Observable.combineLatest(
             WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),

@@ -27,6 +27,8 @@ public class UniversityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((UniversityViewHolder) holder).bind(mUniversityDataList.get(position));
+        if(mSelectedPosition != null)
+            holder.itemView.setSelected(position == mSelectedPosition);
     }
 
     @Override
@@ -38,5 +40,10 @@ public class UniversityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         return ViewHolderFactory.ViewType.UNIVERSITY;
+    }
+
+    private Integer mSelectedPosition;
+    public void setSelected(int position){
+        mSelectedPosition = position;
     }
 }

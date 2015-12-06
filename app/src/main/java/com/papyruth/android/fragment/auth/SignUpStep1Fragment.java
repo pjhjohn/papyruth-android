@@ -101,16 +101,40 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
 
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> mNavigator.navigate(SignUpStep2Fragment.class, true)));
 
-        Api.papyruth()
-            .universities()
-            .map(response -> response.universities)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(universities -> {
-                mUniversities.clear();
-                mUniversities.addAll(universities);
-                mAdapter.notifyDataSetChanged();
-            }, error -> ErrorHandler.handle(error, this));
+        if(SignUpForm.getInstance().getUniversityList().size() < 1) {
+            Api.papyruth()
+                .universities()
+                .map(response -> response.universities)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(universities -> {
+                    notifyUniversityChanged(universities);
+                    SignUpForm.getInstance().setUniversityList(universities);
+                }, error -> ErrorHandler.handle(error, this));
+        }else{
+            notifyUniversityChanged(SignUpForm.getInstance().getUniversityList());
+        }
+
+    }
+
+    private void notifyUniversityChanged(List<UniversityData> universities){
+        mUniversities.clear();
+        mUniversities.addAll(universities);
+        mAdapter.notifyDataSetChanged();
+        if(SignUpForm.getInstance().getUniversityId() != null){
+            this.mAdapter.setSelected(selectedUniversityItem(universities, SignUpForm.getInstance().getUniversityId()));
+        }
+    }
+
+    private int selectedUniversityItem(List<UniversityData> universities, int id){
+        for(int i = 0; i < universities.size(); i++){
+            if(universities.get(i).id == id) {
+                Timber.d("selected item : %s", i);
+                return i;
+            }
+        }
+        Timber.d("not selected : %s", id);
+        return -1;
     }
 
     @Override
