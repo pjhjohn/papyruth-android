@@ -78,17 +78,10 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mLabelOverall.setText(R.string.label_point_overall);
         setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
 
-        if(mEvaluationId != null) Api.papyruth()
-            .get_evaluation_hashtag(User.getInstance().getAccessToken(), mEvaluationId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                AnimatorHelper.FADE_OUT(mProgressbar).start();
-                this.mHashtags.setText(Hashtag.getHashtag(response.hashtags));
-            }, error -> {
-                AnimatorHelper.FADE_OUT(mProgressbar).start();
-                ErrorHandler.handle(error, this);
-            });
+        if(evaluation.hashtags != null) {
+            this.mHashtags.setText(Hashtag.getHashtag(evaluation.hashtags));
+            AnimatorHelper.FADE_OUT(mProgressbar).start();
+        }
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.request_user_vote == 1) setVoteStatus(VoteStatus.UP);

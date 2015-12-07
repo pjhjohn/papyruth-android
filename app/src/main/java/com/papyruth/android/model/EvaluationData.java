@@ -1,5 +1,8 @@
 package com.papyruth.android.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by pjhjohn on 2015-05-10.
  */
@@ -23,6 +26,12 @@ public class EvaluationData {
     public String avatar_url = null;
     public Integer request_user_vote = null; // 1 for up-vote, 0 for down-vote, null for neither.
     public String category;
+    public List<String> hashtags = null;
+
+    public void setHashtags(List<String> hashtags){
+        this.hashtags = new ArrayList<>();
+        this.hashtags.addAll(hashtags);
+    }
 
     @Override
     public String toString() {
