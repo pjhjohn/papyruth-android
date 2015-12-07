@@ -18,19 +18,14 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationFragment;
-import com.papyruth.android.model.EvaluationData;
-import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
-import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.IAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.MetricHelper;
 import com.papyruth.support.utility.helper.StatusBarHelper;
@@ -41,7 +36,6 @@ import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickList
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
