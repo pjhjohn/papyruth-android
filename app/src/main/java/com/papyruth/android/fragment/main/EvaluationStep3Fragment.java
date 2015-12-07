@@ -182,8 +182,8 @@ public class EvaluationStep3Fragment extends Fragment {
             WidgetObservable.text(this.bodyText)
                 .map(RxValidator.toString)
                 .map(body -> {
-                    if(EvaluationForm.getInstance().isModifyMode())
-                        EvaluationForm.getInstance().setEdit(true);
+                    if(EvaluationForm.getInstance().isEditMode())
+                        EvaluationForm.getInstance().setEdited(true);
                     EvaluationForm.getInstance().setBody(body);
                     return body;
                 })
@@ -243,8 +243,8 @@ public class EvaluationStep3Fragment extends Fragment {
         EvaluationForm.getInstance().addHashtag(Hashtag.removeHashPrefix(text));
         drawHashtag();
 
-        if(EvaluationForm.getInstance().isModifyMode())
-            EvaluationForm.getInstance().setEdit(true);
+        if(EvaluationForm.getInstance().isEditMode())
+            EvaluationForm.getInstance().setEdited(true);
         this.showFAB(EvaluationForm.getInstance().isCompleted());
         return true;
     }
@@ -285,7 +285,7 @@ public class EvaluationStep3Fragment extends Fragment {
     }
 
     private void submitNewEvaluation() {
-        this.submitEvaluation(EvaluationForm.getInstance().isModifyMode())
+        this.submitEvaluation(EvaluationForm.getInstance().isEditMode())
             .filter(response -> response.success)
             .map(response -> {
                 EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);

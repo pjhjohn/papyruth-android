@@ -66,8 +66,8 @@ public class RxValidator {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if(fromUserOnly && !fromUser) return;
-                    if(EvaluationForm.getInstance().isModifyMode() && !EvaluationForm.getInstance().isEdit())
-                        EvaluationForm.getInstance().setEdit(true);
+                    if(EvaluationForm.getInstance().isEditMode() && !EvaluationForm.getInstance().isEdited())
+                        EvaluationForm.getInstance().setEdited(true);
                     observer.onNext(progress);
                 }
 

@@ -3,4 +3,6 @@
     android:id="@+id/evaluation_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/toolbar_evaluation"/>
+    android:background="@color/toolbar_evaluation"
+    android:paddingRight="@dimen/baseline_x0.5"
+    android:paddingEnd="@dimen/baseline_x0.5"/>
