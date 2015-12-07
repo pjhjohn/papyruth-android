@@ -60,6 +60,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mMyComments = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
         mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
+        mHideShadow = mHideInform;
         mPage = 1;
         mIndexHeader = 0;
         mIndexInform = mHideInform? -1 : 1;

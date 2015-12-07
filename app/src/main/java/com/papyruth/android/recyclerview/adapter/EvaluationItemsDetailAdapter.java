@@ -61,6 +61,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
         mEvaluations = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
         mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
+        mHideShadow = mHideInform;
         mSinceId = null;
         mIndexHeader = 0;
         mIndexInform = mHideInform? -1 : 1;
