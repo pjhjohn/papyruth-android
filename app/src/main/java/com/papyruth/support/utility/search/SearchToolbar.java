@@ -331,6 +331,9 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         mSelectedCandidate = new Candidate();
         return this;
     }
+    public boolean isReadyToSearch(){
+        return (mSelectedCandidate != null && ( mSelectedCandidate.lecture_id != null || mSelectedCandidate.professor_id != null))|| mSelectedQuery != null;
+    }
     public int getMarginTop() {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
         return params.topMargin;

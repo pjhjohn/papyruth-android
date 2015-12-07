@@ -8,17 +8,21 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.papyruth.android.R;
+import com.papyruth.android.fragment.main.EvaluationStep2Fragment;
 import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.CourseItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
 import java.util.ArrayList;
@@ -44,9 +48,13 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
     private FrameLayout mShadow;
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
+    private Context mContext;
+    private Navigator mNavigator;
 
-    public EvaluationSearchAdapter(Context context, View emptystate, RecyclerViewItemObjectClickListener listener) {
+    public EvaluationSearchAdapter(Context context, View emptystate, Navigator navigator,RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
+        mContext = context;
+        mNavigator = navigator;
         mCourses = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
         mHideInform = true;
@@ -147,14 +155,34 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(courses -> {
                 if (courses != null) {
-                    mCourses.clear();
-                    mCourses.addAll(courses);
+                    if (candidate.professor_id != null && candidate.lecture_id != null && courses.size() > 0)
+                        nextEvaluatonStep(courses.get(0));
+                    else {
+                        mCourses.clear();
+                        mCourses.addAll(courses);
+                    }
                 }
-                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                if (mFooterMaterialProgressBar != null)
+                    AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 reconfigure();
             }, error -> {
                 ErrorHandler.handle(error, this);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
             });
+    }
+    public void nextEvaluatonStep(CourseData course){
+        EvaluationForm.getInstance().setCourseId(course.id);
+        EvaluationForm.getInstance().setLectureName(course.name);
+        EvaluationForm.getInstance().setProfessorName(course.professor_name);
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), course.id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                if (response.success) {
+                    mNavigator.navigate(EvaluationStep2Fragment.class, true);
+                } else {
+                    EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
+                    AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_POSSIBLE);
+                }
+            }, error -> ErrorHandler.handle(error, this));
     }
 }

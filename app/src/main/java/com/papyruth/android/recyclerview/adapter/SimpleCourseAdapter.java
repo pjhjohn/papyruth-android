@@ -8,8 +8,11 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.papyruth.android.R;
+import com.papyruth.android.fragment.main.CourseFragment;
+import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
+import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.CourseItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
@@ -18,6 +21,7 @@ import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
 
@@ -44,9 +48,13 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private FrameLayout mShadow;
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
+    private Context mContext;
+    private Navigator mNavigator;
 
-    public SimpleCourseAdapter(Context context, View emptystate, RecyclerViewItemObjectClickListener listener) {
+    public SimpleCourseAdapter(Context context, View emptystate, Navigator navigator, RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
+        mContext = context;
+        mNavigator = navigator;
         mCourses = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
         mHideInform = true;
@@ -133,12 +141,13 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void loadSearchResult() {
         if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
+        Candidate candidate = SearchToolbar.getInstance().getSelectedCandidate();
         Api.papyruth()
             .search_search(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
-                SearchToolbar.getInstance().getSelectedCandidate().lecture_id,
-                SearchToolbar.getInstance().getSelectedCandidate().professor_id,
+                candidate.lecture_id,
+                candidate.professor_id,
                 SearchToolbar.getInstance().getSelectedQuery()
             )
             .map(response -> response.courses)
@@ -146,14 +155,22 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(courses -> {
                 if (courses != null) {
-                    mCourses.clear();
-                    mCourses.addAll(courses);
+                    if (candidate.professor_id != null && candidate.lecture_id != null && courses.size() > 0) {
+                        Course.getInstance().update(courses.get(0));
+                        candidate.clear();
+                        this.mNavigator.navigate(CourseFragment.class, true);
+                    } else {
+                        mCourses.clear();
+                        mCourses.addAll(courses);
+                    }
                 }
-                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                if (mFooterMaterialProgressBar != null)
+                    AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 reconfigure();
             }, error -> {
                 ErrorHandler.handle(error, this);
-                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                if (mFooterMaterialProgressBar != null)
+                    AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
             });
     }
 }

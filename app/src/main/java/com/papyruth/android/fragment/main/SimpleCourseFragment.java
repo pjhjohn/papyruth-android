@@ -77,7 +77,7 @@ public class SimpleCourseFragment extends Fragment implements RecyclerViewItemOb
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         mSwipeRefresh.setEnabled(false);
 
-        mAdapter = new SimpleCourseAdapter(getActivity(), mEmptyState, this);
+        mAdapter = new SimpleCourseAdapter(getActivity(), mEmptyState, this.mNavigator, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -110,7 +110,8 @@ public class SimpleCourseFragment extends Fragment implements RecyclerViewItemOb
             unused -> mNavigator.navigate(EvaluationStep1Fragment.class, true),
             error -> ErrorHandler.handle(error, this)
         );
-        mAdapter.loadSearchResult();
+        if(SearchToolbar.getInstance().isReadyToSearch())
+            mAdapter.loadSearchResult();
     }
 
     @Override

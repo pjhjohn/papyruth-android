@@ -73,7 +73,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewIte
         mQueryButton.setText(R.string.toolbar_search);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
-        mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyState, this);
+        mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyState, this.mNavigator, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         return view;
@@ -90,7 +90,7 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewIte
 
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
-        this.nextEvaluatonStep(((CourseData) object));
+        mAdapter.nextEvaluatonStep(((CourseData) object));
 
         ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
@@ -115,22 +115,6 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewIte
             .setItemClickListener((v, position) -> mAdapter.searchCourse(SearchToolbar.getInstance().getCandidates().get(position), null))
             .setOnVisibilityChangedListener(visible -> mQueryButton.setVisibility(visible ? View.GONE : View.VISIBLE))
             .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new Candidate(), SearchToolbar.getInstance().getSelectedQuery()));
-    }
-
-    private void nextEvaluatonStep(CourseData course){
-        EvaluationForm.getInstance().setCourseId(course.id);
-        EvaluationForm.getInstance().setLectureName(course.name);
-        EvaluationForm.getInstance().setProfessorName(course.professor_name);
-        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), course.id)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                if (response.success) {
-                    this.mNavigator.navigate(EvaluationStep2Fragment.class, true);
-                } else {
-                    EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
-                    AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_POSSIBLE);
-                }
-            }, error -> ErrorHandler.handle(error, this));
     }
 
     @Override
