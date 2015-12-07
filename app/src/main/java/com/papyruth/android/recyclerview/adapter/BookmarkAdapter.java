@@ -146,7 +146,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), mPage)
+        Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), mPage = 1)
             .map(response -> response.favorites)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

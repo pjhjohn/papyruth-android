@@ -100,7 +100,11 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
-        setFloatingActionControl();
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+            unused -> this.mNavigator.navigate(EvaluationStep1Fragment.class, true),
+            error -> ErrorHandler.handle(error, this)
+        );
 
             mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
             mCompositeSubscription.add(
@@ -120,11 +124,4 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
         }
     }
 
-    private void setFloatingActionControl(){
-        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> this.mNavigator.navigate(EvaluationStep1Fragment.class, true),
-            error -> ErrorHandler.handle(error, this)
-        );
-    }
 }
