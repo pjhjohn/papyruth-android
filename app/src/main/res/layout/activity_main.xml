@@ -1,44 +1,37 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/navigation_drawer_layout"
     android:fitsSystemWindows="true">
     <FrameLayout
         android:id="@+id/activity_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
         <FrameLayout
             android:id="@+id/main_navigator"
-            android:focusable="true"
-            android:clickable="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:clickable="true"/>
         <include layout="@layout/fac"/>
         <include layout="@layout/fab_morphed_comment_input"/>
         <include layout="@layout/toolbar"/>
         <include layout="@layout/toolbar_search"/>
-
     </FrameLayout>
-
     <!--Navigation Drawer-->
     <com.papyruth.support.utility.customview.ScrimInsetsFrameLayout
         android:id="@+id/navigation_drawer_container"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:layout_gravity="start"
-        app:insetForeground="#4000"
-        android:elevation="10dp">
+        android:elevation="10dp"
+        app:insetForeground="#4000">
         <fragment
             android:id="@+id/navigation_drawer"
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             android:name="com.papyruth.android.navigation_drawer.NavigationDrawerFragment"
             app:layout="@layout/fragment_navigation_drawer"/>
     </com.papyruth.support.utility.customview.ScrimInsetsFrameLayout>

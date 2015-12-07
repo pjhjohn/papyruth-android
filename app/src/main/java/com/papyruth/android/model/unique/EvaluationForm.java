@@ -19,8 +19,8 @@ public class EvaluationForm {
     }
 
     /* FLAG */
-    private boolean isEdit;
-    private boolean modifyMode;
+    private boolean isEdited;
+    private boolean editMode;
     private Integer evaluationId;
 
     /* STEP 1*/
@@ -48,8 +48,8 @@ public class EvaluationForm {
     public Integer getPointClarity () {  return pointClarity; }
     public String getBody() {  return body; }
     public List<String> getHashtag() {  return hashtag; }
-    public boolean isEdit() { return isEdit; }
-    public boolean isModifyMode() { return modifyMode; }
+    public boolean isEdited() { return isEdited; }
+    public boolean isEditMode() { return editMode; }
 
     public void setEvaluationId(Integer evaluationId) { this.evaluationId = evaluationId; }
 
@@ -65,8 +65,7 @@ public class EvaluationForm {
         this.hashtag.clear();
         this.hashtag.addAll(hashtag);
     }
-    public void setEdit(boolean isEdit) { this.isEdit = isEdit; }
-    public void setModifyMode(boolean modifyMode) { this.modifyMode = modifyMode; }
+    public void setEdited(boolean isEdit) { this.isEdited = isEdit; }
 
     public void addHashtag(String hashtag){ this.hashtag.add(hashtag); }
     public boolean removeHashtag(String text){
@@ -77,8 +76,8 @@ public class EvaluationForm {
         return false;
     }
 
-    public void initForEdit(Evaluation evaluation){
-        this.modifyMode = true;
+    public void initForEdit(Evaluation evaluation) {
+        this.editMode = true;
         this.evaluationId = evaluation.getId();
         this.courseId = evaluation.getCourseId();
         this.lectureName = evaluation.getLectureName();
@@ -90,8 +89,8 @@ public class EvaluationForm {
         this.body = evaluation.getBody();
         this.hashtag = evaluation.getHashTag();
     }
-    public void initForEdit(EvaluationData evaluation){
-        this.modifyMode = true;
+    public void initForEdit(EvaluationData evaluation) {
+        this.editMode = true;
         this.evaluationId = evaluation.id;
         this.courseId = evaluation.course_id;
         this.lectureName = evaluation.lecture_name;
@@ -103,42 +102,35 @@ public class EvaluationForm {
         this.body = evaluation.body;
     }
 
-    public void clear() {
-        this.clear(false);
-    }
-
     public void free(){
         clear();
         EvaluationForm.instance = null;
     }
-    public EvaluationForm clear(boolean soft) {
-        if(!soft) {
-            this.lectureName        = null;
-            this.professorName      = null;
-            this.courseId           = null;
-        }
+    public EvaluationForm clear() {
+        this.lectureName            = null;
+        this.professorName          = null;
+        this.courseId               = null;
         this.pointOverall           = null;
         this.pointGpaSatisfaction   = null;
         this.pointEasiness          = null;
         this.pointClarity           = null;
         this.body                   = null;
-        if(hashtag == null)
-            this.hashtag = new ArrayList<>();
-        this.hashtag.clear();
-        this.isEdit = false;
-        this.modifyMode = false;
+        if(hashtag == null) this.hashtag = new ArrayList<>();
+        else this.hashtag.clear();
+        this.isEdited = false;
+        this.editMode = false;
         return this;
     }
 
     public boolean isNextStep(){
         return
             this.lectureName           != null &&
-                this.professorName         != null &&
-                this.courseId              != null &&
-                this.pointOverall          != null &&
-                this.pointGpaSatisfaction  != null &&
-                this.pointEasiness         != null &&
-                this.pointClarity          != null;
+            this.professorName         != null &&
+            this.courseId              != null &&
+            this.pointOverall          != null &&
+            this.pointGpaSatisfaction  != null &&
+            this.pointEasiness         != null &&
+            this.pointClarity          != null;
     }
 
     public boolean isCompleted() {
@@ -151,7 +143,7 @@ public class EvaluationForm {
             this.pointEasiness         != null &&
             this.pointClarity          != null &&
             this.body                  != null &&
-            ( !this.modifyMode || this.isEdit );
+            ( !this.editMode || this.isEdited);
 
     }
 

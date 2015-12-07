@@ -4,8 +4,5 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/toolbar_red"
-    />
-    <!--android:background="?attr/colorPrimary"-->
-    <!--following properties are used for setting custom toolbar style-->
-    <!--app:theme="@style/CustomToolBarTheme"-->
-    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"-->
+    android:paddingRight="@dimen/baseline_x0.5"
+    android:paddingEnd="@dimen/baseline_x0.5"/>
