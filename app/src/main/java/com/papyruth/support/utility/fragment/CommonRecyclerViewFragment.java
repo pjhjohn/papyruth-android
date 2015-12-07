@@ -122,6 +122,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     protected abstract void setToolbarStatus();
     protected abstract ADAPTER getAdapter();
     protected abstract void sendScreen();
+    abstract protected void setStatusBarDefault();
 
     @InjectView(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
     protected EvaluationFragment mEvaluationFragment;
@@ -277,9 +278,10 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
                 mEvaluationIsOccupying = false;
                 setFloatingActionControl();
                 Evaluation.getInstance().clear();
-                StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
+                setStatusBarDefault();
             }
         });
         mAnimatorSet.start();
     }
+
 }

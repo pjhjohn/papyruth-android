@@ -58,7 +58,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     protected void setToolbarStatus() {
         mToolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
-        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
+        setStatusBarDefault();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
     }
@@ -74,5 +74,10 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     protected void sendScreen() {
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_my_evaluation));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    @Override
+    protected void setStatusBarDefault() {
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
     }
 }

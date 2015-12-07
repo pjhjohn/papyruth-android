@@ -59,7 +59,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
     protected void setToolbarStatus() {
         mToolbar.setTitle(R.string.nav_item_my_comment);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
-        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
+        setStatusBarDefault();
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
     }
@@ -77,4 +77,8 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+    @Override
+    protected void setStatusBarDefault() {
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
+    }
 }
