@@ -96,11 +96,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         mEvaluationOpened = false;
         this.sendScreen();
         this.setToolbarStatus();
-
-        if(Evaluation.getInstance().getId() != null){
-            mEvaluationFragment = new EvaluationFragment();
-            openEvaluation(null, false);
-        }else setFloatingActionControl();
+        this.setStatusBarDefault();
 
         if(adapter instanceof IAdapter) {
             mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> ((IAdapter) adapter).refresh()));

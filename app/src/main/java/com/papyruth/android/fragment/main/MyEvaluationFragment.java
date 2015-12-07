@@ -25,6 +25,16 @@ import rx.android.schedulers.AndroidSchedulers;
 public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationItemsAdapter> {
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if(Evaluation.getInstance().getId() != null){
+            mEvaluationFragment = new EvaluationFragment();
+            openEvaluation(null, false);
+        }else setFloatingActionControl();
+    }
+
+    @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if(object instanceof EvaluationData){
             EvaluationData data = ((EvaluationData) object);
