@@ -102,9 +102,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
             openEvaluation(null, false);
         }else setFloatingActionControl();
 
-        Timber.d("resume %s", adapter);
         if(adapter instanceof IAdapter) {
-            Timber.d("instance");
             mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> ((IAdapter) adapter).refresh()));
             mCompositeSubscription.add(
                 getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)

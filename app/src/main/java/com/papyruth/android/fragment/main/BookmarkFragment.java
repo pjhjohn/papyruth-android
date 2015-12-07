@@ -1,8 +1,8 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -20,26 +19,22 @@ import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CourseData;
-import com.papyruth.android.model.FavoriteData;
+import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
-import com.papyruth.android.model.unique.User;
-import com.papyruth.android.recyclerview.adapter.CourseItemsAdapter;
+import com.papyruth.android.recyclerview.adapter.BookmarkAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.RecyclerViewFragment;
+import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -47,170 +42,89 @@ import rx.subscriptions.CompositeSubscription;
  * TODO : should be able to expand when clicking recyclerview item to show evaluation data in detail
  */
 
-public class BookmarkFragment extends RecyclerViewFragment<CourseItemsAdapter, CourseData> {
-    private Navigator navigator;
-    private int page;
-    private List<FavoriteData> favorites;
-    private boolean askMore;
+public class BookmarkFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener{
+    private Navigator mNavigator;
     private Tracker mTracker;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
+        this.mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
+        this.mNavigator = (Navigator) activity;
     }
 
-    @InjectView(R.id.recyclerview) protected RecyclerView recycler;
-    @InjectView(R.id.swipe) protected SwipeRefreshLayout refresh;
-    @InjectView(R.id.material_progress_large) protected View progress;
-    private CompositeSubscription subscriptions;
-    private Toolbar toolbar;
+    @InjectView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @InjectView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @InjectView(R.id.common_empty_state)   protected FrameLayout mEmptyState;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
+    private CompositeSubscription mCompositeSubscription;
+    private Toolbar mToolbar;
+    private BookmarkAdapter mAdapter;
 
-        this.toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.favorites = new ArrayList<>();
-    }
-
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_course_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
         ButterKnife.inject(this, view);
-        this.page = 1;
-        this.refresh.setEnabled(true);
-        this.setupRecyclerView(recycler);
-        this.subscriptions = new CompositeSubscription();
-        askMore = true;
+        mCompositeSubscription = new CompositeSubscription();
 
-        ((InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
+        mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        mSwipeRefresh.setEnabled(true);
+        initSwipeRefresh(mSwipeRefresh);
+
+        mAdapter = new BookmarkAdapter(getActivity(), mSwipeRefresh, mEmptyState, this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
+
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.setupSwipeRefresh(this.refresh);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        FloatingActionControl.getInstance().closeMenuButton(true);
         ButterKnife.reset(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
-    @Override
-    protected CourseItemsAdapter getAdapter () {
-        if(this.adapter != null)
-            return adapter;
-        return new CourseItemsAdapter(this.items, this, R.string.no_data_favorite);
-    }
-
-    @Override
-    protected RecyclerView.LayoutManager getRecyclerViewLayoutManager () {
-        return new LinearLayoutManager(this.getActivity());
-    }
-
-    @Override
-    public void onRecyclerViewItemClick(View view, int position) {
-        if(this.items.size() -1 < position){
-            Toast.makeText(getActivity().getBaseContext(),"please wait for loading", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        Course.getInstance().update(this.items.get(position));
-        this.navigator.navigate(CourseFragment.class, true);
-    }
-
-    public void notifyDataChanged(List<FavoriteData> favorites){
-        if(page == 1) {
-            this.items.clear();
-            this.favorites.clear();
-        }
-        this.favorites.addAll(favorites);
-        for (FavoriteData f : favorites){
-            this.items.add(f.course);
-        }
-        this.adapter.setShowPlaceholder(favorites.isEmpty());
-        this.adapter.notifyDataSetChanged();
-
-        if(favorites.size() < 1){
-            askMore = false;
-        }
-        page ++;
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_bookmark));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        this.toolbar.setTitle(R.string.toolbar_favorite);
-        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_red).start();
+        this.mToolbar.setTitle(R.string.toolbar_favorite);
+        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
-        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> this.navigator.navigate(EvaluationStep1Fragment.class, true),
-            error -> ErrorHandler.handle(error, this)
-        );
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
 
-        this.subscriptions.add(
-            Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page)
-                .map(response -> response.favorites)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    favorites -> {
-                        notifyDataChanged(favorites);
-                    }, error -> {
-                        ErrorHandler.handle(error, this);
-                    }
-                )
-        );
+        setFloatingActionControl();
 
-        this.subscriptions.add(
-            this.getRefreshObservable(this.refresh)
-                .flatMap(
-                    unused -> {
-                        this.refresh.setRefreshing(true);
-                        page = 1;
-                        return Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page);
-                    }
-                )
-                .map(favorites -> favorites.favorites)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    favorites -> {
-                        notifyDataChanged(favorites);
-                        this.refresh.setRefreshing(false);
-                    },
-                    error -> ErrorHandler.handle(error, this)
-                )
-        );
+            mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
+            mCompositeSubscription.add(
+                getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
+                    .filter(passIfNull -> passIfNull == null)
+                    .subscribe(unused -> mAdapter.loadMore())
+            );
+    }
 
+    @Override
+    public void onRecyclerViewItemObjectClick(View view, Object object) {
+        if(object instanceof CourseData){
+            Course.getInstance().update(((CourseData) object));
+            this.mNavigator.navigate(CourseFragment.class, true);
+        }else if(object instanceof Footer){
+            mRecyclerView.getLayoutManager().scrollToPosition(0);
+        }
+    }
 
-        this.subscriptions.add(
-            super.getRecyclerViewScrollObservable(this.recycler, this.toolbar, true)
-                .filter(passIfNull -> passIfNull == null && this.progress.getVisibility() != View.VISIBLE && askMore )
-                .flatMap(unused -> {
-                    this.progress.setVisibility(View.VISIBLE);
-                    return Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), page);
-                })
-                .map(favorites -> favorites.favorites)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(favorites -> {
-                    this.progress.setVisibility(View.GONE);
-                    if (favorites != null) {
-                        this.notifyDataChanged(favorites);
-                    }
-                }, error -> ErrorHandler.handle(error, this))
+    private void setFloatingActionControl(){
+        FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
+        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+            unused -> this.mNavigator.navigate(EvaluationStep1Fragment.class, true),
+            error -> ErrorHandler.handle(error, this)
         );
     }
 }
