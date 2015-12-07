@@ -26,16 +26,18 @@ public class StatusBarHelper {
         animColor.setIntValues(fromColor, toColor);
         animColor.setEvaluator(new ArgbEvaluator());
         animColor.addUpdateListener(animator -> {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor((int) animator.getAnimatedValue());
         });
         animColor.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
                 window.setStatusBarColor(toColor);
             }
         });
