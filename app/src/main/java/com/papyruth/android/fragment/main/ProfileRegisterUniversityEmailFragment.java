@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
@@ -22,6 +24,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.materialdialog.FailureDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -51,7 +54,7 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-05-19.
  */
 public class ProfileRegisterUniversityEmailFragment extends Fragment {
-    private Navigator navigator;
+    private Navigator mNavigator;
     private Context context;
     private Resources res;
     private Tracker mTracker;
@@ -63,14 +66,14 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
+        this.mNavigator = (Navigator) activity;
         this.context = activity;
         this.res = activity.getResources();
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.navigator = null;
+        this.mNavigator = null;
     }
 
     @InjectView (R.id.university_email_icon)    protected ImageView icon;
@@ -114,18 +117,21 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
         FloatingActionControl.getButton().setShowProgressBackground(false);
         this.subscriptions.add(this.registerSubmitCallback());
         this.subscriptions.add(WidgetObservable
-            .text(this.email)
-            .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .map(toString)
-            .map(RxValidator.getErrorMessageEmail)
-            .startWith((String) null)
-            .map(error -> error == null)
-            .subscribe(valid -> {
-                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-            }, error -> ErrorHandler.handle(error, this))
+                .text(this.email)
+                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .map(toString)
+                .map(RxValidator.getErrorMessageEmail)
+                .startWith((String) null)
+                .map(error -> error == null)
+                .subscribe(valid -> {
+                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
+                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                }, error -> ErrorHandler.handle(error, this))
         );
+
+        if(User.getInstance().getUniversityEmail() != null)
+            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.NEED_UNIVERSITY_CONFIRMATION);
     }
 
     public Subscription registerSubmitCallback() {
@@ -150,7 +156,7 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
                     FloatingActionControl.getButton().setProgress(0, true);
                     if (response.success) {
                         User.getInstance().setUniversityEmail(email.getText().toString());
-                        this.navigator.back();
+                        sendEmail();
                     } else {
                         // TODO : Failed to Update User Profile
                     }
@@ -171,6 +177,22 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
                     }
                     ErrorHandler.handle(error, this);
                 }
+            );
+    }
+    private void sendEmail(){
+        Api.papyruth().users_email(User.getInstance().getAccessToken(), 1)
+            .map(response -> response.success)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                success -> {
+                    if (success) {
+                        Toast.makeText(context, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                        mNavigator.back();
+                    }else {
+                        Toast.makeText(context, R.string.failure_send_email, Toast.LENGTH_SHORT).show();
+                    }
+                }, error -> ErrorHandler.handle(error, MaterialDialog.class)
             );
     }
 }
