@@ -60,12 +60,13 @@
     <string name="field_exist_nickname">닉네임이 중복되었습니다</string>
 
     <!--common-->
-    <string name="next">다음</string>
-    <string name="submit">제출</string>
-    <string name="cancel">취소</string>
-    <string name="pending">다른 요청이 처리중입니다</string>
-    <string name="close">닫기</string>
-    <string name="wait_to_loading">로딩이 진행 중인 동안 기다려주세요</string>
+    <string name="common_next">다음</string>
+    <string name="common_submit">제출</string>
+    <string name="common_cancel">취소</string>
+    <string name="common_change">변경</string>
+    <string name="common_pending">다른 요청이 처리중입니다</string>
+    <string name="common_close">닫기</string>
+    <string name="common_wait_to_loading">로딩이 진행 중인 동안 기다려주세요</string>
 
     <!--menu-->
     <string name="menu_search">메뉴검색</string>
@@ -124,7 +125,7 @@
     <string name="goto_write">강의평 작성하기</string>
     <string name="inform_wrote_evaluation">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
     <string name="inform_email_confirm">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
-    <string name="inform_email_university_confirm">학교 메일 계정으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
+    <string name="inform_email_university_confirm">학교 메일 계정(%1$s)으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
     <string name="goto_rewrite">강의평 수정하기</string>
     <string name="no_data">No Data</string>
 

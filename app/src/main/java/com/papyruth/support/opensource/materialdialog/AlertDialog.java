@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationStep1Fragment;
 import com.papyruth.android.fragment.main.EvaluationStep2Fragment;
+import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -28,9 +29,9 @@ public class AlertDialog {
 
     public static MaterialDialog build(Context context, Navigator navigator, Type type) {
         return new MaterialDialog.Builder(context)
-            .content(Content(context, type))
-            .positiveText(PositiveText(context, type))
-            .negativeText(R.string.cancel)
+            .content(content(context, type))
+            .positiveText(positiveText(context, type))
+            .negativeText(negativeText(context, type))
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
@@ -52,18 +53,18 @@ public class AlertDialog {
     }
 
 
-    private static String Content(Context context, Type type) {
+    private static String content(Context context, Type type) {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
             case EVALUATION_MANDATORY           :   value = context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()); break;
             case EVALUATION_POSSIBLE            :   value = res.getString(R.string.inform_wrote_evaluation); break;
             case NEED_CONFIRMATION              :   value = res.getString(R.string.inform_email_confirm); break;
-            case NEED_UNIVERSITY_CONFIRMATION   :   value = res.getString(R.string.inform_email_university_confirm); break;
+            case NEED_UNIVERSITY_CONFIRMATION   :   value = String.format(res.getString(R.string.inform_email_university_confirm), User.getInstance().getUniversityEmail()); break;
         } return value;
     }
 
-    private static String PositiveText(Context context, Type type) {
+    private static String positiveText(Context context, Type type) {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
@@ -71,6 +72,15 @@ public class AlertDialog {
             case EVALUATION_POSSIBLE            :   value = res.getString(R.string.goto_rewrite); break;
             case NEED_CONFIRMATION              :   value = res.getString(R.string.confirm_positive); break;
             case NEED_UNIVERSITY_CONFIRMATION   :   value = res.getString(R.string.confirm_positive); break;
+        } return value;
+    }
+
+    private static String negativeText(Context context, Type type){
+        final Resources res = context.getResources();
+        String value;
+        switch (type) {
+            case NEED_UNIVERSITY_CONFIRMATION   :   value = res.getString(R.string.common_change); break;
+            default                             :   value = res.getString(R.string.common_cancel); break;
         } return value;
     }
 
@@ -105,6 +115,7 @@ public class AlertDialog {
                         success -> {
                             if (success) {
                                 Toast.makeText(context, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                                navigator.back();
                             }else {
                                 Toast.makeText(context, R.string.failure_send_email, Toast.LENGTH_SHORT).show();
                             }

@@ -60,12 +60,13 @@
     <string name="field_exist_nickname">Nicaname already exists</string>
 
     <!--common-->
-    <string name="next">Next</string>
-    <string name="submit">Submit</string>
-    <string name="cancel">Cancel</string>
-    <string name="pending">Pending Another Request</string>
-    <string name="close">Close</string>
-    <string name="wait_to_loading">please wait to loading</string>
+    <string name="common_next">Next</string>
+    <string name="common_submit">Submit</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_change">Change</string>
+    <string name="common_pending">Pending Another Request</string>
+    <string name="common_close">Close</string>
+    <string name="common_wait_to_loading">please wait to loading</string>
 
     <!--menu-->
     <string name="menu_search">Menu Search</string>
@@ -121,7 +122,7 @@
     <string name="goto_write">Write evaluation</string>
     <string name="inform_wrote_evaluation">You wrote evaluation this course. You can rewrite evaluation.</string>
     <string name="inform_email_confirm">We send confirm mail your account.\nDo you want to resend email?</string>
-    <string name="inform_email_university_confirm">We send email your university account.\nDo you want to resend email?</string>
+    <string name="inform_email_university_confirm">We send email your university account : %1$s\nDo you want to resend email?</string>
     <string name="goto_rewrite">Rewrite evaluation</string>
     <string name="no_data">No Data</string>
 

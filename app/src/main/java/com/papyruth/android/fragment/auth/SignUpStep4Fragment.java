@@ -141,7 +141,7 @@ public class SignUpStep4Fragment extends Fragment {
                     new MaterialDialog.Builder(mActivity)
                         .title(R.string.terms_of_use)
                         .content(mTermsOfServiceStringArguments.size() > 0 ? mTermsOfServiceStringArguments.get(0) : getString(R.string.lorem_ipsum))
-                        .positiveText(R.string.close)
+                        .positiveText(R.string.common_close)
                         .show();
                 }
 
@@ -164,7 +164,7 @@ public class SignUpStep4Fragment extends Fragment {
                     new MaterialDialog.Builder(mActivity)
                         .title(R.string.privacy_policy)
                         .content(mTermsOfServiceStringArguments.size() > 1 ? mTermsOfServiceStringArguments.get(1) : getString(R.string.lorem_ipsum))
-                        .positiveText(R.string.close)
+                        .positiveText(R.string.common_close)
                         .show();
                 }
 

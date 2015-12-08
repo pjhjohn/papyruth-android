@@ -27,7 +27,6 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.NavigatableFrameLayout;
 import com.papyruth.support.utility.navigator.Navigator;
-import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
@@ -150,7 +149,7 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
         for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
         new MaterialDialog.Builder(mActivity)
             .title(R.string.dialog_title_entrance_year)
-            .negativeText(R.string.cancel)
+            .negativeText(R.string.common_cancel)
             .buttonsGravity(GravityEnum.START)
             .items(years)
             .itemsCallback((dialog, v, which, text) -> {
