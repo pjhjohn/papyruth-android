@@ -78,7 +78,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mLabelOverall.setText(R.string.label_point_overall);
         setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
 
-        if(evaluation.hashtags != null) {
+        if(evaluation.isHashtagUpdated()) {
             this.mHashtags.setText(Hashtag.getHashtag(evaluation.hashtags));
             AnimatorHelper.FADE_OUT(mProgressbar).start();
         }
