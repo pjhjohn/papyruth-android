@@ -21,9 +21,10 @@
                     android:id="@+id/common_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    android:scrollbars="none"
-                    android:layout_gravity="top"/>
+                    android:layout_gravity="top"
+                    android:background="@color/transparent"
+                    android:overScrollMode="ifContentScrolls"
+                    android:scrollbars="vertical"/>
             </FrameLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
         <FrameLayout
