@@ -4,6 +4,7 @@
 # Built application files
 *.apk
 *.ap_
+*.zip
 
 # Files for the Dalvik VM
 *.dex
@@ -111,3 +112,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# private key store configuration
+release.properties
+*.jks
