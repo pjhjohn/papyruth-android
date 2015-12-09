@@ -11,8 +11,8 @@ import com.papyruth.android.R;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by SSS on 2015-12-09.
@@ -26,10 +26,10 @@ public class EmptyStateView extends RelativeLayout{
     private int mTitleColorRes;
     private int mContentColorRes;
 
-    @InjectView(R.id.empty_state_container) protected RelativeLayout mEmptyStateContainer;
-    @InjectView(R.id.empty_state_content) protected TextView mContentTextView;
-    @InjectView(R.id.empty_state_title) protected TextView mTitleTextView;
-    @InjectView(R.id.empty_state_icon) protected ImageView mIcon;
+    @Bind(R.id.empty_state_container) protected RelativeLayout mEmptyStateContainer;
+    @Bind(R.id.empty_state_content) protected TextView mContentTextView;
+    @Bind(R.id.empty_state_title) protected TextView mTitleTextView;
+    @Bind(R.id.empty_state_icon) protected ImageView mIcon;
 
     public EmptyStateView(Context context) {
         super(context);
@@ -48,7 +48,7 @@ public class EmptyStateView extends RelativeLayout{
 
     private void init(){
         View view = inflate(getContext(), R.layout.empty_state_view, this);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         mIconColorRes = R.color.white;
         mContentColorRes = R.color.white;

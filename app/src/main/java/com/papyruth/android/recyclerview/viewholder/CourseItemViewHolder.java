@@ -21,28 +21,28 @@ import com.papyruth.support.utility.customview.Hashtag;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class CourseItemViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.course_item_professor_image)    protected ImageView mProfessorImage;
-    @InjectView(R.id.course_item_lecture)            protected TextView mLecture;
-    @InjectView(R.id.course_item_category)           protected TextView mCategory;
-    @InjectView(R.id.course_item_professor)          protected TextView mProfessor;
-    @InjectView(R.id.course_item_overall_label)      protected TextView mLabelOverall;
-    @InjectView(R.id.course_item_overall_point)      protected RobotoTextView mPointOverall;
-    @InjectView(R.id.course_item_overall_ratingbar)  protected RatingBar mRatingBarOverall;
-    @InjectView(R.id.course_item_hashtags)           protected TextView mHashtags;
-    @InjectView(R.id.course_item_evaluation_icon)    protected ImageView mEvaluationIcon;
-    @InjectView(R.id.course_item_evaluation_count)   protected TextView mEvaluationCount;
+    @Bind(R.id.course_item_professor_image)    protected ImageView mProfessorImage;
+    @Bind(R.id.course_item_lecture)            protected TextView mLecture;
+    @Bind(R.id.course_item_category)           protected TextView mCategory;
+    @Bind(R.id.course_item_professor)          protected TextView mProfessor;
+    @Bind(R.id.course_item_overall_label)      protected TextView mLabelOverall;
+    @Bind(R.id.course_item_overall_point)      protected RobotoTextView mPointOverall;
+    @Bind(R.id.course_item_overall_ratingbar)  protected RatingBar mRatingBarOverall;
+    @Bind(R.id.course_item_hashtags)           protected TextView mHashtags;
+    @Bind(R.id.course_item_evaluation_icon)    protected ImageView mEvaluationIcon;
+    @Bind(R.id.course_item_evaluation_count)   protected TextView mEvaluationCount;
     private final Context mContext;
     private final Resources mResources;
     public CourseItemViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

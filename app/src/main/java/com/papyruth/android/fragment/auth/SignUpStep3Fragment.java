@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
@@ -53,17 +53,17 @@ public class SignUpStep3Fragment extends TrackerFragment {
         mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
     }
 
-    @InjectView(R.id.signup_step3_container) protected NavigatableLinearLayout mContainer;
-    @InjectView(R.id.signup_gender_radiogroup)        protected RadioGroup mRadioGroupGender;
-    @InjectView(R.id.signup_realname_text)      protected EditText mTextRealname;
-    @InjectView(R.id.signup_gender_icon)   protected ImageView mIconGender;
-    @InjectView(R.id.signup_realname_icon) protected ImageView mIconRealname;
+    @Bind(R.id.signup_step3_container) protected NavigatableLinearLayout mContainer;
+    @Bind(R.id.signup_gender_radiogroup)        protected RadioGroup mRadioGroupGender;
+    @Bind(R.id.signup_realname_text)      protected EditText mTextRealname;
+    @Bind(R.id.signup_gender_icon)   protected ImageView mIconGender;
+    @Bind(R.id.signup_realname_icon) protected ImageView mIconRealname;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step3, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         return view;
     }
@@ -71,7 +71,7 @@ public class SignUpStep3Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

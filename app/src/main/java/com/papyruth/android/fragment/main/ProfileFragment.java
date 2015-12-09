@@ -27,8 +27,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -47,26 +47,26 @@ public class ProfileFragment extends TrackerFragment {
         mResources = mContext.getResources();
     }
 
-    @InjectView(R.id.university_image)      protected ImageView mUniversityImage;
-    @InjectView(R.id.university_name)       protected TextView mUniversityName;
-    @InjectView(R.id.entrance_year)         protected TextView mEntranceYear;
-    @InjectView(R.id.email_icon)            protected ImageView mEmailIcon;
-    @InjectView(R.id.email_text)            protected TextView mEmailText;
-    @InjectView(R.id.university_email_icon) protected ImageView mUniversityEmailIcon;
-    @InjectView(R.id.university_email_text) protected TextView mUniversityEmailText;
-    @InjectView(R.id.realname_icon)         protected ImageView mRealnameIcon;
-    @InjectView(R.id.realname_text)         protected TextView mRealnameText;
-    @InjectView(R.id.nickname_icon)         protected ImageView mNicknameIcon;
-    @InjectView(R.id.nickname_text)         protected TextView mNicknameText;
-    @InjectView(R.id.gender_icon)           protected ImageView mGenderIcon;
-    @InjectView(R.id.gender_text)           protected TextView mGenderText;
+    @Bind(R.id.university_image)      protected ImageView mUniversityImage;
+    @Bind(R.id.university_name)       protected TextView mUniversityName;
+    @Bind(R.id.entrance_year)         protected TextView mEntranceYear;
+    @Bind(R.id.email_icon)            protected ImageView mEmailIcon;
+    @Bind(R.id.email_text)            protected TextView mEmailText;
+    @Bind(R.id.university_email_icon) protected ImageView mUniversityEmailIcon;
+    @Bind(R.id.university_email_text) protected TextView mUniversityEmailText;
+    @Bind(R.id.realname_icon)         protected ImageView mRealnameIcon;
+    @Bind(R.id.realname_text)         protected TextView mRealnameText;
+    @Bind(R.id.nickname_icon)         protected ImageView mNicknameIcon;
+    @Bind(R.id.nickname_text)         protected TextView mNicknameText;
+    @Bind(R.id.gender_icon)           protected ImageView mGenderIcon;
+    @Bind(R.id.gender_text)           protected TextView mGenderText;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;
@@ -75,7 +75,7 @@ public class ProfileFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

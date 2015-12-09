@@ -31,8 +31,8 @@ import com.papyruth.support.utility.search.SearchToolbar;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -55,9 +55,9 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
         super.onDetach();
         SearchToolbar.getInstance().setItemClickListener(null);
     }
-    @InjectView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
-    @InjectView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @InjectView(R.id.common_empty_state)   protected FrameLayout mEmptyState;
+    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @Bind(R.id.common_empty_state)   protected FrameLayout mEmptyState;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
     private SimpleCourseAdapter mAdapter;
@@ -66,7 +66,7 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -83,7 +83,7 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
     public void onDestroyView() {
         super.onDestroyView();
         FloatingActionControl.getInstance().closeMenuButton(true);
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         SearchToolbar.getInstance().setOnSearchByQueryListener(null).setItemClickListener(null);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();

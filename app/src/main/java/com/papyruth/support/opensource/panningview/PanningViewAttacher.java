@@ -1,4 +1,4 @@
-package com.papyruth.support.utility.panningview;
+package com.papyruth.support.opensource.panningview;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

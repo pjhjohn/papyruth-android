@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
@@ -55,12 +55,12 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         return SearchToolbar.instance;
     }
 
-    @InjectView(R.id.search_toolbar_root)                   protected LinearLayout mRootView;
-    @InjectView(R.id.search_toolbar_back_icon)              protected ImageView mBackIcon;
-    @InjectView(R.id.search_toolbar_material_progressbar)   protected MaterialProgressBar mMaterialProgressBar;
-    @InjectView(R.id.search_toolbar_query_text)             protected EditText mQueryText;
-    @InjectView(R.id.search_toolbar_query_clear_icon)       protected ImageView mQueryClearIcon;
-    @InjectView(R.id.search_toolbar_query_result)           protected RecyclerView mQueryResult;
+    @Bind(R.id.search_toolbar_root)                   protected LinearLayout mRootView;
+    @Bind(R.id.search_toolbar_back_icon)              protected ImageView mBackIcon;
+    @Bind(R.id.search_toolbar_material_progressbar)   protected MaterialProgressBar mMaterialProgressBar;
+    @Bind(R.id.search_toolbar_query_text)             protected EditText mQueryText;
+    @Bind(R.id.search_toolbar_query_clear_icon)       protected ImageView mQueryClearIcon;
+    @Bind(R.id.search_toolbar_query_result)           protected RecyclerView mQueryResult;
 
     private RecyclerViewItemClickListener mDefaultRecyclerViewItemClickListener;
     private RecyclerViewItemClickListener mRecyclerViewItemClickListener;
@@ -78,7 +78,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
 
     public void init(Context context, ViewGroup root, RecyclerViewItemClickListener defaultRecyclerViewItemClickListener, OnSearchByQueryListener searchByQueryListener) {
         View view = LayoutInflater.from(context).inflate(R.layout.toolbar_search, root, true);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = context;
         mResources = context.getResources();
         mDefaultRecyclerViewItemClickListener = defaultRecyclerViewItemClickListener;

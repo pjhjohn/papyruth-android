@@ -10,21 +10,21 @@ import android.widget.TextView;
 import com.papyruth.android.R;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class InformViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.cardview_inform)     protected RelativeLayout mRoot;
-    @InjectView(R.id.inform_body)         protected TextView mBody;
-    @InjectView(R.id.inform_btn_positive) protected Button mButtonPositive;
-    @InjectView(R.id.inform_btn_optional) protected Button mButtonOptional;
+    @Bind(R.id.cardview_inform)     protected RelativeLayout mRoot;
+    @Bind(R.id.inform_body)         protected TextView mBody;
+    @Bind(R.id.inform_btn_positive) protected Button mButtonPositive;
+    @Bind(R.id.inform_btn_optional) protected Button mButtonOptional;
     private final Context mContext;
     public InformViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         if(listener != null) {
             mButtonPositive.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));

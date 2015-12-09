@@ -5,5 +5,5 @@
         android:color="@color/colorchip_green"/>
     <item
         android:state_pressed="true"
-        android:color="@color/colorchip_green_highlight"/>
+        android:color="@color/colorchip_green_light"/>
 </selector>

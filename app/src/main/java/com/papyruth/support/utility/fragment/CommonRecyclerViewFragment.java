@@ -18,7 +18,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
@@ -34,10 +33,9 @@ import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  *
@@ -54,9 +52,9 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         mNavigator = (Navigator) activity;
     }
 
-    @InjectView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
-    @InjectView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @InjectView(R.id.common_empty_state)   protected FrameLayout mEmptyState;
+    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @Bind(R.id.common_empty_state)   protected FrameLayout mEmptyState;
     protected CompositeSubscription mCompositeSubscription;
     protected Toolbar mToolbar;
     protected ADAPTER adapter;
@@ -65,7 +63,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -84,7 +82,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     public void onDestroyView() {
         super.onDestroyView();
         FloatingActionControl.getInstance().closeMenuButton(true);
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -115,7 +113,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     protected abstract ADAPTER getAdapter();
     abstract protected void setStatusBarDefault();
 
-    @InjectView(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
+    @Bind(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
     protected EvaluationFragment mEvaluationFragment;
     protected Boolean mEvaluationIsOccupying;
     protected Boolean mEvaluationOpened;

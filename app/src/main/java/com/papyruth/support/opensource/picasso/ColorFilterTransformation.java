@@ -1,12 +1,12 @@
 package com.papyruth.support.opensource.picasso;
 
-import com.squareup.picasso.Transformation;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+
+import com.squareup.picasso.Transformation;
 
 /**
  * Copyright (C) 2015 Wasabeef

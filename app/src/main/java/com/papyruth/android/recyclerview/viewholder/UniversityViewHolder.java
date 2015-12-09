@@ -11,19 +11,19 @@ import com.papyruth.support.utility.customview.SquareImageView;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class UniversityViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.university_item_name)  protected TextView mUniversityName;
-    @InjectView(R.id.university_item_image) protected SquareImageView mUniversityImage;
+    @Bind(R.id.university_item_name)  protected TextView mUniversityName;
+    @Bind(R.id.university_item_image) protected SquareImageView mUniversityImage;
     private final Context mContext;
     public UniversityViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
     }

@@ -8,7 +8,6 @@ package com.papyruth.support.opensource.materialprogressbar;
 import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Keep;

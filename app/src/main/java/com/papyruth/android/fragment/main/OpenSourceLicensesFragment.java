@@ -23,8 +23,8 @@ import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
 public class OpenSourceLicensesFragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
@@ -37,15 +37,15 @@ public class OpenSourceLicensesFragment extends TrackerFragment implements Recyc
         this.mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
     }
 
-    @InjectView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @InjectView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     private OpenSourceLicensesAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         this.mCompositeSubscription = new CompositeSubscription();
         mSwipeRefresh.setEnabled(false);
 
@@ -62,7 +62,7 @@ public class OpenSourceLicensesFragment extends TrackerFragment implements Recyc
     public void onDestroyView() {
         super.onDestroyView();
 
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

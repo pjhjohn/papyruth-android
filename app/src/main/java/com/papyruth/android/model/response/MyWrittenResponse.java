@@ -1,7 +1,7 @@
 package com.papyruth.android.model.response;
 
-import com.papyruth.android.model.MyCommentData;
 import com.papyruth.android.model.EvaluationData;
+import com.papyruth.android.model.MyCommentData;
 
 import java.util.List;
 

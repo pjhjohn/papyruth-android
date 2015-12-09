@@ -35,16 +35,16 @@ import com.papyruth.support.utility.search.SearchToolbar;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.Observable;
 import timber.log.Timber;
 
 public class MainActivity extends Activity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, Error.OnReportToGoogleAnalytics {
-    @InjectView(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
-    @InjectView(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
-    @InjectView(R.id.search_toolbar_root)      protected LinearLayout mSearchToolbarRoot;
-    @InjectView(R.id.toolbar)                  protected Toolbar mToolbar;
+    @Bind(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
+    @Bind(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
+    @Bind(R.id.search_toolbar_root)      protected LinearLayout mSearchToolbarRoot;
+    @Bind(R.id.toolbar)                  protected Toolbar mToolbar;
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
     private Tracker mTracker;
@@ -54,7 +54,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         mTracker = ((PapyruthApplication) getApplication()).getTracker();
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
@@ -103,7 +103,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

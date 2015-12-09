@@ -32,8 +32,8 @@ import com.squareup.picasso.Picasso;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -68,16 +68,16 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
         this.navigator = null;
     }
 
-    @InjectView (R.id.nickname_icon) protected ImageView icon;
-    @InjectView (R.id.nickname_label) protected TextView label;
-    @InjectView (R.id.nickname_text) protected EditText nickname;
+    @Bind(R.id.nickname_icon) protected ImageView icon;
+    @Bind(R.id.nickname_label) protected TextView label;
+    @Bind(R.id.nickname_text) protected EditText nickname;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_change_nickname, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         Picasso.with(context).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
@@ -90,7 +90,7 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 

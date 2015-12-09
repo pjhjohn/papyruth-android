@@ -45,8 +45,8 @@ import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickList
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.widget.RevealFrameLayout;
 import rx.android.schedulers.AndroidSchedulers;
@@ -70,10 +70,10 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         mCommentSubmit      = (ImageButton) activity.findViewById(R.id.comment_submit);
     }
 
-    @InjectView(R.id.evaluation_swipe_refresh)  protected SwipeRefreshLayout mSwipeRefresh;
-    @InjectView(R.id.evaluation_recycler_view)  protected RecyclerView mRecyclerView;
-    @InjectView(R.id.evaluation_empty_state)    protected FrameLayout mEmptyState;
-    @InjectView(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
+    @Bind(R.id.evaluation_swipe_refresh)  protected SwipeRefreshLayout mSwipeRefresh;
+    @Bind(R.id.evaluation_recycler_view)  protected RecyclerView mRecyclerView;
+    @Bind(R.id.evaluation_empty_state)    protected FrameLayout mEmptyState;
+    @Bind(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription;
     private EvaluationAdapter mAdapter;
     private boolean mCommentInputActive;
@@ -82,7 +82,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
         /* Initialize SwipeRefresh & RecyclerView */
@@ -129,12 +129,12 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         super.onDestroyView();
         mCommentInput.setVisibility(View.GONE);
         Evaluation.getInstance().clear();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
 
-    @InjectView(R.id.evaluation_container_cover) protected FrameLayout mEvaluationCover;
+    @Bind(R.id.evaluation_container_cover) protected FrameLayout mEvaluationCover;
     public void setShowContentImmediately(boolean show) {
         showContentImmediately(mShowContentImmediately = show);
     }

@@ -10,18 +10,18 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class FooterViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.footer_fully_loaded_indicator) protected ImageView mFullyLoadedIndicator;
+    @Bind(R.id.footer_fully_loaded_indicator) protected ImageView mFullyLoadedIndicator;
     private final Context mContext;
     public FooterViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         Picasso.with(mContext).load(R.drawable.ic_light_list_end).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mFullyLoadedIndicator);
         view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));

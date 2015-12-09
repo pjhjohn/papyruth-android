@@ -7,6 +7,6 @@
     android:layout_height="wrap_content"
     android:src="@drawable/ic_light_new_evaluation"
     fab:fab_colorNormal="@color/disabled"
-    fab:fab_colorPressed="@color/disabled_highlight"
+    fab:fab_colorPressed="@color/disabled_light"
     fab:fab_size="mini"
     fab:fab_label="@string/fab_evaluation"/>

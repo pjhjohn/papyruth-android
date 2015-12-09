@@ -13,19 +13,19 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class OpenSourceLicenseViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.osl_icon) protected ImageView mIcon;
-    @InjectView(R.id.osl_name) protected TextView mName;
+    @Bind(R.id.osl_icon) protected ImageView mIcon;
+    @Bind(R.id.osl_name) protected TextView mName;
     private final Context mContext;
     public OpenSourceLicenseViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         mName.setPaintFlags(mName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition() - 1));

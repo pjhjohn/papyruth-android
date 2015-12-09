@@ -2,7 +2,6 @@ package com.papyruth.support.utility.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;

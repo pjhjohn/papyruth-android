@@ -35,8 +35,8 @@ import com.squareup.picasso.Picasso;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -71,16 +71,16 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         this.mNavigator = null;
     }
 
-    @InjectView (R.id.university_email_icon)    protected ImageView icon;
-    @InjectView (R.id.university_email_label)   protected TextView label;
-    @InjectView (R.id.university_email_text)    protected EditText email;
+    @Bind(R.id.university_email_icon)    protected ImageView icon;
+    @Bind(R.id.university_email_label)   protected TextView label;
+    @Bind(R.id.university_email_text)    protected EditText email;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_register_university_email, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         Picasso.with(context).load(R.drawable.ic_light_university_email).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
@@ -93,7 +93,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 

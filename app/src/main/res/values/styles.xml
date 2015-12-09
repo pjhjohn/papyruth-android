@@ -11,21 +11,6 @@
         <item name="android:windowEnterAnimation">@anim/activity_fade_in</item>
         <item name="android:windowExitAnimation">@anim/activity_fade_out</item>
     </style>
-
-    <style name="loading_highlight_normal">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-    <style name="loading_highlight_medium">
-        <item name="android:textSize">36sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-    <style name="loading_highlight_big">
-        <item name="android:textSize">45sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
     <style name="button_base">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>

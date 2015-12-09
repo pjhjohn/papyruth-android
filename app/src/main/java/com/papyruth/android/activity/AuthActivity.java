@@ -28,18 +28,18 @@ import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import timber.log.Timber;
 
 /**
  * Activity For Authentication.
  */
 public class AuthActivity extends Activity implements com.papyruth.support.utility.navigator.Navigator, Error.OnReportToGoogleAnalytics {
-    @InjectView(R.id.fac)                       protected FloatingActionControlContainer mFloatingActionControlContainer;
-    @InjectView(R.id.auth_app_logo_horizontal)  protected ImageView mApplicationLogoHorizontal;
-    @InjectView(R.id.auth_signup_progress)      protected ProgressBar mSignUpProgress;
-    @InjectView(R.id.auth_signup_label)         protected TextView mSignUpLabel;
+    @Bind(R.id.fac)                       protected FloatingActionControlContainer mFloatingActionControlContainer;
+    @Bind(R.id.auth_app_logo_horizontal)  protected ImageView mApplicationLogoHorizontal;
+    @Bind(R.id.auth_signup_progress)      protected ProgressBar mSignUpProgress;
+    @Bind(R.id.auth_signup_label)         protected TextView mSignUpLabel;
     private FragmentNavigator mNavigator;
     private Tracker mTracker;
 
@@ -48,7 +48,7 @@ public class AuthActivity extends Activity implements com.papyruth.support.utili
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
         mTracker = ((PapyruthApplication) getApplication()).getTracker();
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, SignInFragment.class);
         mSignUpProgress.setMax(100 * (AppConst.Navigator.Auth.LENGTH - 1));

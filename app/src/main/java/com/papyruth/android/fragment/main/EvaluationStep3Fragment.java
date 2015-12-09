@@ -37,8 +37,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
@@ -70,23 +70,23 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         super.onCreate(savedInstanceState);
     }
 
-    @InjectView(R.id.evaluation_body_icon) protected ImageView bodyIcon;
-    @InjectView(R.id.evaluation_body_label) protected TextView bodyLabel;
-    @InjectView(R.id.evaluation_body_text) protected EditText bodyText;
-    @InjectView(R.id.evaluation_hashtags_icon) protected ImageView hashtagsIcon;
-    @InjectView(R.id.evaluation_hashtags_label) protected TextView hashtagsLabel;
-    @InjectView(R.id.evaluation_hashtags_container) protected TextView hashtagsContainer;
-    @InjectView(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
-    @InjectView(R.id.evaluation_recommend_hashtag_list) protected LinearLayout recommendHashtag;
-//    @InjectView(R.id.lecture) protected TextView lecture;
-//    @InjectView(R.id.professor) protected TextView professor;
+    @Bind(R.id.evaluation_body_icon) protected ImageView bodyIcon;
+    @Bind(R.id.evaluation_body_label) protected TextView bodyLabel;
+    @Bind(R.id.evaluation_body_text) protected EditText bodyText;
+    @Bind(R.id.evaluation_hashtags_icon) protected ImageView hashtagsIcon;
+    @Bind(R.id.evaluation_hashtags_label) protected TextView hashtagsLabel;
+    @Bind(R.id.evaluation_hashtags_container) protected TextView hashtagsContainer;
+    @Bind(R.id.evaluation_hashtags_text) protected EditText hashtagsText; // TODO : ==> Recipants Android HashtagChips
+    @Bind(R.id.evaluation_recommend_hashtag_list) protected LinearLayout recommendHashtag;
+//    @Bind(R.id.lecture) protected TextView lecture;
+//    @Bind(R.id.professor) protected TextView professor;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step3, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
@@ -128,7 +128,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 

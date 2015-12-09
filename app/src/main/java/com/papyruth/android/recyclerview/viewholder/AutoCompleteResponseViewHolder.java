@@ -13,24 +13,24 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 
 public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.type_icon) protected ImageView mIcon;
-    @InjectView(R.id.content)   protected TextView mContent;
-    @InjectView(R.id.type_text) protected TextView mTypeText;
+    @Bind(R.id.type_icon) protected ImageView mIcon;
+    @Bind(R.id.content)   protected TextView mContent;
+    @Bind(R.id.type_text) protected TextView mTypeText;
     private final Context mContext;
     private final Resources mResources;
     private int mIconColor;
 
     public AutoCompleteResponseViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
-        ButterKnife.inject(this, itemView);
+        ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mResources = mContext.getResources();
         mIconColor = mResources.getColor(R.color.icon_material);
