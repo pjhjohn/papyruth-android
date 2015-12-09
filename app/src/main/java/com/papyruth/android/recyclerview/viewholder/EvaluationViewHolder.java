@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -26,6 +25,7 @@ import com.papyruth.support.utility.customview.Hashtag;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.helper.PointHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -108,7 +108,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
 
         mLabelOverall.setText(R.string.label_point_overall);
-        setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
+        PointHelper.setPointRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
         mLabelClarity.setText(R.string.label_point_clarity);
         setPointProgress(mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
         mLabelEasiness.setText(R.string.label_point_easiness);
@@ -213,15 +213,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         category.setTextColor(color);
         category.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         professor.setTextColor(color);
-    }
-
-    private void setPointRating(TextView label, RatingBar ratingbar, TextView point, Integer value) {
-        final int pointColor = mResources.getColor(pointInRange(value)? ( value>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
-        label.setTextColor(pointColor);
-        point.setTextColor(pointColor);
-        point.setText(pointInRange(value) ? (value >= 10 ? "10" : String.format("%d.0", value)) : "N/A");
-        for(int i = 0; i < 3; i ++) ((LayerDrawable) ratingbar.getProgressDrawable()).getDrawable(i).setColorFilter(pointColor, PorterDuff.Mode.SRC_ATOP);
-        ratingbar.setRating(pointInRange(value) ? (float) value / 2f : 5.0f);
     }
 
     private void setPointProgress(TextView label, TextView point, TextView postfix, Integer value) {

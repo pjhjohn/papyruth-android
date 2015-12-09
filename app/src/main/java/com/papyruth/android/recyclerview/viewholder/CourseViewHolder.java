@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -22,6 +21,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.helper.PointHelper;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -73,27 +73,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mLabelGpaSatisfaction.setPaintFlags(mLabelGpaSatisfaction.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
     }
 
-    private void setRatingBarColor(RatingBar rating, int color) {
-        LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
-        for(int i = 0; i < 3; i ++) stars.getDrawable(i).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-    }
-
-    private void setPointRating(TextView prefix, RatingBar rating, TextView text, Integer point_sum, Integer count) {
-        Float rating_value = count == null || count <= 0 ? null : point_sum == null ? null : (float)point_sum / (float)count / 2f;
-        if(rating_value == null || rating_value < 0) {
-            prefix.setTextColor(mColorInactive);
-            setRatingBarColor(rating, mColorInactive);
-            text.setTextColor(mColorInactive);
-            text.setText("N/A");
-        } else {
-            final int pointColor = mResources.getColor(rating_value >= 8 ? R.color.point_high : R.color.point_low);
-            prefix.setTextColor(pointColor);
-            setRatingBarColor(rating, pointColor);
-            text.setTextColor(pointColor);
-            text.setText(rating_value >= 10 ? "10" : String.format("%.1f", rating_value));
-        } rating.setRating(rating_value == null || rating_value < 0 ? 5.0f : rating_value);
-    }
-
     private void setPointProgress(TextView prefix, ProgressBar progress, TextView text, Integer point_sum, Integer count) {
         Integer progress_value = count == null || count <= 0 ? null : point_sum == null ? null : (int)(((float)point_sum / (float)count) * 10);
         if(progress_value == null || progress_value < 0) {
@@ -116,7 +95,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix))));
         Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
         mLabelOverall.setText(R.string.label_point_overall_average);
-        setPointRating(mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), count);
+        PointHelper.setPointRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), course.getEvaluationCount());
         mLabelClarity.setText(R.string.label_point_clarity);
         setPointProgress(mLabelClarity, mProgressBarClarity, mPointClarity, course.getPointClarity(), count);
         mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);

@@ -2,6 +2,7 @@ package com.papyruth.android.recyclerview.viewholder;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -17,11 +18,13 @@ import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
 import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.helper.PointHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
@@ -57,7 +60,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         mTimestamp.setText(DateTimeHelper.timeago(mContext, evaluation.created_at));
         mBody.setText(evaluation.body.replace('\n', ' '));
         mNickname.setText(evaluation.user_nickname);
-        setPointRating(mRatingBarOverall, evaluation.point_overall);
+        PointHelper.setPointRating(mContext, mRatingBarOverall, evaluation.point_overall);
     }
 
     /* TODO : Better response based on category value */
@@ -73,15 +76,5 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         category.setTextColor(color);
         category.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         professor.setTextColor(color);
-    }
-
-    private void setPointRating(RatingBar ratingbar, Integer value) {
-        final int pointColor = mResources.getColor(pointInRange(value)? ( value>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
-        for(int i = 0; i < 3; i ++) ((LayerDrawable) ratingbar.getProgressDrawable()).getDrawable(i).setColorFilter(pointColor, PorterDuff.Mode.SRC_ATOP);
-        ratingbar.setRating(pointInRange(value) ? (float) value / 2f : 5.0f);
-    }
-
-    private boolean pointInRange(Integer point) {
-        return point!=null && point >= 0 && point <= 10;
     }
 }

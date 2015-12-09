@@ -3,8 +3,6 @@ package com.papyruth.android.recyclerview.viewholder;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +14,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.helper.PointHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -55,10 +54,7 @@ public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mLecture.setText(evaluation.lecture_name);
         mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
         mBody.setText(evaluation.body);
-
-        final int colorOverall = mResources.getColor(pointInRange(evaluation.point_overall)? ( evaluation.point_overall>=8?R.color.point_high:R.color.point_low ) : R.color.point_none);
-        for(int i = 0; i < 3; i ++) ((LayerDrawable) mRatingBarOverall.getProgressDrawable()).getDrawable(i).setColorFilter(colorOverall, PorterDuff.Mode.SRC_ATOP);
-        mRatingBarOverall.setRating(pointInRange(evaluation.point_overall) ? (float) evaluation.point_overall / 2f : 5.0f);
+        PointHelper.setPointRating(mContext, mRatingBarOverall, evaluation.point_overall);
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.request_user_vote == 1) setVoteStatus(VoteStatus.UP);
@@ -79,9 +75,5 @@ public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
     private void setVoteCount(Integer upCount, Integer downCount) {
         mVoteUpCount.setText(String.valueOf(upCount == null ? 0 : upCount));
         mVoteDownCount.setText(String.valueOf(downCount == null ? 0 : downCount));
-    }
-
-    private boolean pointInRange(Integer point) {
-        return point!=null && point >= 0 && point <= 10;
     }
 }

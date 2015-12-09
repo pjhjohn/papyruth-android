@@ -60,8 +60,11 @@
     <color name="point_easiness">@color/colorchip_green</color>
     <color name="point_gpa_satisfaction">@color/colorchip_blue</color>
     <color name="point_clarity">@color/colorchip_red</color>
-    <color name="point_low">@color/colorchip_green</color>
-    <color name="point_high">@color/colorchip_red</color>
+    <string-array name="point_colors">
+        <item>#E05E5F</item>
+        <item>#FFC81D</item>
+        <item>#60CAC6</item>
+    </string-array>
     <color name="point_none">@color/white_40p</color>
 
     <!--Background-->
