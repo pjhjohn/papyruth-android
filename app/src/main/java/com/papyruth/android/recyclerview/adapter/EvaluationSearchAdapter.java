@@ -24,6 +24,7 @@ import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ import rx.schedulers.Schedulers;
 public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 //    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
-    private View mEmptyState;
+    private EmptyStateView mEmptyState;
     private List<CourseData> mCourses;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
@@ -51,8 +52,9 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context mContext;
     private Navigator mNavigator;
 
-    public EvaluationSearchAdapter(Context context, View emptystate, Navigator navigator,RecyclerViewItemObjectClickListener listener) {
+    public EvaluationSearchAdapter(Context context, EmptyStateView emptystate, Navigator navigator,RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
+        mEmptyState.setIconDrawable(R.drawable.ic_light_history).setContentText("hello").setTitleText("error?").show();
         mContext = context;
         mNavigator = navigator;
         mCourses = new ArrayList<>();

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
@@ -28,6 +28,7 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,7 +51,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
 
     @InjectView(R.id.evaluation_form_query_button) protected Button mQueryButton;
     @InjectView(R.id.evaluation_form_query_result) protected RecyclerView mRecyclerView;
-    @InjectView(R.id.common_empty_state)   protected FrameLayout mEmptyState;
+    @InjectView(R.id.evaluation_empty_state_view)  protected EmptyStateView mEmptyStateView;
     private CompositeSubscription mCompositeSubscription;
     private Navigator mNavigator;
     private Context mContext;
@@ -64,7 +65,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         mQueryButton.setText(R.string.toolbar_search);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
-        mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyState, this.mNavigator, this);
+        mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyStateView, this.mNavigator, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         return view;
@@ -81,7 +82,8 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
 
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
-        mAdapter.nextEvaluatonStep(((CourseData) object));
+        if (object instanceof CourseData) mAdapter.nextEvaluatonStep(((CourseData) object));
+        else this.mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
 
         ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
@@ -95,6 +97,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
         ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
         FloatingActionControl.getInstance().clear();
+
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
                 .observeOn(AndroidSchedulers.mainThread())
