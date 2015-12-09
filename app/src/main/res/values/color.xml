@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Color Chip-->
+    <color name="colorchip_red_dark">#C03E3F</color>
     <color name="colorchip_red">#E05E5F</color>
     <color name="colorchip_red_accent">#FF5E5F</color>
-    <color name="colorchip_red_highlight">#FF7E7F</color>
-    <color name="colorchip_red_light">#FCEFEF</color>
+    <color name="colorchip_red_light">#FF7E7F</color>
+    <color name="colorchip_red_bright">#FCEFEF</color>
+    <color name="colorchip_blue_dark">#344B6D</color>
     <color name="colorchip_blue">#546B8D</color>
     <color name="colorchip_blue_accent">#546BAD</color>
-    <color name="colorchip_blue_highlight">#748BAD</color>
-    <color name="colorchip_blue_light">#E9ECF2</color>
+    <color name="colorchip_blue_light">#748BAD</color>
+    <color name="colorchip_blue_bright">#E9ECF2</color>
+    <color name="colorchip_green_dark">#40AAA6</color>
     <color name="colorchip_green">#60CAC6</color>
     <color name="colorchip_green_accent">#60EAC6</color>
-    <color name="colorchip_green_highlight">#80EAE6</color>
-    <color name="colorchip_green_light">#E9F7F7</color>
+    <color name="colorchip_green_light">#80EAE6</color>
+    <color name="colorchip_green_bright">#E9F7F7</color>
     <color name="colorchip_yellow">#FFC81D</color>
 
     <!--Gray Scale-->
@@ -64,9 +67,9 @@
     <!--Background-->
     <color name="background_profile_change">@color/white_95p</color>
     <color name="background_overall">@color/white_95p</color>
-    <color name="background_easiness">@color/colorchip_green_light</color>
-    <color name="background_gpa_satisfaction">@color/colorchip_blue_light</color>
-    <color name="background_clarity">@color/colorchip_red_light</color>
+    <color name="background_easiness">@color/colorchip_green_bright</color>
+    <color name="background_gpa_satisfaction">@color/colorchip_blue_bright</color>
+    <color name="background_clarity">@color/colorchip_red_bright</color>
 
     <!--Search Category-->
     <color name="lecture_type_major">@color/colorchip_green</color>
@@ -74,35 +77,39 @@
     <color name="lecture_type_etc">@color/white_40p</color>
 
     <!--Toolbar-->
+    <color name="toolbar_evaluation_dark">#253A44</color>
     <color name="toolbar_evaluation">#455A64</color>
-    <color name="toolbar_evaluation_highlight">#657A84</color>
+    <color name="toolbar_evaluation_light">#657A84</color>
+    <color name="toolbar_red_dark">@color/colorchip_red_dark</color>
     <color name="toolbar_red">@color/colorchip_red</color>
-    <color name="toolbar_red_highlight">@color/colorchip_red_highlight</color>
+    <color name="toolbar_red_light">@color/colorchip_red_light</color>
+    <color name="toolbar_green_dark">@color/colorchip_green_dark</color>
     <color name="toolbar_green">@color/colorchip_green</color>
-    <color name="toolbar_green_highlight">@color/colorchip_green_highlight</color>
+    <color name="toolbar_green_light">@color/colorchip_green_light</color>
+    <color name="toolbar_blue_dark">@color/colorchip_blue_dark</color>
     <color name="toolbar_blue">@color/colorchip_blue</color>
-    <color name="toolbar_blue_highlight">@color/colorchip_blue_highlight</color>
+    <color name="toolbar_blue_light">@color/colorchip_blue_light</color>
 
     <!--Status Bar-->
-    <color name="status_bar_evaluation">@color/toolbar_evaluation_highlight</color>
-    <color name="status_bar_red">@color/toolbar_red_highlight</color>
-    <color name="status_bar_green">@color/toolbar_green_highlight</color>
-    <color name="status_bar_blue">@color/toolbar_blue_highlight</color>
+    <color name="status_bar_evaluation">@color/toolbar_evaluation_dark</color>
+    <color name="status_bar_red">@color/toolbar_red_dark</color>
+    <color name="status_bar_green">@color/toolbar_green_dark</color>
+    <color name="status_bar_blue">@color/toolbar_blue_dark</color>
 
     <!--Floating Action Button-->
     <color name="fam_background">#ccffffff</color>
     <color name="fab_evaluation_normal">@color/toolbar_evaluation</color>
-    <color name="fab_evaluation_pressed">@color/toolbar_evaluation_highlight</color>
-    <color name="fab_evaluation_progress">@color/toolbar_evaluation_highlight</color>
+    <color name="fab_evaluation_pressed">@color/toolbar_evaluation_light</color>
+    <color name="fab_evaluation_progress">@color/toolbar_evaluation_light</color>
     <color name="fab_red_normal">@color/toolbar_red</color>
-    <color name="fab_red_pressed">@color/toolbar_red_highlight</color>
-    <color name="fab_red_progress">@color/toolbar_red_highlight</color>
+    <color name="fab_red_pressed">@color/toolbar_red_light</color>
+    <color name="fab_red_progress">@color/toolbar_red_light</color>
     <color name="fab_green_normal">@color/toolbar_green</color>
-    <color name="fab_green_pressed">@color/toolbar_green_highlight</color>
-    <color name="fab_green_progress">@color/toolbar_green_highlight</color>
+    <color name="fab_green_pressed">@color/toolbar_green_light</color>
+    <color name="fab_green_progress">@color/toolbar_green_light</color>
     <color name="fab_blue_normal">@color/toolbar_blue</color>
-    <color name="fab_blue_pressed">@color/toolbar_blue_highlight</color>
-    <color name="fab_blue_progress">@color/toolbar_blue_highlight</color>
+    <color name="fab_blue_pressed">@color/toolbar_blue_light</color>
+    <color name="fab_blue_progress">@color/toolbar_blue_light</color>
 
     <!--Inform ViewHolder-->
     <color name="inform_course">@color/toolbar_green</color>
@@ -114,7 +121,7 @@
 
     <!--Etc-->
     <color name="disabled">@color/white_80p</color>
-    <color name="disabled_highlight">@color/white_95p</color>
+    <color name="disabled_light">@color/white_95p</color>
     <color name="hr_settings">@color/white_95p</color>
     <color name="timestamp">@color/white_60p</color>
     <color name="hashtag">#8C6239</color>

@@ -49,9 +49,9 @@ public class AppConst {
 
     public static int[] DEFAULT_PROGRESSBAR_COLOR_SCHEME(Context context) {
         return new int[] {
-            context.getResources().getColor(R.color.colorchip_green_highlight),
-            context.getResources().getColor(R.color.colorchip_blue_highlight),
-            context.getResources().getColor(R.color.colorchip_red_highlight)
+            context.getResources().getColor(R.color.colorchip_green_light),
+            context.getResources().getColor(R.color.colorchip_blue_light),
+            context.getResources().getColor(R.color.colorchip_red_light)
         };
     }
 
