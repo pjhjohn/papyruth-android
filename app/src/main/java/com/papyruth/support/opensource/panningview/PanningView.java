@@ -1,4 +1,4 @@
-package com.papyruth.support.utility.panningview;
+package com.papyruth.support.opensource.panningview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

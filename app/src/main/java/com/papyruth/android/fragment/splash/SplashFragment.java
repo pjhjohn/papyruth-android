@@ -29,7 +29,7 @@ import com.papyruth.support.utility.customview.Circle;
 import com.papyruth.support.utility.customview.CircleAngleAnimation;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.TrackerFragment;
-import com.papyruth.support.utility.panningview.PanningView;
+import com.papyruth.support.opensource.panningview.PanningView;
 
 import java.util.concurrent.TimeUnit;
 
