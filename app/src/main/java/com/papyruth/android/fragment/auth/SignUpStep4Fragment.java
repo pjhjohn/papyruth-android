@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -21,12 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.TermData;
@@ -38,6 +35,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.squareup.picasso.Picasso;
 
@@ -60,7 +58,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep4Fragment extends Fragment {
+public class SignUpStep4Fragment extends TrackerFragment {
     private AuthActivity mActivity;
     private com.papyruth.support.utility.navigator.Navigator mNavigator;
     private Tracker mTracker;
@@ -69,7 +67,6 @@ public class SignUpStep4Fragment extends Fragment {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
-        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView(R.id.signup_step4_container) protected NavigatableLinearLayout mContainer;
@@ -109,8 +106,6 @@ public class SignUpStep4Fragment extends Fragment {
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
             unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextPassword, InputMethodManager.SHOW_FORCED)
         );
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup4));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP4);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green).hide(true);
         mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

@@ -20,7 +20,7 @@ import rx.Observable;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class ScrollableFragment extends Fragment {
+public abstract class ScrollableFragment extends TrackerFragment {
     protected boolean mHideToolbarOnScroll, mHideFloatingActionControlOnScroll;
     protected Context mContext;
     @Override

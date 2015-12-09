@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,10 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CourseData;
@@ -26,6 +22,7 @@ import com.papyruth.android.recyclerview.adapter.SimpleCourseAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -44,15 +41,13 @@ import rx.subscriptions.CompositeSubscription;
  * TODO : should be able to expand when clicking recyclerview item to show evaluation data in detail
  */
 
-public class SimpleCourseFragment extends Fragment implements RecyclerViewItemObjectClickListener {
+public class SimpleCourseFragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
     private Navigator mNavigator;
-    private Tracker mTracker;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.mNavigator = (Navigator) activity;
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
 
     @Override
@@ -97,8 +92,6 @@ public class SimpleCourseFragment extends Fragment implements RecyclerViewItemOb
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_search_result));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.mToolbar.setTitle(R.string.toolbar_search);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);

@@ -3,12 +3,10 @@ package com.papyruth.android.fragment.auth;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
@@ -29,6 +24,7 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -45,22 +41,19 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends Fragment {
+public class SignUpStep2Fragment extends TrackerFragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mNavigator = (Navigator) activity;
-        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView(R.id.signup_step2_container) protected NavigatableLinearLayout mContainer;
@@ -98,8 +91,6 @@ public class SignUpStep2Fragment extends Fragment {
 
         Picasso.with(mActivity).load(R.drawable.ic_light_email).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconEmail);
         Picasso.with(mActivity).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconNickname);
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup2));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP2);
         final View focusedView = mActivity.getWindow().getCurrentFocus();
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(

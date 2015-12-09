@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -15,16 +14,14 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -41,10 +38,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  */
 
-public class EvaluationStep2Fragment extends Fragment {
+public class EvaluationStep2Fragment extends TrackerFragment {
     private Navigator mNavigator;
     private Context mContext;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -61,7 +57,6 @@ public class EvaluationStep2Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.evaluation_form_lecture)                   protected TextView mLecture;
@@ -118,8 +113,6 @@ public class EvaluationStep2Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_write_evaluation2));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);

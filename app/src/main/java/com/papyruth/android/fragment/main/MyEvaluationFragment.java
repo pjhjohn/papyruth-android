@@ -2,7 +2,6 @@ package com.papyruth.android.fragment.main;
 
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
@@ -27,7 +26,6 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     @Override
     public void onResume() {
         super.onResume();
-
         if(Evaluation.getInstance().getId() != null){
             mEvaluationFragment = new EvaluationFragment();
             openEvaluation(null, false);
@@ -78,12 +76,6 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         if (this.adapter == null)
             return adapter = new MyEvaluationItemsAdapter(mContext, mSwipeRefresh, mEmptyState, this);
         return adapter;
-    }
-
-    @Override
-    protected void sendScreen() {
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_my_evaluation));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

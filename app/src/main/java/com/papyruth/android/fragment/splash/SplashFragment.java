@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,8 +16,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
@@ -27,11 +24,11 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.response.UserDataResponse;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Circle;
 import com.papyruth.support.utility.customview.CircleAngleAnimation;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.panningview.PanningView;
 
 import java.util.concurrent.TimeUnit;
@@ -49,17 +46,15 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SplashFragment extends Fragment {
+public class SplashFragment extends TrackerFragment {
     @InjectView (R.id.splash_background_panning)    protected PanningView mSplashBackgroundPanning;
     @InjectView (R.id.splash_background_circle)     protected Circle mSplashBackgroundCircle;
     @InjectView (R.id.splash_application_logo)      protected ImageView mSplashApplicationLogo;
     private CompositeSubscription mCompositeSubscription;
-    private Tracker mTracker;
     private SplashActivity mActivity;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mTracker = ((PapyruthApplication) activity.getApplication()).getTracker();
         mActivity = (SplashActivity) activity;
     }
     @Override
@@ -89,7 +84,6 @@ public class SplashFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mActivity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
         mCompositeSubscription.add(Api.papyruth()

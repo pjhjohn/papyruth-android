@@ -45,7 +45,6 @@ import timber.log.Timber;
  *
  */
 public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>> extends ScrollableFragment implements OnBack, RecyclerViewItemObjectClickListener {
-    protected Tracker mTracker;
     protected Navigator mNavigator;
 
     @Override
@@ -94,7 +93,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     public void onResume() {
         super.onResume();
         mEvaluationOpened = false;
-        this.sendScreen();
         this.setToolbarStatus();
         this.setStatusBarDefault();
 
@@ -115,7 +113,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     }
     protected abstract void setToolbarStatus();
     protected abstract ADAPTER getAdapter();
-    protected abstract void sendScreen();
     abstract protected void setStatusBarDefault();
 
     @InjectView(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;

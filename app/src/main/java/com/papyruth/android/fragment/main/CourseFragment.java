@@ -2,7 +2,6 @@ package com.papyruth.android.fragment.main;
 
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
@@ -41,13 +40,6 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
             return adapter = new CourseAdapter(getActivity(), mSwipeRefresh, mEmptyState, mNavigator, this);
         }
         return adapter;
-    }
-
-    @Override
-    protected void sendScreen() {
-
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_course));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

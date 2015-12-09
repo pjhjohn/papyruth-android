@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -16,10 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
@@ -30,6 +26,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -53,15 +50,13 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileRegisterUniversityEmailFragment extends Fragment {
+public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
     private Navigator mNavigator;
     private Context context;
     private Resources res;
-    private Tracker mTracker;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
     @Override
     public void onAttach(Activity activity) {
@@ -105,8 +100,6 @@ public class ProfileRegisterUniversityEmailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile_change_university_email));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         toolbar.setTitle(R.string.toolbar_profile_register_university_email);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);

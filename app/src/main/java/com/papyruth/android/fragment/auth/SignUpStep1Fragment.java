@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,10 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.UniversityData;
@@ -25,6 +21,7 @@ import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableFrameLayout;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
@@ -47,16 +44,14 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemClickListener {
+public class SignUpStep1Fragment extends TrackerFragment implements RecyclerViewItemClickListener {
     private AuthActivity mActivity;
     private Navigator mNavigator;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mNavigator = (Navigator) activity;
-        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
@@ -88,8 +83,6 @@ public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemCli
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup1));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP1);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);

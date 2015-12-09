@@ -24,10 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
@@ -58,7 +55,6 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack {
-    private Tracker mTracker;
     private Navigator mNavigator;
     private RevealFrameLayout mCommentContainer;
     private RelativeLayout mCommentInput;
@@ -67,7 +63,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mTracker            = ((PapyruthApplication) getActivity().getApplication()).getTracker();
         mNavigator          = (Navigator) activity;
         mCommentContainer   = (RevealFrameLayout) activity.findViewById(R.id.comment_container);
         mCommentInput       = (RelativeLayout) activity.findViewById(R.id.comment_input);
@@ -158,8 +153,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_evaluation));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_title_evaluation);
         mToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
 

@@ -12,10 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CourseData;
@@ -44,12 +41,10 @@ import rx.subscriptions.CompositeSubscription;
 
 public class BookmarkFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener{
     private Navigator mNavigator;
-    private Tracker mTracker;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
         this.mNavigator = (Navigator) activity;
     }
 
@@ -92,8 +87,6 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_bookmark));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         this.mToolbar.setTitle(R.string.toolbar_favorite);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);

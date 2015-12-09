@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,16 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.OpenSourceLicenseData;
 import com.papyruth.android.recyclerview.adapter.OpenSourceLicensesAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.OpenSourceLicenseDialog;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
@@ -30,8 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.subscriptions.CompositeSubscription;
 
-public class OpenSourceLicensesFragment extends Fragment implements RecyclerViewItemObjectClickListener {
-    private Tracker mTracker;
+public class OpenSourceLicensesFragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
     private Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription;
 
@@ -39,7 +35,6 @@ public class OpenSourceLicensesFragment extends Fragment implements RecyclerView
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        this.mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
@@ -75,8 +70,6 @@ public class OpenSourceLicensesFragment extends Fragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getClass().getSimpleName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_osl);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);

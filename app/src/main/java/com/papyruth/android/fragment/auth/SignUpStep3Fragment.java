@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,16 +14,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.squareup.picasso.Picasso;
 
@@ -41,22 +38,19 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep3Fragment extends Fragment {
+public class SignUpStep3Fragment extends TrackerFragment {
     private AuthActivity mActivity;
     private com.papyruth.support.utility.navigator.Navigator mNavigator;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
-        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView(R.id.signup_step3_container) protected NavigatableLinearLayout mContainer;
@@ -91,8 +85,6 @@ public class SignUpStep3Fragment extends Fragment {
         });
         Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
         Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signup3));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP3);
         final View focusedView = mActivity.getWindow().getCurrentFocus();
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(

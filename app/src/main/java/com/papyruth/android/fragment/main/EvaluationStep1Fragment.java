@@ -2,7 +2,6 @@ package com.papyruth.android.fragment.main;
 
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,21 +14,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.CourseData;
-import com.papyruth.android.model.unique.EvaluationForm;
-import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.EvaluationSearchAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.materialdialog.AlertDialog;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -46,14 +39,12 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  * Searches SimpleCourse for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends Fragment implements RecyclerViewItemObjectClickListener {
+public class EvaluationStep1Fragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
     private Toolbar mToolbar;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mNavigator = (Navigator) activity;
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
         mContext = activity;
     }
 
@@ -98,8 +89,6 @@ public class EvaluationStep1Fragment extends Fragment implements RecyclerViewIte
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_write_evaluation1));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);

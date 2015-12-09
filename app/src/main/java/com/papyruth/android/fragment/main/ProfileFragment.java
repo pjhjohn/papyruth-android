@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -13,17 +12,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -38,9 +34,8 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends TrackerFragment {
     private Navigator mNavigator;
-    private Tracker mTracker;
     private Context mContext;
     private Resources mResources;
 
@@ -48,7 +43,6 @@ public class ProfileFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mNavigator = (Navigator) activity;
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
         mContext = activity;
         mResources = mContext.getResources();
     }
@@ -89,8 +83,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_profile));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mToolbar.setTitle(R.string.toolbar_profile);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);

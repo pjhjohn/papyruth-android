@@ -3,7 +3,6 @@ package com.papyruth.android.fragment.auth;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -18,11 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
@@ -32,6 +28,7 @@ import com.papyruth.support.opensource.materialdialog.InputDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -57,16 +54,14 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
 /**
  * Created by mrl on 2015-04-07.
  */
-public class SignInFragment extends Fragment {
+public class SignInFragment extends TrackerFragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AuthActivity) activity;
         mNavigator = (Navigator) activity;
-        mTracker = ((PapyruthApplication) mActivity.getApplication()).getTracker();
     }
 
     @InjectView (R.id.signin_email_text)        protected AutoCompleteTextView mTextEmail;
@@ -96,8 +91,6 @@ public class SignInFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_auth_signin));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNIN);
         SignUpForm.getInstance().clear();
         FloatingActionControl.getInstance().clear();

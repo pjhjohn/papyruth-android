@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -17,10 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.response.EvaluationResponse;
@@ -33,6 +29,7 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.customview.Hashtag;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -52,10 +49,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  */
 
-public class EvaluationStep3Fragment extends Fragment {
+public class EvaluationStep3Fragment extends TrackerFragment {
     private Navigator navigator;
     private Context context;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -72,7 +68,6 @@ public class EvaluationStep3Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
     }
 
     @InjectView(R.id.evaluation_body_icon) protected ImageView bodyIcon;
@@ -140,8 +135,6 @@ public class EvaluationStep3Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_write_evaluation3));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         final Context context = this.getActivity();
         toolbar.setTitle(R.string.toolbar_title_new_evaluation);
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();

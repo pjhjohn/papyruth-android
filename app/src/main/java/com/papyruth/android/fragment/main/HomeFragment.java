@@ -2,7 +2,6 @@ package com.papyruth.android.fragment.main;
 
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
@@ -91,11 +90,6 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         return adapter;
     }
 
-    @Override
-    protected void sendScreen() {
-        mTracker.setScreenName(getResources().getString(R.string.ga_fragment_main_recent));
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
 
     @Override
     protected void setStatusBarDefault() {
