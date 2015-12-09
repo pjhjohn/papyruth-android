@@ -28,8 +28,8 @@ import com.papyruth.support.utility.navigator.Navigator;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -59,23 +59,23 @@ public class EvaluationStep2Fragment extends TrackerFragment {
         super.onCreate(savedInstanceState);
     }
 
-    @InjectView(R.id.evaluation_form_lecture)                   protected TextView mLecture;
-    @InjectView(R.id.evaluation_form_professor)                 protected TextView mProfessor;
-    @InjectView(R.id.evaluation_form_overall_ratingbar)         protected RatingBar mRatingBarOverall;
-    @InjectView(R.id.evaluation_form_overall_point)             protected TextView mPointOverall;
-    @InjectView(R.id.evaluation_form_clarity_seekbar)           protected SeekBar mSeekBarClarity;
-    @InjectView(R.id.evaluation_form_clarity_point)             protected TextView mPointClarity;
-    @InjectView(R.id.evaluation_form_easiness_seekbar)          protected SeekBar mSeekBarEasiness;
-    @InjectView(R.id.evaluation_form_easiness_point)            protected TextView mPointEasiness;
-    @InjectView(R.id.evaluation_form_gpa_satisfaction_seekbar)  protected SeekBar mSeekBarGpaSatisfaction;
-    @InjectView(R.id.evaluation_form_gpa_satisfaction_point)    protected TextView mPointGpaSatisfaction;
+    @Bind(R.id.evaluation_form_lecture)                   protected TextView mLecture;
+    @Bind(R.id.evaluation_form_professor)                 protected TextView mProfessor;
+    @Bind(R.id.evaluation_form_overall_ratingbar)         protected RatingBar mRatingBarOverall;
+    @Bind(R.id.evaluation_form_overall_point)             protected TextView mPointOverall;
+    @Bind(R.id.evaluation_form_clarity_seekbar)           protected SeekBar mSeekBarClarity;
+    @Bind(R.id.evaluation_form_clarity_point)             protected TextView mPointClarity;
+    @Bind(R.id.evaluation_form_easiness_seekbar)          protected SeekBar mSeekBarEasiness;
+    @Bind(R.id.evaluation_form_easiness_point)            protected TextView mPointEasiness;
+    @Bind(R.id.evaluation_form_gpa_satisfaction_seekbar)  protected SeekBar mSeekBarGpaSatisfaction;
+    @Bind(R.id.evaluation_form_gpa_satisfaction_point)    protected TextView mPointGpaSatisfaction;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step2, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
@@ -105,7 +105,7 @@ public class EvaluationStep2Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

@@ -20,21 +20,21 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppManager;
+import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.android.PapyruthApplication;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallback {
     private NavigationDrawerCallback mNavigationDrawerCallback;
@@ -70,17 +70,17 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
     }
 
-    @InjectView(R.id.navigation_drawer_header)          protected RelativeLayout mHeader;
-    @InjectView(R.id.navigation_drawer_header_nickname) protected TextView mUserNickname;
-    @InjectView(R.id.navigation_drawer_header_email)    protected TextView mUserEmail;
-    @InjectView(R.id.navigation_drawer_header_avatar)   protected ImageView mUserAvatar;
-    @InjectView(R.id.navigation_drawer_recyclerview)    protected RecyclerView mNavigationRecyclerView;
+    @Bind(R.id.navigation_drawer_header)          protected RelativeLayout mHeader;
+    @Bind(R.id.navigation_drawer_header_nickname) protected TextView mUserNickname;
+    @Bind(R.id.navigation_drawer_header_email)    protected TextView mUserEmail;
+    @Bind(R.id.navigation_drawer_header_avatar)   protected ImageView mUserAvatar;
+    @Bind(R.id.navigation_drawer_recyclerview)    protected RecyclerView mNavigationRecyclerView;
     private NavigationDrawerAdapter mNavigationDrawerAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mHeader.setOnClickListener(subtitleView -> {
             mNavigator.navigate(ProfileFragment.class, true);
             if (mDrawerLayout != null) mDrawerLayout.closeDrawer(mFragmentContainerView);

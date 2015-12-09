@@ -7,18 +7,18 @@ import android.widget.TextView;
 
 import com.papyruth.android.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class PlaceholderViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.placeholder_body) protected TextView mBody;
+    @Bind(R.id.placeholder_body) protected TextView mBody;
     private final Context mContext;
     public PlaceholderViewHolder(View view) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
     }
 

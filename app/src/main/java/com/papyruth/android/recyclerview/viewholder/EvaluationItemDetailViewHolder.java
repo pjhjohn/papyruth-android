@@ -20,27 +20,27 @@ import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.evaluation_item_avatar)               protected ImageView mAvatar;
-    @InjectView(R.id.evaluation_item_nickname)             protected TextView mNickname;
-    @InjectView(R.id.evaluation_item_lecture)              protected TextView mLecture;
-    @InjectView(R.id.evaluation_item_timestamp)            protected RobotoTextView mTimestamp;
-    @InjectView(R.id.evaluation_item_category)             protected TextView mCategory;
-    @InjectView(R.id.evaluation_item_professor)            protected TextView mProfessor;
-    @InjectView(R.id.evaluation_item_body)                 protected TextView mBody;
-    @InjectView(R.id.evaluation_item_overall_ratingbar)    protected RatingBar mRatingBarOverall;
+    @Bind(R.id.evaluation_item_avatar)               protected ImageView mAvatar;
+    @Bind(R.id.evaluation_item_nickname)             protected TextView mNickname;
+    @Bind(R.id.evaluation_item_lecture)              protected TextView mLecture;
+    @Bind(R.id.evaluation_item_timestamp)            protected RobotoTextView mTimestamp;
+    @Bind(R.id.evaluation_item_category)             protected TextView mCategory;
+    @Bind(R.id.evaluation_item_professor)            protected TextView mProfessor;
+    @Bind(R.id.evaluation_item_body)                 protected TextView mBody;
+    @Bind(R.id.evaluation_item_overall_ratingbar)    protected RatingBar mRatingBarOverall;
 
     private final Context mContext;
     private final Resources mResources;
     public EvaluationItemDetailViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

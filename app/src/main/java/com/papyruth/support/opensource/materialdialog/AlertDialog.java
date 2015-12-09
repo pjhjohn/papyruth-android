@@ -8,11 +8,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationStep1Fragment;
 import com.papyruth.android.fragment.main.EvaluationStep2Fragment;
-import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.Navigator;
 
 import rx.Observable;

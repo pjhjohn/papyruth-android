@@ -19,23 +19,23 @@ import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.my_evaluation_item_lecture)           protected TextView mLecture;
-    @InjectView(R.id.my_evaluation_item_timestamp)         protected TextView mTimestamp;
-    @InjectView(R.id.my_evaluation_item_body)              protected TextView mBody;
-    @InjectView(R.id.my_evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
-    @InjectView(R.id.my_evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
-    @InjectView(R.id.my_evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
-    @InjectView(R.id.my_evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
-    @InjectView(R.id.my_evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
-    @InjectView(R.id.my_evaluation_item_comment_icon)      protected ImageView mCommentIcon;
-    @InjectView(R.id.my_evaluation_item_comment_count)     protected TextView mCommentCount;
+    @Bind(R.id.my_evaluation_item_lecture)           protected TextView mLecture;
+    @Bind(R.id.my_evaluation_item_timestamp)         protected TextView mTimestamp;
+    @Bind(R.id.my_evaluation_item_body)              protected TextView mBody;
+    @Bind(R.id.my_evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
+    @Bind(R.id.my_evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @Bind(R.id.my_evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
+    @Bind(R.id.my_evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @Bind(R.id.my_evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
+    @Bind(R.id.my_evaluation_item_comment_icon)      protected ImageView mCommentIcon;
+    @Bind(R.id.my_evaluation_item_comment_count)     protected TextView mCommentCount;
     private VoteStatus mVoteStatus;
     private final Context mContext;
     private final Resources mResources;
@@ -44,7 +44,7 @@ public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
     }
     public MyEvaluationItemViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

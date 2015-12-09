@@ -29,8 +29,8 @@ import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
@@ -48,9 +48,9 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         mContext = activity;
     }
 
-    @InjectView(R.id.evaluation_form_query_button) protected Button mQueryButton;
-    @InjectView(R.id.evaluation_form_query_result) protected RecyclerView mRecyclerView;
-    @InjectView(R.id.common_empty_state)   protected FrameLayout mEmptyState;
+    @Bind(R.id.evaluation_form_query_button) protected Button mQueryButton;
+    @Bind(R.id.evaluation_form_query_result) protected RecyclerView mRecyclerView;
+    @Bind(R.id.common_empty_state)   protected FrameLayout mEmptyState;
     private CompositeSubscription mCompositeSubscription;
     private Navigator mNavigator;
     private Context mContext;
@@ -59,7 +59,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mQueryButton.setText(R.string.toolbar_search);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -73,7 +73,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         SearchToolbar.getInstance().setItemClickListener(null).setOnSearchByQueryListener(null);
         if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
         this.mCompositeSubscription.unsubscribe();

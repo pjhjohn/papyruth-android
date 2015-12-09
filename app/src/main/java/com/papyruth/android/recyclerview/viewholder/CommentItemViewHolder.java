@@ -13,32 +13,31 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CommentData;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.opensource.materialdialog.VotersDialog;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class CommentItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @InjectView(R.id.comment_item_avatar)           protected ImageView mAvatar;
-    @InjectView(R.id.comment_item_nickname)         protected TextView mNickname;
-    @InjectView(R.id.comment_item_timestamp)        protected RobotoTextView mTimestamp;
-    @InjectView(R.id.comment_item_body)             protected TextView mBody;
-    @InjectView(R.id.comment_item_up_vote_icon)     protected ImageView mVoteUpIcon;
-    @InjectView(R.id.comment_item_up_vote_count)    protected RobotoTextView mVoteUpCount;
-    @InjectView(R.id.comment_item_down_vote_icon)   protected ImageView mVoteDownIcon;
-    @InjectView(R.id.comment_item_down_vote_count)  protected RobotoTextView mVoteDownCount;
+    @Bind(R.id.comment_item_avatar)           protected ImageView mAvatar;
+    @Bind(R.id.comment_item_nickname)         protected TextView mNickname;
+    @Bind(R.id.comment_item_timestamp)        protected RobotoTextView mTimestamp;
+    @Bind(R.id.comment_item_body)             protected TextView mBody;
+    @Bind(R.id.comment_item_up_vote_icon)     protected ImageView mVoteUpIcon;
+    @Bind(R.id.comment_item_up_vote_count)    protected RobotoTextView mVoteUpCount;
+    @Bind(R.id.comment_item_down_vote_icon)   protected ImageView mVoteDownIcon;
+    @Bind(R.id.comment_item_down_vote_count)  protected RobotoTextView mVoteDownCount;
     private int mCommentId;
     private VoteStatus mVoteStatus;
     private final Context mContext;
@@ -49,7 +48,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
 
     public CommentItemViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         mResources = mContext.getResources();
         view.setOnClickListener(this);

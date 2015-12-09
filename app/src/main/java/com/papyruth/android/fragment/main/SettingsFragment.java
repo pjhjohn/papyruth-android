@@ -30,8 +30,8 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
@@ -58,14 +58,14 @@ public class SettingsFragment extends TrackerFragment {
         this.context = null;
     }
 
-    @InjectView (R.id.signout_container) protected RelativeLayout signout;
-    @InjectView (R.id.signout_icon) protected ImageView signoutIcon;
-    @InjectView (R.id.osl_container) protected RelativeLayout openSourceLicense;
-    @InjectView (R.id.osl_icon) protected ImageView openSourceLicenseIcon;
-    @InjectView (R.id.tos_container) protected RelativeLayout termOfServices;
-    @InjectView (R.id.tos_icon) protected ImageView termOfServicesIcon;
-    @InjectView (R.id.history_delete_container) protected RelativeLayout delHistory;
-    @InjectView (R.id.history_delete_icon) protected ImageView delHistoryIcon;
+    @Bind(R.id.signout_container) protected RelativeLayout signout;
+    @Bind(R.id.signout_icon) protected ImageView signoutIcon;
+    @Bind(R.id.osl_container) protected RelativeLayout openSourceLicense;
+    @Bind(R.id.osl_icon) protected ImageView openSourceLicenseIcon;
+    @Bind(R.id.tos_container) protected RelativeLayout termOfServices;
+    @Bind(R.id.tos_icon) protected ImageView termOfServicesIcon;
+    @Bind(R.id.history_delete_container) protected RelativeLayout delHistory;
+    @Bind(R.id.history_delete_icon) protected ImageView delHistoryIcon;
     private CompositeSubscription subscriptions;
     private Toolbar toolbar;
     private MaterialDialog dialog;
@@ -73,7 +73,7 @@ public class SettingsFragment extends TrackerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         Picasso.with(context).load(R.drawable.ic_light_tos).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(termOfServicesIcon);
@@ -85,7 +85,7 @@ public class SettingsFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
     }
 

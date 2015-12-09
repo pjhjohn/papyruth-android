@@ -13,9 +13,9 @@ import com.papyruth.support.opensource.retrofit.RetrofitLogger;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.squareup.picasso.Picasso;
 
-import io.fabric.sdk.android.Fabric;
 import java.util.Locale;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit.RestAdapter;
 import timber.log.Timber;
 

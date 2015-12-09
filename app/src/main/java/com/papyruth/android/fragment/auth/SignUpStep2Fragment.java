@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
@@ -56,17 +56,17 @@ public class SignUpStep2Fragment extends TrackerFragment {
         mNavigator = (Navigator) activity;
     }
 
-    @InjectView(R.id.signup_step2_container) protected NavigatableLinearLayout mContainer;
-    @InjectView(R.id.signup_email_text)    protected EditText mTextEmail;
-    @InjectView(R.id.signup_nickname_text) protected EditText mTextNickname;
-    @InjectView(R.id.signup_email_icon)    protected ImageView mIconEmail;
-    @InjectView(R.id.signup_nickname_icon) protected ImageView mIconNickname;
+    @Bind(R.id.signup_step2_container) protected NavigatableLinearLayout mContainer;
+    @Bind(R.id.signup_email_text)    protected EditText mTextEmail;
+    @Bind(R.id.signup_nickname_text) protected EditText mTextNickname;
+    @Bind(R.id.signup_email_icon)    protected ImageView mIconEmail;
+    @Bind(R.id.signup_nickname_icon) protected ImageView mIconNickname;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         List<String> emails = getEmails();
         if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getTempSaveEmail() == null) SignUpForm.getInstance().setTempSaveEmail(emails.get(0));
@@ -76,7 +76,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

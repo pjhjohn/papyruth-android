@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.RetrofitError;
 import retrofit.mime.TypedByteArray;
 import rx.Observable;
@@ -69,17 +69,17 @@ public class SignUpStep4Fragment extends TrackerFragment {
         mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
     }
 
-    @InjectView(R.id.signup_step4_container) protected NavigatableLinearLayout mContainer;
-    @InjectView(R.id.signup_password_text)      protected EditText mTextPassword;
-    @InjectView(R.id.signup_password_icon) protected ImageView mIconPassword;
-    @InjectView(R.id.signup_term)    protected TextView mTextAgreement;
+    @Bind(R.id.signup_step4_container) protected NavigatableLinearLayout mContainer;
+    @Bind(R.id.signup_password_text)      protected EditText mTextPassword;
+    @Bind(R.id.signup_password_icon) protected ImageView mIconPassword;
+    @Bind(R.id.signup_term)    protected TextView mTextAgreement;
     private List<CharSequence> mTermsOfServiceStringArguments;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step4, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mTermsOfServiceStringArguments = new ArrayList<>();
         return view;
@@ -88,7 +88,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

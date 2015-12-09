@@ -15,41 +15,36 @@ import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
-import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Hashtag;
-import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.evaluation_item_avatar)            protected ImageView mAvatar;
-    @InjectView(R.id.evaluation_item_nickname)          protected TextView mNickname;
-    @InjectView(R.id.evaluation_item_timestamp)         protected RobotoTextView mTimestamp;
-    @InjectView(R.id.evaluation_item_body)              protected TextView mBody;
-    @InjectView(R.id.evaluation_item_overall_label)     protected TextView mLabelOverall;
-    @InjectView(R.id.evaluation_item_overall_point)     protected RobotoTextView mPointOverall;
-    @InjectView(R.id.evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
-    @InjectView(R.id.evaluation_item_hashtags)          protected TextView mHashtags;
-    @InjectView(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
-    @InjectView(R.id.evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
-    @InjectView(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
-    @InjectView(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
-    @InjectView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
-    @InjectView(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
-    @InjectView(R.id.material_progress_medium)          protected View mProgressbar;
+    @Bind(R.id.evaluation_item_avatar)            protected ImageView mAvatar;
+    @Bind(R.id.evaluation_item_nickname)          protected TextView mNickname;
+    @Bind(R.id.evaluation_item_timestamp)         protected RobotoTextView mTimestamp;
+    @Bind(R.id.evaluation_item_body)              protected TextView mBody;
+    @Bind(R.id.evaluation_item_overall_label)     protected TextView mLabelOverall;
+    @Bind(R.id.evaluation_item_overall_point)     protected RobotoTextView mPointOverall;
+    @Bind(R.id.evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
+    @Bind(R.id.evaluation_item_hashtags)          protected TextView mHashtags;
+    @Bind(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @Bind(R.id.evaluation_item_up_vote_count)     protected TextView mVoteUpCount;
+    @Bind(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @Bind(R.id.evaluation_item_down_vote_count)   protected TextView mVoteDownCount;
+    @Bind(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
+    @Bind(R.id.evaluation_item_comment_count)     protected TextView mCommentCount;
+    @Bind(R.id.material_progress_medium)          protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
     private final Context mContext;
@@ -60,7 +55,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
 
     public EvaluationItemViewHolder(View itemView, RecyclerViewItemClickListener listener) {
         super(itemView);
-        ButterKnife.inject(this, itemView);
+        ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mResources = mContext.getResources();
         mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

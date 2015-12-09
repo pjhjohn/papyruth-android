@@ -38,8 +38,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -64,18 +64,18 @@ public class SignInFragment extends TrackerFragment {
         mNavigator = (Navigator) activity;
     }
 
-    @InjectView (R.id.signin_email_text)        protected AutoCompleteTextView mTextEmail;
-    @InjectView (R.id.signin_password_text)     protected EditText mTextPassword;
-    @InjectView (R.id.signin_button)            protected Button mButtonSignIn;
-    @InjectView (R.id.signin_signup_button)     protected Button mButtonSignUp;
-    @InjectView (R.id.signin_password_recovery) protected TextView mTextPasswordRecovery;
-    @InjectView (R.id.material_progress_large)  protected View mProgress;
+    @Bind(R.id.signin_email_text)        protected AutoCompleteTextView mTextEmail;
+    @Bind(R.id.signin_password_text)     protected EditText mTextPassword;
+    @Bind(R.id.signin_button)            protected Button mButtonSignIn;
+    @Bind(R.id.signin_signup_button)     protected Button mButtonSignUp;
+    @Bind(R.id.signin_password_recovery) protected TextView mTextPasswordRecovery;
+    @Bind(R.id.material_progress_large)  protected View mProgress;
     private CompositeSubscription mCompositeSubscriptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscriptions = new CompositeSubscription();
         mTextEmail.setAdapter(new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, getEmails()));
         return view;
@@ -83,7 +83,7 @@ public class SignInFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscriptions ==null || mCompositeSubscriptions.isUnsubscribed()) return;
         mCompositeSubscriptions.unsubscribe();
     }

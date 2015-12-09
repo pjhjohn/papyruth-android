@@ -31,8 +31,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -54,15 +54,15 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
         mNavigator = (Navigator) activity;
     }
 
-    @InjectView (R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
-    @InjectView (R.id.signup_step1_container) protected NavigatableFrameLayout mContainer;
+    @Bind(R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
+    @Bind(R.id.signup_step1_container) protected NavigatableFrameLayout mContainer;
     private CompositeSubscription mCompositeSubscription;
     private List<UniversityData> mUniversities;
     private UniversityAdapter mAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
         mUniversities = new ArrayList<>();
@@ -75,7 +75,7 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

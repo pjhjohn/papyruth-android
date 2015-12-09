@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 
 /**

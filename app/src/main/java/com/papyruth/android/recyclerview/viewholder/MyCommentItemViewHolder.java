@@ -16,20 +16,20 @@ import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class MyCommentItemViewHolder extends RecyclerView.ViewHolder {
-    @InjectView(R.id.my_comment_item_lecture)           protected TextView mLecture;
-    @InjectView(R.id.my_comment_item_timestamp)         protected TextView mTimestamp;
-    @InjectView(R.id.my_comment_item_body)              protected TextView mBody;
-    @InjectView(R.id.my_comment_item_up_vote_icon)      protected ImageView mVoteUpIcon;
-    @InjectView(R.id.my_comment_item_up_vote_count)     protected TextView mVoteUpCount;
-    @InjectView(R.id.my_comment_item_down_vote_icon)    protected ImageView mVoteDownIcon;
-    @InjectView(R.id.my_comment_item_down_vote_count)   protected TextView mVoteDownCount;
+    @Bind(R.id.my_comment_item_lecture)           protected TextView mLecture;
+    @Bind(R.id.my_comment_item_timestamp)         protected TextView mTimestamp;
+    @Bind(R.id.my_comment_item_body)              protected TextView mBody;
+    @Bind(R.id.my_comment_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @Bind(R.id.my_comment_item_up_vote_count)     protected TextView mVoteUpCount;
+    @Bind(R.id.my_comment_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @Bind(R.id.my_comment_item_down_vote_count)   protected TextView mVoteDownCount;
     private VoteStatus mVoteStatus;
     private final Context mContext;
     private final Resources mResources;
@@ -38,7 +38,7 @@ public class MyCommentItemViewHolder extends RecyclerView.ViewHolder {
     }
     public MyCommentItemViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mContext = view.getContext();
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

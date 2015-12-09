@@ -2,8 +2,8 @@ package com.papyruth.android.navigation_drawer;
 
 import android.app.Fragment;
 
-import com.papyruth.android.fragment.main.EvaluationStep1Fragment;
 import com.papyruth.android.fragment.main.BookmarkFragment;
+import com.papyruth.android.fragment.main.EvaluationStep1Fragment;
 import com.papyruth.android.fragment.main.HomeFragment;
 import com.papyruth.android.fragment.main.MyCommentFragment;
 import com.papyruth.android.fragment.main.MyEvaluationFragment;

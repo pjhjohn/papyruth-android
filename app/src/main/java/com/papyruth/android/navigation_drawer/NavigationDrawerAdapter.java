@@ -14,8 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Author : JoonHo Park &lt;pjhjohn@gmail.com&gt;<br>
@@ -101,14 +101,14 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
     public class NavigationDrawerItemViewHolder extends RecyclerView.ViewHolder {
         public static final int VIEWTYPE = 0x2;
-        @InjectView(R.id.navigation_drawer_item_icon)  protected ImageView mNavigationDrawerItemIcon; // 54% #000000
-        @InjectView(R.id.navigation_drawer_item_label) protected TextView mNavigationDrawerItemLabel; // Roboto Medium, 14sp, 87% #000000
+        @Bind(R.id.navigation_drawer_item_icon)  protected ImageView mNavigationDrawerItemIcon; // 54% #000000
+        @Bind(R.id.navigation_drawer_item_label) protected TextView mNavigationDrawerItemLabel; // Roboto Medium, 14sp, 87% #000000
         private int mColorIconMaterial;
         private final Context mContext;
 
         public NavigationDrawerItemViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             mContext = itemView.getContext();
             mColorIconMaterial = mContext.getResources().getColor(R.color.icon_material);
         }

@@ -33,8 +33,8 @@ import com.papyruth.support.utility.panningview.PanningView;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,9 +47,9 @@ import timber.log.Timber;
  */
 
 public class SplashFragment extends TrackerFragment {
-    @InjectView (R.id.splash_background_panning)    protected PanningView mSplashBackgroundPanning;
-    @InjectView (R.id.splash_background_circle)     protected Circle mSplashBackgroundCircle;
-    @InjectView (R.id.splash_application_logo)      protected ImageView mSplashApplicationLogo;
+    @Bind(R.id.splash_background_panning)    protected PanningView mSplashBackgroundPanning;
+    @Bind(R.id.splash_background_circle)     protected Circle mSplashBackgroundCircle;
+    @Bind(R.id.splash_application_logo)      protected ImageView mSplashApplicationLogo;
     private CompositeSubscription mCompositeSubscription;
     private SplashActivity mActivity;
     @Override
@@ -60,7 +60,7 @@ public class SplashFragment extends TrackerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mSplashBackgroundPanning.startPanning();
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
@@ -69,7 +69,7 @@ public class SplashFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
