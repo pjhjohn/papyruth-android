@@ -245,4 +245,29 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="dialog_btn_settings">SETTINGS</string>
     <string name="dialog_btn_close">CLOSE</string>
     <string name="permission_title">permission_title</string>
+
+    <!-- Empty state Message -->
+    <string name="empty_state_title_network">네트워크가 불안정합니다</string>
+    <string name="empty_state_content_network">네트워크 상태를 확인해주세요</string>
+
+    <string name="empty_state_title_empty_something">%1$s 없습니다</string>
+    <string name="empty_state_title_empty_something_favorite">관심강좌가</string>
+    <string name="empty_state_title_empty_something_my_comment">내가 쓴 댓글이</string>
+    <string name="empty_state_title_empty_something_my_evaluation">내가 쓴 강의평가가</string>
+    <string name="empty_state_title_empty_something_search_result">검색 결과가</string>
+    <string name="empty_state_title_empty_something_recent">최신 강의평가가</string>
+    <string name="empty_state_title_empty_something_comment">댓글이</string>
+    <string name="empty_state_title_empty_something_evaluation">강의평가가</string>
+
+    <string name="empty_state_content_empty_favorite">관심강좌를 추가해주세요</string>
+    <string name="empty_state_content_empty_my_comment">댓글을 써주세요</string>
+    <string name="empty_state_content_empty_my_evaluation">강의평가를 써주세요</string>
+    <string name="empty_state_content_empty_search_result">다른 검색어로 검색해주세요</string>
+    <string name="empty_state_content_empty_recent">헛!! 강의평가가 하나도 없습니다\n우리 학교의 첫 강의평가를 써주세요</string>
+    <string name="empty_state_content_empty_comment">이 강의평가에는 아직 댓글이 없습니다\n첫 댓글을 써주세요!</string>
+    <string name="empty_state_content_empty_evaluation">당신이 처음 강의평가를 쓸 수 있는 기회입니다!\n이 강의에 대한 강의평을 써주세요</string>
+
+    <string name="empty_state_title_access_denied">지금은 볼 수 없습니다</string>
+    <string name="empty_state_content_access_denied_email">이메일 인증을 해주세요</string>
+    <string name="empty_state_content_access_denied_university_email">학교 이메일 인증을 해주세요</string>
 </resources>

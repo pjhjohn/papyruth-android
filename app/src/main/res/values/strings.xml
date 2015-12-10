@@ -247,4 +247,29 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="dialog_btn_settings">SETTINGS</string>
     <string name="dialog_btn_close">CLOSE</string>
     <string name="permission_title">permission_title</string>
+
+    <!-- Empty state Message -->
+    <string name="empty_state_title_network">Unstable network</string>
+    <string name="empty_state_content_network">Check your network</string>
+
+    <string name="empty_state_title_empty_something">No %1$s</string>
+    <string name="empty_state_title_empty_something_favorite">favorite course</string>
+    <string name="empty_state_title_empty_something_my_comment">my comment</string>
+    <string name="empty_state_title_empty_something_my_evaluation">my evaluation</string>
+    <string name="empty_state_title_empty_something_search_result">search result</string>
+    <string name="empty_state_title_empty_something_recent">recent evaluation</string>
+    <string name="empty_state_title_empty_something_comment">commnet</string>
+    <string name="empty_state_title_empty_something_evaluation">evaluation</string>
+
+    <string name="empty_state_content_empty_favorite">Add your favorite course</string>
+    <string name="empty_state_content_empty_my_comment">Write comment to evaluation</string>
+    <string name="empty_state_content_empty_my_evaluation">write evaluation taken course</string>
+    <string name="empty_state_content_empty_search_result">Search other words</string>
+    <string name="empty_state_content_empty_recent">Wow!! Our university has no evluation\n You can write first evaluation for our University</string>
+    <string name="empty_state_content_empty_comment">This evaluation has no comment\nWrite first comment</string>
+    <string name="empty_state_content_empty_evaluation">This course has no evaluation\nWrite first evaluation</string>
+
+    <string name="empty_state_title_access_denied">You can not see now</string>
+    <string name="empty_state_content_access_denied_email">Please check confirm mail</string>
+    <string name="empty_state_content_access_denied_university_email">Please check your university mail</string>
 </resources>
