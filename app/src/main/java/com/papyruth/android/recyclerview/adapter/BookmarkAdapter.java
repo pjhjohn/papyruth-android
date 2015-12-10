@@ -22,6 +22,7 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
     private SwipeRefreshLayout mSwipeRefresh;
-    private View mEmptyState;
+    private EmptyStateView mEmptyState;
     private List<CourseData> mCourses;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
@@ -50,7 +51,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private RelativeLayout mFooterMaterialProgressBar;
     private ImageView mFooterFullyLoadedIndicator;
 
-    public BookmarkAdapter(Context context, SwipeRefreshLayout swiperefresh, View emptystate, RecyclerViewItemObjectClickListener listener) {
+    public BookmarkAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
         mCourses = new ArrayList<>();

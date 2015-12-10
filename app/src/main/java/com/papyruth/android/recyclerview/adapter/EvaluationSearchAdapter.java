@@ -54,7 +54,7 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public EvaluationSearchAdapter(Context context, EmptyStateView emptystate, Navigator navigator,RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
-        mEmptyState.setIconDrawable(R.drawable.ic_light_history).setContentText("hello").setTitleText("error?").show();
+//        mEmptyState.setIconDrawable(R.drawable.ic_light_history).setContentText("hello").setTitleText("error?").show();
         mContext = context;
         mNavigator = navigator;
         mCourses = new ArrayList<>();

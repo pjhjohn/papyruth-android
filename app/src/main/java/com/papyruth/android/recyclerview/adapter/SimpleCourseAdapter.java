@@ -24,6 +24,7 @@ import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ import rx.schedulers.Schedulers;
 public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 //    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
-    private View mEmptyState;
+    private EmptyStateView mEmptyState;
     private List<CourseData> mCourses;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
@@ -51,7 +52,7 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context mContext;
     private Navigator mNavigator;
 
-    public SimpleCourseAdapter(Context context, View emptystate, Navigator navigator, RecyclerViewItemObjectClickListener listener) {
+    public SimpleCourseAdapter(Context context, EmptyStateView emptystate, Navigator navigator, RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
         mContext = context;
         mNavigator = navigator;

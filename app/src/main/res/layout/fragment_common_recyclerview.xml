@@ -16,7 +16,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent">
-                <include layout="@layout/empty_state_common"/>
+                <com.papyruth.utils.view.customview.EmptyStateView
+                    android:id="@+id/common_empty_state_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/common_recycler_view"
                     android:layout_width="match_parent"

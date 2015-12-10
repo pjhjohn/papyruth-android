@@ -32,6 +32,7 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -54,7 +55,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
 
     @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_empty_state)   protected FrameLayout mEmptyState;
+    @Bind(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
     protected CompositeSubscription mCompositeSubscription;
     protected Toolbar mToolbar;
     protected ADAPTER adapter;

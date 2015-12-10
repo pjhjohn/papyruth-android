@@ -50,7 +50,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
 
     @Bind(R.id.evaluation_form_query_button) protected Button mQueryButton;
     @Bind(R.id.evaluation_form_query_result) protected RecyclerView mRecyclerView;
-    @Bind(R.id.evaluation_empty_state_view)  protected EmptyStateView mEmptyStateView;
+    @Bind(R.id.evaluation_step_empty_state_view)  protected EmptyStateView mEmptyStateView;
     private CompositeSubscription mCompositeSubscription;
     private Navigator mNavigator;
     private Context mContext;

@@ -26,6 +26,7 @@ import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +51,7 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
 
     @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_empty_state)   protected FrameLayout mEmptyState;
+    @Bind(R.id.common_empty_state_view) protected EmptyStateView mEmptyStateView;
 
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
@@ -67,7 +68,7 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
         mSwipeRefresh.setEnabled(true);
         initSwipeRefresh(mSwipeRefresh);
 
-        mAdapter = new BookmarkAdapter(getActivity(), mSwipeRefresh, mEmptyState, this);
+        mAdapter = new BookmarkAdapter(getActivity(), mSwipeRefresh, mEmptyStateView, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 

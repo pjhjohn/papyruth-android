@@ -27,6 +27,7 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final String HIDE_INFORM = "EvaluationAdapter.mHideInform";
     private final Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
-    private View mEmptyState;
+    private EmptyStateView mEmptyState;
     private List<CommentData> mComments;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
@@ -56,7 +57,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private RelativeLayout mFooterMaterialProgressBar;
     private ImageView mFooterFullyLoadedIndicator;
 
-    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, View emptystate, RecyclerViewItemObjectClickListener listener) {
+    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;

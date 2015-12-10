@@ -25,6 +25,7 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final String HIDE_INFORM = "MyCommentAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
     private SwipeRefreshLayout mSwipeRefresh;
-    private View mEmptyState;
+    private EmptyStateView mEmptyState;
     private List<MyCommentData> mMyComments;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
@@ -54,7 +55,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private RelativeLayout mFooterMaterialProgressBar;
     private ImageView mFooterFullyLoadedIndicator;
 
-    public MyCommentItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, View emptystate, RecyclerViewItemObjectClickListener listener) {
+    public MyCommentItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
         mMyComments = new ArrayList<>();

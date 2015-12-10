@@ -30,6 +30,7 @@ import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String HIDE_INFORM = "CourseAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
     private final Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
-    private View mEmptyState;
+    private EmptyStateView mEmptyState;
     private List<EvaluationData> mEvaluations;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
@@ -60,7 +61,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ImageView mFooterFullyLoadedIndicator;
     private Navigator mNavigator;
 
-    public CourseAdapter(Context context, SwipeRefreshLayout swiperefresh, View emptystate, Navigator navigator, RecyclerViewItemObjectClickListener listener) {
+    public CourseAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Navigator navigator, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
         mNavigator = navigator;
         mSwipeRefresh = swiperefresh;
