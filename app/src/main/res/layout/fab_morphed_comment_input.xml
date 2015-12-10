@@ -28,7 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_light_done"
+            android:src="@drawable/ic_done_24dp"
             android:background="@color/transparent"
             android:padding="@dimen/baseline_x3"
             android:contentDescription="@string/empty"/>

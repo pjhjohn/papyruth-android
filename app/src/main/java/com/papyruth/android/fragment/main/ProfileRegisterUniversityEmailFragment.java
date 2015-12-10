@@ -82,7 +82,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         View view = inflater.inflate(R.layout.fragment_profile_register_university_email, container, false);
         ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
-        Picasso.with(context).load(R.drawable.ic_light_university_email).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
+        Picasso.with(context).load(R.drawable.ic_university_email_24dp).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
         else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
         this.email.setText(User.getInstance().getUniversityEmail());

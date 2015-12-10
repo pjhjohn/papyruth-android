@@ -166,8 +166,8 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                 .build()
                 .show();
         }, error->ErrorHandler.handle(error, this));
-        Picasso.with(context).load(R.drawable.ic_light_edit).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.bodyIcon);
-        Picasso.with(context).load(R.drawable.ic_light_tag).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.hashtagsIcon);
+        Picasso.with(context).load(R.drawable.ic_edit_24dp).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.bodyIcon);
+        Picasso.with(context).load(R.drawable.ic_hashtag_24dp).transform(new ColorFilterTransformation(this.context.getResources().getColor(R.color.icon_material))).into(this.hashtagsIcon);
         this.bodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.bodyLabel.getPaintFlags());
         this.hashtagsLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | this.hashtagsLabel.getPaintFlags());
 

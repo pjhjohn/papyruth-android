@@ -20,7 +20,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/empty"
-            android:src="@drawable/ic_light_password"/>
+            android:src="@drawable/ic_password_24dp"/>
         <EditText
             android:id="@+id/signup_password_text"
             android:layout_width="match_parent"

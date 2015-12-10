@@ -7,7 +7,7 @@
         android:id="@+id/navigation_drawer_header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/navigation_drawer_header_height"
-        android:background="@drawable/nav_logo"
+        android:background="@drawable/dummy_nav_university"
         android:paddingTop="@dimen/baseline_x3">
         <ImageView
             android:id="@+id/navigation_drawer_header_avatar"
@@ -59,7 +59,7 @@
             android:layout_marginEnd="@dimen/baseline_x2"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/baseline_x2"
-            android:src="@drawable/ic_light_setting"/>
+            android:src="@drawable/ic_settings_24dp"/>
     </RelativeLayout>
     <include layout="@layout/hr_white_8dp"/>
     <android.support.v7.widget.RecyclerView

@@ -5,14 +5,14 @@
     <item
         android:title="@string/menu_search"
         android:id="@+id/menu_search"
-        android:icon="@drawable/ic_light_search"
+        android:icon="@drawable/ic_search_24dp"
         android:orderInCategory="0"
         app:showAsAction="ifRoom"/>
     <!--android:icon="@drawable/abc_ic_search_api_mtrl_alpha"-->
     <item
         android:title="@string/menu_settings"
         android:id="@+id/menu_setting"
-        android:icon="@drawable/ic_light_setting"
+        android:icon="@drawable/ic_settings_24dp"
         android:orderInCategory="1"
         app:showAsAction="ifRoom"/>
 </menu>

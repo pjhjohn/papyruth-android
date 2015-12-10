@@ -83,8 +83,8 @@ public class SignUpStep3Fragment extends TrackerFragment {
             this.mNavigator.back();
             return true;
         });
-        Picasso.with(mActivity).load(R.drawable.ic_light_gender).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
-        Picasso.with(mActivity).load(R.drawable.ic_light_realname).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
+        Picasso.with(mActivity).load(R.drawable.ic_gender_24dp).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconGender);
+        Picasso.with(mActivity).load(R.drawable.ic_realname_24dp).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(mIconRealname);
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP3);
         final View focusedView = mActivity.getWindow().getCurrentFocus();
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(

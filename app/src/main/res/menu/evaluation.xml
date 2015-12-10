@@ -5,7 +5,7 @@
     <item
         android:title="@string/menu_evaluation_edit"
         android:id="@+id/menu_evaluation_edit"
-        android:icon="@drawable/ic_light_edit"
+        android:icon="@drawable/ic_edit_24dp"
         android:orderInCategory="1"
         android:visible="false"
         app:showAsAction="always"/>

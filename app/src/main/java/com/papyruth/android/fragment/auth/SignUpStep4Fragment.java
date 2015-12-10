@@ -100,7 +100,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
             this.mNavigator.back();
             return true;
         });
-        Picasso.with(mActivity).load(R.drawable.ic_light_password).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconPassword);
+        Picasso.with(mActivity).load(R.drawable.ic_password_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconPassword);
         InputMethodManager imm = ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE));
         final View focusedView = mActivity.getWindow().getCurrentFocus();
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(

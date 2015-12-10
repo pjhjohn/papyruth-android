@@ -5,7 +5,7 @@
     android:id="@+id/fab_mini_register_university_email"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_light_university_email"
+    android:src="@drawable/ic_university_email_24dp"
     fab:fab_colorNormal="@color/disabled"
     fab:fab_colorPressed="@color/disabled_light"
     fab:fab_size="mini"

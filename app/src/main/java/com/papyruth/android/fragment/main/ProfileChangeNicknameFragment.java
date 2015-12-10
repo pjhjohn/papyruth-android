@@ -79,7 +79,7 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
         View view = inflater.inflate(R.layout.fragment_profile_change_nickname, container, false);
         ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
-        Picasso.with(context).load(R.drawable.ic_light_nickname).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
+        Picasso.with(context).load(R.drawable.ic_nickname_24dp).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
         else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
         this.nickname.setText(User.getInstance().getNickname());

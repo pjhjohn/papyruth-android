@@ -20,7 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:contentDescription="@string/empty"
-            android:src="@drawable/ic_light_email"/>
+            android:src="@drawable/ic_email_24dp"/>
         <EditText
             android:id="@+id/signup_email_text"
             android:layout_width="match_parent"
@@ -55,7 +55,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/empty"
-            android:src="@drawable/ic_light_nickname"/>
+            android:src="@drawable/ic_nickname_24dp"/>
         <EditText
             android:id="@+id/signup_nickname_text"
             android:layout_width="match_parent"

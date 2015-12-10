@@ -8,7 +8,7 @@
     android:layout_gravity="bottom|right"
     android:layout_marginBottom="10dp"
     android:layout_marginRight="10dp"
-    android:src="@drawable/ic_light_comment"
+    android:src="@drawable/ic_comment_24dp"
     android:visibility="invisible"
     fab:fab_colorNormal="@color/fab_evaluation_normal"
     fab:fab_colorPressed="@color/fab_evaluation_pressed"

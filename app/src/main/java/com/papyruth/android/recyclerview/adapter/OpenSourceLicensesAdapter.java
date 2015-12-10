@@ -71,7 +71,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/ReactiveX/RxAndroid",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("Timber",
             "Copyright 2013 Jake Wharton\n" +
                 "\n" +
@@ -87,7 +87,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/JakeWharton/timber",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("ButterKnife",
             "Copyright 2013 Jake Wharton\n" +
                 "\n" +
@@ -103,7 +103,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/JakeWharton/butterknife",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("OkHttp",
             "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
                 "you may not use this file except in compliance with the License.\n" +
@@ -117,7 +117,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "http://square.github.io/okhttp/",
-            R.drawable.ic_square));
+            R.drawable.ic_square_24dp));
         licenses.add(new OpenSourceLicenseData("Retrofit",
             "Copyright 2013 Square, Inc.\n" +
                 "\n" +
@@ -133,7 +133,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "http://square.github.io/retrofit/",
-            R.drawable.ic_square));
+            R.drawable.ic_square_24dp));
         licenses.add(new OpenSourceLicenseData("Picasso",
             "Copyright 2013 Square, Inc.\n" +
                 "\n" +
@@ -149,7 +149,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "http://square.github.io/picasso/",
-            R.drawable.ic_square));
+            R.drawable.ic_square_24dp));
         licenses.add(new OpenSourceLicenseData("FloatingActionButton",
             "Copyright 2015 Dmytro Tarianyk\n" +
                 "\n" +
@@ -165,7 +165,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/Clans/FloatingActionButton",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("MaterialDialogs",
             "The MIT License (MIT)\n" +
                 "\n" +
@@ -189,7 +189,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n" +
                 "SOFTWARE.",
             "https://github.com/afollestad/material-dialogs",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("MaterialMenuToolbar",
             "Copyright 2014 Balys Valentukevicius\n" +
                 "\n" +
@@ -205,7 +205,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/balysv/material-menu",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("RobotoTextView",
             "Copyright 2014 Evgeny Shishkin\n" +
                 "\n" +
@@ -221,7 +221,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/johnkil/Android-RobotoTextView",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("CircularReveal",
             "The MIT License (MIT)\n" +
                 "\n" +
@@ -245,7 +245,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\n" +
                 "THE SOFTWARE.",
             "https://github.com/ozodrukh/CircularReveal",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData("RetroLambda",
             "\n" +
                 "                                 Apache License\n" +
@@ -450,7 +450,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "   See the License for the specific language governing permissions and\n" +
                 "   limitations under the License.",
             "https://github.com/orfjackal/retrolambda",
-            R.drawable.ic_github));
+            R.drawable.ic_github_24dp));
         licenses.add(new OpenSourceLicenseData(
             "PanningView",
             "Copyright 2013 Flavien Laurent\n" +
@@ -467,7 +467,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/flavienlaurent/PanningView/",
-            R.drawable.ic_github
+            R.drawable.ic_github_24dp
         ));
         licenses.add(new OpenSourceLicenseData(
             "Picasso Transformations",
@@ -485,7 +485,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/wasabeef/picasso-transformations",
-            R.drawable.ic_github
+            R.drawable.ic_github_24dp
         ));
         licenses.add(new OpenSourceLicenseData(
             "MaterialProgressBar",
@@ -503,7 +503,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License.",
             "https://github.com/DreaminginCodeZH/MaterialProgressBar",
-            R.drawable.ic_github
+            R.drawable.ic_github_24dp
         ));
         return licenses;
     }

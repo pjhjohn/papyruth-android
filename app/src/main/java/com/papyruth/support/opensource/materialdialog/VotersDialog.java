@@ -35,7 +35,7 @@ public class VotersDialog {
                 @Override
                 public void onPrepareLoad(Drawable placeHolderDrawable) {}
             };
-            Picasso.with(context).load(user.avatar_url).placeholder(R.drawable.avatar_dummy).error(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(target);
+            Picasso.with(context).load(user.avatar_url).placeholder(R.drawable.dummy_avatar).error(R.drawable.dummy_avatar).transform(new CircleTransformation()).into(target);
         }
         new MaterialDialog.Builder(context)
             .title(String.format("%s (%d)", title, users.counts))

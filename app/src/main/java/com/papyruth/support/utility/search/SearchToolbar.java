@@ -87,8 +87,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         if(mCandidates == null) mCandidates = new ArrayList<>();
         mIsInitialized = true;
 
-        Picasso.with(mContext).load(R.drawable.ic_light_clear).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mQueryClearIcon);
-        Picasso.with(mContext).load(R.drawable.ic_light_back).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mBackIcon);
+        Picasso.with(mContext).load(R.drawable.ic_clear_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mQueryClearIcon);
+        Picasso.with(mContext).load(R.drawable.ic_back_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mBackIcon);
 
         mRootView.setAlpha(0);
         mRootView.setVisibility(View.GONE);

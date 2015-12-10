@@ -76,10 +76,10 @@ public class SettingsFragment extends TrackerFragment {
         ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        Picasso.with(context).load(R.drawable.ic_light_tos).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(termOfServicesIcon);
-        Picasso.with(context).load(R.drawable.ic_light_osl).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(openSourceLicenseIcon);
-        Picasso.with(context).load(R.drawable.ic_light_history).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(delHistoryIcon);
-        Picasso.with(context).load(R.drawable.ic_light_signout).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(signoutIcon);
+        Picasso.with(context).load(R.drawable.ic_terms_of_service_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(termOfServicesIcon);
+        Picasso.with(context).load(R.drawable.ic_open_source_license_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(openSourceLicenseIcon);
+        Picasso.with(context).load(R.drawable.ic_history_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(delHistoryIcon);
+        Picasso.with(context).load(R.drawable.ic_signout_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(signoutIcon);
         return view;
     }
     @Override

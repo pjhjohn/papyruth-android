@@ -57,7 +57,7 @@
                         android:layout_width="@dimen/baseline_x5"
                         android:layout_height="@dimen/baseline_x5"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_point_overall"
+                        android:src="@drawable/ic_point_overall_40dp"
                         android:contentDescription="@string/empty"/><!--Overall Icon-->
                     <TextView
                         android:id="@+id/evaluation_form_overall_label"
@@ -120,7 +120,7 @@
                         android:layout_width="@dimen/baseline_x5"
                         android:layout_height="@dimen/baseline_x5"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_point_clarity"
+                        android:src="@drawable/ic_point_clarity_40dp"
                         android:contentDescription="@string/empty"/><!--Clarity Icon-->
                     <TextView
                         android:id="@+id/evaluation_form_clarity_label"
@@ -186,7 +186,7 @@
                         android:layout_width="@dimen/baseline_x5"
                         android:layout_height="@dimen/baseline_x5"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_point_easiness"
+                        android:src="@drawable/ic_point_easiness_40dp"
                         android:contentDescription="@string/empty"/><!--Easiness Icon-->
                     <TextView
                         android:id="@+id/evaluation_form_easiness_label"
@@ -251,7 +251,7 @@
                         android:layout_width="@dimen/baseline_x5"
                         android:layout_height="@dimen/baseline_x5"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_point_satisfaction"
+                        android:src="@drawable/ic_point_satisfaction_40dp"
                         android:contentDescription="@string/empty"/><!--GPA Satisfaction Icon-->
                     <TextView
                         android:id="@+id/evaluation_form_gpa_satisfaction_label"

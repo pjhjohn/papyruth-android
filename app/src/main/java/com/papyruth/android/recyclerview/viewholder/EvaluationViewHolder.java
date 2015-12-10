@@ -189,9 +189,9 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void setVoteStatus(VoteStatus newStatus) {
         mVoteStatus = newStatus;
-        Picasso.with(mContext).load(R.drawable.ic_light_vote_up).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
+        Picasso.with(mContext).load(R.drawable.ic_vote_up_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
         mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-        Picasso.with(mContext).load(R.drawable.ic_light_vote_down).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
+        Picasso.with(mContext).load(R.drawable.ic_vote_down_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
         mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
     }
 

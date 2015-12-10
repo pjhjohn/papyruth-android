@@ -88,11 +88,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         /* recyclerview items */
         List<NavigationDrawerItem> mNavigationDrawerItems = new ArrayList<>();
-        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_home),          R.drawable.ic_light_latest_evaluation));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_new_evaluation),R.drawable.ic_light_new_evaluation));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_bookmark),      R.drawable.ic_light_bookmark));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_evaluation), R.drawable.ic_light_my_evaluation));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_comment),    R.drawable.ic_light_my_comment));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_home),          R.drawable.ic_latest_evaluation_24dp));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_new_evaluation),R.drawable.ic_new_evaluation_24dp));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_bookmark),      R.drawable.ic_bookmark_24dp));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_evaluation), R.drawable.ic_my_evaluations_24dp));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_comment),    R.drawable.ic_my_comments_24dp));
 
         mNavigationDrawerAdapter = new NavigationDrawerAdapter(mActivity, mNavigationDrawerItems);
         mNavigationDrawerAdapter.setClickCategoryCallback(this);
@@ -186,7 +186,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public void update() {
         final String avatarUrl = User.getInstance().getAvatarUrl();
         if (avatarUrl != null) Picasso.with(mActivity).load(avatarUrl).transform(new CircleTransformation()).into(mUserAvatar);
-        else Picasso.with(mActivity).load(R.drawable.avatar_dummy).transform(new CircleTransformation()).into(mUserAvatar);
+        else Picasso.with(mActivity).load(R.drawable.dummy_avatar).transform(new CircleTransformation()).into(mUserAvatar);
     }
 
     /* Menu : TODO - What exactly this does? */

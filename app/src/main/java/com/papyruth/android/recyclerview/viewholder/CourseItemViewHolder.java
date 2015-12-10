@@ -61,7 +61,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
 
         this.mHashtags.setText(Hashtag.getHashtag(course.hashtags));
 
-        Picasso.with(mContext).load(R.drawable.ic_light_evaluation_count).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
+        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
         mEvaluationCount.setText(String.valueOf(course.evaluation_count == null ? 0 : String.valueOf(course.evaluation_count)));
     }
 

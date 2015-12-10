@@ -23,7 +23,7 @@ public class FooterViewHolder extends RecyclerView.ViewHolder {
         super(view);
         ButterKnife.bind(this, view);
         mContext = view.getContext();
-        Picasso.with(mContext).load(R.drawable.ic_light_list_end).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mFullyLoadedIndicator);
+        Picasso.with(mContext).load(R.drawable.ic_scroll_to_top_24dp).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mFullyLoadedIndicator);
         view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
     }
 }

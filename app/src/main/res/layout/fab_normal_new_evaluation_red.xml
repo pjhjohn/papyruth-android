@@ -8,7 +8,7 @@
     android:layout_gravity="bottom|right"
     android:layout_marginBottom="10dp"
     android:layout_marginRight="10dp"
-    android:src="@drawable/ic_light_new_evaluation"
+    android:src="@drawable/ic_new_evaluation_24dp"
     android:visibility="invisible"
     fab:fab_colorNormal="@color/fab_red_normal"
     fab:fab_colorPressed="@color/fab_red_pressed"/>
