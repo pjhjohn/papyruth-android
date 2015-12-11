@@ -73,7 +73,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
 
     @Bind(R.id.evaluation_swipe_refresh)  protected SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.evaluation_recycler_view)  protected RecyclerView mRecyclerView;
-    @Bind(R.id.evaluation_empty_state)    protected EmptyStateView mEmptyState;
+    @Bind(R.id.evaluation_step_empty_state_view)    protected EmptyStateView mEmptyState;
     @Bind(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription;
     private EvaluationAdapter mAdapter;
