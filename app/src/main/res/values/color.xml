@@ -119,6 +119,7 @@
     <color name="inform_evaluation_form">@color/toolbar_green</color>
     <color name="inform_evaluation">@color/toolbar_evaluation</color>
     <color name="inform_evaluation_item_detail">@color/toolbar_red</color>
+    <color name="inform_bookmark">@color/toolbar_red</color>
     <color name="inform_my_comment">@color/toolbar_blue</color>
     <color name="inform_my_evaluation">@color/toolbar_blue</color>
 

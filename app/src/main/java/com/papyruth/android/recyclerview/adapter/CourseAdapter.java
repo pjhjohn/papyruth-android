@@ -32,7 +32,7 @@ import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.utils.view.customview.EmptyStateView;
+import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,8 +174,8 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setContentText(R.string.empty_state_content_empty_evaluation)
-                .setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_evaluation)))
+            mEmptyState.setBody(R.string.empty_state_content_empty_evaluation)
+                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_evaluation)))
                 .show();
         } else {
             mEmptyState.hide();
@@ -229,10 +229,10 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }, error -> {
                     mSwipeRefresh.setRefreshing(false);
                     if(error instanceof RetrofitError){
-                        if(ErrorNetwork.handle(((RetrofitError) error), this)){
-                            this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                        if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
+                            this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                         }else{
-                            this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                            this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                             ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                         }
                     }else{
@@ -281,10 +281,10 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 reconfigure();
             }, error -> {
                 if(error instanceof RetrofitError){
-                    if(ErrorNetwork.handle(((RetrofitError) error), this)){
-                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
+                        this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                     }else{
-                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                        this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                         ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
                 }else{

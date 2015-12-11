@@ -3,7 +3,7 @@ package com.papyruth.support.utility.error;
 import retrofit.RetrofitError;
 
 public class ErrorHandler {
-    public static boolean handle(Throwable throwable, Object object) {
+    public static ErrorHandleResult handle(Throwable throwable, Object object) {
         if(throwable instanceof RetrofitError) {
             RetrofitError retrofitThrowable = (RetrofitError) throwable;
             switch (retrofitThrowable.getKind()) {

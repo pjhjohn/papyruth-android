@@ -25,7 +25,7 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.utils.view.customview.EmptyStateView;
+import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,8 +144,8 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null)
                 mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setContentText(R.string.empty_state_content_empty_recent)
-                .setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_recent)))
+            mEmptyState.setBody(R.string.empty_state_content_empty_recent)
+                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_recent)))
                 .show();
         } else {
             mSinceId = mEvaluations.get(mEvaluations.size()-1).id;
