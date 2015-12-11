@@ -31,7 +31,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-            mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mOpenSourceLicenseDataList.get((position - mIndexContent)));
+            mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mOpenSourceLicenseDataList.get(position - mIndexContent));
         });
     }
 

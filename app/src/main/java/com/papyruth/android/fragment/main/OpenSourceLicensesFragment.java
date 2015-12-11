@@ -79,6 +79,6 @@ public class OpenSourceLicensesFragment extends TrackerFragment implements Recyc
 
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
-        OpenSourceLicenseDialog.show(getActivity(), ((OpenSourceLicenseData) object));
+        if(object instanceof OpenSourceLicenseData) OpenSourceLicenseDialog.show(getActivity(), ((OpenSourceLicenseData) object));
     }
 }

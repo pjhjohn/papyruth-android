@@ -28,7 +28,7 @@ public class OpenSourceLicenseViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, view);
         mContext = view.getContext();
         mName.setPaintFlags(mName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition() - 1));
+        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
     }
 
     public void bind(OpenSourceLicenseData osl) {
