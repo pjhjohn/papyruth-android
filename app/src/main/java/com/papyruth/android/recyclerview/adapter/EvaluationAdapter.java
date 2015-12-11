@@ -144,6 +144,9 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            mEmptyState.setContentText(R.string.empty_state_content_empty_comment)
+                .setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_comment)))
+                .show();
         } else {
             mSinceId = mComments.get(mComments.size()-1).id;
             mIndexHeader = 0;

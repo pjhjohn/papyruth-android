@@ -142,7 +142,11 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             notifyDataSetChanged();
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
-            mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            if(mShadow != null)
+                mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            mEmptyState.setContentText(R.string.empty_state_content_empty_recent)
+                .setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_recent)))
+                .show();
         } else {
             mSinceId = mEvaluations.get(mEvaluations.size()-1).id;
             mIndexHeader = 0;
@@ -154,7 +158,8 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             notifyDataSetChanged();
             AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
-            mShadow.setBackgroundResource(R.drawable.shadow_white);
+            if(mShadow != null)
+                mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
         if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
