@@ -8,7 +8,7 @@ import com.papyruth.android.R;
 /**
  * Created by pjhjohn on 2015-11-02.
  */
-public class TermOfServicesDialog {
+public class TermsOfServiceDialog {
     public static MaterialDialog build(Context context, String title, String body) {
         return new MaterialDialog.Builder(context)
             .title(title)
@@ -24,6 +24,6 @@ public class TermOfServicesDialog {
     }
 
     public static void show(Context context, String title, String body) {
-        TermOfServicesDialog.build(context, title, body).show();
+        TermsOfServiceDialog.build(context, title, body).show();
     }
 }

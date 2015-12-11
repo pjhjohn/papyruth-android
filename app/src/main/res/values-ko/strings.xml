@@ -26,6 +26,7 @@
     <string name="toolbar_search">강의 검색</string>
     <string name="toolbar_settings">설정</string>
     <string name="toolbar_osl">오픈 소스 라이센스</string>
+    <string name="toolbar_tos">약관</string>
 
     <!--sign up-->
     <string name="step1">1단계</string>
@@ -229,8 +230,8 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="label_signout">로그아웃</string>
     <string name="label_osl">오픈 소스 라이센스</string>
     <string name="label_tos">이용 약관</string>
-    <string name="label_del_history">검색 히스토리 삭제</string>
-    <string name="success_del_history">검색 히스토리가 모두 삭제되었습니다</string>
+    <string name="label_clear_history">검색 기록 초기화</string>
+    <string name="success_clear_history">검색 기록이 초기화 되었습니다</string>
     <string name="goto_github_repo">REPOSITORY</string>
     <string name="password_recovery">비밀번호를 잊어버리셨나요?</string>
     <string name="password_recovery_title">비밀번호 찾기</string>

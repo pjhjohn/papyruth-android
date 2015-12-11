@@ -106,12 +106,12 @@
             </RelativeLayout>
             <include layout="@layout/hr_settings"/>
             <RelativeLayout
-                android:id="@+id/history_delete_container"
+                android:id="@+id/clear_history_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/baseline_x7"
                 android:background="@drawable/background_pressed_selector_white">
                 <ImageView
-                    android:id="@+id/history_delete_icon"
+                    android:id="@+id/clear_history_icon"
                     android:layout_width="@dimen/baseline_x3"
                     android:layout_height="@dimen/baseline_x3"
                     android:layout_marginLeft="@dimen/baseline_x2"
@@ -122,19 +122,19 @@
                     android:src="@drawable/ic_history_24dp"
                     android:contentDescription="@string/empty"/>
                 <TextView
-                    android:id="@+id/history_delete_label"
+                    android:id="@+id/clear_history_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/baseline_x4"
                     android:layout_marginStart="@dimen/baseline_x4"
-                    android:layout_toRightOf="@+id/history_delete_icon"
-                    android:layout_toEndOf="@+id/history_delete_icon"
+                    android:layout_toRightOf="@+id/clear_history_icon"
+                    android:layout_toEndOf="@+id/clear_history_icon"
                     android:layout_marginRight="@dimen/baseline_x3"
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/label_del_history"
+                    android:text="@string/label_clear_history"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>

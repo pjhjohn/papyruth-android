@@ -303,7 +303,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                         Evaluation.getInstance().update(response.evaluation);
                         updateUserData();
                     } else {
-                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {

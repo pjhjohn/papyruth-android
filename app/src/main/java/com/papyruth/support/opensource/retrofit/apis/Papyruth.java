@@ -15,6 +15,7 @@ import com.papyruth.android.model.response.SignUpValidateResponse;
 import com.papyruth.android.model.response.SimpleResponse;
 import com.papyruth.android.model.response.StatisticsResponse;
 import com.papyruth.android.model.response.TermResponse;
+import com.papyruth.android.model.response.TermsResponse;
 import com.papyruth.android.model.response.UniversitiesResponse;
 import com.papyruth.android.model.response.UserDataResponse;
 import com.papyruth.android.model.response.VoidResponse;
@@ -229,6 +230,8 @@ public interface Papyruth {
     );
 
     /* TERMS */
+    @GET("/terms")
+    Observable<TermsResponse> terms();
     @GET("/terms/{id}")
     Observable<TermResponse> terms(
         @Path("id") Integer id

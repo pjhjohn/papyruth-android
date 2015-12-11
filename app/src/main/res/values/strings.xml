@@ -26,6 +26,7 @@
     <string name="toolbar_search">Search Course</string>
     <string name="toolbar_settings">Settings</string>
     <string name="toolbar_osl">Open Source Licenses</string>
+    <string name="toolbar_tos">Terms of Service</string>
 
     <!--sign up-->
     <string name="step1">step 1</string>
@@ -230,9 +231,9 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="change_password_content">password : Current Password not correct</string>
     <string name="label_signout">Sign Out</string>
     <string name="label_osl">Open Source Licenses</string>
-    <string name="label_tos">Term of Services</string>
-    <string name="label_del_history">Delete search history</string>
-    <string name="success_del_history">All search history delete</string>
+    <string name="label_tos">Terms of Service</string>
+    <string name="label_clear_history">Clear Search History</string>
+    <string name="success_clear_history">Search history has been cleared</string>
     <string name="goto_github_repo">REPOSITORY</string>
     <string name="point_denominator">/10</string>
     <string name="password_recovery">Forgot Password?</string>
