@@ -127,6 +127,9 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null)
                 mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            mEmptyState.setContentText(R.string.empty_state_content_empty_search_result)
+                .setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_search_result)))
+                .show();
         }else{
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;

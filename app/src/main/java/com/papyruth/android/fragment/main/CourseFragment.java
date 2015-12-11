@@ -28,6 +28,12 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        setFloatingActionControl();
+    }
+
+    @Override
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_green).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.handle(error, this));

@@ -19,7 +19,8 @@ import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.*;
+import com.papyruth.support.utility.error.Error;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.utils.view.customview.EmptyStateView;
@@ -27,12 +28,15 @@ import com.papyruth.utils.view.customview.EmptyStateView;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
-public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter {
+public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter, Error.OnReportToGoogleAnalytics {
 //    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
+    private Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
     private EmptyStateView mEmptyState;
     private List<CourseData> mCourses;
@@ -52,6 +56,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private ImageView mFooterFullyLoadedIndicator;
 
     public BookmarkAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
+        mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
         mCourses = new ArrayList<>();
@@ -119,6 +124,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null)
                 mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            this.mEmptyState.setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getString(R.string.empty_state_title_empty_something_favorite))).setContentText(R.string.empty_state_content_empty_favorite).show();
         }else{
             mPage ++;
             mIndexHeader = 0;
@@ -159,7 +165,16 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 reconfigure();
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
-                ErrorHandler.handle(error, this);
+                if(error instanceof RetrofitError){
+                    if(ErrorNetwork.handle(((RetrofitError) error), this)){
+                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                    }else{
+                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                    }
+                }else{
+                    ErrorHandler.handle(error, this);
+                }
                 error.printStackTrace();
             });
     }
@@ -190,9 +205,23 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                ErrorHandler.handle(error, this);
+                if(error instanceof RetrofitError){
+                    if(ErrorNetwork.handle(((RetrofitError) error), this)){
+                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                    }else{
+                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                    }
+                }else{
+                    ErrorHandler.handle(error, this);
+                }
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });
+    }
+
+    @Override
+    public void onReportToGoogleAnalytics(String cause, String from, boolean isFatal) {
+        Timber.d("cause %s, from %s, isFatal %s", cause, from, isFatal);
     }
 }

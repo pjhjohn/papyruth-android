@@ -36,6 +36,7 @@ import timber.log.Timber;
 
 public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter{
     private static final String HIDE_INFORM = "MyEvaluationAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
+    private Context mContext;
     private List<EvaluationData> mMyEvaluation;
     private SwipeRefreshLayout mSwipeRefresh;
     private EmptyStateView mEmptyState;
@@ -55,6 +56,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
     private ImageView mFooterFullyLoadedIndicator;
 //
     public MyEvaluationItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
+        mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
         mMyEvaluation = new ArrayList<>();
@@ -150,6 +152,10 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+
+            mEmptyState.setContentText(R.string.empty_state_content_empty_my_evaluation)
+                .setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_my_evaluation)))
+                .show();
         }else{
             mPage ++;
             mIndexHeader = 0;
