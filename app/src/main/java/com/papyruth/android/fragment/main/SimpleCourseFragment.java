@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
@@ -58,7 +57,7 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
     }
     @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_empty_state)   protected EmptyStateView mEmptyState;
+    @Bind(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
     private SimpleCourseAdapter mAdapter;
