@@ -173,13 +173,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
     }
 
-    private void addFavoriteData(List<FavoriteData> favorites, boolean clear) {
-        if(clear) mCourses.clear();
-        for (FavoriteData favorite : favorites) {
-            mCourses.add(favorite.course);
-        }
-    }
-
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
@@ -189,9 +182,10 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(favorites -> {
                 mSwipeRefresh.setRefreshing(false);
-                addFavoriteData(favorites, true);
+                mCourses.clear();
+                for(FavoriteData favorite : favorites) mCourses.add(favorite.course);
+                mFullyLoaded = favorites.isEmpty();
                 mLoading = false;
-                mFullyLoaded = false;
                 reconfigure();
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
@@ -230,8 +224,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(favorites -> {
                 if(favorites != null) {
-                    if(favorites.isEmpty()) mFullyLoaded = true;
-                    else addFavoriteData(favorites, false);
+                    for(FavoriteData favorite : favorites) mCourses.add(favorite.course);
+                    mFullyLoaded = favorites.isEmpty();
                 }
                 if(mFooterMaterialProgressBar != null)
                     AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();

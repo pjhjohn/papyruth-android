@@ -73,6 +73,7 @@
     <color name="background_easiness">@color/colorchip_green_bright</color>
     <color name="background_gpa_satisfaction">@color/colorchip_blue_bright</color>
     <color name="background_clarity">@color/colorchip_red_bright</color>
+    <color name="background_empty_state">#646464</color>
 
     <!--Search Category-->
     <color name="lecture_type_major">@color/colorchip_green</color>

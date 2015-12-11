@@ -1,6 +1,7 @@
 package com.papyruth.support.utility.customview;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -53,7 +54,7 @@ public class EmptyStateView extends RelativeLayout {
         mIconColorResId = R.color.white;
         mBodyTextColorResId = R.color.white;
         mTitleTextColorResId = R.color.white;
-        mBackgroundColorResId = R.color.white_40p;
+        mBackgroundColorResId = R.color.background_empty_state;
         mEmptyStateContainer.setBackgroundColor(getResources().getColor(mBackgroundColorResId));
     }
 
@@ -100,6 +101,7 @@ public class EmptyStateView extends RelativeLayout {
         Picasso.with(getContext()).load(mIconDrawableResId).transform(new ColorFilterTransformation(getResources().getColor(mIconColorResId))).into(mIcon);
         mTitle.setText(mTitleText);
         mTitle.setTextColor(getResources().getColor(mTitleTextColorResId));
+        mTitle.setPaintFlags(mTitle.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mBody.setText(mBodyText);
         mBody.setTextColor(getResources().getColor(mBodyTextColorResId));
         this.setBackgroundResource(mBackgroundColorResId);

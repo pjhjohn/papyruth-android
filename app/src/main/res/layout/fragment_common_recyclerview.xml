@@ -27,7 +27,8 @@
                 <com.papyruth.support.utility.customview.EmptyStateView
                     android:id="@+id/common_empty_state_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
             </FrameLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
         <FrameLayout
