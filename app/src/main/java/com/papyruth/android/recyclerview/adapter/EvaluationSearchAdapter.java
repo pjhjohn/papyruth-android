@@ -24,7 +24,7 @@ import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.utils.view.customview.EmptyStateView;
+import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public EvaluationSearchAdapter(Context context, EmptyStateView emptystate, Navigator navigator,RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
-//        mEmptyState.setIconDrawable(R.drawable.ic_light_history).setContentText("hello").setTitleText("error?").show();
+//        mEmptyState.setIconDrawable(R.drawable.ic_light_history).setBody("hello").setTitle("error?").show();
         mContext = context;
         mNavigator = navigator;
         mCourses = new ArrayList<>();
@@ -127,8 +127,8 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null)
                 mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setContentText(R.string.empty_state_content_empty_search_result)
-                .setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_search_result)))
+            mEmptyState.setBody(R.string.empty_state_content_empty_search_result)
+                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_search_result)))
                 .show();
         }else{
             mIndexHeader = 0;

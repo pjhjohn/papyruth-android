@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.papyruth.android.R;
 import com.papyruth.android.model.OpenSourceLicenseData;
+import com.papyruth.android.model.TermData;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
@@ -19,20 +20,18 @@ import butterknife.ButterKnife;
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class OpenSourceLicenseViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.osl_icon) protected ImageView mIcon;
-    @Bind(R.id.osl_name) protected TextView mName;
+public class TermViewHolder extends RecyclerView.ViewHolder {
+    @Bind(R.id.term_name) protected TextView mName;
     private final Context mContext;
-    public OpenSourceLicenseViewHolder(View view, RecyclerViewItemClickListener listener) {
+    public TermViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
         ButterKnife.bind(this, view);
         mContext = view.getContext();
         mName.setPaintFlags(mName.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
+        if(listener != null) view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition() - 1));
     }
 
-    public void bind(OpenSourceLicenseData osl) {
+    public void bind(TermData osl) {
         mName.setText(osl.name);
-        Picasso.with(mContext).load(osl.repoIconResId).transform(new ColorFilterTransformation(mContext.getResources().getColor(R.color.icon_material))).into(mIcon);
     }
 }

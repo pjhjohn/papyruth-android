@@ -1,7 +1,6 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
@@ -20,7 +18,6 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.materialdialog.TermOfServicesDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -38,97 +35,66 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class SettingsFragment extends TrackerFragment {
-    private Navigator navigator;
-    private Context context;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private Navigator mNavigator;
+    private MainActivity mActivity;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
-        this.context = activity;
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.navigator = null;
-        this.context = null;
+        mNavigator = (Navigator) activity;
+        mActivity = (MainActivity) activity;
     }
 
-    @Bind(R.id.signout_container) protected RelativeLayout signout;
-    @Bind(R.id.signout_icon) protected ImageView signoutIcon;
-    @Bind(R.id.osl_container) protected RelativeLayout openSourceLicense;
-    @Bind(R.id.osl_icon) protected ImageView openSourceLicenseIcon;
-    @Bind(R.id.tos_container) protected RelativeLayout termOfServices;
-    @Bind(R.id.tos_icon) protected ImageView termOfServicesIcon;
-    @Bind(R.id.history_delete_container) protected RelativeLayout delHistory;
-    @Bind(R.id.history_delete_icon) protected ImageView delHistoryIcon;
-    private CompositeSubscription subscriptions;
-    private Toolbar toolbar;
-    private MaterialDialog dialog;
+    @Bind(R.id.signout_container)       protected RelativeLayout mSignOut;
+    @Bind(R.id.signout_icon)            protected ImageView mSignOutIcon;
+    @Bind(R.id.osl_container)           protected RelativeLayout mOpenSourceLicense;
+    @Bind(R.id.osl_icon)                protected ImageView mOpenSourceLicenseIcon;
+    @Bind(R.id.tos_container)           protected RelativeLayout mTermsOfService;
+    @Bind(R.id.tos_icon)                protected ImageView mTermsOfServiceIcon;
+    @Bind(R.id.clear_history_container) protected RelativeLayout mClearHistory;
+    @Bind(R.id.clear_history_icon)      protected ImageView mClearHistoryIcon;
+    private CompositeSubscription mCompositeSubscription;
+    private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
-        this.subscriptions = new CompositeSubscription();
-        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        Picasso.with(context).load(R.drawable.ic_terms_of_service_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(termOfServicesIcon);
-        Picasso.with(context).load(R.drawable.ic_open_source_license_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(openSourceLicenseIcon);
-        Picasso.with(context).load(R.drawable.ic_history_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(delHistoryIcon);
-        Picasso.with(context).load(R.drawable.ic_signout_24dp).transform(new ColorFilterTransformation(context.getResources().getColor(R.color.icon_material))).into(signoutIcon);
+        mCompositeSubscription = new CompositeSubscription();
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        Picasso.with(mActivity).load(R.drawable.ic_terms_of_service_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mTermsOfServiceIcon);
+        Picasso.with(mActivity).load(R.drawable.ic_open_source_license_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mOpenSourceLicenseIcon);
+        Picasso.with(mActivity).load(R.drawable.ic_history_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mClearHistoryIcon);
+        Picasso.with(mActivity).load(R.drawable.ic_signout_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mSignOutIcon);
         return view;
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        toolbar.setTitle(R.string.toolbar_settings);
-        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
-        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
+        mToolbar.setTitle(R.string.toolbar_settings);
+        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
+        StatusBarHelper.changeColorTo(mActivity, R.color.status_bar_blue);
         FloatingActionControl.getInstance().hide(true);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
+        mActivity.setMenuItemVisibility(AppConst.Menu.SETTING, false);
+        mActivity.setMenuItemVisibility(AppConst.Menu.SEARCH, false);
 
-        this.subscriptions.add(ViewObservable
-            .clicks(this.termOfServices)
-            .filter(unused -> this.dialog == null || !this.dialog.isShowing())
-            .subscribe(unused -> {
-                dialog = TermOfServicesDialog.build(
-                    context,
-                    context.getResources().getString(R.string.label_tos),
-                    context.getResources().getString(R.string.lorem_ipsum)
-                );
-                dialog.show();
+        mCompositeSubscription.add(ViewObservable.clicks(mTermsOfService).subscribe(unused -> mNavigator.navigate(TermsOfServiceFragment.class, true), error -> ErrorHandler.handle(error, this)));
+        mCompositeSubscription.add(ViewObservable.clicks(mOpenSourceLicense).subscribe(unused -> mNavigator.navigate(OpenSourceLicensesFragment.class, true), error -> ErrorHandler.handle(error, this)));
+        mCompositeSubscription.add(ViewObservable.clicks(mClearHistory).subscribe(
+            unused -> {
+                AppManager.getInstance().clear(AppConst.Preference.HISTORY);
+                Toast.makeText(mActivity, R.string.success_clear_history, Toast.LENGTH_SHORT).show();
             }, error -> ErrorHandler.handle(error, this))
         );
-
-        this.subscriptions.add(ViewObservable
-            .clicks(this.openSourceLicense)
-            .subscribe(unused -> this.navigator.navigate(OpenSourceLicensesFragment.class, true)
-            , error->ErrorHandler.handle(error, this))
-        );
-
-        this.subscriptions.add(ViewObservable
-                .clicks(delHistory)
-                .subscribe(unused -> {
-                    AppManager.getInstance().clear(AppConst.Preference.HISTORY);
-                    Toast.makeText(getActivity(), R.string.success_del_history, Toast.LENGTH_LONG).show();
-                }, error->ErrorHandler.handle(error, this))
-        );
-
-        this.subscriptions.add(ViewObservable
-            .clicks(signout)
-            .subscribe(unused -> {
+        mCompositeSubscription.add(ViewObservable.clicks(mSignOut).subscribe(
+            unused -> {
                 AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
                 Api.papyruth().users_sign_out(User.getInstance().getAccessToken())
@@ -136,10 +102,10 @@ public class SettingsFragment extends TrackerFragment {
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         User.getInstance().clear();
-                        this.getActivity().startActivity(new Intent(this.getActivity(), SplashActivity.class));
-                        this.getActivity().finish();
+                        mActivity.startActivity(new Intent(mActivity, SplashActivity.class));
+                        mActivity.finish();
                     }, error -> ErrorHandler.handle(error, this));
-            }, error->ErrorHandler.handle(error, this))
+            }, error -> ErrorHandler.handle(error, this))
         );
     }
 }

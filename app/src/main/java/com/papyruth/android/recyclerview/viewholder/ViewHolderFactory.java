@@ -45,6 +45,7 @@ public class ViewHolderFactory {
         public static final int UNIVERSITY             = 0x90;
         public static final int MY_EVALUATION_ITEM     = 0xa0;
         public static final int MY_COMMENT_ITEM        = 0xb0;
+        public static final int TERM                   = 0xc0;
         public static final int OPEN_SOURCE_LICENSE    = 0xd0;
         public static final int TOOLBAR_SHADOW         = 0xe0;
         public static final int HR_WHITE               = 0xf0;
@@ -74,6 +75,7 @@ public class ViewHolderFactory {
             case ViewType.UNIVERSITY             : return new           UniversityViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_university_item       , parent, false), listener);
             case ViewType.MY_EVALUATION_ITEM     : return new     MyEvaluationItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_evaluation         , parent, false), listener);
             case ViewType.MY_COMMENT_ITEM        : return new        MyCommentItemViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_my_comment            , parent, false), listener);
+            case ViewType.TERM                   : return new                 TermViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_term                  , parent, false), listener);
             case ViewType.OPEN_SOURCE_LICENSE    : return new    OpenSourceLicenseViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_open_source_license   , parent, false), listener);
             case ViewType.TOOLBAR_SHADOW         : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_toolbar_shadow        , parent, false));
             case ViewType.HR_WHITE               : return new                 VoidViewHolder(mInflater.inflate(layoutResId != null ? layoutResId : R.layout.cardview_white_8dp             , parent, false));

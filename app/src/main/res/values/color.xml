@@ -73,6 +73,7 @@
     <color name="background_easiness">@color/colorchip_green_bright</color>
     <color name="background_gpa_satisfaction">@color/colorchip_blue_bright</color>
     <color name="background_clarity">@color/colorchip_red_bright</color>
+    <color name="background_empty_state">#646464</color>
 
     <!--Search Category-->
     <color name="lecture_type_major">@color/colorchip_green</color>
@@ -119,6 +120,7 @@
     <color name="inform_evaluation_form">@color/toolbar_green</color>
     <color name="inform_evaluation">@color/toolbar_evaluation</color>
     <color name="inform_evaluation_item_detail">@color/toolbar_red</color>
+    <color name="inform_bookmark">@color/toolbar_red</color>
     <color name="inform_my_comment">@color/toolbar_blue</color>
     <color name="inform_my_evaluation">@color/toolbar_blue</color>
 

@@ -9,7 +9,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-12-01.
  */
 public class ErrorDefault {
-    public static boolean handle(Throwable throwable, Object object) {
+    public static ErrorHandleResult handle(Throwable throwable, Object object) {
         Timber.d("Error : %s\n%s", throwable.getMessage(), throwable.getCause());
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
@@ -30,9 +30,8 @@ public class ErrorDefault {
                         object.getClass().getSimpleName(),
                         false
                     );
-                }
-                return true;
-            } else return false; // TODO : Handle when fragment doesn't have activity
-        } else return false; // TODO : Handle when object is Activity
+                } return new ErrorHandleResult(true);
+            } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
+        } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
     }
 }

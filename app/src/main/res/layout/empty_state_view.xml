@@ -2,22 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/empty_state_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:paddingTop="?attr/actionBarSize">
     <ImageView
         android:id="@+id/empty_state_icon"
-        android:layout_width="@dimen/baseline_x15"
-        android:layout_height="@dimen/baseline_x15"
-        android:layout_centerInParent="true"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/baseline_x10"
+        android:minWidth="@dimen/baseline_x10"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/empty"/>
     <TextView
         android:id="@+id/empty_state_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/empty_state_icon"
+        android:layout_marginTop="@dimen/baseline_x2.5"
+        android:layout_marginBottom="@dimen/baseline_x1"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
         android:gravity="center"/>
     <TextView
-        android:id="@+id/empty_state_content"
-        android:layout_width="match_parent"
+        android:id="@+id/empty_state_body"
+        android:layout_width="@dimen/baseline_x30"
         android:layout_height="wrap_content"
         android:layout_below="@id/empty_state_title"
+        android:layout_centerHorizontal="true"
+        android:lineSpacingMultiplier="2"
+        android:textSize="14sp"
         android:gravity="center"/>
 </RelativeLayout>

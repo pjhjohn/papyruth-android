@@ -10,7 +10,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-12-01.
  */
 public class ErrorNetwork {
-    public static boolean handle(RetrofitError throwable, Object object) {
+    public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
         Timber.d("Network Error : %s\n%s\n%s", throwable.getMessage(), throwable.getUrl(), throwable.getCause());
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
@@ -31,9 +31,8 @@ public class ErrorNetwork {
                         object.getClass().getSimpleName(),
                         false
                     );
-                }
-                return true;
-            } else return false; // TODO : Handle when fragment doesn't have activity
-        } else return false; // TODO : Handle when object is Activity
+                } return new ErrorHandleResult(true);
+            } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
+        } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
     }
 }

@@ -9,7 +9,7 @@ import retrofit.RetrofitError;
  * Created by pjhjohn on 2015-12-01.
  */
 public class ErrorDefaultHTTP {
-    public static boolean handle(RetrofitError throwable, Object object) {
+    public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;
@@ -29,9 +29,8 @@ public class ErrorDefaultHTTP {
                         object.getClass().getSimpleName(),
                         false
                     );
-                }
-                return true;
-            } else return false; // TODO : Handle when fragment doesn't have activity
-        } else return false; // TODO : Handle when object is Activity
+                } return new ErrorHandleResult(true);
+            } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
+        } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
     }
 }

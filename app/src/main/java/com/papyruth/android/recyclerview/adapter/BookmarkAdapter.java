@@ -9,6 +9,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.papyruth.android.AppManager;
+import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.FavoriteData;
@@ -16,14 +19,17 @@ import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.CourseItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
+import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.error.*;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.Error;
+import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.utils.view.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +40,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter, Error.OnReportToGoogleAnalytics {
-//    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
-
+    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
     private Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
     private EmptyStateView mEmptyState;
@@ -61,25 +66,47 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mEmptyState = emptystate;
         mCourses = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
-        mHideInform = true;
-        mHideShadow = true;
+        mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
+        mHideShadow = mHideInform;
         mPage = 1;
         mIndexHeader = 0;
         mIndexInform = mHideInform? -1 : 1;
         mIndexSingle = -1;
-        mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
-        mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
+        mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
+        mIndexContent= 1 + (mHideShadow? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mCourses.size() + mIndexContent;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position)->{
-            if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
-            else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCourses.get(position - mIndexContent));
+        RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
+            if(!mHideInform && position == mIndexInform) {
+                String action = null;
+                switch (view.getId()) {
+                    case R.id.inform_btn_optional:
+                        AppManager.getInstance().putBoolean(HIDE_INFORM, true);
+                        action = parent.getResources().getString(R.string.ga_event_hide_always);
+                    case R.id.inform_btn_positive:
+                        notifyItemRemoved(position);
+                        mHideInform = true;
+                        mHideShadow = true;
+                        if(action == null)
+                            action = parent.getResources().getString(R.string.ga_event_hide_once);
+                        AppTracker.getInstance().getTracker().send(
+                            new HitBuilders.EventBuilder(parent.getResources().getString(R.string.ga_category_inform), action).build()
+                        );
+                        reconfigure();
+                        break;
+                    default:
+                        Timber.d("Unexpected view #%x", view.getId());
+                }
+            } else if(position == mIndexFooter) {
+                if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY);
+            } else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCourses.get(position - mIndexContent));
         });
-        if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
-        if (viewHolder instanceof FooterViewHolder) {
+        if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder)
+            mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
+        if(viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
             mFooterFullyLoadedIndicator = (ImageView) viewHolder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
@@ -89,11 +116,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position <= mIndexHeader) return;
-        if (position == mIndexInform) return;
-        if (position == mIndexSingle) return;
-        if (position == mIndexShadow) return;
-        if (position == mIndexFooter) return;
+        if(position <= mIndexHeader) return;
+        if(position == mIndexInform) {
+            ((InformViewHolder) holder).bind(R.string.inform_bookmark, R.color.inform_bookmark);
+            return;
+        }
+        if(position == mIndexSingle) return;
+        if(position == mIndexShadow) return;
+        if(position == mIndexFooter) return;
         ((CourseItemViewHolder) holder).bind(mCourses.get(position - mIndexContent));
     }
 
@@ -104,50 +134,43 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position <= mIndexHeader) return ViewHolderFactory.ViewType.HEADER;
-        if (position == mIndexInform) return ViewHolderFactory.ViewType.INFORM;
-        if (position == mIndexSingle) ;
-        if (position == mIndexShadow) return ViewHolderFactory.ViewType.SHADOW;
-        if (position == mIndexFooter) return ViewHolderFactory.ViewType.FOOTER;
+        if(position <= mIndexHeader) return ViewHolderFactory.ViewType.HEADER;
+        if(position == mIndexInform) return ViewHolderFactory.ViewType.INFORM;
+        if(position == mIndexSingle) ;
+        if(position == mIndexShadow) return ViewHolderFactory.ViewType.SHADOW;
+        if(position == mIndexFooter) return ViewHolderFactory.ViewType.FOOTER;
         return ViewHolderFactory.ViewType.COURSE_ITEM;
     }
-    private void reconfigure(){
-        if(mCourses.isEmpty()){
-            mIndexHeader = 0;
-            mIndexInform = mHideInform? -1 : 1;
-            mIndexSingle = -1;
-            mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
-            mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
-            mIndexFooter = mCourses.size() + mIndexContent;
-            notifyDataSetChanged();
-            AnimatorHelper.FADE_IN(mEmptyState).start();
-            AnimatorHelper.FADE_OUT(mFooterBorder).start();
-            if(mShadow != null)
-                mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            this.mEmptyState.setTitleText(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getString(R.string.empty_state_title_empty_something_favorite))).setContentText(R.string.empty_state_content_empty_favorite).show();
-        }else{
-            mPage ++;
-            mIndexHeader = 0;
-            mIndexInform = mHideInform? -1 : 1;
-            mIndexSingle = -1;
-            mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
-            mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
-            mIndexFooter = mCourses.size() + mIndexContent;
-            notifyDataSetChanged();
-            AnimatorHelper.FADE_OUT(mEmptyState).start();
-            AnimatorHelper.FADE_IN(mFooterBorder).start();
-            if(mShadow != null)
-                mShadow.setBackgroundResource(R.drawable.shadow_white);
-        }
-        if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
-        else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
-    }
 
-    private void addFavoriteData(List<FavoriteData> favorites, boolean clear){
-        if(clear) mCourses.clear();
-        for (FavoriteData favorite : favorites) {
-            mCourses.add(favorite.course);
+    private void reconfigure() {
+        Timber.d("Reconfigured with mCourses having size of %d", mCourses.size());
+        if(mCourses.isEmpty()) {
+            mIndexHeader = 0;
+            mIndexInform = mHideInform? -1 : 1;
+            mIndexSingle = -1;
+            mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
+            mIndexContent = 1 + (mHideShadow? 0 : 1) + (mHideInform? 0 : 1);
+            mIndexFooter = mCourses.size() + mIndexContent;
+            notifyDataSetChanged();
+            AnimatorHelper.FADE_OUT(mFooterBorder).start();
+            if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            mEmptyState.setIconDrawable(R.drawable.ic_done_24dp).setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getString(R.string.empty_state_title_empty_something_favorite))).setBody(R.string.empty_state_content_empty_favorite).show();
+        } else {
+            mPage++;
+            mIndexHeader = 0;
+            mIndexInform = mHideInform? -1 : 1;
+            mIndexSingle = -1;
+            mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
+            mIndexContent = 1 + (mHideShadow? 0 : 1) + (mHideInform? 0 : 1);
+            mIndexFooter = mCourses.size() + mIndexContent;
+            notifyDataSetChanged();
+            AnimatorHelper.FADE_IN(mFooterBorder).start();
+            if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
+            mEmptyState.hide();
         }
+        if(mFullyLoaded != null && mFullyLoaded)
+            AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
+        else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
     }
 
     @Override
@@ -159,20 +182,21 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(favorites -> {
                 mSwipeRefresh.setRefreshing(false);
-                addFavoriteData(favorites, true);
+                mCourses.clear();
+                for(FavoriteData favorite : favorites) mCourses.add(favorite.course);
+                mFullyLoaded = favorites.isEmpty();
                 mLoading = false;
-                mFullyLoaded = false;
                 reconfigure();
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
-                if(error instanceof RetrofitError){
-                    if(ErrorNetwork.handle(((RetrofitError) error), this)){
-                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
-                    }else{
-                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                    } else {
+                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                         ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
-                }else{
+                } else {
                     ErrorHandler.handle(error, this);
                 }
                 error.printStackTrace();
@@ -181,40 +205,41 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Boolean mLoading;
     private Boolean mFullyLoaded;
+
     @Override
     public void loadMore() {
         if(mLoading != null && mLoading) return;
         mLoading = true;
         if(mFullyLoaded != null && mFullyLoaded) return;
         mFullyLoaded = false;
-        if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
+        if(mFooterMaterialProgressBar != null)
+            AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         Api.papyruth()
             .users_me_favorites(
                 User.getInstance().getAccessToken(),
-                mPage == null ? null : mPage
+                mPage == null? null : mPage
             )
             .map(response -> response.favorites)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(favorites -> {
-                if (favorites != null) {
-                    if(favorites.isEmpty()) mFullyLoaded = true;
-                    else addFavoriteData(favorites, false);
+                if(favorites != null) {
+                    for(FavoriteData favorite : favorites) mCourses.add(favorite.course);
+                    mFullyLoaded = favorites.isEmpty();
                 }
-                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                if(mFooterMaterialProgressBar != null)
+                    AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                if(error instanceof RetrofitError){
-                    if(ErrorNetwork.handle(((RetrofitError) error), this)){
-                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
-                    }else{
-                        this.mEmptyState.setTitleText(R.string.empty_state_title_network).setContentText(R.string.empty_state_content_network).show();
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                    } else {
+                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                         ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
-                }else{
-                    ErrorHandler.handle(error, this);
-                }
+                } else ErrorHandler.handle(error, this);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

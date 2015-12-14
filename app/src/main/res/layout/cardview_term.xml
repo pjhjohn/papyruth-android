@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/baseline_x7"
+        android:background="@drawable/background_pressed_selector_white">
+        <TextView
+            android:id="@+id/term_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/baseline_x2"
+            android:layout_marginStart="@dimen/baseline_x2"
+            android:layout_marginRight="@dimen/baseline_x2"
+            android:layout_marginEnd="@dimen/baseline_x2"
+            android:textColor="@color/text_material"
+            android:textSize="16sp"
+            android:ellipsize="end"/>
+    </RelativeLayout>
+    <include layout="@layout/hr_settings"/>
+</LinearLayout>

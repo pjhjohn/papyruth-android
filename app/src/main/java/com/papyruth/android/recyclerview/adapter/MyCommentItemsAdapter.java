@@ -25,7 +25,7 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.utils.view.customview.EmptyStateView;
+import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;

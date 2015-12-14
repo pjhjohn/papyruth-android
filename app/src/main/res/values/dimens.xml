@@ -30,6 +30,7 @@
     <dimen name="baseline_x18">144dp</dimen>
     <dimen name="baseline_x19">152dp</dimen>
     <dimen name="baseline_x20">160dp</dimen>
+    <dimen name="baseline_x30">240dp</dimen>
 
     <!--Cardview-->
     <dimen name="cardview_image_side_length">@dimen/baseline_x9</dimen>
