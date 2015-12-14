@@ -88,17 +88,11 @@ public class AlertDialog {
         switch (type) {
             case EVALUATION_MANDATORY           :   navigator.navigate(EvaluationStep1Fragment.class, true); break;
             case EVALUATION_POSSIBLE            :
-                Observable.combineLatest(
-                    Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId()),
-                    Api.papyruth().get_evaluation_hashtag(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId()),
-                    (a,b) -> {
-                        EvaluationForm.getInstance().initForEdit(a.evaluation);
-                        EvaluationForm.getInstance().setHashtag(b.hashtags);
-                        return true;
-                    })
+                Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(response -> {
+                        EvaluationForm.getInstance().initForEdit(response.evaluation);
                         navigator.navigate(EvaluationStep2Fragment.class, true);
                     }, error -> ErrorHandler.handle(error, MaterialDialog.class));
                 break;

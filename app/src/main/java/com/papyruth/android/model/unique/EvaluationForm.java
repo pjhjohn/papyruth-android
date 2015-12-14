@@ -100,6 +100,7 @@ public class EvaluationForm {
         this.pointEasiness = evaluation.point_easiness;
         this.pointClarity = evaluation.point_clarity;
         this.body = evaluation.body;
+        this.hashtag.addAll(evaluation.hashtags);
     }
 
     public void free(){

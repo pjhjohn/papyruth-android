@@ -79,8 +79,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mIndexShadow = mHideShadow? -1 : 2 + (mHideInform?  0 : 1);
         mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mEvaluations.size() + mIndexContent;
-
-        mIndexLastHashtag = 0;
     }
 
     @Override
@@ -143,24 +141,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return ViewHolderFactory.ViewType.EVALUATION_ITEM;
     }
 
-    private int mIndexLastHashtag;
-    public void addHashtagToViewHolder(){
-        for(int i = mIndexLastHashtag; i < mEvaluations.size(); i++){
-            final int index = i;
-            Api.papyruth().get_evaluation_hashtag(User.getInstance().getAccessToken(), mEvaluations.get(i).id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( response -> {
-                    mEvaluations.get(index).setHashtags(response.hashtags);
-                    notifyItemChanged(index);
-                }, error ->  {
-                    mEvaluations.get(index).setHashtags(new ArrayList<>());
-                    notifyItemChanged(index);
-                    ErrorHandler.handle(error, this);
-                });
-        }
-        mIndexLastHashtag = mEvaluations.size()-1;
-    }
 
     private void reconfigure() {
         if(mEvaluations.isEmpty()) {
@@ -191,7 +171,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
-        addHashtagToViewHolder();
         if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
     }

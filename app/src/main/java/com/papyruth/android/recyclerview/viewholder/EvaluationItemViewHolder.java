@@ -72,10 +72,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mLabelOverall.setText(R.string.label_point_overall);
         PointHelper.setPointRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
 
-        if(evaluation.isHashtagUpdated()) {
-            this.mHashtags.setText(Hashtag.getHashtag(evaluation.hashtags));
-            AnimatorHelper.FADE_OUT(mProgressbar).start();
-        }
+        this.mHashtags.setText(Hashtag.getHashtag(evaluation.hashtags));
 
         if(evaluation.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.request_user_vote == 1) setVoteStatus(VoteStatus.UP);
@@ -84,6 +81,8 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
 
         Picasso.with(mContext).load(R.drawable.ic_comment_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.inactive))).into(mCommentIcon);
         mCommentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
+
+        AnimatorHelper.FADE_OUT(mProgressbar).start();
     }
 
     private void setVoteStatus(VoteStatus newStatus) {

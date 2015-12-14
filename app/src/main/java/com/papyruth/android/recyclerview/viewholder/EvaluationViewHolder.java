@@ -117,23 +117,14 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         setPointProgress(mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
 
         mBody.setText(evaluation.getBody());
-        if(mEvaluationId != null) Api.papyruth()
-            .get_evaluation_hashtag(User.getInstance().getAccessToken(), mEvaluationId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                AnimatorHelper.FADE_OUT(mProgressbar).start();
-                mHashtags.setText(Hashtag.getHashtag(response.hashtags));
-            }, error ->  {
-                AnimatorHelper.FADE_OUT(mProgressbar).start();
-                ErrorHandler.handle(error, this);
-            });
+        mHashtags.setText(Hashtag.getHashtag(evaluation.getHashTag()));
 
         if(evaluation.getRequestUserVote() == null) setVoteStatus(VoteStatus.NONE);
         else if(evaluation.getRequestUserVote() == 1) setVoteStatus(VoteStatus.UP);
         else setVoteStatus(VoteStatus.DOWN);
 
         setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
+        AnimatorHelper.FADE_OUT(mProgressbar).start();
     }
 
     @Override

@@ -27,15 +27,6 @@ public class EvaluationData {
     public Integer request_user_vote = null; // 1 for up-vote, 0 for down-vote, null for neither.
     public String category;
     public List<String> hashtags = new ArrayList<>();
-    private boolean updateHashtag = false;
-
-    public void setHashtags(List<String> hashtags){
-        this.hashtags.addAll(hashtags);
-        updateHashtag = true;
-    }
-    public boolean isHashtagUpdated(){
-        return updateHashtag;
-    }
 
     @Override
     public String toString() {
