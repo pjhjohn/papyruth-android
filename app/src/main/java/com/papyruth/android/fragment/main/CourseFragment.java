@@ -90,6 +90,7 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     }
     
     private void navigateToEvaluationForm() {
+        EvaluationForm.getInstance().clear();
         EvaluationForm.getInstance().setCourseId(Course.getInstance().getId());
         EvaluationForm.getInstance().setLectureName(Course.getInstance().getName());
         EvaluationForm.getInstance().setProfessorName(Course.getInstance().getProfessorName());

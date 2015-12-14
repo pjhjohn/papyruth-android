@@ -18,6 +18,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.Candidate;
 import com.papyruth.android.model.CourseData;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.recyclerview.adapter.EvaluationSearchAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -25,6 +26,7 @@ import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
 import com.papyruth.support.utility.customview.EmptyStateView;
@@ -39,7 +41,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  * Searches SimpleCourse for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
+public class EvaluationStep1Fragment extends TrackerFragment implements RecyclerViewItemObjectClickListener, OnBack {
     private Toolbar mToolbar;
     @Override
     public void onAttach(Activity activity) {
@@ -112,5 +114,12 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
     public void onPause() {
         super.onPause();
         SearchToolbar.getInstance().setOnVisibilityChangedListener((MainActivity) getActivity());
+    }
+
+
+    @Override
+    public boolean onBack() {
+        EvaluationForm.getInstance().clear();
+        return false;
     }
 }
