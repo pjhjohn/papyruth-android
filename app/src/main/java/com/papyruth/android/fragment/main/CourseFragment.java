@@ -65,11 +65,11 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if (object instanceof EvaluationData) {
             if (User.getInstance().needEmailConfirmed()) {
-                AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.NEED_CONFIRMATION);
+                AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
                 return;
             }
             if (User.getInstance().needMoreEvaluation()) {
-                AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.EVALUATION_MANDATORY);
+                AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
                 return;
             }
             if (mEvaluationOpened) return;
@@ -102,7 +102,7 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
                     ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
                 } else {
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
-                    AlertDialog.build(getActivity(), mNavigator, AlertDialog.Type.EVALUATION_POSSIBLE)
+                    AlertDialog.build(getActivity(), mNavigator, AlertDialog.Type.EVALUATION_ALREADY_REGISTERED)
                         .show();
                 }
             }, error -> ErrorHandler.handle(error, this));

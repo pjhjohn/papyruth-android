@@ -177,7 +177,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        Api.papyruth().users_me_evaluations(User.getInstance().getAccessToken(), mPage = 1)
+        Api.papyruth().get_users_me_evaluations(User.getInstance().getAccessToken(), mPage = 1)
             .map(response -> response.evaluations)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -204,9 +204,9 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
         mFullyLoaded = false;
         if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         Api.papyruth()
-            .users_me_evaluations(
+            .get_users_me_evaluations(
                 User.getInstance().getAccessToken(),
-                mPage == null ? null : mPage
+                mPage == null? null : mPage
             )
             .map(response -> response.evaluations)
             .subscribeOn(Schedulers.io())

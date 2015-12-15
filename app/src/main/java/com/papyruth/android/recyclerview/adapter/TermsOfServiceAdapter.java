@@ -4,22 +4,13 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.papyruth.android.R;
-import com.papyruth.android.model.FavoriteData;
-import com.papyruth.android.model.Footer;
-import com.papyruth.android.model.OpenSourceLicenseData;
 import com.papyruth.android.model.TermData;
-import com.papyruth.android.model.unique.User;
-import com.papyruth.android.recyclerview.viewholder.CourseItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
-import com.papyruth.android.recyclerview.viewholder.OpenSourceLicenseViewHolder;
 import com.papyruth.android.recyclerview.viewholder.TermViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
@@ -78,7 +69,7 @@ public class TermsOfServiceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public void refresh() {
-        Api.papyruth().terms()
+        Api.papyruth().get_terms()
             .map(response -> response.terms)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

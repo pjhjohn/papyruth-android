@@ -40,11 +40,11 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         if(object instanceof EvaluationData) {
             EvaluationData data = (EvaluationData) object;
             if (User.getInstance().needEmailConfirmed()) {
-                AlertDialog.show(mContext, mNavigator, AlertDialog.Type.NEED_CONFIRMATION);
+                AlertDialog.show(mContext, mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
                 return;
             }
             if (User.getInstance().needMoreEvaluation()) {
-                AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_MANDATORY);
+                AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
                 return;
             }
             if (mEvaluationOpened) return;

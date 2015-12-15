@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.CourseFragment;
-import com.papyruth.android.model.Candidate;
+import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
@@ -145,9 +145,9 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void loadSearchResult() {
         if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
-        Candidate candidate = SearchToolbar.getInstance().getSelectedCandidate();
+        CandidateData candidate = SearchToolbar.getInstance().getSelectedCandidate();
         Api.papyruth()
-            .search_search(
+            .get_search_search(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
                 candidate.lecture_id,

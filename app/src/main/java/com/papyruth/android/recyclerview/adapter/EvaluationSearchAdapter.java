@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationStep2Fragment;
-import com.papyruth.android.model.Candidate;
+import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.EvaluationForm;
@@ -145,10 +145,10 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    public void searchCourse(Candidate candidate, String query) {
+    public void searchCourse(CandidateData candidate, String query) {
         if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         Api.papyruth()
-            .search_search(
+            .get_search_search(
                 User.getInstance().getAccessToken(),
                 User.getInstance().getUniversityId(),
                 candidate.lecture_id,
@@ -188,7 +188,7 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
                     mNavigator.navigate(EvaluationStep2Fragment.class, true);
                 } else {
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
-                    AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_POSSIBLE);
+                    AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_ALREADY_REGISTERED);
                 }
             }, error -> ErrorHandler.handle(error, this));
     }

@@ -104,7 +104,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
          */
         this.subscriptions.add(
             Api.papyruth()
-                .get_hashtag_preset(User.getInstance().getAccessToken())
+                .get_hashtag(User.getInstance().getAccessToken())
                 .map(response -> response.hashtags)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -318,7 +318,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             bundle.putBoolean("STANDALONE", true);
             this.navigator.navigate(HomeFragment.class, false, Navigator.AnimatorType.SLIDE_TO_RIGHT, true);
         }else {
-            Api.papyruth().users_me(User.getInstance().getAccessToken())
+            Api.papyruth().get_users_me(User.getInstance().getAccessToken())
                 .map(response -> response.user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

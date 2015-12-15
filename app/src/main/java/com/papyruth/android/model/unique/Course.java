@@ -24,7 +24,7 @@ public class Course {
     private List<String> hashtags;
     private String professorPhotoUrl;
     private String name;
-    private String category;
+    private Integer category;
 
     private static Course instance = null;
     public static synchronized Course getInstance() {
@@ -198,11 +198,11 @@ public class Course {
         this.name = name;
     }
 
-    public String getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 }

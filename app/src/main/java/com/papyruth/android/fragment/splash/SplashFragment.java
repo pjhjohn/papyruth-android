@@ -87,7 +87,7 @@ public class SplashFragment extends TrackerFragment {
         ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mActivity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
         mCompositeSubscription.add(Api.papyruth()
-            .users_me(User.getInstance().getAccessToken())
+            .get_users_me(User.getInstance().getAccessToken())
             .onErrorResumeNext(throwable -> {
                 Timber.d("Error : @GET(\"/users/me\")");
                 return Observable.just(UserDataResponse.ERROR());
@@ -95,7 +95,7 @@ public class SplashFragment extends TrackerFragment {
             .flatMap(response -> { // Handles User-data fetch
                 if(response != null && response.user != null){
                     User.getInstance().update(response.user);
-                    return Api.papyruth().users_refresh_token(User.getInstance().getAccessToken());
+                    return Api.papyruth().post_users_refresh_token(User.getInstance().getAccessToken());
                 } else return Observable.just(UserDataResponse.ERROR());
             })
             .subscribeOn(Schedulers.io())

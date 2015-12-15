@@ -162,7 +162,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        Api.papyruth().users_me_comments(User.getInstance().getAccessToken(), mPage = 1)
+        Api.papyruth().get_users_me_comments(User.getInstance().getAccessToken(), mPage = 1)
             .map(response -> response.comments)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -190,9 +190,9 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mFullyLoaded = false;
         if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         Api.papyruth()
-            .users_me_comments(
+            .get_users_me_comments(
                 User.getInstance().getAccessToken(),
-                mPage == null ? null : mPage
+                mPage == null? null : mPage
             )
             .map(response -> response.comments)
             .subscribeOn(Schedulers.io())

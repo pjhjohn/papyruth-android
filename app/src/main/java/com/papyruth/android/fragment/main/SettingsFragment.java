@@ -97,7 +97,7 @@ public class SettingsFragment extends TrackerFragment {
             unused -> {
                 AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
-                Api.papyruth().users_sign_out(User.getInstance().getAccessToken())
+                Api.papyruth().post_users_sign_out(User.getInstance().getAccessToken())
                     .observeOn(Schedulers.io())
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {

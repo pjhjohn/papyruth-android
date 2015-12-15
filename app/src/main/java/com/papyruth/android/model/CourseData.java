@@ -22,24 +22,5 @@ public class CourseData {
     public List<String> hashtags;
     public String professor_photo_url;
     public String name;
-    public String category;
-
-    public static CourseData Sample(){
-        CourseData courseData = new CourseData();
-        courseData.id = -1;
-        courseData.created_at = "";
-        courseData.updated_at = "";
-        courseData.name = "";
-        courseData.professor_name = "";
-        courseData.professor_id = -1;
-        courseData.lecture_id = -1;
-        courseData.university_id = -1;
-        courseData.evaluation_count = -1;
-        courseData.point_overall = -1;
-        courseData.point_gpa_satisfaction = -1;
-        courseData.point_easiness = -1;
-        courseData.point_clarity = -1;
-
-        return courseData;
-    }
+    public Integer category;
 }

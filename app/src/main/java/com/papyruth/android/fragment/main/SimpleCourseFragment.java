@@ -110,11 +110,11 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if(User.getInstance().needEmailConfirmed()){
-            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.NEED_CONFIRMATION);
+            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
             return;
         }
         if(User.getInstance().needMoreEvaluation()) {
-            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.EVALUATION_MANDATORY);
+            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
             return;
         }
         Course.getInstance().update(((CourseData) object));

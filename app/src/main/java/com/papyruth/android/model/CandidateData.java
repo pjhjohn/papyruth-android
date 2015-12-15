@@ -3,26 +3,27 @@ package com.papyruth.android.model;
 /**
  * Created by pjhjohn on 2015-05-27.
  */
-public class Candidate {
+public class CandidateData {
     public String professor_name;
     public Integer professor_id;
     public String lecture_name;
     public Integer lecture_id;
 
-    public Candidate(){
+    public CandidateData() {
         this.professor_id = null;
         this.professor_name = null;
         this.lecture_id = null;
         this.lecture_name = null;
     }
 
-    public Candidate(String lecture_name, Integer lecture_id, String professor_name, Integer professor_id, CourseData course){
+    public CandidateData(String lecture_name, Integer lecture_id, String professor_name, Integer professor_id, CourseData course){
         this.professor_name = professor_name;
         this.professor_id = professor_id;
         this.lecture_name = lecture_name;
         this.lecture_id = lecture_id;
     }
-    public void clear(){
+
+    public void clear() {
         this.professor_id = null;
         this.professor_name = null;
         this.lecture_id = null;
@@ -38,7 +39,7 @@ public class Candidate {
     public boolean equals(Object object) {
         if(this == object) return true;
         if(object == null || getClass() != object.getClass()) return false;
-        Candidate candidate = (Candidate) object;
+        CandidateData candidate = (CandidateData) object;
         return (this.lecture_id!= null && this.lecture_id.equals(candidate.lecture_id))
             || (this.professor_id!=null && this.professor_id.equals(candidate.professor_id));
     }

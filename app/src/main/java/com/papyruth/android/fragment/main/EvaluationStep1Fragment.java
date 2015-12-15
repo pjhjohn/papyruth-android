@@ -16,7 +16,7 @@ import android.widget.Button;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
-import com.papyruth.android.model.Candidate;
+import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.recyclerview.adapter.EvaluationSearchAdapter;
@@ -107,7 +107,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         SearchToolbar.getInstance()
             .setItemClickListener((v, position) -> mAdapter.searchCourse(SearchToolbar.getInstance().getCandidates().get(position), null))
             .setOnVisibilityChangedListener(visible -> mQueryButton.setVisibility(visible ? View.GONE : View.VISIBLE))
-            .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new Candidate(), SearchToolbar.getInstance().getSelectedQuery()));
+            .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new CandidateData(), SearchToolbar.getInstance().getSelectedQuery()));
     }
 
     @Override

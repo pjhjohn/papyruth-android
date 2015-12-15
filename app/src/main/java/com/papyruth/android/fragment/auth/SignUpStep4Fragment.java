@@ -105,7 +105,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP4);
         mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
-        Api.papyruth().terms().map(terms -> terms.terms).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+        Api.papyruth().get_terms().map(terms -> terms.terms).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
             terms -> {
                 if (terms == null || terms.isEmpty()) return;
                 mTermsOfUse = terms.get(0).body;
@@ -222,7 +222,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
 
     private void submitSignUpForm() {
         if(!validateSignUpForm()) return;
-        Api.papyruth().users_sign_up(
+        Api.papyruth().post_users_sign_up(
             SignUpForm.getInstance().getValidEmail(),
             SignUpForm.getInstance().getValidPassword(),
             SignUpForm.getInstance().getValidRealname(),

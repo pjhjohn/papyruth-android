@@ -24,6 +24,7 @@ import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.materialdialog.FailureDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.opensource.retrofit.apis.Papyruth;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.TrackerFragment;
@@ -124,7 +125,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         );
 
         if(User.getInstance().getUniversityEmail() != null)
-            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.NEED_UNIVERSITY_CONFIRMATION);
+            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.UNIVERSITY_CONFIRMATION_REQUIRED);
     }
 
     public Subscription registerSubmitCallback() {
@@ -137,7 +138,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             })
             .observeOn(Schedulers.io())
             .flatMap(unused ->
-                Api.papyruth().users_me_university_email(
+                Api.papyruth().post_users_me_university_email(
                     User.getInstance().getAccessToken(),
                     this.email.getText().toString()
                 ))
@@ -173,7 +174,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             );
     }
     private void sendEmail(){
-        Api.papyruth().users_email(User.getInstance().getAccessToken(), 1)
+        Api.papyruth().post_email_confirm(User.getInstance().getAccessToken(), Papyruth.EMAIL_CONFIRMATION_UNIVERSITY)
             .map(response -> response.success)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())

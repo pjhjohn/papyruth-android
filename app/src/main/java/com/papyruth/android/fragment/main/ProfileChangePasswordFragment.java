@@ -130,7 +130,7 @@ public class ProfileChangePasswordFragment extends TrackerFragment {
             })
             .observeOn(Schedulers.io())
             .flatMap(unused ->
-                Api.papyruth().users_me_passwd(
+                Api.papyruth().post_users_me_passwd(
                     User.getInstance().getAccessToken(),
                     this.old_password.getText().toString(),
                     this.new_password.getText().toString()

@@ -1,7 +1,6 @@
 package com.papyruth.android.recyclerview.viewholder;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,10 +14,11 @@ import com.papyruth.android.model.CommentData;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.materialdialog.VotersDialog;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
-import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.DateTimeHelper;
+import com.papyruth.support.utility.helper.VoteHelper;
+import com.papyruth.support.utility.helper.VoteHelper.VoteStatus;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -26,9 +26,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 
-/**
- * Created by pjhjohn on 2015-06-29.
- */
 public class CommentItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @Bind(R.id.comment_item_avatar)           protected ImageView mAvatar;
     @Bind(R.id.comment_item_nickname)         protected TextView mNickname;
@@ -41,53 +38,27 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
     private int mCommentId;
     private VoteStatus mVoteStatus;
     private final Context mContext;
-    private final Resources mResources;
-    public enum VoteStatus {
-        UP, DOWN, NONE
-    }
 
     public CommentItemViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
         ButterKnife.bind(this, view);
-        mContext = view.getContext();
-        mResources = mContext.getResources();
         view.setOnClickListener(this);
+        mContext = view.getContext();
         mNickname.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mVoteUpIcon.setOnClickListener(this);
         mVoteUpCount.setOnClickListener(this);
         mVoteDownIcon.setOnClickListener(this);
         mVoteDownCount.setOnClickListener(this);
-        setVoteStatus(VoteStatus.NONE);
-    }
-
-    private void setVoteStatus(VoteStatus newStatus) {
-        mVoteStatus = newStatus;
-
-        Picasso.with(mContext).load(R.drawable.ic_vote_up_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
-        mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-
-        Picasso.with(mContext).load(R.drawable.ic_vote_down_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
-        mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
-    }
-
-    private void setVoteCount(Integer upCount, Integer downCount) {
-        mVoteUpCount.setText(String.valueOf(upCount == null ? 0 : upCount));
-        mVoteDownCount.setText(String.valueOf(downCount == null ? 0 : downCount));
+        mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE);
     }
 
     public void bind(CommentData comment) {
         mCommentId = comment.id;
-
         Picasso.with(mContext).load(comment.avatar_url).transform(new CircleTransformation()).into(mAvatar);
         mNickname.setText(comment.user_nickname);
         mTimestamp.setText(DateTimeHelper.timestamp(comment.updated_at, AppConst.DateFormat.DATE_AND_TIME));
         mBody.setText(comment.body);
-
-        if(comment.request_user_vote == null) setVoteStatus(VoteStatus.NONE);
-        else if(comment.request_user_vote == 1) setVoteStatus(VoteStatus.UP);
-        else setVoteStatus(VoteStatus.DOWN);
-
-        setVoteCount(comment.up_vote_count, comment.down_vote_count);
+        mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, comment);
     }
 
     @Override
@@ -97,33 +68,21 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                 if(mVoteStatus == VoteStatus.UP) Api.papyruth()
                     .delete_comment_vote(User.getInstance().getAccessToken(), mCommentId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.NONE);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
                 else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), mCommentId, true)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.UP);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.UP, response), error ->  ErrorHandler.handle(error, this));
                 break;
             case R.id.comment_item_down_vote_icon:
                 if(mVoteStatus == VoteStatus.DOWN) Api.papyruth()
                     .delete_comment_vote(User.getInstance().getAccessToken(), mCommentId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.NONE);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
                 else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), mCommentId, false)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.DOWN);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.DOWN, response), error ->  ErrorHandler.handle(error, this));
                 break;
             case R.id.comment_item_up_vote_count:
             case R.id.comment_item_down_vote_count:

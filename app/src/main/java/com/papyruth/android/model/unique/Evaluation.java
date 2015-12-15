@@ -28,7 +28,7 @@ public class Evaluation {
     private String avatar_url;
     private Integer request_user_vote; // 1 for up-vote, 0 for down-vote, null for neither.
     private List<String> hashTag;
-    public String category;
+    public Integer category;
 
     private static Evaluation instance = null;
     private Evaluation() {
@@ -82,8 +82,8 @@ public class Evaluation {
         this.hashTag = hashTag;
     }
     public void addHashTag(String hashtag){ this.hashTag.add(hashtag); }
-    public String getCategory() { return this.category; }
-    public void setCategory(String category) { this.category = category; }
+    public Integer getCategory() { return this.category; }
+    public void setCategory(Integer category) { this.category = category; }
 
     public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;

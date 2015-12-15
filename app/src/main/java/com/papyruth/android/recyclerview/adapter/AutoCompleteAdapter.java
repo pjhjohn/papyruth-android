@@ -3,7 +3,7 @@ package com.papyruth.android.recyclerview.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.papyruth.android.model.Candidate;
+import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.recyclerview.viewholder.AutoCompleteResponseViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
@@ -14,8 +14,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private RecyclerViewItemClickListener itemClickListener; // TODO : use if implemented.
     private boolean isHistory;
 
-    private List<Candidate> items;
-    public AutoCompleteAdapter(List<Candidate> initItemList, RecyclerViewItemClickListener listener) {
+    private List<CandidateData> items;
+    public AutoCompleteAdapter(List<CandidateData> initItemList, RecyclerViewItemClickListener listener) {
         this.items = initItemList;
         this.itemClickListener = listener;
         this.isHistory = false;

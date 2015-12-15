@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
-import com.papyruth.android.model.Candidate;
+import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.HistoryData;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.AutoCompleteAdapter;
@@ -71,7 +71,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     private CompositeSubscription mCompositeSubscription;
     private Context mContext;
     private Resources mResources;
-    private List<Candidate> mCandidates;
+    private List<CandidateData> mCandidates;
 
     private boolean mIsInitialized = false;
     private static final long THROTTLE_MILLISECONDS = 600;
@@ -181,7 +181,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         );
         animatorSet.start();
         Api.papyruth()
-            .search_autocomplete(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), query)
+            .get_search_autocomplete(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), query)
             .map(response -> response.candidates)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -215,7 +215,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         hide();
     }
 
-    private void notifyAutoCompleteDataChanged(List<Candidate> candidates) {
+    private void notifyAutoCompleteDataChanged(List<CandidateData> candidates) {
         mCandidates.clear();
         mCandidates.addAll(candidates);
         mAutoCompleteAdapter.notifyDataSetChanged();
@@ -309,13 +309,13 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         if(mAutoCompleteAdapter == null) mAutoCompleteAdapter = new AutoCompleteAdapter(mCandidates, this);
         return mAutoCompleteAdapter;
     }
-    public List<Candidate> getCandidates() {
+    public List<CandidateData> getCandidates() {
         return mCandidates;
     }
 
-    private Candidate mSelectedCandidate;
+    private CandidateData mSelectedCandidate;
     private String mSelectedQuery;
-    public Candidate getSelectedCandidate() {
+    public CandidateData getSelectedCandidate() {
         return mSelectedCandidate;
     }
     public SearchToolbar setSelectedCandidate(int position) {
@@ -328,7 +328,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     }
     public SearchToolbar setSelectedQuery(String query) {
         mSelectedQuery = query;
-        mSelectedCandidate = new Candidate();
+        mSelectedCandidate = new CandidateData();
         return this;
     }
     public boolean isReadyToSearch(){
@@ -345,8 +345,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         return this;
     }
 
-    public List<Candidate> getHistory() {
-        List<Candidate> courses = new ArrayList<>();
+    public List<CandidateData> getHistory() {
+        List<CandidateData> courses = new ArrayList<>();
         if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
             courses = ((HistoryData)AppManager.getInstance().getStringParsed(
                 AppConst.Preference.HISTORY,
@@ -357,9 +357,9 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     }
 
     private static final int HISTORY_SIZE = 10;
-    public boolean addToHistory(Candidate newCandidate) {
+    public boolean addToHistory(CandidateData newCandidate) {
         if(newCandidate.lecture_id == null && newCandidate.professor_id == null) return false;
-        List<Candidate> candidates;
+        List<CandidateData> candidates;
         if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
             candidates = ((HistoryData) AppManager.getInstance().getStringParsed(
                 AppConst.Preference.HISTORY,

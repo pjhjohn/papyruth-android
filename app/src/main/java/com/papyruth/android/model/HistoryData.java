@@ -7,13 +7,13 @@ import java.util.List;
  * Created by pjhjohn on 2015-07-05.
  */
 public class HistoryData {
-    public List<Candidate> candidates;
+    public List<CandidateData> candidates;
 
     public HistoryData() {
         this.candidates = new ArrayList<>();
     }
 
-    public HistoryData(List<Candidate> candidates) {
+    public HistoryData(List<CandidateData> candidates) {
         this.candidates = candidates;
     }
 }

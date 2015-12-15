@@ -95,7 +95,7 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
 
         if(SignUpForm.getInstance().getUniversityList().size() < 1) {
             Api.papyruth()
-                .universities()
+                .get_universities()
                 .map(response -> response.universities)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

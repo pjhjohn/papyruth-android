@@ -181,11 +181,11 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mSwipeRefresh.setRefreshing(true);
         if(User.getInstance().needEmailConfirmed()){
             mSwipeRefresh.setRefreshing(false);
-            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.NEED_CONFIRMATION);
+            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
             return;
         }else if(User.getInstance().needMoreEvaluation()) {
             mSwipeRefresh.setRefreshing(false);
-            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_MANDATORY);
+            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
             return;
         }
         Api.papyruth().get_evaluations(User.getInstance().getAccessToken(),
@@ -227,10 +227,10 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void loadMore() {
 
         if(User.getInstance().needEmailConfirmed()){
-            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.NEED_CONFIRMATION);
+            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
             return;
         }else if(User.getInstance().needMoreEvaluation()) {
-            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_MANDATORY);
+            AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
             return;
         }
         if(mLoading != null && mLoading) return;

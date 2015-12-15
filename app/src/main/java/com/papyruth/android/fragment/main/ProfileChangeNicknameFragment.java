@@ -131,7 +131,7 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
             })
             .observeOn(Schedulers.io())
             .flatMap(unused ->
-                Api.papyruth().users_me_edit_nickname(
+                Api.papyruth().post_users_me_edit_nickname(
                     User.getInstance().getAccessToken(),
                     this.nickname.getText().toString()
                 ))

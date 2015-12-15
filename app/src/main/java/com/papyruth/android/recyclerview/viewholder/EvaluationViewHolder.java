@@ -3,7 +3,6 @@ package com.papyruth.android.recyclerview.viewholder;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -19,20 +18,21 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.materialdialog.VotersDialog;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
-import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Hashtag;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.helper.CategoryHelper;
 import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.helper.PointHelper;
+import com.papyruth.support.utility.helper.VoteHelper;
+import com.papyruth.support.utility.helper.VoteHelper.VoteStatus;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -69,9 +69,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     private VoteStatus mVoteStatus;
     private final Context mContext;
     private final Resources mResources;
-    public enum VoteStatus {
-        UP, DOWN, NONE
-    }
+
     public EvaluationViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
         ButterKnife.bind(this, view);
@@ -88,7 +86,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         mVoteUpCount.setOnClickListener(this);
         mVoteDownIcon.setOnClickListener(this);
         mVoteDownCount.setOnClickListener(this);
-        setVoteStatus(VoteStatus.NONE);
+        mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE);
     }
 
     public void bind(Evaluation evaluation, View.OnClickListener listener){
@@ -98,32 +96,24 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void bind(Evaluation evaluation) {
         mProgressbar.setVisibility(View.VISIBLE);
-
         mEvaluationId = evaluation.getId();
         mLecture.setText(evaluation.getLectureName());
         mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
-        setCategoryProfessorColor(mCategory, mProfessor, evaluation.getCategory());
+        CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.getCategory());
         Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
         mNickname.setText(evaluation.getUserNickname());
         mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
-
         mLabelOverall.setText(R.string.label_point_overall);
-        PointHelper.setPointRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
+        PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
         mLabelClarity.setText(R.string.label_point_clarity);
-        setPointProgress(mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
+        PointHelper.applyProgress(mContext, mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
         mLabelEasiness.setText(R.string.label_point_easiness);
-        setPointProgress(mLabelEasiness, mPointEasiness, mPostfixEasiness, evaluation.getPointEasiness());
+        PointHelper.applyProgress(mContext, mLabelEasiness, mPointEasiness, mPostfixEasiness, evaluation.getPointEasiness());
         mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
-        setPointProgress(mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
-
+        PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
         mBody.setText(evaluation.getBody());
         mHashtags.setText(Hashtag.getHashtag(evaluation.getHashTag()));
-
-        if(evaluation.getRequestUserVote() == null) setVoteStatus(VoteStatus.NONE);
-        else if(evaluation.getRequestUserVote() == 1) setVoteStatus(VoteStatus.UP);
-        else setVoteStatus(VoteStatus.DOWN);
-
-        setVoteCount(evaluation.getUpVoteCount(), evaluation.getDownVoteCount());
+        mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
         AnimatorHelper.FADE_OUT(mProgressbar).start();
     }
 
@@ -135,33 +125,21 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                 if(mVoteStatus == VoteStatus.UP) Api.papyruth()
                     .delete_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.NONE);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
                 else Api.papyruth()
                     .post_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId, true)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.UP);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.UP, response), error ->  ErrorHandler.handle(error, this));
                 break;
             case R.id.evaluation_down_vote_icon:
                 if(mVoteStatus == VoteStatus.DOWN) Api.papyruth()
                     .delete_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.NONE);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
                 else Api.papyruth()
                     .post_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId, false)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        setVoteStatus(VoteStatus.DOWN);
-                        setVoteCount(response.up_vote_count, response.down_vote_count);
-                    }, error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.DOWN, response), error ->  ErrorHandler.handle(error, this));
                 break;
             case R.id.evaluation_up_vote_count:
             case R.id.evaluation_down_vote_count:
@@ -176,46 +154,5 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                 break;
             default : Timber.d("Clicked view : %s", view);
         }
-    }
-
-    private void setVoteStatus(VoteStatus newStatus) {
-        mVoteStatus = newStatus;
-        Picasso.with(mContext).load(R.drawable.ic_vote_up_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none))).into(mVoteUpIcon);
-        mVoteUpCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.UP ? R.color.vote_up : R.color.vote_none));
-        Picasso.with(mContext).load(R.drawable.ic_vote_down_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none))).into(mVoteDownIcon);
-        mVoteDownCount.setTextColor(mResources.getColor(mVoteStatus == VoteStatus.DOWN ? R.color.vote_down : R.color.vote_none));
-    }
-
-    private void setVoteCount(Integer upCount, Integer downCount) {
-        mVoteUpCount.setText(String.valueOf(upCount == null ? 0 : upCount));
-        mVoteDownCount.setText(String.valueOf(downCount == null ? 0 : downCount));
-    }
-
-    /* TODO : Better response based on category value */
-    private void setCategoryProfessorColor(TextView category, TextView professor, String value) {
-        int color;
-        if(value == null || value.isEmpty()) {
-            color = mResources.getColor(R.color.lecture_type_etc);
-            category.setText(R.string.lecture_type_etc);
-        } else {
-            color = mResources.getColor(R.color.lecture_type_major);
-            category.setText(R.string.lecture_type_major);
-        }
-        category.setTextColor(color);
-        category.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        professor.setTextColor(color);
-    }
-
-    private void setPointProgress(TextView label, TextView point, TextView postfix, Integer value) {
-        if(!pointInRange(value)) {
-            label.setTextColor(mResources.getColor(R.color.point_none));
-            point.setTextColor(mResources.getColor(R.color.point_none));
-            postfix.setTextColor(mResources.getColor(R.color.point_none));
-            point.setText("N/A");
-        } else point.setText(String.valueOf(value));
-    }
-
-    private boolean pointInRange(Integer point) {
-        return point!=null && point >= 0 && point <= 10;
     }
 }

@@ -11,10 +11,10 @@ import com.papyruth.android.fragment.main.EvaluationStep2Fragment;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.opensource.retrofit.apis.Papyruth;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.Navigator;
 
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -23,7 +23,7 @@ import rx.schedulers.Schedulers;
  */
 public class AlertDialog {
     public enum Type{
-        EVALUATION_MANDATORY, EVALUATION_POSSIBLE, NEED_CONFIRMATION, NEED_UNIVERSITY_CONFIRMATION
+        MANDATORY_EVALUATION_REQUIRED, EVALUATION_ALREADY_REGISTERED, USER_CONFIRMATION_REQUIRED, UNIVERSITY_CONFIRMATION_REQUIRED
     }
 
     public static MaterialDialog build(Context context, Navigator navigator, Type type) {
@@ -56,10 +56,10 @@ public class AlertDialog {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case EVALUATION_MANDATORY           :   value = context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()); break;
-            case EVALUATION_POSSIBLE            :   value = res.getString(R.string.inform_wrote_evaluation); break;
-            case NEED_CONFIRMATION              :   value = res.getString(R.string.inform_email_confirm); break;
-            case NEED_UNIVERSITY_CONFIRMATION   :   value = String.format(res.getString(R.string.inform_email_university_confirm), User.getInstance().getUniversityEmail()); break;
+            case MANDATORY_EVALUATION_REQUIRED      : value = context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()); break;
+            case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.inform_wrote_evaluation); break;
+            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.inform_email_confirm); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = String.format(res.getString(R.string.inform_email_university_confirm), User.getInstance().getUniversityEmail()); break;
         } return value;
     }
 
@@ -67,10 +67,10 @@ public class AlertDialog {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case EVALUATION_MANDATORY           :   value = res.getString(R.string.goto_write); break;
-            case EVALUATION_POSSIBLE            :   value = res.getString(R.string.goto_rewrite); break;
-            case NEED_CONFIRMATION              :   value = res.getString(R.string.confirm_positive); break;
-            case NEED_UNIVERSITY_CONFIRMATION   :   value = res.getString(R.string.confirm_positive); break;
+            case MANDATORY_EVALUATION_REQUIRED      : value = res.getString(R.string.goto_write); break;
+            case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.goto_rewrite); break;
+            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.confirm_positive); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.confirm_positive); break;
         } return value;
     }
 
@@ -78,16 +78,16 @@ public class AlertDialog {
         final Resources res = context.getResources();
         String value;
         switch (type) {
-            case NEED_UNIVERSITY_CONFIRMATION   :   value = res.getString(R.string.common_change); break;
-            default                             :   value = res.getString(R.string.common_cancel); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.common_change); break;
+            default                                 : value = res.getString(R.string.common_cancel); break;
         } return value;
     }
 
     private static void doPositive(Context context, Navigator navigator, Type type) {
         Integer emailType = null;
         switch (type) {
-            case EVALUATION_MANDATORY           :   navigator.navigate(EvaluationStep1Fragment.class, true); break;
-            case EVALUATION_POSSIBLE            :
+            case MANDATORY_EVALUATION_REQUIRED:   navigator.navigate(EvaluationStep1Fragment.class, true); break;
+            case EVALUATION_ALREADY_REGISTERED:
                 Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -96,11 +96,11 @@ public class AlertDialog {
                         navigator.navigate(EvaluationStep2Fragment.class, true);
                     }, error -> ErrorHandler.handle(error, MaterialDialog.class));
                 break;
-            case NEED_CONFIRMATION              :
-                emailType = 0;
-            case NEED_UNIVERSITY_CONFIRMATION   :
-                if(emailType == null) emailType = 1;
-                Api.papyruth().users_email(User.getInstance().getAccessToken(), emailType)
+            case USER_CONFIRMATION_REQUIRED:
+                emailType = Papyruth.EMAIL_CONFIRMATION_USER;
+            case UNIVERSITY_CONFIRMATION_REQUIRED:
+                if(emailType == null) emailType = Papyruth.EMAIL_CONFIRMATION_UNIVERSITY;
+                Api.papyruth().post_email_confirm(User.getInstance().getAccessToken(), emailType)
                     .map(response -> response.success)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -122,8 +122,8 @@ public class AlertDialog {
 
     private static void doNegative(Type type) {
         switch (type) {
-            case EVALUATION_MANDATORY   :  break;
-            case EVALUATION_POSSIBLE    : EvaluationForm.getInstance().clear(); break;
+            case MANDATORY_EVALUATION_REQUIRED  : break;
+            case EVALUATION_ALREADY_REGISTERED  : EvaluationForm.getInstance().clear(); break;
         }
     }
 }

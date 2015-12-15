@@ -172,7 +172,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
                 SignUpForm.getInstance().setTempSaveEmail(email);
                 final String errorMessage = RxValidator.getErrorMessageEmail.call(email);
                 if (errorMessage == null) return Api.papyruth()
-                    .users_sign_up_validate("email", email)
+                    .post_users_sign_up_validate("email", email)
                     .map(validator -> validator.validation)
                     .map(valid -> valid ? null : getResources().getString(R.string.duplicated_email));
                 else return Observable.just(errorMessage);
@@ -190,7 +190,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
                 SignUpForm.getInstance().setTempSaveNickname(nickname);
                 final String errorMessage = RxValidator.getErrorMessageNickname.call(nickname);
                 if (errorMessage == null) return Api.papyruth()
-                    .users_sign_up_validate("nickname", nickname)
+                    .post_users_sign_up_validate("nickname", nickname)
                     .map(validator -> validator.validation)
                     .map(valid -> valid ? null : getResources().getString(R.string.duplicated_nickname));
                 else return Observable.just(errorMessage);

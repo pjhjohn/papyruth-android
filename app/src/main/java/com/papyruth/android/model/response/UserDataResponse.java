@@ -9,6 +9,7 @@ public class UserDataResponse {
     public UserData user;
     public String access_token;
     public Boolean success;
+    public Boolean email_success;
 
     public static UserDataResponse ERROR() {
         UserDataResponse response = new UserDataResponse();

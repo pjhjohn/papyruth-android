@@ -10,16 +10,17 @@ import com.papyruth.android.model.response.EvaluationResponse;
 import com.papyruth.android.model.response.EvaluationsResponse;
 import com.papyruth.android.model.response.FavoriteCoursesResponse;
 import com.papyruth.android.model.response.HashtagsResponse;
-import com.papyruth.android.model.response.MyWrittenResponse;
+import com.papyruth.android.model.response.MyCommentsResponse;
 import com.papyruth.android.model.response.SignUpValidateResponse;
-import com.papyruth.android.model.response.SimpleResponse;
 import com.papyruth.android.model.response.StatisticsResponse;
+import com.papyruth.android.model.response.SuccessResponse;
 import com.papyruth.android.model.response.TermResponse;
 import com.papyruth.android.model.response.TermsResponse;
 import com.papyruth.android.model.response.UniversitiesResponse;
+import com.papyruth.android.model.response.UniversityResponse;
 import com.papyruth.android.model.response.UserDataResponse;
 import com.papyruth.android.model.response.VoidResponse;
-import com.papyruth.android.model.response.VoteResponse;
+import com.papyruth.android.model.response.VoteCountResponse;
 import com.papyruth.android.model.response.VotersResponse;
 
 import java.util.List;
@@ -52,25 +53,25 @@ public interface Papyruth {
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
-    @POST("/comments")
+    @POST("/comments") // 403 if failed
     Observable<VoidResponse> post_comment(
         @Header("Authorization") String authorization,
         @Query("evaluation_id") Integer evaluation_id,
         @Query("body") String body
     );
-    @DELETE("/comments/{id}")
+    @DELETE("/comments/{id}") // 401 if not owner
     Observable<VoidResponse> delete_comment(
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
     @POST("/comments/{id}/vote")
-    Observable<VoteResponse> post_comment_vote(
+    Observable<VoteCountResponse> post_comment_vote(
         @Header("Authorization") String authorization,
         @Path("id") Integer id,
         @Query("up") Boolean up
     );
     @DELETE("/comments/{id}/vote")
-    Observable<VoteResponse> delete_comment_vote(
+    Observable<VoteCountResponse> delete_comment_vote(
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
@@ -79,6 +80,7 @@ public interface Papyruth {
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
+
 
     /* COURSES */
     @GET("/courses")
@@ -94,8 +96,8 @@ public interface Papyruth {
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
-    @POST("/courses/{id}/favorite")
-    Observable<SimpleResponse> post_course_favorite(
+    @POST("/courses/{id}/favorite") // 403 failed to (un)register favorite
+    Observable<SuccessResponse> post_course_favorite(
         @Header("Authorization") String authorization,
         @Path("id") Integer id,
         @Query("favorite") Boolean favorite
@@ -106,6 +108,22 @@ public interface Papyruth {
         @Query("university_id") Integer university_id,
         @Query("number") Integer number
     );
+
+
+    /* EMAIL */
+    Integer EMAIL_CONFIRMATION_USER = 0;
+    Integer EMAIL_CONFIRMATION_UNIVERSITY = 1;
+    @POST("/email/confirm")
+    Observable<SuccessResponse> post_email_confirm(
+        @Header("Authorization") String authorization,
+        @Query("type") Integer confirmation_type
+    );
+    @POST("/email/password")
+    Observable<SuccessResponse> post_email_password(
+        @Header("Authorization") String authorization,
+        @Query("email") String email
+    );
+
 
     /* EVALUATIONS */
     @GET("/evaluations")
@@ -158,18 +176,18 @@ public interface Papyruth {
         @Query("body") String body
     );
     @DELETE("/evaluations/{id")
-    Observable<SimpleResponse> delete_evaluation(
+    Observable<SuccessResponse> delete_evaluation(
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
     @POST("/evaluations/{id}/vote")
-    Observable<VoteResponse> post_evaluation_vote(
+    Observable<VoteCountResponse> post_evaluation_vote(
         @Header("Authorization") String authorization,
         @Path("id") Integer id,
         @Query("up") Boolean up
     );
     @DELETE("/evaluations/{id}/vote")
-    Observable<VoteResponse> delete_evaluation_vote(
+    Observable<VoteCountResponse> delete_evaluation_vote(
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
@@ -184,20 +202,17 @@ public interface Papyruth {
         @Path("id") Integer id,
         @Query("hashtags[]") List<String> hashtags
     );
-    @GET("/evaluations/{id}/hashtag")
-    Observable<HashtagsResponse> get_evaluation_hashtag(
-        @Header("Authorization") String authorization,
-        @Path("id") Integer id
-    );
+
 
     /* HOME */
     @GET("/info")
     Observable<StatisticsResponse> get_info();
 
     @GET("/hashtag")
-    Observable<HashtagsResponse> get_hashtag_preset(
+    Observable<HashtagsResponse> get_hashtag(
         @Header("Authorization") String authorization
     );
+
 
     /* PROFESSORS */
     @PATCH("/professors/{id}")
@@ -213,15 +228,16 @@ public interface Papyruth {
         @Query("photo_url") String photo_url
     );
 
+
     /* SEARCH */
     @GET("/search/autocomplete")
-    Observable<CandidatesResponse> search_autocomplete(
+    Observable<CandidatesResponse> get_search_autocomplete(
         @Header("Authorization") String authorization,
         @Query("university_id") Integer university_id,
         @Query("query") String query
     );
     @GET("/search/search")
-    Observable<CoursesResponse> search_search(
+    Observable<CoursesResponse> get_search_search(
         @Header("Authorization") String authorization,
         @Query("university_id") Integer university_id,
         @Query("lecture_id") Integer lecture_id,
@@ -229,26 +245,29 @@ public interface Papyruth {
         @Query("query") String query
     );
 
+
     /* TERMS */
     @GET("/terms")
-    Observable<TermsResponse> terms();
+    Observable<TermsResponse> get_terms();
     @GET("/terms/{id}")
-    Observable<TermResponse> terms(
+    Observable<TermResponse> get_terms(
         @Path("id") Integer id
     );
 
+
     /* UNIVERSITIES */
     @GET("/universities")
-    Observable<UniversitiesResponse> universities();
+    Observable<UniversitiesResponse> get_universities();
     @GET("/universities/{id}")
-    Observable<StatisticsResponse> universities(
+    Observable<UniversityResponse> get_universities(
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
 
+
     /* USERS */
     @POST("/users/sign_up")
-    Observable<UserDataResponse> users_sign_up(
+    Observable<UserDataResponse> post_users_sign_up(
         @Query("email") String email,
         @Query("password") String password,
         @Query("realname") String realname,
@@ -257,67 +276,57 @@ public interface Papyruth {
         @Query("university_id") Integer university_id,
         @Query("entrance_year") Integer entrance_year
     );
-    @POST("/users/sign_up/validate")
-    Observable<SignUpValidateResponse> users_sign_up_validate(
+    @POST("/users/sign_up/validate") // 400 if attribute not found by name
+    Observable<SignUpValidateResponse> post_users_sign_up_validate(
         @Query("name") String name,
         @Query("value") String value
     );
-    @POST("/users/sign_in")
-    Observable<UserDataResponse> users_sign_in(
+    @POST("/users/sign_in") // 403 if account not found or password not matched
+    Observable<UserDataResponse> post_users_sign_in(
         @Query("email") String email,
         @Query("password") String password
     );
     @POST("/users/sign_out")
-    Observable<UserDataResponse> users_sign_out(
+    Observable<VoidResponse> post_users_sign_out(
         @Header("Authorization") String authorization
     );
     @POST("/users/refresh_token")
-    Observable<UserDataResponse> users_refresh_token(
+    Observable<UserDataResponse> post_users_refresh_token(
         @Header("Authorization") String authorization
     );
     @GET("/users/me")
-    Observable<UserDataResponse> users_me(
+    Observable<UserDataResponse> get_users_me(
         @Header("Authorization") String authorization
     );
-    @POST("/users/me/passwd")
-    Observable<SimpleResponse> users_me_passwd(
+    @POST("/users/me/passwd") // 400 if failed to change password
+    Observable<SuccessResponse> post_users_me_passwd(
         @Header("Authorization") String authorization,
         @Query("old_password") String old_password,
         @Query("new_password") String new_password
     );
-    @POST("/users/me/edit")
-    Observable<UserDataResponse> users_me_edit_email(
-        @Header("Authorization") String authorization,
-        @Query("email") String email
-    );
-    @POST("/users/me/edit")
-    Observable<UserDataResponse> users_me_edit_nickname(
+    @POST("/users/me/edit") // 400 if failed to edit user profile
+    Observable<UserDataResponse> post_users_me_edit_nickname(
         @Header("Authorization") String authorization,
         @Query("nickname") String nickname
     );
     @GET("/users/me/favorites")
-    Observable<FavoriteCoursesResponse> users_me_favorites(
+    Observable<FavoriteCoursesResponse> get_users_me_favorites(
         @Header("Authorization") String authorization,
         @Query("page") Integer page
     );
     @GET("/users/me/evaluations")
-    Observable<MyWrittenResponse> users_me_evaluations(
+    Observable<EvaluationsResponse> get_users_me_evaluations(
         @Header("Authorization") String authorization,
         @Query("page") Integer page
     );
     @GET("/users/me/comments")
-    Observable<MyWrittenResponse> users_me_comments(
+    Observable<MyCommentsResponse> get_users_me_comments(
         @Header("Authorization") String authorization,
         @Query("page") Integer page
     );
-    @GET("/users/email")
-    Observable<SimpleResponse> users_email(
-        @Header("Authorization") String authorization,
-        @Query("type") Integer type
-    );
     @POST("/users/me/university_email")
-    Observable<SimpleResponse> users_me_university_email(
+    Observable<SuccessResponse> post_users_me_university_email(
         @Header("Authorization") String authorization,
-        @Query("email") String univ_email
+        @Query("email") String university_email
     );
 }

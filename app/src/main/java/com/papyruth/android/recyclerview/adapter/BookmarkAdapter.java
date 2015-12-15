@@ -176,7 +176,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        Api.papyruth().users_me_favorites(User.getInstance().getAccessToken(), mPage = 1)
+        Api.papyruth().get_users_me_favorites(User.getInstance().getAccessToken(), mPage = 1)
             .map(response -> response.favorites)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -215,7 +215,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(mFooterMaterialProgressBar != null)
             AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         Api.papyruth()
-            .users_me_favorites(
+            .get_users_me_favorites(
                 User.getInstance().getAccessToken(),
                 mPage == null? null : mPage
             )

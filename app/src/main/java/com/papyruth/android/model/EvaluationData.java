@@ -25,7 +25,7 @@ public class EvaluationData {
     public Integer comment_count = null;
     public String avatar_url = null;
     public Integer request_user_vote = null; // 1 for up-vote, 0 for down-vote, null for neither.
-    public String category;
+    public Integer category;
     public List<String> hashtags = new ArrayList<>();
 
     @Override
