@@ -76,14 +76,10 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
             if (mEvaluationIsOccupying) return;
             if (mAnimatorSet != null && mAnimatorSet.isRunning()) return;
             mEvaluationOpened = true;
-            Api.papyruth()
-                .get_evaluation(User.getInstance().getAccessToken(), ((EvaluationData) object).id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    Evaluation.getInstance().update(response.evaluation);
-                    this.mEvaluationFragment = new EvaluationFragment();
-                    this.openEvaluation(view, true);
-                }, error -> ErrorHandler.handle(error, this));
+
+            Evaluation.getInstance().setId(((EvaluationData) object).id);
+            this.mEvaluationFragment = new EvaluationFragment();
+            this.openEvaluation(view, true);
         } else if (object instanceof Footer) {
             mRecyclerView.getLayoutManager().scrollToPosition(0);
         }

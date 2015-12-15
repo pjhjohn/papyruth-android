@@ -217,7 +217,6 @@
                         android:layout_alignBaseline="@+id/evaluation_clarity_point"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
-                        android:text="@string/point_denominator"
                         android:textSize="14sp"
                         android:textColor="@color/point_clarity"
                         roboto:textWeight="normal"/><!-- Clarity Postfix -->
@@ -258,7 +257,6 @@
                         android:layout_alignBaseline="@+id/evaluation_easiness_point"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
-                        android:text="@string/point_denominator"
                         android:textSize="14sp"
                         android:textColor="@color/point_easiness"
                         roboto:textWeight="normal"/><!-- Easiness Postfix -->
@@ -298,7 +296,6 @@
                         android:layout_alignBaseline="@+id/evaluation_gpa_satisfaction_point"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
-                        android:text="@string/point_denominator"
                         android:textSize="14sp"
                         android:textColor="@color/point_gpa_satisfaction"
                         roboto:textWeight="normal"/><!-- GPA Satisfaction Postfix -->

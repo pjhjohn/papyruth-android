@@ -20,6 +20,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.response.EvaluationResponse;
+import com.papyruth.android.model.response.VoidResponse;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
@@ -44,6 +45,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -280,35 +282,30 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     private void submitNewEvaluation() {
         this.submitEvaluation(EvaluationForm.getInstance().isEditMode())
             .filter(response -> response.success)
-            .map(response -> {
+            .flatMap(response -> {
                 EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
-                if (EvaluationForm.getInstance().getHashtag().size() > 0) {
-                    Api.papyruth().post_evaluation_hashtag(
+                if (EvaluationForm.getInstance().getHashtag().isEmpty()) {
+                    return Observable.just(new VoidResponse());
+                }
+                return Api.papyruth().post_evaluation_hashtag(
                         User.getInstance().getAccessToken(),
                         EvaluationForm.getInstance().getEvaluationId(),
                         EvaluationForm.getInstance().getHashtag()
-                    ).subscribe();
-                }
-                return true;
+                );
             })
-            .flatMap(unused -> Api.papyruth().get_evaluation(
-                User.getInstance().getAccessToken(),
-                EvaluationForm.getInstance().getEvaluationId()
-            ))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                response -> {
-                    if (response.success) {
+                    response -> {
+                        Timber.d("response");
                         EvaluationForm.getInstance().free();
-                        Evaluation.getInstance().update(response.evaluation);
+                        Evaluation.getInstance().clear();
+                        Evaluation.getInstance().setId(EvaluationForm.getInstance().getEvaluationId());
                         updateUserData();
-                    } else {
+                    },
+                    error -> {
                         Toast.makeText(this.getActivity(), this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_SHORT).show();
+                        ErrorHandler.handle(error, this);
                     }
-                },
-                error -> {
-                    ErrorHandler.handle(error, this);
-                }
             );
     }
 

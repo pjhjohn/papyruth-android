@@ -42,14 +42,10 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
             if (mEvaluationIsOccupying) return;
             if (mAnimatorSet != null && mAnimatorSet.isRunning()) return;
             mEvaluationOpened = true;
-            Api.papyruth()
-                .get_evaluation(User.getInstance().getAccessToken(), data.evaluation_id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    Evaluation.getInstance().update(response.evaluation);
-                    mEvaluationFragment = new EvaluationFragment();
-                    this.openEvaluation(view, true);
-                }, error -> ErrorHandler.handle(error, this));
+
+            mEvaluationFragment = new EvaluationFragment();
+            this.openEvaluation(view, true);
+            Evaluation.getInstance().setId(data.evaluation_id);
         }else if(object instanceof Footer){
             mRecyclerView.getLayoutManager().scrollToPosition(0);
         }

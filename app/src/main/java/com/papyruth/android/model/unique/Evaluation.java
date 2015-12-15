@@ -85,6 +85,10 @@ public class Evaluation {
     public Integer getCategory() { return this.category; }
     public void setCategory(Integer category) { this.category = category; }
 
+    public boolean hasContents(){
+        return this.body != null && this.id != null && this.user_id != null && this.course_id != null;
+    }
+
     public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;
         if(evaluation.user_id != null)                  this.user_id = evaluation.user_id;
