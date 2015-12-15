@@ -25,6 +25,7 @@ import com.papyruth.android.fragment.main.EvaluationFragment;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.recyclerview.adapter.IAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.MetricHelper;
 import com.papyruth.support.utility.helper.StatusBarHelper;
@@ -32,7 +33,6 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

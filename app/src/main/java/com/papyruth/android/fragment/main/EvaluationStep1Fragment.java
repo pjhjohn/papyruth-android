@@ -21,6 +21,7 @@ import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.recyclerview.adapter.EvaluationSearchAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
@@ -29,7 +30,6 @@ import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

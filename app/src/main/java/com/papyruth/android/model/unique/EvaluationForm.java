@@ -104,10 +104,6 @@ public class EvaluationForm {
         this.hashtag.addAll(evaluation.hashtags);
     }
 
-    public void free(){
-        clear();
-        EvaluationForm.instance = null;
-    }
     public EvaluationForm clear() {
         this.lectureName            = null;
         this.professorName          = null;

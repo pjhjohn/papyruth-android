@@ -85,6 +85,10 @@ public class Evaluation {
     public Integer getCategory() { return this.category; }
     public void setCategory(Integer category) { this.category = category; }
 
+    public boolean hasContents(){
+        return this.body != null && this.id != null && this.user_id != null && this.course_id != null;
+    }
+
     public void update(EvaluationData evaluation) {
         if(evaluation.id != null)                       this.id = evaluation.id;
         if(evaluation.user_id != null)                  this.user_id = evaluation.user_id;
@@ -104,7 +108,10 @@ public class Evaluation {
         if(evaluation.comment_count != null)            this.comment_count = evaluation.comment_count;
         if(evaluation.avatar_url != null)               this.avatar_url = evaluation.avatar_url;
         if(evaluation.category != null)                 this.category = evaluation.category;
-        if(!evaluation.hashtags.isEmpty())              this.hashTag.addAll(evaluation.hashtags);
+        if(!evaluation.hashtags.isEmpty()){
+            this.hashTag.clear();
+            this.hashTag.addAll(evaluation.hashtags);
+        }
         this.request_user_vote = evaluation.request_user_vote; // TODO : verify data consistency holds without null check
     }
 

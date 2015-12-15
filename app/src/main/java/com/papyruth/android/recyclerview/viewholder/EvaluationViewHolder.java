@@ -86,7 +86,6 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         mVoteUpCount.setOnClickListener(this);
         mVoteDownIcon.setOnClickListener(this);
         mVoteDownCount.setOnClickListener(this);
-        mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE);
     }
 
     public void bind(Evaluation evaluation, View.OnClickListener listener){
@@ -95,26 +94,36 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     public void bind(Evaluation evaluation) {
-        mProgressbar.setVisibility(View.VISIBLE);
-        mEvaluationId = evaluation.getId();
-        mLecture.setText(evaluation.getLectureName());
-        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
-        CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.getCategory());
-        Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
-        mNickname.setText(evaluation.getUserNickname());
-        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
-        mLabelOverall.setText(R.string.label_point_overall);
-        PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
-        mLabelClarity.setText(R.string.label_point_clarity);
-        PointHelper.applyProgress(mContext, mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
-        mLabelEasiness.setText(R.string.label_point_easiness);
-        PointHelper.applyProgress(mContext, mLabelEasiness, mPointEasiness, mPostfixEasiness, evaluation.getPointEasiness());
-        mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
-        PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
-        mBody.setText(evaluation.getBody());
-        mHashtags.setText(Hashtag.getHashtag(evaluation.getHashTag()));
-        mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
-        AnimatorHelper.FADE_OUT(mProgressbar).start();
+        if(evaluation.hasContents()) {
+            mProgressbar.setVisibility(View.VISIBLE);
+            mEvaluationId = evaluation.getId();
+            mLecture.setText(evaluation.getLectureName());
+            mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
+            CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.getCategory());
+            Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
+            mNickname.setText(evaluation.getUserNickname());
+            mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
+            mLabelOverall.setText(R.string.label_point_overall);
+            PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
+            mLabelClarity.setText(R.string.label_point_clarity);
+            mPostfixClarity.setText(R.string.point_denominator);
+            mPostfixClarity.setTextColor(mContext.getResources().getColor(R.color.point_clarity));
+            PointHelper.applyProgress(mContext, mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
+            mLabelEasiness.setText(R.string.label_point_easiness);
+            mPostfixEasiness.setText(R.string.point_denominator);
+            mPostfixEasiness.setTextColor(mContext.getResources().getColor(R.color.point_easiness));
+            PointHelper.applyProgress(mContext, mLabelEasiness, mPointEasiness, mPostfixEasiness, evaluation.getPointEasiness());
+            mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
+            mPostfixGpaSatisfaction.setText(R.string.point_denominator);
+            mPostfixGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_gpa_satisfaction));
+            PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
+            mBody.setText(evaluation.getBody());
+            mHashtags.setText(Hashtag.getHashtag(evaluation.getHashTag()));
+            mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
+            AnimatorHelper.FADE_OUT(mProgressbar).start();
+        }else{
+            AnimatorHelper.FADE_IN(mProgressbar).start();
+        }
     }
 
     @Override

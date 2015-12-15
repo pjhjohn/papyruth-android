@@ -71,6 +71,16 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mIndexShadow = mHideShadow? -1 : 2 + (mHideInform?  0 : 1);
         mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mComments.size() + mIndexContent;
+
+        if (Evaluation.getInstance().getId() != null){
+            Api.papyruth().get_evaluation(User.getInstance().getAccessToken(),Evaluation.getInstance().getId())
+                    .map(response -> response.evaluation)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(evaluationData -> {
+                        Evaluation.getInstance().update(evaluationData);
+                        notifyItemChanged(mIndexSingle);
+                    }, error -> ErrorHandler.handle(error, this));
+        }
     }
 
     @Override

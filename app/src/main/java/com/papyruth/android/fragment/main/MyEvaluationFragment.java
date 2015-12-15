@@ -8,18 +8,14 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
-import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.MyEvaluationItemsAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 
 import java.util.concurrent.TimeUnit;
-
-import rx.android.schedulers.AndroidSchedulers;
 
 public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluationItemsAdapter> {
 
@@ -41,14 +37,10 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             if (mEvaluationIsOccupying) return;
             if (mAnimatorSet != null && mAnimatorSet.isRunning()) return;
             mEvaluationOpened = true;
-            Api.papyruth()
-                .get_evaluation(User.getInstance().getAccessToken(), data.id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    Evaluation.getInstance().update(response.evaluation);
-                    mEvaluationFragment = new EvaluationFragment();
-                    this.openEvaluation(view, true);
-                }, error -> ErrorHandler.handle(error, this));
+
+            Evaluation.getInstance().setId(data.id);
+            mEvaluationFragment = new EvaluationFragment();
+            this.openEvaluation(view, true);
         }else if(object instanceof Footer){
             mRecyclerView.getLayoutManager().scrollToPosition(0);
         }
