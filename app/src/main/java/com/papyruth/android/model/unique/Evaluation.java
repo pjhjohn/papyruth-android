@@ -108,7 +108,10 @@ public class Evaluation {
         if(evaluation.comment_count != null)            this.comment_count = evaluation.comment_count;
         if(evaluation.avatar_url != null)               this.avatar_url = evaluation.avatar_url;
         if(evaluation.category != null)                 this.category = evaluation.category;
-        if(!evaluation.hashtags.isEmpty())              this.hashTag.addAll(evaluation.hashtags);
+        if(!evaluation.hashtags.isEmpty()){
+            this.hashTag.clear();
+            this.hashTag.addAll(evaluation.hashtags);
+        }
         this.request_user_vote = evaluation.request_user_vote; // TODO : verify data consistency holds without null check
     }
 

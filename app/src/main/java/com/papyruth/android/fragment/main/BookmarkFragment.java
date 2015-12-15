@@ -19,13 +19,13 @@ import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.recyclerview.adapter.BookmarkAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.concurrent.TimeUnit;
 

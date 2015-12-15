@@ -176,7 +176,7 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
             });
     }
     public void nextEvaluatonStep(CourseData course){
-        if(!EvaluationForm.getInstance().getCourseId().equals(course.id))
+        if( EvaluationForm.getInstance().getCourseId() != null && !EvaluationForm.getInstance().getCourseId().equals(course.id))
             EvaluationForm.getInstance().clear();
         EvaluationForm.getInstance().setCourseId(course.id);
         EvaluationForm.getInstance().setLectureName(course.name);

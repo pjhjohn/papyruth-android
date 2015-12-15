@@ -12,7 +12,6 @@ import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
@@ -20,8 +19,6 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 
 import java.util.concurrent.TimeUnit;
-
-import rx.android.schedulers.AndroidSchedulers;
 
 public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDetailAdapter>{
 

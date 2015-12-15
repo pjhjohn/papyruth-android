@@ -8,18 +8,14 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.MyCommentData;
 import com.papyruth.android.model.unique.Evaluation;
-import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.MyCommentItemsAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 
 import java.util.concurrent.TimeUnit;
-
-import rx.android.schedulers.AndroidSchedulers;
 
 public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItemsAdapter>{
 

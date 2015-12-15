@@ -35,6 +35,7 @@ import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.helper.MetricHelper;
@@ -42,7 +43,6 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.concurrent.TimeUnit;
 
