@@ -1,6 +1,7 @@
 package com.papyruth.android.model.unique;
 
 import com.papyruth.android.model.EvaluationData;
+import com.papyruth.support.opensource.rx.RxValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,13 +126,13 @@ public class EvaluationForm {
 
     public boolean isNextStep(){
         return
-            this.lectureName           != null &&
-            this.professorName         != null &&
-            this.courseId              != null &&
-            this.pointOverall          != null &&
-            this.pointGpaSatisfaction  != null &&
-            this.pointEasiness         != null &&
-            this.pointClarity          != null;
+            this.lectureName    != null &&
+            this.professorName  != null &&
+            this.courseId       != null &&
+            RxValidator.isIntegerValueInRange.call(this.pointOverall) &&
+            RxValidator.isIntegerValueInRange.call(this.pointGpaSatisfaction) &&
+            RxValidator.isIntegerValueInRange.call(this.pointEasiness) &&
+            RxValidator.isIntegerValueInRange.call(this.pointClarity);
     }
 
     public boolean isCompleted() {

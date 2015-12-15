@@ -13,6 +13,7 @@ import rx.Observable;
 import rx.android.widget.OnTextChangeEvent;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-06.
@@ -52,13 +53,17 @@ public class RxValidator {
     };
 
     /* for SeekBar Validation */
-    public static Func1<Integer, Boolean> isIntegerValueInRange = value -> value != null && value >= 0 && value <= 10;
+    public static final int ON_STOP_TRACKING_TOUCH_SEEKBAR = -1;
+    public static Func1<Integer, Boolean> isIntegerValueInRange = value -> value != null && value >= 1 && value <= 10;
     public static Func2<TextView, Integer, Integer> assignProgressValue = (text, value) -> {
-        if(text == null) return value;
-        if(value >= 10) text.setText("10");
-        else if(value < 0) text.setText("N/A");
-        else text.setText(String.format("%d", value));
-        return value;
+        if(text == null || value == ON_STOP_TRACKING_TOUCH_SEEKBAR) return value;
+        if(value < 1) {
+            text.setTextSize(32);
+            text.setText("N/A");
+        } else {
+            text.setTextSize(48);
+            text.setText(value >= 10? "10" : String.format("%d", value));
+        } return value;
     };
     public static Observable<Integer> createObservableSeekBar(SeekBar seekbar, Boolean fromUserOnly) {
         return Observable.create(observer ->
@@ -78,7 +83,7 @@ public class RxValidator {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-                    observer.onNext(seekBar.getProgress());
+                    observer.onNext(ON_STOP_TRACKING_TOUCH_SEEKBAR);
                 }
             })
         );
@@ -88,10 +93,13 @@ public class RxValidator {
     public static Func1<Float, Boolean> isFloatValueInRange = value -> value != null && value >= 0 && value <= 10;
     public static Func2<TextView, Float, Float> assignRatingValue = (text, value) -> {
         if(text == null) return value;
-        if(value >= 5.0f) text.setText("10");
-        else if(value < 0.0f) text.setText("N/A");
-        else text.setText(String.format("%d", (int)(2*value)));
-        return value;
+        if(value < 1.0f) {
+            text.setTextSize(32);
+            text.setText("N/A");
+        } else {
+            text.setTextSize(48);
+            text.setText(value >= 5.0f? "10" : String.format("%d", (int)(2*value)));
+        } return value;
     };
     public static Observable<Float> createObservableRatingBar(RatingBar ratingbar, Boolean fromUserOnly) {
         return Observable.create(observer -> ratingbar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {

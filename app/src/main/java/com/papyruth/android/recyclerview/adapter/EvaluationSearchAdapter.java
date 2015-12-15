@@ -175,9 +175,8 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
             });
     }
-    public void nextEvaluatonStep(CourseData course){
-        if(!EvaluationForm.getInstance().getCourseId().equals(course.id))
-            EvaluationForm.getInstance().clear();
+    public void nextEvaluatonStep(CourseData course) {
+        if(course.id == null || !course.id.equals(EvaluationForm.getInstance().getCourseId())) EvaluationForm.getInstance().clear();
         EvaluationForm.getInstance().setCourseId(course.id);
         EvaluationForm.getInstance().setLectureName(course.name);
         EvaluationForm.getInstance().setProfessorName(course.professor_name);

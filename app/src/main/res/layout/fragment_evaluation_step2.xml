@@ -94,9 +94,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:gravity="center"
-                    android:textSize="40sp"
+                    android:textSize="48sp"
                     android:textColor="@color/point_overall"
-                    roboto:textWeight="bold"/>
+                    roboto:textWeight="medium"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -146,6 +146,7 @@
                         android:layout_gravity="center"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_clarity"
+                        android:splitTrack="false"
                         android:thumb="@drawable/progressbar_thumb_clarity"
                         android:thumbOffset="@dimen/baseline_x1"
                         android:indeterminateOnly="false"
@@ -160,9 +161,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:gravity="center"
-                    android:textSize="40sp"
+                    android:textSize="48sp"
                     android:textColor="@color/point_clarity"
-                    roboto:textWeight="bold"/>
+                    roboto:textWeight="medium"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -212,6 +213,7 @@
                         android:layout_gravity="center"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_easiness"
+                        android:splitTrack="false"
                         android:thumb="@drawable/progressbar_thumb_easiness"
                         android:thumbOffset="@dimen/baseline_x1"
                         android:indeterminateOnly="false"
@@ -226,9 +228,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:gravity="center"
-                    android:textSize="40sp"
+                    android:textSize="48sp"
                     android:textColor="@color/point_easiness"
-                    roboto:textWeight="bold"/>
+                    roboto:textWeight="medium"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/evaluation_form_gpa_satisfaction"
@@ -277,6 +279,7 @@
                         android:layout_gravity="center"
                         android:maxHeight="@dimen/baseline_x1"
                         android:progressDrawable="@drawable/progressbar_gpa_satisfaction"
+                        android:splitTrack="false"
                         android:thumb="@drawable/progressbar_thumb_gpa_satisfaction"
                         android:thumbOffset="@dimen/baseline_x1"
                         android:indeterminateOnly="false"
@@ -291,9 +294,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:gravity="center"
-                    android:textSize="40sp"
+                    android:textSize="48sp"
                     android:textColor="@color/point_gpa_satisfaction"
-                    roboto:textWeight="bold"/>
+                    roboto:textWeight="medium"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
