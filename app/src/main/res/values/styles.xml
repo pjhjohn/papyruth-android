@@ -12,24 +12,4 @@
         <item name="android:windowEnterAnimation">@anim/activity_fade_in</item>
         <item name="android:windowExitAnimation">@anim/activity_fade_out</item>
     </style>
-    <style name="button_base">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="button_rect_green" parent="button_base">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/button_background_rect_green</item>
-    </style>
-    <style name="button_flat_green" parent="button_base">
-        <item name="android:textColor">@color/colorchip_green</item>
-        <item name="android:background">@drawable/button_background_flat_green</item>
-    </style>
-    <style name="button_rect_blue" parent="button_base">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/button_background_rect_blue</item>
-    </style>
-    <style name="button_flat_blue" parent="button_base">
-        <item name="android:textColor">@color/colorchip_green</item>
-        <item name="android:background">@drawable/button_background_flat_blue</item>
-    </style>
 </resources>

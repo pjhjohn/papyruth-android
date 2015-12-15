@@ -4,7 +4,7 @@
     android:id="@+id/activity_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_auth">
+    android:background="@drawable/wallpaper_auth">
     <RelativeLayout
         android:id="@+id/auth_header"
         android:layout_width="match_parent"

@@ -59,7 +59,7 @@
                 android:layout_marginLeft="@dimen/baseline_x1"
                 android:layout_marginStart="@dimen/baseline_x1"
                 android:layout_alignBottom="@+id/course_professor"
-                android:background="@drawable/category_background"
+                android:background="@drawable/background_category"
                 android:textSize="12sp"/><!-- Category -->
             <TextView
                 android:id="@+id/course_professor"

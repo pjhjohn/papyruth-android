@@ -27,7 +27,7 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder {
     public AutoCompleteResponseViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
         ButterKnife.bind(this, view);
-        view.setBackgroundResource(R.drawable.row_selector);
+        view.setBackgroundResource(R.drawable.background_row_selector);
         view.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, getAdapterPosition()));
         mContext = view.getContext();
         mResources = mContext.getResources();

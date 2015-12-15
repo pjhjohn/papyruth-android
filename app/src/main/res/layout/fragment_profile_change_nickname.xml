@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:minHeight="@dimen/baseline_x5"
             android:layout_centerVertical="true"
-            android:background="@drawable/edittext_background_blue"
+            android:background="@drawable/background_edittext_blue"
             android:hint="@string/hint_nickname"
             android:gravity="center"
             android:inputType="textNoSuggestions"/>

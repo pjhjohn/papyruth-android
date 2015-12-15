@@ -45,7 +45,7 @@
             android:layout_marginStart="@dimen/baseline_x4"
             android:layout_toLeftOf="@+id/search_toolbar_query_clear_icon"
             android:layout_toStartOf="@+id/search_toolbar_query_clear_icon"
-            android:background="@drawable/edittext_transparent"
+            android:background="@drawable/background_edittext_transparent"
             android:imeOptions="actionSearch"
             android:singleLine="true"
             android:hint="@string/hint_search"

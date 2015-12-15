@@ -6,7 +6,7 @@
         android:id="@+id/splash_background_panning"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_splash"
+        android:src="@drawable/wallpaper_splash"
         custom:panningDurationInMs="1200"/>
     <com.papyruth.support.utility.customview.Circle
         android:id="@+id/splash_background_circle"

@@ -63,7 +63,7 @@
         android:layout_toRightOf="@+id/course_item_professor_image"
         android:layout_toEndOf="@+id/course_item_professor_image"
         android:layout_alignBottom="@+id/course_item_overall_ratingbar"
-        android:background="@drawable/category_background"
+        android:background="@drawable/background_category"
         android:textSize="12sp"/><!-- Category -->
     <TextView
         android:id="@+id/course_item_professor"

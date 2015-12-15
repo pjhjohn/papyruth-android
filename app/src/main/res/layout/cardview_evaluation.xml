@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:background="@drawable/category_background"
+                        android:background="@drawable/background_category"
                         android:textSize="14sp"/><!-- Category -->
                     <TextView
                         android:id="@+id/evaluation_professor"
