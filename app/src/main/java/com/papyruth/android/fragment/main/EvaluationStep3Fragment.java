@@ -297,7 +297,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             .subscribe(
                     response -> {
                         Timber.d("response");
-                        EvaluationForm.getInstance().free();
+                        EvaluationForm.getInstance().clear();
                         Evaluation.getInstance().clear();
                         Evaluation.getInstance().setId(EvaluationForm.getInstance().getEvaluationId());
                         updateUserData();
