@@ -72,6 +72,7 @@
     <!--menu-->
     <string name="menu_search">메뉴검색</string>
     <string name="menu_settings">설정</string>
+    <string name="menu_favorite">관심강의</string>
     <string name="email_default">--이메일 왜 로딩안됨?--</string>
     <string name="signup_category_account">계정</string>
     <string name="signup_category_info">추가 정보</string>

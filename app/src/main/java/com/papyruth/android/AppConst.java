@@ -70,7 +70,8 @@ public class AppConst {
     }
 
     public static class Menu {
-        public static final int SEARCH = com.papyruth.android.R.id.menu_search;
-        public static final int SETTING = com.papyruth.android.R.id.menu_setting;
+        public static final int FAVORITE = R.id.menu_favorite;
+        public static final int SEARCH = R.id.menu_search;
+        public static final int SETTING = R.id.menu_setting;
     }
 }

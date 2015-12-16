@@ -7,10 +7,13 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.papyruth.android.R;
+
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-06-19.
@@ -44,6 +47,15 @@ public class ToolbarHelper {
         toolbar.inflateMenu(menuResourceId);
         toolbar.setTitleTextColor(Color.WHITE);
         if(listener != null) toolbar.setOnMenuItemClickListener(listener);
+    }
+
+    public static MenuItem menuItemVisibility(Toolbar toolbar, int menuItemResourseId, boolean visibility){
+        MenuItem menuItem = toolbar.getMenu().findItem(menuItemResourseId);
+        if(menuItem != null)
+            menuItem.setVisible(visibility);
+        else
+            Timber.d("This toolbar(%s) has not this item %s", toolbar.toString(), menuItemResourseId);
+        return menuItem;
     }
 
     public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColorResourceId) {
