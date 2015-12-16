@@ -96,7 +96,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_overall"
-                    roboto:textWeight="medium"/>
+                    roboto:textWeight="normal"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -163,7 +163,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_clarity"
-                    roboto:textWeight="medium"/>
+                    roboto:textWeight="normal"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -230,7 +230,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_easiness"
-                    roboto:textWeight="medium"/>
+                    roboto:textWeight="normal"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/evaluation_form_gpa_satisfaction"
@@ -296,7 +296,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_gpa_satisfaction"
-                    roboto:textWeight="medium"/>
+                    roboto:textWeight="normal"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

@@ -53,7 +53,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private FrameLayout mShadow;
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
-    private ImageView mFooterFullyLoadedIndicator;
+    private RelativeLayout mFooterFullyLoadedIndicator;
 
     public MyCommentItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mSwipeRefresh = swiperefresh;
@@ -100,7 +100,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
-            mFooterFullyLoadedIndicator = (ImageView) viewHolder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
+            mFooterFullyLoadedIndicator = (RelativeLayout) viewHolder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
         }
         return viewHolder;
     }

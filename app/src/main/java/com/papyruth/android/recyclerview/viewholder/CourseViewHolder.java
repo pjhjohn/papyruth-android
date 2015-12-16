@@ -3,9 +3,7 @@ package com.papyruth.android.recyclerview.viewholder;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -78,7 +76,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.getCategory());
         mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
         mLecture.setText(course.getName());
-        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix))));
+        mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
         Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
         mLabelOverall.setText(R.string.label_point_overall_average);
         PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), course.getEvaluationCount());

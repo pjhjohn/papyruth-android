@@ -61,7 +61,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private FrameLayout mShadow;
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
-    private ImageView mFooterFullyLoadedIndicator;
+    private RelativeLayout mFooterFullyLoadedIndicator;
     private Navigator mNavigator;
 
     public CourseAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Navigator navigator, RecyclerViewItemObjectClickListener listener) {
@@ -111,7 +111,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (viewholder instanceof FooterViewHolder) {
             mFooterBorder = viewholder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewholder.itemView.findViewById(R.id.material_progress_medium);
-            mFooterFullyLoadedIndicator = (ImageView) viewholder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
+            mFooterFullyLoadedIndicator = (RelativeLayout) viewholder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
         }
         return viewholder;
     }

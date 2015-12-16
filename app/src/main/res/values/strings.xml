@@ -138,7 +138,7 @@
     <string name="no_data_history">No search history</string>
     <string name="no_data_you_cant">You can\'t view any evaluation.</string>
 
-    <string name="professor_prefix">Prof. </string>
+    <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
 
     <!-- time -->

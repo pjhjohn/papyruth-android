@@ -2,11 +2,11 @@ package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,9 +76,9 @@ public class EvaluationStep2Fragment extends TrackerFragment {
         ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-
+        mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLecture.setText(EvaluationForm.getInstance().getLectureName());
-        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
+        mProfessor.setText(String.format("%s%s%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix)));
         LayerDrawable ldRatingBarOverall = (LayerDrawable) mRatingBarOverall.getProgressDrawable();
         for(int i = 0; i < 3; i ++) ldRatingBarOverall.getDrawable(i).setColorFilter(mContext.getResources().getColor(R.color.point_overall), PorterDuff.Mode.SRC_ATOP);
         if(EvaluationForm.getInstance().isNextStep()) {
