@@ -60,11 +60,11 @@
         android:id="@+id/course_item_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/course_item_overall_ratingbar"
         android:layout_toRightOf="@+id/course_item_professor_image"
         android:layout_toEndOf="@+id/course_item_professor_image"
+        android:layout_alignBaseline="@+id/course_item_professor"
         android:background="@drawable/background_category"
-        android:textSize="12sp"/><!-- Category -->
+        android:textSize="11sp"/><!-- Category -->
     <TextView
         android:id="@+id/course_item_professor"
         android:layout_width="wrap_content"
