@@ -61,8 +61,9 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
         mToolbar.setTitle(R.string.nav_item_my_comment);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         setStatusBarDefault();
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
     }
 
     @Override

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.FailureDialog;
@@ -72,7 +71,7 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
     @Bind(R.id.nickname_label) protected TextView label;
     @Bind(R.id.nickname_text) protected EditText nickname;
     private CompositeSubscription subscriptions;
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +82,7 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
         if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
         else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
         this.nickname.setText(User.getInstance().getNickname());
-        toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;
     }
 
@@ -97,11 +96,12 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        toolbar.setTitle(R.string.toolbar_profile_change_nickname);
-        ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_blue).start();
+        mToolbar.setTitle(R.string.toolbar_profile_change_nickname);
+        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);

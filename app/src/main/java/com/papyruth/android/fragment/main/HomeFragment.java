@@ -4,7 +4,6 @@ import android.view.View;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
@@ -71,8 +70,9 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         mToolbar.setTitle(R.string.toolbar_title_home);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         setStatusBarDefault();
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
     }
 
 

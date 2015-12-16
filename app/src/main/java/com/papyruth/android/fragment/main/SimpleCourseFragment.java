@@ -95,8 +95,9 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
         this.mToolbar.setTitle(R.string.toolbar_search);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
 
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(

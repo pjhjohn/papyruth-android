@@ -69,8 +69,9 @@ public class TermsOfServiceFragment extends TrackerFragment implements RecyclerV
         mToolbar.setTitle(R.string.toolbar_tos);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(mActivity, R.color.status_bar_blue);
-        mActivity.setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        mActivity.setMenuItemVisibility(AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
     }
 
     @Override

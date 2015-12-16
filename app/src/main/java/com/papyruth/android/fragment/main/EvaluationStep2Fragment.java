@@ -115,8 +115,9 @@ public class EvaluationStep2Fragment extends TrackerFragment {
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> mNavigator.navigate(EvaluationStep3Fragment.class, true),
             error -> ErrorHandler.handle(error, this)

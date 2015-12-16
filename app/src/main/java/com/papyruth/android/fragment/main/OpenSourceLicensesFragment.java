@@ -73,8 +73,9 @@ public class OpenSourceLicensesFragment extends TrackerFragment implements Recyc
         mToolbar.setTitle(R.string.toolbar_osl);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
     }
 
     @Override

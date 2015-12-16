@@ -59,8 +59,9 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
         mToolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         setStatusBarDefault();
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
     }
 
     @Override

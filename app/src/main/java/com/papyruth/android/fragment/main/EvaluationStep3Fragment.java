@@ -142,8 +142,9 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         ToolbarHelper.getColorTransitionAnimator(toolbar, R.color.toolbar_green).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        ((MainActivity) getActivity()).setMenuItemVisibility(AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(toolbar, AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(toolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(toolbar, AppConst.Menu.FAVORITE, false);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
             new MaterialDialog.Builder(context)
                 .title(R.string.new_evaluation_submit_title)

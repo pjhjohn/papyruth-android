@@ -82,8 +82,9 @@ public class SettingsFragment extends TrackerFragment {
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(mActivity, R.color.status_bar_blue);
         FloatingActionControl.getInstance().hide(true);
-        mActivity.setMenuItemVisibility(AppConst.Menu.SETTING, false);
-        mActivity.setMenuItemVisibility(AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
 
         mCompositeSubscription.add(ViewObservable.clicks(mTermsOfService).subscribe(unused -> mNavigator.navigate(TermsOfServiceFragment.class, true), error -> ErrorHandler.handle(error, this)));
         mCompositeSubscription.add(ViewObservable.clicks(mOpenSourceLicense).subscribe(unused -> mNavigator.navigate(OpenSourceLicensesFragment.class, true), error -> ErrorHandler.handle(error, this)));

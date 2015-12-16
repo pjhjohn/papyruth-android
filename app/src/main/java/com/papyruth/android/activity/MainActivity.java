@@ -63,13 +63,11 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         mToolbar.setTitleTextColor(Color.WHITE);
         mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar_red));
 
-        mMenuItemSearch  = mToolbar.getMenu().findItem(AppConst.Menu.SEARCH);
-        mMenuItemSearch.setOnMenuItemClickListener(item -> {
+        mToolbar.getMenu().findItem(AppConst.Menu.SEARCH).setOnMenuItemClickListener(item -> {
             SearchToolbar.getInstance().show();
             return true;
         });
-        mMenuItemSetting = mToolbar.getMenu().findItem(AppConst.Menu.SETTING);
-        mMenuItemSetting.setOnMenuItemClickListener(item -> {
+        mToolbar.getMenu().findItem(AppConst.Menu.SETTING).setOnMenuItemClickListener(item -> {
             this.navigate(SettingsFragment.class, true, AnimatorType.SLIDE_TO_RIGHT);
             return true;
         });
@@ -89,15 +87,6 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
             this.navigate(SimpleCourseFragment.class, true);
         });
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
-    }
-
-    private MenuItem mMenuItemSearch;
-    private MenuItem mMenuItemSetting;
-    public void setMenuItemVisibility(int menuItemId, boolean visible) {
-        switch(menuItemId) {
-            case AppConst.Menu.SEARCH  : mMenuItemSearch.setVisible(visible); break;
-            case AppConst.Menu.SETTING : mMenuItemSetting.setVisible(visible); break;
-        }
     }
 
     @Override
