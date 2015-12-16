@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -52,7 +51,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         Picasso.with(mContext).load(evaluation.avatar_url).transform(new CircleTransformation()).into(mAvatar);
         mLecture.setSelected(true);
         mLecture.setText(evaluation.lecture_name);
-        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s </strong>%s", mResources.getString(R.string.professor_prefix), evaluation.professor_name, mResources.getString(R.string.professor_postfix))));
+        mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), evaluation.professor_name, mResources.getString(R.string.professor_postfix)));
         CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.category);
         mTimestamp.setText(DateTimeHelper.timeago(mContext, evaluation.created_at));
         mBody.setText(evaluation.body.replace('\n', ' '));

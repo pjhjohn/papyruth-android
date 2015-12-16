@@ -2,11 +2,11 @@ package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +25,6 @@ import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -78,26 +76,26 @@ public class EvaluationStep2Fragment extends TrackerFragment {
         ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-
+        mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLecture.setText(EvaluationForm.getInstance().getLectureName());
-        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix))));
+        mProfessor.setText(String.format("%s%s%s", getResources().getString(R.string.professor_prefix), EvaluationForm.getInstance().getProfessorName(), " " + getResources().getString(R.string.professor_postfix)));
         LayerDrawable ldRatingBarOverall = (LayerDrawable) mRatingBarOverall.getProgressDrawable();
         for(int i = 0; i < 3; i ++) ldRatingBarOverall.getDrawable(i).setColorFilter(mContext.getResources().getColor(R.color.point_overall), PorterDuff.Mode.SRC_ATOP);
         if(EvaluationForm.getInstance().isNextStep()) {
             mRatingBarOverall.setProgress(EvaluationForm.getInstance().getPointOverall());
-            mSeekBarClarity.setProgress(EvaluationForm.getInstance().getPointClarity());
-            mSeekBarGpaSatisfaction.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
-            mSeekBarEasiness.setProgress(EvaluationForm.getInstance().getPointEasiness());
             mPointOverall.setText(String.valueOf(EvaluationForm.getInstance().getPointOverall()));
+            mSeekBarClarity.setProgress(EvaluationForm.getInstance().getPointClarity());
             mPointClarity.setText(String.valueOf(EvaluationForm.getInstance().getPointClarity()));
+            mSeekBarGpaSatisfaction.setProgress(EvaluationForm.getInstance().getPointGpaSatisfaction());
             mPointGpaSatisfaction.setText(String.valueOf(EvaluationForm.getInstance().getPointGpaSatisfaction()));
+            mSeekBarEasiness.setProgress(EvaluationForm.getInstance().getPointEasiness());
             mPointEasiness.setText(String.valueOf(EvaluationForm.getInstance().getPointEasiness()));
             FloatingActionControl.getInstance().show(true);
         } else {
-            mPointOverall.setText("0");
-            mPointClarity.setText("0");
-            mPointGpaSatisfaction.setText("0");
-            mPointEasiness.setText("0");
+            RxValidator.assignRatingValue.call(mPointOverall, mRatingBarOverall.getRating());
+            RxValidator.assignProgressValue.call(mPointClarity, mSeekBarClarity.getProgress());
+            RxValidator.assignProgressValue.call(mPointEasiness, mSeekBarEasiness.getProgress());
+            RxValidator.assignProgressValue.call(mPointGpaSatisfaction, mSeekBarGpaSatisfaction.getProgress());
         }
         return view;
     }
@@ -128,37 +126,38 @@ public class EvaluationStep2Fragment extends TrackerFragment {
         mCompositeSubscription.add(Observable
             .combineLatest(
                 RxValidator.createObservableRatingBar(mRatingBarOverall, true)
-                    .map(rating -> RxValidator.assignRatingValue.call(mPointOverall, rating))
-                    .map(rating -> {
-                        EvaluationForm.getInstance().setPointOverall((int) (rating * 2));
-                        return RxValidator.isFloatValueInRange.call(rating);
-                    }),
-                RxValidator.createObservableSeekBar(mSeekBarGpaSatisfaction, true)
-                    .map(progress -> RxValidator.assignProgressValue.call(mPointGpaSatisfaction, progress))
-                    .map(progress -> {
-                        EvaluationForm.getInstance().setPointGpaSatisfaction(progress);
-                        return RxValidator.isIntegerValueInRange.call(progress);
-                    }),
-                RxValidator.createObservableSeekBar(mSeekBarEasiness, true)
-                    .map(progress -> RxValidator.assignProgressValue.call(mPointEasiness, progress))
-                    .map(progress -> {
-                        EvaluationForm.getInstance().setPointEasiness(progress);
-                        return RxValidator.isIntegerValueInRange.call(progress);
+                    .map(overall -> RxValidator.assignRatingValue.call(mPointOverall, overall))
+                    .map(overall -> {
+                        EvaluationForm.getInstance().setPointOverall((int) (overall * 2));
+                        return (int) (overall * 2);
                     }),
                 RxValidator.createObservableSeekBar(mSeekBarClarity, true)
-                    .map(progress -> RxValidator.assignProgressValue.call(mPointClarity, progress))
-                    .map(progress -> {
-                        EvaluationForm.getInstance().setPointClarity(progress);
-                        return RxValidator.isIntegerValueInRange.call(progress);
+                    .map(clarity -> RxValidator.assignProgressValue.call(mPointClarity, clarity))
+                    .map(clarity -> {
+                        if(clarity >= 0) EvaluationForm.getInstance().setPointClarity(clarity);
+                        return clarity;
                     }),
-                (a, b, c, d) -> EvaluationForm.getInstance().isNextStep()
+                RxValidator.createObservableSeekBar(mSeekBarEasiness, true)
+                    .map(easiness -> RxValidator.assignProgressValue.call(mPointEasiness, easiness))
+                    .map(easiness -> {
+                        if(easiness >= 0) EvaluationForm.getInstance().setPointEasiness(easiness);
+                        return easiness;
+                    }),
+                RxValidator.createObservableSeekBar(mSeekBarGpaSatisfaction, true)
+                    .map(satisfaction -> RxValidator.assignProgressValue.call(mPointGpaSatisfaction, satisfaction))
+                    .map(satisfaction -> {
+                        if(satisfaction >= 0) EvaluationForm.getInstance().setPointGpaSatisfaction(satisfaction);
+                        return satisfaction;
+                    }),
+                (overall, clarity, easiness, satisfaction) -> {
+                    return EvaluationForm.getInstance().isNextStep() && satisfaction == RxValidator.ON_STOP_TRACKING_TOUCH_SEEKBAR; // Show FAB only when GPA Satisfaction control has finished
+                }
             )
             .startWith(EvaluationForm.getInstance().isNextStep())
-            .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                if(visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if(!visible && valid) FloatingActionControl.getInstance().show(true);
             }, error -> ErrorHandler.handle(error, this))
         );
     }

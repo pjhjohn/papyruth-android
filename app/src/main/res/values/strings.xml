@@ -89,7 +89,6 @@
 
     <!--course-->
     <string name="label_point_overall">Overall</string>
-    <string name="label_point_overall_average">Avg. Overall</string>
     <string name="label_point_gpa_satisfaction">Satisfaction</string>
     <string name="label_point_clarity">Clarity</string>
     <string name="label_point_easiness">Easiness</string>
@@ -139,7 +138,7 @@
     <string name="no_data_history">No search history</string>
     <string name="no_data_you_cant">You can\'t view any evaluation.</string>
 
-    <string name="professor_prefix">Prof. </string>
+    <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
 
     <!-- time -->

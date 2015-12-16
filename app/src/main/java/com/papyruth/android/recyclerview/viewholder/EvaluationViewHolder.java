@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -98,7 +97,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             mProgressbar.setVisibility(View.VISIBLE);
             mEvaluationId = evaluation.getId();
             mLecture.setText(evaluation.getLectureName());
-            mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), " " + mResources.getString(R.string.professor_postfix))));
+            mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), evaluation.getProfessorName(), mResources.getString(R.string.professor_postfix)));
             CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.getCategory());
             Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
             mNickname.setText(evaluation.getUserNickname());

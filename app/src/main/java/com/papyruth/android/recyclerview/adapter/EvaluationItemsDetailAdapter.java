@@ -53,7 +53,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
     private FrameLayout mShadow;
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
-    private ImageView mFooterFullyLoadedIndicator;
+    private RelativeLayout mFooterFullyLoadedIndicator;
 
     public EvaluationItemsDetailAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
@@ -101,7 +101,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
         if (viewholder instanceof FooterViewHolder) {
             mFooterBorder = viewholder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewholder.itemView.findViewById(R.id.material_progress_medium);
-            mFooterFullyLoadedIndicator = (ImageView) viewholder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
+            mFooterFullyLoadedIndicator = (RelativeLayout) viewholder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
         }
         return viewholder;
     }

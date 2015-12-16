@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -54,7 +53,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
     public void bind(CourseData course) {
         Picasso.with(mContext).load(course.professor_photo_url).transform(new CircleTransformation()).into(mProfessorImage);
         mLecture.setText(course.name);
-        mProfessor.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.professor_prefix), course.professor_name, mResources.getString(R.string.professor_postfix))));
+        mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.professor_name, mResources.getString(R.string.professor_postfix)));
         CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.category);
         mLabelOverall.setText(R.string.label_point_overall);
         PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.point_overall, course.evaluation_count);

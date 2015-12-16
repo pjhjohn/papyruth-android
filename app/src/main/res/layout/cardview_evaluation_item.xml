@@ -51,7 +51,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/evaluation_item_nickname"
-        android:layout_marginTop="@dimen/baseline_x1"
         android:layout_toRightOf="@+id/evaluation_item_avatar"
         android:layout_toEndOf="@+id/evaluation_item_avatar"
         android:layout_alignParentRight="true"
@@ -61,6 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/baseline_x1"
             android:layout_toLeftOf="@+id/evaluation_item_overall"
             android:layout_toStartOf="@+id/evaluation_item_overall"
             android:layout_marginRight="@dimen/baseline_x1"
@@ -77,18 +77,14 @@
             android:orientation="vertical">
             <RelativeLayout
                 android:id="@+id/evaluation_item_overall_score"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end">
+                android:layout_gravity="end">
                 <TextView
                     android:id="@+id/evaluation_item_overall_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
                     android:layout_alignBaseline="@+id/evaluation_item_overall_point"
-                    android:layout_toLeftOf="@+id/evaluation_item_overall_point"
-                    android:layout_toStartOf="@+id/evaluation_item_overall_point"
                     android:layout_marginRight="@dimen/baseline_x1"
                     android:layout_marginEnd="@dimen/baseline_x1"
                     android:gravity="end"/><!-- Overall Label -->
@@ -96,18 +92,19 @@
                     android:id="@+id/evaluation_item_overall_point"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_toRightOf="@+id/evaluation_item_overall_label"
+                    android:layout_toEndOf="@+id/evaluation_item_overall_label"
                     android:gravity="bottom"
                     android:textSize="36sp"
                     roboto:fontFamily="roboto"
-                    roboto:textWeight="bold"/><!-- Overall Point -->
+                    roboto:textWeight="medium"/><!-- Overall Point -->
             </RelativeLayout>
             <RatingBar
                 android:id="@+id/evaluation_item_overall_ratingbar"
                 android:progressDrawable="@drawable/ratingbar_16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/baseline_x2"
+                android:layout_gravity="end"
                 android:layout_marginLeft="@dimen/baseline_x0.5"
                 android:layout_marginStart="@dimen/baseline_x0.5"
                 android:isIndicator="true"
@@ -119,8 +116,7 @@
         android:id="@+id/evaluation_item_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/evaluation_item_content"
-        android:layout_marginTop="@dimen/baseline_x1">
+        android:layout_below="@+id/evaluation_item_content">
         <TextView
             android:id="@+id/evaluation_item_hashtags"
             android:layout_width="match_parent"
@@ -151,9 +147,7 @@
                     android:layout_centerVertical="true"
                     android:padding="@dimen/baseline_x0.5"
                     android:contentDescription="@string/empty"/>
-
                 <com.devspark.robototextview.widget.RobotoTextView
-                    xmlns:roboto="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/evaluation_item_up_vote_count"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/baseline_x4"
@@ -162,15 +156,14 @@
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
+                    android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
                     roboto:textWeight="bold"/>
             </RelativeLayout>
-
             <RelativeLayout
                 android:id="@+id/evaluation_item_down_vote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-
                 <ImageView
                     android:id="@+id/evaluation_item_down_vote_icon"
                     android:layout_width="@dimen/baseline_x4"
@@ -180,9 +173,7 @@
                     android:layout_centerVertical="true"
                     android:padding="@dimen/baseline_x0.5"
                     android:contentDescription="@string/empty"/>
-
                 <com.devspark.robototextview.widget.RobotoTextView
-                    xmlns:roboto="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/evaluation_item_down_vote_count"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/baseline_x4"
@@ -191,15 +182,14 @@
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
+                    android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
                     roboto:textWeight="bold"/>
             </RelativeLayout>
-
             <RelativeLayout
                 android:id="@+id/evaluation_item_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-
                 <ImageView
                     android:id="@+id/evaluation_item_comment_icon"
                     android:layout_width="@dimen/baseline_x4"
@@ -209,9 +199,7 @@
                     android:layout_centerVertical="true"
                     android:padding="@dimen/baseline_x0.5"
                     android:contentDescription="@string/empty"/>
-
                 <com.devspark.robototextview.widget.RobotoTextView
-                    xmlns:roboto="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/evaluation_item_comment_count"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/baseline_x4"
@@ -220,6 +208,7 @@
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
+                    android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
                     roboto:textWeight="bold"/>
             </RelativeLayout>
