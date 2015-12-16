@@ -18,6 +18,7 @@
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/Papyruth.Theme.Splash"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,11 +28,13 @@
         <activity
             android:name=".activity.AuthActivity"
             android:theme="@style/Papyruth.Theme.Auth"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/Papyruth.Theme.Main"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
 
