@@ -5,6 +5,10 @@
         <item name="android:windowAnimationStyle">@style/Papyruth.Activity.Animation</item>
         <item name="android:textColorHint">#AAA</item>
     </style>
+    <style name="Papyruth.Theme.Splash" parent="Papyruth.Theme.Base">
+    </style>
+    <style name="Papyruth.Theme.Auth" parent="Papyruth.Theme.Base">
+    </style>
     <style name="Papyruth.Theme.Main" parent="Papyruth.Theme.Base">
         <item name="android:windowBackground">@color/white_90p</item>
     </style>

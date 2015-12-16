@@ -12,13 +12,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_title"
-        android:theme="@style/Papyruth.Theme.Base">
-
+        android:theme="@style/Papyruth.Theme.Base"
+        android:screenOrientation="portrait">
         <!-- Activities -->
         <activity
             android:name=".activity.SplashActivity"
-            android:label="@string/app_title"
-            android:screenOrientation="portrait"
+            android:theme="@style/Papyruth.Theme.Splash"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,16 +26,13 @@
         </activity>
         <activity
             android:name=".activity.AuthActivity"
-            android:label="@string/app_title"
-            android:screenOrientation="portrait"
+            android:theme="@style/Papyruth.Theme.Auth"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/app_title"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            android:theme="@style/Papyruth.Theme.Main">
+            android:theme="@style/Papyruth.Theme.Main"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
 
         <!-- Google Play Services -->

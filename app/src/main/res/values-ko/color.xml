@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="point_colors">
+        <item>#E05E5F</item>
+        <item>#FFC81D</item>
+        <item>#60CAC6</item>
+    </string-array>
+</resources>

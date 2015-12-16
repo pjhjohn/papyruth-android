@@ -3,15 +3,15 @@
     <style name="Papyruth.Theme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:windowAnimationStyle">@style/Papyruth.Activity.Animation</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
         <item name="android:textColorHint">#AAA</item>
+    </style>
+    <style name="Papyruth.Theme.Splash" parent="Papyruth.Theme.Base">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+    <style name="Papyruth.Theme.Auth" parent="Papyruth.Theme.Base">
     </style>
     <style name="Papyruth.Theme.Main" parent="Papyruth.Theme.Base">
         <item name="android:windowBackground">@color/white_90p</item>
-        <item name="android:windowTranslucentStatus">false</item>
-    </style>
-    <style name="Papyruth.Activity.Animation" parent="@android:style/Animation.Activity">
-        <item name="android:windowEnterAnimation">@anim/activity_fade_in</item>
-        <item name="android:windowExitAnimation">@anim/activity_fade_out</item>
     </style>
 </resources>
