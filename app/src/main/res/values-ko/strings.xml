@@ -88,7 +88,6 @@
 
     <!--course-->
     <string name="label_point_overall">총점</string>
-    <string name="label_point_overall_average">평균총점</string>
     <string name="label_point_gpa_satisfaction">학점만족도</string>
     <string name="label_point_clarity">강의력</string>
     <string name="label_point_easiness">널널함</string>
