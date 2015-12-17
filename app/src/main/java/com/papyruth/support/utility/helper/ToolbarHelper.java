@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
@@ -56,6 +58,16 @@ public class ToolbarHelper {
         else
             Timber.d("This toolbar(%s) has not this item %s", toolbar.toString(), menuItemResourseId);
         return menuItem;
+    }
+
+    public static void menuItemColor(Toolbar toolbar, int menuItemResourseId, int color){
+        MenuItem menuItem = toolbar.getMenu().findItem(menuItemResourseId);
+        if(menuItem != null) {
+            Drawable iconDrawable = menuItem.getIcon();
+            iconDrawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        }else{
+            Timber.d("This toolbar(%s) has not this item %s", toolbar.toString(), menuItemResourseId);
+        }
     }
 
     public static ValueAnimator getColorTransitionAnimator(Toolbar toolbar, int toColorResourceId) {
