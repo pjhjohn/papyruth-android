@@ -85,7 +85,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mLabelEasiness.setText(R.string.label_point_easiness);
         PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
         mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
-        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
+        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
         mEvaluationCount.setText(String.valueOf(count == null ? 0 : String.valueOf(count)));
         Picasso.with(mContext).load(R.drawable.ic_bookmark_24dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
         mBookmark.setOnClickListener(this);

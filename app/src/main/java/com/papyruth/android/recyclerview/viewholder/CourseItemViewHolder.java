@@ -58,7 +58,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
         mLabelOverall.setText(R.string.label_point_overall);
         PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.point_overall, course.evaluation_count);
         mHashtags.setText(Hashtag.getHashtag(course.hashtags));
-        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
+        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
         mEvaluationCount.setText(String.valueOf(course.evaluation_count == null? 0 : String.valueOf(course.evaluation_count)));
     }
 }

@@ -70,7 +70,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
         mHashtags.setText(Hashtag.getHashtag(evaluation.hashtags));
         VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
-        Picasso.with(mContext).load(R.drawable.ic_comment_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mCommentIcon);
+        Picasso.with(mContext).load(R.drawable.ic_comment_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mCommentIcon);
         mCommentCount.setText(String.valueOf(evaluation.comment_count == null? 0 : evaluation.comment_count));
         AnimatorHelper.FADE_OUT(mProgressbar).start();
     }
