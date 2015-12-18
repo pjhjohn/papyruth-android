@@ -97,7 +97,6 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
-        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
         FloatingActionControl.getInstance().clear();
 
 

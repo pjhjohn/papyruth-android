@@ -71,7 +71,6 @@ public class TermsOfServiceFragment extends TrackerFragment implements RecyclerV
         StatusBarHelper.changeColorTo(mActivity, R.color.status_bar_blue);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
-        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
     }
 
     @Override

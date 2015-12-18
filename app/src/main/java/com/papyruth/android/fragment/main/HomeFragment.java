@@ -72,7 +72,6 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         setStatusBarDefault();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
-        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
     }
 
 

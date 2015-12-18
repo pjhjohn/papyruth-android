@@ -88,7 +88,6 @@ public class ProfileFragment extends TrackerFragment {
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, true);
-        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, false);
 
         FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityName.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

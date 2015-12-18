@@ -40,6 +40,7 @@
     <color name="black_translucent_54p">#8A000000</color>
     <color name="white_translucent_54p">#8Affffff</color>
     <color name="icon_material">@color/black_translucent_54p</color><!--Icon values: 54% #000000-->
+    <color name="icon_skew_dark">@color/white_40p</color>
     <color name="text_material">#DE000000</color><!--Text values: 87% #000000-->
 
     <!--Item State-->
@@ -47,7 +48,7 @@
     <color name="item_pressed">#D6D6D6</color>
 
     <!--BookMark-->
-    <color name="inactive">@color/white_40p</color>
+    <color name="inactive">@color/white_70p</color>
     <color name="active">@color/colorchip_yellow</color>
 
     <!--Vote-->
