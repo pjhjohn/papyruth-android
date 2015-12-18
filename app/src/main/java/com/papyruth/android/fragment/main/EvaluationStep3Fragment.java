@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.response.EvaluationResponse;
 import com.papyruth.android.model.response.VoidResponse;
 import com.papyruth.android.model.unique.Evaluation;
@@ -45,7 +44,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-26.
@@ -184,12 +182,13 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                 })
                 .map(RxValidator.isValidEvaluationBody)
                 .map(e -> EvaluationForm.getInstance().isCompleted())
-                .startWith(EvaluationForm.getInstance().isCompleted())
                 .delay(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe(valid -> {
                     this.showFAB(valid);
                 }, error -> ErrorHandler.handle(error, this))
         );
+        if(EvaluationForm.getInstance().isCompleted())
+            this.showFAB(true);
 
         /**
          * Type new hashtag.
@@ -197,7 +196,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         this.subscriptions.add(
             WidgetObservable.text(this.hashtagsText)
                 .filter(event -> {
-                    if (event.text().length() > 0 &&  event.text().charAt(0) == '#')
+                    if (event.text().length() > 0 && event.text().charAt(0) == '#')
                         this.recommendHashtag.setVisibility(View.VISIBLE);
                     else
                         this.recommendHashtag.setVisibility(View.INVISIBLE);
@@ -222,9 +221,10 @@ public class EvaluationStep3Fragment extends TrackerFragment {
 
     private boolean showFAB(boolean valid){
         boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-        if (visible && !valid){
+        if(visible && valid) FloatingActionControl.getInstance().show(false);
+        else if (visible){
             FloatingActionControl.getInstance().hide(true);
-        }else if (!visible && valid) {
+        }else if (valid) {
             FloatingActionControl.getInstance().show(true);
             return true;
         }
@@ -283,7 +283,8 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         this.submitEvaluation(EvaluationForm.getInstance().isEditMode())
             .filter(response -> response.success)
             .flatMap(response -> {
-                EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
+                if(response.evaluation_id != null)
+                    EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                 if (EvaluationForm.getInstance().getHashtag().isEmpty()) {
                     return Observable.just(new VoidResponse());
                 }
@@ -296,10 +297,9 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                     response -> {
-                        Timber.d("response");
-                        EvaluationForm.getInstance().clear();
                         Evaluation.getInstance().clear();
                         Evaluation.getInstance().setId(EvaluationForm.getInstance().getEvaluationId());
+                        EvaluationForm.getInstance().clear();
                         updateUserData();
                     },
                     error -> {

@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.rx.RxValidator;
@@ -90,7 +89,6 @@ public class EvaluationStep2Fragment extends TrackerFragment {
             mPointGpaSatisfaction.setText(String.valueOf(EvaluationForm.getInstance().getPointGpaSatisfaction()));
             mSeekBarEasiness.setProgress(EvaluationForm.getInstance().getPointEasiness());
             mPointEasiness.setText(String.valueOf(EvaluationForm.getInstance().getPointEasiness()));
-            FloatingActionControl.getInstance().show(true);
         } else {
             RxValidator.assignRatingValue.call(mPointOverall, mRatingBarOverall.getRating());
             RxValidator.assignProgressValue.call(mPointClarity, mSeekBarClarity.getProgress());
@@ -156,8 +154,10 @@ public class EvaluationStep2Fragment extends TrackerFragment {
             .startWith(EvaluationForm.getInstance().isNextStep())
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if(visible && !valid) FloatingActionControl.getInstance().hide(true);
-                else if(!visible && valid) FloatingActionControl.getInstance().show(true);
+                if(visible && valid && EvaluationForm.getInstance().isCompleted()) FloatingActionControl.getInstance().show(false);
+                else if(visible && valid) FloatingActionControl.getInstance().show(true);
+                else if(visible) FloatingActionControl.getInstance().hide(true);
+                else if(valid) FloatingActionControl.getInstance().show(true);
             }, error -> ErrorHandler.handle(error, this))
         );
     }

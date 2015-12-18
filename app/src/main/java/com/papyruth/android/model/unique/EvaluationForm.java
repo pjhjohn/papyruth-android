@@ -141,7 +141,7 @@ public class EvaluationForm {
             this.pointEasiness         != null &&
             this.pointClarity          != null &&
             this.body                  != null &&
-            ( !this.editMode || this.isEdited);
+            this.body.length() > 0;
 
     }
 
