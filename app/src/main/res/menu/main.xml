@@ -3,12 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="@string/menu_settings"
-        android:id="@+id/menu_favorite"
-        android:icon="@drawable/ic_bookmark_24dp"
-        android:orderInCategory="0"
-        app:showAsAction="ifRoom"/>
-    <item
         android:title="@string/menu_search"
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_search_24dp"

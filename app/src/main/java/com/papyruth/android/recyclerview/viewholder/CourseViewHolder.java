@@ -55,7 +55,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     private CompositeSubscription mCompositeSubscription;
     private final Context mContext;
     private final Resources mResources;
-    private final int mColorInactive;
     public CourseViewHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
@@ -64,7 +63,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mCategory.setPaintFlags(mCategory.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mCompositeSubscription = new CompositeSubscription();
-        mColorInactive = mResources.getColor(R.color.inactive);
         mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLabelClarity.setPaintFlags(mLabelClarity.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLabelEasiness.setPaintFlags(mLabelEasiness.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
@@ -87,7 +85,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mLabelEasiness.setText(R.string.label_point_easiness);
         PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
         mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
-        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mColorInactive)).into(mEvaluationIcon);
+        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEvaluationIcon);
         mEvaluationCount.setText(String.valueOf(count == null ? 0 : String.valueOf(count)));
         Picasso.with(mContext).load(R.drawable.ic_bookmark_24dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
         mBookmark.setOnClickListener(this);
@@ -98,7 +96,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         if(v.getId() == R.id.course_bookmark) setFavorite(!Course.getInstance().getIsFavorite());
     }
 
-    private void setFavorite(boolean favorite){
+    private void setFavorite(boolean favorite) {
         mCompositeSubscription.add(
             Api.papyruth().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), favorite)
                 .filter(response -> response.success)

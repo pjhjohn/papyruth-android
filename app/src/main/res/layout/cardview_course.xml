@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/baseline_x2"
+    android:paddingTop="0dp"
+    android:paddingStart="@dimen/baseline_x2"
+    android:paddingEnd="@dimen/baseline_x2"
+    android:paddingBottom="@dimen/baseline_x2"
     android:background="@color/white">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,6 +18,7 @@
             android:layout_width="@dimen/baseline_x8"
             android:layout_height="@dimen/baseline_x8"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/baseline_x2"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:padding="@dimen/baseline_x0.5"
@@ -24,12 +28,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/baseline_x2"
             android:layout_toRightOf="@+id/course_professor_image"
             android:layout_toEndOf="@+id/course_professor_image"
             android:layout_marginLeft="@dimen/baseline_x1"
             android:layout_marginStart="@dimen/baseline_x1"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_toLeftOf="@+id/course_bookmark"
+            android:layout_toStartOf="@+id/course_bookmark"
             android:layout_marginRight="@dimen/baseline_x1"
             android:layout_marginEnd="@dimen/baseline_x1"
             android:gravity="end"
@@ -37,6 +42,17 @@
             android:textColor="@color/white_30p"
             android:maxLines="2"
             android:ellipsize="end"/><!-- Lecture Title -->
+        <ImageView
+            android:id="@+id/course_bookmark"
+            android:layout_width="@dimen/baseline_x4"
+            android:layout_height="@dimen/baseline_x4"
+            android:layout_marginTop="-4dp"
+            android:layout_marginRight="-6dp"
+            android:layout_marginEnd="-6dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/empty"/><!-- Bookmark Icon -->
         <TextView
             android:id="@+id/course_category"
             android:layout_width="wrap_content"
@@ -58,8 +74,6 @@
             android:layout_marginStart="@dimen/baseline_x0.5"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="@dimen/baseline_x1"
-            android:layout_marginEnd="@dimen/baseline_x1"
             android:layout_gravity="center_vertical"
             android:gravity="end"
             android:textSize="14sp"
@@ -90,10 +104,10 @@
                 android:layout_height="@dimen/baseline_x3"
                 android:layout_toRightOf="@+id/course_overall_label"
                 android:layout_toEndOf="@+id/course_overall_label"
-                android:layout_marginLeft="@dimen/baseline_x2"
-                android:layout_marginStart="@dimen/baseline_x2"
-                android:layout_marginRight="@dimen/baseline_x2"
-                android:layout_marginEnd="@dimen/baseline_x2"
+                android:layout_marginLeft="@dimen/baseline_x1"
+                android:layout_marginStart="@dimen/baseline_x1"
+                android:layout_marginRight="@dimen/baseline_x1"
+                android:layout_marginEnd="@dimen/baseline_x1"
                 android:layout_alignBottom="@+id/course_overall_point"
                 android:layout_marginBottom="@dimen/baseline_x0.5"
                 android:progressDrawable="@drawable/ratingbar_24dp"
@@ -167,6 +181,7 @@
         <ProgressBar
             android:id="@+id/course_easiness_progressbar"
             android:layout_width="match_parent"
+
             android:layout_height="@dimen/baseline_x1"
             android:layout_toRightOf="@+id/course_easiness_point"
             android:layout_toEndOf="@+id/course_easiness_point"
@@ -240,20 +255,9 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/course_bookmark"
-            android:layout_toStartOf="@+id/course_bookmark"
-            android:textColor="@color/hashtag"/><!-- Hashtags -->
-        <ImageView
-            android:id="@+id/course_bookmark"
-            android:layout_width="@dimen/baseline_x4"
-            android:layout_height="@dimen/baseline_x4"
-            android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/course_statistics"
             android:layout_toStartOf="@+id/course_statistics"
-            android:layout_marginStart="@dimen/baseline_x1"
-            android:layout_marginEnd="@dimen/baseline_x1"
-            android:padding="@dimen/baseline_x0.5"
-            android:contentDescription="@string/empty"/><!-- Bookmark Icon -->
+            android:textColor="@color/hashtag"/><!-- Hashtags -->
         <LinearLayout
             android:id="@+id/course_statistics"
             android:layout_width="wrap_content"
@@ -261,10 +265,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:paddingLeft="@dimen/baseline_x1"
-            android:paddingRight="@dimen/baseline_x1"
-            android:orientation="horizontal"
-            android:background="@drawable/background_course_evaluation">
+            android:orientation="horizontal">
             <RelativeLayout
                 android:id="@+id/course_evaluation"
                 android:layout_width="wrap_content"

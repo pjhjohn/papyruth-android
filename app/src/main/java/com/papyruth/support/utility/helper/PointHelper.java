@@ -95,11 +95,11 @@ public class PointHelper {
             progress.setProgress(progressValue);
             text.setText(progressValue >= BOUND_UPPER_EXTENDED? "10" : String.format("%d.%d", progressValue / 10, progressValue % 10));
         } else {
-            final int colorInactive = context.getResources().getColor(R.color.inactive);
-            prefix.setTextColor(colorInactive);
-            progress.setProgressDrawable(new ColorDrawable(colorInactive));
+            final int colorPointNone = context.getResources().getColor(R.color.point_none);
+            prefix.setTextColor(colorPointNone);
+            progress.setProgressDrawable(new ColorDrawable(colorPointNone));
             progress.setProgress(100);
-            text.setTextColor(colorInactive);
+            text.setTextColor(colorPointNone);
             text.setText(NOT_ASSIGNED);
         }
     }

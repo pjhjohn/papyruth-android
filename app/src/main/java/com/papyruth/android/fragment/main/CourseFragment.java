@@ -23,6 +23,7 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
 
@@ -54,7 +55,6 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
-        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, true);
     }
     @Override
     protected void setStatusBarDefault() {

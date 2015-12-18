@@ -47,7 +47,7 @@
     <color name="item_pressed">#D6D6D6</color>
 
     <!--BookMark-->
-    <color name="inactive">@color/white_40p</color>
+    <color name="inactive">@color/white_70p</color>
     <color name="active">@color/colorchip_yellow</color>
 
     <!--Vote-->
