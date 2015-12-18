@@ -12,11 +12,8 @@ import android.widget.TextView;
 
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.Course;
-import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
-import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Hashtag;
 import com.papyruth.support.utility.helper.CategoryHelper;
 import com.papyruth.support.utility.helper.PointHelper;
@@ -24,17 +21,14 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
-public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class CourseViewHolder extends RecyclerView.ViewHolder{
     @Bind(R.id.course_professor_image)                protected ImageView mProfessorImage;
     @Bind(R.id.course_lecture)                        protected TextView mLecture;
-    @Bind(R.id.course_bookmark)                       protected ImageView mBookmark;
     @Bind(R.id.course_category)                       protected TextView mCategory;
     @Bind(R.id.course_professor)                      protected TextView mProfessor;
     @Bind(R.id.course_overall_label)                  protected TextView mLabelOverall;
@@ -89,29 +83,5 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
         Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mColorInactive)).into(mEvaluationIcon);
         mEvaluationCount.setText(String.valueOf(count == null ? 0 : String.valueOf(count)));
-        Picasso.with(mContext).load(R.drawable.ic_bookmark_24dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
-        mBookmark.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.course_bookmark) setFavorite(!Course.getInstance().getIsFavorite());
-    }
-
-    private void setFavorite(boolean favorite){
-        mCompositeSubscription.add(
-            Api.papyruth().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), favorite)
-                .filter(response -> response.success)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    response -> {
-                        Course.getInstance().setIsFavorite(favorite);
-                        Picasso.with(mContext).load(R.drawable.ic_bookmark_24dp)
-                            .transform(new ColorFilterTransformation(mResources.getColor(favorite? R.color.active : R.color.inactive)))
-                            .into(mBookmark);
-                    }, Throwable::printStackTrace
-                )
-        );
     }
 }

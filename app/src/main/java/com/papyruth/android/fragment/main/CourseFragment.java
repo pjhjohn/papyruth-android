@@ -23,6 +23,7 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
 
@@ -54,7 +55,20 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
-        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, true);
+        ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.FAVORITE, true).setOnMenuItemClickListener(item -> {
+            boolean favorite = !Course.getInstance().getIsFavorite();
+            Api.papyruth().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), favorite)
+                .filter(response -> response.success)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            Course.getInstance().setIsFavorite(favorite);
+                            ToolbarHelper.menuItemColor(mToolbar, AppConst.Menu.FAVORITE, getActivity().getResources().getColor(favorite ? R.color.active : R.color.inactive));
+                        }, Throwable::printStackTrace
+                );
+            return true;
+        });
         if(Course.getInstance().getIsFavorite()){
             ToolbarHelper.menuItemColor(mToolbar, AppConst.Menu.FAVORITE, getActivity().getResources().getColor(R.color.active));
         }else{
