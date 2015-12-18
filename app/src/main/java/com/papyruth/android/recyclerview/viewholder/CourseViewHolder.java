@@ -87,7 +87,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
         Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
         mEvaluationCount.setText(String.valueOf(count == null ? 0 : String.valueOf(count)));
-        Picasso.with(mContext).load(R.drawable.ic_bookmark_24dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
+        Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
         mBookmark.setOnClickListener(this);
     }
 
@@ -105,7 +105,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 .subscribe(
                     response -> {
                         Course.getInstance().setIsFavorite(favorite);
-                        Picasso.with(mContext).load(R.drawable.ic_bookmark_24dp)
+                        Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp)
                             .transform(new ColorFilterTransformation(mResources.getColor(favorite? R.color.active : R.color.inactive)))
                             .into(mBookmark);
                     }, Throwable::printStackTrace

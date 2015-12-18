@@ -6,13 +6,16 @@
     android:layout_height="wrap_content"
     android:background="@drawable/background_pressed_selector_white"
     android:layout_marginBottom="1dp"
-    android:padding="@dimen/baseline_x2">
+    android:paddingTop="@dimen/baseline_x2"
+    android:paddingBottom="@dimen/baseline_x2">
     <RelativeLayout
         android:id="@+id/evaluation_item_evaluator"
-        android:layout_width="@dimen/baseline_x7"
+        android:layout_width="@dimen/baseline_x8"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/baseline_x1"
+        android:layout_marginStart="@dimen/baseline_x1"
         android:layout_marginRight="@dimen/baseline_x1"
         android:layout_marginEnd="@dimen/baseline_x1">
         <ImageView
@@ -20,21 +23,14 @@
             android:layout_width="@dimen/baseline_x6"
             android:layout_height="@dimen/baseline_x6"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/baseline_x0.5"
-            android:layout_marginRight="@dimen/baseline_x0.5"
+            android:layout_centerHorizontal="true"
             android:padding="@dimen/baseline_x0.5"
             android:contentDescription="@string/empty"/><!-- Avatar -->
         <TextView
             android:id="@+id/evaluation_item_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/evaluation_item_avatar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:gravity="center"
             android:textSize="12sp"
             android:singleLine="true"
@@ -62,6 +58,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/baseline_x2"
+        android:layout_marginEnd="@dimen/baseline_x2"
         android:gravity="end"
         android:textSize="14sp"
         android:textColor="@color/timestamp"
@@ -73,6 +71,8 @@
         android:layout_below="@+id/evaluation_item_lecture"
         android:layout_toRightOf="@+id/evaluation_item_evaluator"
         android:layout_toEndOf="@+id/evaluation_item_evaluator"
+        android:layout_marginRight="@dimen/baseline_x2"
+        android:layout_marginEnd="@dimen/baseline_x2"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
         <TextView
@@ -120,6 +120,8 @@
         android:layout_marginTop="@dimen/baseline_x1"
         android:layout_toRightOf="@+id/evaluation_item_evaluator"
         android:layout_toEndOf="@+id/evaluation_item_evaluator"
+        android:layout_marginRight="@dimen/baseline_x2"
+        android:layout_marginEnd="@dimen/baseline_x2"
         android:maxLines="4"
         android:ellipsize="end"/>
 </RelativeLayout>
