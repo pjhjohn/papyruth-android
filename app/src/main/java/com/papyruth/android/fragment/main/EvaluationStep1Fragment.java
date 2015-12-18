@@ -105,7 +105,10 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
                 .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.handle(error, this))
         );
         SearchToolbar.getInstance()
-            .setItemClickListener((v, position) -> mAdapter.searchCourse(SearchToolbar.getInstance().getCandidates().get(position), null))
+            .setItemClickListener((v, position) -> {
+                mAdapter.searchCourse(SearchToolbar.getInstance().getCandidates().get(position), null);
+                SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getCandidates().get(position));
+            })
             .setOnVisibilityChangedListener(visible -> mQueryButton.setVisibility(visible ? View.GONE : View.VISIBLE))
             .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new CandidateData(), SearchToolbar.getInstance().getSelectedQuery()));
     }
