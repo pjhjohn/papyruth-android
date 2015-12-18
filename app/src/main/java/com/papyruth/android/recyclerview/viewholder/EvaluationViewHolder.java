@@ -63,6 +63,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @Bind(R.id.evaluation_up_vote_count)              protected RobotoTextView mVoteUpCount;
     @Bind(R.id.evaluation_down_vote_icon)             protected ImageView mVoteDownIcon;
     @Bind(R.id.evaluation_down_vote_count)            protected RobotoTextView mVoteDownCount;
+    @Bind(R.id.evaluation_comment_count)              protected TextView mCommentCount;
     @Bind(R.id.material_progress_medium)              protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
@@ -85,6 +86,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         mVoteUpCount.setOnClickListener(this);
         mVoteDownIcon.setOnClickListener(this);
         mVoteDownCount.setOnClickListener(this);
+        mCommentCount.setPaintFlags(mCommentCount.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
     }
 
     public void bind(Evaluation evaluation, View.OnClickListener listener){
@@ -120,7 +122,10 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             mHashtags.setText(Hashtag.getHashtag(evaluation.getHashTag()));
             mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
             AnimatorHelper.FADE_OUT(mProgressbar).start();
-        }else{
+            final int commentCount = evaluation.getCommentCount();
+            if(commentCount <= 0) mCommentCount.setText(mContext.getResources().getString(R.string.evaluation_no_comments));
+            else mCommentCount.setText(String.format(mContext.getResources().getQuantityString(R.plurals.comments, commentCount), commentCount));
+        } else {
             AnimatorHelper.FADE_IN(mProgressbar).start();
         }
     }

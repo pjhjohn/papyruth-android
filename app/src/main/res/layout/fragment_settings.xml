@@ -36,7 +36,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/application_title"
             android:orientation="vertical">
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/tos_container"
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/osl_container"
                 android:layout_width="match_parent"
@@ -104,7 +104,7 @@
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/clear_history_container"
                 android:layout_width="match_parent"
@@ -138,7 +138,7 @@
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/signout_container"
                 android:layout_width="match_parent"
@@ -172,7 +172,7 @@
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
         </LinearLayout>
     </RelativeLayout>
 </com.papyruth.support.utility.navigator.NavigatableFrameLayout>

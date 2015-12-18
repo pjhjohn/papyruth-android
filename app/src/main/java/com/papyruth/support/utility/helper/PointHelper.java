@@ -97,7 +97,7 @@ public class PointHelper {
         } else {
             final int colorPointNone = context.getResources().getColor(R.color.point_none);
             prefix.setTextColor(colorPointNone);
-            progress.setProgressDrawable(new ColorDrawable(colorPointNone));
+            progress.setProgressDrawable(context.getResources().getDrawable(R.drawable.progressbar_none));
             progress.setProgress(100);
             text.setTextColor(colorPointNone);
             text.setText(NOT_ASSIGNED);

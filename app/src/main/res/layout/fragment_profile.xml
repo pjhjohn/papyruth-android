@@ -50,7 +50,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/entrance_year">
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/email_container"
                 android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                     android:singleLine="true"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/university_email_container"
                 android:layout_width="match_parent"
@@ -140,7 +140,7 @@
                     android:singleLine="true"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/realname_container"
                 android:layout_width="match_parent"
@@ -185,7 +185,7 @@
                     android:singleLine="true"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/nickname_container"
                 android:layout_width="match_parent"
@@ -230,7 +230,7 @@
                     android:singleLine="true"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
             <RelativeLayout
                 android:id="@+id/gender_container"
                 android:layout_width="match_parent"
@@ -275,7 +275,7 @@
                     android:singleLine="true"
                     android:textSize="16sp"/>
             </RelativeLayout>
-            <include layout="@layout/hr_settings"/>
+            <include layout="@layout/hr_padding"/>
         </LinearLayout>
     </RelativeLayout>
 </com.papyruth.support.utility.navigator.NavigatableFrameLayout>

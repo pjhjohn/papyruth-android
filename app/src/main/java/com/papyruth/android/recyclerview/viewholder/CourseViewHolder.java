@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -50,8 +51,10 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     @Bind(R.id.course_gpa_satisfaction_progressbar)   protected ProgressBar mProgressBarGpaSatisfaction;
     @Bind(R.id.course_gpa_satisfaction_point)         protected TextView mPointGpaSatisfaction;
     @Bind(R.id.course_hashtags)                       protected TextView mHashtags;
+    @Bind(R.id.course_statistics)                     protected LinearLayout mStatistics;
     @Bind(R.id.course_evaluation_icon)                protected ImageView mEvaluationIcon;
     @Bind(R.id.course_evaluation_count)               protected TextView mEvaluationCount;
+    @Bind(R.id.course_no_evaluations_message)         protected LinearLayout mNoEvaluationsMessage;
     private CompositeSubscription mCompositeSubscription;
     private final Context mContext;
     private final Resources mResources;
@@ -71,6 +74,8 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
 
     public void bind(Course course) {
         final Integer count = course.getEvaluationCount();
+        Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
+        mBookmark.setOnClickListener(this);
         CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.getCategory());
         mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
         mLecture.setText(course.getName());
@@ -84,11 +89,18 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, course.getPointGpaSatisfaction(), count);
         mLabelEasiness.setText(R.string.label_point_easiness);
         PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
-        mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
-        Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
-        mEvaluationCount.setText(String.valueOf(count == null ? 0 : String.valueOf(count)));
-        Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
-        mBookmark.setOnClickListener(this);
+        if(count == null || count <= 0) {
+            mHashtags.setVisibility(View.GONE);
+            mStatistics.setVisibility(View.GONE);
+            mNoEvaluationsMessage.setVisibility(View.VISIBLE);
+        } else {
+            mHashtags.setVisibility(View.VISIBLE);
+            mStatistics.setVisibility(View.VISIBLE);
+            mNoEvaluationsMessage.setVisibility(View.GONE);
+            mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
+            Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
+            mEvaluationCount.setText(String.valueOf(count));
+        }
     }
 
     @Override

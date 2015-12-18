@@ -151,10 +151,10 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setBody(R.string.empty_state_content_empty_evaluation)
+            if(mIndexSingle < 0) mEmptyState
+                .setBody(R.string.empty_state_content_empty_evaluation)
                 .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_evaluation)))
                 .show();
         } else {
@@ -167,7 +167,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_white);
         }

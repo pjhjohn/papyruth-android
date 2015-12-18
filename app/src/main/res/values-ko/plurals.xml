@@ -11,4 +11,8 @@
     <plurals name="days">
         <item quantity="other">%d 일</item>
     </plurals>
+
+    <plurals name="comments">
+        <item quantity="other">%d 개의 댓글</item>
+    </plurals>
 </resources>

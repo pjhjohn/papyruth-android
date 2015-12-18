@@ -14,4 +14,9 @@
         <item quantity="one">a day</item>
         <item quantity="other">%d days</item>
     </plurals>
+
+    <plurals name="comments">
+        <item quantity="one">1 Comment</item>
+        <item quantity="other">%d Comments</item>
+    </plurals>
 </resources>

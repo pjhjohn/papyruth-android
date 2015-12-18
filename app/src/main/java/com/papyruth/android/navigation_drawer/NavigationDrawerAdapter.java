@@ -48,7 +48,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case NavigationDrawerItemSeparatorViewHolder.VIEWTYPE :
-                return new NavigationDrawerItemSeparatorViewHolder(LayoutInflater.from(mContext).inflate(R.layout.hr_drawer, parent, false));
+                return new NavigationDrawerItemSeparatorViewHolder(LayoutInflater.from(mContext).inflate(R.layout.hr_nav_drawer, parent, false));
             case NavigationDrawerItemViewHolder.VIEWTYPE :
                 RecyclerView.ViewHolder viewholder = new NavigationDrawerItemViewHolder(LayoutInflater.from(mContext).inflate(R.layout.cardview_navigation_drawer_item, parent, false));
                 viewholder.itemView.setClickable(true);

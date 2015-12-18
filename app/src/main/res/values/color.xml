@@ -128,7 +128,7 @@
     <!--Etc-->
     <color name="disabled">@color/white_80p</color>
     <color name="disabled_light">@color/white_95p</color>
-    <color name="hr_settings">@color/white_95p</color>
+    <color name="hr">@color/white_95p</color>
     <color name="timestamp">@color/white_60p</color>
     <color name="hashtag">#8C6239</color>
     <color name="background_recyclerview">@color/white_90p</color>

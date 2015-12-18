@@ -62,7 +62,7 @@
             android:src="@drawable/ic_clear_24dp"
             android:contentDescription="@string/empty"/>
     </RelativeLayout>
-    <include layout="@layout/hr_solid"/>
+    <include layout="@layout/hr_black_1px"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/search_toolbar_query_result"
         android:layout_width="match_parent"

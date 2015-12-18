@@ -31,5 +31,5 @@
             android:textSize="16sp"
             android:ellipsize="end"/>
     </RelativeLayout>
-    <include layout="@layout/hr_settings"/>
+    <include layout="@layout/hr_padding"/>
 </LinearLayout>

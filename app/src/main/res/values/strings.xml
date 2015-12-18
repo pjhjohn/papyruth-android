@@ -274,4 +274,9 @@ Fusce congue tellus in nulla luctus rutrum vitae fringilla ligula. Nullam facili
     <string name="empty_state_title_access_denied">You can not see now</string>
     <string name="empty_state_content_access_denied_email">Please check confirm mail</string>
     <string name="empty_state_content_access_denied_university_email">Please check your university mail</string>
+
+    <!--Course Evaluation Count Notification-->
+    <string name="course_no_evaluations">There is no Evaluations for this Course.\nWhy don\'t you write an evaluation for others?</string>
+    <!--Evaluation Comment Count Notification-->
+    <string name="evaluation_no_comments">There is no Comment for this Evaluation.\nWhy don\'t you comment one?</string>
 </resources>

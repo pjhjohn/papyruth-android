@@ -302,7 +302,7 @@
                 </RelativeLayout><!-- GPA Satisfaction -->
             </LinearLayout><!-- Clarity & Easiness & GPA Satisfaction -->
         </RelativeLayout><!-- Avatar & Nickname & Timestamp & Overall & Clarity & Easiness & GPA Satisfaction -->
-        <include layout="@layout/hr_settings"/>
+        <include layout="@layout/hr_padding"/>
         <TextView
             android:id="@+id/evaluation_body"
             android:layout_width="match_parent"
@@ -357,8 +357,7 @@
             <RelativeLayout
                 android:id="@+id/evaluation_down_vote"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/baseline_x1">
+                android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/evaluation_down_vote_icon"
                     android:layout_width="@dimen/baseline_x4"
@@ -382,6 +381,14 @@
                     roboto:textWeight="bold"/><!-- Vote Down Count -->
             </RelativeLayout><!-- Body -->
         </LinearLayout><!--Footer : Vote Up/Down-->
+        <include layout="@layout/hr_nopadding"/>
+        <TextView
+            android:id="@+id/evaluation_comment_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/baseline_x1"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.2"/>
     </LinearLayout>
     <include layout="@layout/material_progressbar_medium"/>
 </FrameLayout>
