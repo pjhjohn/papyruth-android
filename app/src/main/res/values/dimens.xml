@@ -16,6 +16,7 @@
     <dimen name="baseline_x3.5">28dp</dimen>
     <dimen name="baseline_x4">32dp</dimen>
     <dimen name="baseline_x5">40dp</dimen>
+    <dimen name="baseline_x5.5">44dp</dimen>
     <dimen name="baseline_x6">48dp</dimen>
     <dimen name="baseline_x7">56dp</dimen>
     <dimen name="baseline_x8">64dp</dimen>
