@@ -23,14 +23,16 @@
     <!--Navigation Drawer-->
     <com.papyruth.support.utility.customview.ScrimInsetsFrameLayout
         android:id="@+id/navigation_drawer_container"
-        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/baseline_x7"
+        android:layout_marginEnd="@dimen/baseline_x7"
         android:layout_gravity="start"
         android:elevation="10dp"
         app:insetForeground="#4000">
         <fragment
             android:id="@+id/navigation_drawer"
-            android:layout_width="@dimen/navigation_drawer_width"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="com.papyruth.android.navigation_drawer.NavigationDrawerFragment"
             app:layout="@layout/fragment_navigation_drawer"/>

@@ -52,6 +52,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement OnClickCategory");
         }
+        if(User.getInstance().getUniversityId() == 1){
+            mHeaderBackgroundDrawableRes = R.drawable.dummy_nav_university;
+        }
     }
 
     private static final String SELECTED_POSITION   = "NavigationDrawerFragment.SelectedPosition";
@@ -60,6 +63,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private boolean mFromSavedInstanceState;
     private int mCurrentSelectedPosition = 0;
     private View.OnClickListener mNavigationPriorClickListener;
+    private int mHeaderBackgroundDrawableRes;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,17 +74,20 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
     }
 
-    @Bind(R.id.navigation_drawer_header)          protected RelativeLayout mHeader;
-    @Bind(R.id.navigation_drawer_header_nickname) protected TextView mUserNickname;
-    @Bind(R.id.navigation_drawer_header_email)    protected TextView mUserEmail;
-    @Bind(R.id.navigation_drawer_header_avatar)   protected ImageView mUserAvatar;
-    @Bind(R.id.navigation_drawer_recyclerview)    protected RecyclerView mNavigationRecyclerView;
+    @Bind(R.id.navigation_drawer_header)            protected RelativeLayout mHeader;
+    @Bind(R.id.navigation_drawer_header_background) protected ImageView mHeaderBackground;
+    @Bind(R.id.navigation_drawer_header_nickname)   protected TextView mUserNickname;
+    @Bind(R.id.navigation_drawer_header_email)      protected TextView mUserEmail;
+    @Bind(R.id.navigation_drawer_header_avatar)     protected ImageView mUserAvatar;
+    @Bind(R.id.navigation_drawer_recyclerview)      protected RecyclerView mNavigationRecyclerView;
     private NavigationDrawerAdapter mNavigationDrawerAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         ButterKnife.bind(this, view);
+        Picasso.with(getActivity()).load(mHeaderBackgroundDrawableRes).into(mHeaderBackground);
+
         mHeader.setOnClickListener(subtitleView -> {
             mNavigator.navigate(ProfileFragment.class, true);
             if (mDrawerLayout != null) mDrawerLayout.closeDrawer(mFragmentContainerView);

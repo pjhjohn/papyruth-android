@@ -6,59 +6,54 @@
     <RelativeLayout
         android:id="@+id/navigation_drawer_header"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/navigation_drawer_header_height"
-        android:background="@drawable/dummy_nav_university"
-        android:paddingTop="@dimen/baseline_x3">
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/navigation_drawer_header_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"/>
         <ImageView
             android:id="@+id/navigation_drawer_header_avatar"
             android:layout_width="@dimen/baseline_x8"
             android:layout_height="@dimen/baseline_x8"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/baseline_x2"
+            android:layout_marginTop="@dimen/baseline_x5"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/baseline_x2"
             android:layout_marginStart="@dimen/baseline_x2"
             android:layout_marginBottom="@dimen/baseline_x1"
             android:contentDescription="@string/empty"/>
-        <LinearLayout
+        <TextView
+            android:id="@+id/navigation_drawer_header_nickname"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/baseline_x7"
-            android:layout_below="@+id/navigation_drawer_header_avatar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_height="@dimen/baseline_x3.5"
             android:layout_marginLeft="@dimen/baseline_x2"
-            android:layout_toLeftOf="@+id/navigation_drawer_header_settings"
-            android:layout_toStartOf="@+id/navigation_drawer_header_settings"
+            android:layout_marginRight="@dimen/baseline_x2"
+            android:layout_below="@+id/navigation_drawer_header_avatar"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
+        <TextView
+            android:id="@+id/navigation_drawer_header_email"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baseline_x3.5"
+            android:layout_marginLeft="@dimen/baseline_x2"
             android:layout_marginRight="@dimen/baseline_x2"
             android:layout_marginBottom="@dimen/baseline_x1"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/navigation_drawer_header_nickname"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"/>
-            <TextView
-                android:id="@+id/navigation_drawer_header_email"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"/>
-        </LinearLayout>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/navigation_drawer_header_nickname"
+            android:textSize="14sp"
+            android:textColor="@android:color/white" />
         <ImageView
             android:id="@+id/navigation_drawer_header_settings"
-            android:layout_width="@dimen/baseline_x3"
-            android:layout_height="@dimen/baseline_x3"
+            android:layout_width="@dimen/baseline_x7"
+            android:layout_height="@dimen/baseline_x7"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="@dimen/baseline_x2"
-            android:layout_marginEnd="@dimen/baseline_x2"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/baseline_x2"
+            android:layout_alignBottom="@+id/navigation_drawer_header_email"
+            android:padding="@dimen/baseline_x2"
             android:src="@drawable/ic_settings_24dp"/>
     </RelativeLayout>
     <include layout="@layout/hr_white_8dp"/>
