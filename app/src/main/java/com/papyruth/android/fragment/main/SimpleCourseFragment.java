@@ -16,6 +16,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.unique.Course;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.SimpleCourseAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -100,7 +101,10 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
 
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> mNavigator.navigate(EvaluationStep1Fragment.class, true),
+            unused -> {
+                EvaluationForm.getInstance().clear();
+                mNavigator.navigate(EvaluationStep1Fragment.class, true);
+            },
             error -> ErrorHandler.handle(error, this)
         );
         if(SearchToolbar.getInstance().isReadyToSearch())

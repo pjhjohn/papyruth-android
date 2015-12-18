@@ -8,6 +8,7 @@ import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.recyclerview.adapter.MyEvaluationItemsAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -49,7 +50,10 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(
-            unused -> mNavigator.navigate(EvaluationStep1Fragment.class, true),
+            unused -> {
+                EvaluationForm.getInstance().clear();
+                mNavigator.navigate(EvaluationStep1Fragment.class, true);
+            },
             error -> ErrorHandler.handle(error, this)
         );
     }

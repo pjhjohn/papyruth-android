@@ -86,7 +86,10 @@ public class AlertDialog {
     private static void doPositive(Context context, Navigator navigator, Type type) {
         Integer emailType = null;
         switch (type) {
-            case MANDATORY_EVALUATION_REQUIRED:   navigator.navigate(EvaluationStep1Fragment.class, true); break;
+            case MANDATORY_EVALUATION_REQUIRED:
+                EvaluationForm.getInstance().clear();
+                navigator.navigate(EvaluationStep1Fragment.class, true);
+                break;
             case EVALUATION_ALREADY_REGISTERED:
                 Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -7,6 +7,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.EvaluationItemsDetailAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -60,7 +61,10 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().subscribe(
-            unused -> mNavigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN),
+            unused -> {
+                EvaluationForm.getInstance().clear();
+                mNavigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN);
+            },
             error -> ErrorHandler.handle(error, this)
         );
     }

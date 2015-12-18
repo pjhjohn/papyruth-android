@@ -16,6 +16,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
+import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.recyclerview.adapter.BookmarkAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.EmptyStateView;
@@ -94,7 +95,10 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
 
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> this.mNavigator.navigate(EvaluationStep1Fragment.class, true),
+            unused -> {
+                EvaluationForm.getInstance().clear();
+                this.mNavigator.navigate(EvaluationStep1Fragment.class, true);
+            },
             error -> ErrorHandler.handle(error, this)
         );
 
