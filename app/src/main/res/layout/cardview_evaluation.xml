@@ -164,9 +164,9 @@
                     <RatingBar
                         android:id="@+id/evaluation_overall_ratingbar"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/baseline_x2"
+                        android:layout_height="@dimen/baseline_x3"
                         android:layout_gravity="center_horizontal"
-                        android:progressDrawable="@drawable/ratingbar_16dp"
+                        android:progressDrawable="@drawable/ratingbar_24dp"
                         android:isIndicator="true"
                         android:numStars="5"
                         android:max="10"/><!-- Overall RatingBar -->
