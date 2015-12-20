@@ -119,7 +119,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             mPostfixGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_gpa_satisfaction));
             PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
             mBody.setText(evaluation.getBody());
-            mHashtags.setText(Hashtag.getHashtag(evaluation.getHashTag()));
+            mHashtags.setText(Hashtag.plainString(evaluation.getHashTag()));
             mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
             AnimatorHelper.FADE_OUT(mProgressbar).start();
             final int commentCount = evaluation.getCommentCount();

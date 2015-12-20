@@ -186,8 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/baseline_x2"
-                    android:layout_marginEnd="@dimen/baseline_x2"
-                    android:layout_marginBottom="@dimen/baseline_x0.25">
+                    android:layout_marginEnd="@dimen/baseline_x2">
                     <TextView
                         android:id="@+id/evaluation_clarity_label"
                         android:layout_width="match_parent"
@@ -226,8 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/baseline_x2"
-                    android:layout_marginEnd="@dimen/baseline_x2"
-                    android:layout_marginBottom="@dimen/baseline_x0.25">
+                    android:layout_marginEnd="@dimen/baseline_x2">
                     <TextView
                         android:id="@+id/evaluation_easiness_label"
                         android:layout_width="match_parent"

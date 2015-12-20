@@ -3,18 +3,18 @@
     android:id="@+id/cardview_inform"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorchip_blue_accent">
+    android:background="@color/black">
     <TextView
         android:id="@+id/inform_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:padding="@dimen/baseline_x3"
+        android:paddingTop="@dimen/baseline_x1"
+        android:paddingStart="@dimen/baseline_x3"
+        android:paddingEnd="@dimen/baseline_x3"
+        android:paddingBottom="@dimen/baseline_x1"
         android:background="@color/transparent"
+        android:lineSpacingMultiplier="1.5"
         android:textSize="14sp"
         android:textColor="@color/white"/>
     <Button

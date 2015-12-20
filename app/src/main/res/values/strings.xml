@@ -116,9 +116,9 @@
     <string name="confirm_cancel">Cancel</string>
 
     <!-- inform -->
-    <string name="inform_home">Latest Evaluations are provided.\n\nYou can see the latest evaluations by clicking it.</string>
-    <string name="inform_course">Overall statistics for course and list of evaluations are provided.\n\nYou can open evaluation detail window by clicking the item.</string>
-    <string name="inform_evaluation">Evaluations statistics and comments are provided.\n\nYou can vote up and down to both evaluation and comments.</string>
+    <string name="inform_home">Latest Evaluations are provided.\nYou can see the latest evaluations by clicking it.</string>
+    <string name="inform_course">Overall statistics for course and list of evaluations are provided.\nYou can open evaluation detail window by clicking the item.</string>
+    <string name="inform_evaluation">Evaluations statistics and comments are provided.\nYou can vote up and down to both evaluation and comments.</string>
     <string name="inform_bookmark">I brought some evaluation that you told me you like it</string>
     <string name="inform_mandatory_evaluation">Must write over 3 evaluations.\n Remain %d.</string>
     <string name="goto_write">Write evaluation</string>

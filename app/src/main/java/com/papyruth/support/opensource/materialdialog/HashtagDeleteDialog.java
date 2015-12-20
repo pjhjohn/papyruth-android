@@ -28,12 +28,6 @@ public class HashtagDeleteDialog {
                 public void onPositive(MaterialDialog dialog) {
                     container.removeView(hashtag);
                     EvaluationForm.getInstance().removeHashtag(hashtag.getText().toString());
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onNegative(MaterialDialog dialog) {
-                    dialog.dismiss();
                 }
             })
             .show();
@@ -49,18 +43,12 @@ public class HashtagDeleteDialog {
                 public void onPositive(MaterialDialog dialog) {
                     container.removeView(hashtag);
                     EvaluationForm.getInstance().removeHashtag(hashtag.getText().toString());
-                    dialog.dismiss();
                     action.call(null);
-                }
-
-                @Override
-                public void onNegative(MaterialDialog dialog) {
-                    dialog.dismiss();
                 }
             })
             .show();
     }
-    public static void show(Context context, String text, Func0<Boolean> action) {
+    public static void show(Context context, String text, Func0<Void> action) {
         new MaterialDialog.Builder(context)
             .title(R.string.hashtag_delete_title)
             .content(R.string.hashtag_delete_content)
@@ -69,14 +57,8 @@ public class HashtagDeleteDialog {
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
-                    dialog.dismiss();
                     EvaluationForm.getInstance().removeHashtag(text);
                     action.call();
-                }
-
-                @Override
-                public void onNegative(MaterialDialog dialog) {
-                    dialog.dismiss();
                 }
             })
             .show();

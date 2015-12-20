@@ -156,7 +156,7 @@ public interface Papyruth {
         @Path("id") Integer id
     );
     @PATCH("/evaluations/{id}")
-    Observable<EvaluationResponse> patch_update_evaluation(
+    Observable<EvaluationResponse> patch_evaluation(
         @Header("Authorization") String authorization,
         @Path("id") Integer id,
         @Query("point_overall") Integer point_overall,
@@ -166,7 +166,7 @@ public interface Papyruth {
         @Query("body") String body
     );
     @PUT("/evaluations/{id}")
-    Observable<EvaluationResponse> put_update_evaluation(
+    Observable<EvaluationResponse> put_evaluation(
         @Header("Authorization") String authorization,
         @Path("id") Integer id,
         @Query("point_overall") Integer point_overall,

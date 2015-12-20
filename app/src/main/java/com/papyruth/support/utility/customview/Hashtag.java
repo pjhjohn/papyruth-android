@@ -16,52 +16,38 @@ import rx.functions.Func0;
 /**
  * Created by pjhjohn on 2015-06-25.
  */
-public class Hashtag{
-
-    public static String addHashPrefix(String text){
-
-        if(text.charAt(0) != '#')
-            return "#" + text + " ";
-
-        return text+" ";
-    }
-
-    public static String removeHashPrefix(String text){
-        if(text.charAt(0) == '#')
-            return text.substring(1);
-
+public class Hashtag {
+    // TODO : Remove Trailing Spaces
+    public static String appendPrefix(String text) {
+        if(text.charAt(0) != '#') return "#" + text;
         return text;
     }
 
-    public static SpannableString getClickableHashtag(Context context, List<String> hashtags, Func0<Boolean> action){
-        String hashtagString = "";
+    // TODO : Remove Trailing Spaces
+    public static String removePrefix(String text) {
+        if(text.charAt(0) == '#') return text.substring(1);
+        return text;
+    }
 
-        for(String hashtagItem : EvaluationForm.getInstance().getHashtag()) {
-            hashtagString += addHashPrefix(hashtagItem);
-        }
+    public static SpannableString clickableSpannableString(Context context, List<String> hashtags, Func0<Void> action) {
+        String str = "";
+        for(String hashtag : hashtags) str += appendPrefix(hashtag) + " ";
 
-        SpannableString spannableString = new SpannableString(hashtagString);
-
-        for(String item : EvaluationForm.getInstance().getHashtag()){
+        SpannableString spannableString = new SpannableString(str);
+        for(String hashtag : hashtags) {
             ClickableSpan span = new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
-                    HashtagDeleteDialog.show(context, item, action);
+                    HashtagDeleteDialog.show(context, hashtag, action);
                 }
             };
-            spannableString.setSpan(span, hashtagString.indexOf(item)-1, hashtagString.indexOf(item)+item.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        return spannableString;
+            spannableString.setSpan(span, str.indexOf(hashtag) - 1, str.indexOf(hashtag) + hashtag.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } return spannableString;
     }
 
-    public static String getHashtag(List<String> hashtags){
-        String hashtagString = "";
-
-        for(String hashtagItem : hashtags){
-            hashtagString += addHashPrefix(hashtagItem);
-        }
-
-        return hashtagString;
+    public static String plainString(List<String> hashtags) {
+        String str = "";
+        for(String hashtag : hashtags) str += appendPrefix(hashtag) + " ";
+        return str;
     }
 }

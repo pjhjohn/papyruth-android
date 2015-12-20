@@ -15,4 +15,6 @@
     <string name="hint_lecture">강좌명</string>
     <string name="hint_professor">교수명</string>
     <string name="hint_register_university_email">sample\@snu.ac.kr</string>
+    <string name="hint_evalaution_form_hashtags">해시태그를 입력해 주세요(ex. #졸림)</string>
+    <string name="hint_evalaution_form_body">강의평 내용을 작성해주세요</string>
 </resources>

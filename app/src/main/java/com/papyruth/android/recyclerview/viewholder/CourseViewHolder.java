@@ -97,7 +97,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             mHashtags.setVisibility(View.VISIBLE);
             mStatistics.setVisibility(View.VISIBLE);
             mNoEvaluationsMessage.setVisibility(View.GONE);
-            mHashtags.setText(Hashtag.getHashtag(course.getHashtags()));
+            mHashtags.setText(Hashtag.plainString(course.getHashtags()));
             Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
             mEvaluationCount.setText(String.valueOf(count));
         }

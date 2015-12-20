@@ -15,4 +15,6 @@
     <string name="hint_lecture">Lecture Title</string>
     <string name="hint_professor">Professor Name</string>
     <string name="hint_register_university_email">sample\@snu.ac.kr</string>
+    <string name="hint_evalaution_form_hashtags">Please enter hashtag(ex. #sleepy)</string>
+    <string name="hint_evalaution_form_body">Please enter evaluation Body for this course</string>
 </resources>
