@@ -105,15 +105,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         }
     }
 
-    protected abstract void setFloatingActionControl();
-
-    protected RecyclerView.LayoutManager getRecyclerViewLayoutManager () {
-        return new LinearLayoutManager(this.getActivity());
-    }
-    protected abstract void setToolbarStatus();
-    protected abstract ADAPTER getAdapter();
-    abstract protected void setStatusBarDefault();
-
     @Bind(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
     protected EvaluationFragment mEvaluationFragment;
     protected Boolean mEvaluationIsOccupying;
@@ -259,6 +250,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
             @Override
             public void onAnimationStart(Animator animation) {
                 mEvaluationFragment.showContent(false);
+                setStatusBarDefault();
             }
 
             @Override
@@ -268,10 +260,15 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
                 mEvaluationIsOccupying = false;
                 setFloatingActionControl();
                 Evaluation.getInstance().clear();
-                setStatusBarDefault();
             }
         });
         mAnimatorSet.start();
     }
-
+    protected abstract ADAPTER getAdapter();
+    protected abstract void setFloatingActionControl();
+    protected abstract void setToolbarStatus();
+    protected abstract void setStatusBarDefault();
+    protected RecyclerView.LayoutManager getRecyclerViewLayoutManager () {
+        return new LinearLayoutManager(this.getActivity());
+    }
 }
