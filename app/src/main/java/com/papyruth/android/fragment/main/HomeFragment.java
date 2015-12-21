@@ -52,7 +52,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
             mEvaluationFragment = new EvaluationFragment();
             this.openEvaluation(view, true);
         }  else if(object instanceof Footer) {
-            mRecyclerView.getLayoutManager().scrollToPosition(0);
+            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
     }
 

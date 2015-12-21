@@ -335,7 +335,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                     }, error -> ErrorHandler.handle(error, this))
             );
         } else if(object instanceof Footer) {
-            mRecyclerView.getLayoutManager().scrollToPosition(0);
+            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
     }
 }

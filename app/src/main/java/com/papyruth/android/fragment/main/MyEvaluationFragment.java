@@ -43,7 +43,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
             mEvaluationFragment = new EvaluationFragment();
             this.openEvaluation(view, true);
         }else if(object instanceof Footer){
-            mRecyclerView.getLayoutManager().scrollToPosition(0);
+            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
     }
     @Override

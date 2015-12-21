@@ -77,7 +77,7 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
             this.mEvaluationFragment = new EvaluationFragment();
             this.openEvaluation(view, true);
         } else if (object instanceof Footer) {
-            mRecyclerView.getLayoutManager().scrollToPosition(0);
+            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
     }
     

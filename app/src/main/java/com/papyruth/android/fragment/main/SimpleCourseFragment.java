@@ -15,6 +15,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CourseData;
+import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
@@ -108,15 +109,19 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
 
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
-        if(User.getInstance().needEmailConfirmed()){
-            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
-            return;
+        if(object instanceof CourseData) {
+            if (User.getInstance().needEmailConfirmed()) {
+                AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
+                return;
+            }
+            if (User.getInstance().needMoreEvaluation()) {
+                AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
+                return;
+            }
+            Course.getInstance().update(((CourseData) object));
+            this.mNavigator.navigate(CourseFragment.class, true);
+        }else if(object instanceof Footer){
+            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
-        if(User.getInstance().needMoreEvaluation()) {
-            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
-            return;
-        }
-        Course.getInstance().update(((CourseData) object));
-        this.mNavigator.navigate(CourseFragment.class, true);
     }
 }

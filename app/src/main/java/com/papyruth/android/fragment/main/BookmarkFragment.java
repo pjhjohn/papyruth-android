@@ -116,7 +116,7 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
             Course.getInstance().update(((CourseData) object));
             this.mNavigator.navigate(CourseFragment.class, true);
         }else if(object instanceof Footer){
-            mRecyclerView.getLayoutManager().scrollToPosition(0);
+            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
     }
 

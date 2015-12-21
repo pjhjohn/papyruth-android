@@ -18,6 +18,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.CourseData;
+import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.recyclerview.adapter.EvaluationSearchAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
@@ -84,7 +85,8 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if (object instanceof CourseData) mAdapter.nextEvaluatonStep(((CourseData) object));
-        else this.mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
+        else if(object instanceof Footer)
+            this.mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
 
         ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }

@@ -44,7 +44,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
             this.openEvaluation(view, true);
             Evaluation.getInstance().setId(data.evaluation_id);
         }else if(object instanceof Footer){
-            mRecyclerView.getLayoutManager().scrollToPosition(0);
+            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
     }
 
