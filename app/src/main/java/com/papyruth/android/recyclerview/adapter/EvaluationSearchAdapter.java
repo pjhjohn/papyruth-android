@@ -146,34 +146,40 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void searchCourse(CandidateData candidate, String query) {
-        if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
-        Api.papyruth()
-            .get_search_search(
-                User.getInstance().getAccessToken(),
-                User.getInstance().getUniversityId(),
-                candidate.lecture_id,
-                candidate.professor_id,
-                query
-            )
-            .map(response -> response.courses)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(courses -> {
-                if (courses != null) {
-                    if (candidate.professor_id != null && candidate.lecture_id != null && courses.size() > 0)
-                        nextEvaluatonStep(courses.get(0));
-                    else {
-                        mCourses.clear();
-                        mCourses.addAll(courses);
+        if(candidate.course_id != null){
+            nextEvaluatonStep(candidate);
+        }else {
+            if (mFooterMaterialProgressBar != null)
+                AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
+            Api.papyruth()
+                .get_search_search(
+                    User.getInstance().getAccessToken(),
+                    User.getInstance().getUniversityId(),
+                    candidate.lecture_id,
+                    candidate.professor_id,
+                    query
+                )
+                .map(response -> response.courses)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(courses -> {
+                    if (courses != null) {
+                        if (candidate.professor_id != null && candidate.lecture_id != null && courses.size() > 0)
+                            nextEvaluatonStep(courses.get(0));
+                        else {
+                            mCourses.clear();
+                            mCourses.addAll(courses);
+                        }
                     }
-                }
-                if (mFooterMaterialProgressBar != null)
-                    AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
-                reconfigure();
-            }, error -> {
-                ErrorHandler.handle(error, this);
-                if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
-            });
+                    if (mFooterMaterialProgressBar != null)
+                        AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                    reconfigure();
+                }, error -> {
+                    ErrorHandler.handle(error, this);
+                    if (mFooterMaterialProgressBar != null)
+                        AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                });
+        }
     }
     public void nextEvaluatonStep(CourseData course) {
         if(course.id == null || !course.id.equals(EvaluationForm.getInstance().getCourseId()))
@@ -181,7 +187,21 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
         EvaluationForm.getInstance().setCourseId(course.id);
         EvaluationForm.getInstance().setLectureName(course.name);
         EvaluationForm.getInstance().setProfessorName(course.professor_name);
-        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), course.id)
+
+        checkEvaluationPossible(course.id);
+    }
+    public void nextEvaluatonStep(CandidateData candidate) {
+        if(candidate.course_id == null || !candidate.course_id.equals(EvaluationForm.getInstance().getCourseId()))
+            EvaluationForm.getInstance().clear();
+        EvaluationForm.getInstance().setCourseId(candidate.course_id);
+        EvaluationForm.getInstance().setLectureName(candidate.lecture_name);
+        EvaluationForm.getInstance().setProfessorName(candidate.professor_name);
+
+        checkEvaluationPossible(candidate.course_id);
+    }
+
+    private void checkEvaluationPossible(int courseId){
+        Api.papyruth().post_evaluation_possible(User.getInstance().getAccessToken(), courseId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
                 if (response.success) {

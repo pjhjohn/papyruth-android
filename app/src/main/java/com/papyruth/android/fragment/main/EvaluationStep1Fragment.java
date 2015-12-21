@@ -103,15 +103,11 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
 
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.handle(error, this))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.handle(error, this))
         );
         SearchToolbar.getInstance()
-            .setItemObjectClickListener(
-                    (view, object) -> {
-                        mAdapter.searchCourse(((CandidateData) object), null);
-                        SearchToolbar.getInstance().addToHistory(((CandidateData) object));
-            })
+            .setItemObjectClickListener((view, object) -> mAdapter.searchCourse(((CandidateData) object), null))
             .setOnVisibilityChangedListener(visible -> mQueryButton.setVisibility(visible ? View.GONE : View.VISIBLE))
             .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new CandidateData(), SearchToolbar.getInstance().getSelectedQuery()));
     }
