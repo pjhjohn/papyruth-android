@@ -154,7 +154,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
 
             mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_my_evaluation)
-                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_my_evaluation)))
+                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_title_empty_something_my_comment)))
                 .show();
         }else{
             mPage ++;

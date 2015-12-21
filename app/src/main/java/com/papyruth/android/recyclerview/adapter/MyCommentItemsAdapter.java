@@ -37,6 +37,7 @@ import timber.log.Timber;
 public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter{
     private static final String HIDE_INFORM = "MyCommentAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
+    private Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
     private EmptyStateView mEmptyState;
     private List<MyCommentData> mMyComments;
@@ -56,6 +57,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private RelativeLayout mFooterFullyLoadedIndicator;
 
     public MyCommentItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
+        mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
         mMyComments = new ArrayList<>();
@@ -142,6 +144,9 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_my_comment)
+                    .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_title_empty_something_my_comment)))
+                    .show();
         }else{
             mPage ++;
             mIndexHeader = 0;
