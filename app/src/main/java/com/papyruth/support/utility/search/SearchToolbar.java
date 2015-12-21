@@ -23,7 +23,6 @@ import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.HistoryData;
-import com.papyruth.android.recyclerview.adapter.AutoCompleteAdapter;
 import com.papyruth.support.opensource.materialprogressbar.MaterialProgressBar;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.helper.AnimatorHelper;

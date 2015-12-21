@@ -1,4 +1,4 @@
-package com.papyruth.android.recyclerview.adapter;
+package com.papyruth.support.utility.search;
 
 import android.animation.AnimatorSet;
 import android.content.Context;
