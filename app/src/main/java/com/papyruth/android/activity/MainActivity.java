@@ -80,8 +80,6 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
 
         ViewHolderFactory.getInstance().setContext(this);
         SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, position) -> {
-            SearchToolbar.getInstance().setSelectedCandidate(position);
-            SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
             this.navigate(SimpleCourseFragment.class, true);
         }, () -> {
             this.navigate(SimpleCourseFragment.class, true);

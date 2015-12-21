@@ -1,59 +1,204 @@
 package com.papyruth.android.recyclerview.adapter;
 
+import android.animation.AnimatorSet;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.papyruth.android.AppConst;
+import com.papyruth.android.AppManager;
 import com.papyruth.android.model.CandidateData;
+import com.papyruth.android.model.HistoryData;
+import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.AutoCompleteResponseViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
-import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
+import com.papyruth.support.opensource.materialprogressbar.MaterialProgressBar;
+import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
+import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
+import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private RecyclerViewItemClickListener itemClickListener; // TODO : use if implemented.
-    private boolean isHistory;
+import retrofit.RetrofitError;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
-    private List<CandidateData> items;
-    public AutoCompleteAdapter(List<CandidateData> initItemList, RecyclerViewItemClickListener listener) {
-        this.items = initItemList;
-        this.itemClickListener = listener;
-        this.isHistory = false;
+public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private boolean isHistory;
+    private Context mContext;
+    private ImageView mBackIcon;
+    private MaterialProgressBar mMaterialProgressBar;
+    private List<CandidateData> mCandidates;
+    private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
+    private boolean mHideShadow;
+    private Integer mPage;
+    private int mIndexHeader; // INDEX 0
+    private int mIndexShadow; // UNDER SINGLE if exists, -1 otherwise
+    private int mIndexContent;// UNDER SHADOW if exists.
+
+    private String mQuery;
+
+    public AutoCompleteAdapter(Context context, ImageView backIcon, MaterialProgressBar materialProgressBar, RecyclerViewItemObjectClickListener listener) {
+        mContext = context;
+        mCandidates = new ArrayList<>();
+        mBackIcon = backIcon;
+        mMaterialProgressBar = materialProgressBar;
+        mRecyclerViewItemObjectClickListener = listener;
+        mHideShadow = true;
+        mIndexHeader = 0;
+        mIndexContent= 1 + (mHideShadow? 0 : 1);
+        mIndexShadow = mCandidates.size() + mIndexContent;
+
+        mPage = 1;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolderFactory.getInstance().create(parent, viewType, ((view, position) -> {
-            itemClickListener.onRecyclerViewItemClick(view, position-getItemHeader());
-        }));
+        RecyclerView.ViewHolder viewHolder;
+
+        if(viewType == ViewHolderFactory.ViewType.HR_WHITE || viewType == ViewHolderFactory.ViewType.TOOLBAR_SHADOW) {
+            viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, null);
+        } else {
+            viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
+                mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCandidates.get(position - mIndexContent));
+            });
+        }
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(position < items.size() + getItemHeader() && position > 0)
-            ((AutoCompleteResponseViewHolder) holder).bind(this.items.get(position- getItemHeader()), isHistory);
-    }
-
-    public int getItemHeader(){
-        return items.size() > 0 ? 1 : 0;
-    }
-    public int getItemFooter(){
-        return items.size() > 0 ? 1 : 0;
-    }
-
-    @Override
-    public int getItemCount() {
-        return this.items == null ? 0 : this.items.size() + getItemHeader() + getItemFooter();
+        if(position <= mIndexHeader) return;
+        if(position == mIndexShadow) return;
+        ((AutoCompleteResponseViewHolder) holder).bind(mCandidates.get(position - mIndexContent), isHistory);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position <= 0)
-            return ViewHolderFactory.ViewType.HR_WHITE;
-        else if(position < items.size() + getItemHeader())
-            return ViewHolderFactory.ViewType.AUTO_COMPLETE_RESPONSE;
-        else
-            return ViewHolderFactory.ViewType.TOOLBAR_SHADOW;
+        if(position <= mIndexHeader) return ViewHolderFactory.ViewType.HR_WHITE;
+        if(position == mIndexShadow) return ViewHolderFactory.ViewType.TOOLBAR_SHADOW;
+        return ViewHolderFactory.ViewType.AUTO_COMPLETE_RESPONSE;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mIndexShadow + 1;
+    }
+
+    private void reconfigure() {
+        Timber.d("Reconfigured with mCandidates having size of %d", mCandidates.size());
+        AnimatorSet animators = new AnimatorSet();
+        animators.playTogether(
+                AnimatorHelper.FADE_OUT(mMaterialProgressBar),
+                AnimatorHelper.FADE_IN(mBackIcon)
+        );
+        animators.start();
+        if(mCandidates.isEmpty()) {
+            setIsHistory(true);
+            mIndexHeader = 0;
+            mIndexContent = 1;
+            mIndexShadow = mCandidates.size() + mIndexContent;
+            mHideShadow = true;
+            notifyDataSetChanged();
+        } else {
+            setIsHistory(false);
+            mPage++;
+            mIndexHeader = 0;
+            mIndexContent = 1;
+            mIndexShadow = mCandidates.size() + mIndexContent;
+            mHideShadow = false;
+            notifyDataSetChanged();
+        }
+    }
+
+    public void clear(){
+        this.mCandidates.clear();
+    }
+
+    public void history(){
+        List<CandidateData> candidates = new ArrayList<>();
+        if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
+            candidates = ((HistoryData)AppManager.getInstance().getStringParsed(
+                    AppConst.Preference.HISTORY,
+                    HistoryData.class
+            )).candidates;
+        } // TODO : Otherwise, Inform history is empty whenever history is empty.
+        this.mCandidates.clear();
+        this.mCandidates.addAll(candidates);
+        reconfigure();
+    }
+
+
+    private Boolean mLoading;
+    private Boolean mFullyLoaded;
+
+    public void search(String query) {
+        if(query != null) {
+            if(mLoading != null && mLoading) return;
+            mLoading = true;
+            mFullyLoaded = false;
+            mQuery = query;
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(
+                    AnimatorHelper.FADE_IN(mMaterialProgressBar),
+                    AnimatorHelper.FADE_OUT(mBackIcon)
+            );
+            animatorSet.start();
+            mPage = 1;
+            getCandidate();
+        }
+    }
+
+    public void loadMore(){
+        if(mLoading != null && mLoading) return;
+        mLoading = true;
+        if(mFullyLoaded != null && mFullyLoaded) return;
+        mFullyLoaded = false;
+        mPage++;
+        getCandidate();
+    }
+
+    public void getCandidate(){
+        Api.papyruth()
+                .get_search_autocomplete(
+                        User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        mQuery,
+                        mPage
+                )
+                .map(response -> response.candidates)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(candidates -> {
+                    if (candidates != null) {
+                        if(mPage != null && mPage <= 1)
+                            mCandidates.clear();
+                        mCandidates.addAll(candidates);
+                        mFullyLoaded = candidates.isEmpty();
+                    }
+                    mLoading = false;
+                    reconfigure();
+                }, error -> {
+                    AnimatorSet animators = new AnimatorSet();
+                    animators.playTogether(
+                            AnimatorHelper.FADE_IN(mMaterialProgressBar),
+                            AnimatorHelper.FADE_OUT(mBackIcon)
+                    );
+                    animators.start();
+                    if (error instanceof RetrofitError) {
+                        if (ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        } else {
+                            ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        }
+                    } else ErrorHandler.handle(error, this);
+                    mLoading = false;
+                });
     }
 
     public void setIsHistory(boolean isHistory){

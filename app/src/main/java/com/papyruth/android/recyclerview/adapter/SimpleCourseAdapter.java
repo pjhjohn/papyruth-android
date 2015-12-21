@@ -67,9 +67,7 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mCourses.size() + mIndexContent;
 
-        SearchToolbar.getInstance().setItemClickListener((v, position) -> {
-            SearchToolbar.getInstance().setSelectedCandidate(position);
-            SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
+        SearchToolbar.getInstance().setItemObjectClickListener((v, object) -> {
             this.loadSearchResult();
         }).setOnSearchByQueryListener(this::loadSearchResult);
     }

@@ -234,7 +234,8 @@ public interface Papyruth {
     Observable<CandidatesResponse> get_search_autocomplete(
         @Header("Authorization") String authorization,
         @Query("university_id") Integer university_id,
-        @Query("query") String query
+        @Query("query") String query,
+        @Query("page") Integer page
     );
     @GET("/search/search")
     Observable<CoursesResponse> get_search_search(

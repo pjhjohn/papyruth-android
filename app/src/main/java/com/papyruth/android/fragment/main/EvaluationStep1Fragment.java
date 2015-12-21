@@ -76,7 +76,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        SearchToolbar.getInstance().setItemClickListener(null).setOnSearchByQueryListener(null);
+        SearchToolbar.getInstance().setItemObjectClickListener(null).setOnSearchByQueryListener(null);
         if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
         this.mCompositeSubscription.unsubscribe();
     }
@@ -105,9 +105,10 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
                 .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.handle(error, this))
         );
         SearchToolbar.getInstance()
-            .setItemClickListener((v, position) -> {
-                mAdapter.searchCourse(SearchToolbar.getInstance().getCandidates().get(position), null);
-                SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getCandidates().get(position));
+            .setItemObjectClickListener(
+                    (view, object) -> {
+                        mAdapter.searchCourse(((CandidateData) object), null);
+                        SearchToolbar.getInstance().addToHistory(((CandidateData) object));
             })
             .setOnVisibilityChangedListener(visible -> mQueryButton.setVisibility(visible ? View.GONE : View.VISIBLE))
             .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new CandidateData(), SearchToolbar.getInstance().getSelectedQuery()));

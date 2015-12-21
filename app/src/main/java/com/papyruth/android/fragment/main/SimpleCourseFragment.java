@@ -51,11 +51,6 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
         this.mNavigator = (Navigator) activity;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        SearchToolbar.getInstance().setItemClickListener(null);
-    }
     @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
     @Bind(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
@@ -85,7 +80,7 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
         super.onDestroyView();
         FloatingActionControl.getInstance().closeMenuButton(true);
         ButterKnife.unbind(this);
-        SearchToolbar.getInstance().setOnSearchByQueryListener(null).setItemClickListener(null);
+        SearchToolbar.getInstance().setOnSearchByQueryListener(null).setItemObjectClickListener(null);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

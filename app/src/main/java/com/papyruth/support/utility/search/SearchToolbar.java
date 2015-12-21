@@ -23,13 +23,11 @@ import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.HistoryData;
-import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.AutoCompleteAdapter;
 import com.papyruth.support.opensource.materialprogressbar.MaterialProgressBar;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
-import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.helper.AnimatorHelper;
-import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,13 +39,9 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by SSS on 2015-11-06.
- */
-public class SearchToolbar implements RecyclerViewItemClickListener {
+public class SearchToolbar implements RecyclerViewItemObjectClickListener {
     private static SearchToolbar instance;
     private SearchToolbar() {}
     public static synchronized SearchToolbar getInstance() {
@@ -62,8 +56,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     @Bind(R.id.search_toolbar_query_clear_icon)       protected ImageView mQueryClearIcon;
     @Bind(R.id.search_toolbar_query_result)           protected RecyclerView mQueryResult;
 
-    private RecyclerViewItemClickListener mDefaultRecyclerViewItemClickListener;
-    private RecyclerViewItemClickListener mRecyclerViewItemClickListener;
+    private RecyclerViewItemObjectClickListener mDefaultRecyclerViewItemObjectClickListener;
+    private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private OnVisibilityChangedListener mOnVisibilityChangedListener;
     private OnSearchByQueryListener mDefaultOnSearchByQueryListener;
     private OnSearchByQueryListener mOnSearchByQueryListener;
@@ -71,21 +65,17 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     private CompositeSubscription mCompositeSubscription;
     private Context mContext;
     private Resources mResources;
-    private List<CandidateData> mCandidates;
 
-    private boolean mIsInitialized = false;
     private static final long THROTTLE_MILLISECONDS = 600;
 
-    public void init(Context context, ViewGroup root, RecyclerViewItemClickListener defaultRecyclerViewItemClickListener, OnSearchByQueryListener searchByQueryListener) {
+    public void init(Context context, ViewGroup root, RecyclerViewItemObjectClickListener defaultRecyclerViewItemObjectClickListener, OnSearchByQueryListener searchByQueryListener) {
         View view = LayoutInflater.from(context).inflate(R.layout.toolbar_search, root, true);
         ButterKnife.bind(this, view);
         mContext = context;
         mResources = context.getResources();
-        mDefaultRecyclerViewItemClickListener = defaultRecyclerViewItemClickListener;
+        mDefaultRecyclerViewItemObjectClickListener = defaultRecyclerViewItemObjectClickListener;
         mDefaultOnSearchByQueryListener = searchByQueryListener;
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
-        if(mCandidates == null) mCandidates = new ArrayList<>();
-        mIsInitialized = true;
 
         Picasso.with(mContext).load(R.drawable.ic_clear_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mQueryClearIcon);
         Picasso.with(mContext).load(R.drawable.ic_back_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mBackIcon);
@@ -96,7 +86,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         mMaterialProgressBar.setVisibility(View.GONE);
         mQueryClearIcon.setVisibility(View.GONE);
         mQueryResult.setLayoutManager(new LinearLayoutManager(context));
-        mQueryResult.setAdapter(getAdapter());
+        mAutoCompleteAdapter = new AutoCompleteAdapter(mContext, mBackIcon, mMaterialProgressBar, this);
+        mQueryResult.setAdapter(mAutoCompleteAdapter);
         mQueryResult.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
             boolean isActionDown = false;
             @Override
@@ -128,12 +119,11 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
                 AnimatorSet animators = new AnimatorSet();
                 if (query.isEmpty()) {
                     animators.playTogether(
-                        AnimatorHelper.FADE_OUT(mQueryClearIcon),
-                        AnimatorHelper.FADE_OUT(mMaterialProgressBar),
-                        AnimatorHelper.FADE_IN(mBackIcon)
+                            AnimatorHelper.FADE_OUT(mQueryClearIcon),
+                            AnimatorHelper.FADE_OUT(mMaterialProgressBar),
+                            AnimatorHelper.FADE_IN(mBackIcon)
                     );
-                    mAutoCompleteAdapter.setIsHistory(true);
-                    notifyAutoCompleteDataChanged(getHistory());
+                    mAutoCompleteAdapter.history();
                 } else animators.play(AnimatorHelper.FADE_IN(mQueryClearIcon));
                 animators.start();
                 return query;
@@ -148,8 +138,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
             .subscribeOn(AndroidSchedulers.mainThread())
             .subscribe(event -> {
                 mQueryText.getText().clear();
-                mAutoCompleteAdapter.setIsHistory(true);
-                notifyAutoCompleteDataChanged(getHistory());
+                mAutoCompleteAdapter.history();
             }, Throwable::printStackTrace)
         );
 
@@ -174,51 +163,18 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     }
 
     private void searchAutocomplete(String query) {
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(
-            AnimatorHelper.FADE_IN(mMaterialProgressBar),
-            AnimatorHelper.FADE_OUT(mBackIcon)
-        );
-        animatorSet.start();
-        Api.papyruth()
-            .get_search_autocomplete(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), query)
-            .map(response -> response.candidates)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                candidates -> {
-                    AnimatorSet animators = new AnimatorSet();
-                    animators.playTogether(
-                        AnimatorHelper.FADE_OUT(mMaterialProgressBar),
-                        AnimatorHelper.FADE_IN(mBackIcon)
-                    );
-                    animators.start();
-                    mAutoCompleteAdapter.setIsHistory(false);
-                    notifyAutoCompleteDataChanged(candidates);
-                },
-                error -> {
-                    AnimatorSet animators = new AnimatorSet();
-                    animators.playTogether(
-                        AnimatorHelper.FADE_IN(mMaterialProgressBar),
-                        AnimatorHelper.FADE_OUT(mBackIcon)
-                    );
-                    animators.start();
-                    error.printStackTrace();
-                }
-            );
+        mAutoCompleteAdapter.search(query);
     }
 
     @Override
-    public void onRecyclerViewItemClick(View view, int position) {
-        if(mRecyclerViewItemClickListener != null) mRecyclerViewItemClickListener.onRecyclerViewItemClick(view, position);
-        else mDefaultRecyclerViewItemClickListener.onRecyclerViewItemClick(view, position);
+    public void onRecyclerViewItemObjectClick(View view, Object object) {
+        if(object instanceof CandidateData) {
+            SearchToolbar.getInstance().setSelectedCandidate(((CandidateData) object));
+            SearchToolbar.getInstance().addToHistory(SearchToolbar.getInstance().getSelectedCandidate());
+        }
+        if(mRecyclerViewItemObjectClickListener != null) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, object);
+        else mDefaultRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, object);
         hide();
-    }
-
-    private void notifyAutoCompleteDataChanged(List<CandidateData> candidates) {
-        mCandidates.clear();
-        mCandidates.addAll(candidates);
-        mAutoCompleteAdapter.notifyDataSetChanged();
     }
 
     public boolean back() {
@@ -275,8 +231,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
         });
         mAnimator.start();
 
-        mAutoCompleteAdapter.setIsHistory(true);
-        notifyAutoCompleteDataChanged(getHistory());
+        mAutoCompleteAdapter.history();
     }
     public void hide() {
         mAnimator = AnimatorHelper.FADE_OUT(mRootView);
@@ -298,19 +253,7 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
             }
         });
         mAnimator.start();
-        notifyAutoCompleteDataChanged(new ArrayList<>());
-    }
-
-    public boolean isInitialized(){
-        return mIsInitialized;
-    }
-
-    public AutoCompleteAdapter getAdapter() {
-        if(mAutoCompleteAdapter == null) mAutoCompleteAdapter = new AutoCompleteAdapter(mCandidates, this);
-        return mAutoCompleteAdapter;
-    }
-    public List<CandidateData> getCandidates() {
-        return mCandidates;
+        this.mAutoCompleteAdapter.clear();
     }
 
     private CandidateData mSelectedCandidate;
@@ -318,8 +261,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     public CandidateData getSelectedCandidate() {
         return mSelectedCandidate;
     }
-    public SearchToolbar setSelectedCandidate(int position) {
-        mSelectedCandidate = mCandidates.get(position);
+    public SearchToolbar setSelectedCandidate(CandidateData candidateData) {
+        mSelectedCandidate = candidateData;
         mSelectedQuery = null;
         return this;
     }
@@ -333,27 +276,6 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     }
     public boolean isReadyToSearch(){
         return (mSelectedCandidate != null && ( mSelectedCandidate.lecture_id != null || mSelectedCandidate.professor_id != null))|| mSelectedQuery != null;
-    }
-    public int getMarginTop() {
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
-        return params.topMargin;
-    }
-    public SearchToolbar setMarginTop(int pixels) {
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
-        params.topMargin = pixels;
-        mRootView.setLayoutParams(params);
-        return this;
-    }
-
-    public List<CandidateData> getHistory() {
-        List<CandidateData> courses = new ArrayList<>();
-        if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
-            courses = ((HistoryData)AppManager.getInstance().getStringParsed(
-                AppConst.Preference.HISTORY,
-                HistoryData.class
-            )).candidates;
-        } // TODO : Otherwise, Inform history is empty whenever history is empty.
-        return courses;
     }
 
     private static final int HISTORY_SIZE = 10;
@@ -377,8 +299,8 @@ public class SearchToolbar implements RecyclerViewItemClickListener {
     }
 
     /* Listener Setter */
-    public SearchToolbar setItemClickListener(RecyclerViewItemClickListener listener) {
-        mRecyclerViewItemClickListener = listener;
+    public SearchToolbar setItemObjectClickListener(RecyclerViewItemObjectClickListener listener) {
+        mRecyclerViewItemObjectClickListener = listener;
         return this;
     }
     public SearchToolbar setOnVisibilityChangedListener(OnVisibilityChangedListener listener) {
