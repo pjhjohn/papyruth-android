@@ -29,8 +29,10 @@ import com.papyruth.support.utility.customview.EmptyStateView;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 //    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
@@ -142,37 +144,39 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void loadSearchResult() {
-        if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         CandidateData candidate = SearchToolbar.getInstance().getSelectedCandidate();
-        Api.papyruth()
-            .get_search_search(
-                User.getInstance().getAccessToken(),
-                User.getInstance().getUniversityId(),
-                candidate.lecture_id,
-                candidate.professor_id,
-                SearchToolbar.getInstance().getSelectedQuery()
-            )
-            .map(response -> response.courses)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(courses -> {
-                if (courses != null) {
-                    if (candidate.professor_id != null && candidate.lecture_id != null && courses.size() > 0) {
-                        Course.getInstance().update(courses.get(0));
-                        candidate.clear();
-                        this.mNavigator.navigate(CourseFragment.class, true);
-                    } else {
-                        mCourses.clear();
-                        mCourses.addAll(courses);
-                    }
-                }
-                if (mFooterMaterialProgressBar != null)
-                    AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
-                reconfigure();
-            }, error -> {
-                ErrorHandler.handle(error, this);
-                if (mFooterMaterialProgressBar != null)
-                    AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
-            });
+        if (mFooterMaterialProgressBar != null)
+            AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
+        if(candidate.course_id != null && Course.getInstance().getId() == null){
+            Course.getInstance().clear();
+            Course.getInstance().setId(candidate.course_id);
+            this.mNavigator.navigate(CourseFragment.class, true);
+        }else {
+            Api.papyruth()
+                    .get_search_search(
+                            User.getInstance().getAccessToken(),
+                            User.getInstance().getUniversityId(),
+                            candidate.lecture_id,
+                            candidate.professor_id,
+                            SearchToolbar.getInstance().getSelectedQuery()
+                    )
+                    .map(response -> response.courses)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(courses -> {
+                        if (courses != null) {
+                            Course.getInstance().clear();
+                            mCourses.clear();
+                            mCourses.addAll(courses);
+                        }
+                        if (mFooterMaterialProgressBar != null)
+                            AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                        reconfigure();
+                    }, error -> {
+                        ErrorHandler.handle(error, this);
+                        if (mFooterMaterialProgressBar != null)
+                            AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                    });
+        }
     }
 }

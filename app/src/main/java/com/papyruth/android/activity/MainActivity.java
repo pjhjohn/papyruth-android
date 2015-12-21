@@ -17,9 +17,12 @@ import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
+import com.papyruth.android.fragment.main.CourseFragment;
 import com.papyruth.android.fragment.main.HomeFragment;
 import com.papyruth.android.fragment.main.SettingsFragment;
 import com.papyruth.android.fragment.main.SimpleCourseFragment;
+import com.papyruth.android.model.CandidateData;
+import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.navigation_drawer.NavigationDrawerCallback;
 import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
@@ -79,8 +82,16 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
 
         ViewHolderFactory.getInstance().setContext(this);
-        SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, position) -> {
-            this.navigate(SimpleCourseFragment.class, true);
+        SearchToolbar.getInstance().init(this, mSearchToolbarRoot, (view, object) -> {
+            if(object instanceof CandidateData) {
+                CandidateData candidate = ((CandidateData) object);
+                if (candidate.course_id != null) {
+                    Course.getInstance().clear();
+                    Course.getInstance().setId(candidate.course_id);
+                    this.navigate(CourseFragment.class, true);
+                }else
+                    this.navigate(SimpleCourseFragment.class, true);
+            }
         }, () -> {
             this.navigate(SimpleCourseFragment.class, true);
         });

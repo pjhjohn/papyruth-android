@@ -23,7 +23,6 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     @Override

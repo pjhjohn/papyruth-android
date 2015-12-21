@@ -19,6 +19,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.CategoryHelper;
 import com.papyruth.support.utility.helper.PointHelper;
 import com.squareup.picasso.Picasso;
@@ -55,6 +56,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     @Bind(R.id.course_evaluation_icon)                protected ImageView mEvaluationIcon;
     @Bind(R.id.course_evaluation_count)               protected TextView mEvaluationCount;
     @Bind(R.id.course_no_evaluations_message)         protected LinearLayout mNoEvaluationsMessage;
+    @Bind(R.id.material_progress_medium)              protected View mProgressbar;
     private CompositeSubscription mCompositeSubscription;
     private final Context mContext;
     private final Resources mResources;
@@ -73,33 +75,39 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     }
 
     public void bind(Course course) {
-        final Integer count = course.getEvaluationCount();
-        Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
-        mBookmark.setOnClickListener(this);
-        CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.getCategory());
-        mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
-        mLecture.setText(course.getName());
-        mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
-        Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
-        mLabelOverall.setText(R.string.label_point_overall);
-        PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), course.getEvaluationCount());
-        mLabelClarity.setText(R.string.label_point_clarity);
-        PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, course.getPointClarity(), count);
-        mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
-        PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, course.getPointGpaSatisfaction(), count);
-        mLabelEasiness.setText(R.string.label_point_easiness);
-        PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
-        if(count == null || count <= 0) {
-            mHashtags.setVisibility(View.GONE);
-            mStatistics.setVisibility(View.GONE);
-            mNoEvaluationsMessage.setVisibility(View.VISIBLE);
-        } else {
-            mHashtags.setVisibility(View.VISIBLE);
-            mStatistics.setVisibility(View.VISIBLE);
-            mNoEvaluationsMessage.setVisibility(View.GONE);
-            mHashtags.setText(Hashtag.plainString(course.getHashtags()));
-            Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
-            mEvaluationCount.setText(String.valueOf(count));
+        if(course.needToUpdateData()) {
+            AnimatorHelper.FADE_IN(mProgressbar).start();
+        }else{
+            final Integer count = course.getEvaluationCount();
+            Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
+            mBookmark.setOnClickListener(this);
+            CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.getCategory());
+            mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
+            mLecture.setText(course.getName());
+            mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
+            Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
+            mLabelOverall.setText(R.string.label_point_overall);
+            PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), course.getEvaluationCount());
+            mLabelClarity.setText(R.string.label_point_clarity);
+            PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, course.getPointClarity(), count);
+            mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
+            PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, course.getPointGpaSatisfaction(), count);
+            mLabelEasiness.setText(R.string.label_point_easiness);
+            PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
+
+            if (count == null || count <= 0) {
+                mHashtags.setVisibility(View.GONE);
+                mStatistics.setVisibility(View.GONE);
+                mNoEvaluationsMessage.setVisibility(View.VISIBLE);
+            } else {
+                mHashtags.setVisibility(View.VISIBLE);
+                mStatistics.setVisibility(View.VISIBLE);
+                mNoEvaluationsMessage.setVisibility(View.GONE);
+                mHashtags.setText(Hashtag.plainString(course.getHashtags()));
+                Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);
+                mEvaluationCount.setText(String.valueOf(count));
+            }
+            AnimatorHelper.FADE_OUT(mProgressbar).start();
         }
     }
 

@@ -315,4 +315,5 @@
         android:paddingEnd="@dimen/baseline_x1"
         android:paddingBottom="@dimen/baseline_x1"
         android:contentDescription="@string/empty"/><!-- Bookmark Icon -->
+    <include layout="@layout/material_progressbar_medium"/>
 </RelativeLayout>

@@ -6,13 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
+import com.papyruth.android.fragment.main.CourseFragment;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
@@ -79,6 +79,21 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mIndexShadow = mHideShadow? -1 : 2 + (mHideInform?  0 : 1);
         mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mEvaluations.size() + mIndexContent;
+
+        if(Course.getInstance().needToUpdateData()){
+            Api.papyruth().get_course(User.getInstance().getAccessToken(), Course.getInstance().getId())
+                .map(response -> response.course)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(course -> {
+                    if (course != null) {
+                        Course.getInstance().update(course);
+                        notifyItemChanged(mIndexSingle);
+                    }
+                }, error -> {
+                    ErrorHandler.handle(error, this);
+                });
+        }
     }
 
     @Override

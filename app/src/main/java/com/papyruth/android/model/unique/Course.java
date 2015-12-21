@@ -70,6 +70,10 @@ public class Course {
         this.setName(courseData.name);
     }
 
+    public boolean needToUpdateData(){
+        return this.lectureId == null || this.professorId == null || this.pointOverall == null;
+    }
+
     public Integer getId() {
         return id;
     }
