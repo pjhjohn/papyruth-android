@@ -25,11 +25,10 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     @Override
     public void onResume() {
         super.onResume();
-
         if(Evaluation.getInstance().getId() != null){
             mEvaluationFragment = new EvaluationFragment();
             openEvaluation(null, false);
-        }else setFloatingActionControl();
+        } else setFloatingActionControl();
     }
 
     @Override
@@ -78,14 +77,12 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
     }
 
-
     @Override
     protected EvaluationItemsDetailAdapter getAdapter() {
         if (this.adapter == null)
             return adapter = new EvaluationItemsDetailAdapter(mContext, mSwipeRefresh, mEmptyState, this);
         return adapter;
     }
-
 
     @Override
     protected void setStatusBarDefault() {

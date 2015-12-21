@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,12 +87,13 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             .get_hashtag(User.getInstance().getAccessToken())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                mHashtagPresetData.clear();
-                for (String hashtag : response.hashtags) mHashtagPresetData.add(hashtag);
-                mHashtagPresetAdapter.notifyDataSetChanged();
-            }, Throwable::printStackTrace
-        );
+            .subscribe(
+                response -> {
+                    mHashtagPresetData.clear();
+                    for (String hashtag : response.hashtags) mHashtagPresetData.add(hashtag);
+                    mHashtagPresetAdapter.notifyDataSetChanged();
+                }, Throwable::printStackTrace
+            );
         return view;
     }
 
@@ -149,15 +151,16 @@ public class EvaluationStep3Fragment extends TrackerFragment {
 
         /* Type new hashtag. */
         mCompositeSubscription.add(WidgetObservable.text(mHashtagsText)
-            .filter(event -> event.text().length() > 1 && (event.text().charAt(event.text().length() - 1) == ' ' || event.text().charAt(event.text().length() - 1) == '#'))
-            .subscribe(event -> {
-                final String str = event.text().subSequence(0, event.text().length() - 1).toString();
+            .map(RxValidator.toString)
+            .filter(s -> s.length() > 1 && (s.charAt(s.length() - 1) == ' ' || s.charAt(s.length() - 1) == '#'))
+            .subscribe(s -> {
+                final String str = s.subSequence(0, s.length() - 1).toString();
                 if(str.equals(" ") || str.equals("#")) {
                     mHashtagsText.setText("");
                     return;
                 }
                 addNewHashtag(str);
-                if(event.text().charAt(event.text().length() - 1) == '#') {
+                if(s.charAt(s.length() - 1) == '#') {
                     mHashtagsText.setText("#");
                     mHashtagsText.setSelection(mHashtagsText.getText().length());
                 } else mHashtagsText.setText("");
@@ -182,9 +185,12 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     }
 
     private Void renderHashtag() {
+        final List<String> hashtags = EvaluationForm.getInstance().getHashtag();
+        if(hashtags.isEmpty()) mHashtagsContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0));
+        else mHashtagsContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         mHashtagsContainer.setText("");
         mHashtagsContainer.setMovementMethod(LinkMovementMethod.getInstance());
-        mHashtagsContainer.setText(Hashtag.clickableSpannableString(mActivity, EvaluationForm.getInstance().getHashtag(), this::renderHashtag));
+        mHashtagsContainer.setText(Hashtag.clickableSpannableString(mActivity, hashtags, this::renderHashtag));
         return null;
     }
 
@@ -237,7 +243,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         );
     }
 
-    public void updateUserData() {
+    private void updateUserData() {
         if(User.getInstance().getMandatoryEvaluationCount() > 0) Api.papyruth().get_users_me(User.getInstance().getAccessToken())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())

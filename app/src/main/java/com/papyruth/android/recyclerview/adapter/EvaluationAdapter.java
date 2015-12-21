@@ -3,6 +3,7 @@ package com.papyruth.android.recyclerview.adapter;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -41,6 +42,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
     private EmptyStateView mEmptyState;
+    private Toolbar mToolbar;
     private List<CommentData> mComments;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
@@ -57,10 +59,11 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private RelativeLayout mFooterMaterialProgressBar;
     private RelativeLayout mFooterFullyLoadedIndicator;
 
-    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
+    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
+        mToolbar = toolbar;
         mComments = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
         mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
@@ -74,12 +77,13 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         if (Evaluation.getInstance().getId() != null){
             Api.papyruth().get_evaluation(User.getInstance().getAccessToken(),Evaluation.getInstance().getId())
-                    .map(response -> response.evaluation)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(evaluationData -> {
-                        Evaluation.getInstance().update(evaluationData);
-                        notifyItemChanged(mIndexSingle);
-                    }, error -> ErrorHandler.handle(error, this));
+                .map(response -> response.evaluation)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(evaluationData -> {
+                    Evaluation.getInstance().update(evaluationData);
+                    mToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
+                    notifyItemChanged(mIndexSingle);
+                }, error -> ErrorHandler.handle(error, this));
         }
     }
 

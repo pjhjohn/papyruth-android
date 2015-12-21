@@ -26,8 +26,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -40,12 +38,9 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
         FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.handle(error, this));
     }
 
-
     @Override
     protected CourseAdapter getAdapter() {
-        if (adapter == null) {
-            return adapter = new CourseAdapter(getActivity(), mSwipeRefresh, mEmptyState, mNavigator, this);
-        }
+        if (adapter == null) adapter = new CourseAdapter(getActivity(), mSwipeRefresh, mEmptyState, mNavigator, this);
         return adapter;
     }
 
@@ -56,11 +51,11 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
     }
+
     @Override
     protected void setStatusBarDefault() {
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
     }
-
 
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
