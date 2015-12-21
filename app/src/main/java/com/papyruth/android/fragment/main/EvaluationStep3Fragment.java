@@ -173,7 +173,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     }
 
     private boolean addNewHashtag(String text) {
-        if(EvaluationForm.getInstance().getHashtag().contains(text)) return false;
+        if(EvaluationForm.getInstance().getHashtag().contains(Hashtag.removePrefix(text))) return false;
         EvaluationForm.getInstance().addHashtag(Hashtag.removePrefix(text));
         renderHashtag();
         if(EvaluationForm.getInstance().isEditMode()) EvaluationForm.getInstance().setEdited(true);
