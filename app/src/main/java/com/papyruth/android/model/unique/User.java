@@ -54,7 +54,7 @@ public class User {
         this.university_id              = null;
         this.is_boy                     = null;
         this.confirmed                  = null;
-        this.mandatory_evaluation_count = 0;
+        this.mandatory_evaluation_count = null;
         this.university_email           = null;
         this.university_confirmed       = null;
         this.university_name            = null;
