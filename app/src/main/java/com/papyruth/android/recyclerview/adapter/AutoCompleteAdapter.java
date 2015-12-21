@@ -52,8 +52,9 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mRecyclerViewItemObjectClickListener = listener;
         mHideShadow = true;
         mIndexHeader = 0;
-        mIndexContent= 1 + (mHideShadow? 0 : 1);
-        mIndexShadow = mCandidates.size() + mIndexContent;
+        mIndexContent= 1;
+        mIndexShadow = (mHideShadow ? -1 : mCandidates.size() + mIndexContent);
+        isHistory = true;
 
         mPage = 1;
     }
@@ -65,9 +66,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(viewType == ViewHolderFactory.ViewType.HR_WHITE || viewType == ViewHolderFactory.ViewType.TOOLBAR_SHADOW) {
             viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, null);
         } else {
-            viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-                mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCandidates.get(position - mIndexContent));
-            });
+            viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCandidates.get(position - mIndexContent)) );
         }
         return viewHolder;
     }
@@ -91,57 +90,30 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mIndexShadow + 1;
     }
 
-    private void reconfigure() {
-        Timber.d("Reconfigured with mCandidates having size of %d", mCandidates.size());
-        AnimatorSet animators = new AnimatorSet();
-        animators.playTogether(
-                AnimatorHelper.FADE_OUT(mMaterialProgressBar),
-                AnimatorHelper.FADE_IN(mBackIcon)
-        );
-        animators.start();
-        if(mCandidates.isEmpty()) {
-            setIsHistory(true);
-            mIndexHeader = 0;
-            mIndexContent = 1;
-            mIndexShadow = mCandidates.size() + mIndexContent;
-            mHideShadow = true;
-            notifyDataSetChanged();
-        } else {
-            setIsHistory(false);
-            mPage++;
-            mIndexHeader = 0;
-            mIndexContent = 1;
-            mIndexShadow = mCandidates.size() + mIndexContent;
-            mHideShadow = false;
-            notifyDataSetChanged();
-        }
-    }
-
     public void clear(){
         this.mCandidates.clear();
     }
 
+    public boolean isHistory(){ return isHistory; }
+
     public void history(){
         List<CandidateData> candidates = new ArrayList<>();
+        this.isHistory = true;
         if(AppManager.getInstance().contains(AppConst.Preference.HISTORY)) {
-            candidates = ((HistoryData)AppManager.getInstance().getStringParsed(
-                    AppConst.Preference.HISTORY,
-                    HistoryData.class
-            )).candidates;
+            candidates = ((HistoryData)AppManager.getInstance().getStringParsed( AppConst.Preference.HISTORY, HistoryData.class )).candidates;
         } // TODO : Otherwise, Inform history is empty whenever history is empty.
         this.mCandidates.clear();
         this.mCandidates.addAll(candidates);
         reconfigure();
     }
 
-
     private Boolean mLoading;
     private Boolean mFullyLoaded;
 
     public void search(String query) {
+        this.isHistory = false;
         if(query != null) {
             if(mLoading != null && mLoading) return;
-            mLoading = true;
             mFullyLoaded = false;
             mQuery = query;
             AnimatorSet animatorSet = new AnimatorSet();
@@ -151,20 +123,21 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             );
             animatorSet.start();
             mPage = 1;
-            getCandidate();
+            getCandidates();
         }
     }
 
     public void loadMore(){
+        if(isHistory) return;
         if(mLoading != null && mLoading) return;
         mLoading = true;
         if(mFullyLoaded != null && mFullyLoaded) return;
         mFullyLoaded = false;
-        mPage++;
-        getCandidate();
+        getCandidates();
     }
 
-    public void getCandidate(){
+    public void getCandidates(){
+        if(isHistory) return;
         Api.papyruth()
                 .get_search_autocomplete(
                         User.getInstance().getAccessToken(),
@@ -177,7 +150,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(candidates -> {
                     if (candidates != null) {
-                        if(mPage != null && mPage <= 1)
+                        if (mPage != null && mPage <= 1)
                             mCandidates.clear();
                         mCandidates.addAll(candidates);
                         mFullyLoaded = candidates.isEmpty();
@@ -187,8 +160,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }, error -> {
                     AnimatorSet animators = new AnimatorSet();
                     animators.playTogether(
-                            AnimatorHelper.FADE_IN(mMaterialProgressBar),
-                            AnimatorHelper.FADE_OUT(mBackIcon)
+                            AnimatorHelper.FADE_IN(mBackIcon),
+                            AnimatorHelper.FADE_OUT(mMaterialProgressBar)
                     );
                     animators.start();
                     if (error instanceof RetrofitError) {
@@ -201,7 +174,27 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 });
     }
 
-    public void setIsHistory(boolean isHistory){
-        this.isHistory = isHistory;
+    private void reconfigure() {
+        Timber.d("Reconfigured with mCandidates having size of %d", mCandidates.size());
+        AnimatorSet animators = new AnimatorSet();
+        animators.playTogether(
+                AnimatorHelper.FADE_OUT(mMaterialProgressBar),
+                AnimatorHelper.FADE_IN(mBackIcon)
+        );
+        animators.start();
+        if(mCandidates.isEmpty()) {
+            mIndexHeader = 0;
+            mIndexContent = 1;
+            mHideShadow = true;
+            mIndexShadow = (mHideShadow ? -1 : mCandidates.size() + mIndexContent);
+            notifyDataSetChanged();
+        } else {
+            mPage++;
+            mIndexHeader = 0;
+            mIndexContent = 1;
+            mHideShadow = false;
+            mIndexShadow = (mHideShadow ? -1 : mCandidates.size() + mIndexContent);
+            notifyDataSetChanged();
+        }
     }
 }

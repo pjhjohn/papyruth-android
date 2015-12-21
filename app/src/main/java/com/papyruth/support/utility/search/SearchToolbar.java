@@ -27,6 +27,7 @@ import com.papyruth.android.recyclerview.adapter.AutoCompleteAdapter;
 import com.papyruth.support.opensource.materialprogressbar.MaterialProgressBar;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.helper.AnimatorHelper;
+import com.papyruth.support.utility.recyclerview.PanelControllerOnScrollWithAskMore;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -54,7 +55,7 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
     @Bind(R.id.search_toolbar_material_progressbar)   protected MaterialProgressBar mMaterialProgressBar;
     @Bind(R.id.search_toolbar_query_text)             protected EditText mQueryText;
     @Bind(R.id.search_toolbar_query_clear_icon)       protected ImageView mQueryClearIcon;
-    @Bind(R.id.search_toolbar_query_result)           protected RecyclerView mQueryResult;
+    @Bind(R.id.search_toolbar_query_result)           protected RecyclerView mAutoCompleteRecyclerView;
 
     private RecyclerViewItemObjectClickListener mDefaultRecyclerViewItemObjectClickListener;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
@@ -85,11 +86,12 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
         mBackIcon.setVisibility(View.VISIBLE);
         mMaterialProgressBar.setVisibility(View.GONE);
         mQueryClearIcon.setVisibility(View.GONE);
-        mQueryResult.setLayoutManager(new LinearLayoutManager(context));
+        mAutoCompleteRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mAutoCompleteAdapter = new AutoCompleteAdapter(mContext, mBackIcon, mMaterialProgressBar, this);
-        mQueryResult.setAdapter(mAutoCompleteAdapter);
-        mQueryResult.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+        mAutoCompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
+        mAutoCompleteRecyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
             boolean isActionDown = false;
+
             @Override
             public boolean onInterceptTouchEvent(RecyclerView recyclerview, MotionEvent event) {
                 View childView = recyclerview.findChildViewUnder(event.getX(), event.getY());
@@ -100,7 +102,7 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
                     isActionDown = true;
                 } else if (event.getAction() == KeyEvent.ACTION_UP) {
                     if (isActionDown) {
-                        if(mAnimator != null && mAnimator.isRunning() && mRootView.getVisibility() == View.VISIBLE){
+                        if (mAnimator != null && mAnimator.isRunning() && mRootView.getVisibility() == View.VISIBLE) {
                             mAnimator.cancel();
                         }
                         hide();
@@ -109,6 +111,14 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
                     return true;
                 }
                 return false;
+            }
+        });
+        this.mAutoCompleteRecyclerView.setOnScrollListener(new PanelControllerOnScrollWithAskMore(AppConst.DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE) {
+            @Override public void onHidePanels() { }
+            @Override public void onShowPanels() { }
+            @Override
+            public void onAskMore(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+                if (!mAutoCompleteAdapter.isHistory()) mAutoCompleteAdapter.loadMore();
             }
         });
 
@@ -131,7 +141,7 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
             .throttleLast(THROTTLE_MILLISECONDS, TimeUnit.MILLISECONDS)
             .filter(query -> !query.isEmpty())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::searchAutocomplete, Throwable::printStackTrace)
+            .subscribe(mAutoCompleteAdapter::search, Throwable::printStackTrace)
         );
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryClearIcon)
@@ -162,9 +172,6 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
         });
     }
 
-    private void searchAutocomplete(String query) {
-        mAutoCompleteAdapter.search(query);
-    }
 
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
@@ -183,7 +190,6 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
         hide();
         return true;
     }
-
 
     private boolean mSearchToolbarOpened = false;
     public boolean isOpened() {
