@@ -109,18 +109,19 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private Boolean mLoading;
     private Boolean mFullyLoaded;
+    AnimatorSet animators;
 
     public void search(String query) {
         this.isHistory = false;
         if(query != null) {
             mFullyLoaded = false;
             mQuery = query;
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(
+            animators = new AnimatorSet();
+            animators.playTogether(
                     AnimatorHelper.FADE_IN(mMaterialProgressBar),
                     AnimatorHelper.FADE_OUT(mBackIcon)
             );
-            animatorSet.start();
+            animators.start();
             mPage = 1;
             getCandidates();
         }
@@ -157,7 +158,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     mLoading = false;
                     reconfigure();
                 }, error -> {
-                    AnimatorSet animators = new AnimatorSet();
+                    animators = new AnimatorSet();
                     animators.playTogether(
                             AnimatorHelper.FADE_IN(mBackIcon),
                             AnimatorHelper.FADE_OUT(mMaterialProgressBar)
@@ -175,12 +176,6 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void reconfigure() {
         Timber.d("Reconfigured with mCandidates having size of %d", mCandidates.size());
-        AnimatorSet animators = new AnimatorSet();
-        animators.playTogether(
-                AnimatorHelper.FADE_IN(mBackIcon),
-                AnimatorHelper.FADE_OUT(mMaterialProgressBar)
-        );
-        animators.start();
         if(mCandidates.isEmpty()) {
             mIndexHeader = 0;
             mIndexContent = 1;
@@ -195,5 +190,14 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mIndexShadow = (mHideShadow ? -1 : mCandidates.size() + mIndexContent);
             notifyDataSetChanged();
         }
+
+        if (animators != null && animators.isRunning())
+            animators.cancel();
+        animators = new AnimatorSet();
+        animators.playTogether(
+                AnimatorHelper.FADE_IN(mBackIcon),
+                AnimatorHelper.FADE_OUT(mMaterialProgressBar)
+        );
+        animators.start();
     }
 }

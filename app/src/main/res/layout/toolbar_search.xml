@@ -8,6 +8,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:focusable="true"
+        android:clickable="true"
         android:background="@color/white">
         <RelativeLayout
             android:id="@+id/search_toolbar_navigation_icon"
