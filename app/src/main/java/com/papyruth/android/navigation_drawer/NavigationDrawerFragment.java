@@ -28,6 +28,7 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.Navigator;
+import com.papyruth.support.utility.search.SearchToolbar;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -134,6 +135,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                if(SearchToolbar.getInstance().isOpened())
+                    SearchToolbar.getInstance().hide();
                 if (!NavigationDrawerFragment.this.isAdded()) return;
                 if (!mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
