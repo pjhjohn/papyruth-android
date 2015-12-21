@@ -143,7 +143,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setBody(R.string.empty_state_content_empty_recent)
+            mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_recent)
                 .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_recent)))
                 .show();
         } else {

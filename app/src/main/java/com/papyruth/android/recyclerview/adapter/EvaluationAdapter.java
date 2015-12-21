@@ -154,7 +154,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setBody(R.string.empty_state_content_empty_comment)
+            if(mIndexSingle < 0) mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_comment)
                 .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_comment)))
                 .show();
         } else {

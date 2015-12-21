@@ -154,6 +154,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             if(mIndexSingle < 0) mEmptyState
+                .setIconDrawable(R.drawable.ic_password_48dp)
                 .setBody(R.string.empty_state_content_empty_evaluation)
                 .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_evaluation)))
                 .show();
@@ -208,9 +209,9 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     mSwipeRefresh.setRefreshing(false);
                     if(error instanceof RetrofitError){
                         if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
-                            this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                         }else{
-                            this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                             ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                         }
                     }else{
@@ -260,9 +261,9 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }, error -> {
                 if(error instanceof RetrofitError){
                     if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
-                        this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                     }else{
-                        this.mEmptyState.setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
                         ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
                 }else{
