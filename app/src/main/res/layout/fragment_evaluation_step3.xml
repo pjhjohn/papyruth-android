@@ -31,9 +31,9 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/evaluation_hashtags_icon"
                 android:layout_toEndOf="@+id/evaluation_hashtags_icon"
-                android:layout_marginStart="@dimen/baseline_x4"
-                android:layout_marginLeft="@dimen/baseline_x4"/>
-        </RelativeLayout>
+                android:layout_marginStart="@dimen/baseline_x1"
+                android:layout_marginLeft="@dimen/baseline_x1"/>
+        </RelativeLayout><!--Hashtag Label-->
         <AutoCompleteTextView
             android:id="@+id/evaluation_hashtags_text"
             android:layout_width="match_parent"
@@ -48,18 +48,22 @@
             android:imeOptions="actionNext"
             android:hint="@string/hint_evalaution_form_hashtags"
             android:focusable="true"
-            android:focusableInTouchMode="true"/>
+            android:textSize="14sp"
+            android:focusableInTouchMode="true"/><!--Hashtag Input-->
         <TextView
             android:id="@+id/evaluation_hashtags_container"
             android:background="@color/transparent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/baseline_x5"
-            android:layout_marginTop="@dimen/baseline_x1"
-            android:orientation="vertical"/>
+            android:layout_height="0dp"
+            android:paddingTop="@dimen/baseline_x1"
+            android:paddingStart="@dimen/baseline_x1.5"
+            android:paddingEnd="@dimen/baseline_x1.5"
+            android:textSize="14sp"
+            android:orientation="vertical"/><!--Hashtag Container-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/baseline_x1">
             <ImageView
                 android:id="@+id/evaluation_body_icon"
                 android:layout_width="@dimen/baseline_x3"
@@ -73,9 +77,9 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/evaluation_body_icon"
                 android:layout_toEndOf="@+id/evaluation_body_icon"
-                android:layout_marginStart="@dimen/baseline_x4"
-                android:layout_marginLeft="@dimen/baseline_x4"/>
-        </RelativeLayout>
+                android:layout_marginStart="@dimen/baseline_x1"
+                android:layout_marginLeft="@dimen/baseline_x1"/>
+        </RelativeLayout><!--Body Label-->
         <EditText
             android:id="@+id/evaluation_body"
             android:layout_width="match_parent"
@@ -87,6 +91,7 @@
             android:gravity="top"
             android:background="@drawable/background_edittext_green"
             android:inputType="textMultiLine"
+            android:textSize="14sp"
             android:hint="@string/hint_evalaution_form_body"/>
-    </LinearLayout>
+    </LinearLayout><!--Body-->
 </com.papyruth.support.utility.navigator.NavigatableLinearLayout>

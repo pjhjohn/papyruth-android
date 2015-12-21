@@ -3,15 +3,12 @@ package com.papyruth.support.utility.helper;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.papyruth.android.R;
-
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-12-10.
@@ -65,14 +62,12 @@ public class PointHelper {
         } return Color.parseColor(colorScheme[colorScheme.length-1]);
     }
     private static String getPointString(Integer value) {
-        Timber.d("value : %d", value);
         if(!pointInRange(value)) return NOT_ASSIGNED;
         return value >= MAX ? String.valueOf(MAX) : String.format("%d.0", value);
     }
 
     public static void applyRating(Context context, RatingBar ratingbar, Integer value) {
         final int pointColor = getPointColor(value, MIN, MAX, context.getResources().getColor(R.color.point_none), context.getResources().getStringArray(R.array.point_colors));
-        Timber.d("Value : %d, Color : %d", value, pointColor);
         for(int i = 0; i < 3; i ++) ((LayerDrawable) ratingbar.getProgressDrawable()).getDrawable(i).setColorFilter(pointColor, PorterDuff.Mode.SRC_ATOP);
         ratingbar.setRating(pointInRange(value) ? (float)value / (MAX / ratingbar.getNumStars()) : ratingbar.getNumStars());
     }

@@ -90,7 +90,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         mSwipeRefresh.setEnabled(true);
         initSwipeRefresh(mSwipeRefresh);
 
-        mAdapter = new EvaluationAdapter(mContext, mSwipeRefresh, mEmptyState, this);
+        mAdapter = new EvaluationAdapter(mContext, mSwipeRefresh, mEmptyState, mToolbar, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -98,6 +98,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         MaterialMenuDrawable mMaterialNavigationDrawable = new MaterialMenuDrawable(mContext, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
         mMaterialNavigationDrawable.setIconState(MaterialMenuDrawable.IconState.X);
         mToolbar.setNavigationIcon(mMaterialNavigationDrawable);
+        mToolbar.setTitle(R.string.toolbar_title_evaluation);
         mToolbar.setNavigationOnClickListener(unused -> {
             if (mCommentInputActive) {
                 morph2FloatingActionButton();
@@ -154,9 +155,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public void onResume() {
         super.onResume();
-        mToolbar.setTitle(R.string.toolbar_title_evaluation);
-        mToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
-
         mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
         mCompositeSubscription.add(getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
             .filter(passIfNull -> passIfNull == null)
