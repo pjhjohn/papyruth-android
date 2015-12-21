@@ -113,7 +113,6 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void search(String query) {
         this.isHistory = false;
         if(query != null) {
-            if(mLoading != null && mLoading) return;
             mFullyLoaded = false;
             mQuery = query;
             AnimatorSet animatorSet = new AnimatorSet();
@@ -178,8 +177,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Timber.d("Reconfigured with mCandidates having size of %d", mCandidates.size());
         AnimatorSet animators = new AnimatorSet();
         animators.playTogether(
-                AnimatorHelper.FADE_OUT(mMaterialProgressBar),
-                AnimatorHelper.FADE_IN(mBackIcon)
+                AnimatorHelper.FADE_IN(mBackIcon),
+                AnimatorHelper.FADE_OUT(mMaterialProgressBar)
         );
         animators.start();
         if(mCandidates.isEmpty()) {
