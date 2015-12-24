@@ -133,6 +133,14 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mLoading = true;
         if(mFullyLoaded != null && mFullyLoaded) return;
         mFullyLoaded = false;
+        if(animators !=null && animators.isRunning())
+            animators.cancel();
+        animators = new AnimatorSet();
+        animators.playTogether(
+                AnimatorHelper.FADE_IN(mMaterialProgressBar),
+                AnimatorHelper.FADE_OUT(mBackIcon)
+        );
+        animators.start();
         getCandidates();
     }
 
