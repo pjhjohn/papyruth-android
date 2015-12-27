@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.RetrofitError;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -166,6 +167,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
+            if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             if(mIndexSingle < 0) mEmptyState
@@ -183,6 +185,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
+            if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
@@ -203,20 +206,29 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
             return;
         }
-        Api.papyruth().get_evaluations(User.getInstance().getAccessToken(),
-            User.getInstance().getUniversityId(),
-            null,
-            null,
-            null,
-            Course.getInstance().getId())
-            .map(response -> response.evaluations)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                evaluations -> {
+        Observable.combineLatest(
+                Api.papyruth().get_evaluations(User.getInstance().getAccessToken(),
+                        User.getInstance().getUniversityId(),
+                        null,
+                        null,
+                        null,
+                        Course.getInstance().getId()),
+                Api.papyruth().get_course(User.getInstance().getAccessToken(), Course.getInstance().getId()),
+                (a, b) -> {
+                    if(a.evaluations != null){
+                        mEvaluations.clear();
+                        mEvaluations.addAll(a.evaluations);
+                    }
+                    if (b.course != null){
+                        Course.getInstance().update(b.course);
+                    }
+                    return a.evaluations != null && b.course != null;
+                })
+                .filter(successs -> successs)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(success -> {
                     mSwipeRefresh.setRefreshing(false);
-                    mEvaluations.clear();
-                    mEvaluations.addAll(evaluations);
                     mLoading = false;
                     mFullyLoaded = false;
                     reconfigure();
@@ -232,8 +244,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }else{
                         ErrorHandler.handle(error, this);
                     }
-                }
-            );
+                });
     }
 
     private Boolean mLoading;

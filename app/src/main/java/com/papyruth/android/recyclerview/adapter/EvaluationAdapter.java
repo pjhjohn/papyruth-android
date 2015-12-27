@@ -25,7 +25,9 @@ import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.customview.EmptyStateView;
@@ -33,6 +35,8 @@ import com.papyruth.support.utility.customview.EmptyStateView;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.RetrofitError;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -155,6 +159,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mComments.size() + mIndexContent;
             notifyDataSetChanged();
+            if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
@@ -170,6 +175,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mComments.size() + mIndexContent;
             notifyDataSetChanged();
+            if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_white);
@@ -182,23 +188,40 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        Api.papyruth().get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null)
-            .map(response -> response.comments)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                comments -> {
+
+        Observable.combineLatest(
+                Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), Evaluation.getInstance().getId() ),
+                Api.papyruth().get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null),
+                (a, b)->{
+                    if(a.evaluation != null){
+                        Evaluation.getInstance().update(a.evaluation);
+                    }
+                    if(b.comments != null){
+                        this.mComments.clear();
+                        this.mComments.addAll(b.comments);
+                    }
+                    return a.evaluation != null && b.comments != null;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(success -> {
                     mSwipeRefresh.setRefreshing(false);
-                    mComments.clear();
-                    mComments.addAll(comments);
                     mLoading = false;
                     mFullyLoaded = false;
                     reconfigure();
                 }, error -> {
                     mSwipeRefresh.setRefreshing(false);
-                    ErrorHandler.handle(error, this);
-                }
-            );
+                    if (error instanceof RetrofitError) {
+                        if (ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        } else {
+                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                            ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        }
+                    } else {
+                        ErrorHandler.handle(error, this);
+                    }
+                });
     }
 
     private Boolean mLoading;
