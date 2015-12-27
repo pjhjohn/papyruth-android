@@ -55,6 +55,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
     private RelativeLayout mFooterFullyLoadedIndicator;
+    private boolean mTempHideInform;
 
     public MyCommentItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
@@ -62,7 +63,8 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mEmptyState = emptystate;
         mMyComments = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
-        mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
+        mTempHideInform = false;
+        mHideInform = true;
         mHideShadow = mHideInform;
         mPage = 1;
         mIndexHeader = 0;
@@ -86,6 +88,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         notifyItemRemoved(position);
                         mHideInform = true;
                         mHideShadow = true;
+                        mTempHideInform = true;
                         if(action == null) action = parent.getResources().getString(R.string.ga_event_hide_once);
                         AppTracker.getInstance().getTracker().send(
                             new HitBuilders.EventBuilder(parent.getResources().getString(R.string.ga_category_inform), action).build()
@@ -135,6 +138,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private void reconfigure(){
         if(mMyComments.isEmpty()){
             mIndexHeader = 0;
+            mHideShadow = mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
@@ -152,6 +156,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }else{
             mPage ++;
             mIndexHeader = 0;
+            mHideShadow = mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);

@@ -54,6 +54,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
     private RelativeLayout mFooterFullyLoadedIndicator;
+    private boolean mTempHideInform;
 
     public MyEvaluationItemsAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
@@ -61,7 +62,8 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
         mEmptyState = emptystate;
         mMyEvaluation = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
-        mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
+        mTempHideInform = false;
+        mHideInform = true;
         mHideShadow = mHideInform;
         mPage = 1;
         mIndexHeader = 0;
@@ -85,6 +87,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
                         notifyItemRemoved(position);
                         mHideInform = true;
                         mHideShadow = true;
+                        mTempHideInform = true;
                         if (action == null)
                             action = parent.getResources().getString(R.string.ga_event_hide_once);
                         AppTracker.getInstance().getTracker().send(
@@ -143,6 +146,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
     private void reconfigure(){
         if(mMyEvaluation.isEmpty()){
             mIndexHeader = 0;
+            mHideShadow = mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
@@ -160,6 +164,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
         }else{
             mPage ++;
             mIndexHeader = 0;
+            mHideShadow = mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
