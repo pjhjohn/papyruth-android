@@ -67,7 +67,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         mQueryButton.setText(R.string.toolbar_search);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
 
-        mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyStateView, this.mNavigator, this);
+        if(mAdapter == null) mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyStateView, this.mNavigator, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         return view;
