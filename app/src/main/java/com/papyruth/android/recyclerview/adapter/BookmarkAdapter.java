@@ -59,6 +59,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
     private RelativeLayout mFooterFullyLoadedIndicator;
+    private boolean mTempHideInform;
 
     public BookmarkAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
@@ -66,7 +67,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mEmptyState = emptystate;
         mCourses = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
-        mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
+        mTempHideInform = false;
+        mHideInform = true;
         mHideShadow = mHideInform;
         mPage = 1;
         mIndexHeader = 0;
@@ -90,6 +92,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         notifyItemRemoved(position);
                         mHideInform = true;
                         mHideShadow = true;
+                        mTempHideInform = true;
                         if(action == null)
                             action = parent.getResources().getString(R.string.ga_event_hide_once);
                         AppTracker.getInstance().getTracker().send(
@@ -146,6 +149,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Timber.d("Reconfigured with mCourses having size of %d", mCourses.size());
         if(mCourses.isEmpty()) {
             mIndexHeader = 0;
+            mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
+            mHideShadow = mHideInform;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
@@ -158,6 +163,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             mPage++;
             mIndexHeader = 0;
+            mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
+            mHideShadow = mHideInform;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
