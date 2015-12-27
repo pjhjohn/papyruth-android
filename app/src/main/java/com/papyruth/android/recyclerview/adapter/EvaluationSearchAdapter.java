@@ -123,7 +123,8 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mCourses.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_IN(mEmptyState).start();
+            if(mEmptyState.getVisibility() != View.VISIBLE)
+                AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null)
                 mShadow.setBackgroundResource(R.drawable.shadow_transparent);
@@ -138,7 +139,8 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mCourses.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_OUT(mEmptyState).start();
+            if(mEmptyState.getVisibility() == View.VISIBLE)
+                AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null)
                 mShadow.setBackgroundResource(R.drawable.shadow_white);

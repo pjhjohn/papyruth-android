@@ -149,7 +149,8 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mMyEvaluation.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_IN(mEmptyState).start();
+            if(mEmptyState.getVisibility() != View.VISIBLE)
+                AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
 
@@ -165,7 +166,8 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mMyEvaluation.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_OUT(mEmptyState).start();
+            if(mEmptyState.getVisibility() == View.VISIBLE)
+                AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_white);
         }

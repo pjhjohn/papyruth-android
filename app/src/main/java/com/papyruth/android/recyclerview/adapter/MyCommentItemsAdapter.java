@@ -141,7 +141,9 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mMyComments.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_IN(mEmptyState).start();
+            if(mEmptyState.getVisibility() != View.VISIBLE){
+                AnimatorHelper.FADE_IN(mEmptyState).start();
+            }
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_my_comment)
@@ -156,7 +158,9 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mMyComments.size() + mIndexContent;
             notifyDataSetChanged();
-            AnimatorHelper.FADE_OUT(mEmptyState).start();
+            if(mEmptyState.getVisibility() == View.VISIBLE) {
+                AnimatorHelper.FADE_OUT(mEmptyState).start();
+            }
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
