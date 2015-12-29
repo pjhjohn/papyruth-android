@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -24,6 +25,7 @@ import com.papyruth.android.fragment.main.SimpleCourseFragment;
 import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.Evaluation;
+import com.papyruth.android.model.unique.User;
 import com.papyruth.android.navigation_drawer.NavigationDrawerCallback;
 import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
@@ -57,6 +59,12 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         mTracker = ((PapyruthApplication) getApplication()).getTracker();
+
+        Crashlytics.setUserIdentifier(User.getInstance().getId().toString());
+        Crashlytics.setUserEmail(User.getInstance().getEmail());
+        Crashlytics.setUserName(User.getInstance().getNickname());
+        Crashlytics.setString(getResources().getString(R.string.word_university), User.getInstance().getUniversityName());
+
         ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
