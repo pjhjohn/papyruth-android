@@ -172,21 +172,21 @@
                         android:max="10"/><!-- Overall RatingBar -->
                 </LinearLayout>
             </FrameLayout><!-- Overall -->
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/evaluation_content_right"
                 android:layout_width="@dimen/baseline_x17"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignBottom="@+id/evaluation_content_left"
-                android:orientation="vertical"
                 android:gravity="bottom">
                 <RelativeLayout
                     android:id="@+id/evaluation_clarity"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/baseline_x3.5"
                     android:layout_marginRight="@dimen/baseline_x2"
-                    android:layout_marginEnd="@dimen/baseline_x2">
+                    android:layout_marginEnd="@dimen/baseline_x2"
+                    android:layout_above="@+id/evaluation_easiness">
                     <TextView
                         android:id="@+id/evaluation_clarity_label"
                         android:layout_width="match_parent"
@@ -223,9 +223,10 @@
                 <RelativeLayout
                     android:id="@+id/evaluation_easiness"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/baseline_x3.5"
                     android:layout_marginRight="@dimen/baseline_x2"
-                    android:layout_marginEnd="@dimen/baseline_x2">
+                    android:layout_marginEnd="@dimen/baseline_x2"
+                    android:layout_above="@+id/evaluation_gpa_satisfaction">
                     <TextView
                         android:id="@+id/evaluation_easiness_label"
                         android:layout_width="match_parent"
@@ -262,9 +263,10 @@
                 <RelativeLayout
                     android:id="@+id/evaluation_gpa_satisfaction"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/baseline_x3.5"
                     android:layout_marginRight="@dimen/baseline_x2"
-                    android:layout_marginEnd="@dimen/baseline_x2">
+                    android:layout_marginEnd="@dimen/baseline_x2"
+                    android:layout_alignParentBottom="true">
                     <TextView
                         android:id="@+id/evaluation_gpa_satisfaction_label"
                         android:layout_width="match_parent"
@@ -298,7 +300,7 @@
                         android:textColor="@color/point_gpa_satisfaction"
                         roboto:textWeight="normal"/><!-- GPA Satisfaction Postfix -->
                 </RelativeLayout><!-- GPA Satisfaction -->
-            </LinearLayout><!-- Clarity & Easiness & GPA Satisfaction -->
+            </RelativeLayout><!-- Clarity & Easiness & GPA Satisfaction -->
         </RelativeLayout><!-- Avatar & Nickname & Timestamp & Overall & Clarity & Easiness & GPA Satisfaction -->
         <include layout="@layout/hr_padding"/>
         <TextView
