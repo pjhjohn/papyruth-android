@@ -298,9 +298,9 @@ public class SignUpStep4Fragment extends TrackerFragment {
 
         Toast.makeText(mActivity, alertMsg, Toast.LENGTH_SHORT).show();
         switch (target) {
-            case AppConst.Navigator.Auth.SIGNUP_STEP1 : mNavigator.navigate(SignInFragment.class, false, true); break;
-            case AppConst.Navigator.Auth.SIGNUP_STEP2 : mNavigator.navigate(SignInFragment.class, false, true); break;
-            case AppConst.Navigator.Auth.SIGNUP_STEP3 : mNavigator.navigate(SignInFragment.class, false, true); break;
+            case AppConst.Navigator.Auth.SIGNUP_STEP1 : mNavigator.navigate(SignInFragment.class, true, true); break;
+            case AppConst.Navigator.Auth.SIGNUP_STEP2 : mNavigator.navigate(SignInFragment.class, true, true); break;
+            case AppConst.Navigator.Auth.SIGNUP_STEP3 : mNavigator.navigate(SignInFragment.class, true, true); break;
         }
         return false;
     }
