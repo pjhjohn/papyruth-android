@@ -42,7 +42,10 @@ public class TermsOfServiceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position)-> mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mTerms.get(position - mIndexContent)));
+        RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position)-> {
+            if(viewType == ViewHolderFactory.ViewType.TERM)
+                mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mTerms.get(position - mIndexContent));
+        });
         if (viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
@@ -65,7 +68,7 @@ public class TermsOfServiceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public int getItemViewType(int position) {
         if (position <= mIndexHeader) return ViewHolderFactory.ViewType.HEADER;
         if (position == mIndexFooter) return ViewHolderFactory.ViewType.FOOTER;
-        return ViewHolderFactory.ViewType.COURSE_ITEM;
+        return ViewHolderFactory.ViewType.TERM;
     }
 
     public void refresh() {

@@ -14,9 +14,11 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.OpenSourceLicenseData;
+import com.papyruth.android.model.TermData;
 import com.papyruth.android.recyclerview.adapter.TermsOfServiceAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.OpenSourceLicenseDialog;
+import com.papyruth.support.opensource.materialdialog.TermsOfServiceDialog;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
@@ -25,6 +27,7 @@ import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickList
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class TermsOfServiceFragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
     private Toolbar mToolbar;
@@ -75,6 +78,6 @@ public class TermsOfServiceFragment extends TrackerFragment implements RecyclerV
 
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
-        if(object instanceof OpenSourceLicenseData) OpenSourceLicenseDialog.show(mActivity, ((OpenSourceLicenseData) object));
+        if(object instanceof TermData) TermsOfServiceDialog.show(mActivity, ((TermData) object).name, ((TermData) object).body);
     }
 }
