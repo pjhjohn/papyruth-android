@@ -250,12 +250,12 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             .subscribeOn(Schedulers.io())
             .subscribe(response -> {
                 User.getInstance().update(response.user);
-                mNavigator.navigate(HomeFragment.class, false, true);
+                mNavigator.navigate(HomeFragment.class, true, true);
             }, error -> ErrorHandler.handle(error, this));
         else {
             Bundle bundle = new Bundle();
             bundle.putBoolean("STANDALONE", true);
-            mNavigator.navigate(HomeFragment.class, false, true);
+            mNavigator.navigate(HomeFragment.class, true, true);
         }
     }
 }
