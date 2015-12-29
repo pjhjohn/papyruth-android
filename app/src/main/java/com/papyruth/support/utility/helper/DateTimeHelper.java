@@ -10,6 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by pjhjohn on 2015-06-27.
@@ -22,7 +24,8 @@ public class DateTimeHelper {
         return DateTimeHelper.timestamp(in, AppConst.DateFormat.API, out_format);
     }
     public static String timestamp(String in, String in_format, String out_format) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(in_format);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(in_format, Locale.UK);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
         try {
             date = dateFormat.parse(in);
@@ -30,6 +33,7 @@ public class DateTimeHelper {
             e.printStackTrace();
         }
         dateFormat.applyLocalizedPattern(out_format);
+        dateFormat.setTimeZone(TimeZone.getDefault());
         return dateFormat.format(date);
     }
 
@@ -40,6 +44,7 @@ public class DateTimeHelper {
     private static final String NOT_ASSIGNED = "N/A";
     public static String timeago(Context context, String in, String in_format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(in_format);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
         try {
             date = dateFormat.parse(in);
