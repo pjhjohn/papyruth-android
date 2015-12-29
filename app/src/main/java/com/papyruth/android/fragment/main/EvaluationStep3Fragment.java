@@ -83,6 +83,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         if(EvaluationForm.getInstance().getBody() != null) mBody.setText(EvaluationForm.getInstance().getBody());
         if(EvaluationForm.getInstance().getHashtag().size() > 0) renderHashtag();
         mHashtagsText.setAdapter(mHashtagPresetAdapter = new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, mHashtagPresetData = new ArrayList<>()));
+        mHashtagsText.setThreshold(1);
         Api.papyruth()
             .get_hashtag(User.getInstance().getAccessToken())
             .subscribeOn(Schedulers.io())
