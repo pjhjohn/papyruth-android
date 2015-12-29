@@ -25,8 +25,6 @@
         android:id="@+id/navigation_drawer_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/baseline_x7"
-        android:layout_marginEnd="@dimen/baseline_x7"
         android:layout_gravity="start"
         android:elevation="10dp"
         app:insetForeground="#4000">
