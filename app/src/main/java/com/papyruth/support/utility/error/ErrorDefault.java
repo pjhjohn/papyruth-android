@@ -16,7 +16,7 @@ public class ErrorDefault {
             Fragment fragment = (Fragment) object;
             if (fragment instanceof Error.OnReportToGoogleAnalytics) {
                 ((Error.OnReportToGoogleAnalytics) fragment).onReportToGoogleAnalytics(
-                    Error.getDescription(throwable.getMessage()),
+                    Error.description(throwable.getMessage()),
                     object.getClass().getSimpleName(),
                     false
                 );
@@ -26,7 +26,7 @@ public class ErrorDefault {
                 Activity activity = fragment.getActivity();
                 if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
                     ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
-                        Error.getDescription(throwable.getMessage()),
+                        Error.description(throwable.getMessage()),
                         object.getClass().getSimpleName(),
                         false
                     );

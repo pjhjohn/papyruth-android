@@ -11,11 +11,12 @@ public class UserDataResponse {
     public Boolean success;
     public Boolean email_success;
 
-    public static UserDataResponse ERROR() {
-        UserDataResponse response = new UserDataResponse();
-        response.user = null;
-        response.access_token = null;
-        response.success = false;
-        return response;
+    public UserDataResponse() {
+        this.user = null;
+        this.access_token = null;
+        this.success = false;
+        this.email_success = false;
     }
+
+    public static UserDataResponse ERROR = new UserDataResponse();
 }

@@ -27,7 +27,12 @@ import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Circle;
 import com.papyruth.support.utility.customview.CircleAngleAnimation;
+import com.papyruth.support.utility.error.Error403;
+import com.papyruth.support.utility.error.ErrorDefault;
+import com.papyruth.support.utility.error.ErrorDefaultHTTP;
+import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.opensource.panningview.PanningView;
 
@@ -86,51 +91,90 @@ public class SplashFragment extends TrackerFragment {
         super.onResume();
         ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mActivity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
 
-        mCompositeSubscription.add(Api.papyruth()
+        Api.papyruth()
             .get_users_me(User.getInstance().getAccessToken())
-            .onErrorResumeNext(throwable -> {
-                Timber.d("Error : @GET(\"/users/me\")");
-                return Observable.just(UserDataResponse.ERROR());
-            })
-            .flatMap(response -> { // Handles User-data fetch
-                if(response != null && response.user != null){
-                    User.getInstance().update(response.user);
-                    return Api.papyruth().post_users_refresh_token(User.getInstance().getAccessToken());
-                } else return Observable.just(UserDataResponse.ERROR());
-            })
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                response -> { // Handles Access-token refresh
-                    if(response != null && response.access_token != null){
-                        User.getInstance().setAccessToken(response.access_token);
-                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
-                    } else User.getInstance().clear();
-                    requestPending = false;
-                    startActivity();
+                response -> {
+                    // TODO : Try to refresh Access Token
+                    if(response == null || response.user == null) {
+                        Toast.makeText(mActivity, "유저 정보를 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        User.getInstance().update(response.user);
+                        Api.papyruth()
+                            .post_users_refresh_token(User.getInstance().getAccessToken())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                resp -> {
+                                    if( resp != null && resp.access_token != null ) {
+                                        User.getInstance().setAccessToken(resp.access_token);
+                                        AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, resp.access_token);
+                                    } else User.getInstance().clear();
+                                    requestPending = false;
+                                    startActivity();
+                                },
+                                err -> {
+                                    boolean handled = false;
+                                    if (err instanceof RetrofitError) {
+                                        switch(((RetrofitError) err).getResponse().getStatus()) {
+                                            case 401:
+                                            case 419:
+                                                handled = true;
+                                                Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
+                                    }
+                                    if (!handled) {
+                                        Timber.e("Unhandled Exception. Throws to ErrorHandler");
+                                        err.printStackTrace();
+                                        ErrorHandler.handle(err, this);
+                                    }
+                                    User.getInstance().clear();
+                                    requestPending = false;
+                                    startActivity();
+                                }
+                            );
+                    }
                 },
-                error -> { // Collects all exceptions
+                error -> {
+                    // TODO : if failed by netrowk problem, do not proceed (or tab to retry)
+                    // TODO : if failed by authorization problem, proceed to AuthActivity
                     boolean handled = false;
-                    if (error instanceof RetrofitError) {
-                        switch(((RetrofitError) error).getResponse().getStatus()) {
-                            case 401:
-                            case 419:
-                                handled = true;
-                                Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                    if( error instanceof RetrofitError ) {
+                        RetrofitError throwable = (RetrofitError) error;
+                        switch (throwable.getKind()) {
+                            case HTTP :
+                                switch(((RetrofitError) error).getResponse().getStatus()) {
+                                    case 401:
+                                    case 419:
+                                        handled = true;
+                                        Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
                                 break;
+                            case NETWORK :
+                                handled = ErrorNetwork.handle(throwable, this).handled;
+                                if( handled ) Toast.makeText(mActivity, "인터넷이 불안정합니다", Toast.LENGTH_SHORT).show();
+                                handled = false;
+                                break;
+                            default :
+                                handled = ErrorDefaultRetrofit.handle(throwable, this).handled;
                         }
-                    }
-                    if (!handled) {
-                        Timber.e("Unhandled Exception. Throws to ErrorHandler");
+                    } else {
+                        Timber.e("Uncatched Exception. Does Nothing");
                         error.printStackTrace();
-                        ErrorHandler.handle(error, this);
                     }
+
+                    // Start AuthActivity
                     User.getInstance().clear();
-                    requestPending = false;
-                    startActivity();
+                    if(handled) {
+                        requestPending = false;
+                        startActivity();
+                    }
                 }
-            )
-        );
+            );
 
         /* Animation */
         ValueAnimator animAlpha = ValueAnimator.ofFloat(0.0f, 1.0f);

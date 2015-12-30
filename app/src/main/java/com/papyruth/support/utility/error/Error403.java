@@ -26,7 +26,7 @@ public class Error403 {
             Fragment fragment = (Fragment) object;
             if (fragment instanceof Error.OnReportToGoogleAnalytics) {
                 ((Error.OnReportToGoogleAnalytics) fragment).onReportToGoogleAnalytics(
-                    Error.getDescription(throwable.getMessage(), throwable.getUrl(), 403),
+                    Error.description(throwable.getMessage(), throwable.getUrl(), 403),
                     object.getClass().getSimpleName(),
                     false
                 );
@@ -36,7 +36,7 @@ public class Error403 {
                 Activity activity = fragment.getActivity();
                 if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
                     ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
-                        Error.getDescription(throwable.getMessage(), throwable.getUrl(), 403),
+                        Error.description(throwable.getMessage(), throwable.getUrl(), 403),
                         object.getClass().getSimpleName(),
                         false
                     );
