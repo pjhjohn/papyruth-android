@@ -69,23 +69,21 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     }
 
     @Override
-    protected void setToolbarStatus() {
+    protected void setToolbarOptions() {
         mToolbar.setTitle(R.string.toolbar_title_home);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
-        setStatusBarDefault();
+        setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
     }
 
     @Override
     protected EvaluationItemsDetailAdapter getAdapter() {
-        if (this.adapter == null)
-            return adapter = new EvaluationItemsDetailAdapter(mContext, mSwipeRefresh, mEmptyState, this);
-        return adapter;
+        return new EvaluationItemsDetailAdapter(mContext, mSwipeRefresh, mEmptyState, this);
     }
 
     @Override
-    protected void setStatusBarDefault() {
+    protected void setStatusBarOptions() {
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
     }
 }

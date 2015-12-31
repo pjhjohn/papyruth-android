@@ -58,7 +58,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     @Bind(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
     protected CompositeSubscription mCompositeSubscription;
     protected Toolbar mToolbar;
-    protected ADAPTER adapter;
+    protected ADAPTER mAdapter;
 
     @Nullable
     @Override
@@ -72,7 +72,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         initSwipeRefresh(mSwipeRefresh);
 
         mRecyclerView.setLayoutManager(this.getRecyclerViewLayoutManager());
-        mRecyclerView.setAdapter(this.getAdapter());
 
         mEvaluationFragment = null;
         mEvaluationIsOccupying = false;
@@ -92,15 +91,16 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     public void onResume() {
         super.onResume();
         mEvaluationOpened = false;
-        this.setToolbarStatus();
-        this.setStatusBarDefault();
+        this.setToolbarOptions();
+        this.setStatusBarOptions();
+        mRecyclerView.setAdapter(mAdapter = getAdapter());
 
-        if(adapter instanceof IAdapter) {
-            mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> ((IAdapter) adapter).refresh()));
+        if(mAdapter instanceof IAdapter) {
+            mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> ((IAdapter) mAdapter).refresh()));
             mCompositeSubscription.add(
                 getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
                     .filter(passIfNull -> passIfNull == null)
-                    .subscribe(unused -> ((IAdapter) adapter).loadMore())
+                    .subscribe(unused -> ((IAdapter) mAdapter).loadMore())
             );
         }
     }
@@ -250,7 +250,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
             @Override
             public void onAnimationStart(Animator animation) {
                 mEvaluationFragment.showContent(false);
-                setStatusBarDefault();
+                setStatusBarOptions();
             }
 
             @Override
@@ -266,8 +266,8 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
     }
     protected abstract ADAPTER getAdapter();
     protected abstract void setFloatingActionControl();
-    protected abstract void setToolbarStatus();
-    protected abstract void setStatusBarDefault();
+    protected abstract void setToolbarOptions();
+    protected abstract void setStatusBarOptions();
     protected RecyclerView.LayoutManager getRecyclerViewLayoutManager () {
         return new LinearLayoutManager(this.getActivity());
     }

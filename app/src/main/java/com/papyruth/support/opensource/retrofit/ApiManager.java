@@ -3,6 +3,7 @@ package com.papyruth.support.opensource.retrofit;
 import android.content.Context;
 
 import com.papyruth.android.AppConst;
+import com.papyruth.android.BuildConfig;
 import com.papyruth.support.opensource.retrofit.apis.Papyruth;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -34,6 +35,7 @@ public class ApiManager {
     }
     private static RestAdapter getRestAdapter(Context context, RestAdapter.LogLevel loglevel, RestAdapter.Log logger) {
         final Context finalContext = context.getApplicationContext();
+        if (!BuildConfig.DEBUG) logger = null;
         /* Create Cache */
         Cache responseCache = null;
         try {

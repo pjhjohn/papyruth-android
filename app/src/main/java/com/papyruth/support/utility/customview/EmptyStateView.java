@@ -51,6 +51,7 @@ public class EmptyStateView extends RelativeLayout {
         ButterKnife.bind(this, view);
         mTitleText = "";
         mBodyText = "";
+        mIconDrawableResId = 0;
         mIconColorResId = R.color.white;
         mBodyTextColorResId = R.color.white;
         mTitleTextColorResId = R.color.white;
@@ -98,7 +99,7 @@ public class EmptyStateView extends RelativeLayout {
     }
 
     public void show() {
-        Picasso.with(getContext()).load(mIconDrawableResId).transform(new ColorFilterTransformation(getResources().getColor(mIconColorResId))).into(mIcon);
+        if(mIconDrawableResId != 0) Picasso.with(getContext()).load(mIconDrawableResId).transform(new ColorFilterTransformation(getResources().getColor(mIconColorResId))).into(mIcon);
         mTitle.setText(mTitleText);
         mTitle.setTextColor(getResources().getColor(mTitleTextColorResId));
         mTitle.setPaintFlags(mTitle.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

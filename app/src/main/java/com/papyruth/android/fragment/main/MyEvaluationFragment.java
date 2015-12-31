@@ -4,7 +4,6 @@ import android.view.View;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Evaluation;
@@ -59,23 +58,21 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
     }
 
     @Override
-    protected void setToolbarStatus() {
+    protected void setToolbarOptions() {
         mToolbar.setTitle(R.string.nav_item_my_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
-        setStatusBarDefault();
+        setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
     }
 
     @Override
     protected MyEvaluationItemsAdapter getAdapter() {
-        if (this.adapter == null)
-            return adapter = new MyEvaluationItemsAdapter(mContext, mSwipeRefresh, mEmptyState, this);
-        return adapter;
+        return new MyEvaluationItemsAdapter(mContext, mSwipeRefresh, mEmptyState, this);
     }
 
     @Override
-    protected void setStatusBarDefault() {
+    protected void setStatusBarOptions() {
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
     }
 }
