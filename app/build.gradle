@@ -19,8 +19,8 @@ android {
         applicationId "com.papyruth.android"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 4
-        versionName "0.0.3"
+        versionCode 5
+        versionName "0.0.4"
         multiDexEnabled true
     }
     buildTypes {
