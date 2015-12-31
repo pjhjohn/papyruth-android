@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,25 +17,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.devspark.robototextview.widget.RobotoTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
-import com.papyruth.android.model.response.UserDataResponse;
 import com.papyruth.android.model.unique.User;
+import com.papyruth.support.opensource.panningview.PanningView;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Circle;
 import com.papyruth.support.utility.customview.CircleAngleAnimation;
-import com.papyruth.support.utility.error.Error403;
-import com.papyruth.support.utility.error.ErrorDefault;
-import com.papyruth.support.utility.error.ErrorDefaultHTTP;
 import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.fragment.TrackerFragment;
-import com.papyruth.support.opensource.panningview.PanningView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -52,9 +50,10 @@ import timber.log.Timber;
  */
 
 public class SplashFragment extends TrackerFragment {
-    @Bind(R.id.splash_background_panning)    protected PanningView mSplashBackgroundPanning;
-    @Bind(R.id.splash_background_circle)     protected Circle mSplashBackgroundCircle;
-    @Bind(R.id.splash_application_logo)      protected ImageView mSplashApplicationLogo;
+    @Bind(R.id.splash_background_panning)   protected PanningView mSplashBackgroundPanning;
+    @Bind(R.id.splash_background_circle)    protected Circle mSplashBackgroundCircle;
+    @Bind(R.id.splash_application_logo)     protected ImageView mSplashApplicationLogo;
+    @Bind(R.id.splash_version_name)         protected RobotoTextView mVersionName;
     private CompositeSubscription mCompositeSubscription;
     private SplashActivity mActivity;
     @Override
@@ -90,6 +89,11 @@ public class SplashFragment extends TrackerFragment {
     public void onResume() {
         super.onResume();
         ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mActivity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
+        try {
+            mVersionName.setText(String.format("Version %s", mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionName));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Api.papyruth()
             .get_users_me(User.getInstance().getAccessToken())
