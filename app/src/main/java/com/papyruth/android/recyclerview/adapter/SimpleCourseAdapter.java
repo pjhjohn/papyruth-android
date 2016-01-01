@@ -80,7 +80,11 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(position == mIndexFooter) { mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
             else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCourses.get(position - mIndexContent));
         });
-        if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
+        if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) {
+            mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
+            if(mCourses.isEmpty()) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            else mShadow.setBackgroundResource(R.drawable.shadow_white);
+        }
         if (viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
@@ -124,8 +128,7 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(mEmptyState.getVisibility() != View.VISIBLE)
                 AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
-            if(mShadow != null)
-                mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_search_result)
                 .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_search_result)))
                 .show();
@@ -140,8 +143,7 @@ public class SimpleCourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(mEmptyState.getVisibility() == View.VISIBLE)
                 AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
-            if(mShadow != null)
-                mShadow.setBackgroundResource(R.drawable.shadow_white);
+            if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
     }
 

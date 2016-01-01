@@ -104,8 +104,12 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             } else
                 mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mMyEvaluation.get(position - mIndexContent));
         });
-        if (viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder)
+        if (viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) {
+            Timber.d("create shadow");
             mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
+            if(mMyEvaluation.isEmpty()) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            else mShadow.setBackgroundResource(R.drawable.shadow_white);
+        }
         if (viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
@@ -144,6 +148,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
 
 
     private void reconfigure(){
+        Timber.d("reconfigure");
         if(mMyEvaluation.isEmpty()){
             mIndexHeader = 0;
             mHideShadow = mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
@@ -156,7 +161,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             if(mEmptyState.getVisibility() != View.VISIBLE)
                 AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
-            mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
 
             mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_my_evaluation)
                 .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_title_empty_something_my_comment)))
@@ -174,7 +179,7 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             if(mEmptyState.getVisibility() == View.VISIBLE)
                 AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
-            mShadow.setBackgroundResource(R.drawable.shadow_white);
+            if(mShadow != null)  mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
         if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
