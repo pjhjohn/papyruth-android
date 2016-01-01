@@ -14,7 +14,6 @@ public class AppConst {
     public static final String LOGGER_TAG = "RetrofitApi";
     public static final String LOGGER_FILTER = "^[AC\\-\\<\\{].*";
 
-    public static final int MIN_ENTRANCE_YEAR = 2000;
     /* KOREAN : 1 WORD == 3 BYTES */
     public static final int MAX_REALNAME_BYTES = 20;
     public static final int MAX_NICKNAME_BYTES = 20;

@@ -9,6 +9,7 @@ import com.papyruth.android.model.response.EvaluationPossibleResponse;
 import com.papyruth.android.model.response.EvaluationResponse;
 import com.papyruth.android.model.response.EvaluationsResponse;
 import com.papyruth.android.model.response.FavoriteCoursesResponse;
+import com.papyruth.android.model.response.GlobalInfosResponse;
 import com.papyruth.android.model.response.HashtagsResponse;
 import com.papyruth.android.model.response.MyCommentsResponse;
 import com.papyruth.android.model.response.SignUpValidateResponse;
@@ -202,6 +203,11 @@ public interface Papyruth {
         @Path("id") Integer id,
         @Query("hashtags[]") List<String> hashtags
     );
+
+
+    /* GLOBAL INFOS : Doesn't require access-token */
+    @GET("/global_infos")
+    Observable<GlobalInfosResponse> get_global_infos();
 
 
     /* HOME */
