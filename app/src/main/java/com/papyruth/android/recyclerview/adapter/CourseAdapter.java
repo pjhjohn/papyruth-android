@@ -123,7 +123,11 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
             else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mEvaluations.get(position - mIndexContent));
         });
-        if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);
+        if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) {
+            mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);
+            if(mEvaluations.isEmpty()) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            else mShadow.setBackgroundResource(R.drawable.shadow_white);
+        }
         if (viewholder instanceof FooterViewHolder) {
             mFooterBorder = viewholder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewholder.itemView.findViewById(R.id.material_progress_medium);
@@ -169,7 +173,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             notifyDataSetChanged();
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
-            mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             if(mIndexSingle < 0) mEmptyState
                 .setIconDrawable(R.drawable.ic_password_48dp)
                 .setBody(R.string.empty_state_content_empty_evaluation)
@@ -187,7 +191,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             notifyDataSetChanged();
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_IN(mFooterBorder).start();
-            mShadow.setBackgroundResource(R.drawable.shadow_white);
+            if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
         if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();

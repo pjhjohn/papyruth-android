@@ -96,7 +96,11 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
             else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mEvaluations.get(position - mIndexContent));
         });
-        if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);
+        if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) {
+            mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);
+            if(mEvaluations.isEmpty()) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            else mShadow.setBackgroundResource(R.drawable.shadow_white);
+        }
         if (viewholder instanceof FooterViewHolder) {
             mFooterBorder = viewholder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewholder.itemView.findViewById(R.id.material_progress_medium);
