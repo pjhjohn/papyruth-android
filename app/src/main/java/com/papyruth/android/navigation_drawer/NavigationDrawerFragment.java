@@ -53,7 +53,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement OnClickCategory");
         }
-        if(User.getInstance().getUniversityId() == 1){
+        if(User.getInstance().getUniversityId() != null && User.getInstance().getUniversityId() == 1) {
             mHeaderBackgroundDrawableRes = R.drawable.dummy_nav_university;
         }
     }
@@ -64,7 +64,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private boolean mFromSavedInstanceState;
     private int mCurrentSelectedPosition = 0;
     private View.OnClickListener mNavigationPriorClickListener;
-    private int mHeaderBackgroundDrawableRes;
+    private int mHeaderBackgroundDrawableRes = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +87,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         ButterKnife.bind(this, view);
-        Picasso.with(getActivity()).load(mHeaderBackgroundDrawableRes).into(mHeaderBackground);
+        if(mHeaderBackgroundDrawableRes != 0) Picasso.with(getActivity()).load(mHeaderBackgroundDrawableRes).into(mHeaderBackground);
 
         mHeader.setOnClickListener(subtitleView -> {
             mNavigator.navigate(ProfileFragment.class, true);

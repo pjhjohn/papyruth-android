@@ -39,12 +39,11 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
 
     @Override
     protected CourseAdapter getAdapter() {
-        if (adapter == null) adapter = new CourseAdapter(getActivity(), mSwipeRefresh, mEmptyState, mNavigator, this);
-        return adapter;
+        return new CourseAdapter(getActivity(), mSwipeRefresh, mEmptyState, mNavigator, this);
     }
 
     @Override
-    protected void setToolbarStatus() {
+    protected void setToolbarOptions() {
         this.mToolbar.setTitle(R.string.toolbar_title_course);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
@@ -52,7 +51,7 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     }
 
     @Override
-    protected void setStatusBarDefault() {
+    protected void setStatusBarOptions() {
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
     }
 

@@ -14,7 +14,6 @@ public class AppConst {
     public static final String LOGGER_TAG = "RetrofitApi";
     public static final String LOGGER_FILTER = "^[AC\\-\\<\\{].*";
 
-    public static final int MIN_ENTRANCE_YEAR = 2000;
     /* KOREAN : 1 WORD == 3 BYTES */
     public static final int MAX_REALNAME_BYTES = 20;
     public static final int MAX_NICKNAME_BYTES = 20;
@@ -49,9 +48,9 @@ public class AppConst {
 
     public static int[] DEFAULT_PROGRESSBAR_COLOR_SCHEME(Context context) {
         return new int[] {
-            context.getResources().getColor(R.color.colorchip_green_light),
-            context.getResources().getColor(R.color.colorchip_blue_light),
-            context.getResources().getColor(R.color.colorchip_red_light)
+            context.getResources().getColor(R.color.colorchip_green),
+            context.getResources().getColor(R.color.colorchip_blue),
+            context.getResources().getColor(R.color.colorchip_red)
         };
     }
 

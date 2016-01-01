@@ -17,7 +17,7 @@ public class ErrorDefaultRetrofit {
             Fragment fragment = (Fragment) object;
             if (fragment instanceof Error.OnReportToGoogleAnalytics) {
                 ((Error.OnReportToGoogleAnalytics) fragment).onReportToGoogleAnalytics(
-                    Error.getDescription(throwable.getMessage(), throwable.getUrl()),
+                    Error.description(throwable.getMessage(), throwable.getUrl()),
                     object.getClass().getSimpleName(),
                     false
                 );
@@ -27,7 +27,7 @@ public class ErrorDefaultRetrofit {
                 Activity activity = fragment.getActivity();
                 if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
                     ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
-                        Error.getDescription(throwable.getMessage(), throwable.getUrl()),
+                        Error.description(throwable.getMessage(), throwable.getUrl()),
                         object.getClass().getSimpleName(),
                         false
                     );

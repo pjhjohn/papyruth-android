@@ -55,8 +55,8 @@ public class PapyruthApplication extends Application {
         Api.createInstance(ApiManager.createPapyruthApi(this, RestAdapter.LogLevel.FULL, new RetrofitLogger("RetrofitApi", "^[AC\\-\\<\\{].*")));
 
         /* Picasso Debugging flags */
-        Picasso.with(getApplicationContext()).setIndicatorsEnabled(false);
-        Picasso.with(getApplicationContext()).setLoggingEnabled(false);
+        Picasso.with(getApplicationContext()).setIndicatorsEnabled(BuildConfig.DEBUG);
+        Picasso.with(getApplicationContext()).setLoggingEnabled(BuildConfig.DEBUG);
     }
 
     /*

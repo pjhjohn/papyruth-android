@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -21,6 +22,7 @@ import com.papyruth.android.recyclerview.adapter.UniversityAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableFrameLayout;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -132,23 +135,32 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         for(int i = 0; i < mUniversityRecyclerView.getChildCount(); i ++) mUniversityRecyclerView.getChildAt(i).setSelected(false);
-        view.setSelected(true);
-
-        SignUpForm.getInstance().setUniversityId(mUniversities.get(position).id);
-        SignUpForm.getInstance().setImageUrl(mUniversities.get(position).image_url);
-
-        final int length = Calendar.getInstance().get(Calendar.YEAR) - AppConst.MIN_ENTRANCE_YEAR + 1;
-        String[] years = new String[length];
-        for(int i = 0; i < length; i ++) years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
-        new MaterialDialog.Builder(mActivity)
-            .title(R.string.dialog_title_entrance_year)
-            .negativeText(R.string.common_cancel)
-            .buttonsGravity(GravityEnum.START)
-            .items(years)
-            .itemsCallback((dialog, v, which, text) -> {
-                SignUpForm.getInstance().setEntranceYear(Integer.parseInt(text.toString()));
-                mNavigator.navigate(SignUpStep2Fragment.class, true);
-            })
-            .show();
+        Api.papyruth().get_global_infos().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+            response -> {
+                view.setSelected(true);
+                SignUpForm.getInstance().setUniversityId(mUniversities.get(position).id);
+                SignUpForm.getInstance().setImageUrl(mUniversities.get(position).image_url);
+                final int length = Calendar.getInstance().get(Calendar.YEAR) - response.global_infos.get(0).start_of_entrance_year + 1;
+                String[] years = new String[length];
+                for (int i = 0; i < length; i++)
+                    years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
+                new MaterialDialog.Builder(mActivity)
+                    .title(R.string.dialog_title_entrance_year)
+                    .negativeText(R.string.common_cancel)
+                    .buttonsGravity(GravityEnum.START)
+                    .items(years)
+                    .itemsCallback((dialog, v, which, text) -> {
+                        SignUpForm.getInstance().setEntranceYear(Integer.parseInt(text.toString()));
+                        mNavigator.navigate(SignUpStep2Fragment.class, true);
+                    })
+                    .show();
+            },
+            error -> {
+                boolean handled = false;
+                if(error instanceof RetrofitError) handled = ErrorNetwork.handle((RetrofitError) error, this).handled;
+                if(handled) Toast.makeText(mActivity, R.string.toast_bad_network_status, Toast.LENGTH_SHORT).show();
+                else Toast.makeText(mActivity, R.string.toast_start_of_entrance_year_not_loaded, Toast.LENGTH_SHORT).show();
+            }
+        );
     }
 }

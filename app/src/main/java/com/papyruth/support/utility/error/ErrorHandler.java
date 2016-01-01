@@ -9,6 +9,7 @@ public class ErrorHandler {
             switch (retrofitThrowable.getKind()) {
                 case HTTP:
                     switch (retrofitThrowable.getResponse().getStatus()) {
+                        case 401: return Error401.handle(retrofitThrowable, object);
                         case 403: return Error403.handle(retrofitThrowable, object);
                         default : return ErrorDefaultHTTP.handle(retrofitThrowable, object);
                     }
