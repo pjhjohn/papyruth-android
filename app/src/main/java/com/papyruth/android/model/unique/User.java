@@ -108,8 +108,8 @@ public class User {
 
     public boolean needMoreEvaluation(){ return this.mandatory_evaluation_count > 0; }
     public boolean needEmailConfirmed(){
-        return false; // TODO: when apply new confirmed api, this code MUST change following code.
-//        return !this.getConfirmed();
+//        return false; // TODO: when apply new confirmed api, this code MUST change following code.
+        return !this.getConfirmed();
     }
 
     public void update(UserData user) {

@@ -80,6 +80,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mIndexShadow = mHideShadow? -1 : 2 + (mHideInform?  0 : 1);
         mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mEvaluations.size() + mIndexContent;
+        mFullyLoaded = false;
 
         if(Course.getInstance().needToUpdateData()){
             Api.papyruth().get_course(User.getInstance().getAccessToken(), Course.getInstance().getId())

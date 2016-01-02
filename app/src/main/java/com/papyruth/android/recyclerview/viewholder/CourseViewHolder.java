@@ -3,7 +3,10 @@ package com.papyruth.android.recyclerview.viewholder;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -87,14 +90,32 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
             Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
             mLabelOverall.setText(R.string.label_point_overall);
-            PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), course.getEvaluationCount());
             mLabelClarity.setText(R.string.label_point_clarity);
-            PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, course.getPointClarity(), count);
             mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
-            PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, course.getPointGpaSatisfaction(), count);
             mLabelEasiness.setText(R.string.label_point_easiness);
-            PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
-
+            if(User.getInstance().needEmailConfirmed() || User.getInstance().needMoreEvaluation()) {
+                PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, 0, 0);
+                PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, 0, 0);
+                PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, 0, 0);
+                PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, 0, 0);
+                mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                mPointClarity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+                mPointEasiness.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+                mPointGpaSatisfaction.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+                mPointOverall.setText(mContext.getString(R.string.invalid_point_closed));
+                mPointClarity.setText(mContext.getString(R.string.invalid_point_closed));
+                mPointEasiness.setText(mContext.getString(R.string.invalid_point_closed));
+                mPointGpaSatisfaction.setText(mContext.getString(R.string.invalid_point_closed));
+            }else {
+                mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34);
+                mPointClarity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                mPointEasiness.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                mPointGpaSatisfaction.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.getPointOverall(), course.getEvaluationCount());
+                PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, course.getPointClarity(), count);
+                PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, course.getPointGpaSatisfaction(), count);
+                PointHelper.applyProgress(mContext, mLabelEasiness, mProgressBarEasiness, mPointEasiness, course.getPointEasiness(), count);
+            }
             if (count == null || count <= 0) {
                 mHashtags.setVisibility(View.GONE);
                 mStatistics.setVisibility(View.GONE);

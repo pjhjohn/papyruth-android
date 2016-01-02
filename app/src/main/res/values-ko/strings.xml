@@ -278,4 +278,5 @@
     <string name="invalid_evaluation_cause_normal_email">계정 인증을 해주세요</string>
     <string name="invalid_evaluation_cause_university_email">학교 메일 인증을 해주세요</string>
     <string name="invalid_evaluation_cause_mandantory">더 많은 강의평을 써주세요</string>
+    <string name="invalid_point_closed">비공개</string>
 </resources>

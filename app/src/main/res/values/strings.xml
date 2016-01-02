@@ -276,8 +276,9 @@
     <string name="toast_start_of_entrance_year_not_loaded">Start of Entrance Year has not been loaded. Try again.</string>
     <string name="toast_bad_network_status">Please check your network</string>
 
-    <string name="invalid_evaluation">You can see this evaluation\n%s</string>
+    <string name="invalid_evaluation">You cannot see this evaluation\n%s</string>
     <string name="invalid_evaluation_cause_normal_email">Confirm your email</string>
     <string name="invalid_evaluation_cause_university_email">Confirm your university email</string>
     <string name="invalid_evaluation_cause_mandantory">Write more evaluation</string>
+    <string name="invalid_point_closed">closed</string>
 </resources>

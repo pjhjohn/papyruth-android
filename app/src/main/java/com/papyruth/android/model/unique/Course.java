@@ -74,6 +74,14 @@ public class Course {
         return this.lectureId == null || this.professorId == null || this.pointOverall == null;
     }
 
+    public boolean isValidData(){
+        return (pointOverall > 0
+                && pointEasiness > 0
+                && pointClarity > 0
+                && pointGpaSatisfaction > 0
+                && evaluationCount > 0 );
+    }
+
     public Integer getId() {
         return id;
     }

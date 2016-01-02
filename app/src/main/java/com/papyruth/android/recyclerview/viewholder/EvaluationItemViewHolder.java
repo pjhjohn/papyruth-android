@@ -78,6 +78,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             mBody.setText(evaluation.body);
             PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
             mHashtags.setText(Hashtag.plainString(evaluation.hashtags));
+            mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         }else{
             String bodyAlert = String.format(
                 mContext.getResources().getString(R.string.invalid_evaluation)
@@ -88,7 +89,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             mBody.setTextColor(mContext.getResources().getColor(R.color.colorchip_red));
             mBody.setText(bodyAlert);
             mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-            mPointOverall.setText("비공개");
+            mPointOverall.setText(mContext.getString(R.string.invalid_point_closed));
             for(int i = 0; i < 3; i++) ((LayerDrawable) mRatingBarOverall.getProgressDrawable()).getDrawable(i).setColorFilter(mContext.getResources().getColor(R.color.white_60p), PorterDuff.Mode.SRC_ATOP);
             mRatingBarOverall.setRating(10);
         }
