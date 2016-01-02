@@ -270,7 +270,7 @@
     <string name="course_no_evaluations">현재 이 강의에 대해 작성된 강의평가가 없습니다.\n혹시 수업을 들으셨다면 강의평가를 작성해보세요!</string>
     <!--Evaluation Comment Count Notification-->
     <string name="evaluation_no_comments">현재 이 강의평가에 대한 댓글이 없습니다.\n댓글로 의견을 달아주세요!</string>
-    <string name="toast_not_owner">작성자가 아닙니다</string>
+    <string name="toast_error_403">어머나, 뭔가 문제가 있네요!</string>
     <string name="toast_start_of_entrance_year_not_loaded">최소 입학년도 값이 로드되지 않았습니다. 다시 시도해 주십시오</string>
     <string name="toast_bad_network_status">네트워크 상태를 확인해 주십시오</string>
 </resources>
