@@ -35,7 +35,6 @@ public class ApiManager {
     }
     private static RestAdapter getRestAdapter(Context context, RestAdapter.LogLevel loglevel, RestAdapter.Log logger) {
         final Context finalContext = context.getApplicationContext();
-        if (!BuildConfig.DEBUG) logger = null;
         /* Create Cache */
         Cache responseCache = null;
         try {
@@ -77,13 +76,15 @@ public class ApiManager {
         Executor executor = Executors.newCachedThreadPool();
 
         /* Build RestAdapter */
-        return new RestAdapter.Builder()
-            .setEndpoint(String.format("https://%s/api/%s/", AppConst.API_BASE_URL, AppConst.API_VERSION))
-//            .setExecutors(executor, executor)
-            .setClient(new OkClient(new OkHttpClient()))
-            .setLogLevel(loglevel)
-            .setLog(logger)
-            .build();
+        RestAdapter.Builder builder = new RestAdapter.Builder();
+        builder.setEndpoint(String.format("https://%s/api/%s/", AppConst.API_BASE_URL, AppConst.API_VERSION));
+        builder.setClient(new OkClient(new OkHttpClient()));
+//        builder.setExecutors(executor, executor);
+        if(BuildConfig.DEBUG) {
+            builder.setLogLevel(loglevel);
+            builder.setLog(logger);
+        }
+        return builder.build();
     }
 
     public static Papyruth createPapyruthApi(Context context) {
