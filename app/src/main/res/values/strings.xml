@@ -272,7 +272,7 @@
     <string name="course_no_evaluations">There is no Evaluations for this Course.\nWhy don\'t you write an evaluation for others?</string>
     <!--Evaluation Comment Count Notification-->
     <string name="evaluation_no_comments">There is no Comment for this Evaluation.\nWhy don\'t you comment one?</string>
-    <string name="toast_not_owner">Not owner</string>
+    <string name="toast_error_403">Oops! Something went wrong</string>
     <string name="toast_start_of_entrance_year_not_loaded">Start of Entrance Year has not been loaded. Try again.</string>
     <string name="toast_bad_network_status">Please check your network</string>
 

@@ -23,13 +23,13 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-12-01.
  */
 public class Error401 {
-    public static ErrorHandleResult handle(Throwable throwable, Object object) {
+    public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;
             if (fragment instanceof Error.OnReportToGoogleAnalytics) {
                 ((Error.OnReportToGoogleAnalytics) fragment).onReportToGoogleAnalytics(
-                    Error.description(throwable.getMessage()),
+                    Error.description(throwable.getMessage(), throwable.getUrl(), 401),
                     object.getClass().getSimpleName(),
                     false
                 );
@@ -37,13 +37,26 @@ public class Error401 {
             }
             if (fragment.getActivity() != null) {
                 Activity activity = fragment.getActivity();
-                Toast.makeText(activity, R.string.toast_not_owner, Toast.LENGTH_SHORT).show();
                 if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
                     ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
-                        Error.description(throwable.getMessage()),
+                        Error.description(throwable.getMessage(), throwable.getUrl(), 401),
                         object.getClass().getSimpleName(),
                         false
                     );
+                }
+                if(activity instanceof MainActivity) {
+                    /* Clear Data */
+                    AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
+                    Course.getInstance().clear();
+                    Evaluation.getInstance().clear();
+                    EvaluationForm.getInstance().clear();
+                    SignUpForm.getInstance().clear();
+                    User.getInstance().clear();
+
+                    /* Back to Launch Activity */
+                    Intent intent = new Intent(((Fragment) object).getActivity(), SplashActivity.class);
+                    ((Fragment) object).getActivity().startActivity(intent);
+                    ((Fragment) object).getActivity().finish();
                 } return new ErrorHandleResult(true);
             } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
         } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
