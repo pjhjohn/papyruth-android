@@ -28,6 +28,14 @@ public class EvaluationData {
     public Integer category;
     public List<String> hashtags = new ArrayList<>();
 
+    public boolean isValidData(){
+        return  !body.isEmpty()
+                && point_overall > 0
+                && point_easiness > 0
+                && point_clarity > 0
+                && point_gpa_satisfaction > 0;
+    }
+
     @Override
     public String toString() {
         return String.format("eval/user/couse id:%d/%d/%d\nprofessor:%s, lecture:%s\noverall/easiness/gpa-satisfaction/clarity point:%d/%d/%d/%d\nbody : %s",

@@ -66,6 +66,9 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
                 AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
                 return;
             }
+            if(!((EvaluationData) object).isValidData()){
+                return;
+            }
             if (mEvaluationOpened) return;
             if (mEvaluationIsOccupying) return;
             if (mAnimatorSet != null && mAnimatorSet.isRunning()) return;
