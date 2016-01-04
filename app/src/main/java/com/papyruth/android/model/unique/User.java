@@ -106,8 +106,8 @@ public class User {
         this.bsAvatarUrl.onNext(url);
     }
 
-    public boolean needMoreEvaluation(){ return this.mandatory_evaluation_count > 0; }
-    public boolean needEmailConfirmed(){
+    public boolean mandatoryEvaluationsRequired(){ return this.mandatory_evaluation_count > 0; }
+    public boolean emailConfirmationRequired(){
 //        return false; // TODO: when apply new confirmed api, this code MUST change following code.
         return !this.getConfirmed();
     }

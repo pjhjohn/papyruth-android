@@ -312,11 +312,11 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if(object instanceof Evaluation && view.getId() == R.id.evaluation_header) {
-            if (User.getInstance().needEmailConfirmed()) {
+            if (User.getInstance().emailConfirmationRequired()) {
                 AlertDialog.show(mContext, mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
                 return;
             }
-            if (User.getInstance().needMoreEvaluation()) {
+            if (User.getInstance().mandatoryEvaluationsRequired()) {
                 AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
                 return;
             }

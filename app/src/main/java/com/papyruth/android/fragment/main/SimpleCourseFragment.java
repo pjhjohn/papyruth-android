@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
@@ -109,11 +108,11 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if(object instanceof CourseData) {
-            if (User.getInstance().needEmailConfirmed()) {
+            if (User.getInstance().emailConfirmationRequired()) {
                 AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
                 return;
             }
-            if (User.getInstance().needMoreEvaluation()) {
+            if (User.getInstance().mandatoryEvaluationsRequired()) {
                 AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
                 return;
             }

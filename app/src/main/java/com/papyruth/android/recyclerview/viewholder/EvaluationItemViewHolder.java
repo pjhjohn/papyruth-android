@@ -82,8 +82,8 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         }else{
             String bodyAlert = String.format(
                 mContext.getResources().getString(R.string.invalid_evaluation)
-                    , User.getInstance().needEmailConfirmed() ? mContext.getString(R.string.invalid_evaluation_cause_normal_email)
-                        : User.getInstance().needMoreEvaluation() ? mContext.getString(R.string.invalid_evaluation_cause_mandantory)
+                    , User.getInstance().emailConfirmationRequired() ? mContext.getString(R.string.invalid_evaluation_cause_normal_email)
+                        : User.getInstance().mandatoryEvaluationsRequired() ? mContext.getString(R.string.invalid_evaluation_cause_mandantory)
                         : mContext.getString(R.string.invalid_evaluation_cause_university_email)
             );
             mBody.setTextColor(mContext.getResources().getColor(R.color.colorchip_red));

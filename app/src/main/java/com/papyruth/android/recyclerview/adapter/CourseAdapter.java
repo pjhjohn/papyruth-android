@@ -197,11 +197,11 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        if(User.getInstance().needEmailConfirmed()){
+        if(User.getInstance().emailConfirmationRequired()) {
             mSwipeRefresh.setRefreshing(false);
             AlertDialog.show(mContext, mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
             return;
-        }else if(User.getInstance().needMoreEvaluation()) {
+        } else if(User.getInstance().mandatoryEvaluationsRequired()) {
             mSwipeRefresh.setRefreshing(false);
             AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
             return;
@@ -252,10 +252,10 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void loadMore() {
 
-        if(User.getInstance().needEmailConfirmed()){
+        if(User.getInstance().emailConfirmationRequired()){
             AlertDialog.show(mContext, mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
             return;
-        }else if(User.getInstance().needMoreEvaluation()) {
+        }else if(User.getInstance().mandatoryEvaluationsRequired()) {
             AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
             return;
         }

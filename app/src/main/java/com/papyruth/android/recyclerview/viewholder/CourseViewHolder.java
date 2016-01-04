@@ -3,8 +3,6 @@ package com.papyruth.android.recyclerview.viewholder;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
@@ -93,7 +91,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             mLabelClarity.setText(R.string.label_point_clarity);
             mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
             mLabelEasiness.setText(R.string.label_point_easiness);
-            if(User.getInstance().needEmailConfirmed() || User.getInstance().needMoreEvaluation()) {
+            if(User.getInstance().emailConfirmationRequired() || User.getInstance().mandatoryEvaluationsRequired()) {
                 PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, 0, 0);
                 PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, 0, 0);
                 PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mProgressBarGpaSatisfaction, mPointGpaSatisfaction, 0, 0);
