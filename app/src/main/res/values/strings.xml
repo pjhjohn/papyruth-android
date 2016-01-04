@@ -249,18 +249,12 @@
     <string name="emptystate_title_my_comment">My Comments</string>
     <string name="emptystate_title_my_evaluation">My Evaluations</string>
     <string name="emptystate_title_search_result">No Result</string>
-    <string name="emptystate_title_latest_evaluation">No Evaluations</string>
-    <string name="emptystate_title_comment">No Comments</string>
-    <string name="emptystate_title_evaluation">No Evaluations</string>
 
     <string name="emptystate_body_network">Network status is low. Please check your data or wifi network status.</string>
     <string name="emptystate_body_favorite">Courses you marked as "Favorite" will be displayed here.</string>
     <string name="emptystate_body_my_comment">Comments you write will be displayed here.</string>
     <string name="emptystate_body_my_evaluation">Evaluations you write will be displayed here.</string>
     <string name="emptystate_body_search_result">Could not find any results that matches your words. Please try different words.</string>
-    <string name="emptystate_body_latest_evaluation">Currently there are no evaluations here in your university. Why don\'t you be the first??</string>
-    <string name="emptystate_body_comment">Currently there are no comments of this evaluation here. Why don\'t you be the first??</string>
-    <string name="emptystate_body_evaluation">Currently there are no evaluations of this course here. Why don\'t you be the first??</string>
 
     <string name="emptystate_title_access_denied">You can not see now</string>
     <string name="emptystate_body_denial_of_email_unauthorized">Please check confirm mail</string>

@@ -23,12 +23,14 @@ import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -136,6 +138,7 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void reconfigure() {
         if(mEvaluations.isEmpty()) {
+            mEmptyState.hide();
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = -1;
@@ -143,12 +146,10 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
-            if(mEmptyState.getVisibility() != View.VISIBLE)
-                AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_latest_evaluation).setBody(R.string.emptystate_body_latest_evaluation).show();
         } else {
+            mEmptyState.hide();
             mSinceId = mEvaluations.get(mEvaluations.size()-1).id;
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;
@@ -157,8 +158,6 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mEvaluations.size() + mIndexContent;
             notifyDataSetChanged();
-            if(mEmptyState.getVisibility() == View.VISIBLE)
-                AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
@@ -184,7 +183,11 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
                     reconfigure();
                 }, error -> {
                     mSwipeRefresh.setRefreshing(false);
-                    ErrorHandler.handle(error, this);
+                    if(error instanceof RetrofitError) {
+                        if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                            mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                        }
+                    } else ErrorHandler.handle(error, this);
                 }
             );
     }
@@ -219,7 +222,11 @@ public class EvaluationItemsDetailAdapter extends RecyclerView.Adapter<RecyclerV
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                ErrorHandler.handle(error, this);
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                    }
+                } else ErrorHandler.handle(error, this);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

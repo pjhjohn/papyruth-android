@@ -246,19 +246,13 @@
     <string name="emptystate_title_favorite">관심강좌</string>
     <string name="emptystate_title_my_comment">나의 댓글</string>
     <string name="emptystate_title_my_evaluation">나의 강의평가</string>
-    <string name="emptystate_title_search_result">검색 결과</string>
-    <string name="emptystate_title_latest_evaluation">최신 강의평가</string>
-    <string name="emptystate_title_comment">댓글</string>
-    <string name="emptystate_title_evaluation">강의평가</string>
+    <string name="emptystate_title_search_result">검색 결과 없음</string>
 
     <string name="emptystate_body_network">네트워크가 불안정합니다. 데이터 혹은 와이파이 네트워크 상태를 확인해주세요</string>
     <string name="emptystate_body_favorite">관심강좌가 저장되는 곳입니다. 강좌 페이지에서 아이콘을 클릭하여 관심강좌로 등록할 수 있습니다.</string>
     <string name="emptystate_body_my_comment">작성한 나의 댓글들이 저장되는 공간입니다.</string>
     <string name="emptystate_body_my_evaluation">작성한 나의 강의평가들이 저장되는 공간입니다.</string>
     <string name="emptystate_body_search_result">해당 검색어로는 나오는 검색 결과가 없네요. 다른 검색어를 사용해보시는 건 어떨까요?</string>
-    <string name="emptystate_body_latest_evaluation">현재 우리학교의 강의평가가 없네요! 첫 강의평가자가 되어보시는게 어때요??</string>
-    <string name="emptystate_body_comment">이 강의평가에는 아직 댓글이 없습니다. 첫 댓글의 주인공이 되어보세요!</string>
-    <string name="emptystate_body_evaluation">이 강좌에는 아직 강의평가가 등록되어 있지 않네요. 첫 강의평가자가 되어보시는게 어때요??</string>
 
     <string name="emptystate_title_access_denied">접근 거부</string>
     <string name="emptystate_body_denial_of_email_unauthorized">이메일 인증이 필요합니다.</string>

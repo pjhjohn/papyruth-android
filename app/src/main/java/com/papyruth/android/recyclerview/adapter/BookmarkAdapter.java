@@ -177,8 +177,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
             mEmptyState.hide();
         }
-        if(mFullyLoaded != null && mFullyLoaded)
-            AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
+        if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
     }
 

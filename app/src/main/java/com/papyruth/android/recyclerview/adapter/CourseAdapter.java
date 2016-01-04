@@ -81,7 +81,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mIndexFooter = mEvaluations.size() + mIndexContent;
         mFullyLoaded = false;
 
-        if(Course.getInstance().needToUpdateData()){
+        if(Course.getInstance().needToUpdateData()) {
             Api.papyruth().get_course(User.getInstance().getAccessToken(), Course.getInstance().getId())
                 .map(response -> response.course)
                 .subscribeOn(Schedulers.io())
@@ -100,7 +100,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewholder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-            Timber.d("position : %s", position);
             if(!mHideInform && position == mIndexInform) {
                 String action = null;
                 switch(view.getId()) {
@@ -161,9 +160,9 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return ViewHolderFactory.ViewType.EVALUATION_ITEM;
     }
 
-
     private void reconfigure() {
         if(mEvaluations.isEmpty()) {
+            mEmptyState.hide();
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = 1 + (mHideInform?  0 : 1);
@@ -174,7 +173,6 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            if(mIndexSingle < 0) mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_evaluation).setBody(R.string.emptystate_body_evaluation).show();
         } else {
             mEmptyState.hide();
             mSinceId = mEvaluations.get(mEvaluations.size()-1).id;
@@ -207,55 +205,42 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return;
         }
         Observable.combineLatest(
-                Api.papyruth().get_evaluations(User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        null,
-                        null,
-                        null,
-                        Course.getInstance().getId()),
-                Api.papyruth().get_course(User.getInstance().getAccessToken(), Course.getInstance().getId()),
-                (a, b) -> {
-                    if(a.evaluations != null){
-                        mEvaluations.clear();
-                        mEvaluations.addAll(a.evaluations);
+            Api.papyruth().get_course(User.getInstance().getAccessToken(), Course.getInstance().getId()),
+            Api.papyruth().get_evaluations(User.getInstance().getAccessToken(), User.getInstance().getUniversityId(), null, null, null, Course.getInstance().getId()),
+            (courseResponse, evaluationsResponse) -> {
+                if(evaluationsResponse.evaluations != null){
+                    mEvaluations.clear();
+                    mEvaluations.addAll(evaluationsResponse.evaluations);
+                }
+                if (courseResponse.course != null) Course.getInstance().update(courseResponse.course);
+                return evaluationsResponse.evaluations != null && courseResponse.course != null;
+            })
+            .filter(success -> success)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(success -> {
+                mSwipeRefresh.setRefreshing(false);
+                mLoading = false;
+                mFullyLoaded = false;
+                reconfigure();
+            }, error -> {
+                mSwipeRefresh.setRefreshing(false);
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     }
-                    if (b.course != null){
-                        Course.getInstance().update(b.course);
-                    }
-                    return a.evaluations != null && b.course != null;
-                })
-                .filter(successs -> successs)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(success -> {
-                    mSwipeRefresh.setRefreshing(false);
-                    mLoading = false;
-                    mFullyLoaded = false;
-                    reconfigure();
-                }, error -> {
-                    mSwipeRefresh.setRefreshing(false);
-                    if(error instanceof RetrofitError){
-                        if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
-                            mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                        }else{
-                            mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_evaluation).setBody(R.string.emptystate_body_evaluation).show();
-                            ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
-                        }
-                    }else{
-                        ErrorHandler.handle(error, this);
-                    }
-                });
+                } else ErrorHandler.handle(error, this);
+            });
     }
 
     private Boolean mLoading;
     private Boolean mFullyLoaded;
     @Override
     public void loadMore() {
-
-        if(User.getInstance().emailConfirmationRequired()){
+        if(User.getInstance().emailConfirmationRequired()) {
             AlertDialog.show(mContext, mNavigator, AlertDialog.Type.USER_CONFIRMATION_REQUIRED);
             return;
-        }else if(User.getInstance().mandatoryEvaluationsRequired()) {
+        } else if(User.getInstance().mandatoryEvaluationsRequired()) {
             AlertDialog.show(mContext, mNavigator, AlertDialog.Type.MANDATORY_EVALUATION_REQUIRED);
             return;
         }
@@ -285,16 +270,11 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                if(error instanceof RetrofitError){
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                    }else{
-                        mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_evaluation).setBody(R.string.emptystate_body_evaluation).show();
-                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
-                }else{
-                    ErrorHandler.handle(error, this);
-                }
+                } else ErrorHandler.handle(error, this);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

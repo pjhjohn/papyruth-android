@@ -155,6 +155,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void reconfigure() {
         if(mComments.isEmpty()) {
+            mEmptyState.hide();
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = 1 + (mHideInform?  0 : 1);
@@ -163,11 +164,10 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mIndexFooter = mComments.size() + mIndexContent;
             notifyDataSetChanged();
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
-            AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            if(mIndexSingle < 0) mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_comment).setBody(R.string.emptystate_body_comment).show();
         } else {
+            mEmptyState.hide();
             mSinceId = mComments.get(mComments.size()-1).id;
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;
@@ -177,7 +177,6 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mIndexFooter = mComments.size() + mIndexContent;
             notifyDataSetChanged();
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
-            AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
@@ -189,40 +188,32 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-
         Observable.combineLatest(
-                Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), Evaluation.getInstance().getId() ),
-                Api.papyruth().get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null),
-                (a, b)->{
-                    if(a.evaluation != null){
-                        Evaluation.getInstance().update(a.evaluation);
+            Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), Evaluation.getInstance().getId()),
+            Api.papyruth().get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null),
+            (evaluationResponse, commentsResponse) -> {
+                if(evaluationResponse.evaluation != null) Evaluation.getInstance().update(evaluationResponse.evaluation);
+                if(commentsResponse.comments != null){
+                    this.mComments.clear();
+                    this.mComments.addAll(commentsResponse.comments);
+                }
+                return evaluationResponse.evaluation != null && commentsResponse.comments != null;
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(success -> {
+                mSwipeRefresh.setRefreshing(false);
+                mLoading = false;
+                mFullyLoaded = false;
+                reconfigure();
+            }, error -> {
+                mSwipeRefresh.setRefreshing(false);
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     }
-                    if(b.comments != null){
-                        this.mComments.clear();
-                        this.mComments.addAll(b.comments);
-                    }
-                    return a.evaluation != null && b.comments != null;
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(success -> {
-                    mSwipeRefresh.setRefreshing(false);
-                    mLoading = false;
-                    mFullyLoaded = false;
-                    reconfigure();
-                }, error -> {
-                    mSwipeRefresh.setRefreshing(false);
-                    if (error instanceof RetrofitError) {
-                        if (ErrorNetwork.handle(((RetrofitError) error), this).handled) {
-                            mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                        } else {
-                            mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_comment).setBody(R.string.emptystate_body_comment).show();
-                            ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
-                        }
-                    } else {
-                        ErrorHandler.handle(error, this);
-                    }
-                });
+                } else ErrorHandler.handle(error, this);
+            });
     }
 
     private Boolean mLoading;
@@ -254,7 +245,11 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                ErrorHandler.handle(error, this);
+                if (error instanceof RetrofitError) {
+                    if (ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                    }
+                } else ErrorHandler.handle(error, this);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

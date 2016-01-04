@@ -22,13 +22,16 @@ import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.EmptyStateView;
+import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -138,8 +141,8 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return ViewHolderFactory.ViewType.MY_COMMENT_ITEM;
     }
 
-    private void reconfigure(){
-        if(mMyComments.isEmpty()){
+    private void reconfigure() {
+        if(mMyComments.isEmpty()) {
             mIndexHeader = 0;
             mHideShadow = mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
             mIndexInform = mHideInform? -1 : 1;
@@ -148,13 +151,10 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mMyComments.size() + mIndexContent;
             notifyDataSetChanged();
-            if(mEmptyState.getVisibility() != View.VISIBLE){
-                AnimatorHelper.FADE_IN(mEmptyState).start();
-            }
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_my_comment).setBody(R.string.emptystate_body_my_comment).show();
-        }else{
+        } else {
             mPage ++;
             mIndexHeader = 0;
             mHideShadow = mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
@@ -164,11 +164,9 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mMyComments.size() + mIndexContent;
             notifyDataSetChanged();
-            if(mEmptyState.getVisibility() == View.VISIBLE) {
-                AnimatorHelper.FADE_OUT(mEmptyState).start();
-            }
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
+            mEmptyState.hide();
         }
         if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
@@ -190,8 +188,14 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 reconfigure();
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
-                ErrorHandler.handle(error, this);
-                error.printStackTrace();
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                    } else {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_my_comment).setBody(R.string.emptystate_body_my_comment).show();
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                    }
+                } else ErrorHandler.handle(error, this);
             });
     }
 
@@ -221,7 +225,14 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                ErrorHandler.handle(error, this);
+                if(error instanceof RetrofitError) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                    } else {
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_my_comment).setBody(R.string.emptystate_body_my_comment).show();
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                    }
+                } else ErrorHandler.handle(error, this);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });
