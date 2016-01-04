@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -25,12 +24,12 @@ import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,9 +166,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            if(mIndexSingle < 0) mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_comment)
-                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_comment)))
-                .show();
+            if(mIndexSingle < 0) mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_comment).setBody(R.string.emptystate_body_comment).show();
         } else {
             mSinceId = mComments.get(mComments.size()-1).id;
             mIndexHeader = 0;
@@ -217,9 +214,9 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     mSwipeRefresh.setRefreshing(false);
                     if (error instanceof RetrofitError) {
                         if (ErrorNetwork.handle(((RetrofitError) error), this).handled) {
-                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                            mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                         } else {
-                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                            mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_comment).setBody(R.string.emptystate_body_comment).show();
                             ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                         }
                     } else {

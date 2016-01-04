@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -22,10 +21,10 @@ import com.papyruth.android.recyclerview.viewholder.MyCommentItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,9 +153,7 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_my_comment)
-                    .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_title_empty_something_my_comment)))
-                    .show();
+            mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_my_comment).setBody(R.string.emptystate_body_my_comment).show();
         }else{
             mPage ++;
             mIndexHeader = 0;

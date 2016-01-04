@@ -32,7 +32,9 @@ public class ErrorNetwork {
                         false
                     );
                 } return new ErrorHandleResult(true);
-            } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
-        } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
+            }// else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
+        }// else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
+        if (throwable.getKind() == RetrofitError.Kind.NETWORK) return new ErrorHandleResult(true);
+        return new ErrorHandleResult(false);
     }
 }

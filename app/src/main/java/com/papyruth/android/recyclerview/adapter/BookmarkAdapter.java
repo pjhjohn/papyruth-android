@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -162,7 +161,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             notifyDataSetChanged();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setIconDrawable(R.drawable.ic_done_24dp).setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getString(R.string.empty_state_title_empty_something_favorite))).setBody(R.string.empty_state_content_empty_favorite).show();
+            mEmptyState.setIconDrawable(R.drawable.emptystate_favorite).setTitle(R.string.emptystate_title_favorite).setBody(R.string.emptystate_body_favorite).show();
         } else {
             mPage++;
             mIndexHeader = 0;
@@ -201,9 +200,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mSwipeRefresh.setRefreshing(false);
                 if(error instanceof RetrofitError) {
                     if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
-                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
-                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_favorite).setTitle(R.string.emptystate_title_favorite).setBody(R.string.emptystate_body_favorite).show();
                         ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
                 } else {
@@ -244,9 +243,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }, error -> {
                 if(error instanceof RetrofitError) {
                     if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
-                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
-                        mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_favorite).setTitle(R.string.emptystate_title_favorite).setBody(R.string.emptystate_body_favorite).show();
                         ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
                 } else ErrorHandler.handle(error, this);

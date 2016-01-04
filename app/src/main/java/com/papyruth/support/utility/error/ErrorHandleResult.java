@@ -16,4 +16,9 @@ public class ErrorHandleResult {
         this.title= null;
         this.body = null;
     }
+
+    @Override
+    public String toString() {
+        return String.format("handled:%b, code:%d, title:%s, body:%s", handled, code, title, body);
+    }
 }

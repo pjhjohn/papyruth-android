@@ -20,11 +20,11 @@ import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,9 +131,7 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
                 AnimatorHelper.FADE_IN(mEmptyState).start();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setBody(R.string.empty_state_content_empty_search_result)
-                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_search_result)))
-                .show();
+            mEmptyState.setIconDrawable(R.drawable.emptystate_search).setTitle(R.string.emptystate_title_search_result).setBody(R.string.emptystate_body_search_result).show();
         }else{
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;

@@ -12,7 +12,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
-import com.papyruth.android.fragment.main.CourseFragment;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
@@ -26,13 +25,13 @@ import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,11 +174,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
-            if(mIndexSingle < 0) mEmptyState
-                .setIconDrawable(R.drawable.ic_password_48dp)
-                .setBody(R.string.empty_state_content_empty_evaluation)
-                .setTitle(String.format(mContext.getResources().getString(R.string.empty_state_title_empty_something), mContext.getResources().getString(R.string.empty_state_content_empty_evaluation)))
-                .show();
+            if(mIndexSingle < 0) mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_evaluation).setBody(R.string.emptystate_body_evaluation).show();
         } else {
             mEmptyState.hide();
             mSinceId = mEvaluations.get(mEvaluations.size()-1).id;
@@ -241,9 +236,9 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     mSwipeRefresh.setRefreshing(false);
                     if(error instanceof RetrofitError){
                         if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
-                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                            mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                         }else{
-                            this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                            mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_evaluation).setBody(R.string.emptystate_body_evaluation).show();
                             ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                         }
                     }else{
@@ -292,9 +287,9 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }, error -> {
                 if(error instanceof RetrofitError){
                     if(ErrorNetwork.handle(((RetrofitError) error), this).handled){
-                        this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     }else{
-                        this.mEmptyState.setIconDrawable(R.drawable.ic_password_48dp).setTitle(R.string.empty_state_title_network).setBody(R.string.empty_state_content_network).show();
+                        mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_evaluation).setBody(R.string.emptystate_body_evaluation).show();
                         ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                     }
                 }else{

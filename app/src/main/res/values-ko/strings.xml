@@ -242,29 +242,27 @@
     <string name="permission_title">permission_title</string>
 
     <!-- Empty state Message -->
-    <string name="empty_state_title_network">네트워크가 불안정합니다</string>
-    <string name="empty_state_content_network">네트워크 상태를 확인해주세요</string>
+    <string name="emptystate_title_network">네트워크 불안정</string>
+    <string name="emptystate_title_favorite">관심강좌</string>
+    <string name="emptystate_title_my_comment">나의 댓글</string>
+    <string name="emptystate_title_my_evaluation">나의 강의평가</string>
+    <string name="emptystate_title_search_result">검색 결과</string>
+    <string name="emptystate_title_latest_evaluation">최신 강의평가</string>
+    <string name="emptystate_title_comment">댓글</string>
+    <string name="emptystate_title_evaluation">강의평가</string>
 
-    <string name="empty_state_title_empty_something">%1$s 없습니다</string>
-    <string name="empty_state_title_empty_something_favorite">관심강좌가</string>
-    <string name="empty_state_title_empty_something_my_comment">내가 쓴 댓글이</string>
-    <string name="empty_state_title_empty_something_my_evaluation">내가 쓴 강의평가가</string>
-    <string name="empty_state_title_empty_something_search_result">검색 결과가</string>
-    <string name="empty_state_title_empty_something_recent">최신 강의평가가</string>
-    <string name="empty_state_title_empty_something_comment">댓글이</string>
-    <string name="empty_state_title_empty_something_evaluation">강의평가가</string>
+    <string name="emptystate_body_network">네트워크가 불안정합니다. 데이터 혹은 와이파이 네트워크 상태를 확인해주세요</string>
+    <string name="emptystate_body_favorite">관심강좌가 저장되는 곳입니다. 강좌 페이지에서 아이콘을 클릭하여 관심강좌로 등록할 수 있습니다.</string>
+    <string name="emptystate_body_my_comment">작성한 나의 댓글들이 저장되는 공간입니다.</string>
+    <string name="emptystate_body_my_evaluation">작성한 나의 강의평가들이 저장되는 공간입니다.</string>
+    <string name="emptystate_body_search_result">해당 검색어로는 나오는 검색 결과가 없네요. 다른 검색어를 사용해보시는 건 어떨까요?</string>
+    <string name="emptystate_body_latest_evaluation">현재 우리학교의 강의평가가 없네요! 첫 강의평가자가 되어보시는게 어때요??</string>
+    <string name="emptystate_body_comment">이 강의평가에는 아직 댓글이 없습니다. 첫 댓글의 주인공이 되어보세요!</string>
+    <string name="emptystate_body_evaluation">이 강좌에는 아직 강의평가가 등록되어 있지 않네요. 첫 강의평가자가 되어보시는게 어때요??</string>
 
-    <string name="empty_state_content_empty_favorite">관심강좌를 추가해주세요</string>
-    <string name="empty_state_content_empty_my_comment">댓글을 써주세요</string>
-    <string name="empty_state_content_empty_my_evaluation">강의평가를 써주세요</string>
-    <string name="empty_state_content_empty_search_result">다른 검색어로 검색해주세요</string>
-    <string name="empty_state_content_empty_recent">헛!! 강의평가가 하나도 없습니다\n우리 학교의 첫 강의평가를 써주세요</string>
-    <string name="empty_state_content_empty_comment">이 강의평가에는 아직 댓글이 없습니다\n첫 댓글을 써주세요!</string>
-    <string name="empty_state_content_empty_evaluation">당신이 처음 강의평가를 쓸 수 있는 기회입니다!\n이 강의에 대한 강의평을 써주세요</string>
-
-    <string name="empty_state_title_access_denied">지금은 볼 수 없습니다</string>
-    <string name="empty_state_content_access_denied_email">이메일 인증을 해주세요</string>
-    <string name="empty_state_content_access_denied_university_email">학교 이메일 인증을 해주세요</string>
+    <string name="emptystate_title_access_denied">접근 거부</string>
+    <string name="emptystate_body_denial_of_email_unauthorized">이메일 인증이 필요합니다.</string>
+    <string name="emptystate_body_denial_of_university_email_unauthorized">학교 이메일 인증이 필요합니다.</string>
 
     <!--Course Evaluation Count Notification-->
     <string name="course_no_evaluations">현재 이 강의에 대해 작성된 강의평가가 없습니다.\n혹시 수업을 들으셨다면 강의평가를 작성해보세요!</string>
