@@ -95,6 +95,7 @@ public class SplashFragment extends TrackerFragment {
             e.printStackTrace();
         }
 
+        final boolean[] userHasAccessToken = {User.getInstance().getAccessToken() != null};
         Api.papyruth()
             .get_users_me(User.getInstance().getAccessToken())
             .subscribeOn(Schedulers.io())
@@ -106,6 +107,7 @@ public class SplashFragment extends TrackerFragment {
                         Toast.makeText(mActivity, "유저 정보를 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                     } else {
                         User.getInstance().update(response.user);
+                        userHasAccessToken[0] = User.getInstance().getAccessToken() != null;
                         Api.papyruth()
                             .post_users_refresh_token(User.getInstance().getAccessToken())
                             .subscribeOn(Schedulers.io())
@@ -126,7 +128,7 @@ public class SplashFragment extends TrackerFragment {
                                             case 401:
                                             case 419:
                                                 handled = true;
-                                                Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                                if(userHasAccessToken[0]) Toast.makeText(mActivity, "로그인 권한을 갱신하던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                                                 break;
                                         }
                                     }
@@ -154,7 +156,7 @@ public class SplashFragment extends TrackerFragment {
                                     case 401:
                                     case 419:
                                         handled = true;
-                                        Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                        if(userHasAccessToken[0]) Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
                                 break;
