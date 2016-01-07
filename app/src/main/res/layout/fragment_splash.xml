@@ -1,13 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.papyruth.support.opensource.panningview.PanningView
-        xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/splash_background_panning"
+    <ImageView
+        android:id="@+id/splash_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/wallpaper_splash"
-        custom:panningDurationInMs="1200"/>
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/empty"/>
     <com.papyruth.support.utility.customview.Circle
         android:id="@+id/splash_background_circle"
         android:layout_width="240dp"
