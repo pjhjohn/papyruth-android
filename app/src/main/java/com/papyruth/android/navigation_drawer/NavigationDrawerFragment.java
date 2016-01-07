@@ -196,7 +196,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public void update() {
         final String avatarUrl = User.getInstance().getAvatarUrl();
         if (avatarUrl != null) Picasso.with(mActivity).load(avatarUrl).transform(new CircleTransformation()).into(mUserAvatar);
-        else Picasso.with(mActivity).load(R.drawable.dummy_avatar).transform(new CircleTransformation()).into(mUserAvatar);
     }
 
     /* Menu : TODO - What exactly this does? */
