@@ -54,6 +54,7 @@ public class TermsOfServiceFragment extends TrackerFragment implements RecyclerV
         FloatingActionControl.getInstance().clear();
 
         mAdapter = new TermsOfServiceAdapter(mActivity, this);
+        mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mRecyclerView.setAdapter(mAdapter);
         return view;

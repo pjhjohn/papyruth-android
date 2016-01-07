@@ -36,7 +36,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter{
+public class MyEvaluationItemsAdapter extends TrackerAdapter implements IAdapter{
     private static final String HIDE_INFORM = "MyEvaluationAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
     private Context mContext;
     private List<EvaluationData> mMyEvaluation;
@@ -198,13 +198,13 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
                 if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_my_evaluation).setBody(R.string.emptystate_body_my_evaluation).show();
-                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this.getFragment());
                     }
-                } else ErrorHandler.handle(error, this);
+                } else ErrorHandler.handle(error, this.getFragment());
             });
     }
     private Boolean mLoading;
@@ -234,13 +234,13 @@ public class MyEvaluationItemsAdapter extends RecyclerView.Adapter<RecyclerView.
                 reconfigure();
             }, error -> {
                 if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_evaluation).setTitle(R.string.emptystate_title_my_evaluation).setBody(R.string.emptystate_body_my_evaluation).show();
-                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this.getFragment());
                     }
-                } else ErrorHandler.handle(error, this);
+                } else ErrorHandler.handle(error, this.getFragment());
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

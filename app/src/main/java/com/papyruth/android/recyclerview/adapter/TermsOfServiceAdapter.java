@@ -22,7 +22,7 @@ import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class TermsOfServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TermsOfServiceAdapter extends TrackerAdapter {
     private List<TermData> mTerms;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private int mIndexHeader; // INDEX 0
@@ -82,7 +82,7 @@ public class TermsOfServiceAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 notifyItemRangeInserted(mIndexContent, mTerms.size());
                 AnimatorHelper.FADE_IN(mFooterBorder).start();
             }, error -> {
-                ErrorHandler.handle(error, this);
+                ErrorHandler.handle(error, this.getFragment());
                 error.printStackTrace();
             });
     }

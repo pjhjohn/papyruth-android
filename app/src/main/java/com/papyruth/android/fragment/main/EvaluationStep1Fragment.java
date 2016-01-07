@@ -68,6 +68,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         mEmptyStateView.findViewById(R.id.empty_state_shadow).setVisibility(View.GONE);
         if(mAdapter == null) mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyStateView, this.mNavigator, this);
+        mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         return view;

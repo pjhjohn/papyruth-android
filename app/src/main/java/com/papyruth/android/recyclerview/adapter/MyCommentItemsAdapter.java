@@ -36,7 +36,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter{
+public class MyCommentItemsAdapter extends TrackerAdapter implements IAdapter{
     private static final String HIDE_INFORM = "MyCommentAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
     private Context mContext;
@@ -189,13 +189,13 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
                 if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_my_comment).setBody(R.string.emptystate_body_my_comment).show();
-                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this.getFragment());
                     }
-                } else ErrorHandler.handle(error, this);
+                } else ErrorHandler.handle(error, this.getFragment());
             });
     }
 
@@ -226,13 +226,13 @@ public class MyCommentItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 reconfigure();
             }, error -> {
                 if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_comment).setTitle(R.string.emptystate_title_my_comment).setBody(R.string.emptystate_body_my_comment).show();
-                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this.getFragment());
                     }
-                } else ErrorHandler.handle(error, this);
+                } else ErrorHandler.handle(error, this.getFragment());
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

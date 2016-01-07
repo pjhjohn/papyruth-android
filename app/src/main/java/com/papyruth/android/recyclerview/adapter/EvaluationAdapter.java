@@ -40,7 +40,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter {
+public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     private static final String HIDE_INFORM = "EvaluationAdapter.mHideInform";
     private final Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -86,7 +86,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Evaluation.getInstance().update(evaluationData);
                     mToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
                     notifyItemChanged(mIndexSingle);
-                }, error -> ErrorHandler.handle(error, this));
+                }, error -> ErrorHandler.handle(error, this.getFragment()));
         }
     }
 
@@ -209,10 +209,10 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
                 if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     }
-                } else ErrorHandler.handle(error, this);
+                } else ErrorHandler.handle(error, this.getFragment());
             });
     }
 
@@ -246,10 +246,10 @@ public class EvaluationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 reconfigure();
             }, error -> {
                 if (error instanceof RetrofitError) {
-                    if (ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if (ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     }
-                } else ErrorHandler.handle(error, this);
+                } else ErrorHandler.handle(error, this.getFragment());
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

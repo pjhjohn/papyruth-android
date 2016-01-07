@@ -68,6 +68,7 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
         initSwipeRefresh(mSwipeRefresh);
 
         mAdapter = new BookmarkAdapter(getActivity(), mSwipeRefresh, mEmptyStateView, this);
+        mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 

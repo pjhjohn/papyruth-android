@@ -91,6 +91,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         initSwipeRefresh(mSwipeRefresh);
 
         mAdapter = new EvaluationAdapter(mContext, mSwipeRefresh, mEmptyState, mToolbar, this);
+        mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(mAdapter);
 

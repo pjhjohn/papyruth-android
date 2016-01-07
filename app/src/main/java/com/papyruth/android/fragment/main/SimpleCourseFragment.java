@@ -68,6 +68,7 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         mSwipeRefresh.setEnabled(false);
         if(mAdapter == null) mAdapter = new SimpleCourseAdapter(getActivity(), mEmptyState, this.mNavigator, this);
+        mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 

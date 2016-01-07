@@ -24,6 +24,7 @@ import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationFragment;
 import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.recyclerview.adapter.IAdapter;
+import com.papyruth.android.recyclerview.adapter.TrackerAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -43,7 +44,7 @@ import rx.subscriptions.CompositeSubscription;
  * use this Fragment when need to open EvaluationView.
  *
  */
-public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Adapter<RecyclerView.ViewHolder>> extends ScrollableFragment implements OnBack, RecyclerViewItemObjectClickListener {
+public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter> extends ScrollableFragment implements OnBack, RecyclerViewItemObjectClickListener {
     protected Navigator mNavigator;
 
     @Override
@@ -94,6 +95,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends RecyclerView.Ad
         this.setToolbarOptions();
         this.setStatusBarOptions();
         mRecyclerView.setAdapter(mAdapter = getAdapter());
+        mAdapter.setFragment(this);
 
         if(mAdapter instanceof IAdapter) {
             mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> ((IAdapter) mAdapter).refresh()));

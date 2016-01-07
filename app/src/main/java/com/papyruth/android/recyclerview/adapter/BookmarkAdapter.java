@@ -38,7 +38,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IAdapter, Error.OnReportToGoogleAnalytics {
+public class BookmarkAdapter extends TrackerAdapter implements IAdapter, Error.OnReportToGoogleAnalytics {
     private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
     private Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -198,14 +198,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
                 if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_favorite).setTitle(R.string.emptystate_title_favorite).setBody(R.string.emptystate_body_favorite).show();
-                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this.getFragment());
                     }
                 } else {
-                    ErrorHandler.handle(error, this);
+                    ErrorHandler.handle(error, this.getFragment());
                 }
                 error.printStackTrace();
             });
@@ -241,13 +241,13 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 reconfigure();
             }, error -> {
                 if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this).handled) {
+                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
                     } else {
                         mEmptyState.setIconDrawable(R.drawable.emptystate_favorite).setTitle(R.string.emptystate_title_favorite).setBody(R.string.emptystate_body_favorite).show();
-                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
+                        ErrorDefaultRetrofit.handle(((RetrofitError) error), this.getFragment());
                     }
-                } else ErrorHandler.handle(error, this);
+                } else ErrorHandler.handle(error, this.getFragment());
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

@@ -32,7 +32,7 @@ import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class EvaluationSearchAdapter extends TrackerAdapter{
 //    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
     private EmptyStateView mEmptyState;
@@ -176,7 +176,7 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
                         AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                     reconfigure();
                 }, error -> {
-                    ErrorHandler.handle(error, this);
+                    ErrorHandler.handle(error, this.getFragment());
                     if (mFooterMaterialProgressBar != null)
                         AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 });
@@ -211,6 +211,6 @@ public class EvaluationSearchAdapter extends RecyclerView.Adapter<RecyclerView.V
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                     AlertDialog.show(mContext, mNavigator, AlertDialog.Type.EVALUATION_ALREADY_REGISTERED);
                 }
-            }, error -> ErrorHandler.handle(error, this));
+            }, error -> ErrorHandler.handle(error, this.getFragment()));
     }
 }
