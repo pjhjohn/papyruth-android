@@ -24,6 +24,9 @@ import timber.log.Timber;
  */
 public class Error401 {
     public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
+        if(throwable.getResponse().getStatus() != 401){
+            return new ErrorHandleResult(false);
+        }
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;

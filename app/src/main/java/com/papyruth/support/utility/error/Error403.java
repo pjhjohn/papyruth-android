@@ -6,11 +6,16 @@ import android.widget.Toast;
 
 import com.papyruth.android.R;
 
+import retrofit.RetrofitError;
+
 /**
  * Created by pjhjohn on 2015-12-01.
  */
 public class Error403 {
     public static ErrorHandleResult handle(Throwable throwable, Object object) {
+        if(((RetrofitError) throwable).getResponse().getStatus() != 403){
+            return new ErrorHandleResult(false);
+        }
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;

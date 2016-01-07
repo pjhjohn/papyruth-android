@@ -11,6 +11,9 @@ import timber.log.Timber;
  */
 public class ErrorNetwork {
     public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
+        if(throwable.getKind() != RetrofitError.Kind.NETWORK){
+            return new ErrorHandleResult(false);
+        }
         Timber.d("Network Error : %s\n%s\n%s", throwable.getMessage(), throwable.getUrl(), throwable.getCause());
         boolean sentToTracker = false;
         if (object instanceof Fragment) {

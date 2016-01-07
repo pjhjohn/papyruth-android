@@ -10,6 +10,9 @@ import retrofit.RetrofitError;
  */
 public class ErrorDefaultHTTP {
     public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
+        if(throwable.getKind() != RetrofitError.Kind.HTTP){
+            return new ErrorHandleResult(false);
+        }
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;
