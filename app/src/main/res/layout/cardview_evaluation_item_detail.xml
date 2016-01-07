@@ -103,11 +103,11 @@
         <RatingBar
             android:id="@+id/evaluation_item_overall_ratingbar"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/baseline_x3"
+            android:layout_height="@dimen/baseline_x2"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:progressDrawable="@drawable/ratingbar_24dp"
+            android:progressDrawable="@drawable/ratingbar_16dp"
             android:isIndicator="true"
             android:numStars="5"
             android:max="10"/>
@@ -119,6 +119,7 @@
         android:layout_below="@+id/evaluation_item_category_prefessor_rating"
         android:layout_toRightOf="@+id/evaluation_item_evaluator"
         android:layout_toEndOf="@+id/evaluation_item_evaluator"
+        android:layout_marginTop="@dimen/baseline_x1"
         android:layout_marginRight="@dimen/baseline_x2"
         android:layout_marginEnd="@dimen/baseline_x2"
         android:maxLines="4"
