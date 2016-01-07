@@ -102,9 +102,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
                 }else
                     this.navigate(SimpleCourseFragment.class, true);
             }
-        }, () -> {
-            this.navigate(SimpleCourseFragment.class, true);
-        });
+        }, () -> this.navigate(SimpleCourseFragment.class, true));
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
     }
 

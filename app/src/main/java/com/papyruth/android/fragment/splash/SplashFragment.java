@@ -82,7 +82,6 @@ public class SplashFragment extends TrackerFragment {
     public void onStop() {
         super.onStop();
         if(mCompositeSubscription != null) mCompositeSubscription.unsubscribe();
-        mActivity.finish();
     }
 
     @Override
