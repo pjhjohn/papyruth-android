@@ -32,6 +32,12 @@ public class SplashActivity extends Activity implements Error.OnReportToGoogleAn
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        System.exit(0);
+    }
+
     public void startActivity(Class<? extends Activity> targetActivityClass){
         Intent intent = new Intent(SplashActivity.this, targetActivityClass);
         SplashActivity.this.startActivity(intent);

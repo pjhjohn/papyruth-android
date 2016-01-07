@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -31,6 +30,7 @@ import com.papyruth.android.navigation_drawer.NavigationDrawerFragment;
 import com.papyruth.android.navigation_drawer.NavigationDrawerUtils;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
 import com.papyruth.support.utility.error.Error;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
@@ -43,6 +43,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainActivity extends Activity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, Error.OnReportToGoogleAnalytics {
@@ -100,9 +102,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
                 }else
                     this.navigate(SimpleCourseFragment.class, true);
             }
-        }, () -> {
-            this.navigate(SimpleCourseFragment.class, true);
-        });
+        }, () -> this.navigate(SimpleCourseFragment.class, true));
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
     }
 
@@ -118,6 +118,9 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         if(SearchToolbar.getInstance().isOpened()) Observable.timer(100, TimeUnit.MILLISECONDS).subscribe(unused -> SearchToolbar.getInstance().showSoftKeyboard());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
+        Api.papyruth().get_users_me(User.getInstance().getAccessToken()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+            response -> User.getInstance().update(response.user), Throwable::printStackTrace
+        );
     }
 
     /* Double Back-Pressed Termination of MainActivity */
