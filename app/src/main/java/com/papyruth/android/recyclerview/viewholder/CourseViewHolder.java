@@ -78,12 +78,11 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     public void bind(Course course) {
         if(course.needToUpdateData()) {
             AnimatorHelper.FADE_IN(mProgressbar).start();
-        }else{
+        } else {
             final Integer count = course.getEvaluationCount();
             Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
             mBookmark.setOnClickListener(this);
             CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.getCategory());
-            mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
             mLecture.setText(course.getName());
             mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
             Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);

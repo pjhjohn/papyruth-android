@@ -26,6 +26,9 @@
     <string name="toolbar_settings">설정</string>
     <string name="toolbar_osl">오픈 소스 라이센스</string>
     <string name="toolbar_tos">약관</string>
+    <!-- Toolbar Menu -->
+    <string name="menu_search">검색</string>
+    <string name="menu_settings">설정</string>
 
     <!-- Sign-in & Sign-up -->
     <string name="signin_btn">로그인</string>
@@ -44,7 +47,35 @@
     <string name="signup_email_duplication">이메일이 중복되었습니다</string>
     <string name="signup_nickname_duplication">닉네임이 중복되었습니다</string>
 
-    <!--common-->
+    <!-- Permission -->
+    <string name="permission_title">permission_title</string>
+    <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
+    <string name="permission_get_accounts">permission_get_accounts</string>
+    <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
+    <string name="dialog_btn_settings">SETTINGS</string>
+    <string name="dialog_btn_close">CLOSE</string>
+
+    <!-- Category -->
+    <string name="lecture_type_major">전공</string>
+    <string name="lecture_type_liberal_arts">교양</string>
+    <string name="lecture_type_etc">기타</string>
+
+    <!-- Timestamp -->
+    <string name="just_now">방금</string>
+    <string name="time_ago">%s 전</string>
+    <string name="yesterday">어제</string>
+
+    <!-- Course -->
+    <string name="label_point_overall">총점</string>
+    <string name="label_point_gpa_satisfaction">학점만족도</string>
+    <string name="label_point_clarity">강의력</string>
+    <string name="label_point_easiness">널널함</string>
+
+
+
+
+
+    <!-- BELOW : Unclassified TODO : Classifiy'em-->
     <string name="common_next">다음</string>
     <string name="common_submit">제출</string>
     <string name="common_cancel">취소</string>
@@ -52,35 +83,11 @@
     <string name="common_pending">다른 요청이 처리중입니다</string>
     <string name="common_close">닫기</string>
     <string name="common_wait_to_loading">로딩이 진행 중인 동안 기다려주세요</string>
-
-    <!--menu-->
-    <string name="menu_search">메뉴검색</string>
-    <string name="menu_settings">설정</string>
-    <string name="menu_favorite">관심강의</string>
-    <string name="email_default">--이메일 왜 로딩안됨?--</string>
-    <string name="signup_category_account">계정</string>
-    <string name="signup_category_info">추가 정보</string>
-    <string name="gender">성별</string>
+    <string name="submit_evaluation_fail">강의평가 등록에 실패하였습니다</string>
     <string name="gender_male">남자</string>
     <string name="gender_female">여자</string>
-    <string name="entrance_prompt">입학 년도를 선택해 주세요</string>
     <string name="entrance_postfix">  학번</string>
     <string name="confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
-    <string name="submit_evaluation_success">강의평가 등록에 성공하였습니다</string>
-    <string name="submit_evaluation_fail">강의평가 등록에 실패하였습니다</string>
-    <string name="fab_evaluation">강의평가 등록하기</string>
-    <string name="fab_comment">덧글 달기</string>
-
-    <!--course-->
-    <string name="label_point_overall">총점</string>
-    <string name="label_point_gpa_satisfaction">학점만족도</string>
-    <string name="label_point_clarity">강의력</string>
-    <string name="label_point_easiness">널널함</string>
-
-    <!--Category-->
-    <string name="lecture_type_major">전공</string>
-    <string name="lecture_type_liberal_arts">교양</string>
-    <string name="lecture_type_etc">기타</string>
 
     <!--comment-->
     <string name="submit_comment_success">댓글을 등록했습니다</string>
@@ -94,7 +101,6 @@
     <string name="failed_passwd">비밀번호 변경에 실패하였습니다</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
-
     <string name="empty"/>
     <string name="confirm_positive">확인</string>
     <string name="confirm_optional">다시보지 않기</string>
@@ -113,29 +119,8 @@
     <string name="inform_email_confirm">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
     <string name="inform_email_university_confirm">학교 메일 계정(%1$s)으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
     <string name="goto_rewrite">강의평 수정하기</string>
-    <string name="no_data">No Data</string>
 
-    <!-- No data Inform -->
-    <string name="no_data_my_evaluation">내가 쓴 강의평가가 없습니다.</string>
-    <string name="no_data_my_comment">내가 쓴 댓글이 없습니다.</string>
-    <string name="no_data_evaluation">현재 강의평가가 없습니다.</string>
-    <string name="no_data_comment">현재 댓글이 없습니다.</string>
-    <string name="no_data_favorite">나의 관심강의가 없습니다.</string>
-    <string name="no_data_search">검색 결과가 없습니다.</string>
-    <string name="no_data_history">내가 검색한 히스토리가 없습니다.</string>
-    <string name="no_data_you_cant">현재 강의평가를 볼 수 없습니다.</string>
 
-    <!-- time -->
-    <string name="just_now">방금</string>
-    <string name="time_ago">%s 전</string>
-    <string name="yesterday">어제</string>
-    <string name="point_overall">총점</string>
-    <string name="category_major">전공</string>
-
-    <!-- my info -->
-    <string name="my_profile">내 프로필</string>
-    <string name="exit">나가기</string>
-    <string name="opensourse_license">오픈소스 라이센스</string>
 
     <string name="new_evaluation_submit_title">새 강의평가 등록</string>
     <string name="new_evaluation_submit_content">현재 기입된 정보로 새 강의평가를 작성하시겠습니까?</string>
@@ -172,8 +157,6 @@
     <string name="label_gender">성별</string>
     <string name="label_university_mail">학교 메일</string>
 
-    <string name="sample_univ_email_prefix">sample</string>
-    <string name="sample_univ_email_postfix">\@snu.ac.kr</string>
 
     <string name="label_university_email_need">인증이 필요합니다</string>
     <string name="label_university_email">학교 이메일 주소를 적어주세요</string>
@@ -216,14 +199,6 @@
     <string name="enter_your_email">가입할 때 입력한 이메일을 입력해주세요</string>
     <string name="menu_evaluation_edit">강의평가 수정</string>
     <string name="point_denominator">/10</string>
-
-    <!--Permission-->
-    <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
-    <string name="permission_get_accounts">permission_get_accounts</string>
-    <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
-    <string name="dialog_btn_settings">SETTINGS</string>
-    <string name="dialog_btn_close">CLOSE</string>
-    <string name="permission_title">permission_title</string>
 
     <!-- Empty state Message -->
     <string name="emptystate_title_network">네트워크 불안정</string>
