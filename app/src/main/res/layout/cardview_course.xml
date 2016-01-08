@@ -69,7 +69,7 @@
                 android:textColor="@color/white_30p"
                 android:maxLines="2"
                 android:ellipsize="end"/><!-- Lecture Title -->
-        </RelativeLayout><!--Header : Professor Image / Lecture / Bookmark / Category / Professor-->
+        </RelativeLayout><!--Header : Professor Image / Lecture / Favorite / Category / Professor-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -303,7 +303,7 @@
         </RelativeLayout><!--Footer-->
     </LinearLayout>
     <ImageView
-        android:id="@+id/course_bookmark"
+        android:id="@+id/course_favorite"
         android:layout_width="@dimen/baseline_x5.5"
         android:layout_height="@dimen/baseline_x5"
         android:layout_alignParentTop="true"
@@ -314,6 +314,6 @@
         android:paddingRight="@dimen/baseline_x1"
         android:paddingEnd="@dimen/baseline_x1"
         android:paddingBottom="@dimen/baseline_x1"
-        android:contentDescription="@string/empty"/><!-- Bookmark Icon -->
+        android:contentDescription="@string/empty"/><!-- Favorite Icon -->
     <include layout="@layout/material_progressbar_medium"/>
 </RelativeLayout>

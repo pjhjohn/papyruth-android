@@ -98,7 +98,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         List<NavigationDrawerItem> mNavigationDrawerItems = new ArrayList<>();
         mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_home),          R.drawable.ic_latest_evaluation_24dp));
         mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_compose_evaluation),R.drawable.ic_new_evaluation_24dp));
-        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_bookmark),      R.drawable.ic_bookmark_24dp));
+        mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_favorite),      R.drawable.ic_favorite_24dp));
         mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_evaluation), R.drawable.ic_my_evaluations_24dp));
         mNavigationDrawerItems.add(new NavigationDrawerItem(getString(R.string.nav_item_my_comment),    R.drawable.ic_my_comments_24dp));
 

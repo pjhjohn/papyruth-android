@@ -2,7 +2,7 @@ package com.papyruth.android.navigation_drawer;
 
 import android.app.Fragment;
 
-import com.papyruth.android.fragment.main.BookmarkFragment;
+import com.papyruth.android.fragment.main.FavoriteFragment;
 import com.papyruth.android.fragment.main.EvaluationStep1Fragment;
 import com.papyruth.android.fragment.main.HomeFragment;
 import com.papyruth.android.fragment.main.MyCommentFragment;
@@ -24,7 +24,7 @@ public class NavigationDrawerUtils {
         switch(position) {
             case ItemType.HOME          : return HomeFragment.class;
             case ItemType.EVALUATION    : return EvaluationStep1Fragment.class;
-            case ItemType.BOOKMARK      : return BookmarkFragment.class;
+            case ItemType.BOOKMARK      : return FavoriteFragment.class;
             case ItemType.MY_EVALUATION : return MyEvaluationFragment.class;
             case ItemType.MY_COMMENT    : return MyCommentFragment.class;
             default: return null;

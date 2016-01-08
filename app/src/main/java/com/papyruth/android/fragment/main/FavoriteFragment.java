@@ -17,7 +17,7 @@ import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.EvaluationForm;
-import com.papyruth.android.recyclerview.adapter.BookmarkAdapter;
+import com.papyruth.android.recyclerview.adapter.FavoriteAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -39,7 +39,7 @@ import rx.subscriptions.CompositeSubscription;
  * TODO : should be able to expand when clicking recyclerview item to show evaluation data in detail
  */
 
-public class BookmarkFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener{
+public class FavoriteFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener{
     private Navigator mNavigator;
 
     @Override
@@ -54,7 +54,7 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
 
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
-    private BookmarkAdapter mAdapter;
+    private FavoriteAdapter mAdapter;
 
     @Nullable
     @Override
@@ -67,7 +67,7 @@ public class BookmarkFragment extends ScrollableFragment implements RecyclerView
         mSwipeRefresh.setEnabled(true);
         initSwipeRefresh(mSwipeRefresh);
 
-        mAdapter = new BookmarkAdapter(getActivity(), mSwipeRefresh, mEmptyStateView, this);
+        mAdapter = new FavoriteAdapter(getActivity(), mSwipeRefresh, mEmptyStateView, this);
         mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);

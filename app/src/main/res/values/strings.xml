@@ -6,14 +6,14 @@
     <!-- Navigation Drawer -->
     <string name="nav_item_home">Latest Evaluation</string>
     <string name="nav_item_compose_evaluation">Compose Evaluation</string>
-    <string name="nav_item_bookmark">Bookmark</string>
+    <string name="nav_item_favorite">Favorite</string>
     <string name="nav_item_my_evaluation">My Evaluation</string>
     <string name="nav_item_my_comment">My Comment</string>
 
     <!-- Toolbar -->
     <string name="toolbar_home">@string/nav_item_home</string>
     <string name="toolbar_compose_evaluation">@string/nav_item_compose_evaluation</string>
-    <string name="toolbar_favorite">@string/nav_item_bookmark</string>
+    <string name="toolbar_favorite">@string/nav_item_favorite</string>
     <string name="toolbar_my_evaluation">@string/nav_item_my_evaluation</string>
     <string name="toolbar_my_comment">@string/nav_item_my_comment</string>
     <string name="toolbar_evaluation">Evaluation</string>
@@ -71,7 +71,27 @@
     <string name="label_point_clarity">Clarity</string>
     <string name="label_point_easiness">Easiness</string>
 
+    <!-- EmptyState -->
+    <string name="emptystate_title_network">Unstable Network</string>
+    <string name="emptystate_title_favorite">Favorite Courses</string>
+    <string name="emptystate_title_my_comment">My Comments</string>
+    <string name="emptystate_title_my_evaluation">My Evaluations</string>
+    <string name="emptystate_title_search_result">No Result</string>
+    <string name="emptystate_body_network">Network status is low. Please check your data or wifi network status.</string>
+    <string name="emptystate_body_favorite">Courses you marked as "Favorite" will be displayed here.</string>
+    <string name="emptystate_body_my_comment">Comments you write will be displayed here.</string>
+    <string name="emptystate_body_my_evaluation">Evaluations you write will be displayed here.</string>
+    <string name="emptystate_body_search_result">Could not find any results that matches your words. Please try different words.</string>
 
+    <!-- Inform View -->
+    <string name="inform_home">Latest Evaluations are provided.\nYou can see the latest evaluations by clicking it.</string>
+    <string name="inform_course">Overall statistics for course and list of evaluations are provided.\nYou can open evaluation detail window by clicking the item.</string>
+    <string name="inform_evaluation">Evaluations statistics and comments are provided.\nYou can vote up and down to both evaluation and comments.</string>
+    <string name="inform_favorite">I brought some evaluation that you told me you like it</string>
+    <string name="inform_mandatory_evaluation">Must write over 3 evaluations.\n Remain %d.</string>
+    <string name="inform_wrote_evaluation">You wrote evaluation this course. You can rewrite evaluation.</string>
+    <string name="inform_email_confirm">We send confirm mail your account.\nDo you want to resend email?</string>
+    <string name="inform_email_university_confirm">We send email your university account : %1$s\nDo you want to resend email?</string>
 
 
 
@@ -108,16 +128,7 @@
     <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
 
-    <!-- inform -->
-    <string name="inform_home">Latest Evaluations are provided.\nYou can see the latest evaluations by clicking it.</string>
-    <string name="inform_course">Overall statistics for course and list of evaluations are provided.\nYou can open evaluation detail window by clicking the item.</string>
-    <string name="inform_evaluation">Evaluations statistics and comments are provided.\nYou can vote up and down to both evaluation and comments.</string>
-    <string name="inform_bookmark">I brought some evaluation that you told me you like it</string>
-    <string name="inform_mandatory_evaluation">Must write over 3 evaluations.\n Remain %d.</string>
     <string name="goto_write">Write evaluation</string>
-    <string name="inform_wrote_evaluation">You wrote evaluation this course. You can rewrite evaluation.</string>
-    <string name="inform_email_confirm">We send confirm mail your account.\nDo you want to resend email?</string>
-    <string name="inform_email_university_confirm">We send email your university account : %1$s\nDo you want to resend email?</string>
     <string name="goto_rewrite">Rewrite evaluation</string>
     <string name="confirm_university_email">Email Not Confirmed</string>
 
@@ -132,13 +143,6 @@
     <string name="hashtag_delete_content">Are you sure to delete this hashtag?</string>
     <string name="confirm_delete">DELETE</string>
 
-    <!-- loading -->
-    <string name="loading_number_of_university">" universities has"</string>
-    <string name="loading_university">" has"</string>
-    <string name="loading_student">" students with"</string>
-    <string name="loading_evaluation">" evaluations"</string>
-    <string name="loading_end_word">Wrote in PAPYRUTH</string>
-    <string name="loading_word_evaluation"> </string>
 
     <!-- simple word -->
     <string name="word_evaluation">evaluaion</string>
@@ -202,22 +206,7 @@
 
 
 
-    <!-- Empty state Message -->
-    <string name="emptystate_title_network">Unstable Network</string>
-    <string name="emptystate_title_favorite">Favorite Courses</string>
-    <string name="emptystate_title_my_comment">My Comments</string>
-    <string name="emptystate_title_my_evaluation">My Evaluations</string>
-    <string name="emptystate_title_search_result">No Result</string>
 
-    <string name="emptystate_body_network">Network status is low. Please check your data or wifi network status.</string>
-    <string name="emptystate_body_favorite">Courses you marked as "Favorite" will be displayed here.</string>
-    <string name="emptystate_body_my_comment">Comments you write will be displayed here.</string>
-    <string name="emptystate_body_my_evaluation">Evaluations you write will be displayed here.</string>
-    <string name="emptystate_body_search_result">Could not find any results that matches your words. Please try different words.</string>
-
-    <string name="emptystate_title_access_denied">You can not see now</string>
-    <string name="emptystate_body_denial_of_email_unauthorized">Please check confirm mail</string>
-    <string name="emptystate_body_denial_of_university_email_unauthorized">Please check your university mail</string>
 
     <!--Course Evaluation Count Notification-->
     <string name="course_no_evaluations">There is no Evaluations for this Course.\nWhy don\'t you write an evaluation for others?</string>

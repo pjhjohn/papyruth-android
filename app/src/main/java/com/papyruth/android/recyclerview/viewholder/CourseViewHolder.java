@@ -37,7 +37,7 @@ import rx.subscriptions.CompositeSubscription;
 public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @Bind(R.id.course_professor_image)                protected ImageView mProfessorImage;
     @Bind(R.id.course_lecture)                        protected TextView mLecture;
-    @Bind(R.id.course_bookmark)                       protected ImageView mBookmark;
+    @Bind(R.id.course_favorite)                       protected ImageView mFavorite;
     @Bind(R.id.course_category)                       protected TextView mCategory;
     @Bind(R.id.course_professor)                      protected TextView mProfessor;
     @Bind(R.id.course_overall_label)                  protected TextView mLabelOverall;
@@ -80,8 +80,8 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             AnimatorHelper.FADE_IN(mProgressbar).start();
         } else {
             final Integer count = course.getEvaluationCount();
-            Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
-            mBookmark.setOnClickListener(this);
+            Picasso.with(mContext).load(R.drawable.ic_favorite_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mFavorite);
+            mFavorite.setOnClickListener(this);
             CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.getCategory());
             mLecture.setText(course.getName());
             mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
@@ -131,7 +131,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.course_bookmark) setFavorite(!Course.getInstance().getIsFavorite());
+        if(v.getId() == R.id.course_favorite) setFavorite(!Course.getInstance().getIsFavorite());
     }
 
     private void setFavorite(boolean favorite) {
@@ -143,9 +143,9 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 .subscribe(
                     response -> {
                         Course.getInstance().setIsFavorite(favorite);
-                        Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp)
+                        Picasso.with(mContext).load(R.drawable.ic_favorite_32dp)
                             .transform(new ColorFilterTransformation(mResources.getColor(favorite? R.color.active : R.color.inactive)))
-                            .into(mBookmark);
+                            .into(mFavorite);
                     }, Throwable::printStackTrace
                 )
         );

@@ -18,7 +18,7 @@
     <string name="ga_fragment_auth_signup4" translatable="false">auth_Signup4</string>
 
     <string name="ga_fragment_main_recent" translatable="false">main_Recent</string>
-    <string name="ga_fragment_main_bookmark" translatable="false">main_Bookmark</string>
+    <string name="ga_fragment_main_favorite" translatable="false">main_Favorite</string>
     <string name="ga_fragment_main_course" translatable="false">main_Course</string>
     <string name="ga_fragment_main_evaluation" translatable="false">main_Evaluation</string>
     <string name="ga_fragment_main_write_evaluation1" translatable="false">main_Write Evaluation1</string>
