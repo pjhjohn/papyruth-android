@@ -13,7 +13,6 @@ import rx.Observable;
 import rx.android.widget.OnTextChangeEvent;
 import rx.functions.Func1;
 import rx.functions.Func2;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-06.
@@ -33,23 +32,23 @@ public class RxValidator {
 
     public static Func1<String, String> getErrorMessageEmail = text -> {
         if (isValidEmail.call(text)) return null;
-        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
-        else return AppManager.getInstance().getString(R.string.field_invalid_email);
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.signup_field_required);
+        else return AppManager.getInstance().getString(R.string.signup_invalid_email);
     };
     public static Func1<String, String> getErrorMessagePassword = text -> {
         if (isValidPassword.call(text)) return null;
-        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
-        else return AppManager.getInstance().getString(R.string.field_invalid_password);
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.signup_field_required);
+        else return AppManager.getInstance().getString(R.string.signup_invalid_password);
     };
     public static Func1<String, String> getErrorMessageRealname = text -> {
         if (isValidRealname.call(text)) return null;
-        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
-        else return AppManager.getInstance().getString(R.string.field_invalid_realname);
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.signup_field_required);
+        else return AppManager.getInstance().getString(R.string.signup_invalid_realname);
     };
     public static Func1<String, String> getErrorMessageNickname = text -> {
         if (isValidNickname.call(text)) return null;
-        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.field_invalid_required);
-        else return AppManager.getInstance().getString(R.string.field_invalid_nickname);
+        else if (isEmpty.call(text)) return AppManager.getInstance().getString(R.string.signup_field_required);
+        else return AppManager.getInstance().getString(R.string.signup_invalid_nickname);
     };
 
     /* for SeekBar Validation */

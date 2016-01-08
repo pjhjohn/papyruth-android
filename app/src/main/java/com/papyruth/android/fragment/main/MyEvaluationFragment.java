@@ -59,7 +59,7 @@ public class MyEvaluationFragment extends CommonRecyclerViewFragment<MyEvaluatio
 
     @Override
     protected void setToolbarOptions() {
-        mToolbar.setTitle(R.string.nav_item_my_evaluation);
+        mToolbar.setTitle(R.string.toolbar_my_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);

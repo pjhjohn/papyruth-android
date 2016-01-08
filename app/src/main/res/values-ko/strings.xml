@@ -1,64 +1,48 @@
 <resources>
-    <!--app name-->
-    <string name="app_title">파피루스</string>
-    <string name="app_sub_title">대학교 강의 평가</string>
+    <!-- Application Name -->
+    <string name="application_title">파피루스</string>
+    <string name="application_summary">대학교 강의평가</string>
 
-    <!--navigation-->
+    <!-- Navigation Drawer -->
     <string name="nav_item_home">최신 강의평가</string>
-    <string name="nav_item_search">강좌검색</string>
-    <string name="nav_item_recommendation">추천강좌</string>
-    <string name="nav_item_bookmark">관심강좌</string>
-    <string name="nav_item_new_evaluation">강의평가 작성</string>
-    <string name="nav_item_my_evaluation">내가 쓴 강의평가</string>
-    <string name="nav_item_my_comment">내가 쓴 댓글</string>
+    <string name="nav_item_compose_evaluation">강의평가 작성</string>
+    <string name="nav_item_bookmark">관심 강의</string>
+    <string name="nav_item_my_evaluation">나의 강의평가</string>
+    <string name="nav_item_my_comment">나의 댓글</string>
 
-    <!--toolbar-->
-    <string name="toolbar_title_new_comment">덧글 쓰기</string>
-    <string name="toolbar_title_evaluation">강의 평가</string>
-    <string name="toolbar_title_home">최신 강의평가</string>
-    <string name="toolbar_title_course">강의 정보</string>
-    <string name="toolbar_title_new_evaluation">강의평가 쓰기</string>
+    <!-- Toolbar -->
+    <string name="toolbar_home">@string/nav_item_home</string>
+    <string name="toolbar_compose_evaluation">@string/nav_item_compose_evaluation</string>
+    <string name="toolbar_favorite">@string/nav_item_bookmark</string>
+    <string name="toolbar_my_evaluation">@string/nav_item_my_evaluation</string>
+    <string name="toolbar_my_comment">@string/nav_item_my_comment</string>
+    <string name="toolbar_evaluation">강의평가</string>
+    <string name="toolbar_course">강의 정보</string>
     <string name="toolbar_profile">내 정보</string>
     <string name="toolbar_profile_register_university_email">학교 이메일 등록</string>
     <string name="toolbar_profile_change_nickname">닉네임 변경</string>
     <string name="toolbar_profile_change_password">비밀번호 변경</string>
-    <string name="toolbar_favorite">관심 강좌</string>
-    <string name="toolbar_search">강의 검색</string>
+    <string name="toolbar_search">검색</string>
     <string name="toolbar_settings">설정</string>
     <string name="toolbar_osl">오픈 소스 라이센스</string>
     <string name="toolbar_tos">약관</string>
 
-    <!--sign up-->
-    <string name="step1">1단계</string>
-    <string name="step2">2단계</string>
-    <string name="step3">3단계</string>
-    <string name="step4">4단계</string>
-    <string name="step5">5단계</string>
-    <string name="entrance_year">입학년도</string>
-    <string name="agree_terms">가입하면 %1$s 및 %2$s에 동의하게 됩니다.</string>
-    <string name="agree">동의합니다</string>
-    <string name="back">돌아가기</string>
-    <string name="terms_of_use">약관</string>
-    <string name="privacy_policy">개인정보 취급방침</string>
-    <string name="duplicated_email">이메일이 중복되었습니다</string>
-    <string name="duplicated_nickname">닉네임이 중복되었습니다</string>
-
-    <!-- Strings related to login -->
-    <string name="action_sign_in">로그인</string>
-    <string name="failed_sign_in">로그인에 실패하였습니다</string>
-    <string name="action_sign_up">회원가입</string>
-    <string name="failed_sign_up">회원가입에 실패하였습니다</string>
-    <string name="field_invalid_required">필수 항목입니다</string>
-    <string name="field_invalid_email">잘못된 이메일 형식입니다</string>
-    <string name="field_invalid_password">비밀번호가 너무 짧습니다</string>
-    <string name="field_wrong_password">비밀번호가 틀렸습니다</string>
-    <string name="field_invalid_realname">이름이 너무 깁니다</string>
-    <string name="field_invalid_nickname">닉네임이 너무 깁니다</string>
-    <string name="field_invalid_gender">존재하지 않는 성별입니다</string>
-    <string name="field_invalid_entrance_year">해당 입학년도는 지원되지 않습니다</string>
-    <string name="field_invalid_university">학교가 선택되지 않았습니다</string>
-    <string name="field_exist_email">이메일이 중복되었습니다</string>
-    <string name="field_exist_nickname">닉네임이 중복되었습니다</string>
+    <!-- Sign-in & Sign-up -->
+    <string name="signin_btn">로그인</string>
+    <string name="signup_btn">회원가입</string>
+    <string name="signup_field_required">필수 항목입니다</string>
+    <string name="signup_invalid_email">잘못된 이메일 형식입니다</string>
+    <string name="signup_invalid_password">비밀번호가 너무 짧습니다</string>
+    <string name="signup_invalid_realname">이름이 너무 깁니다</string>
+    <string name="signup_invalid_nickname">닉네임이 너무 깁니다</string>
+    <string name="signup_invalid_gender">존재하지 않는 성별입니다</string>
+    <string name="signup_invalid_entrance_year">해당 입학년도는 지원되지 않습니다</string>
+    <string name="signup_invalid_university">학교가 선택되지 않았습니다</string>
+    <string name="signup_agreement_message">가입하면 %1$s 및 %2$s에 동의하게 됩니다.</string>
+    <string name="signup_terms_of_use">약관</string>
+    <string name="signup_privacy_policy">개인정보 취급방침</string>
+    <string name="signup_email_duplication">이메일이 중복되었습니다</string>
+    <string name="signup_nickname_duplication">닉네임이 중복되었습니다</string>
 
     <!--common-->
     <string name="common_next">다음</string>
@@ -243,13 +227,13 @@
 
     <!-- Empty state Message -->
     <string name="emptystate_title_network">네트워크 불안정</string>
-    <string name="emptystate_title_favorite">관심강좌</string>
+    <string name="emptystate_title_favorite">관심강의</string>
     <string name="emptystate_title_my_comment">나의 댓글</string>
     <string name="emptystate_title_my_evaluation">나의 강의평가</string>
     <string name="emptystate_title_search_result">검색 결과 없음</string>
 
     <string name="emptystate_body_network">네트워크가 불안정합니다. 데이터 혹은 와이파이 네트워크 상태를 확인해주세요</string>
-    <string name="emptystate_body_favorite">관심강좌가 저장되는 곳입니다. 강좌 페이지에서 아이콘을 클릭하여 관심강좌로 등록할 수 있습니다.</string>
+    <string name="emptystate_body_favorite">관심강의가 저장되는 곳입니다. 강의 페이지에서 아이콘을 클릭하여 관심강의로 등록할 수 있습니다.</string>
     <string name="emptystate_body_my_comment">작성한 나의 댓글들이 저장되는 공간입니다.</string>
     <string name="emptystate_body_my_evaluation">작성한 나의 강의평가들이 저장되는 공간입니다.</string>
     <string name="emptystate_body_search_result">해당 검색어로는 나오는 검색 결과가 없네요. 다른 검색어를 사용해보시는 건 어떨까요?</string>
@@ -271,4 +255,9 @@
     <string name="invalid_evaluation_cause_university_email">학교 메일 인증을 해주세요</string>
     <string name="invalid_evaluation_cause_mandantory">더 많은 강의평을 써주세요</string>
     <string name="invalid_point_closed">비공개</string>
+    <string name="evaluation_step1_search">클릭하여 작성할 강의 검색</string>
+
+    <!-- Strings related to login -->
+    <string name="tost_failure_sign_in">로그인에 실패하였습니다</string>
+    <string name="toast_failure_sign_up">회원가입에 실패하였습니다</string>
 </resources>

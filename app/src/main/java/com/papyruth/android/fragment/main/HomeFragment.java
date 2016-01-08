@@ -70,7 +70,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
 
     @Override
     protected void setToolbarOptions() {
-        mToolbar.setTitle(R.string.toolbar_title_home);
+        mToolbar.setTitle(R.string.toolbar_home);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);

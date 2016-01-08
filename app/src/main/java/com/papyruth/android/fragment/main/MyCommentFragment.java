@@ -61,7 +61,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
 
     @Override
     protected void setToolbarOptions() {
-        mToolbar.setTitle(R.string.nav_item_my_comment);
+        mToolbar.setTitle(R.string.toolbar_my_comment);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);

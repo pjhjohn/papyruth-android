@@ -52,6 +52,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textSize="16sp"
-            android:text="@string/agree_terms"/>
+            android:text="@string/signup_agreement_message"/>
     </RelativeLayout>
 </com.papyruth.support.utility.navigator.NavigatableLinearLayout>

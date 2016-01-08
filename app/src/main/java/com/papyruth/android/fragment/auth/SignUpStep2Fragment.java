@@ -174,7 +174,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
                 if (errorMessage == null) return Api.papyruth()
                     .post_users_sign_up_validate("email", email)
                     .map(validator -> validator.validation)
-                    .map(valid -> valid ? null : getResources().getString(R.string.duplicated_email));
+                    .map(valid -> valid ? null : getResources().getString(R.string.signup_email_duplication));
                 else return Observable.just(errorMessage);
             }).observeOn(AndroidSchedulers.mainThread());
     }
@@ -192,7 +192,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
                 if (errorMessage == null) return Api.papyruth()
                     .post_users_sign_up_validate("nickname", nickname)
                     .map(validator -> validator.validation)
-                    .map(valid -> valid ? null : getResources().getString(R.string.duplicated_nickname));
+                    .map(valid -> valid ? null : getResources().getString(R.string.signup_nickname_duplication));
                 else return Observable.just(errorMessage);
             }).observeOn(AndroidSchedulers.mainThread());
     }

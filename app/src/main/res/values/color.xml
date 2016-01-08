@@ -75,6 +75,8 @@
     <color name="background_gpa_satisfaction">@color/colorchip_blue_bright</color>
     <color name="background_clarity">@color/colorchip_red_bright</color>
     <color name="background_empty_state">#646464</color>
+    <color name="background_recyclerview">@color/white_90p</color>
+    <color name="background_progressbar">@color/white_90p</color>
 
     <!--Search Category-->
     <color name="lecture_type_major">@color/colorchip_green</color>
@@ -131,7 +133,4 @@
     <color name="hr">@color/white_95p</color>
     <color name="timestamp">@color/white_60p</color>
     <color name="hashtag">#8C6239</color>
-    <color name="background_recyclerview">@color/white_90p</color>
-    <color name="background_placeholder">@color/white_70p</color>
-    <color name="background_progressbar">@color/white_90p</color>
 </resources>
