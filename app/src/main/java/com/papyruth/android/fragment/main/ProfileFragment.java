@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
@@ -102,13 +101,13 @@ public class ProfileFragment extends TrackerFragment {
         Picasso.with(mContext).load(R.drawable.ic_nickname_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mNicknameIcon);
         mNicknameText.setText(User.getInstance().getNickname());
         Picasso.with(mContext).load(R.drawable.ic_gender_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mGenderIcon);
-        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
+        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.profile_value_male : R.string.profile_value_female));
         Picasso.with(mContext).load(R.drawable.ic_university_email_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
 
         if(!User.getInstance().getUniversityConfirmed())
             mUniversityEmailText.setText(R.string.confirm_university_email);
         else if(User.getInstance().getUniversityEmail() == null)
-            mUniversityEmailText.setText(mResources.getString(R.string.label_university_email_need));
+            mUniversityEmailText.setText(mResources.getString(R.string.profile_value_university_email_confirmation_required));
         else
             mUniversityEmailText.setText(User.getInstance().getUniversityEmail());
 

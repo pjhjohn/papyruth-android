@@ -240,7 +240,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
                         SignUpForm.getInstance().clear();
                         mActivity.startMainActivity();
-                    } else Toast.makeText(mActivity, getResources().getString(R.string.tost_failure_sign_in), Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(mActivity, getResources().getString(R.string.toast_failure_sign_in), Toast.LENGTH_SHORT).show();
                 },
                 error -> {
                     if (error instanceof RetrofitError) {

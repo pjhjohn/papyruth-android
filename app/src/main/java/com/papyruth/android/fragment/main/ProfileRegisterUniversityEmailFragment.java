@@ -83,8 +83,8 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         Picasso.with(context).load(R.drawable.ic_university_email_48dp).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
-        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
-        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
+        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.profile_register_university_email_body_prefix), res.getString(R.string.profile_register_university_email_body), res.getString(R.string.profile_register_university_email_body_postfix))));
+        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.profile_register_university_email_body_prefix), res.getString(R.string.profile_register_university_email_body), res.getString(R.string.profile_register_university_email_body_postfix))));
         this.email.setText(User.getInstance().getUniversityEmail());
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;

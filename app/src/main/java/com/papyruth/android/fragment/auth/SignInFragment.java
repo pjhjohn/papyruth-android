@@ -159,14 +159,14 @@ public class SignInFragment extends TrackerFragment {
                                 error.printStackTrace();
                             }
                         );
-                    else Toast.makeText(mActivity, this.getResources().getString(R.string.tost_failure_sign_in), Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(mActivity, this.getResources().getString(R.string.toast_failure_sign_in), Toast.LENGTH_SHORT).show();
                 },
                 error -> {
                     AnimatorHelper.FADE_OUT(mProgress).start();
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 403:
-                                Toast.makeText(mActivity, this.getResources().getString(R.string.tost_failure_sign_in), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, this.getResources().getString(R.string.toast_failure_sign_in), Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());

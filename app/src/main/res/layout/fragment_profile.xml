@@ -77,7 +77,7 @@
                         android:layout_marginStart="@dimen/baseline_x4"
                         android:layout_toRightOf="@+id/email_icon"
                         android:layout_toEndOf="@+id/email_icon"
-                        android:text="@string/label_email"
+                        android:text="@string/profile_label_email"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
                     <TextView
@@ -122,7 +122,7 @@
                         android:layout_marginStart="@dimen/baseline_x4"
                         android:layout_toRightOf="@+id/university_email_icon"
                         android:layout_toEndOf="@+id/university_email_icon"
-                        android:text="@string/label_university_mail"
+                        android:text="@string/profile_label_university_mail"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
                     <TextView
@@ -167,7 +167,7 @@
                         android:layout_marginStart="@dimen/baseline_x4"
                         android:layout_toRightOf="@+id/realname_icon"
                         android:layout_toEndOf="@+id/realname_icon"
-                        android:text="@string/label_realname"
+                        android:text="@string/profile_label_realname"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
                     <TextView
@@ -212,7 +212,7 @@
                         android:layout_marginStart="@dimen/baseline_x4"
                         android:layout_toRightOf="@+id/nickname_icon"
                         android:layout_toEndOf="@+id/nickname_icon"
-                        android:text="@string/label_nickname"
+                        android:text="@string/profile_label_nickname"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
                     <TextView
@@ -257,7 +257,7 @@
                         android:layout_marginStart="@dimen/baseline_x4"
                         android:layout_toRightOf="@+id/gender_icon"
                         android:layout_toEndOf="@+id/gender_icon"
-                        android:text="@string/label_gender"
+                        android:text="@string/profile_label_gender"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
                     <TextView

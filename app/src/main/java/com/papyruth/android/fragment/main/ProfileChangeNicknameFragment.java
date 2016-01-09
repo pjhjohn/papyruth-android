@@ -79,8 +79,8 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
         ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         Picasso.with(context).load(R.drawable.ic_nickname_48dp).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
-        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
-        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_nickname_change_prefix), res.getString(R.string.label_nickname_change_content), res.getString(R.string.label_nickname_change_postfix))));
+        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.profile_change_nickname_body_prefix), res.getString(R.string.profile_change_nickname_body), res.getString(R.string.profile_change_nickname_body_postfix))));
+        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.profile_change_nickname_body_prefix), res.getString(R.string.profile_change_nickname_body), res.getString(R.string.profile_change_nickname_body_postfix))));
         this.nickname.setText(User.getInstance().getNickname());
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;

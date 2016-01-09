@@ -24,7 +24,7 @@
             android:layout_marginBottom="@dimen/baseline_x1"
             android:layout_above="@+id/nickname_text"
             android:gravity="center"
-            android:text="@string/label_nickname_change"
+            android:text="@string/profile_change_nickname_label"
             android:layout_centerVertical="true"/>
         <EditText
             android:id="@+id/nickname_text"

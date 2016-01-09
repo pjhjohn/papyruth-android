@@ -55,7 +55,7 @@ public class CourseItemViewHolder extends RecyclerView.ViewHolder {
         mLecture.setText(course.name);
         mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.professor_name, mResources.getString(R.string.professor_postfix)));
         CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.category);
-        mLabelOverall.setText(R.string.label_point_overall);
+        mLabelOverall.setText(R.string.course_label_point_overall);
         PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, course.point_overall, course.evaluation_count);
         mHashtags.setText(Hashtag.plainString(course.hashtags));
         Picasso.with(mContext).load(R.drawable.ic_evaluation_count_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mEvaluationIcon);

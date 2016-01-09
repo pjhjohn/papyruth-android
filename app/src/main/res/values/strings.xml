@@ -66,10 +66,24 @@
     <string name="yesterday">yesterday</string>
 
     <!-- Course -->
-    <string name="label_point_overall">Overall</string>
-    <string name="label_point_gpa_satisfaction">GPA Sat.</string>
-    <string name="label_point_clarity">Clarity</string>
-    <string name="label_point_easiness">Easiness</string>
+    <string name="course_label_point_overall">Overall</string>
+    <string name="course_label_point_gpa_satisfaction">GPA Sat.</string>
+    <string name="course_label_point_clarity">Clarity</string>
+    <string name="course_label_point_easiness">Easiness</string>
+    <string name="course_no_evaluations">There is no Evaluations for this Course.\nWhy don\'t you write an evaluation for others?</string>
+
+    <!-- Evaluation -->
+    <string name="evaluation_label_point_overall">Overall</string>
+    <string name="evaluation_label_point_gpa_satisfaction">GPA Sat.</string>
+    <string name="evaluation_label_point_clarity">Clarity</string>
+    <string name="evaluation_label_point_easiness">Easiness</string>
+    <string name="evaluation_no_comments">There is no Comment for this Evaluation.\nWhy don\'t you comment one?</string>
+
+    <!-- Compose Evaluation -->
+    <string name="compose_evaluation_label_point_overall">Overall</string>
+    <string name="compose_evaluation_label_point_gpa_satisfaction">GPA Sat.</string>
+    <string name="compose_evaluation_label_point_clarity">Clarity</string>
+    <string name="compose_evaluation_label_point_easiness">Easiness</string>
 
     <!-- EmptyState -->
     <string name="emptystate_title_network">Unstable Network</string>
@@ -93,7 +107,43 @@
     <string name="inform_email_confirm">We send confirm mail your account.\nDo you want to resend email?</string>
     <string name="inform_email_university_confirm">We send email your university account : %1$s\nDo you want to resend email?</string>
 
+    <!-- Profile -->
+    <string name="profile_label_email">EMAIL</string>
+    <string name="profile_label_university_mail">UNIVERSITY EMAIL</string>
+    <string name="profile_label_realname">REALNAME</string>
+    <string name="profile_label_nickname">NICKNAME</string>
+    <string name="profile_label_gender">GENDER</string>
+    <string name="profile_value_male">Male</string>
+    <string name="profile_value_female">Female</string>
+    <string name="profile_value_university_email_confirmation_required">Confirmation Required</string>
+    <!-- Profile Register University Email -->
+    <string name="profile_register_university_email_label">ENTER UNIVERSITY EMAIL</string>
+    <string name="profile_register_university_email_body_prefix">ENTER</string>
+    <string name="profile_register_university_email_body">UNIVERSITY</string>
+    <string name="profile_register_university_email_body_postfix">EMAIL</string>
+    <!-- Profile Change Nickname -->
+    <string name="profile_change_nickname_label">ENTER NEW NICKNAME TO CHANGE</string>
+    <string name="profile_change_nickname_body_prefix">ENTER</string>
+    <string name="profile_change_nickname_body">NEW NICKNAME</string>
+    <string name="profile_change_nickname_body_postfix">TO CHANGE</string>
+    <!-- Profile Change Password -->
+    <string name="profile_change_password_label">ENTER PASSWORD TO CHANGE</string>
+    <string name="profile_change_password_body_prefix">ENTER</string>
+    <string name="profile_change_password_body">PASSWORD</string>
+    <string name="profile_change_password_body_postfix">TO CHANGE</string>
 
+    <!-- Dialog Title -->
+    <!-- Dialog Button -->
+    <!-- Toast Messages -->
+    <string name="toast_error_403">Oops! Something went wrong</string>
+    <string name="toast_start_of_entrance_year_not_loaded">Start of Entrance Year has not been loaded. Try again.</string>
+    <string name="toast_bad_network_status">Please check your network</string>
+    <string name="toast_failure_sign_in">Failed to Signin</string>
+    <string name="toast_failure_sign_up">Failed to Signup</string>
+    <!-- Floating Action Button -->
+    <string name="fab_change_nickname">Change Nickname</string>
+    <string name="fab_change_password">Change Password</string>
+    <string name="fab_register_universtiy_email">Register University Email</string>
 
     <!-- BELOW : Unclassified TODO : Classifiy'em-->
     <string name="common_next">Next</string>
@@ -104,20 +154,13 @@
     <string name="common_close">Close</string>
     <string name="common_wait_to_loading">please wait to loading</string>
     <string name="submit_evaluation_fail">Failed to register Evaluation</string>
-    <string name="gender_male">Male</string>
-    <string name="gender_female">Female</string>
     <string name="entrance_postfix"/>
     <string name="confirm_exit">Press again to close application</string>
-
-    <!--comment-->
     <string name="submit_comment_success">Succeed to register Comment</string>
     <string name="submit_comment_fail">Failed to register Comment</string>
     <string name="dialog_title_confirm_submit">Confirm Submission</string>
     <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
     <string name="dialog_title_entrance_year">Please select your entrance year</string>
-    <string name="fab_change_nickname">Change Nickname</string>
-    <string name="fab_change_password">Change Password</string>
-    <string name="fab_register_universtiy_email">Register University Email</string>
     <string name="failed_passwd">Failed to change password</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
@@ -127,13 +170,9 @@
     <string name="confirm_cancel">Cancel</string>
     <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
-
     <string name="goto_write">Write evaluation</string>
     <string name="goto_rewrite">Rewrite evaluation</string>
     <string name="confirm_university_email">Email Not Confirmed</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-
     <string name="new_evaluation_submit_title">Submit New Evaluation</string>
     <string name="new_evaluation_submit_content">Are you sure to submit new evaluation with current contents?</string>
     <string name="new_evaluation_incomplete">Submit form is incomplete. Aborting submission</string>
@@ -142,9 +181,6 @@
     <string name="hashtag_delete_title">Removing Hashtag</string>
     <string name="hashtag_delete_content">Are you sure to delete this hashtag?</string>
     <string name="confirm_delete">DELETE</string>
-
-
-    <!-- simple word -->
     <string name="word_evaluation">evaluaion</string>
     <string name="word_lecture">lecture</string>
     <string name="word_course">course</string>
@@ -154,39 +190,13 @@
     <string name="word_professor">professor</string>
     <string name="word_signup">SIGN UP</string>
     <string name="please_connect_to_internet">Please check your network status</string>
-
-
-    <string name="label_email">EMAIL</string>
-    <string name="label_realname">REALNAME</string>
-    <string name="label_nickname">NICKNAME</string>
-    <string name="label_gender">GENDER</string>
-    <string name="label_university_mail">University Email</string>
-
-    <string name="label_university_email_need">Confirmation Required</string>
-    <string name="label_university_email">ENTER UNIVERSITY EMAIL</string>
-    <string name="label_university_email_prefix">ENTER</string>
-    <string name="label_university_email_content">UNIVERSITY</string>
-    <string name="label_university_email_postfix">EMAIL</string>
-
-    <string name="label_nickname_change">ENTER NEW NICKNAME TO CHANGE</string>
-    <string name="label_nickname_change_prefix">ENTER</string>
-    <string name="label_nickname_change_content">NEW NICKNAME</string>
-    <string name="label_nickname_change_postfix">TO CHANGE</string>
-
-    <string name="label_password_change">ENTER PASSWORD TO CHANGE</string>
-    <string name="label_password_change_prefix">ENTER</string>
-    <string name="label_password_change_content">PASSWORD</string>
-    <string name="label_password_change_postfix">TO CHANGE</string>
-
     <string name="failure_title_prefix">Failed to change </string>
     <string name="failure_title_postfix"></string>
     <string name="change_university_email_title">university email</string>
     <string name="change_nickname_title">nickname</string>
     <string name="change_password_title">password</string>
-
     <string name="success_send_email">Email send success</string>
     <string name="failure_send_email">Email send fail</string>
-
     <string name="failure_content_prefix">Could not register new </string>
     <string name="failure_content_postfix"></string>
     <string name="change_university_email_content">university email : Duplicate Email</string>
@@ -203,27 +213,10 @@
     <string name="password_recovery_title">Password Recovery</string>
     <string name="enter_your_email">enter the email address you use to sign in.</string>
     <string name="menu_evaluation_edit">Edit Evaluation</string>
-
-
-
-
-
-    <!--Course Evaluation Count Notification-->
-    <string name="course_no_evaluations">There is no Evaluations for this Course.\nWhy don\'t you write an evaluation for others?</string>
-    <!--Evaluation Comment Count Notification-->
-    <string name="evaluation_no_comments">There is no Comment for this Evaluation.\nWhy don\'t you comment one?</string>
-    <string name="toast_error_403">Oops! Something went wrong</string>
-    <string name="toast_start_of_entrance_year_not_loaded">Start of Entrance Year has not been loaded. Try again.</string>
-    <string name="toast_bad_network_status">Please check your network</string>
-
     <string name="invalid_evaluation">You cannot see this evaluation\n%s</string>
     <string name="invalid_evaluation_cause_normal_email">Confirm your email</string>
     <string name="invalid_evaluation_cause_university_email">Confirm your university email</string>
     <string name="invalid_evaluation_cause_mandantory">Write more evaluation</string>
     <string name="invalid_point_closed">closed</string>
     <string name="evaluation_step1_search">Click to Search Evaluation to Compose</string>
-
-    <!-- Strings related to login -->
-    <string name="tost_failure_sign_in">Failed to Signin</string>
-    <string name="toast_failure_sign_up">Failed to Signup</string>
 </resources>

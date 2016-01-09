@@ -86,10 +86,10 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             mLecture.setText(course.getName());
             mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
             Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
-            mLabelOverall.setText(R.string.label_point_overall);
-            mLabelClarity.setText(R.string.label_point_clarity);
-            mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
-            mLabelEasiness.setText(R.string.label_point_easiness);
+            mLabelOverall.setText(R.string.course_label_point_overall);
+            mLabelClarity.setText(R.string.course_label_point_clarity);
+            mLabelGpaSatisfaction.setText(R.string.course_label_point_gpa_satisfaction);
+            mLabelEasiness.setText(R.string.course_label_point_easiness);
             if(User.getInstance().emailConfirmationRequired() || User.getInstance().mandatoryEvaluationsRequired()) {
                 PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, 0, 0);
                 PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, 0, 0);
