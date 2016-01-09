@@ -112,7 +112,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         MaterialMenuDrawable mMaterialNavigationDrawable = new MaterialMenuDrawable(mContext, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
         mMaterialNavigationDrawable.setIconState(MaterialMenuDrawable.IconState.X);
         mToolbar.setNavigationIcon(mMaterialNavigationDrawable);
-        mToolbar.setTitle(R.string.toolbar_title_evaluation);
+        mToolbar.setTitle(R.string.toolbar_evaluation);
         mToolbar.setNavigationOnClickListener(unused -> {
             if (mCommentInputActive) {
                 morph2FloatingActionButton();

@@ -36,7 +36,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:inputType="text"
-            android:imeActionLabel="@string/common_next"
+            android:imeActionLabel="@string/ime_next"
             android:imeOptions="actionNext"
             android:hint="@string/hint_realname"
             android:textSize="16sp"/>
@@ -78,7 +78,7 @@
                 android:layout_marginEnd="@dimen/baseline_x2.5"
                 android:textColor="@color/white_50p"
                 android:textSize="16sp"
-                android:text="@string/gender_male"/>
+                android:text="@string/profile_value_male"/>
             <RadioButton
                 android:id="@+id/signup_gender_radio_female"
                 android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/white_50p"
                 android:textSize="16sp"
-                android:text="@string/gender_female"/>
+                android:text="@string/profile_value_female"/>
         </RadioGroup>
     </RelativeLayout>
 </com.papyruth.support.utility.navigator.NavigatableLinearLayout>

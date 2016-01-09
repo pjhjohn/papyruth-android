@@ -25,7 +25,6 @@ import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.activity.SplashActivity;
 import com.papyruth.android.model.unique.User;
-import com.papyruth.support.opensource.panningview.PanningView;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Circle;
 import com.papyruth.support.utility.customview.CircleAngleAnimation;
@@ -50,7 +49,7 @@ import timber.log.Timber;
  */
 
 public class SplashFragment extends TrackerFragment {
-    @Bind(R.id.splash_background_panning)   protected PanningView mSplashBackgroundPanning;
+    @Bind(R.id.splash_background)           protected ImageView mSplashBackground;
     @Bind(R.id.splash_background_circle)    protected Circle mSplashBackgroundCircle;
     @Bind(R.id.splash_application_logo)     protected ImageView mSplashApplicationLogo;
     @Bind(R.id.splash_version_name)         protected RobotoTextView mVersionName;
@@ -66,7 +65,6 @@ public class SplashFragment extends TrackerFragment {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
         ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
-        mSplashBackgroundPanning.startPanning();
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         return view;
     }

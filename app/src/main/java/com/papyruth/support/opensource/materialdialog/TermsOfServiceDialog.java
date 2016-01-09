@@ -13,7 +13,7 @@ public class TermsOfServiceDialog {
         return new MaterialDialog.Builder(context)
             .title(title)
             .content(body)
-            .positiveText(R.string.confirm_positive)
+            .positiveText(R.string.dialog_positive_ok)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {

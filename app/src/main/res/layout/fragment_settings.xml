@@ -25,7 +25,7 @@
             android:layout_below="@+id/auth_app_logo"
             android:layout_marginBottom="@dimen/baseline_x1"
             android:gravity="center"
-            android:text="@string/app_sub_title"
+            android:text="@string/application_summary"
             android:textSize="18sp"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/label_tos"
+                    android:text="@string/settings_label_tos"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>
@@ -100,7 +100,7 @@
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/label_osl"
+                    android:text="@string/settings_label_osl"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>
@@ -134,7 +134,7 @@
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/label_clear_history"
+                    android:text="@string/settings_label_clear_history"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>
@@ -168,7 +168,7 @@
                     android:layout_marginEnd="@dimen/baseline_x3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/label_signout"
+                    android:text="@string/settings_label_signout"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
             </RelativeLayout>

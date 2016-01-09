@@ -30,7 +30,7 @@ public class PapyruthApplication extends Application {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             mTracker = analytics.newTracker(R.xml.ga_tracker);
         }
-        mTracker.setAppName(getResources().getString(R.string.app_title));
+        mTracker.setAppName(getResources().getString(R.string.application_title));
         mTracker.set("&uid", User.getInstance().getId() == null ? "null" : User.getInstance().getId().toString());
         mTracker.set("&ul", Locale.getDefault().getDisplayLanguage());
         mTracker.enableAutoActivityTracking(true);

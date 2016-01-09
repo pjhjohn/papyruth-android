@@ -25,7 +25,7 @@
             android:layout_below="@id/auth_app_logo_horizontal"
             android:layout_marginTop="8dp"
             android:layout_centerHorizontal="true"
-            android:text="@string/word_signup"
+            android:text="@string/signup_label"
             android:textSize="18sp"
             android:textColor="@color/colorchip_green"
             android:visibility="gone"/>

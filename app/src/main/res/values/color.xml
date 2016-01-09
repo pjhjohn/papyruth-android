@@ -47,7 +47,7 @@
     <color name="item_selected">#E8E8E8</color>
     <color name="item_pressed">#D6D6D6</color>
 
-    <!--BookMark-->
+    <!--Favorite-->
     <color name="inactive">@color/white_70p</color>
     <color name="active">@color/colorchip_yellow</color>
 
@@ -75,6 +75,8 @@
     <color name="background_gpa_satisfaction">@color/colorchip_blue_bright</color>
     <color name="background_clarity">@color/colorchip_red_bright</color>
     <color name="background_empty_state">#646464</color>
+    <color name="background_recyclerview">@color/white_90p</color>
+    <color name="background_progressbar">@color/white_90p</color>
 
     <!--Search Category-->
     <color name="lecture_type_major">@color/colorchip_green</color>
@@ -121,7 +123,7 @@
     <color name="inform_evaluation_form">@color/toolbar_green</color>
     <color name="inform_evaluation">@color/toolbar_evaluation</color>
     <color name="inform_evaluation_item_detail">@color/toolbar_red</color>
-    <color name="inform_bookmark">@color/toolbar_red</color>
+    <color name="inform_favorite">@color/toolbar_red</color>
     <color name="inform_my_comment">@color/toolbar_blue</color>
     <color name="inform_my_evaluation">@color/toolbar_blue</color>
 
@@ -131,9 +133,7 @@
     <color name="hr">@color/white_95p</color>
     <color name="timestamp">@color/white_60p</color>
     <color name="hashtag">#8C6239</color>
-    <color name="background_recyclerview">@color/white_90p</color>
     <color name="background_cardview">@color/white</color>
     <color name="background_focus_cardview">@color/colorchip_red</color>
     <color name="background_placeholder">@color/white_70p</color>
-    <color name="background_progressbar">@color/white_90p</color>
 </resources>

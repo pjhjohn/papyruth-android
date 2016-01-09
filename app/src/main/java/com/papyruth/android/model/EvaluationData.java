@@ -28,7 +28,7 @@ public class EvaluationData {
     public Integer category;
     public List<String> hashtags = new ArrayList<>();
 
-    public boolean isValidData(){
+    public boolean isValidData() {
         return  !body.isEmpty()
                 && point_overall > 0
                 && point_easiness > 0

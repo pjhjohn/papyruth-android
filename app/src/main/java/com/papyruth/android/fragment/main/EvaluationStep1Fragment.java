@@ -64,7 +64,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
         ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
-        mQueryButton.setText(R.string.toolbar_search);
+        mQueryButton.setText(R.string.compose_evaluation_label_search);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         mEmptyStateView.findViewById(R.id.empty_state_shadow).setVisibility(View.GONE);
         if(mAdapter == null) mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyStateView, this.mNavigator, this);
@@ -95,7 +95,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
     @Override
     public void onResume() {
         super.onResume();
-        mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        mToolbar.setTitle(R.string.toolbar_compose_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);

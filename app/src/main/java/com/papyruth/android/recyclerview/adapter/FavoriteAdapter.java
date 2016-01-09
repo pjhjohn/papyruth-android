@@ -38,8 +38,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class BookmarkAdapter extends TrackerAdapter implements IAdapter, Error.OnReportToGoogleAnalytics {
-    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
+public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.OnReportToGoogleAnalytics {
+    private static final String HIDE_INFORM = "FavoriteAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
     private Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
     private EmptyStateView mEmptyState;
@@ -60,7 +60,7 @@ public class BookmarkAdapter extends TrackerAdapter implements IAdapter, Error.O
     private RelativeLayout mFooterFullyLoadedIndicator;
     private boolean mTempHideInform;
 
-    public BookmarkAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
+    public FavoriteAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
@@ -123,7 +123,7 @@ public class BookmarkAdapter extends TrackerAdapter implements IAdapter, Error.O
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(position <= mIndexHeader) return;
         if(position == mIndexInform) {
-            ((InformViewHolder) holder).bind(R.string.inform_bookmark, R.color.inform_bookmark);
+            ((InformViewHolder) holder).bind(R.string.inform_favorite, R.color.inform_favorite);
             return;
         }
         if(position == mIndexSingle) return;

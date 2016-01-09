@@ -109,7 +109,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mToolbar.setTitle(R.string.toolbar_title_new_evaluation);
+        mToolbar.setTitle(R.string.toolbar_compose_evaluation);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
@@ -117,23 +117,23 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> new MaterialDialog.Builder(mActivity)
-                .title(R.string.new_evaluation_submit_title)
-                .content(R.string.new_evaluation_submit_content)
-                .positiveText(R.string.confirm_positive)
-                .negativeText(R.string.confirm_cancel)
+                .title(R.string.dialog_title_compose_evaluation_submit)
+                .content(R.string.dialog_content_compose_evaluation_submit)
+                .positiveText(R.string.dialog_positive_submit)
+                .negativeText(R.string.dialog_negative_cancel)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         if(EvaluationForm.getInstance().isCompleted()) submitNewEvaluation();
-                        else Toast.makeText(mActivity, R.string.new_evaluation_incomplete, Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(mActivity, R.string.toast_compose_evaluation_incomplete_data, Toast.LENGTH_SHORT).show();
                     }
                 }).show(),
             error -> ErrorHandler.handle(error, this)
         );
         Picasso.with(mActivity).load(R.drawable.ic_hashtag_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mHashtagsIcon);
-        mHashtagsLabel.setText(R.string.label_evaluation_hashtags);
+        mHashtagsLabel.setText(R.string.compose_evaluation_label_hashtags);
         Picasso.with(mActivity).load(R.drawable.ic_new_evaluation_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mBodyIcon);
-        mBodyLabel.setText(R.string.label_evaluation_body);
+        mBodyLabel.setText(R.string.compose_evaluation_label_body);
         mBodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | mBodyLabel.getPaintFlags());
         mHashtagsLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | mHashtagsLabel.getPaintFlags());
         mCompositeSubscription.add(WidgetObservable.text(mBody)
@@ -217,7 +217,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                     updateUserData();
                 },
                 error -> {
-                    Toast.makeText(mActivity, this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, this.getResources().getString(R.string.toast_compose_evaluation_submission_failed), Toast.LENGTH_SHORT).show();
                     ErrorHandler.handle(error, this);
                 }
             );

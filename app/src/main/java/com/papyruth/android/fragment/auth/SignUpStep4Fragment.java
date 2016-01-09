@@ -113,9 +113,9 @@ public class SignUpStep4Fragment extends TrackerFragment {
             }, error -> ErrorHandler.handle(error, this)
         );
 
-        String strTermsOfUse = getString(R.string.terms_of_use);
-        String strPrivacyPolicy = getString(R.string.privacy_policy);
-        String strAgreement = String.format(getString(R.string.agree_terms), strTermsOfUse, strPrivacyPolicy);
+        String strTermsOfUse = getString(R.string.signup_terms_of_use);
+        String strPrivacyPolicy = getString(R.string.signup_privacy_policy);
+        String strAgreement = String.format(getString(R.string.signup_agreement_message), strTermsOfUse, strPrivacyPolicy);
         SpannableString ss = new SpannableString(strAgreement);
 
         int index;
@@ -126,9 +126,9 @@ public class SignUpStep4Fragment extends TrackerFragment {
                 public void onClick(View widget) {
                     imm.hideSoftInputFromWindow(mTextPassword.getWindowToken(), 0);
                     new MaterialDialog.Builder(mActivity)
-                        .title(R.string.terms_of_use)
+                        .title(R.string.signup_terms_of_use)
                         .content(mTermsOfUse)
-                        .positiveText(R.string.common_close)
+                        .positiveText(R.string.dialog_positive_ok)
                         .show();
                 }
 
@@ -149,9 +149,9 @@ public class SignUpStep4Fragment extends TrackerFragment {
                 @Override
                 public void onClick(View widget) {
                     new MaterialDialog.Builder(mActivity)
-                        .title(R.string.privacy_policy)
+                        .title(R.string.signup_privacy_policy)
                         .content(mPrivacyPolicy)
-                        .positiveText(R.string.common_close)
+                        .positiveText(R.string.dialog_positive_ok)
                         .show();
                 }
 
@@ -240,7 +240,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
                         SignUpForm.getInstance().clear();
                         mActivity.startMainActivity();
-                    } else Toast.makeText(mActivity, getResources().getString(R.string.failed_sign_in), Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(mActivity, getResources().getString(R.string.toast_signin_failed), Toast.LENGTH_SHORT).show();
                 },
                 error -> {
                     if (error instanceof RetrofitError) {
@@ -250,7 +250,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                     new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes()),
                                     SignupError.class
                                 );
-                                Toast.makeText(mActivity, signupError.errors.email != null? R.string.field_exist_email : (signupError.errors.nickname != null? R.string.field_exist_nickname : R.string.failed_sign_up), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, signupError.errors.email != null? R.string.signup_email_duplication : (signupError.errors.nickname != null? R.string.signup_nickname_duplication : R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
                                 if(signupError.errors.email != null || signupError.errors.nickname != null) {
                                     mNavigator.navigate(SignUpStep2Fragment.class, true);
                                 } else if(!validateSignUpForm()) {
@@ -259,7 +259,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                 }
                                 break;
                             case 403: // Failed to SignUp
-                                Toast.makeText(mActivity, getResources().getString(R.string.failed_sign_up), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, getResources().getString(R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
@@ -275,25 +275,25 @@ public class SignUpStep4Fragment extends TrackerFragment {
         SignUpForm signupForm = SignUpForm.getInstance();
 
         if(signupForm.getUniversityId() == null) {
-            alertMsg = getResources().getString(R.string.field_invalid_university);
+            alertMsg = getResources().getString(R.string.signup_invalid_university);
             target = AppConst.Navigator.Auth.SIGNUP_STEP1;
         } else if(signupForm.getEntranceYear() == null) {
-            alertMsg = getResources().getString(R.string.field_invalid_entrance_year);
+            alertMsg = getResources().getString(R.string.signup_invalid_entrance_year);
             target = AppConst.Navigator.Auth.SIGNUP_STEP1;
         } else if(signupForm.getValidEmail() == null || !RxValidator.isValidEmail.call(signupForm.getValidEmail())) {
-            alertMsg = getResources().getString(R.string.field_invalid_email);
+            alertMsg = getResources().getString(R.string.signup_invalid_email);
             target = AppConst.Navigator.Auth.SIGNUP_STEP2;
         } else if(signupForm.getValidNickname() == null || !RxValidator.isValidNickname.call(signupForm.getValidNickname())) {
-            alertMsg = getResources().getString(R.string.field_invalid_nickname);
+            alertMsg = getResources().getString(R.string.signup_invalid_nickname);
             target = AppConst.Navigator.Auth.SIGNUP_STEP2;
         } else if(signupForm.getValidRealname() == null || !RxValidator.isValidRealname.call(signupForm.getValidRealname())) {
-            alertMsg = getResources().getString(R.string.field_invalid_realname);
+            alertMsg = getResources().getString(R.string.signup_invalid_realname);
             target = AppConst.Navigator.Auth.SIGNUP_STEP3;
         } else if(signupForm.getValidIsBoy() == null) {
-            alertMsg = getResources().getString(R.string.field_invalid_gender);
+            alertMsg = getResources().getString(R.string.signup_invalid_gender);
             target = AppConst.Navigator.Auth.SIGNUP_STEP3;
         } else if(signupForm.getValidPassword() == null) {
-            alertMsg = getResources().getString(R.string.field_invalid_password);
+            alertMsg = getResources().getString(R.string.signup_invalid_password);
         } else return true;
 
         Toast.makeText(mActivity, alertMsg, Toast.LENGTH_SHORT).show();

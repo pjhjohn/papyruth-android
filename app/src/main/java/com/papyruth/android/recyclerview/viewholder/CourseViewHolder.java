@@ -37,7 +37,7 @@ import rx.subscriptions.CompositeSubscription;
 public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @Bind(R.id.course_professor_image)                protected ImageView mProfessorImage;
     @Bind(R.id.course_lecture)                        protected TextView mLecture;
-    @Bind(R.id.course_bookmark)                       protected ImageView mBookmark;
+    @Bind(R.id.course_favorite)                       protected ImageView mFavorite;
     @Bind(R.id.course_category)                       protected TextView mCategory;
     @Bind(R.id.course_professor)                      protected TextView mProfessor;
     @Bind(R.id.course_overall_label)                  protected TextView mLabelOverall;
@@ -78,19 +78,18 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     public void bind(Course course) {
         if(course.needToUpdateData()) {
             AnimatorHelper.FADE_IN(mProgressbar).start();
-        }else{
+        } else {
             final Integer count = course.getEvaluationCount();
-            Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mBookmark);
-            mBookmark.setOnClickListener(this);
+            Picasso.with(mContext).load(R.drawable.ic_favorite_32dp).transform(new ColorFilterTransformation(mResources.getColor(course.getIsFavorite() ? R.color.active : R.color.inactive))).into(mFavorite);
+            mFavorite.setOnClickListener(this);
             CategoryHelper.assignColor(mContext, mCategory, mProfessor, course.getCategory());
-            mCategory.setText(mContext.getString(R.string.category_major)); // TODO -> evaluation.category
             mLecture.setText(course.getName());
             mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), course.getProfessorName(), mResources.getString(R.string.professor_postfix)));
             Picasso.with(mContext).load(course.getProfessorPhotoUrl()).transform(new CircleTransformation()).into(mProfessorImage);
-            mLabelOverall.setText(R.string.label_point_overall);
-            mLabelClarity.setText(R.string.label_point_clarity);
-            mLabelGpaSatisfaction.setText(R.string.label_point_gpa_satisfaction);
-            mLabelEasiness.setText(R.string.label_point_easiness);
+            mLabelOverall.setText(R.string.course_label_point_overall);
+            mLabelClarity.setText(R.string.course_label_point_clarity);
+            mLabelGpaSatisfaction.setText(R.string.course_label_point_gpa_satisfaction);
+            mLabelEasiness.setText(R.string.course_label_point_easiness);
             if(User.getInstance().emailConfirmationRequired() || User.getInstance().mandatoryEvaluationsRequired()) {
                 PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, 0, 0);
                 PointHelper.applyProgress(mContext, mLabelClarity, mProgressBarClarity, mPointClarity, 0, 0);
@@ -100,11 +99,11 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 mPointClarity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 mPointEasiness.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 mPointGpaSatisfaction.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-                mPointOverall.setText(mContext.getString(R.string.invalid_point_closed));
-                mPointClarity.setText(mContext.getString(R.string.invalid_point_closed));
-                mPointEasiness.setText(mContext.getString(R.string.invalid_point_closed));
-                mPointGpaSatisfaction.setText(mContext.getString(R.string.invalid_point_closed));
-            }else {
+                mPointOverall.setText(mContext.getString(R.string.course_point_hidden));
+                mPointClarity.setText(mContext.getString(R.string.course_point_hidden));
+                mPointEasiness.setText(mContext.getString(R.string.course_point_hidden));
+                mPointGpaSatisfaction.setText(mContext.getString(R.string.course_point_hidden));
+            } else {
                 mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34);
                 mPointClarity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 mPointEasiness.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
@@ -132,7 +131,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.course_bookmark) setFavorite(!Course.getInstance().getIsFavorite());
+        if(v.getId() == R.id.course_favorite) setFavorite(!Course.getInstance().getIsFavorite());
     }
 
     private void setFavorite(boolean favorite) {
@@ -144,9 +143,9 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 .subscribe(
                     response -> {
                         Course.getInstance().setIsFavorite(favorite);
-                        Picasso.with(mContext).load(R.drawable.ic_bookmark_32dp)
+                        Picasso.with(mContext).load(R.drawable.ic_favorite_32dp)
                             .transform(new ColorFilterTransformation(mResources.getColor(favorite? R.color.active : R.color.inactive)))
-                            .into(mBookmark);
+                            .into(mFavorite);
                     }, Throwable::printStackTrace
                 )
         );

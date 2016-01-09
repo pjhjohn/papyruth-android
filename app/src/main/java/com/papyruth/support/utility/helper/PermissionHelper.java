@@ -93,8 +93,8 @@ public class PermissionHelper {
         new MaterialDialog.Builder(context)
             .title(R.string.permission_title)
             .content(message)
-            .positiveText(R.string.dialog_btn_settings)
-            .negativeText(R.string.dialog_btn_close)
+            .positiveText(R.string.dialog_positive_settings)
+            .negativeText(R.string.dialog_negative_close)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {

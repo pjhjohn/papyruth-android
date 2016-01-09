@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
@@ -94,7 +93,7 @@ public class ProfileFragment extends TrackerFragment {
 
         Picasso.with(mContext).load(User.getInstance().getUniversityImageUrl()).into(mUniversityImage);
         mUniversityName.setText(User.getInstance().getUniversityName());
-        mEntranceYear.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.entrance_postfix)));
+        mEntranceYear.setText(String.format("%d  %s", User.getInstance().getEntranceYear(), getResources().getString(R.string.profile_label_entrance_year_postfix)));
         Picasso.with(mContext).load(R.drawable.ic_email_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mEmailIcon);
         mEmailText.setText(User.getInstance().getEmail());
         Picasso.with(mContext).load(R.drawable.ic_realname_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mRealnameIcon);
@@ -102,13 +101,13 @@ public class ProfileFragment extends TrackerFragment {
         Picasso.with(mContext).load(R.drawable.ic_nickname_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mNicknameIcon);
         mNicknameText.setText(User.getInstance().getNickname());
         Picasso.with(mContext).load(R.drawable.ic_gender_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mGenderIcon);
-        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.gender_male : R.string.gender_female));
+        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.profile_value_male : R.string.profile_value_female));
         Picasso.with(mContext).load(R.drawable.ic_university_email_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
 
         if(!User.getInstance().getUniversityConfirmed())
-            mUniversityEmailText.setText(R.string.confirm_university_email);
+            mUniversityEmailText.setText(R.string.profile_value_university_email_confirmation_pending);
         else if(User.getInstance().getUniversityEmail() == null)
-            mUniversityEmailText.setText(mResources.getString(R.string.label_university_email_need));
+            mUniversityEmailText.setText(mResources.getString(R.string.profile_value_university_email_confirmation_required));
         else
             mUniversityEmailText.setText(User.getInstance().getUniversityEmail());
 

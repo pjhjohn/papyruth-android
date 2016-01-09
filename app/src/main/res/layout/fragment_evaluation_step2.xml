@@ -64,7 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/label_point_overall"
+                        android:text="@string/compose_evaluation_label_point_overall"
                         android:textStyle="bold"
                         android:textColor="@color/point_overall"/><!--Overall Label-->
                 </LinearLayout>
@@ -127,7 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/label_point_clarity"
+                        android:text="@string/compose_evaluation_label_point_clarity"
                         android:textStyle="bold"
                         android:textColor="@color/point_clarity"/><!--Clarity Label-->
                 </LinearLayout>
@@ -194,7 +194,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/label_point_easiness"
+                        android:text="@string/compose_evaluation_label_point_easiness"
                         android:textStyle="bold"
                         android:textColor="@color/point_easiness"/><!--Easiness Label-->
                 </LinearLayout>
@@ -260,7 +260,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/label_point_gpa_satisfaction"
+                        android:text="@string/compose_evaluation_label_point_gpa_satisfaction"
                         android:textStyle="bold"
                         android:textColor="@color/point_gpa_satisfaction"/><!--GPA Satisfaction Label-->
                 </LinearLayout>

@@ -83,8 +83,8 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         ButterKnife.bind(this, view);
         this.subscriptions = new CompositeSubscription();
         Picasso.with(context).load(R.drawable.ic_university_email_48dp).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
-        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
-        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.label_university_email_prefix), res.getString(R.string.label_university_email_content), res.getString(R.string.label_university_email_postfix))));
+        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.profile_register_university_email_body_prefix), res.getString(R.string.profile_register_university_email_body), res.getString(R.string.profile_register_university_email_body_postfix))));
+        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.profile_register_university_email_body_prefix), res.getString(R.string.profile_register_university_email_body), res.getString(R.string.profile_register_university_email_body_postfix))));
         this.email.setText(User.getInstance().getUniversityEmail());
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;
@@ -161,7 +161,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400:
-                                FailureDialog.show(this.getActivity(), FailureDialog.Type.UNIVERSITY_EMAIL);
+                                FailureDialog.show(this.getActivity(), FailureDialog.Type.REGISTER_UNIVERSITY_EMAIL);
                                 this.subscriptions.add(this.registerSubmitCallback());
                                 break;
                             default:
@@ -180,10 +180,10 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             .subscribe(
                 success -> {
                     if (success) {
-                        Toast.makeText(context, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.toast_profile_register_university_email_sent, Toast.LENGTH_SHORT).show();
                         mNavigator.back();
                     }else {
-                        Toast.makeText(context, R.string.failure_send_email, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.toast_profile_register_university_email_not_sent, Toast.LENGTH_SHORT).show();
                     }
                 }, error -> ErrorHandler.handle(error, MaterialDialog.class)
             );

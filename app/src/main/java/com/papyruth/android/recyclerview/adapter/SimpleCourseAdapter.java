@@ -36,7 +36,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class SimpleCourseAdapter extends TrackerAdapter{
-//    private static final String HIDE_INFORM = "BookmarkAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
+//    private static final String HIDE_INFORM = "SimpleCourseAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
 
     private EmptyStateView mEmptyState;
     private List<CourseData> mCourses;

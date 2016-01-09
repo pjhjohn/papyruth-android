@@ -39,17 +39,17 @@ public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder {
             Picasso.with(mContext).load( isHistory ? R.drawable.ic_history_24dp : R.drawable.ic_lecture_24dp).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
             mContent.setText(String.format("%s - %s", item.lecture_name, item.professor_name));
             mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_red));
-            mTypeText.setText(R.string.word_course);
+            mTypeText.setText(R.string.search_candidate_type_course);
         } else if(item.lecture_name != null) {
             Picasso.with(mContext).load( isHistory ? R.drawable.ic_history_24dp : R.drawable.ic_lecture_24dp).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
             mContent.setText(item.lecture_name);
             mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_blue));
-            mTypeText.setText(R.string.word_lecture);
+            mTypeText.setText(R.string.search_candidate_type_lecture);
         } else if(item.professor_name != null) {
             Picasso.with(mContext).load( isHistory ? R.drawable.ic_history_24dp : R.drawable.ic_professor_24dp).transform(new ColorFilterTransformation(mIconColor)).into(mIcon);
             mContent.setText(item.professor_name);
             mTypeText.setBackgroundDrawable(mResources.getDrawable(R.drawable.background_round_stroke_green));
-            mTypeText.setText(R.string.word_professor);
+            mTypeText.setText(R.string.search_candidate_type_professor);
         }
     }
 }

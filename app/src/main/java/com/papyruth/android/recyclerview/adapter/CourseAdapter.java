@@ -138,7 +138,7 @@ public class CourseAdapter extends TrackerAdapter implements IAdapter{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= mIndexHeader) return;
-        if (position == mIndexInform) {((InformViewHolder) holder).bind(R.string.inform_evaluation, R.color.inform_course); return; }
+        if (position == mIndexInform) {((InformViewHolder) holder).bind(R.string.inform_course, R.color.inform_course); return; }
         if (position == mIndexSingle) {((CourseViewHolder) holder).bind(Course.getInstance()); return; }
         if (position == mIndexShadow) return;
         if (position == mIndexFooter) return;

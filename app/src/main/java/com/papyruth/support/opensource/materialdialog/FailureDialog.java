@@ -12,22 +12,16 @@ import com.papyruth.android.R;
 
 public class FailureDialog {
     public enum Type {
-        UNIVERSITY_EMAIL,
+        REGISTER_UNIVERSITY_EMAIL,
         CHANGE_NICKNAME,
         CHANGE_PASSWORD
     }
 
     public static MaterialDialog build(Context context, Type type) {
         return new MaterialDialog.Builder(context)
-            .title(Title(context, type))
-            .content(Content(context, type))
-            .positiveText(R.string.confirm_positive)
-            .callback(new MaterialDialog.ButtonCallback() {
-                @Override
-                public void onPositive(MaterialDialog dialog) {
-                    dialog.dismiss();
-                }
-            })
+            .title(makeTitle(context, type))
+            .content(makeContent(context, type))
+            .positiveText(R.string.dialog_positive_ok)
             .build();
     }
 
@@ -35,23 +29,23 @@ public class FailureDialog {
         FailureDialog.build(context, type).show();
     }
 
-    private static String Title(Context context, Type type) {
+    private static String makeTitle(Context context, Type type) {
         final Resources res = context.getResources();
-        String value = "";
+        String title = "";
         switch (type) {
-            case UNIVERSITY_EMAIL: value = res.getString(R.string.change_university_email_title); break;
-            case CHANGE_NICKNAME: value = res.getString(R.string.change_nickname_title); break;
-            case CHANGE_PASSWORD: value = res.getString(R.string.change_password_title); break;
-        } return String.format("%s %s %s", res.getString(R.string.failure_title_prefix), value, res.getString(R.string.failure_title_postfix));
+            case REGISTER_UNIVERSITY_EMAIL  : title = res.getString(R.string.dialog_title_failure_register_university_email); break;
+            case CHANGE_NICKNAME            : title = res.getString(R.string.dialog_title_failure_change_nickname); break;
+            case CHANGE_PASSWORD            : title = res.getString(R.string.dialog_title_failure_change_password); break;
+        } return title;
     }
 
-    private static String Content(Context context, Type type) {
+    private static String makeContent(Context context, Type type) {
         final Resources res = context.getResources();
-        String value = "";
+        String content = "";
         switch (type) {
-            case UNIVERSITY_EMAIL: value = res.getString(R.string.change_university_email_content); break;
-            case CHANGE_NICKNAME: value = res.getString(R.string.change_nickname_content); break;
-            case CHANGE_PASSWORD: value = res.getString(R.string.change_password_content); break;
-        } return String.format("%s %s %s", res.getString(R.string.failure_content_prefix), value, res.getString(R.string.failure_content_postfix));
+            case REGISTER_UNIVERSITY_EMAIL  : content = res.getString(R.string.dialog_content_failure_register_university_email); break;
+            case CHANGE_NICKNAME            : content = res.getString(R.string.dialog_content_failure_change_nickname); break;
+            case CHANGE_PASSWORD            : content = res.getString(R.string.dialog_content_failure_change_password); break;
+        } return content;
     }
 }
