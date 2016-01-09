@@ -132,7 +132,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         else if (mNavigator.back()) mReadyToTerminate = false;
         else if (mReadyToTerminate) this.finish();
         else {
-            Toast.makeText(this, this.getResources().getString(R.string.confirm_exit), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getResources().getString(R.string.application_confirm_exit), Toast.LENGTH_SHORT).show();
             mReadyToTerminate = true;
         }
     }

@@ -22,29 +22,28 @@ import rx.schedulers.Schedulers;
  * Created by pjhjohn on 2015-11-02.
  */
 public class AlertDialog {
-    public enum Type{
+    public enum Type {
         MANDATORY_EVALUATION_REQUIRED, EVALUATION_ALREADY_REGISTERED, USER_CONFIRMATION_REQUIRED, UNIVERSITY_CONFIRMATION_REQUIRED
     }
 
     public static MaterialDialog build(Context context, Navigator navigator, Type type) {
         return new MaterialDialog.Builder(context)
-            .content(content(context, type))
-            .positiveText(positiveText(context, type))
-            .negativeText(negativeText(context, type))
+            .content(makeContent(context, type))
+            .positiveText(makePositiveText(context, type))
+            .negativeText(makeNegativeText(context, type))
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
                     super.onPositive(dialog);
-                    doPositive(context, navigator, type);
+                    actionOnPositive(context, navigator, type);
                 }
-
                 @Override
                 public void onNegative(MaterialDialog dialog) {
                     super.onNegative(dialog);
-                    doNegative(type);
+                    actionOnNegative(type);
                 }
             })
-            .show();
+            .build();
     }
 
     public static void show(Context context, Navigator navigator, Type type) {
@@ -52,38 +51,38 @@ public class AlertDialog {
     }
 
 
-    private static String content(Context context, Type type) {
+    private static String makeContent(Context context, Type type) {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case MANDATORY_EVALUATION_REQUIRED      : value = context.getResources().getString(R.string.inform_mandatory_evaluation, User.getInstance().getMandatoryEvaluationCount()); break;
-            case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.inform_wrote_evaluation); break;
-            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.inform_email_confirm); break;
-            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = String.format(res.getString(R.string.inform_email_university_confirm), User.getInstance().getUniversityEmail()); break;
+            case MANDATORY_EVALUATION_REQUIRED      : value = res.getString(R.string.dialog_content_alert_mandatory_evaluation_required, User.getInstance().getMandatoryEvaluationCount()); break;
+            case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.dialog_content_alert_evaluation_already_registered); break;
+            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.dialog_content_alert_user_confirmation_required); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = String.format(res.getString(R.string.dialog_content_alert_university_confirmation_required), User.getInstance().getUniversityEmail()); break;
         } return value;
     }
 
-    private static String positiveText(Context context, Type type) {
+    private static String makePositiveText(Context context, Type type) {
         final Resources res = context.getResources();
         String value = "";
         switch (type) {
-            case MANDATORY_EVALUATION_REQUIRED      : value = res.getString(R.string.goto_write); break;
-            case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.goto_rewrite); break;
-            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.confirm_positive); break;
-            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.confirm_positive); break;
+            case MANDATORY_EVALUATION_REQUIRED      : value = res.getString(R.string.dialog_positive_compose); break;
+            case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.dialog_positive_edit); break;
+            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.dialog_positive_ok); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_positive_ok); break;
         } return value;
     }
 
-    private static String negativeText(Context context, Type type){
+    private static String makeNegativeText(Context context, Type type){
         final Resources res = context.getResources();
         String value;
         switch (type) {
-            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.common_change); break;
-            default                                 : value = res.getString(R.string.common_cancel); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_negative_change); break;
+            default                                 : value = res.getString(R.string.dialog_negative_cancel); break;
         } return value;
     }
 
-    private static void doPositive(Context context, Navigator navigator, Type type) {
+    private static void actionOnPositive(Context context, Navigator navigator, Type type) {
         Integer emailType = null;
         switch (type) {
             case MANDATORY_EVALUATION_REQUIRED:
@@ -109,11 +108,11 @@ public class AlertDialog {
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         success -> {
-                            if (success) {
-                                Toast.makeText(context, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                            if(success) {
+                                Toast.makeText(context, R.string.toast_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
                                 navigator.back();
-                            }else {
-                                Toast.makeText(context, R.string.failure_send_email, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, R.string.toast_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
                             }
                         }, error -> ErrorHandler.handle(error, MaterialDialog.class)
                     );
@@ -123,9 +122,8 @@ public class AlertDialog {
         }
     }
 
-    private static void doNegative(Type type) {
+    private static void actionOnNegative(Type type) {
         switch (type) {
-            case MANDATORY_EVALUATION_REQUIRED  : break;
             case EVALUATION_ALREADY_REGISTERED  : EvaluationForm.getInstance().clear(); break;
         }
     }

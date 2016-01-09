@@ -2,6 +2,7 @@
     <!-- Application Name -->
     <string name="application_title">파피루스</string>
     <string name="application_summary">대학교 강의평가</string>
+    <string name="application_confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
 
     <!-- Navigation Drawer -->
     <string name="nav_item_home">최신 강의평가</string>
@@ -29,6 +30,7 @@
     <!-- Toolbar Menu -->
     <string name="menu_search">검색</string>
     <string name="menu_settings">설정</string>
+    <string name="menu_edit_evaluation">강의평가 수정</string>
 
     <!-- Sign-in & Sign-up -->
     <string name="signin_btn">로그인</string>
@@ -52,8 +54,6 @@
     <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
     <string name="permission_get_accounts">permission_get_accounts</string>
     <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
-    <string name="dialog_btn_settings">SETTINGS</string>
-    <string name="dialog_btn_close">CLOSE</string>
 
     <!-- Category -->
     <string name="lecture_type_major">전공</string>
@@ -84,6 +84,7 @@
     <string name="compose_evaluation_label_point_gpa_satisfaction">학점만족도</string>
     <string name="compose_evaluation_label_point_clarity">강의력</string>
     <string name="compose_evaluation_label_point_easiness">널널함</string>
+    <string name="compose_evaluation_label_search">클릭하여 작성할 강의 검색</string>
 
     <!-- EmptyState -->
     <string name="emptystate_title_network">네트워크 불안정</string>
@@ -102,10 +103,6 @@
     <string name="inform_course">강의 통계와 강의평가를 보여주는 페이지입니다.\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
     <string name="inform_evaluation">강의에 대한 강의평가를 보여주는 페이지입니다.\n댓글을 추가하거나 강의평가, 댓글에 투표를 위-아래 위-위-아래</string>
     <string name="inform_favorite">(수줍) 네가 좋아한다고 말한 강의들을 준비해봤어\n댓글을 추가하거나 강의평가, 댓글에 투표를 위-아래 위-위-아래</string>
-    <string name="inform_mandatory_evaluation">3개 이상의 강의평가를 써야 볼 수 있습니다. \n%d개 남았습니다.</string>
-    <string name="inform_wrote_evaluation">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
-    <string name="inform_email_confirm">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
-    <string name="inform_email_university_confirm">학교 메일 계정(%1$s)으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
 
     <!-- Profile -->
     <string name="profile_label_email">이메일</string>
@@ -132,91 +129,101 @@
     <string name="profile_change_password_body">변경하실 비밀번호</string>
     <string name="profile_change_password_body_postfix">를 적어주세요</string>
 
+    <!-- Settings -->
+    <string name="settings_label_tos">이용 약관</string>
+    <string name="settings_label_osl">오픈 소스 라이센스</string>
+    <string name="settings_label_clear_history">검색 기록 초기화</string>
+    <string name="settings_label_signout">로그아웃</string>
+
     <!-- Dialog Title -->
+    <string name="dialog_title_confirm_submit">양식 제출 확인</string>
+    <string name="dialog_title_entrance_year">입학 년도를 선택해주세요</string>
+    <string name="dialog_title_delete_hashtag">해시태그 삭제</string>
+    <string name="dialog_title_password_recovery">비밀번호 찾기</string>
+    <string name="dialog_title_compose_evaluation_submit">새 강의평가 등록</string>
+    <!-- Dialog Content -->
+    <string name="dialog_content_configm_submit">양식을 제출하시겠습니까?</string>
+    <string name="dialog_content_delete_hashtag">해당 해시태그를 삭제하시겠습니까?</string>
+    <string name="dialog_content_password_recovery">가입할 때 입력한 이메일을 입력해주세요</string>
+    <string name="dialog_content_compose_evaluation_submit">현재 기입된 정보로 새 강의평가를 작성하시겠습니까?</string>
+    <string name="dialog_content_alert_mandatory_evaluation_required">3개 이상의 강의평가를 써야 볼 수 있습니다. \n%d개 남았습니다.</string>
+    <string name="dialog_content_alert_evaluation_already_registered">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
+    <string name="dialog_content_alert_user_confirmation_required">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
+    <string name="dialog_content_alert_university_confirmation_required">학교 메일 계정(%1$s)으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
     <!-- Dialog Button -->
+    <string name="dialog_positive_delete">삭제</string>
+    <string name="dialog_positive_send">보내기</string>
+    <string name="dialog_positive_submit">제출</string>
+    <string name="dialog_positive_settings">설정</string>
+    <string name="dialog_positive_compose">강의평가 작성</string>
+    <string name="dialog_positive_edit">강의평가 수정</string>
+    <string name="dialog_positive_ok">확인</string>
+    <string name="dialog_negative_cancel">취소</string>
+    <string name="dialog_negative_close">닫기</string>
+    <string name="dialog_negative_change">변경</string>
+
     <!-- Toast Messages -->
     <string name="toast_error_403">어머나, 뭔가 문제가 있네요!</string>
     <string name="toast_start_of_entrance_year_not_loaded">최소 입학년도 값이 로드되지 않았습니다. 다시 시도해 주십시오</string>
     <string name="toast_bad_network_status">네트워크 상태를 확인해 주십시오</string>
     <string name="toast_failure_sign_in">로그인에 실패하였습니다</string>
     <string name="toast_failure_sign_up">회원가입에 실패하였습니다</string>
+    <string name="toast_history_clear_succeed">검색 기록이 초기화 되었습니다</string>
+    <string name="toast_history_clear_failed">검색 기록 초기화에 실패하였습니다</string>
+    <string name="toast_university_confirmation_email_sent">이메일 전송 성공</string>
+    <string name="toast_university_confirmation_email_not_sent">이메일 전송 실패</string>
     <!-- Floating Action Button -->
     <string name="fab_change_nickname">닉네임 변경</string>
     <string name="fab_change_password">비밀번호 변경</string>
     <string name="fab_register_universtiy_email">학교 이메일 등록</string>
+    <!-- IME -->
+    <string name="ime_next">다음</string>
+
+
+
+
 
     <!-- BELOW : Unclassified TODO : Classifiy'em-->
-    <string name="common_next">다음</string>
-    <string name="common_submit">제출</string>
-    <string name="common_cancel">취소</string>
-    <string name="common_change">변경</string>
-    <string name="common_pending">다른 요청이 처리중입니다</string>
-    <string name="common_close">닫기</string>
-    <string name="common_wait_to_loading">로딩이 진행 중인 동안 기다려주세요</string>
     <string name="submit_evaluation_fail">강의평가 등록에 실패하였습니다</string>
     <string name="entrance_postfix">  학번</string>
-    <string name="confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
-    <string name="submit_comment_success">댓글을 등록했습니다</string>
-    <string name="submit_comment_fail">댓글 등록에 실패했습니다</string>
-    <string name="dialog_title_confirm_submit">양식 제출 확인</string>
-    <string name="dialog_content_configm_submit">양식을 제출하시겠습니까?</string>
-    <string name="dialog_title_entrance_year">입학 년도를 선택해주세요</string>
-    <string name="failed_passwd">비밀번호 변경에 실패하였습니다</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
     <string name="empty"/>
-    <string name="confirm_positive">확인</string>
-    <string name="confirm_optional">다시보지 않기</string>
-    <string name="confirm_cancel">취소</string>
+    <string name="inform_btn_positive">확인</string>
+    <string name="inform_btn_optional">다시보지 않기</string>
     <string name="professor_prefix"/>
     <string name="professor_postfix">교수</string>
-    <string name="goto_write">강의평 작성하기</string>
-    <string name="goto_rewrite">강의평 수정하기</string>
-    <string name="new_evaluation_submit_title">새 강의평가 등록</string>
-    <string name="new_evaluation_submit_content">현재 기입된 정보로 새 강의평가를 작성하시겠습니까?</string>
-    <string name="new_evaluation_incomplete">필수 항목 중 누락된 부분이 있어 강의평가 등록을 취소합니다</string>
+    <string name="toast_compose_evaluation_incomplete_data">필수 항목 중 누락된 부분이 있어 강의평가 등록을 취소합니다</string>
     <string name="label_evaluation_hashtags">해시태그 등록</string>
     <string name="label_evaluation_body">강의평 작성</string>
-    <string name="hashtag_delete_title">해시태그 삭제</string>
-    <string name="hashtag_delete_content">해당 해시태그를 삭제하시겠습니까?</string>
-    <string name="confirm_delete">삭제</string>
     <string name="confirm_university_email">미인증 상태</string>
-    <string name="word_evaluation">강의평가</string>
     <string name="word_lecture">과목</string>
     <string name="word_course">강의</string>
-    <string name="word_student">학생</string>
-    <string name="word_search">검색</string>
     <string name="word_university">대학교</string>
     <string name="word_professor">교수</string>
     <string name="word_signup">회원가입</string>
-    <string name="please_connect_to_internet">네트워크 연결 상태를 확인해주세요</string>
     <string name="failure_title_prefix"></string>
     <string name="failure_title_postfix"></string>
     <string name="change_university_email_title">학교 이메일 등록 실패</string>
     <string name="change_nickname_title">닉네임 변경 실패</string>
     <string name="change_password_title">비밀번호 변경 실패</string>
-    <string name="success_send_email">이메일 전송 성공</string>
-    <string name="failure_send_email">이메일 전송 실패</string>
     <string name="failure_content_prefix"></string>
     <string name="failure_content_postfix"></string>
     <string name="change_university_email_content">중복된 학교 이메일입니다</string>
     <string name="change_nickname_content">중복된 닉네임 입니다</string>
     <string name="change_password_content">기존 비밀번호가 틀립니다</string>
-    <string name="label_signout">로그아웃</string>
-    <string name="label_osl">오픈 소스 라이센스</string>
-    <string name="label_tos">이용 약관</string>
-    <string name="label_clear_history">검색 기록 초기화</string>
-    <string name="success_clear_history">검색 기록이 초기화 되었습니다</string>
     <string name="goto_github_repo">REPOSITORY</string>
     <string name="password_recovery">비밀번호를 잊어버리셨나요?</string>
-    <string name="password_recovery_title">비밀번호 찾기</string>
-    <string name="enter_your_email">가입할 때 입력한 이메일을 입력해주세요</string>
-    <string name="menu_evaluation_edit">강의평가 수정</string>
     <string name="point_denominator">/10</string>
     <string name="invalid_evaluation">해당 강의평을 지금은 볼 수 없습니다\n%s</string>
     <string name="invalid_evaluation_cause_normal_email">계정 인증을 해주세요</string>
     <string name="invalid_evaluation_cause_university_email">학교 메일 인증을 해주세요</string>
     <string name="invalid_evaluation_cause_mandantory">더 많은 강의평을 써주세요</string>
     <string name="invalid_point_closed">비공개</string>
-    <string name="evaluation_step1_search">클릭하여 작성할 강의 검색</string>
+    <string name="ok">OK</string>
+    <string name="error_default">error_default</string>
+    <string name="error_retrofit_unstable_network">error_retrofit_unstable_network</string>
+    <string name="error_retrofit_default">error_retrofit_default</string>
+    <string name="password_recovery_failed">password_recovery_failed</string>
+    <string name="password_recovery_succeed">password_recovery_succeed</string>
 </resources>

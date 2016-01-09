@@ -21,7 +21,7 @@ public class FailureDialog {
         return new MaterialDialog.Builder(context)
             .title(Title(context, type))
             .content(Content(context, type))
-            .positiveText(R.string.confirm_positive)
+            .positiveText(R.string.ok)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {

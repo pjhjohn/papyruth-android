@@ -128,7 +128,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                     new MaterialDialog.Builder(mActivity)
                         .title(R.string.signup_terms_of_use)
                         .content(mTermsOfUse)
-                        .positiveText(R.string.common_close)
+                        .positiveText(R.string.dialog_positive_ok)
                         .show();
                 }
 
@@ -151,7 +151,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                     new MaterialDialog.Builder(mActivity)
                         .title(R.string.signup_privacy_policy)
                         .content(mPrivacyPolicy)
-                        .positiveText(R.string.common_close)
+                        .positiveText(R.string.dialog_positive_ok)
                         .show();
                 }
 

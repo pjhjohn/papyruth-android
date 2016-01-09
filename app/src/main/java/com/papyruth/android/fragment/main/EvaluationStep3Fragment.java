@@ -117,15 +117,15 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> new MaterialDialog.Builder(mActivity)
-                .title(R.string.new_evaluation_submit_title)
-                .content(R.string.new_evaluation_submit_content)
-                .positiveText(R.string.confirm_positive)
-                .negativeText(R.string.confirm_cancel)
+                .title(R.string.dialog_title_compose_evaluation_submit)
+                .content(R.string.dialog_content_compose_evaluation_submit)
+                .positiveText(R.string.dialog_positive_submit)
+                .negativeText(R.string.dialog_negative_cancel)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         if(EvaluationForm.getInstance().isCompleted()) submitNewEvaluation();
-                        else Toast.makeText(mActivity, R.string.new_evaluation_incomplete, Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(mActivity, R.string.toast_compose_evaluation_incomplete_data, Toast.LENGTH_SHORT).show();
                     }
                 }).show(),
             error -> ErrorHandler.handle(error, this)

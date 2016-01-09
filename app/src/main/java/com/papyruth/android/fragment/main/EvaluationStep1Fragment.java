@@ -64,7 +64,7 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
         ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
-        mQueryButton.setText(R.string.evaluation_step1_search);
+        mQueryButton.setText(R.string.compose_evaluation_label_search);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         mEmptyStateView.findViewById(R.id.empty_state_shadow).setVisibility(View.GONE);
         if(mAdapter == null) mAdapter = new EvaluationSearchAdapter(getActivity(), mEmptyStateView, this.mNavigator, this);

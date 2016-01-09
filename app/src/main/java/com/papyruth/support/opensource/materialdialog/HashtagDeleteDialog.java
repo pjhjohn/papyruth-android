@@ -19,10 +19,10 @@ import rx.functions.Func1;
 public class HashtagDeleteDialog {
     public static void show(Context context, ViewGroup container, TextView hashtag) {
         new MaterialDialog.Builder(context)
-            .title(R.string.hashtag_delete_title)
-            .content(R.string.hashtag_delete_content)
-            .positiveText(R.string.confirm_delete)
-            .negativeText(R.string.confirm_cancel)
+            .title(R.string.dialog_title_delete_hashtag)
+            .content(R.string.dialog_content_delete_hashtag)
+            .positiveText(R.string.dialog_positive_delete)
+            .negativeText(R.string.dialog_negative_cancel)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
@@ -34,10 +34,10 @@ public class HashtagDeleteDialog {
     }
     public static void show(Context context, ViewGroup container, Button hashtag, Func1<Void, Void> action) {
         new MaterialDialog.Builder(context)
-            .title(R.string.hashtag_delete_title)
-            .content(R.string.hashtag_delete_content)
-            .positiveText(R.string.confirm_delete)
-            .negativeText(R.string.confirm_cancel)
+            .title(R.string.dialog_title_delete_hashtag)
+            .content(R.string.dialog_content_delete_hashtag)
+            .positiveText(R.string.dialog_positive_delete)
+            .negativeText(R.string.dialog_negative_cancel)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
@@ -50,10 +50,10 @@ public class HashtagDeleteDialog {
     }
     public static void show(Context context, String text, Func0<Void> action) {
         new MaterialDialog.Builder(context)
-            .title(R.string.hashtag_delete_title)
-            .content(R.string.hashtag_delete_content)
-            .positiveText(R.string.confirm_delete)
-            .negativeText(R.string.confirm_cancel)
+            .title(R.string.dialog_title_delete_hashtag)
+            .content(R.string.dialog_content_delete_hashtag)
+            .positiveText(R.string.dialog_positive_delete)
+            .negativeText(R.string.dialog_negative_cancel)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {

@@ -36,7 +36,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:inputType="textEmailAddress"
-            android:imeActionLabel="@string/common_next"
+            android:imeActionLabel="@string/ime_next"
             android:imeOptions="actionNext"
             android:textSize="16sp"
             android:hint="@string/hint_email"/>
@@ -70,7 +70,7 @@
             android:background="@color/transparent"
             android:inputType="text"
             android:textSize="16sp"
-            android:imeActionLabel="@string/common_next"
+            android:imeActionLabel="@string/ime_next"
             android:imeOptions="actionNext"
             android:hint="@string/hint_nickname"/>
     </RelativeLayout>

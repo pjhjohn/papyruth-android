@@ -121,7 +121,6 @@ public interface Papyruth {
     );
     @POST("/email/password")
     Observable<SuccessResponse> post_email_password(
-        @Header("Authorization") String authorization,
         @Query("email") String email
     );
 

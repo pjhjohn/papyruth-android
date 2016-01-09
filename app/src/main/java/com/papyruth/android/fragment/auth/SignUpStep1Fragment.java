@@ -146,7 +146,7 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
                     years[i] = String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - i);
                 new MaterialDialog.Builder(mActivity)
                     .title(R.string.dialog_title_entrance_year)
-                    .negativeText(R.string.common_cancel)
+                    .negativeText(R.string.dialog_negative_cancel)
                     .buttonsGravity(GravityEnum.START)
                     .items(years)
                     .itemsCallback((dialog, v, which, text) -> {

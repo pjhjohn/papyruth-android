@@ -24,7 +24,7 @@ import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.materialdialog.InputDialog;
+import com.papyruth.support.opensource.materialdialog.PasswordRecoveryDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -126,7 +126,7 @@ public class SignInFragment extends TrackerFragment {
         ));
 
         mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
-            .subscribe(event -> InputDialog.show(mActivity), error -> ErrorHandler.handle(error, this))
+            .subscribe(event -> PasswordRecoveryDialog.show(mActivity), error -> ErrorHandler.handle(error, this))
         );
     }
 
