@@ -2,7 +2,7 @@
     <!-- Application Name -->
     <string name="application_title">파피루스</string>
     <string name="application_summary">대학교 강의평가</string>
-    <string name="application_confirm_exit">한번 더 누르면 앱이 종료됩니다</string>
+    <string name="application_confirm_exit">한번 더 누르시면 앱이 종료됩니다</string>
 
     <!-- Navigation Drawer -->
     <string name="navigation_drawer_item_home">최신 강의평가</string>
@@ -44,19 +44,22 @@
     <string name="signup_invalid_realname">이름이 너무 깁니다</string>
     <string name="signup_invalid_nickname">닉네임이 너무 깁니다</string>
     <string name="signup_invalid_gender">존재하지 않는 성별입니다</string>
-    <string name="signup_invalid_entrance_year">해당 입학년도는 지원되지 않습니다</string>
+    <string name="signup_invalid_entrance_year">불가능한 입학년도입니다</string>
     <string name="signup_invalid_university">학교가 선택되지 않았습니다</string>
     <string name="signup_agreement_message">가입하면 %1$s 및 %2$s에 동의하게 됩니다.</string>
     <string name="signup_terms_of_use">약관</string>
     <string name="signup_privacy_policy">개인정보 취급방침</string>
     <string name="signup_email_duplication">이메일이 중복되었습니다</string>
     <string name="signup_nickname_duplication">닉네임이 중복되었습니다</string>
+    <string name="toast_signin_failed">로그인에 실패하였습니다</string>
+    <string name="toast_signup_failed">회원가입에 실패하였습니다</string>
+    <string name="toast_signup_min_entrance_year_not_loaded">최소 입학년도 값을 받아오지 못하였습니다. 다시 시도해 주세요</string>
 
     <!-- Permission -->
-    <string name="permission_title">permission_title</string>
-    <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
-    <string name="permission_get_accounts">permission_get_accounts</string>
-    <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
+    <string name="permission_title">주소록 접근 권한</string>
+    <string name="permission_get_accounts_rational">주소록 접근 권한은 이메일 자동완성에 사용됩니다. 권한을 거부하면 자동완성 기능이 비활성화 됩니다</string>
+    <string name="permission_get_accounts">주소록 접근 권한</string>
+    <string name="permission_request">%1$s. %2$s을 허용하시겠습니까?</string>
 
     <!-- Category -->
     <string name="lecture_type_major">전공</string>
@@ -73,7 +76,7 @@
     <string name="course_label_point_gpa_satisfaction">학점만족도</string>
     <string name="course_label_point_clarity">강의력</string>
     <string name="course_label_point_easiness">널널함</string>
-    <string name="course_no_evaluations">현재 이 강의에 대해 작성된 강의평가가 없습니다.\n혹시 수업을 들으셨다면 강의평가를 작성해보세요!</string>
+    <string name="course_no_evaluations">현재 이 강의에 대해 작성된 강의평가가 없습니다.\n수업을 들으셨다면 강의평가를 남겨주세요!</string>
     <string name="course_point_hidden">비공개</string>
 
     <!-- Evaluation -->
@@ -82,23 +85,23 @@
     <string name="evaluation_label_point_gpa_satisfaction">학점만족도</string>
     <string name="evaluation_label_point_clarity">강의력</string>
     <string name="evaluation_label_point_easiness">널널함</string>
-    <string name="evaluation_no_comments">현재 이 강의평가에 대한 댓글이 없습니다.\n댓글로 의견을 달아주세요!</string>
+    <string name="evaluation_no_comments">현재 이 강의평가에 대해 작성된 댓글이 없습니다.\n댓글로 의견을 달아주세요!</string>
     <string name="evaluation_point_hidden">비공개</string>
-    <string name="evaluation_forbidden">해당 강의평을 지금은 볼 수 없습니다\n%s</string>
-    <string name="evaluation_forbidden_email_confirmation_required">계정 인증을 해주세요</string>
-    <string name="evaluation_forbidden_university_confirmation_required">학교 메일 인증을 해주세요</string>
-    <string name="evaluation_forbidden_mandatory_evaluation_required">더 많은 강의평을 써주세요</string>
+    <string name="evaluation_forbidden">해당 강의평을 볼 수 없습니다\n%s</string>
+    <string name="evaluation_forbidden_email_confirmation_required">계정 이메일 인증이 필요합니다</string>
+    <string name="evaluation_forbidden_university_confirmation_required">학교 메일 인증이 필요합니다</string>
+    <string name="evaluation_forbidden_mandatory_evaluation_required">3개 이상의 강의평을 작성하시면 볼 수 있습니다</string>
 
     <!-- Compose Evaluation -->
     <string name="compose_evaluation_label_point_overall">총점</string>
     <string name="compose_evaluation_label_point_gpa_satisfaction">학점만족도</string>
     <string name="compose_evaluation_label_point_clarity">강의력</string>
     <string name="compose_evaluation_label_point_easiness">널널함</string>
-    <string name="compose_evaluation_label_search">클릭하여 작성할 강의 검색</string>
+    <string name="compose_evaluation_label_search">클릭하여 강의 검색</string>
     <string name="compose_evaluation_label_hashtags">해시태그 등록</string>
-    <string name="compose_evaluation_label_body">강의평 작성</string>
+    <string name="compose_evaluation_label_body">강의평가 내용</string>
     <string name="toast_compose_evaluation_submission_failed">강의평가 등록에 실패하였습니다</string>
-    <string name="toast_compose_evaluation_incomplete_data">필수 항목 중 누락된 부분이 있어 강의평가 등록을 취소합니다</string>
+    <string name="toast_compose_evaluation_incomplete_data">필수 항목 중 누락된 부분이 있어 강의평가를 등록할 수 없습니다</string>
 
     <!-- EmptyState -->
     <string name="emptystate_title_network">네트워크 불안정</string>
@@ -129,13 +132,15 @@
     <string name="profile_label_gender">성별</string>
     <string name="profile_value_male">남자</string>
     <string name="profile_value_female">여자</string>
-    <string name="profile_value_university_email_confirmation_required">인증이 필요합니다</string>
+    <string name="profile_value_university_email_confirmation_required">미인증</string>
     <string name="profile_value_university_email_confirmation_pending">인증 대기중</string>
     <!-- Profile Register University Email -->
     <string name="profile_register_university_email_label">학교 이메일 주소를 적어주세요</string>
     <string name="profile_register_university_email_body_prefix"></string>
     <string name="profile_register_university_email_body">학교 이메일 주소</string>
     <string name="profile_register_university_email_body_postfix">를 적어주세요</string>
+    <string name="toast_profile_register_university_email_sent">이메일 전송 성공</string>
+    <string name="toast_profile_register_university_email_not_sent">이메일 전송 실패</string>
     <!-- Profile Change Nickname -->
     <string name="profile_change_nickname_label">변경하실 닉네임을 적어주세요</string>
     <string name="profile_change_nickname_body_prefix"></string>
@@ -152,9 +157,10 @@
     <string name="settings_label_osl">오픈 소스 라이센스</string>
     <string name="settings_label_clear_history">검색 기록 초기화</string>
     <string name="settings_label_signout">로그아웃</string>
+    <string name="toast_settings_history_clear_succeed">검색 기록이 초기화 되었습니다</string>
+    <string name="toast_settings_history_clear_failed">검색 기록 초기화에 실패하였습니다</string>
 
     <!-- Dialog Title -->
-    <string name="dialog_title_confirm_submit">양식 제출 확인</string>
     <string name="dialog_title_entrance_year">입학 년도를 선택해주세요</string>
     <string name="dialog_title_delete_hashtag">해시태그 삭제</string>
     <string name="dialog_title_password_recovery">비밀번호 찾기</string>
@@ -163,12 +169,11 @@
     <string name="dialog_title_failure_change_nickname">닉네임 변경 실패</string>
     <string name="dialog_title_failure_change_password">비밀번호 변경 실패</string>
     <!-- Dialog Content -->
-    <string name="dialog_content_configm_submit">양식을 제출하시겠습니까?</string>
     <string name="dialog_content_delete_hashtag">해당 해시태그를 삭제하시겠습니까?</string>
-    <string name="dialog_content_password_recovery">가입할 때 입력한 이메일을 입력해주세요</string>
+    <string name="dialog_content_password_recovery">가입할 때 입력한 이메일을 입력해주세요. 비밀번호 변경 이메일이 발송됩니다.</string>
     <string name="dialog_content_compose_evaluation_submit">현재 기입된 정보로 새 강의평가를 작성하시겠습니까?</string>
     <string name="dialog_content_alert_mandatory_evaluation_required">3개 이상의 강의평가를 써야 볼 수 있습니다. \n%d개 남았습니다.</string>
-    <string name="dialog_content_alert_evaluation_already_registered">이전에 해당 강의에 대한 평가를 작성하였습니다. 수정하실 수 있습니다.</string>
+    <string name="dialog_content_alert_evaluation_already_registered">해당 강의에 대한 평가를 이미 작성하셨으므로 수정만 가능합니다.</string>
     <string name="dialog_content_alert_user_confirmation_required">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
     <string name="dialog_content_alert_university_confirmation_required">학교 메일 계정(%1$s)으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
     <string name="dialog_content_failure_register_university_email">중복된 학교 이메일입니다</string>
@@ -186,17 +191,10 @@
     <string name="dialog_negative_close">닫기</string>
     <string name="dialog_negative_change">변경</string>
     <string name="dialog_neutral_repository">웹페이지</string>
+    <!-- Dialog Toast -->
+    <string name="toast_alert_university_confirmation_email_sent">이메일 전송 성공</string>
+    <string name="toast_alert_university_confirmation_email_not_sent">이메일 전송 실패</string>
 
-    <!-- Toast Messages -->
-    <string name="toast_error_403">어머나, 뭔가 문제가 있네요!</string>
-    <string name="toast_start_of_entrance_year_not_loaded">최소 입학년도 값이 로드되지 않았습니다. 다시 시도해 주십시오</string>
-    <string name="toast_bad_network_status">네트워크 상태를 확인해 주십시오</string>
-    <string name="toast_failure_sign_in">로그인에 실패하였습니다</string>
-    <string name="toast_failure_sign_up">회원가입에 실패하였습니다</string>
-    <string name="toast_history_clear_succeed">검색 기록이 초기화 되었습니다</string>
-    <string name="toast_history_clear_failed">검색 기록 초기화에 실패하였습니다</string>
-    <string name="toast_university_confirmation_email_sent">이메일 전송 성공</string>
-    <string name="toast_university_confirmation_email_not_sent">이메일 전송 실패</string>
     <!-- Floating Action Button -->
     <string name="fab_change_nickname">닉네임 변경</string>
     <string name="fab_change_password">비밀번호 변경</string>
@@ -213,14 +211,15 @@
     <string name="search_candidate_type_professor">교수</string>
 
     <!-- Error -->
-    <string name="toast_error_default">error_default</string>
-    <string name="toast_error_retrofit_unstable_network">error_retrofit_unstable_network</string>
-    <string name="toast_error_retrofit_default">error_retrofit_default</string>
+    <string name="toast_error_default">알 수 없는 오류 발생</string>
+    <string name="toast_error_retrofit_403">어머나, 뭔가 문제가 있네요!</string>
+    <string name="toast_error_retrofit_unstable_network">네트워크 상태를 확인해 주십시오</string>
+    <string name="toast_error_retrofit_default">요청에 문제가 있습니다.</string>
 
     <!-- Password Recovery -->
     <string name="password_recovery_label">비밀번호를 잊어버리셨나요?</string>
-    <string name="toast_password_recovery_failed">password_recovery_failed</string>
-    <string name="toast_password_recovery_succeed">password_recovery_succeed</string>
+    <string name="toast_password_recovery_failed">비밀번호 변경 안내 이메일 발송에 실패하였습니다</string>
+    <string name="toast_password_recovery_succeed">비밀번호 변경 안내 이메일을 발송하였습니다</string>
 
     <!-- ETC -->
     <string name="empty"/>

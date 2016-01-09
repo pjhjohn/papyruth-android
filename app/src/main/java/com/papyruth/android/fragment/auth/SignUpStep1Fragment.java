@@ -158,8 +158,8 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
             error -> {
                 boolean handled = false;
                 if(error instanceof RetrofitError) handled = ErrorNetwork.handle((RetrofitError) error, this).handled;
-                if(handled) Toast.makeText(mActivity, R.string.toast_bad_network_status, Toast.LENGTH_SHORT).show();
-                else Toast.makeText(mActivity, R.string.toast_start_of_entrance_year_not_loaded, Toast.LENGTH_SHORT).show();
+                if(handled) Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                else Toast.makeText(mActivity, R.string.toast_signup_min_entrance_year_not_loaded, Toast.LENGTH_SHORT).show();
             }
         );
     }

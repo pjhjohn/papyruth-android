@@ -90,11 +90,11 @@ public class SettingsFragment extends TrackerFragment {
         mCompositeSubscription.add(ViewObservable.clicks(mClearHistory).subscribe(
             unused -> {
                 AppManager.getInstance().clear(AppConst.Preference.HISTORY);
-                Toast.makeText(mActivity, R.string.toast_history_clear_succeed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, R.string.toast_settings_history_clear_succeed, Toast.LENGTH_SHORT).show();
             },
             error -> {
                 ErrorHandler.handle(error, this);
-                Toast.makeText(mActivity, R.string.toast_history_clear_failed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, R.string.toast_settings_history_clear_failed, Toast.LENGTH_SHORT).show();
             }
         ));
         mCompositeSubscription.add(ViewObservable.clicks(mSignOut).subscribe(

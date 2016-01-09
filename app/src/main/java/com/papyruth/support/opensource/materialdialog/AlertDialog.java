@@ -109,10 +109,10 @@ public class AlertDialog {
                     .subscribe(
                         success -> {
                             if(success) {
-                                Toast.makeText(context, R.string.toast_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, R.string.toast_alert_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
                                 navigator.back();
                             } else {
-                                Toast.makeText(context, R.string.toast_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, R.string.toast_alert_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
                             }
                         }, error -> ErrorHandler.handle(error, MaterialDialog.class)
                     );

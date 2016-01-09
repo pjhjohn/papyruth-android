@@ -29,7 +29,7 @@ public class Error403 {
             }
             if (fragment.getActivity() != null) {
                 Activity activity = fragment.getActivity();
-                Toast.makeText(activity, R.string.toast_error_403, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.toast_error_retrofit_403, Toast.LENGTH_SHORT).show();
                 if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
                     ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
                         Error.description(throwable.getMessage()),

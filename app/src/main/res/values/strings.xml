@@ -51,11 +51,14 @@
     <string name="signup_privacy_policy">Privacy Policy</string>
     <string name="signup_email_duplication">duplicated email</string>
     <string name="signup_nickname_duplication">duplicated nickname</string>
+    <string name="toast_signin_failed">Failed to Signin</string>
+    <string name="toast_signup_failed">Failed to Signup</string>
+    <string name="toast_signup_min_entrance_year_not_loaded">Start of Entrance Year has not been loaded. Try again.</string>
 
     <!-- Permission -->
-    <string name="permission_title">permission_title</string>
-    <string name="permission_get_accounts_rational">permission_get_accounts_rational</string>
-    <string name="permission_get_accounts">permission_get_accounts</string>
+    <string name="permission_title">Contacts Permission</string>
+    <string name="permission_get_accounts_rational">This permission helps you auto-complete your email. Denying this permission disables email auto-complete function</string>
+    <string name="permission_get_accounts">permission to access your contacts</string>
     <string name="permission_request">%1$s. Would you like to grant %2$s?</string>
 
     <!-- Category -->
@@ -136,6 +139,8 @@
     <string name="profile_register_university_email_body_prefix">ENTER</string>
     <string name="profile_register_university_email_body">UNIVERSITY</string>
     <string name="profile_register_university_email_body_postfix">EMAIL</string>
+    <string name="toast_profile_register_university_email_sent">Email send success</string>
+    <string name="toast_profile_register_university_email_not_sent">Email send fail</string>
     <!-- Profile Change Nickname -->
     <string name="profile_change_nickname_label">ENTER NEW NICKNAME TO CHANGE</string>
     <string name="profile_change_nickname_body_prefix">ENTER</string>
@@ -152,9 +157,10 @@
     <string name="settings_label_osl">Open Source Licenses</string>
     <string name="settings_label_clear_history">Clear Search History</string>
     <string name="settings_label_signout">Sign Out</string>
+    <string name="toast_settings_history_clear_succeed">Search history has been cleared</string>
+    <string name="toast_settings_history_clear_failed">Failed to clear search history</string>
 
     <!-- Dialog Title -->
-    <string name="dialog_title_confirm_submit">Confirm Submission</string>
     <string name="dialog_title_entrance_year">Please select your entrance year</string>
     <string name="dialog_title_delete_hashtag">Removing Hashtag</string>
     <string name="dialog_title_password_recovery">Password Recovery</string>
@@ -163,7 +169,6 @@
     <string name="dialog_title_failure_change_nickname">nickname</string>
     <string name="dialog_title_failure_change_password">password</string>
     <!-- Dialog Content -->
-    <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
     <string name="dialog_content_delete_hashtag">Are you sure to delete this hashtag?</string>
     <string name="dialog_content_password_recovery">enter the email address you use to sign in.</string>
     <string name="dialog_content_compose_evaluation_submit">Are you sure to submit new evaluation with current contents?</string>
@@ -186,17 +191,10 @@
     <string name="dialog_negative_close">CLOSE</string>
     <string name="dialog_negative_change">CHANGE</string>
     <string name="dialog_neutral_repository">REPOSITORY</string>
+    <!-- Dialog Toast -->
+    <string name="toast_alert_university_confirmation_email_sent">Email Sent</string>
+    <string name="toast_alert_university_confirmation_email_not_sent">Failed to send Email</string>
 
-    <!-- Toast Messages -->
-    <string name="toast_error_403">Oops! Something went wrong</string>
-    <string name="toast_start_of_entrance_year_not_loaded">Start of Entrance Year has not been loaded. Try again.</string>
-    <string name="toast_bad_network_status">Please check your network</string>
-    <string name="toast_failure_sign_in">Failed to Signin</string>
-    <string name="toast_failure_sign_up">Failed to Signup</string>
-    <string name="toast_history_clear_succeed">Search history has been cleared</string>
-    <string name="toast_history_clear_failed">Failed to clear search history</string>
-    <string name="toast_university_confirmation_email_sent">Email send success</string>
-    <string name="toast_university_confirmation_email_not_sent">Email send fail</string>
     <!-- Floating Action Button -->
     <string name="fab_change_nickname">Change Nickname</string>
     <string name="fab_change_password">Change Password</string>
@@ -214,7 +212,8 @@
 
     <!-- Error -->
     <string name="toast_error_default">error_default</string>
-    <string name="toast_error_retrofit_unstable_network">error_retrofit_unstable_network</string>
+    <string name="toast_error_retrofit_403">Oops! Something went wrong</string>
+    <string name="toast_error_retrofit_unstable_network">Please check your network</string>
     <string name="toast_error_retrofit_default">error_retrofit_default</string>
 
     <!-- Password Recovery -->

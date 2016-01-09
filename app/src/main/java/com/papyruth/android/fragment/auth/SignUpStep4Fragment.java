@@ -240,7 +240,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
                         SignUpForm.getInstance().clear();
                         mActivity.startMainActivity();
-                    } else Toast.makeText(mActivity, getResources().getString(R.string.toast_failure_sign_in), Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(mActivity, getResources().getString(R.string.toast_signin_failed), Toast.LENGTH_SHORT).show();
                 },
                 error -> {
                     if (error instanceof RetrofitError) {
@@ -250,7 +250,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                     new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes()),
                                     SignupError.class
                                 );
-                                Toast.makeText(mActivity, signupError.errors.email != null? R.string.signup_email_duplication : (signupError.errors.nickname != null? R.string.signup_nickname_duplication : R.string.toast_failure_sign_up), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, signupError.errors.email != null? R.string.signup_email_duplication : (signupError.errors.nickname != null? R.string.signup_nickname_duplication : R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
                                 if(signupError.errors.email != null || signupError.errors.nickname != null) {
                                     mNavigator.navigate(SignUpStep2Fragment.class, true);
                                 } else if(!validateSignUpForm()) {
@@ -259,7 +259,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                 }
                                 break;
                             case 403: // Failed to SignUp
-                                Toast.makeText(mActivity, getResources().getString(R.string.toast_failure_sign_up), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, getResources().getString(R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
