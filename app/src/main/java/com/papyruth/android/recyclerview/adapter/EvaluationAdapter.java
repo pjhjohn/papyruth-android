@@ -25,7 +25,6 @@ import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.EmptyStateView;
-import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
@@ -62,6 +61,8 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     private RelativeLayout mFooterMaterialProgressBar;
     private RelativeLayout mFooterFullyLoadedIndicator;
 
+    private int mCommentId;
+
     public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
         mSwipeRefresh = swiperefresh;
@@ -77,6 +78,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         mIndexShadow = mHideShadow? -1 : 2 + (mHideInform?  0 : 1);
         mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mComments.size() + mIndexContent;
+        mCommentId = -1;
 
         if (Evaluation.getInstance().getId() != null){
             Api.papyruth().get_evaluation(User.getInstance().getAccessToken(),Evaluation.getInstance().getId())
@@ -136,6 +138,10 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         if (position == mIndexShadow) return;
         if (position == mIndexFooter) return;
         ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent));
+        if(mComments.get(position - mIndexContent).id.equals(mCommentId)) {
+            AnimatorHelper.FOCUS_EFFECT(holder.itemView).start();
+            mCommentId = -1;
+        }
     }
 
     @Override
@@ -151,6 +157,19 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         if (position == mIndexShadow) return ViewHolderFactory.ViewType.SHADOW;
         if (position == mIndexFooter) return ViewHolderFactory.ViewType.FOOTER;
         return ViewHolderFactory.ViewType.COMMENT_ITEM;
+    }
+
+    public void setCommentId(int commentId){
+        this.mCommentId = commentId;
+    }
+    public int getFocusIndex(){
+        if (mCommentId > 0 && mComments.get(mComments.size()-1).id < mCommentId){
+            for(int i = 0; i < mComments.size(); i++){
+                if(mComments.get(i).id.equals(mCommentId))
+                    return i + mIndexContent;
+            }
+        }
+        return -1;
     }
 
     private void reconfigure() {
@@ -179,6 +198,10 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
+
+            if(mCommentId > 0 && mComments.get(mComments.size()-1).id > mCommentId){
+                loadMore();
+            }
         }
         if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
@@ -192,7 +215,11 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), Evaluation.getInstance().getId()),
             Api.papyruth().get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null),
             (evaluationResponse, commentsResponse) -> {
-                if(evaluationResponse.evaluation != null) Evaluation.getInstance().update(evaluationResponse.evaluation);
+                this.mCommentId = -1;
+                if(evaluationResponse.evaluation != null) {
+                    Evaluation.getInstance().update(evaluationResponse.evaluation);
+                    this.notifyItemChanged(mIndexSingle);
+                }
                 if(commentsResponse.comments != null){
                     this.mComments.clear();
                     this.mComments.addAll(commentsResponse.comments);

@@ -132,6 +132,8 @@
     <color name="timestamp">@color/white_60p</color>
     <color name="hashtag">#8C6239</color>
     <color name="background_recyclerview">@color/white_90p</color>
+    <color name="background_cardview">@color/white</color>
+    <color name="background_focus_cardview">@color/colorchip_red</color>
     <color name="background_placeholder">@color/white_70p</color>
     <color name="background_progressbar">@color/white_90p</color>
 </resources>

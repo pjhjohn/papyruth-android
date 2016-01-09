@@ -2,9 +2,12 @@ package com.papyruth.support.utility.helper;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+
+import com.papyruth.android.R;
 
 /**
  * Created by pjhjohn on 2015-11-27.
@@ -56,6 +59,17 @@ public class AnimatorHelper {
                 view.setAlpha(1);
                 view.setVisibility(View.VISIBLE);
             }
+        });
+        return animator;
+    }
+
+    public static ValueAnimator FOCUS_EFFECT(View view){
+        int currentBackground = view.getResources().getColor(R.color.background_cardview);
+        int focusBackground = view.getResources().getColor(R.color.background_focus_cardview);
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), currentBackground, focusBackground, currentBackground);
+        animator.setDuration(1500);
+        animator.addUpdateListener(animation -> {
+            view.setBackgroundColor(((int) animation.getAnimatedValue()));
         });
         return animator;
     }

@@ -80,6 +80,8 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     private boolean mCommentInputActive;
     private boolean mStandalone;
 
+    private int mCommentId = -1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
@@ -94,6 +96,17 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(mAdapter);
+        this.mAdapter.setCommentId(mCommentId);
+
+        this.mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if(mAdapter.getFocusIndex() > 0) {
+                    mRecyclerView.smoothScrollToPosition(mAdapter.getFocusIndex());
+                }
+            }
+        });
 
         /* Initialize Toolbar */
         MaterialMenuDrawable mMaterialNavigationDrawable = new MaterialMenuDrawable(mContext, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
@@ -338,5 +351,8 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         } else if(object instanceof Footer) {
             mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
+    }
+    public void setCommentId(int mCommentId) {
+        this.mCommentId = mCommentId;
     }
 }

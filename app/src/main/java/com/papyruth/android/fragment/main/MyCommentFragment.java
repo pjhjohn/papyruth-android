@@ -40,6 +40,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
             mEvaluationOpened = true;
 
             mEvaluationFragment = new EvaluationFragment();
+            mEvaluationFragment.setCommentId(data.id);
             this.openEvaluation(view, true);
             Evaluation.getInstance().setId(data.evaluation_id);
         }else if(object instanceof Footer){

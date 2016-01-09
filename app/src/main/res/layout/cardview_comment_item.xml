@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/cardview_min_height_default"
     android:layout_marginBottom="1dp"
-    android:background="@color/white">
+    android:background="@color/background_cardview">
     <ImageView
         android:id="@+id/comment_item_avatar"
         android:layout_width="@dimen/cardview_image_side_length"
