@@ -30,15 +30,15 @@ public class PasswordRecoveryDialog {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         response -> {
-                            if(response.success) Toast.makeText(context, R.string.password_recovery_succeed, Toast.LENGTH_SHORT).show();
-                            else Toast.makeText(context, R.string.password_recovery_failed, Toast.LENGTH_SHORT).show();
+                            if(response.success) Toast.makeText(context, R.string.toast_password_recovery_succeed, Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(context, R.string.toast_password_recovery_failed, Toast.LENGTH_SHORT).show();
                         },
                         error -> {
                             if(error instanceof RetrofitError) {
                                 if(((RetrofitError) error).getKind() == RetrofitError.Kind.NETWORK)
-                                    Toast.makeText(context, R.string.error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
-                                else Toast.makeText(context, R.string.error_retrofit_default, Toast.LENGTH_SHORT).show();
-                            } else Toast.makeText(context, R.string.error_default, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                                else Toast.makeText(context, R.string.toast_error_retrofit_default, Toast.LENGTH_SHORT).show();
+                            } else Toast.makeText(context, R.string.toast_error_default, Toast.LENGTH_SHORT).show();
                         }
                     );
             })

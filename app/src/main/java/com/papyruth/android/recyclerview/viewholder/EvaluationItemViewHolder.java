@@ -79,17 +79,18 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
             mHashtags.setText(Hashtag.plainString(evaluation.hashtags));
             mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
-        }else{
-            String bodyAlert = String.format(
-                mContext.getResources().getString(R.string.invalid_evaluation)
-                    , User.getInstance().emailConfirmationRequired() ? mContext.getString(R.string.invalid_evaluation_cause_normal_email)
-                        : User.getInstance().mandatoryEvaluationsRequired() ? mContext.getString(R.string.invalid_evaluation_cause_mandantory)
-                        : mContext.getString(R.string.invalid_evaluation_cause_university_email)
+        } else {
+            String messageEvaluationForbidden = String.format(mContext.getResources().getString(R.string.evaluation_forbidden),
+                User.getInstance().emailConfirmationRequired()?
+                    mContext.getString(R.string.evaluation_forbidden_email_confirmation_required) :
+                    User.getInstance().mandatoryEvaluationsRequired()?
+                        mContext.getString(R.string.evaluation_forbidden_mandatory_evaluation_required) :
+                        mContext.getString(R.string.evaluation_forbidden_university_confirmation_required)
             );
             mBody.setTextColor(mContext.getResources().getColor(R.color.colorchip_red));
-            mBody.setText(bodyAlert);
+            mBody.setText(messageEvaluationForbidden);
             mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-            mPointOverall.setText(mContext.getString(R.string.invalid_point_closed));
+            mPointOverall.setText(mContext.getString(R.string.evaluation_point_hidden));
             for(int i = 0; i < 3; i++) ((LayerDrawable) mRatingBarOverall.getProgressDrawable()).getDrawable(i).setColorFilter(mContext.getResources().getColor(R.color.white_60p), PorterDuff.Mode.SRC_ATOP);
             mRatingBarOverall.setRating(10);
         }

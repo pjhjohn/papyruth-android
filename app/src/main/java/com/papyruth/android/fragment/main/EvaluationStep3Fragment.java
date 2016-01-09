@@ -131,9 +131,9 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             error -> ErrorHandler.handle(error, this)
         );
         Picasso.with(mActivity).load(R.drawable.ic_hashtag_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mHashtagsIcon);
-        mHashtagsLabel.setText(R.string.label_evaluation_hashtags);
+        mHashtagsLabel.setText(R.string.compose_evaluation_label_hashtags);
         Picasso.with(mActivity).load(R.drawable.ic_new_evaluation_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mBodyIcon);
-        mBodyLabel.setText(R.string.label_evaluation_body);
+        mBodyLabel.setText(R.string.compose_evaluation_label_body);
         mBodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | mBodyLabel.getPaintFlags());
         mHashtagsLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | mHashtagsLabel.getPaintFlags());
         mCompositeSubscription.add(WidgetObservable.text(mBody)
@@ -217,7 +217,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                     updateUserData();
                 },
                 error -> {
-                    Toast.makeText(mActivity, this.getResources().getString(R.string.submit_evaluation_fail), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, this.getResources().getString(R.string.toast_compose_evaluation_submission_failed), Toast.LENGTH_SHORT).show();
                     ErrorHandler.handle(error, this);
                 }
             );

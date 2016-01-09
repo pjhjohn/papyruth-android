@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:background="@color/transparent"
             android:inputType="textPassword"
-            android:imeActionLabel="@string/word_signup"
+            android:imeActionLabel="@string/ime_signup"
             android:imeOptions="actionNext"
             android:textSize="16sp"
             android:hint="@string/hint_password"/>

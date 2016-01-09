@@ -161,7 +161,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400:
-                                FailureDialog.show(this.getActivity(), FailureDialog.Type.UNIVERSITY_EMAIL);
+                                FailureDialog.show(this.getActivity(), FailureDialog.Type.REGISTER_UNIVERSITY_EMAIL);
                                 this.subscriptions.add(this.registerSubmitCallback());
                                 break;
                             default:

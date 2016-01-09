@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         Crashlytics.setUserIdentifier(User.getInstance().getId().toString());
         Crashlytics.setUserEmail(User.getInstance().getEmail());
         Crashlytics.setUserName(User.getInstance().getNickname());
-        Crashlytics.setString(getResources().getString(R.string.word_university), User.getInstance().getUniversityName());
+        Crashlytics.setString(getResources().getString(R.string.crashlytics_key_university), User.getInstance().getUniversityName());
 
         ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);

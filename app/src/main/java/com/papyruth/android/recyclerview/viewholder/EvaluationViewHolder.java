@@ -107,15 +107,15 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             mLabelOverall.setText(R.string.evaluation_label_point_overall);
             PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
             mLabelClarity.setText(R.string.evaluation_label_point_clarity);
-            mPostfixClarity.setText(R.string.point_denominator);
+            mPostfixClarity.setText(R.string.evaluation_point_denominator);
             mPostfixClarity.setTextColor(mContext.getResources().getColor(R.color.point_clarity));
             PointHelper.applyProgress(mContext, mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
             mLabelEasiness.setText(R.string.evaluation_label_point_easiness);
-            mPostfixEasiness.setText(R.string.point_denominator);
+            mPostfixEasiness.setText(R.string.evaluation_point_denominator);
             mPostfixEasiness.setTextColor(mContext.getResources().getColor(R.color.point_easiness));
             PointHelper.applyProgress(mContext, mLabelEasiness, mPointEasiness, mPostfixEasiness, evaluation.getPointEasiness());
             mLabelGpaSatisfaction.setText(R.string.evaluation_label_point_gpa_satisfaction);
-            mPostfixGpaSatisfaction.setText(R.string.point_denominator);
+            mPostfixGpaSatisfaction.setText(R.string.evaluation_point_denominator);
             mPostfixGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_gpa_satisfaction));
             PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
             mBody.setText(evaluation.getBody());

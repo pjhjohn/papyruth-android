@@ -16,8 +16,8 @@ public class OpenSourceLicenseDialog {
         return new MaterialDialog.Builder(context)
             .title(data.name)
             .content(data.license)
-            .positiveText(R.string.ok)
-            .neutralText(R.string.goto_github_repo)
+            .positiveText(R.string.dialog_positive_ok)
+            .neutralText(R.string.dialog_neutral_repository)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
                 public void onPositive(MaterialDialog dialog) {

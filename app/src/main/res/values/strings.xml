@@ -5,18 +5,20 @@
     <string name="application_confirm_exit">Press again to close application</string>
 
     <!-- Navigation Drawer -->
-    <string name="nav_item_home">Latest Evaluation</string>
-    <string name="nav_item_compose_evaluation">Compose Evaluation</string>
-    <string name="nav_item_favorite">Favorite</string>
-    <string name="nav_item_my_evaluation">My Evaluation</string>
-    <string name="nav_item_my_comment">My Comment</string>
+    <string name="navigation_drawer_item_home">Latest Evaluation</string>
+    <string name="navigation_drawer_item_compose_evaluation">Compose Evaluation</string>
+    <string name="navigation_drawer_item_favorite">Favorite</string>
+    <string name="navigation_drawer_item_my_evaluation">My Evaluation</string>
+    <string name="navigation_drawer_item_my_comment">My Comment</string>
+    <string name="navigation_drawer_open"/>
+    <string name="navigation_drawer_close"/>
 
     <!-- Toolbar -->
-    <string name="toolbar_home">@string/nav_item_home</string>
-    <string name="toolbar_compose_evaluation">@string/nav_item_compose_evaluation</string>
-    <string name="toolbar_favorite">@string/nav_item_favorite</string>
-    <string name="toolbar_my_evaluation">@string/nav_item_my_evaluation</string>
-    <string name="toolbar_my_comment">@string/nav_item_my_comment</string>
+    <string name="toolbar_home">@string/navigation_drawer_item_home</string>
+    <string name="toolbar_compose_evaluation">@string/navigation_drawer_item_compose_evaluation</string>
+    <string name="toolbar_favorite">@string/navigation_drawer_item_favorite</string>
+    <string name="toolbar_my_evaluation">@string/navigation_drawer_item_my_evaluation</string>
+    <string name="toolbar_my_comment">@string/navigation_drawer_item_my_comment</string>
     <string name="toolbar_evaluation">Evaluation</string>
     <string name="toolbar_course">Course Overview</string>
     <string name="toolbar_profile">My Profile</string>
@@ -33,8 +35,9 @@
     <string name="menu_edit_evaluation">Edit Evaluation</string>
 
     <!-- Sign-in & Sign-up -->
-    <string name="signin_btn">Sign in</string>
-    <string name="signup_btn">Sign up</string>
+    <string name="signin_btn">SIGN IN</string>
+    <string name="signup_btn">SIGN UP</string>
+    <string name="signup_label">Sign Up</string>
     <string name="signup_field_required">This field is required</string>
     <string name="signup_invalid_email">Invalid e-mail format</string>
     <string name="signup_invalid_password">Password is too short</string>
@@ -71,13 +74,20 @@
     <string name="course_label_point_clarity">Clarity</string>
     <string name="course_label_point_easiness">Easiness</string>
     <string name="course_no_evaluations">There is no Evaluations for this Course.\nWhy don\'t you write an evaluation for others?</string>
+    <string name="course_point_hidden">HIDDEN</string>
 
     <!-- Evaluation -->
+    <string name="evaluation_point_denominator">/10</string>
     <string name="evaluation_label_point_overall">Overall</string>
     <string name="evaluation_label_point_gpa_satisfaction">GPA Sat.</string>
     <string name="evaluation_label_point_clarity">Clarity</string>
     <string name="evaluation_label_point_easiness">Easiness</string>
     <string name="evaluation_no_comments">There is no Comment for this Evaluation.\nWhy don\'t you comment one?</string>
+    <string name="evaluation_point_hidden">HIDDEN</string>
+    <string name="evaluation_forbidden">You cannot see this evaluation\n%s</string>
+    <string name="evaluation_forbidden_email_confirmation_required">Confirm your email</string>
+    <string name="evaluation_forbidden_university_confirmation_required">Confirm your university email</string>
+    <string name="evaluation_forbidden_mandatory_evaluation_required">Write more evaluation</string>
 
     <!-- Compose Evaluation -->
     <string name="compose_evaluation_label_point_overall">Overall</string>
@@ -85,6 +95,10 @@
     <string name="compose_evaluation_label_point_clarity">Clarity</string>
     <string name="compose_evaluation_label_point_easiness">Easiness</string>
     <string name="compose_evaluation_label_search">Click to Search Evaluation to Compose</string>
+    <string name="compose_evaluation_label_hashtags">Hashtags</string>
+    <string name="compose_evaluation_label_body">Evaluation Content</string>
+    <string name="toast_compose_evaluation_submission_failed">Failed to register Evaluation</string>
+    <string name="toast_compose_evaluation_incomplete_data">Submit form is incomplete. Aborting submission</string>
 
     <!-- EmptyState -->
     <string name="emptystate_title_network">Unstable Network</string>
@@ -107,6 +121,7 @@
     <string name="inform_btn_optional">NEVER AGAIN</string>
 
     <!-- Profile -->
+    <string name="profile_label_entrance_year_postfix"/>
     <string name="profile_label_email">EMAIL</string>
     <string name="profile_label_university_mail">UNIVERSITY EMAIL</string>
     <string name="profile_label_realname">REALNAME</string>
@@ -115,6 +130,7 @@
     <string name="profile_value_male">Male</string>
     <string name="profile_value_female">Female</string>
     <string name="profile_value_university_email_confirmation_required">Confirmation Required</string>
+    <string name="profile_value_university_email_confirmation_pending">Waiting for Confirmation</string>
     <!-- Profile Register University Email -->
     <string name="profile_register_university_email_label">ENTER UNIVERSITY EMAIL</string>
     <string name="profile_register_university_email_body_prefix">ENTER</string>
@@ -143,6 +159,9 @@
     <string name="dialog_title_delete_hashtag">Removing Hashtag</string>
     <string name="dialog_title_password_recovery">Password Recovery</string>
     <string name="dialog_title_compose_evaluation_submit">Submit New Evaluation</string>
+    <string name="dialog_title_failure_register_university_email">university email</string>
+    <string name="dialog_title_failure_change_nickname">nickname</string>
+    <string name="dialog_title_failure_change_password">password</string>
     <!-- Dialog Content -->
     <string name="dialog_content_configm_submit">Are you sure to send this form?</string>
     <string name="dialog_content_delete_hashtag">Are you sure to delete this hashtag?</string>
@@ -152,6 +171,9 @@
     <string name="dialog_content_alert_evaluation_already_registered">You wrote evaluation this course. You can rewrite evaluation.</string>
     <string name="dialog_content_alert_user_confirmation_required">We send confirm mail your account.\nDo you want to resend email?</string>
     <string name="dialog_content_alert_university_confirmation_required">We send email your university account : %1$s\nDo you want to resend email?</string>
+    <string name="dialog_content_failure_register_university_email">university email : Duplicate Email</string>
+    <string name="dialog_content_failure_change_nickname">nickname : Duplicate Nickname</string>
+    <string name="dialog_content_failure_change_password">password : Current Password not correct</string>
     <!-- Dialog Button -->
     <string name="dialog_positive_delete">DELETE</string>
     <string name="dialog_positive_send">SEND</string>
@@ -163,6 +185,7 @@
     <string name="dialog_negative_cancel">CANCEL</string>
     <string name="dialog_negative_close">CLOSE</string>
     <string name="dialog_negative_change">CHANGE</string>
+    <string name="dialog_neutral_repository">REPOSITORY</string>
 
     <!-- Toast Messages -->
     <string name="toast_error_403">Oops! Something went wrong</string>
@@ -172,54 +195,35 @@
     <string name="toast_failure_sign_up">Failed to Signup</string>
     <string name="toast_history_clear_succeed">Search history has been cleared</string>
     <string name="toast_history_clear_failed">Failed to clear search history</string>
+    <string name="toast_university_confirmation_email_sent">Email send success</string>
+    <string name="toast_university_confirmation_email_not_sent">Email send fail</string>
     <!-- Floating Action Button -->
     <string name="fab_change_nickname">Change Nickname</string>
     <string name="fab_change_password">Change Password</string>
     <string name="fab_register_universtiy_email">Register University Email</string>
     <!-- IME -->
     <string name="ime_next">Next</string>
+    <string name="ime_signup">SignUp</string>
 
-    <!-- BELOW : Unclassified TODO : Classifiy'em-->
-    <string name="submit_evaluation_fail">Failed to register Evaluation</string>
-    <string name="entrance_postfix"/>
-    <string name="navigation_drawer_open"/>
-    <string name="navigation_drawer_close"/>
+    <!--Crashlytics-->
+    <string name="crashlytics_key_university">university</string>
+    <!--Search-->
+    <string name="search_candidate_type_lecture">lecture</string>
+    <string name="search_candidate_type_course">course</string>
+    <string name="search_candidate_type_professor">professor</string>
+
+    <!-- Error -->
+    <string name="toast_error_default">error_default</string>
+    <string name="toast_error_retrofit_unstable_network">error_retrofit_unstable_network</string>
+    <string name="toast_error_retrofit_default">error_retrofit_default</string>
+
+    <!-- Password Recovery -->
+    <string name="password_recovery_label">Forgot Password?</string>
+    <string name="toast_password_recovery_failed">password_recovery_failed</string>
+    <string name="toast_password_recovery_succeed">password_recovery_succeed</string>
+
+    <!-- ETC -->
     <string name="empty"/>
     <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
-    <string name="confirm_university_email">Email Not Confirmed</string>
-    <string name="toast_compose_evaluation_incomplete_data">Submit form is incomplete. Aborting submission</string>
-    <string name="label_evaluation_hashtags">Hashtags</string>
-    <string name="label_evaluation_body">Evaluation Content</string>
-    <string name="word_lecture">lecture</string>
-    <string name="word_course">course</string>
-    <string name="word_university">university</string>
-    <string name="word_professor">professor</string>
-    <string name="word_signup">SIGN UP</string>
-    <string name="failure_title_prefix">Failed to change </string>
-    <string name="failure_title_postfix"></string>
-    <string name="change_university_email_title">university email</string>
-    <string name="change_nickname_title">nickname</string>
-    <string name="change_password_title">password</string>
-    <string name="toast_university_confirmation_email_sent">Email send success</string>
-    <string name="toast_university_confirmation_email_not_sent">Email send fail</string>
-    <string name="failure_content_prefix">Could not register new </string>
-    <string name="failure_content_postfix"></string>
-    <string name="change_university_email_content">university email : Duplicate Email</string>
-    <string name="change_nickname_content">nickname : Duplicate Nickname</string>
-    <string name="change_password_content">password : Current Password not correct</string>
-    <string name="goto_github_repo">REPOSITORY</string>
-    <string name="point_denominator">/10</string>
-    <string name="password_recovery">Forgot Password?</string>
-    <string name="invalid_evaluation">You cannot see this evaluation\n%s</string>
-    <string name="invalid_evaluation_cause_normal_email">Confirm your email</string>
-    <string name="invalid_evaluation_cause_university_email">Confirm your university email</string>
-    <string name="invalid_evaluation_cause_mandantory">Write more evaluation</string>
-    <string name="invalid_point_closed">closed</string>
-    <string name="ok">OK</string>
-    <string name="error_default">error_default</string>
-    <string name="error_retrofit_unstable_network">error_retrofit_unstable_network</string>
-    <string name="error_retrofit_default">error_retrofit_default</string>
-    <string name="password_recovery_failed">password_recovery_failed</string>
-    <string name="password_recovery_succeed">password_recovery_succeed</string>
 </resources>

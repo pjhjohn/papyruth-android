@@ -99,11 +99,11 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                 mPointClarity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 mPointEasiness.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 mPointGpaSatisfaction.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-                mPointOverall.setText(mContext.getString(R.string.invalid_point_closed));
-                mPointClarity.setText(mContext.getString(R.string.invalid_point_closed));
-                mPointEasiness.setText(mContext.getString(R.string.invalid_point_closed));
-                mPointGpaSatisfaction.setText(mContext.getString(R.string.invalid_point_closed));
-            }else {
+                mPointOverall.setText(mContext.getString(R.string.course_point_hidden));
+                mPointClarity.setText(mContext.getString(R.string.course_point_hidden));
+                mPointEasiness.setText(mContext.getString(R.string.course_point_hidden));
+                mPointGpaSatisfaction.setText(mContext.getString(R.string.course_point_hidden));
+            } else {
                 mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34);
                 mPointClarity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 mPointEasiness.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
