@@ -139,7 +139,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         if (position == mIndexFooter) return;
         ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent));
         if(mComments.get(position - mIndexContent).id.equals(mCommentId)) {
-            AnimatorHelper.FOCUS_EFFECT(holder.itemView).start();
+//            AnimatorHelper.FOCUS_EFFECT(holder.itemView).start();
             mCommentId = -1;
         }
     }
