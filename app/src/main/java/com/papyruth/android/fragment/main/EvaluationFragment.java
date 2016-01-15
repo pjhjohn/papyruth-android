@@ -54,6 +54,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack {
     private Navigator mNavigator;
@@ -98,15 +99,23 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         mRecyclerView.setAdapter(mAdapter);
         this.mAdapter.setCommentId(mCommentId);
 
-        this.mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if(mAdapter.getFocusIndex() > 0) {
-                    mRecyclerView.smoothScrollToPosition(mAdapter.getFocusIndex());
-                }
-            }
-        });
+//        this.mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//            @Override
+//            public void onChanged() {
+//                super.onChanged();
+//                if(mAdapter.getFocusIndex() > 0) {
+//                    Timber.d("focus");
+//                    mRecyclerView.smoothScrollToPosition(mAdapter.getFocusIndex());
+//                }
+//            }
+//
+//            @Override
+//            public void onItemRangeInserted(int positionStart, int itemCount) {
+//                super.onItemRangeInserted(positionStart, itemCount);
+//                Timber.d("focus 0");
+//                mRecyclerView.smoothScrollToPosition(0);
+//            }
+//        });
 
         /* Initialize Toolbar */
         MaterialMenuDrawable mMaterialNavigationDrawable = new MaterialMenuDrawable(mContext, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
@@ -170,10 +179,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     public void onResume() {
         super.onResume();
         mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
-        mCompositeSubscription.add(getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
-            .filter(passIfNull -> passIfNull == null)
-            .subscribe(unused -> mAdapter.loadMore())
-        );
 
         showContentImmediately(mShowContentImmediately);
 
@@ -350,6 +355,10 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
             );
         } else if(object instanceof Footer) {
             mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
+        }else if(object instanceof Evaluation && view.getId() == R.id.evaluation_comment_count){
+            if(mAdapter.isMoreComment()){
+                mAdapter.loadMore();
+            }
         }
     }
     public void setCommentId(int mCommentId) {

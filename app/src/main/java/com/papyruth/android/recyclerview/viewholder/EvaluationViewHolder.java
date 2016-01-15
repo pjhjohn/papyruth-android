@@ -73,7 +73,10 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     public EvaluationViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);
         ButterKnife.bind(this, view);
-        if(listener != null) mHeader.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
+        if(listener != null) {
+            mHeader.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
+            mCommentCount.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
+        }
         mContext = view.getContext();
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mNickname.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);

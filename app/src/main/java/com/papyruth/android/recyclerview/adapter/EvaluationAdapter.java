@@ -31,6 +31,7 @@ import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit.RetrofitError;
@@ -62,6 +63,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     private RelativeLayout mFooterFullyLoadedIndicator;
 
     private int mCommentId;
+    private int mCommentSize;
 
     public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
@@ -90,11 +92,13 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                     notifyItemChanged(mIndexSingle);
                 }, error -> ErrorHandler.handle(error, this.getFragment()));
         }
+        loadMore();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewholder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
+            Timber.d("position : %s", position);
             if(!mHideInform && position == mIndexInform) {
                 String action = null;
                 switch(view.getId()) {
@@ -115,7 +119,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             }
             else if(position == mIndexSingle) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Evaluation.getInstance());
             else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
-            else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mComments.get(position - mIndexContent));
+            else if(position - mIndexContent < mComments.size() && position > 0) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mComments.get(position - mIndexContent));
         });
         if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);
@@ -137,8 +141,8 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         if (position == mIndexSingle) {((EvaluationViewHolder) holder).bind(Evaluation.getInstance()); return; }
         if (position == mIndexShadow) return;
         if (position == mIndexFooter) return;
-        ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent));
-        if(mComments.get(position - mIndexContent).id.equals(mCommentId)) {
+        if (position - mIndexContent < mComments.size()) ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent));
+        if (position - mIndexContent < mComments.size() && mComments.get(position - mIndexContent).id.equals(mCommentId)) {
 //            AnimatorHelper.FOCUS_EFFECT(holder.itemView).start();
             mCommentId = -1;
         }
@@ -171,6 +175,9 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         }
         return -1;
     }
+    public boolean isMoreComment(){
+        return Evaluation.getInstance().getCommentCount() - this.mComments.size() > 0;
+    }
 
     private void reconfigure() {
         if(mComments.isEmpty()) {
@@ -181,30 +188,43 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             mIndexShadow = mHideShadow? -1 : 2 + (mHideInform?  0 : 1);
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mComments.size() + mIndexContent;
-            notifyDataSetChanged();
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
         } else {
             mEmptyState.hide();
-            mSinceId = mComments.get(mComments.size()-1).id;
+            mSinceId = mComments.get(0).id;
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;
             mIndexSingle = 1 + (mHideInform?  0 : 1);
             mIndexShadow = mHideShadow? -1 : 2 + (mHideInform?  0 : 1);
             mIndexContent= 2 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mComments.size() + mIndexContent;
-            notifyDataSetChanged();
             if(mIndexSingle > 0) this.notifyItemChanged(mIndexSingle);
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
 
-            if(mCommentId > 0 && mComments.get(mComments.size()-1).id > mCommentId){
-                loadMore();
+            if(mCommentId > 0 && mComments.get(0).id > mCommentId){
+//                loadMore();
             }
         }
         if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
         else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
+    }
+
+    private void addAllComment(List<CommentData> commentDatas){
+        Collections.reverse(commentDatas);
+        this.mComments.addAll(0, commentDatas);
+        this.notifyItemRangeInserted(mIndexContent, commentDatas.size());
+    }
+
+    private void updateAllComment(List<CommentData> commentDatas){
+        int size = mComments.size();
+        this.notifyItemRangeRemoved(mIndexContent, size);
+        this.mComments.clear();
+        Collections.reverse(commentDatas);
+        this.mComments.addAll(0, commentDatas);
+        this.notifyItemRangeInserted(mIndexContent, commentDatas.size());
     }
 
     /* IAdapter methods*/
@@ -218,20 +238,19 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                 this.mCommentId = -1;
                 if(evaluationResponse.evaluation != null) {
                     Evaluation.getInstance().update(evaluationResponse.evaluation);
-                    this.notifyItemChanged(mIndexSingle);
                 }
                 if(commentsResponse.comments != null){
-                    this.mComments.clear();
-                    this.mComments.addAll(commentsResponse.comments);
+                    mCommentSize = commentsResponse.comments.size();
                 }
-                return evaluationResponse.evaluation != null && commentsResponse.comments != null;
+                return commentsResponse.comments;
             })
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(success -> {
+            .subscribe(comments -> {
                 mSwipeRefresh.setRefreshing(false);
                 mLoading = false;
                 mFullyLoaded = false;
+                this.updateAllComment(comments);
                 reconfigure();
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
@@ -266,7 +285,10 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             .subscribe(comments -> {
                 if(comments != null) {
                     if(comments.isEmpty()) mFullyLoaded = true;
-                    else mComments.addAll(comments);
+                    else {
+                        mCommentSize = comments.size();
+                        this.addAllComment(comments);
+                    }
                 }
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
