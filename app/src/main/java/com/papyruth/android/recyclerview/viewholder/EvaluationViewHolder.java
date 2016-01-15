@@ -63,7 +63,9 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
     @Bind(R.id.evaluation_up_vote_count)              protected RobotoTextView mVoteUpCount;
     @Bind(R.id.evaluation_down_vote_icon)             protected ImageView mVoteDownIcon;
     @Bind(R.id.evaluation_down_vote_count)            protected RobotoTextView mVoteDownCount;
+    @Bind(R.id.evaluation_comment_container)          protected LinearLayout mCommentContainer;
     @Bind(R.id.evaluation_comment_count)              protected TextView mCommentCount;
+    @Bind(R.id.evaluation_comment_more)               protected TextView mCommentMore;
     @Bind(R.id.material_progress_medium)              protected View mProgressbar;
     private Integer mEvaluationId;
     private VoteStatus mVoteStatus;
@@ -75,7 +77,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
         ButterKnife.bind(this, view);
         if(listener != null) {
             mHeader.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
-            mCommentCount.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
+            mCommentContainer.setOnClickListener(v -> listener.onRecyclerViewItemClick(v, super.getAdapterPosition()));
         }
         mContext = view.getContext();
         mResources = mContext.getResources();
@@ -94,10 +96,10 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void bind(Evaluation evaluation, View.OnClickListener listener){
         mLecture.setOnClickListener(listener);
-        bind(evaluation);
+        bind(evaluation, false);
     }
 
-    public void bind(Evaluation evaluation) {
+    public void bind(Evaluation evaluation, boolean loadMore) {
         if(evaluation.hasContents()) {
             mProgressbar.setVisibility(View.VISIBLE);
             mEvaluationId = evaluation.getId();
@@ -128,6 +130,10 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             final int commentCount = evaluation.getCommentCount();
             if(commentCount <= 0) mCommentCount.setText(mContext.getResources().getString(R.string.evaluation_no_comments));
             else mCommentCount.setText(String.format(mContext.getResources().getQuantityString(R.plurals.comments, commentCount), commentCount));
+            if(loadMore) {
+                mCommentMore.setVisibility(View.VISIBLE);
+                mCommentMore.setText(R.string.data_load_more);
+            } else mCommentMore.setVisibility(View.GONE);
         } else {
             AnimatorHelper.FADE_IN(mProgressbar).start();
         }

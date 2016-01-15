@@ -225,4 +225,5 @@
     <string name="empty"/>
     <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
+    <string name="data_load_more">Load more</string>
 </resources>

@@ -225,4 +225,5 @@
     <string name="empty"/>
     <string name="professor_prefix"/>
     <string name="professor_postfix">교수</string>
+    <string name="data_load_more">더 보기</string>
 </resources>

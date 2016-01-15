@@ -63,7 +63,6 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     private RelativeLayout mFooterFullyLoadedIndicator;
 
     private int mCommentId;
-    private int mCommentSize;
 
     public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener) {
         mContext = context;
@@ -118,7 +117,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                 }
             }
             else if(position == mIndexSingle) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Evaluation.getInstance());
-            else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
+            else if(position == mIndexFooter) { mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
             else if(position - mIndexContent < mComments.size() && position > 0) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mComments.get(position - mIndexContent));
         });
         if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) {
@@ -130,6 +129,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             mFooterBorder = viewholder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewholder.itemView.findViewById(R.id.material_progress_medium);
             mFooterFullyLoadedIndicator = (RelativeLayout) viewholder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
+            mFooterFullyLoadedIndicator.setVisibility(View.VISIBLE);
         }
         return viewholder;
     }
@@ -138,7 +138,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= mIndexHeader) return;
         if (position == mIndexInform) {((InformViewHolder) holder).bind(R.string.inform_evaluation, R.color.inform_evaluation); return; }
-        if (position == mIndexSingle) {((EvaluationViewHolder) holder).bind(Evaluation.getInstance()); return; }
+        if (position == mIndexSingle) { ((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), this.isMoreComment()); return; }
         if (position == mIndexShadow) return;
         if (position == mIndexFooter) return;
         if (position - mIndexContent < mComments.size()) ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent));
@@ -176,7 +176,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         return -1;
     }
     public boolean isMoreComment(){
-        return Evaluation.getInstance().getCommentCount() - this.mComments.size() > 0;
+        return Evaluation.getInstance().getCommentCount() != null && Evaluation.getInstance().getCommentCount() - this.mComments.size() > 0;
     }
 
     private void reconfigure() {
@@ -208,8 +208,6 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
 //                loadMore();
             }
         }
-        if(mFullyLoaded != null && mFullyLoaded) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
-        else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
     }
 
     private void addAllComment(List<CommentData> commentDatas){
@@ -239,9 +237,6 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                 if(evaluationResponse.evaluation != null) {
                     Evaluation.getInstance().update(evaluationResponse.evaluation);
                 }
-                if(commentsResponse.comments != null){
-                    mCommentSize = commentsResponse.comments.size();
-                }
                 return commentsResponse.comments;
             })
             .subscribeOn(Schedulers.io())
@@ -249,7 +244,6 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             .subscribe(comments -> {
                 mSwipeRefresh.setRefreshing(false);
                 mLoading = false;
-                mFullyLoaded = false;
                 this.updateAllComment(comments);
                 reconfigure();
             }, error -> {
@@ -263,13 +257,10 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     }
 
     private Boolean mLoading;
-    private Boolean mFullyLoaded;
     @Override
     public void loadMore() {
         if(mLoading != null && mLoading) return;
         mLoading = true;
-        if(mFullyLoaded != null && mFullyLoaded) return;
-        mFullyLoaded = false;
         if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
         Api.papyruth()
             .get_comments(
@@ -283,12 +274,9 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(comments -> {
-                if(comments != null) {
-                    if(comments.isEmpty()) mFullyLoaded = true;
-                    else {
-                        mCommentSize = comments.size();
-                        this.addAllComment(comments);
-                    }
+                if (comments != null) {
+                    this.addAllComment(comments);
+                    this.notifyItemChanged(mIndexSingle);
                 }
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;

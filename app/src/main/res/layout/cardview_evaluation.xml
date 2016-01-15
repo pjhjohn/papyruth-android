@@ -380,13 +380,28 @@
             </RelativeLayout><!-- Body -->
         </LinearLayout><!--Footer : Vote Up/Down-->
         <include layout="@layout/hr_nopadding"/>
-        <TextView
-            android:id="@+id/evaluation_comment_count"
+        <LinearLayout
+            android:id="@+id/evaluation_comment_container"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/baseline_x1"
-            android:gravity="center"
-            android:lineSpacingMultiplier="1.2"/>
+            android:clickable="true">
+            <TextView
+                android:id="@+id/evaluation_comment_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/baseline_x1"
+                android:paddingBottom="@dimen/baseline_x1"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.2"/>
+            <TextView
+                android:id="@+id/evaluation_comment_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/baseline_x1"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.2"/>
+        </LinearLayout>
     </LinearLayout>
     <include layout="@layout/material_progressbar_medium"/>
 </FrameLayout>

@@ -355,7 +355,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
             );
         } else if(object instanceof Footer) {
             mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
-        }else if(object instanceof Evaluation && view.getId() == R.id.evaluation_comment_count){
+        }else if(object instanceof Evaluation && view.getId() == R.id.evaluation_comment_container){
             if(mAdapter.isMoreComment()){
                 mAdapter.loadMore();
             }
