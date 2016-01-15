@@ -205,7 +205,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
 
             if(mCommentId > 0 && mComments.get(0).id > mCommentId){
-//                loadMore();
+                loadMore();
             }
         }
     }
