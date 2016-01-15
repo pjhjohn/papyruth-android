@@ -6,11 +6,14 @@ import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.ApiManager;
 import com.papyruth.support.opensource.retrofit.RetrofitLogger;
 import com.papyruth.support.opensource.retrofit.apis.Api;
+import com.papyruth.support.utility.error.*;
+import com.papyruth.support.utility.error.Error;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -23,7 +26,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-05-07.
  * MontserratApp.onCreate handles application initialization which should be called once.
  */
-public class PapyruthApplication extends Application {
+public class PapyruthApplication extends Application implements Error.OnReportToGoogleAnalytics{
     private Tracker mTracker;
     synchronized public Tracker getTracker() {
         if (mTracker == null) {
@@ -41,6 +44,11 @@ public class PapyruthApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
+            this.onReportToGoogleAnalytics(ex.getMessage(), this.getClass().getSimpleName(), false);
+        });
+
         /* Fabric for Crashlytics */
         Fabric.with(this, new Crashlytics());
 
@@ -67,5 +75,12 @@ public class PapyruthApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+    @Override
+    public void onReportToGoogleAnalytics(String cause, String from, boolean isFatal) {
+        Timber.d("Application.onReportToGoogleAnalytics from %s\nCause : %s", from, cause);
+        String description = Error.description(String.format("UncaughtExeption from %s : %s", from, cause));
+        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(isFatal).build());
     }
 }
