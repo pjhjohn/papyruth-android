@@ -41,7 +41,7 @@ public class MyCommentItemViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(MyCommentData comment) {
         mLecture.setText(comment.lecture_name);
-        mTimestamp.setText(DateTimeHelper.timestamp(comment.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mTimestamp.setText(DateTimeHelper.timestamp(comment.created_at, AppConst.DateFormat.DATE_TIME_12HR));
         mBody.setText(comment.body);
         VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, comment);
     }
