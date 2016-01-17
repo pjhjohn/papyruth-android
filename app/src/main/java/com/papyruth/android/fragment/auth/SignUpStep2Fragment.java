@@ -62,6 +62,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
     @Bind(R.id.signup_email_icon)    protected ImageView mIconEmail;
     @Bind(R.id.signup_nickname_icon) protected ImageView mIconNickname;
     private CompositeSubscription mCompositeSubscription;
+    private boolean typeEmail = false, typeNickName = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,15 +98,14 @@ public class SignUpStep2Fragment extends TrackerFragment {
             unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextEmail, InputMethodManager.SHOW_FORCED)
         );
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next).hide(true);
-
         mCompositeSubscription.add(
             Observable.combineLatest(
-                getEmailValidationObservable(mTextEmail),
-                getNicknameValidationObservable(mTextNickname),
+                getEmailValidationObservable(mTextEmail).startWith(((String) null)),
+                getNicknameValidationObservable(mTextNickname).startWith(((String) null)),
                 (String emailError, String nicknameError) -> {
-                    mTextEmail.setError(emailError);
-                    mTextNickname.setError(nicknameError);
-                    return emailError == null && nicknameError == null;
+                    if(typeEmail)    mTextEmail.setError(emailError);
+                    if(typeNickName) mTextNickname.setError(nicknameError);
+                    return emailError == null && nicknameError == null && typeEmail && typeNickName;
                 }
             ).observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
                 if (valid) mNextButtonEnabled = true;
@@ -169,6 +169,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
             })
             .map(event -> event.text().toString())
             .flatMap(email -> {
+                this.typeEmail = true;
                 SignUpForm.getInstance().setTempSaveEmail(email);
                 final String errorMessage = RxValidator.getErrorMessageEmail.call(email);
                 if (errorMessage == null) return Api.papyruth()
@@ -187,6 +188,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
             })
             .map(event -> event.text().toString())
             .flatMap(nickname -> {
+                typeNickName = true;
                 SignUpForm.getInstance().setTempSaveNickname(nickname);
                 final String errorMessage = RxValidator.getErrorMessageNickname.call(nickname);
                 if (errorMessage == null) return Api.papyruth()
