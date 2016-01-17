@@ -90,7 +90,7 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
-            if (mUniversityRecyclerView != null)
+            if(mUniversityRecyclerView != null)
                 ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityRecyclerView.getWindowToken(), 0);
         });
 
@@ -112,24 +112,20 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
 
     }
 
-    private void notifyUniversityChanged(List<UniversityData> universities){
+    private void notifyUniversityChanged(List<UniversityData> universities) {
         mUniversities.clear();
         mUniversities.addAll(universities);
         mAdapter.notifyDataSetChanged();
-        if(SignUpForm.getInstance().getUniversityId() != null){
-            this.mAdapter.setSelected(selectedUniversityItem(universities, SignUpForm.getInstance().getUniversityId()));
-        }
+        if(SignUpForm.getInstance().getUniversityId() != null) mAdapter.setSelected(selectedUniversityItem(universities, SignUpForm.getInstance().getUniversityId()));
+        else if(mUniversities.size() == 1) Observable.timer(200, TimeUnit.MILLISECONDS, Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(unused -> {
+            if(mUniversityRecyclerView.getChildAt(0) != null) mUniversityRecyclerView.getChildAt(0).performClick();
+        });
     }
 
-    private int selectedUniversityItem(List<UniversityData> universities, int id){
-        for(int i = 0; i < universities.size(); i++){
-            if(universities.get(i).id == id) {
-                Timber.d("selected item : %s", i);
-                return i;
-            }
-        }
-        Timber.d("not selected : %s", id);
-        return -1;
+    private int selectedUniversityItem(List<UniversityData> universities, int id) {
+        for(int i = 0; i < universities.size(); i++) {
+            if(universities.get(i).id == id) return i;
+        } return -1;
     }
 
     @Override

@@ -102,6 +102,8 @@ public class SignUpStep4Fragment extends TrackerFragment {
             unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextPassword, InputMethodManager.SHOW_FORCED)
         );
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green).hide(true);
+        FloatingActionControl.getButton().setMax(100);
+        FloatingActionControl.getButton().setShowProgressBackground(false);
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP4);
         mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
@@ -169,7 +171,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
         mTextAgreement.setText(ss);
         mTextAgreement.setMovementMethod(LinkMovementMethod.getInstance());
 
-        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> proceedSubmit()));
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> submitSignUpForm()));
         mCompositeSubscription.add(getPasswordValidationObservable(mTextPassword)
             .map(passwordError -> {
                 mTextPassword.setError(passwordError);
@@ -185,7 +187,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
 
         mTextPassword.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == EditorInfo.IME_ACTION_NEXT) {
-                proceedSubmit();
+                submitSignUpForm();
                 return true;
             } return false;
         });
@@ -201,13 +203,6 @@ public class SignUpStep4Fragment extends TrackerFragment {
         });
     }
 
-    private void proceedSubmit(){
-        if (mSubmitButtonEnabled) {
-            SignUpForm.getInstance().setValidPassword();
-            submitSignUpForm();
-        }
-    }
-
     private boolean mSubmitButtonEnabled;
     private Observable<String> getPasswordValidationObservable(TextView passwordTextView) {
         return WidgetObservable.text(passwordTextView)
@@ -221,20 +216,24 @@ public class SignUpStep4Fragment extends TrackerFragment {
     }
 
     private void submitSignUpForm() {
+        if(mSubmitButtonEnabled) SignUpForm.getInstance().setValidPassword();
         if(!validateSignUpForm()) return;
+        FloatingActionControl.getButton().setIndeterminate(true);
         Api.papyruth().post_users_sign_up(
-            SignUpForm.getInstance().getValidEmail(),
-            SignUpForm.getInstance().getValidPassword(),
-            SignUpForm.getInstance().getValidRealname(),
-            SignUpForm.getInstance().getValidNickname(),
-            SignUpForm.getInstance().getValidIsBoy(),
-            SignUpForm.getInstance().getUniversityId(),
-            SignUpForm.getInstance().getEntranceYear()
-        )
+                SignUpForm.getInstance().getValidEmail(),
+                SignUpForm.getInstance().getValidPassword(),
+                SignUpForm.getInstance().getValidRealname(),
+                SignUpForm.getInstance().getValidNickname(),
+                SignUpForm.getInstance().getValidIsBoy(),
+                SignUpForm.getInstance().getUniversityId(),
+                SignUpForm.getInstance().getEntranceYear()
+            )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 response -> {
+                    FloatingActionControl.getButton().setIndeterminate(false);
+                    FloatingActionControl.getButton().setProgress(0, true);
                     if (response.success) {
                         User.getInstance().update(response.user, response.access_token);
                         AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
@@ -243,6 +242,8 @@ public class SignUpStep4Fragment extends TrackerFragment {
                     } else Toast.makeText(mActivity, getResources().getString(R.string.toast_signin_failed), Toast.LENGTH_SHORT).show();
                 },
                 error -> {
+                    FloatingActionControl.getButton().setIndeterminate(false);
+                    FloatingActionControl.getButton().setProgress(0, true);
                     if (error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400: // Invalid field or lack of required field.

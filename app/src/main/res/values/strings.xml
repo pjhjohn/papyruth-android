@@ -170,15 +170,15 @@
     <string name="dialog_title_failure_change_password">password</string>
     <!-- Dialog Content -->
     <string name="dialog_content_delete_hashtag">Are you sure to delete this hashtag?</string>
-    <string name="dialog_content_password_recovery">enter the email address you use to sign in.</string>
-    <string name="dialog_content_compose_evaluation_submit">Are you sure to submit new evaluation with current contents?</string>
-    <string name="dialog_content_alert_mandatory_evaluation_required">Must write over 3 evaluations.\n Remain %d.</string>
-    <string name="dialog_content_alert_evaluation_already_registered">You wrote evaluation this course. You can rewrite evaluation.</string>
-    <string name="dialog_content_alert_user_confirmation_required">We send confirm mail your account.\nDo you want to resend email?</string>
-    <string name="dialog_content_alert_university_confirmation_required">We send email your university account : %1$s\nDo you want to resend email?</string>
+    <string name="dialog_content_password_recovery">Enter email address you want to sign in with.</string>
+    <string name="dialog_content_compose_evaluation_submit">Are you sure to submit a new evaluation with current contents?</string>
+    <string name="dialog_content_alert_mandatory_evaluation_required">You must compose three or more evaluations to proceed.\n Remaining : %d.</string>
+    <string name="dialog_content_alert_evaluation_already_registered">You have already composed an evaluation for this course. You may edit your evaluation.</string>
+    <string name="dialog_content_alert_user_confirmation_required">We have sent a confirmation email to your account.\nDo you want to resend?</string>
+    <string name="dialog_content_alert_university_confirmation_required">We have sent a confirmation email to your university account : %1$s\nDo you want to resend?</string>
     <string name="dialog_content_failure_register_university_email">university email : Duplicate Email</string>
-    <string name="dialog_content_failure_change_nickname">nickname : Duplicate Nickname</string>
-    <string name="dialog_content_failure_change_password">password : Current Password not correct</string>
+    <string name="dialog_content_failure_change_nickname">Nickname : Nickname has been duplicated</string>
+    <string name="dialog_content_failure_change_password">Password : Current password is incorrect</string>
     <!-- Dialog Button -->
     <string name="dialog_positive_delete">DELETE</string>
     <string name="dialog_positive_send">SEND</string>
