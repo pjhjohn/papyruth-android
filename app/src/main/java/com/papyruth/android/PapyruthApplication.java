@@ -46,6 +46,7 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
         super.onCreate();
 
         Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
+            ex.printStackTrace();
             this.onReportToGoogleAnalytics(ex.getMessage(), this.getClass().getSimpleName(), false);
         });
 
@@ -82,5 +83,6 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
         Timber.d("Application.onReportToGoogleAnalytics from %s\nCause : %s", from, cause);
         String description = Error.description(String.format("UncaughtExeption from %s : %s", from, cause));
         mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(isFatal).build());
+        System.exit(1);
     }
 }
