@@ -271,19 +271,20 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                         break;
                                     default:
                                         Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                                        ErrorDefaultHTTP.handle(((RetrofitError) error.getCause()), this);
+                                        ErrorDefaultHTTP.handle(((RetrofitError) error), this);
                                 }
                                 break;
                             case NETWORK:
-                                if( ErrorNetwork.handle(((RetrofitError) error.getCause()), this).handled ) Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                                if (ErrorNetwork.handle(((RetrofitError) error), this).handled)
+                                    Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
                                 break;
                             default:
-                                ErrorDefaultRetrofit.handle(((RetrofitError) error.getCause()), this);
+                                ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
                                 break;
                         }
                     }else{
                         error.printStackTrace();
-                        ErrorDefault.handle(error.getCause(), this);
+                        ErrorDefault.handle(error, this);
                     }
                 }
             );
