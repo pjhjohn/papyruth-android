@@ -52,8 +52,10 @@ public class SimpleCourseAdapter extends TrackerAdapter{
     private FrameLayout mShadow;
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
+    private RelativeLayout mFooterFullyLoadedIndicator;
     private Context mContext;
     private Navigator mNavigator;
+    private int mPage;
 
     public SimpleCourseAdapter(Context context, EmptyStateView emptystate, Navigator navigator, RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
@@ -69,10 +71,11 @@ public class SimpleCourseAdapter extends TrackerAdapter{
         mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
         mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mCourses.size() + mIndexContent;
+        mPage = 1;
 
         SearchToolbar.getInstance().setItemObjectClickListener((v, object) -> {
-            this.loadSearchResult();
-        }).setOnSearchByQueryListener(this::loadSearchResult);
+            this.loadSearchResult(true);
+        }).setOnSearchByQueryListener(() -> this.loadSearchResult(true));
     }
 
     @Override
@@ -89,6 +92,7 @@ public class SimpleCourseAdapter extends TrackerAdapter{
         if (viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
+            mFooterFullyLoadedIndicator = (RelativeLayout) viewHolder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
         }
         return viewHolder;
     }
@@ -118,6 +122,7 @@ public class SimpleCourseAdapter extends TrackerAdapter{
         return ViewHolderFactory.ViewType.COURSE_ITEM;
     }
     private void reconfigure() {
+        mLoadding = false;
         if(mCourses.isEmpty()) {
             mIndexHeader = 0;
             mIndexInform = mHideInform? -1 : 1;
@@ -136,14 +141,23 @@ public class SimpleCourseAdapter extends TrackerAdapter{
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mCourses.size() + mIndexContent;
+            mPage ++;
             notifyDataSetChanged();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
+            if(mFullyLoad) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
+            else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
             mEmptyState.hide();
         }
     }
 
-    public void loadSearchResult() {
+    private boolean mLoadding = false, mFullyLoad = false;
+    public void loadSearchResult(boolean clear) {
+        if (clear) {
+            mPage = 1;
+            mFullyLoad = false;
+        }else if(mLoadding || mFullyLoad) return;
+        mLoadding = true;
         CandidateData candidate = SearchToolbar.getInstance().getSelectedCandidate();
         if (mFooterMaterialProgressBar != null)
             AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
@@ -158,21 +172,26 @@ public class SimpleCourseAdapter extends TrackerAdapter{
                     User.getInstance().getUniversityId(),
                     candidate.lecture_id,
                     candidate.professor_id,
-                    SearchToolbar.getInstance().getSelectedQuery()
+                    SearchToolbar.getInstance().getSelectedQuery(),
+                    mPage,
+                    null
                 )
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(courses -> {
+                    mLoadding = false;
                     if(courses != null) {
+                        if (courses.isEmpty()) mFullyLoad = true;
                         Course.getInstance().clear();
-                        mCourses.clear();
+                        if(clear) mCourses.clear();
                         mCourses.addAll(courses);
                     }
                     if(mFooterMaterialProgressBar != null)
                         AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                     reconfigure();
                 }, error -> {
+                    mLoadding = false;
                     if(error instanceof RetrofitError) {
                         if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
                             mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();

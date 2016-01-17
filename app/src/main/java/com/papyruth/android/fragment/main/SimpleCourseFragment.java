@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
+import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
@@ -22,6 +23,7 @@ import com.papyruth.android.recyclerview.adapter.SimpleCourseAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
@@ -42,13 +44,14 @@ import rx.subscriptions.CompositeSubscription;
  * TODO : should be able to expand when clicking recyclerview item to show evaluation data in detail
  */
 
-public class SimpleCourseFragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
+public class SimpleCourseFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener {
     private Navigator mNavigator;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.mNavigator = (Navigator) activity;
+        SearchToolbar.getInstance().setSelectedQuery(null).setSelectedCandidate(new CandidateData());
     }
 
     @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
@@ -88,6 +91,11 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
     @Override
     public void onResume() {
         super.onResume();
+        this.mCompositeSubscription.add(
+            this.getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
+                .filter(passIfNull -> passIfNull == null && (!SearchToolbar.getInstance().getSelectedCandidate().isEmpty() || SearchToolbar.getInstance().getSelectedQuery() != null))
+                .subscribe(unused -> mAdapter.loadSearchResult(false))
+        );
         this.mToolbar.setTitle(R.string.toolbar_search);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
@@ -103,7 +111,7 @@ public class SimpleCourseFragment extends TrackerFragment implements RecyclerVie
             error -> ErrorHandler.handle(error, this)
         );
         if(SearchToolbar.getInstance().isReadyToSearch())
-            mAdapter.loadSearchResult();
+            mAdapter.loadSearchResult(true);
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.papyruth.android.recyclerview.adapter.EvaluationSearchAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
@@ -42,13 +43,14 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  * Searches SimpleCourse for Evaluation on Step 1.
  */
-public class EvaluationStep1Fragment extends TrackerFragment implements RecyclerViewItemObjectClickListener, OnBack {
+public class EvaluationStep1Fragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack {
     private Toolbar mToolbar;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mNavigator = (Navigator) activity;
         mContext = activity;
+        SearchToolbar.getInstance().setSelectedQuery(null).setSelectedCandidate(new CandidateData());
     }
 
     @Bind(R.id.evaluation_form_query_button) protected Button mQueryButton;
@@ -107,10 +109,15 @@ public class EvaluationStep1Fragment extends TrackerFragment implements Recycler
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.handle(error, this))
         );
+        mCompositeSubscription.add(
+            this.getRecyclerViewScrollObservable(mRecyclerView, mToolbar, false, true)
+                .filter(passIfNull -> passIfNull == null && (!SearchToolbar.getInstance().getSelectedCandidate().isEmpty() || SearchToolbar.getInstance().getSelectedQuery() != null))
+                .subscribe(unused -> this.mAdapter.searchCourse(SearchToolbar.getInstance().getSelectedCandidate(), SearchToolbar.getInstance().getSelectedQuery(), false))
+            );
         SearchToolbar.getInstance()
-            .setItemObjectClickListener((view, object) -> mAdapter.searchCourse(((CandidateData) object), null))
+            .setItemObjectClickListener((view, object) -> mAdapter.searchCourse(((CandidateData) object), null, true))
             .setOnVisibilityChangedListener(visible -> mQueryButton.setVisibility(visible ? View.GONE : View.VISIBLE))
-            .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new CandidateData(), SearchToolbar.getInstance().getSelectedQuery()));
+            .setOnSearchByQueryListener(() -> mAdapter.searchCourse(new CandidateData(), SearchToolbar.getInstance().getSelectedQuery(), true));
     }
 
     @Override
