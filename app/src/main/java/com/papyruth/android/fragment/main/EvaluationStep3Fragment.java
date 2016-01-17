@@ -115,6 +115,8 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
         StatusBarHelper.changeColorTo(mActivity, R.color.status_bar_green);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green);
+        FloatingActionControl.getButton().setMax(100);
+        FloatingActionControl.getButton().setShowProgressBackground(false);
         FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
             unused -> new MaterialDialog.Builder(mActivity)
                 .title(R.string.dialog_title_compose_evaluation_submit)
@@ -201,6 +203,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             .flatMap(response -> {
                 if(response.evaluation_id != null) EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
                 if(EvaluationForm.getInstance().getHashtag().isEmpty()) return Observable.just(new VoidResponse());
+                FloatingActionControl.getButton().setIndeterminate(true);
                 return Api.papyruth().post_evaluation_hashtag(
                     User.getInstance().getAccessToken(),
                     EvaluationForm.getInstance().getEvaluationId(),
@@ -218,12 +221,15 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                 },
                 error -> {
                     Toast.makeText(mActivity, this.getResources().getString(R.string.toast_compose_evaluation_submission_failed), Toast.LENGTH_SHORT).show();
+                    FloatingActionControl.getButton().setIndeterminate(false);
+                    FloatingActionControl.getButton().setProgress(0, true);
                     ErrorHandler.handle(error, this);
                 }
             );
     }
 
     private Observable<EvaluationResponse> getApiObservable(boolean isEditMode) {
+        FloatingActionControl.getButton().setIndeterminate(true);
         if(isEditMode) return Api.papyruth().put_evaluation(
             User.getInstance().getAccessToken(),
             EvaluationForm.getInstance().getEvaluationId(),
@@ -249,9 +255,15 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(response -> {
+                FloatingActionControl.getButton().setIndeterminate(false);
+                FloatingActionControl.getButton().setProgress(0, true);
                 User.getInstance().update(response.user);
                 mNavigator.navigate(HomeFragment.class, true, true);
-            }, error -> ErrorHandler.handle(error, this));
+            }, error -> {
+                FloatingActionControl.getButton().setIndeterminate(false);
+                FloatingActionControl.getButton().setProgress(0, true);
+                ErrorHandler.handle(error, this);
+            });
         else {
             Bundle bundle = new Bundle();
             bundle.putBoolean("STANDALONE", true);
