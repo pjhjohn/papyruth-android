@@ -49,8 +49,10 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
     private FrameLayout mShadow;
     private View mFooterBorder;
     private RelativeLayout mFooterMaterialProgressBar;
+    private RelativeLayout mFooterFullyLoadedIndicator;
     private Context mContext;
     private Navigator mNavigator;
+    private int mPage;
 
     public EvaluationSearchAdapter(Context context, EmptyStateView emptystate, Navigator navigator,RecyclerViewItemObjectClickListener listener) {
         mEmptyState = emptystate;
@@ -66,6 +68,7 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
         mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
         mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
         mIndexFooter = mCourses.size() + mIndexContent;
+        mPage = 1;
     }
 
     @Override
@@ -89,6 +92,7 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
         if (viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);
             mFooterMaterialProgressBar = (RelativeLayout) viewHolder.itemView.findViewById(R.id.material_progress_medium);
+            mFooterFullyLoadedIndicator = (RelativeLayout) viewHolder.itemView.findViewById(R.id.footer_fully_loaded_indicator);
         }
         return viewHolder;
     }
@@ -138,15 +142,24 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform?  0 : 1);
             mIndexContent= 1 + (mHideShadow ? 0 : 1) + (mHideInform? 0 : 1);
             mIndexFooter = mCourses.size() + mIndexContent;
+            mPage++;
             notifyDataSetChanged();
             if(mEmptyState.getVisibility() == View.VISIBLE)
                 AnimatorHelper.FADE_OUT(mEmptyState).start();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
+            if(mFullyLoad) AnimatorHelper.FADE_IN(mFooterFullyLoadedIndicator).start();
+            else AnimatorHelper.FADE_OUT(mFooterFullyLoadedIndicator).start();
         }
     }
 
-    public void searchCourse(CandidateData candidate, String query) {
+    private boolean mLoadding = false, mFullyLoad = false;
+    public void searchCourse(CandidateData candidate, String query, boolean clear) {
+        if (clear){
+            mPage = 1;
+            mFullyLoad = false;
+        }else if(mLoadding || mFullyLoad) return;
+        mLoadding = true;
         if(candidate.course_id != null){
             nextEvaluatonStep(candidate);
         }else {
@@ -158,17 +171,21 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
                     User.getInstance().getUniversityId(),
                     candidate.lecture_id,
                     candidate.professor_id,
-                    query
+                    query,
+                    mPage,
+                    null
                 )
                 .map(response -> response.courses)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(courses -> {
+                    mLoadding = false;
                     if (courses != null) {
+                        if (courses.isEmpty()) mFullyLoad = true;
                         if (candidate.professor_id != null && candidate.lecture_id != null && courses.size() > 0)
                             nextEvaluatonStep(courses.get(0));
                         else {
-                            mCourses.clear();
+                            if (clear) mCourses.clear();
                             mCourses.addAll(courses);
                         }
                     }
@@ -176,6 +193,7 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
                         AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                     reconfigure();
                 }, error -> {
+                    mLoadding = false;
                     ErrorHandler.handle(error, this.getFragment());
                     if (mFooterMaterialProgressBar != null)
                         AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();

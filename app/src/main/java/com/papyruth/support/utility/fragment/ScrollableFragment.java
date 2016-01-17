@@ -46,22 +46,29 @@ public abstract class ScrollableFragment extends TrackerFragment {
     }
 
     protected Observable<Boolean> getRecyclerViewScrollObservable(RecyclerView view, Toolbar toolbar, boolean animateFAC) {
+        return getRecyclerViewScrollObservable(view, toolbar, animateFAC, false);
+    }
+    protected Observable<Boolean> getRecyclerViewScrollObservable(RecyclerView view, Toolbar toolbar, boolean animateFAC, boolean alwalyShow){
         return Observable.create( observer -> view.setOnScrollListener( new PanelControllerOnScrollWithAskMore(AppConst.DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE) {
-            @Override public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) { observer.onNext(null); }
-            @Override public void onHidePanels () { observer.onNext(false); }
-            @Override public void onShowPanels () { observer.onNext(true); }
-        }))
-        .map(show_panels -> {
-            if (show_panels == null) return null;
-            if ((boolean) show_panels) {
-                if (mHideToolbarOnScroll) ToolbarHelper.show(toolbar);
-                if (mHideFloatingActionControlOnScroll) FloatingActionControl.getInstance().show(animateFAC);
-                return true;
-            } else {
-                if (mHideToolbarOnScroll) ToolbarHelper.hide(toolbar);
-                if (mHideFloatingActionControlOnScroll) FloatingActionControl.getInstance().hide(animateFAC);
-                return false;
-            }
-        });
+                @Override public void onAskMore (int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) { observer.onNext(null); }
+                @Override public void onHidePanels () { observer.onNext(false); }
+                @Override public void onShowPanels () { observer.onNext(true); }
+            }))
+            .map(show_panels -> {
+                if (show_panels == null) return null;
+                if(!alwalyShow) {
+                    if ((boolean) show_panels) {
+                        if (mHideToolbarOnScroll) ToolbarHelper.show(toolbar);
+                        if (mHideFloatingActionControlOnScroll)
+                            FloatingActionControl.getInstance().show(animateFAC);
+                        return true;
+                    } else {
+                        if (mHideToolbarOnScroll) ToolbarHelper.hide(toolbar);
+                        if (mHideFloatingActionControlOnScroll)
+                            FloatingActionControl.getInstance().hide(animateFAC);
+                        return false;
+                    }
+                } return ((boolean) show_panels);
+            });
     }
 }

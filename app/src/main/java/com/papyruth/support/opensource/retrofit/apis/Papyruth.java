@@ -248,7 +248,9 @@ public interface Papyruth {
         @Query("university_id") Integer university_id,
         @Query("lecture_id") Integer lecture_id,
         @Query("professor_id") Integer professor_id,
-        @Query("query") String query
+        @Query("query") String query,
+        @Query("page") Integer page,
+        @Query("limit") Integer limit
     );
 
 

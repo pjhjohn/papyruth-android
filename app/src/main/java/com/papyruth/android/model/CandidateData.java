@@ -33,6 +33,10 @@ public class CandidateData {
         this.lecture_name = null;
     }
 
+    public boolean isEmpty(){
+        return this.course_id == null && this.professor_id == null && this.professor_name == null && this.lecture_id == null && this.lecture_name == null;
+    }
+
     @Override
     public String toString() {
         return String.format("course : id - <%s>  professor : id-<%s>, name-<%s>  lecture : id-<%s>, name-<%s>", course_id, professor_id, professor_name, lecture_id, lecture_name);

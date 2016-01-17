@@ -264,6 +264,7 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
     private CandidateData mSelectedCandidate;
     private String mSelectedQuery;
     public CandidateData getSelectedCandidate() {
+        if (mSelectedCandidate == null) return new CandidateData();
         return mSelectedCandidate;
     }
     public SearchToolbar setSelectedCandidate(CandidateData candidateData) {
