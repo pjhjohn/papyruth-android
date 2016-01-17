@@ -137,7 +137,10 @@ public class SignUpStep2Fragment extends TrackerFragment {
 
         if(mTextEmail.getText().toString().isEmpty()) {
             final String email = SignUpForm.getInstance().getTempSaveEmail();
-            if(email != null) mTextEmail.setText(email);
+            if(email != null) {
+                mTextEmail.setText(email);
+                mTextEmail.setSelection(mTextEmail.getText().length());
+            }
             else mTextEmail.getText().clear();
         } else mTextEmail.setText(mTextEmail.getText());
         if(mTextNickname.getText().toString().isEmpty()) {
