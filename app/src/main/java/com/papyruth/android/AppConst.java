@@ -31,8 +31,8 @@ public class AppConst {
     /* DateTime String Format*/
     public static class DateFormat {
         public static final String API = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // TODO : Z stands for TimeZone, but seems not working now
-        public static final String SIMPLE = "yyyy.MM.dd";
-        public static final String DATE_AND_TIME = "yy.MM.dd HH:mm";
+        public static final String DATE = "yyyy.MM.dd";
+        public static final String DATE_TIME_12HR = "yyyy.MM.dd ahh:mm";
     }
 
     public static class Navigator {

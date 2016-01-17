@@ -51,7 +51,7 @@ public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(EvaluationData evaluation) {
         mLecture.setText(evaluation.lecture_name);
-        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_TIME_12HR));
         mBody.setText(evaluation.body);
         PointHelper.applyRating(mContext, mRatingBarOverall, evaluation.point_overall);
         VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);

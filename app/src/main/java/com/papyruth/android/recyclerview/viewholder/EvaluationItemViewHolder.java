@@ -68,7 +68,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mEvaluationId = evaluation.id;
         Picasso.with(mContext).load(evaluation.avatar_url).transform(new CircleTransformation()).into(mAvatar);
         mNickname.setText(evaluation.user_nickname);
-        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_AND_TIME));
+        mTimestamp.setText(DateTimeHelper.timestamp(evaluation.created_at, AppConst.DateFormat.DATE_TIME_12HR));
         mLabelOverall.setText(R.string.evaluation_label_point_overall);
         VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
         Picasso.with(mContext).load(R.drawable.ic_comment_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mCommentIcon);

@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,23 +19,27 @@ import java.util.TimeZone;
  */
 public class DateTimeHelper {
     public static String timestamp(String in) {
-        return DateTimeHelper.timestamp(in, AppConst.DateFormat.API, AppConst.DateFormat.SIMPLE);
+        return DateTimeHelper.timestamp(in, AppConst.DateFormat.API, AppConst.DateFormat.DATE);
     }
     public static String timestamp(String in, String out_format) {
         return DateTimeHelper.timestamp(in, AppConst.DateFormat.API, out_format);
     }
     public static String timestamp(String in, String in_format, String out_format) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(in_format, Locale.UK);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        SimpleDateFormat format = new SimpleDateFormat(in_format, Locale.UK);
+        DateFormatSymbols symbols = format.getDateFormatSymbols();
+        symbols = (DateFormatSymbols) symbols.clone();
+        symbols.setAmPmStrings(new String[] {"AM", "PM"});
+        format.setDateFormatSymbols(symbols);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
         try {
-            date = dateFormat.parse(in);
+            date = format.parse(in);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        dateFormat.applyLocalizedPattern(out_format);
-        dateFormat.setTimeZone(TimeZone.getDefault());
-        return dateFormat.format(date);
+        format.applyLocalizedPattern(out_format);
+        format.setTimeZone(TimeZone.getDefault());
+        return format.format(date);
     }
 
     public static String timeago(Context context, String in) {
@@ -44,6 +49,10 @@ public class DateTimeHelper {
     private static final String NOT_ASSIGNED = "N/A";
     public static String timeago(Context context, String in, String in_format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(in_format);
+        DateFormatSymbols symbols = dateFormat.getDateFormatSymbols();
+        symbols = (DateFormatSymbols) symbols.clone();
+        symbols.setAmPmStrings(new String[] {"AM", "PM"});
+        dateFormat.setDateFormatSymbols(symbols);
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
         try {

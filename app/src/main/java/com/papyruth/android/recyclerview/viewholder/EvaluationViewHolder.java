@@ -108,7 +108,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.getCategory());
             Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
             mNickname.setText(evaluation.getUserNickname());
-            mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.SIMPLE));
+            mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.DATE));
             mLabelOverall.setText(R.string.evaluation_label_point_overall);
             PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
             mLabelClarity.setText(R.string.evaluation_label_point_clarity);
