@@ -33,6 +33,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorDefault;
+import com.papyruth.support.utility.error.ErrorDefaultHTTP;
 import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
@@ -153,6 +154,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
             new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
+                    imm.hideSoftInputFromWindow(mTextPassword.getWindowToken(), 0);
                     new MaterialDialog.Builder(mActivity)
                         .title(R.string.signup_privacy_policy)
                         .content(mPrivacyPolicy)
@@ -269,6 +271,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                         break;
                                     default:
                                         Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                                        ErrorDefaultHTTP.handle(((RetrofitError) error.getCause()), this);
                                 }
                                 break;
                             case NETWORK:
@@ -279,6 +282,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                 break;
                         }
                     }else{
+                        error.printStackTrace();
                         ErrorDefault.handle(error.getCause(), this);
                     }
                 }
