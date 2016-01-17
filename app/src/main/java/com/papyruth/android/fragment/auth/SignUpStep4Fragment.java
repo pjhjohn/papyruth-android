@@ -32,7 +32,10 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.error.ErrorDefault;
+import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -245,26 +248,38 @@ public class SignUpStep4Fragment extends TrackerFragment {
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
                     if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 400: // Invalid field or lack of required field.
-                                SignupError signupError = new Gson().fromJson(
-                                    new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes()),
-                                    SignupError.class
-                                );
-                                Toast.makeText(mActivity, signupError.errors.email != null? R.string.signup_email_duplication : (signupError.errors.nickname != null? R.string.signup_nickname_duplication : R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
-                                if(signupError.errors.email != null || signupError.errors.nickname != null) {
-                                    mNavigator.navigate(SignUpStep2Fragment.class, true);
-                                } else if(!validateSignUpForm()) {
-                                } else {
-                                    mNavigator.navigate(SignUpStep1Fragment.class, true);
+                        switch (((RetrofitError) error).getKind()) {
+                            case HTTP:
+                                switch (((RetrofitError) error).getResponse().getStatus()) {
+                                    case 400: // Invalid field or lack of required field.
+                                        SignupError signupError = new Gson().fromJson(
+                                                new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes()),
+                                                SignupError.class
+                                        );
+                                        Toast.makeText(mActivity, signupError.errors.email != null ? R.string.signup_email_duplication : (signupError.errors.nickname != null ? R.string.signup_nickname_duplication : R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
+                                        if (signupError.errors.email != null || signupError.errors.nickname != null) {
+                                            mNavigator.navigate(SignUpStep2Fragment.class, true);
+                                        } else if (!validateSignUpForm()) {
+                                        } else {
+                                            mNavigator.navigate(SignUpStep1Fragment.class, true);
+                                        }
+                                        break;
+                                    case 403: // Failed to SignUp
+                                        Toast.makeText(mActivity, getResources().getString(R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default:
+                                        Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
                                 }
                                 break;
-                            case 403: // Failed to SignUp
-                                Toast.makeText(mActivity, getResources().getString(R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
+                            case NETWORK:
+                                if( ErrorNetwork.handle(((RetrofitError) error.getCause()), this).handled ) Toast.makeText(mActivity, "인터넷이 불안정합니다", Toast.LENGTH_SHORT).show();
                                 break;
                             default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
+                                ErrorDefaultRetrofit.handle(((RetrofitError) error.getCause()), this);
+                                break;
                         }
+                    }else{
+                        ErrorDefault.handle(error.getCause(), this);
                     }
                 }
             );
