@@ -272,7 +272,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                 }
                                 break;
                             case NETWORK:
-                                if( ErrorNetwork.handle(((RetrofitError) error.getCause()), this).handled ) Toast.makeText(mActivity, "인터넷이 불안정합니다", Toast.LENGTH_SHORT).show();
+                                if( ErrorNetwork.handle(((RetrofitError) error.getCause()), this).handled ) Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 ErrorDefaultRetrofit.handle(((RetrofitError) error.getCause()), this);
