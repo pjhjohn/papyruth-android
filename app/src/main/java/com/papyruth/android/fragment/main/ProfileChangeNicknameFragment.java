@@ -47,42 +47,38 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
  * Created by pjhjohn on 2015-05-19.
  */
 public class ProfileChangeNicknameFragment extends TrackerFragment {
-    private Navigator navigator;
-    private Context context;
-    private Resources res;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private Navigator mNavigator;
+    private Context mContext;
+    private Resources mResources;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.navigator = (Navigator) activity;
-        this.context = activity;
-        this.res = activity.getResources();
+        mNavigator = (Navigator) activity;
+        mContext = activity;
+        mResources = activity.getResources();
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.navigator = null;
+        mNavigator = null;
     }
 
-    @Bind(R.id.nickname_icon) protected ImageView icon;
-    @Bind(R.id.nickname_label) protected TextView label;
-    @Bind(R.id.nickname_text) protected EditText nickname;
-    private CompositeSubscription subscriptions;
+    @Bind(R.id.nickname_icon)   protected ImageView mNicknameIcon;
+    @Bind(R.id.nickname_label)  protected TextView mNicknameLabel;
+    @Bind(R.id.nickname_text)   protected EditText mNickname;
+    private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_change_nickname, container, false);
         ButterKnife.bind(this, view);
-        this.subscriptions = new CompositeSubscription();
-        Picasso.with(context).load(R.drawable.ic_nickname_48dp).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
-        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.profile_change_nickname_body_prefix), res.getString(R.string.profile_change_nickname_body), res.getString(R.string.profile_change_nickname_body_postfix))));
-        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.profile_change_nickname_body_prefix), res.getString(R.string.profile_change_nickname_body), res.getString(R.string.profile_change_nickname_body_postfix))));
-        this.nickname.setText(User.getInstance().getNickname());
-        mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        mCompositeSubscription = new CompositeSubscription();
+        Picasso.with(mContext).load(R.drawable.ic_nickname_48dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mNicknameIcon);
+        if(Locale.getDefault().equals(Locale.KOREA)) mNicknameLabel.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.profile_change_nickname_body_prefix), mResources.getString(R.string.profile_change_nickname_body), mResources.getString(R.string.profile_change_nickname_body_postfix))));
+        else mNicknameLabel.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", mResources.getString(R.string.profile_change_nickname_body_prefix), mResources.getString(R.string.profile_change_nickname_body), mResources.getString(R.string.profile_change_nickname_body_postfix))));
+        mNickname.setText(User.getInstance().getNickname());
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         return view;
     }
 
@@ -90,7 +86,8 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     @Override
@@ -104,9 +101,9 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
-        this.subscriptions.add(this.registerSubmitCallback());
-        this.subscriptions.add(WidgetObservable
-            .text(this.nickname)
+        setSubmissionCallback();
+        mCompositeSubscription.add(WidgetObservable
+            .text(mNickname)
             .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .map(toString)
             .map(RxValidator.getErrorMessageNickname)
@@ -114,14 +111,14 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
             .map(error -> error == null)
             .subscribe(valid -> {
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                else if (!visible && valid) FloatingActionControl.getInstance().show(true);
+                if(visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if(!visible && valid) FloatingActionControl.getInstance().show(true);
             }, error -> ErrorHandler.handle(error, this))
         );
     }
 
-    public Subscription registerSubmitCallback() {
-        return FloatingActionControl
+    private void setSubmissionCallback() {
+        mCompositeSubscription.add(FloatingActionControl
             .clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .map(unused -> {
@@ -132,7 +129,7 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
             .flatMap(unused ->
                 Api.papyruth().post_users_me_edit_nickname(
                     User.getInstance().getAccessToken(),
-                    this.nickname.getText().toString()
+                    mNickname.getText().toString()
                 ))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -140,22 +137,20 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
                     Timber.d("Response : %s", response);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
-                    if (response.success) {
+                    if(response.success) {
                         User.getInstance().update(response.user, response.access_token);
-                        this.navigator.back();
-                    } else {
-                        // TODO : Failed to Update User Profile
+                        mNavigator.back();
                     }
                 },
                 error -> {
                     Timber.d("Error : %s", error);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
-                    if (error instanceof RetrofitError) {
+                    if(error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400:
-                                FailureDialog.show(this.getActivity(), FailureDialog.Type.CHANGE_NICKNAME);
-                                this.subscriptions.add(this.registerSubmitCallback());
+                                FailureDialog.show(getActivity(), FailureDialog.Type.CHANGE_NICKNAME);
+                                setSubmissionCallback();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
@@ -163,6 +158,6 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
                     }
                     ErrorHandler.handle(error, this);
                 }
-            );
+            ));
     }
 }

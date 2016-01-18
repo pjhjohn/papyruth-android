@@ -181,7 +181,8 @@
     <string name="dialog_content_failure_change_password">기존 비밀번호가 틀립니다</string>
     <!-- Dialog Button -->
     <string name="dialog_positive_delete">삭제</string>
-    <string name="dialog_positive_send">보내기</string>
+    <string name="dialog_positive_send">전송</string>
+    <string name="dialog_positive_resend">재전송</string>
     <string name="dialog_positive_submit">제출</string>
     <string name="dialog_positive_settings">설정</string>
     <string name="dialog_positive_compose">강의평가 작성</string>
@@ -189,7 +190,7 @@
     <string name="dialog_positive_ok">확인</string>
     <string name="dialog_negative_cancel">취소</string>
     <string name="dialog_negative_close">닫기</string>
-    <string name="dialog_negative_change">변경</string>
+    <string name="dialog_negative_change_email">이메일 변경</string>
     <string name="dialog_neutral_repository">웹페이지</string>
     <!-- Dialog Toast -->
     <string name="toast_alert_university_confirmation_email_sent">이메일 전송 성공</string>

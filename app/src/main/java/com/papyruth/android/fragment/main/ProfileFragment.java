@@ -16,6 +16,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.TrackerFragment;
@@ -112,16 +113,23 @@ public class ProfileFragment extends TrackerFragment {
             mUniversityEmailText.setText(User.getInstance().getUniversityEmail());
 
         mCompositeSubscription.add(FloatingActionControl
-                .clicks(R.id.fab_mini_register_university_email)
-                .subscribe(unused -> mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true), error -> ErrorHandler.handle(error, this))
+            .clicks(R.id.fab_mini_register_university_email)
+            .subscribe(
+                unused -> {
+                    if(User.getInstance().getUniversityEmail() != null && !User.getInstance().getUniversityConfirmed())
+                        AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.UNIVERSITY_CONFIRMATION_REQUIRED);
+                    else
+                        mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true);
+                }, error -> ErrorHandler.handle(error, this)
+            )
         );
         mCompositeSubscription.add(FloatingActionControl
-                .clicks(R.id.fab_mini_change_nickname)
-                .subscribe(unused -> mNavigator.navigate(ProfileChangeNicknameFragment.class, true), error -> ErrorHandler.handle(error, this))
+            .clicks(R.id.fab_mini_change_nickname)
+            .subscribe(unused -> mNavigator.navigate(ProfileChangeNicknameFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
         mCompositeSubscription.add(FloatingActionControl
-                .clicks(R.id.fab_mini_change_password)
-                .subscribe(unused -> mNavigator.navigate(ProfileChangePasswordFragment.class, true), error -> ErrorHandler.handle(error, this))
+            .clicks(R.id.fab_mini_change_password)
+            .subscribe(unused -> mNavigator.navigate(ProfileChangePasswordFragment.class, true), error -> ErrorHandler.handle(error, this))
         );
     }
 }

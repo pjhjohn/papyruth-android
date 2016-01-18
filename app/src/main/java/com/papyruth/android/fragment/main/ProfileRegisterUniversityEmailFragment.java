@@ -19,7 +19,6 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.materialdialog.FailureDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -38,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.RetrofitError;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
@@ -52,8 +50,8 @@ import static com.papyruth.support.opensource.rx.RxValidator.toString;
  */
 public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
     private Navigator mNavigator;
-    private Context context;
-    private Resources res;
+    private Context mContext;
+    private Resources mResources;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,32 +59,32 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.mNavigator = (Navigator) activity;
-        this.context = activity;
-        this.res = activity.getResources();
+        mNavigator = (Navigator) activity;
+        mContext = activity;
+        mResources = activity.getResources();
     }
     @Override
     public void onDetach() {
         super.onDetach();
-        this.mNavigator = null;
+        mNavigator = null;
     }
 
-    @Bind(R.id.university_email_icon)    protected ImageView icon;
-    @Bind(R.id.university_email_label)   protected TextView label;
-    @Bind(R.id.university_email_text)    protected EditText email;
-    private CompositeSubscription subscriptions;
+    @Bind(R.id.university_email_icon)    protected ImageView mUniversityEmailIcon;
+    @Bind(R.id.university_email_label)   protected TextView mUniversityEmailLabel;
+    @Bind(R.id.university_email_text)    protected EditText mUniversityEmail;
+    private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_register_university_email, container, false);
         ButterKnife.bind(this, view);
-        this.subscriptions = new CompositeSubscription();
-        Picasso.with(context).load(R.drawable.ic_university_email_48dp).transform(new ColorFilterTransformation(res.getColor(R.color.icon_material))).into(this.icon);
-        if(Locale.getDefault().equals(Locale.KOREA)) this.label.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", res.getString(R.string.profile_register_university_email_body_prefix), res.getString(R.string.profile_register_university_email_body), res.getString(R.string.profile_register_university_email_body_postfix))));
-        else this.label.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", res.getString(R.string.profile_register_university_email_body_prefix), res.getString(R.string.profile_register_university_email_body), res.getString(R.string.profile_register_university_email_body_postfix))));
-        this.email.setText(User.getInstance().getUniversityEmail());
-        mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        mCompositeSubscription = new CompositeSubscription();
+        Picasso.with(mContext).load(R.drawable.ic_university_email_48dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
+        if(Locale.getDefault().equals(Locale.KOREA)) mUniversityEmailLabel.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.profile_register_university_email_body_prefix), mResources.getString(R.string.profile_register_university_email_body), mResources.getString(R.string.profile_register_university_email_body_postfix))));
+        else mUniversityEmailLabel.setText(Html.fromHtml(String.format("%s <strong>%s</strong> %s", mResources.getString(R.string.profile_register_university_email_body_prefix), mResources.getString(R.string.profile_register_university_email_body), mResources.getString(R.string.profile_register_university_email_body_postfix))));
+        mUniversityEmail.setText(User.getInstance().getUniversityEmail());
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         return view;
     }
 
@@ -94,7 +92,8 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        if(this.subscriptions!=null && !this.subscriptions.isUnsubscribed()) this.subscriptions.unsubscribe();
+        if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
+        mCompositeSubscription.unsubscribe();
     }
 
     @Override
@@ -108,27 +107,24 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
-        this.subscriptions.add(this.registerSubmitCallback());
-        this.subscriptions.add(WidgetObservable
-                .text(this.email)
-                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .map(toString)
-                .map(RxValidator.getErrorMessageEmail)
-                .startWith((String) null)
-                .map(error -> error == null)
-                .subscribe(valid -> {
-                    boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
-                    if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-                    else if (!visible && valid) FloatingActionControl.getInstance().show(true);
-                }, error -> ErrorHandler.handle(error, this))
+        setSubmissionCallback();
+        mCompositeSubscription.add(WidgetObservable
+            .text(mUniversityEmail)
+            .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .map(toString)
+            .map(RxValidator.getErrorMessageEmail)
+            .startWith((String) null)
+            .map(error -> error == null)
+            .subscribe(valid -> {
+                boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
+                if(visible && !valid) FloatingActionControl.getInstance().hide(true);
+                else if(!visible && valid) FloatingActionControl.getInstance().show(true);
+            }, error -> ErrorHandler.handle(error, this))
         );
-
-        if(User.getInstance().getUniversityEmail() != null)
-            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.UNIVERSITY_CONFIRMATION_REQUIRED);
     }
 
-    public Subscription registerSubmitCallback() {
-        return FloatingActionControl
+    private void setSubmissionCallback() {
+        mCompositeSubscription.add(FloatingActionControl
             .clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .map(unused -> {
@@ -139,7 +135,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             .flatMap(unused ->
                 Api.papyruth().post_users_me_university_email(
                     User.getInstance().getAccessToken(),
-                    this.email.getText().toString()
+                    mUniversityEmail.getText().toString()
                 ))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -147,22 +143,20 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
                     Timber.d("Response : %s", response);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
-                    if (response.success) {
-                        User.getInstance().setUniversityEmail(email.getText().toString());
-                        sendEmail();
-                    } else {
-                        // TODO : Failed to Update User Profile
+                    if(response.success) {
+                        User.getInstance().setUniversityEmail(mUniversityEmail.getText().toString());
+                        sendUniversityConfirmationEmail();
                     }
                 },
                 error -> {
                     Timber.d("Error : %s", error);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
-                    if (error instanceof RetrofitError) {
+                    if(error instanceof RetrofitError) {
                         switch (((RetrofitError) error).getResponse().getStatus()) {
                             case 400:
-                                FailureDialog.show(this.getActivity(), FailureDialog.Type.REGISTER_UNIVERSITY_EMAIL);
-                                this.subscriptions.add(this.registerSubmitCallback());
+                                FailureDialog.show(getActivity(), FailureDialog.Type.REGISTER_UNIVERSITY_EMAIL);
+                                setSubmissionCallback();
                                 break;
                             default:
                                 Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
@@ -170,9 +164,10 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
                     }
                     ErrorHandler.handle(error, this);
                 }
-            );
+            ));
     }
-    private void sendEmail(){
+
+    private void sendUniversityConfirmationEmail() {
         Api.papyruth().post_email_confirm(User.getInstance().getAccessToken(), Papyruth.EMAIL_CONFIRMATION_UNIVERSITY)
             .map(response -> response.success)
             .observeOn(AndroidSchedulers.mainThread())
@@ -180,10 +175,10 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             .subscribe(
                 success -> {
                     if (success) {
-                        Toast.makeText(context, R.string.toast_profile_register_university_email_sent, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.toast_profile_register_university_email_sent, Toast.LENGTH_SHORT).show();
                         mNavigator.back();
-                    }else {
-                        Toast.makeText(context, R.string.toast_profile_register_university_email_not_sent, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, R.string.toast_profile_register_university_email_not_sent, Toast.LENGTH_SHORT).show();
                     }
                 }, error -> ErrorHandler.handle(error, MaterialDialog.class)
             );

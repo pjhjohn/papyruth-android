@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationStep1Fragment;
 import com.papyruth.android.fragment.main.EvaluationStep2Fragment;
+import com.papyruth.android.fragment.main.ProfileRegisterUniversityEmailFragment;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -40,7 +41,7 @@ public class AlertDialog {
                 @Override
                 public void onNegative(MaterialDialog dialog) {
                     super.onNegative(dialog);
-                    actionOnNegative(type);
+                    actionOnNegative(navigator, type);
                 }
             })
             .build();
@@ -49,7 +50,6 @@ public class AlertDialog {
     public static void show(Context context, Navigator navigator, Type type) {
         AlertDialog.build(context, navigator, type).show();
     }
-
 
     private static String makeContent(Context context, Type type) {
         final Resources res = context.getResources();
@@ -68,8 +68,8 @@ public class AlertDialog {
         switch (type) {
             case MANDATORY_EVALUATION_REQUIRED      : value = res.getString(R.string.dialog_positive_compose); break;
             case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.dialog_positive_edit); break;
-            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.dialog_positive_ok); break;
-            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_positive_ok); break;
+            case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.dialog_positive_resend); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_positive_resend); break;
         } return value;
     }
 
@@ -77,7 +77,7 @@ public class AlertDialog {
         final Resources res = context.getResources();
         String value;
         switch (type) {
-            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_negative_change); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_negative_change_email); break;
             default                                 : value = res.getString(R.string.dialog_negative_cancel); break;
         } return value;
     }
@@ -100,8 +100,6 @@ public class AlertDialog {
                 break;
             case USER_CONFIRMATION_REQUIRED:
                 emailType = Papyruth.EMAIL_CONFIRMATION_USER;
-            case UNIVERSITY_CONFIRMATION_REQUIRED:
-                if(emailType == null) emailType = Papyruth.EMAIL_CONFIRMATION_UNIVERSITY;
                 Api.papyruth().post_email_confirm(User.getInstance().getAccessToken(), emailType)
                     .map(response -> response.success)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -117,14 +115,26 @@ public class AlertDialog {
                         }, error -> ErrorHandler.handle(error, MaterialDialog.class)
                     );
                 break;
-            default:
+            case UNIVERSITY_CONFIRMATION_REQUIRED:
+                emailType = Papyruth.EMAIL_CONFIRMATION_UNIVERSITY;
+                Api.papyruth().post_email_confirm(User.getInstance().getAccessToken(), emailType)
+                    .map(response -> response.success)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                        success -> {
+                            if(success) Toast.makeText(context, R.string.toast_alert_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(context, R.string.toast_alert_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
+                        }, error -> ErrorHandler.handle(error, MaterialDialog.class)
+                    );
                 break;
         }
     }
 
-    private static void actionOnNegative(Type type) {
+    private static void actionOnNegative(Navigator navigator, Type type) {
         switch (type) {
             case EVALUATION_ALREADY_REGISTERED  : EvaluationForm.getInstance().clear(); break;
+            case UNIVERSITY_CONFIRMATION_REQUIRED : navigator.navigate(ProfileRegisterUniversityEmailFragment.class, true); break;
         }
     }
 }
