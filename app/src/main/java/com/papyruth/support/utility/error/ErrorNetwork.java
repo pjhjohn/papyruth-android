@@ -11,9 +11,7 @@ import timber.log.Timber;
  */
 public class ErrorNetwork {
     public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
-        if(throwable.getKind() != RetrofitError.Kind.NETWORK){
-            return new ErrorHandleResult(false);
-        }
+        if(throwable.getKind() != RetrofitError.Kind.NETWORK) return new ErrorHandleResult(false);
         Timber.d("Network Error : %s\n%s\n%s", throwable.getMessage(), throwable.getUrl(), throwable.getCause());
         boolean sentToTracker = false;
         if (object instanceof Fragment) {
@@ -35,9 +33,16 @@ public class ErrorNetwork {
                         false
                     );
                 } return new ErrorHandleResult(true);
-            }// else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
-        }// else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
-        if (throwable.getKind() == RetrofitError.Kind.NETWORK) return new ErrorHandleResult(true);
-        return new ErrorHandleResult(false);
+            } else return new ErrorHandleResult(true); // TODO : Handle when fragment doesn't have activity
+        } else if (object instanceof Activity) {
+            Activity activity = (Activity) object;
+            if (activity instanceof Error.OnReportToGoogleAnalytics) {
+                ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
+                    Error.description(throwable.getMessage(), throwable.getUrl()),
+                    object.getClass().getSimpleName(),
+                    false
+                );
+            } return new ErrorHandleResult(true);
+        } else return new ErrorHandleResult(true); // TODO : Handle when object is neither Activity nor Fragment
     }
 }

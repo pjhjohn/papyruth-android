@@ -217,6 +217,7 @@
     <!-- Error -->
     <string name="toast_error_default">error_default</string>
     <string name="toast_error_retrofit_403">Oops! Something went wrong</string>
+    <string name="toast_error_retrofit_500">Oops! There must be something wrong with the server</string>
     <string name="toast_error_retrofit_unstable_network">Please check your network</string>
     <string name="toast_error_retrofit_default">error_retrofit_default</string>
 

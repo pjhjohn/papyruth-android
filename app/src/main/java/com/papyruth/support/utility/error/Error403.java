@@ -38,6 +38,16 @@ public class Error403 {
                     );
                 } return new ErrorHandleResult(true);
             } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
-        } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
+        } else if(object instanceof Activity) {
+            Activity activity = (Activity) object;
+            Toast.makeText(activity, R.string.toast_error_retrofit_403, Toast.LENGTH_SHORT).show();
+            if (activity instanceof Error.OnReportToGoogleAnalytics) {
+                ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
+                    Error.description(throwable.getMessage()),
+                    object.getClass().getSimpleName(),
+                    false
+                );
+            } return new ErrorHandleResult(true);
+        } else return new ErrorHandleResult(false); // TODO : Handle when object is neither Activity nor Fragment
     }
 }

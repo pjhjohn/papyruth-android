@@ -33,6 +33,15 @@ public class ErrorDefaultRetrofit {
                     );
                 } return new ErrorHandleResult(true);
             } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
-        } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
+        } else if (object instanceof Activity) {
+            Activity activity = (Activity) object;
+            if (activity instanceof Error.OnReportToGoogleAnalytics) {
+                ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
+                    Error.description(throwable.getMessage(), throwable.getUrl()),
+                    object.getClass().getSimpleName(),
+                    false
+                );
+            } return new ErrorHandleResult(true);
+        } else return new ErrorHandleResult(false); // TODO : Handle when object is neither Activity nor Fragment
     }
 }

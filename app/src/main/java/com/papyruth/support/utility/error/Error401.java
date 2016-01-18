@@ -62,6 +62,29 @@ public class Error401 {
                     ((Fragment) object).getActivity().finish();
                 } return new ErrorHandleResult(true);
             } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
-        } else return new ErrorHandleResult(false); // TODO : Handle when object is Activity
+        } else if(object instanceof Activity) {
+            Activity activity = (Activity) object;
+            if (activity instanceof Error.OnReportToGoogleAnalytics) {
+                ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
+                    Error.description(throwable.getMessage(), throwable.getUrl(), 401),
+                    object.getClass().getSimpleName(),
+                    false
+                );
+            }
+            if(activity instanceof MainActivity) {
+                /* Clear Data */
+                AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);
+                Course.getInstance().clear();
+                Evaluation.getInstance().clear();
+                EvaluationForm.getInstance().clear();
+                SignUpForm.getInstance().clear();
+                User.getInstance().clear();
+
+                /* Back to Launch Activity */
+                Intent intent = new Intent(activity, SplashActivity.class);
+                activity.startActivity(intent);
+                activity.finish();
+            } return new ErrorHandleResult(true);
+        } else return new ErrorHandleResult(false); // TODO : Handle when object is neither Activity nor Fragment
     }
 }
