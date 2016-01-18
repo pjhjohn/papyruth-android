@@ -8,6 +8,7 @@ import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.EvaluationForm;
+import com.papyruth.support.utility.helper.PointHelper;
 
 import rx.Observable;
 import rx.android.widget.OnTextChangeEvent;
@@ -58,7 +59,7 @@ public class RxValidator {
         if(text == null || value == ON_STOP_TRACKING_TOUCH_SEEKBAR) return value;
         if(value < 1) {
             text.setTextSize(32);
-            text.setText("N/A");
+            text.setText(PointHelper.NOT_ASSIGNED);
         } else {
             text.setTextSize(48);
             text.setText(value >= 10? "10" : String.format("%d", value));
@@ -70,8 +71,11 @@ public class RxValidator {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if(fromUserOnly && !fromUser) return;
-                    if(EvaluationForm.getInstance().isEditMode() && !EvaluationForm.getInstance().isEdited())
-                        EvaluationForm.getInstance().setEdited(true);
+                    if(fromUser && progress == 0) {
+                        seekBar.setProgress(PointHelper.MIN);
+                        return;
+                    }
+                    if(EvaluationForm.getInstance().isEditMode() && !EvaluationForm.getInstance().isEdited()) EvaluationForm.getInstance().setEdited(true);
                     observer.onNext(progress);
                 }
 
@@ -94,7 +98,7 @@ public class RxValidator {
         if(text == null) return value;
         if(value < 0.5f) {
             text.setTextSize(32);
-            text.setText("N/A");
+            text.setText(PointHelper.NOT_ASSIGNED);
         } else {
             text.setTextSize(48);
             text.setText(value >= 5.0f? "10" : String.format("%d", (int)(2*value)));
@@ -103,6 +107,10 @@ public class RxValidator {
     public static Observable<Float> createObservableRatingBar(RatingBar ratingbar, Boolean fromUserOnly) {
         return Observable.create(observer -> ratingbar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             if(fromUserOnly && !fromUser) return;
+            if(fromUser && rating == 0) {
+                ratingBar.setRating((float) PointHelper.MIN / (PointHelper.MAX / ratingbar.getNumStars()));
+                return;
+            }
             observer.onNext(rating);
         }));
     }

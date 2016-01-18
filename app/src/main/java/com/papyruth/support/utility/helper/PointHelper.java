@@ -14,7 +14,7 @@ import com.papyruth.android.R;
  * Created by pjhjohn on 2015-12-10.
  */
 public class PointHelper {
-    public static final int MIN =  1;
+    public static final int MIN = 1;
     public static final int MAX = 10;
     public static final int BOUND_LOWER = 0;
     public static final int BOUND_UPPER = 10;

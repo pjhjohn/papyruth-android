@@ -123,25 +123,25 @@ public class EvaluationStep2Fragment extends TrackerFragment {
 
         mCompositeSubscription.add(Observable
             .combineLatest(
-                RxValidator.createObservableRatingBar(mRatingBarOverall, true)
+                RxValidator.createObservableRatingBar(mRatingBarOverall, false)
                     .map(overall -> RxValidator.assignRatingValue.call(mPointOverall, overall))
                     .map(overall -> {
                         EvaluationForm.getInstance().setPointOverall((int) (overall * 2));
                         return (int) (overall * 2);
                     }),
-                RxValidator.createObservableSeekBar(mSeekBarClarity, true)
+                RxValidator.createObservableSeekBar(mSeekBarClarity, false)
                     .map(clarity -> RxValidator.assignProgressValue.call(mPointClarity, clarity))
                     .map(clarity -> {
                         if(clarity >= 0) EvaluationForm.getInstance().setPointClarity(clarity);
                         return clarity;
                     }),
-                RxValidator.createObservableSeekBar(mSeekBarEasiness, true)
+                RxValidator.createObservableSeekBar(mSeekBarEasiness, false)
                     .map(easiness -> RxValidator.assignProgressValue.call(mPointEasiness, easiness))
                     .map(easiness -> {
                         if(easiness >= 0) EvaluationForm.getInstance().setPointEasiness(easiness);
                         return easiness;
                     }),
-                RxValidator.createObservableSeekBar(mSeekBarGpaSatisfaction, true)
+                RxValidator.createObservableSeekBar(mSeekBarGpaSatisfaction, false)
                     .map(satisfaction -> RxValidator.assignProgressValue.call(mPointGpaSatisfaction, satisfaction))
                     .map(satisfaction -> {
                         if(satisfaction >= 0) EvaluationForm.getInstance().setPointGpaSatisfaction(satisfaction);
