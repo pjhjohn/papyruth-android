@@ -77,12 +77,16 @@ public class ApiManager {
 
         /* Build RestAdapter */
         RestAdapter.Builder builder = new RestAdapter.Builder();
-        builder.setEndpoint(String.format("https://%s/api/%s/", AppConst.API_BASE_URL, AppConst.API_VERSION));
-        builder.setClient(new OkClient(new OkHttpClient()));
-//        builder.setExecutors(executor, executor);
-        if(BuildConfig.DEBUG) {
+        if(BuildConfig.DEBUG) { // Debug Mode
+            builder.setEndpoint(String.format("https://%s/api/%s/", AppConst.API_BASE_DEBUG, AppConst.API_VERSION_DEBUG));
+            builder.setClient(new OkClient(new OkHttpClient()));
+//            builder.setExecutors(executor, executor);
             builder.setLogLevel(loglevel);
             builder.setLog(logger);
+        } else { // Release Mode
+            builder.setEndpoint(String.format("https://%s/api/%s/", AppConst.API_BASE_RELEASE, AppConst.API_VERSION_RELEASE));
+            builder.setClient(new OkClient(new OkHttpClient()));
+//            builder.setExecutors(executor, executor);
         }
         return builder.build();
     }

@@ -7,8 +7,10 @@ import android.content.Context;
  */
 public class AppConst {
     /* API BINDING */
-    public static final String API_BASE_URL = "api.papyruth.com:443";
-    public static final String API_VERSION = "v1";
+    public static final String API_BASE_RELEASE = "api.papyruth.com:443";
+    public static final String API_BASE_DEBUG = "api.papyruth.com:443";
+    public static final String API_VERSION_RELEASE = "v1";
+    public static final String API_VERSION_DEBUG = "v1";
 
     /* Retrofit REST Adapter*/
     public static final String LOGGER_TAG = "RetrofitApi";
