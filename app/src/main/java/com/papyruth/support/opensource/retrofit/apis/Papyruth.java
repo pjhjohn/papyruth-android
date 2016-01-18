@@ -286,7 +286,12 @@ public interface Papyruth {
         @Query("nickname") String nickname,
         @Query("is_boy") Boolean is_boy,
         @Query("university_id") Integer university_id,
-        @Query("entrance_year") Integer entrance_year
+        @Query("entrance_year") Integer entrance_year,
+        @Query("device_type") String device_type,
+        @Query("app_version") String app_version,
+        @Query("os_version") String os_version,
+        @Query("device_model") String device_model
+
     );
     @POST("/users/sign_up/validate") // 400 if attribute not found by name
     Observable<SignUpValidateResponse> post_users_sign_up_validate(
@@ -296,7 +301,11 @@ public interface Papyruth {
     @POST("/users/sign_in") // 403 if account not found or password not matched
     Observable<UserDataResponse> post_users_sign_in(
         @Query("email") String email,
-        @Query("password") String password
+        @Query("password") String password,
+        @Query("device_type") String device_type,
+        @Query("app_version") String app_version,
+        @Query("os_version") String os_version,
+        @Query("device_model") String device_model
     );
     @POST("/users/sign_out")
     Observable<VoidResponse> post_users_sign_out(
@@ -304,7 +313,11 @@ public interface Papyruth {
     );
     @POST("/users/refresh_token")
     Observable<UserDataResponse> post_users_refresh_token(
-        @Header("Authorization") String authorization
+        @Header("Authorization") String authorization,
+        @Query("device_type") String device_type,
+        @Query("app_version") String app_version,
+        @Query("os_version") String os_version,
+        @Query("device_model") String device_model
     );
     @GET("/users/me")
     Observable<UserDataResponse> get_users_me(
