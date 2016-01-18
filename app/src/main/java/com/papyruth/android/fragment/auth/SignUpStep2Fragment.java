@@ -21,6 +21,8 @@ import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
+import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.opensource.materialdialog.FailureDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
@@ -63,6 +65,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
     @Bind(R.id.signup_nickname_icon) protected ImageView mIconNickname;
     private CompositeSubscription mCompositeSubscription;
     private boolean typeEmail = false, typeNickName = false;
+    private boolean legacyEmail = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -156,7 +159,9 @@ public class SignUpStep2Fragment extends TrackerFragment {
     }
 
     private void proceedNextStep(){
-        if (mNextButtonEnabled) {
+        if(mNextButtonEnabled && legacyEmail) {
+            AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.LEGACY_USER);
+        }else if (mNextButtonEnabled) {
             SignUpForm.getInstance().setValidEmail();
             SignUpForm.getInstance().setValidNickname();
             mNavigator.navigate(SignUpStep3Fragment.class, true);
@@ -177,8 +182,26 @@ public class SignUpStep2Fragment extends TrackerFragment {
                 final String errorMessage = RxValidator.getErrorMessageEmail.call(email);
                 if (errorMessage == null) return Api.papyruth()
                     .post_users_sign_up_validate("email", email)
-                    .map(validator -> validator.validation)
-                    .map(valid -> valid ? null : getResources().getString(R.string.signup_email_duplication));
+                    .map(validator -> validator)
+                    .map(valid -> {
+                        if(valid.validation) {
+                            legacyEmail = false;
+                            return null;
+                        }
+                        switch (valid.status) {
+                            case 0:
+                                legacyEmail = false;
+                                return null;
+                            case 1:
+                                legacyEmail = false;
+                                return getResources().getString(R.string.signup_email_duplication);
+                            case 2:
+                                legacyEmail = true;
+                                return null;
+                            default:
+                                return getResources().getString(R.string.signup_email_duplication);
+                        }
+                    });
                 else return Observable.just(errorMessage);
             }).observeOn(AndroidSchedulers.mainThread());
     }
@@ -196,8 +219,16 @@ public class SignUpStep2Fragment extends TrackerFragment {
                 final String errorMessage = RxValidator.getErrorMessageNickname.call(nickname);
                 if (errorMessage == null) return Api.papyruth()
                     .post_users_sign_up_validate("nickname", nickname)
-                    .map(validator -> validator.validation)
-                    .map(valid -> valid ? null : getResources().getString(R.string.signup_nickname_duplication));
+                    .map(validator -> validator)
+                    .map(valid -> {
+                        if (valid.validation) return null;
+                        switch (valid.status) {
+                            case 1:
+                                return getResources().getString(R.string.signup_nickname_duplication);
+                            default:
+                                return getResources().getString(R.string.signup_nickname_duplication);
+                        }
+                    });
                 else return Observable.just(errorMessage);
             }).observeOn(AndroidSchedulers.mainThread());
     }

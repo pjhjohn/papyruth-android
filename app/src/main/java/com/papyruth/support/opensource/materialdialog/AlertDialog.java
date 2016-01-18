@@ -73,7 +73,7 @@ public class AlertDialog {
             case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.dialog_positive_edit); break;
             case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.dialog_positive_resend); break;
             case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_positive_resend); break;
-            case LEGACY_USER                        : value = res.getString(R.string.dialog_positive_resend); break;
+            case LEGACY_USER                        : value = res.getString(R.string.dialog_positive_send); break;
         } return value;
     }
 
