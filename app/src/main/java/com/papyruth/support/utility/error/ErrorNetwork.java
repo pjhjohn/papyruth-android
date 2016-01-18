@@ -10,6 +10,10 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-12-01.
  */
 public class ErrorNetwork {
+    public static ErrorHandleResult handle(Throwable throwable, Object object) {
+        if(throwable instanceof RetrofitError) return handle((RetrofitError) throwable, object);
+        else return new ErrorHandleResult(false);
+    }
     public static ErrorHandleResult handle(RetrofitError throwable, Object object) {
         if(throwable.getKind() != RetrofitError.Kind.NETWORK) return new ErrorHandleResult(false);
         Timber.d("Network Error : %s\n%s\n%s", throwable.getMessage(), throwable.getUrl(), throwable.getCause());

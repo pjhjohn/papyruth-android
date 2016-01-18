@@ -113,18 +113,14 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void search(String query) {
         this.isHistory = false;
-        if(query != null) {
-            mFullyLoaded = false;
-            mQuery = query;
-            animators = new AnimatorSet();
-            animators.playTogether(
-                    AnimatorHelper.FADE_IN(mMaterialProgressBar),
-                    AnimatorHelper.FADE_OUT(mBackIcon)
-            );
-            animators.start();
-            mPage = 1;
-            getCandidates();
-        }
+        if(query == null) return;
+        mFullyLoaded = false;
+        mQuery = query;
+        animators = new AnimatorSet();
+        animators.playTogether(AnimatorHelper.FADE_IN(mMaterialProgressBar), AnimatorHelper.FADE_OUT(mBackIcon));
+        animators.start();
+        mPage = 1;
+        getCandidates();
     }
 
     public void loadMore(){
@@ -133,13 +129,9 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mLoading = true;
         if(mFullyLoaded != null && mFullyLoaded) return;
         mFullyLoaded = false;
-        if(animators !=null && animators.isRunning())
-            animators.cancel();
+        if(animators !=null && animators.isRunning()) animators.cancel();
         animators = new AnimatorSet();
-        animators.playTogether(
-                AnimatorHelper.FADE_IN(mMaterialProgressBar),
-                AnimatorHelper.FADE_OUT(mBackIcon)
-        );
+        animators.playTogether(AnimatorHelper.FADE_IN(mMaterialProgressBar), AnimatorHelper.FADE_OUT(mBackIcon));
         animators.start();
         getCandidates();
     }
@@ -147,39 +139,32 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void getCandidates(){
         if(isHistory) return;
         Api.papyruth()
-                .get_search_autocomplete(
-                        User.getInstance().getAccessToken(),
-                        User.getInstance().getUniversityId(),
-                        mQuery,
-                        mPage
-                )
-                .map(response -> response.candidates)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(candidates -> {
-                    if (candidates != null) {
-                        if (mPage != null && mPage <= 1)
-                            mCandidates.clear();
-                        mCandidates.addAll(candidates);
-                        mFullyLoaded = candidates.isEmpty();
-                    }
-                    mLoading = false;
-                    reconfigure();
-                }, error -> {
-                    animators = new AnimatorSet();
-                    animators.playTogether(
-                            AnimatorHelper.FADE_IN(mBackIcon),
-                            AnimatorHelper.FADE_OUT(mMaterialProgressBar)
-                    );
-                    animators.start();
-                    if (error instanceof RetrofitError) {
-                        if (ErrorNetwork.handle(((RetrofitError) error), this).handled) {
-                        } else {
-                            ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
-                        }
-                    } else ErrorHandler.handle(error, this);
-                    mLoading = false;
-                });
+            .get_search_autocomplete(
+                User.getInstance().getAccessToken(),
+                User.getInstance().getUniversityId(),
+                mQuery,
+                mPage
+            )
+            .map(response -> response.candidates)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(candidates -> {
+                if(candidates != null) {
+                    if(mPage != null && mPage <= 1) mCandidates.clear();
+                    mCandidates.addAll(candidates);
+                    mFullyLoaded = candidates.isEmpty();
+                }
+                mLoading = false;
+                reconfigure();
+            }, error -> {
+                animators = new AnimatorSet();
+                animators.playTogether(AnimatorHelper.FADE_IN(mBackIcon), AnimatorHelper.FADE_OUT(mMaterialProgressBar));
+                animators.start();
+                boolean handled = ErrorNetwork.handle(((RetrofitError) error), this).handled;
+                if(!handled) handled = ErrorDefaultRetrofit.handle(((RetrofitError) error), this).handled;
+                if(!handled) handled = ErrorHandler.handle(error, this).handled;
+                mLoading = false;
+            });
     }
 
     private void reconfigure() {
@@ -199,13 +184,9 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             notifyDataSetChanged();
         }
 
-        if (animators != null && animators.isRunning())
-            animators.cancel();
+        if (animators != null && animators.isRunning()) animators.cancel();
         animators = new AnimatorSet();
-        animators.playTogether(
-                AnimatorHelper.FADE_IN(mBackIcon),
-                AnimatorHelper.FADE_OUT(mMaterialProgressBar)
-        );
+        animators.playTogether(AnimatorHelper.FADE_IN(mBackIcon), AnimatorHelper.FADE_OUT(mMaterialProgressBar));
         animators.start();
     }
 }

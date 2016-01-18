@@ -33,6 +33,7 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
 import com.papyruth.support.utility.error.Error;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -119,7 +120,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
         Api.papyruth().get_users_me(User.getInstance().getAccessToken()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-            response -> User.getInstance().update(response.user), Throwable::printStackTrace
+            response -> User.getInstance().update(response.user), error -> ErrorHandler.handle(error, this)
         );
     }
 
