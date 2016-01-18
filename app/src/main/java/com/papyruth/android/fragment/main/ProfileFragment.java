@@ -89,7 +89,11 @@ public class ProfileFragment extends TrackerFragment {
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, true);
 
-        FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
+        if(User.getInstance().getUniversityConfirmed()) {
+            FloatingActionControl.getInstance().setControl(R.layout.fam_profile_without_university).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
+        }else {
+            FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
+        }
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityName.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
         Picasso.with(mContext).load(User.getInstance().getUniversityImageUrl()).into(mUniversityImage);
