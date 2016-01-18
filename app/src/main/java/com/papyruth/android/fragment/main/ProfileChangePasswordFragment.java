@@ -100,8 +100,10 @@ public class ProfileChangePasswordFragment extends TrackerFragment {
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
-        FloatingActionControl.getButton().setMax(100);
-        FloatingActionControl.getButton().setShowProgressBackground(false);
+        if(FloatingActionControl.getButton() != null) {
+            FloatingActionControl.getButton().setMax(100);
+            FloatingActionControl.getButton().setShowProgressBackground(false);
+        }
         setSubmissionCallback();
         mCompositeSubscription.add(Observable.combineLatest(
                 WidgetObservable.text(mOldPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword).startWith((String) null),

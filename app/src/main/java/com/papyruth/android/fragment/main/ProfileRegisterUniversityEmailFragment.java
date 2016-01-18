@@ -105,8 +105,10 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_blue);
-        FloatingActionControl.getButton().setMax(100);
-        FloatingActionControl.getButton().setShowProgressBackground(false);
+        if(FloatingActionControl.getButton() != null) {
+            FloatingActionControl.getButton().setMax(100);
+            FloatingActionControl.getButton().setShowProgressBackground(false);
+        }
         setSubmissionCallback();
         mCompositeSubscription.add(WidgetObservable
             .text(mUniversityEmail)
