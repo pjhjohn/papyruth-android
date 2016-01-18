@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +107,13 @@ public class SplashFragment extends TrackerFragment {
                         User.getInstance().update(response.user);
                         userHasAccessToken[0] = User.getInstance().getAccessToken() != null;
                         Api.papyruth()
-                            .post_users_refresh_token(User.getInstance().getAccessToken())
+                            .post_users_refresh_token(
+                                    User.getInstance().getAccessToken(),
+                                    AppConst.DEVICE_TYPE,
+                                    AppManager.getInstance().getAppVersion(getActivity()),
+                                    Build.VERSION.RELEASE,
+                                    Build.MODEL
+                            )
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(

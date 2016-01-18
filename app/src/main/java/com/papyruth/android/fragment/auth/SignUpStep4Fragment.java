@@ -2,6 +2,7 @@ package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -231,7 +232,11 @@ public class SignUpStep4Fragment extends TrackerFragment {
                 SignUpForm.getInstance().getValidNickname(),
                 SignUpForm.getInstance().getValidIsBoy(),
                 SignUpForm.getInstance().getUniversityId(),
-                SignUpForm.getInstance().getEntranceYear()
+                SignUpForm.getInstance().getEntranceYear(),
+                AppConst.DEVICE_TYPE,
+                AppManager.getInstance().getAppVersion(getActivity()),
+                Build.VERSION.RELEASE,
+                Build.MODEL
             )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

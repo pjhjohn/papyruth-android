@@ -2,6 +2,7 @@ package com.papyruth.support.opensource.materialdialog;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -10,6 +11,7 @@ import com.papyruth.android.fragment.main.EvaluationStep1Fragment;
 import com.papyruth.android.fragment.main.EvaluationStep2Fragment;
 import com.papyruth.android.fragment.main.ProfileRegisterUniversityEmailFragment;
 import com.papyruth.android.model.unique.EvaluationForm;
+import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.retrofit.apis.Papyruth;
@@ -24,7 +26,7 @@ import rx.schedulers.Schedulers;
  */
 public class AlertDialog {
     public enum Type {
-        MANDATORY_EVALUATION_REQUIRED, EVALUATION_ALREADY_REGISTERED, USER_CONFIRMATION_REQUIRED, UNIVERSITY_CONFIRMATION_REQUIRED
+        MANDATORY_EVALUATION_REQUIRED, EVALUATION_ALREADY_REGISTERED, USER_CONFIRMATION_REQUIRED, UNIVERSITY_CONFIRMATION_REQUIRED, LEGACY_USER
     }
 
     public static MaterialDialog build(Context context, Navigator navigator, Type type) {
@@ -41,7 +43,7 @@ public class AlertDialog {
                 @Override
                 public void onNegative(MaterialDialog dialog) {
                     super.onNegative(dialog);
-                    actionOnNegative(navigator, type);
+                    actionOnNegative(context, navigator, type);
                 }
             })
             .build();
@@ -59,6 +61,7 @@ public class AlertDialog {
             case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.dialog_content_alert_evaluation_already_registered); break;
             case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.dialog_content_alert_user_confirmation_required); break;
             case UNIVERSITY_CONFIRMATION_REQUIRED   : value = String.format(res.getString(R.string.dialog_content_alert_university_confirmation_required), User.getInstance().getUniversityEmail()); break;
+            case LEGACY_USER                        : value = String.format(res.getString(R.string.dialog_content_alert_legacy_user), SignUpForm.getInstance().getTempSaveEmail()); break;
         } return value;
     }
 
@@ -70,6 +73,7 @@ public class AlertDialog {
             case EVALUATION_ALREADY_REGISTERED      : value = res.getString(R.string.dialog_positive_edit); break;
             case USER_CONFIRMATION_REQUIRED         : value = res.getString(R.string.dialog_positive_resend); break;
             case UNIVERSITY_CONFIRMATION_REQUIRED   : value = res.getString(R.string.dialog_positive_resend); break;
+            case LEGACY_USER                        : value = res.getString(R.string.dialog_positive_send); break;
         } return value;
     }
 
@@ -128,10 +132,22 @@ public class AlertDialog {
                         }, error -> ErrorHandler.handle(error, MaterialDialog.class)
                     );
                 break;
+            case LEGACY_USER:
+                Api.papyruth().post_email_migrate(SignUpForm.getInstance().getTempSaveEmail())
+                    .map(response -> response.success)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                        success -> {
+                            if(success) Toast.makeText(context, R.string.toast_alert_email_sent, Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(context, R.string.toast_alert_email_not_sent, Toast.LENGTH_SHORT).show();
+                        }, error -> ErrorHandler.handle(error, MaterialDialog.class)
+                    );
+                break;
         }
     }
 
-    private static void actionOnNegative(Navigator navigator, Type type) {
+    private static void actionOnNegative(Context context, Navigator navigator, Type type) {
         switch (type) {
             case EVALUATION_ALREADY_REGISTERED  : EvaluationForm.getInstance().clear(); break;
             case UNIVERSITY_CONFIRMATION_REQUIRED : navigator.navigate(ProfileRegisterUniversityEmailFragment.class, true); break;

@@ -2,6 +2,8 @@ package com.papyruth.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
 import com.google.gson.Gson;
@@ -22,6 +24,17 @@ public class AppManager {
     public static AppManager getInstance() {
         if ( instance == null ) return instance = new AppManager();
         else return instance;
+    }
+
+    public String getAppVersion(Context context){
+        PackageInfo pInfo = null;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            return pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /* Members */

@@ -133,7 +133,13 @@ public class SignInFragment extends TrackerFragment {
     private void requestSignIn() {
         AnimatorHelper.FADE_IN(mProgress).start();
         mCompositeSubscriptions.add(Api.papyruth()
-            .post_users_sign_in(mTextEmail.getText().toString(), mTextPassword.getText().toString())
+            .post_users_sign_in(
+                    mTextEmail.getText().toString(),
+                    mTextPassword.getText().toString(),
+                    AppConst.DEVICE_TYPE,
+                    AppManager.getInstance().getAppVersion(getActivity()),
+                    Build.VERSION.RELEASE,
+                    Build.MODEL)
             .map(response -> {
                 User.getInstance().update(response.user, response.access_token);
                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
@@ -145,7 +151,13 @@ public class SignInFragment extends TrackerFragment {
                 success -> {
                     AnimatorHelper.FADE_OUT(mProgress).start();
                     if (success) Api.papyruth()
-                        .post_users_refresh_token(User.getInstance().getAccessToken())
+                        .post_users_refresh_token(
+                                User.getInstance().getAccessToken(),
+                                AppConst.DEVICE_TYPE,
+                                AppManager.getInstance().getAppVersion(getActivity()),
+                                Build.VERSION.RELEASE,
+                                Build.MODEL
+                        )
                         .map(user -> user.access_token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
