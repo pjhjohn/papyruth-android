@@ -176,6 +176,7 @@
     <string name="dialog_content_alert_evaluation_already_registered">You have already composed an evaluation for this course. You may edit your evaluation.</string>
     <string name="dialog_content_alert_user_confirmation_required">We have sent a confirmation email to your account.\nDo you want to resend?</string>
     <string name="dialog_content_alert_university_confirmation_required">We have sent a confirmation email to your university account : %1$s\nDo you want to resend?</string>
+    <string name="dialog_content_alert_legacy_user">This account join SNUEV :%1$s\nDo you want to join this account?</string>
     <string name="dialog_content_failure_register_university_email">university email : Duplicate Email</string>
     <string name="dialog_content_failure_change_nickname">Nickname : Nickname has been duplicated</string>
     <string name="dialog_content_failure_change_password">Password : Current password is incorrect</string>
@@ -195,6 +196,8 @@
     <!-- Dialog Toast -->
     <string name="toast_alert_university_confirmation_email_sent">Email Sent</string>
     <string name="toast_alert_university_confirmation_email_not_sent">Failed to send Email</string>
+    <string name="toast_alert_email_sent">Email Sent, Check your mail box</string>
+    <string name="toast_alert_email_not_sent">Failed to send Email</string>
 
     <!-- Floating Action Button -->
     <string name="fab_change_nickname">Change Nickname</string>

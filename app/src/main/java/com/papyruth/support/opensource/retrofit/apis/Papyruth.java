@@ -123,6 +123,10 @@ public interface Papyruth {
     Observable<SuccessResponse> post_email_password(
         @Query("email") String email
     );
+    @POST("/email/migrate")
+    Observable<SuccessResponse> post_email_migrate(
+        @Query("email") String email
+    );
 
 
     /* EVALUATIONS */
