@@ -76,6 +76,7 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
         mDefaultRecyclerViewItemObjectClickListener = defaultRecyclerViewItemObjectClickListener;
         mDefaultOnSearchByQueryListener = searchByQueryListener;
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription.clear();
 
         Picasso.with(mContext).load(R.drawable.ic_clear_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mQueryClearIcon);
         Picasso.with(mContext).load(R.drawable.ic_back_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mBackIcon);

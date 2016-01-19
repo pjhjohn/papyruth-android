@@ -29,7 +29,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-06-29.
@@ -58,7 +57,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     @Bind(R.id.course_evaluation_count)               protected TextView mEvaluationCount;
     @Bind(R.id.course_no_evaluations_message)         protected LinearLayout mNoEvaluationsMessage;
     @Bind(R.id.material_progress_medium)              protected View mProgressbar;
-    private CompositeSubscription mCompositeSubscription;
     private final Context mContext;
     private final Resources mResources;
     public CourseViewHolder(View view) {
@@ -68,7 +66,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         mResources = mContext.getResources();
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mCategory.setPaintFlags(mCategory.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
-        mCompositeSubscription = new CompositeSubscription();
         mLabelOverall.setPaintFlags(mLabelOverall.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLabelClarity.setPaintFlags(mLabelClarity.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
         mLabelEasiness.setPaintFlags(mLabelEasiness.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
@@ -135,19 +132,17 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
     }
 
     private void setFavorite(boolean favorite) {
-        mCompositeSubscription.add(
-            Api.papyruth().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), favorite)
-                .filter(response -> response.success)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    response -> {
-                        Course.getInstance().setIsFavorite(favorite);
-                        Picasso.with(mContext).load(R.drawable.ic_favorite_32dp)
-                            .transform(new ColorFilterTransformation(mResources.getColor(favorite? R.color.active : R.color.inactive)))
-                            .into(mFavorite);
-                    }, Throwable::printStackTrace
-                )
-        );
+        Api.papyruth().post_course_favorite(User.getInstance().getAccessToken(), Course.getInstance().getId(), favorite)
+            .filter(response -> response.success)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                response -> {
+                    Course.getInstance().setIsFavorite(favorite);
+                    Picasso.with(mContext).load(R.drawable.ic_favorite_32dp)
+                        .transform(new ColorFilterTransformation(mResources.getColor(favorite ? R.color.active : R.color.inactive)))
+                        .into(mFavorite);
+                }, Throwable::printStackTrace
+            );
     }
 }
