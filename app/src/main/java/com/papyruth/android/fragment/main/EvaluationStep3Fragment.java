@@ -118,21 +118,24 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_done_green);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> new MaterialDialog.Builder(mActivity)
-                .title(R.string.dialog_title_compose_evaluation_submit)
-                .content(R.string.dialog_content_compose_evaluation_submit)
-                .positiveText(R.string.dialog_positive_submit)
-                .negativeText(R.string.dialog_negative_cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        if(EvaluationForm.getInstance().isCompleted()) submitNewEvaluation();
-                        else Toast.makeText(mActivity, R.string.toast_compose_evaluation_incomplete_data, Toast.LENGTH_SHORT).show();
-                    }
-                }).show(),
-            error -> ErrorHandler.handle(error, this)
+        mCompositeSubscription.add(
+            FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+                unused -> new MaterialDialog.Builder(mActivity)
+                    .title(R.string.dialog_title_compose_evaluation_submit)
+                    .content(R.string.dialog_content_compose_evaluation_submit)
+                    .positiveText(R.string.dialog_positive_submit)
+                    .negativeText(R.string.dialog_negative_cancel)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            if(EvaluationForm.getInstance().isCompleted()) submitNewEvaluation();
+                            else Toast.makeText(mActivity, R.string.toast_compose_evaluation_incomplete_data, Toast.LENGTH_SHORT).show();
+                        }
+                    }).show(),
+                error -> ErrorHandler.handle(error, this)
+            )
         );
+
         Picasso.with(mActivity).load(R.drawable.ic_hashtag_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mHashtagsIcon);
         mHashtagsLabel.setText(R.string.compose_evaluation_label_hashtags);
         Picasso.with(mActivity).load(R.drawable.ic_new_evaluation_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mBodyIcon);

@@ -110,16 +110,19 @@ public class EvaluationStep2Fragment extends TrackerFragment {
     public void onResume() {
         super.onResume();
         mToolbar.setTitle(R.string.toolbar_compose_evaluation);
+        mCompositeSubscription.clear();
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_green);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> mNavigator.navigate(EvaluationStep3Fragment.class, true),
-            error -> ErrorHandler.handle(error, this)
+
+        mCompositeSubscription.add(
+            FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+                    unused -> mNavigator.navigate(EvaluationStep3Fragment.class, true),
+                    error -> ErrorHandler.handle(error, this)
+            )
         );
-        mCompositeSubscription.clear();
 
         mCompositeSubscription.add(Observable
             .combineLatest(

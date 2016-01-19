@@ -104,12 +104,14 @@ public class SimpleCourseFragment extends ScrollableFragment implements Recycler
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
 
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
-            unused -> {
-                EvaluationForm.getInstance().clear();
-                mNavigator.navigate(EvaluationStep1Fragment.class, true);
-            },
-            error -> ErrorHandler.handle(error, this)
+        mCompositeSubscription.add(
+            FloatingActionControl.clicks().observeOn(AndroidSchedulers.mainThread()).subscribe(
+                unused -> {
+                    EvaluationForm.getInstance().clear();
+                    mNavigator.navigate(EvaluationStep1Fragment.class, true);
+                },
+                error -> ErrorHandler.handle(error, this)
+            )
         );
         if(SearchToolbar.getInstance().isReadyToSearch())
             mAdapter.loadSearchResult(true);

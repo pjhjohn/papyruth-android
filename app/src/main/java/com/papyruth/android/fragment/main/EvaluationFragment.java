@@ -319,7 +319,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_comment).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
-        FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput(), error->ErrorHandler.handle(error, this));
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput(), error->ErrorHandler.handle(error, this)));
     }
 
     @Override

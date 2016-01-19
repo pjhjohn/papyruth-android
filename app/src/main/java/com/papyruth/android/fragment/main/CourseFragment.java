@@ -34,7 +34,7 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     @Override
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_green).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.handle(error, this));
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> navigateToEvaluationForm(), error -> ErrorHandler.handle(error, this)));
     }
 
     @Override

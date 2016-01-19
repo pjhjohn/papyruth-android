@@ -51,12 +51,14 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
     @Override
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_blue).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks().subscribe(
-            unused -> {
-                EvaluationForm.getInstance().clear();
-                mNavigator.navigate(EvaluationStep1Fragment.class, true);
-            },
-            error -> ErrorHandler.handle(error, this)
+        mCompositeSubscription.add(
+            FloatingActionControl.clicks().subscribe(
+                unused -> {
+                    EvaluationForm.getInstance().clear();
+                    mNavigator.navigate(EvaluationStep1Fragment.class, true);
+                },
+                error -> ErrorHandler.handle(error, this)
+            )
         );
     }
 

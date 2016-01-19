@@ -59,12 +59,14 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     @Override
     protected void setFloatingActionControl() {
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_new_evaluation_red).show(true, 200, TimeUnit.MILLISECONDS);
-        FloatingActionControl.clicks().subscribe(
-            unused -> {
-                EvaluationForm.getInstance().clear();
-                mNavigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN);
-            },
-            error -> ErrorHandler.handle(error, this)
+        mCompositeSubscription.add(
+            FloatingActionControl.clicks().subscribe(
+                unused -> {
+                    EvaluationForm.getInstance().clear();
+                    mNavigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN);
+                },
+                error -> ErrorHandler.handle(error, this)
+            )
         );
     }
 
