@@ -26,8 +26,10 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     public void onResume() {
         super.onResume();
         if(Evaluation.getInstance().getId() != null){
-            mEvaluationFragment = new EvaluationFragment();
-            openEvaluation(null, false);
+            if(!mEvaluationOpened) {
+                mEvaluationFragment = new EvaluationFragment();
+                openEvaluation(null, false);
+            }
         } else setFloatingActionControl();
     }
 

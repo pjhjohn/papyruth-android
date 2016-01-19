@@ -78,8 +78,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Bind(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription;
     private EvaluationAdapter mAdapter;
-    private boolean mCommentInputActive;
-    private boolean mStandalone;
+    private boolean mCommentInputActive = false;
 
     private int mCommentId = -1;
 
@@ -143,16 +142,13 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         });
 
         /* Initialize Others */
-        mStandalone = getArguments()!=null && getArguments().getBoolean("STANDALONE", false);
-        mCommentInputActive = false;
-        mCommentInput.setVisibility(View.GONE);
+        if(!mCommentInputActive) mCommentInput.setVisibility(View.GONE);
         return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mCommentInput.setVisibility(View.GONE);
         Evaluation.getInstance().clear();
         ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
@@ -207,8 +203,8 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 mAdapter.refresh();
             })
         );
-        if (!mStandalone) return;
         setEvaluationFloatingActionControl();
+//        if (!mStandalone) return;
     }
 
     void morph2CommentInput() {

@@ -92,7 +92,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     public void onResume() {
         super.onResume();
         mCompositeSubscription.clear();
-        mEvaluationOpened = false;
+//        mEvaluationOpened = false;
         this.setToolbarOptions();
         this.setStatusBarOptions();
         mRecyclerView.setAdapter(mAdapter = getAdapter());
@@ -111,7 +111,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     @Bind(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
     protected EvaluationFragment mEvaluationFragment;
     protected Boolean mEvaluationIsOccupying;
-    protected Boolean mEvaluationOpened;
+    protected Boolean mEvaluationOpened = false;
 
     @Override
     public boolean onBack() {
