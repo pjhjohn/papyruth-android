@@ -116,6 +116,7 @@ public class ProfileFragment extends TrackerFragment {
         else
             mUniversityEmailText.setText(User.getInstance().getUniversityEmail());
 
+        mCompositeSubscription.clear();
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_register_university_email)
             .subscribe(

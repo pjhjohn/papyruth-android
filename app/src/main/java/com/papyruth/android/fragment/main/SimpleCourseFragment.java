@@ -91,6 +91,7 @@ public class SimpleCourseFragment extends ScrollableFragment implements Recycler
     @Override
     public void onResume() {
         super.onResume();
+        mCompositeSubscription.clear();
         this.mCompositeSubscription.add(
             this.getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
                 .filter(passIfNull -> passIfNull == null && (!SearchToolbar.getInstance().getSelectedCandidate().isEmpty() || SearchToolbar.getInstance().getSelectedQuery() != null))

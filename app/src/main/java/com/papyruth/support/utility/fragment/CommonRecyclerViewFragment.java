@@ -91,6 +91,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     @Override
     public void onResume() {
         super.onResume();
+        mCompositeSubscription.clear();
         mEvaluationOpened = false;
         this.setToolbarOptions();
         this.setStatusBarOptions();

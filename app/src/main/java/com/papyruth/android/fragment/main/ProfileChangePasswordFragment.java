@@ -104,6 +104,7 @@ public class ProfileChangePasswordFragment extends TrackerFragment {
             FloatingActionControl.getButton().setMax(100);
             FloatingActionControl.getButton().setShowProgressBackground(false);
         }
+        mCompositeSubscription.clear();
         setSubmissionCallback();
         mCompositeSubscription.add(Observable.combineLatest(
                 WidgetObservable.text(mOldPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword).startWith((String) null),

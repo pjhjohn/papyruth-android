@@ -103,6 +103,7 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
             FloatingActionControl.getButton().setMax(100);
             FloatingActionControl.getButton().setShowProgressBackground(false);
         }
+        mCompositeSubscription.clear();
         setSubmissionCallback();
         mCompositeSubscription.add(WidgetObservable
             .text(mNickname)

@@ -109,6 +109,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             FloatingActionControl.getButton().setMax(100);
             FloatingActionControl.getButton().setShowProgressBackground(false);
         }
+        mCompositeSubscription.clear();
         setSubmissionCallback();
         mCompositeSubscription.add(WidgetObservable
             .text(mUniversityEmail)

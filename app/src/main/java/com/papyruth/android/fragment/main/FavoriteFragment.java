@@ -89,6 +89,7 @@ public class FavoriteFragment extends ScrollableFragment implements RecyclerView
     public void onResume() {
         super.onResume();
         this.mToolbar.setTitle(R.string.toolbar_favorite);
+        mCompositeSubscription.clear();
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_red).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_red);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
@@ -103,12 +104,12 @@ public class FavoriteFragment extends ScrollableFragment implements RecyclerView
             error -> ErrorHandler.handle(error, this)
         );
 
-            mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
-            mCompositeSubscription.add(
-                getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
-                    .filter(passIfNull -> passIfNull == null)
-                    .subscribe(unused -> mAdapter.loadMore())
-            );
+        mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
+        mCompositeSubscription.add(
+            getRecyclerViewScrollObservable(mRecyclerView, mToolbar, true)
+                .filter(passIfNull -> passIfNull == null)
+                .subscribe(unused -> mAdapter.loadMore())
+        );
     }
 
     @Override

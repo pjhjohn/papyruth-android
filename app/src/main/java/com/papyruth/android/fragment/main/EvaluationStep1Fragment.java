@@ -104,6 +104,7 @@ public class EvaluationStep1Fragment extends ScrollableFragment implements Recyc
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
         FloatingActionControl.getInstance().clear();
 
+        mCompositeSubscription.clear();
 
         mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
             .observeOn(AndroidSchedulers.mainThread())

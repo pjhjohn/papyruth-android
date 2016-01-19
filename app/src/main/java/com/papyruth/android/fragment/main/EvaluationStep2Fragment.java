@@ -119,7 +119,7 @@ public class EvaluationStep2Fragment extends TrackerFragment {
             unused -> mNavigator.navigate(EvaluationStep3Fragment.class, true),
             error -> ErrorHandler.handle(error, this)
         );
-
+        mCompositeSubscription.clear();
 
         mCompositeSubscription.add(Observable
             .combineLatest(

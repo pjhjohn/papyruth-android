@@ -110,6 +110,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     public void onResume() {
         super.onResume();
         mToolbar.setTitle(R.string.toolbar_compose_evaluation);
+        mCompositeSubscription.clear();
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);

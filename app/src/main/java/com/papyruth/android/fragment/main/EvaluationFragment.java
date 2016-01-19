@@ -178,6 +178,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public void onResume() {
         super.onResume();
+        mCompositeSubscription.clear();
         mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
 
         showContentImmediately(mShowContentImmediately);
@@ -343,15 +344,14 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 morph2FloatingActionButton();
                 ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
             }
-            mCompositeSubscription.add(
-                Api.papyruth().get_course(User.getInstance().getAccessToken(), ((Evaluation) object).getCourseId())
-                    .map(response -> response.course)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(course -> {
-                        Course.getInstance().update(course);
-                        mNavigator.navigate(CourseFragment.class, true);
-                    }, error -> ErrorHandler.handle(error, this))
+            Api.papyruth().get_course(User.getInstance().getAccessToken(), ((Evaluation) object).getCourseId())
+                .map(response -> response.course)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(course -> {
+                    Course.getInstance().update(course);
+                    mNavigator.navigate(CourseFragment.class, true);
+                }, error -> ErrorHandler.handle(error, this)
             );
         } else if(object instanceof Footer) {
             mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
