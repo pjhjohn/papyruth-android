@@ -6,7 +6,6 @@ import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.support.opensource.materialdialog.HashtagDeleteDialog;
 
 import java.util.List;
@@ -47,7 +46,9 @@ public class Hashtag {
 
     public static String plainString(List<String> hashtags) {
         String str = "";
-        for(String hashtag : hashtags) str += appendPrefix(hashtag) + " ";
+        for(String hashtag : hashtags) {
+            if(hashtag != null && !hashtag.isEmpty()) str += appendPrefix(hashtag) + " ";
+        }
         return str;
     }
 }
