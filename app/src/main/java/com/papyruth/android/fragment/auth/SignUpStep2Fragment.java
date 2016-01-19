@@ -97,6 +97,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
         Picasso.with(mActivity).load(R.drawable.ic_email_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconEmail);
         Picasso.with(mActivity).load(R.drawable.ic_nickname_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mIconNickname);
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP2);
+
         final View focusedView = mActivity.getWindow().getCurrentFocus();
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(
             unused -> ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(focusedView != null ? focusedView : mTextEmail, InputMethodManager.SHOW_FORCED)
@@ -143,10 +144,12 @@ public class SignUpStep2Fragment extends TrackerFragment {
             final String email = SignUpForm.getInstance().getTempSaveEmail();
             if(email != null) {
                 mTextEmail.setText(email);
-                mTextEmail.setSelection(mTextEmail.getText().length());
             }
             else mTextEmail.getText().clear();
-        } else mTextEmail.setText(mTextEmail.getText());
+        } else {
+            mTextEmail.setText(mTextEmail.getText());
+        }
+        mTextEmail.setSelection(mTextEmail.getText().length());
         if(mTextNickname.getText().toString().isEmpty()) {
             final String nickname = SignUpForm.getInstance().getTempSaveNickname();
             if(nickname != null) mTextNickname.setText(nickname);

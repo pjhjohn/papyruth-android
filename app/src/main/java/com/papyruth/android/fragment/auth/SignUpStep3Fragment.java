@@ -98,7 +98,10 @@ public class SignUpStep3Fragment extends TrackerFragment {
             final String realname = SignUpForm.getInstance().getTempSaveRealname();
             if(realname != null) mTextRealname.setText(realname);
             else mTextRealname.getText().clear();
-        } else mTextRealname.setText(mTextRealname.getText());
+        } else {
+            mTextRealname.setText(mTextRealname.getText());
+        }
+        mTextRealname.setSelection(mTextRealname.getText().length());
         if(mRadioGroupGender.getCheckedRadioButtonId() < 0) {
             final Boolean isboy = SignUpForm.getInstance().getTempSaveIsBoy();
             if(isboy != null) mRadioGroupGender.check(isboy? R.id.signup_gender_radio_male : R.id.signup_gender_radio_female);

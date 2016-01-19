@@ -203,6 +203,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
             if(password != null) mTextPassword.setText(password);
             else mTextPassword.getText().clear();
         } else mTextPassword.setText(mTextPassword.getText());
+        mTextPassword.setSelection(mTextPassword.getText().length());
 
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
             if(mTextPassword != null) mTextPassword.requestFocus();
