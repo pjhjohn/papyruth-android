@@ -12,7 +12,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
-import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.FavoriteData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.User;
@@ -43,11 +42,11 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
     private Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
     private EmptyStateView mEmptyState;
-    private List<CourseData> mCourses;
+    private List<FavoriteData> mFavorites;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
     private boolean mHideInform;
     private boolean mHideShadow;
-    private Integer mPage;
+    private Integer mSinceId;
     private int mIndexHeader; // INDEX 0
     private int mIndexInform; // UNDER HEADER unless user learned inform, -1 otherwise
     private int mIndexSingle; // UNDER INFORM if exists, -1 otherwise
@@ -64,18 +63,18 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
         mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
-        mCourses = new ArrayList<>();
+        mFavorites = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
         mTempHideInform = false;
         mHideInform = true;
         mHideShadow = mHideInform;
-        mPage = 1;
+        mSinceId = null;
         mIndexHeader = 0;
         mIndexInform = mHideInform? -1 : 1;
         mIndexSingle = -1;
         mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
         mIndexContent= 1 + (mHideShadow? 0 : 1) + (mHideInform? 0 : 1);
-        mIndexFooter = mCourses.size() + mIndexContent;
+        mIndexFooter = mFavorites.size() + mIndexContent;
     }
 
     @Override
@@ -104,11 +103,11 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
                 }
             } else if(position == mIndexFooter) {
                 if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY);
-            } else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCourses.get(position - mIndexContent));
+            } else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mFavorites.get(position - mIndexContent).course);
         });
         if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
-            if(mCourses.isEmpty()) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
+            if(mFavorites.isEmpty()) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             else mShadow.setBackgroundResource(R.drawable.shadow_white);
         }
         if(viewHolder instanceof FooterViewHolder) {
@@ -129,7 +128,7 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
         if(position == mIndexSingle) return;
         if(position == mIndexShadow) return;
         if(position == mIndexFooter) return;
-        ((CourseItemViewHolder) holder).bind(mCourses.get(position - mIndexContent));
+        ((CourseItemViewHolder) holder).bind(mFavorites.get(position - mIndexContent).course);
     }
 
     @Override
@@ -148,8 +147,8 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
     }
 
     private void reconfigure() {
-        Timber.d("Reconfigured with mCourses having size of %d", mCourses.size());
-        if(mCourses.isEmpty()) {
+        Timber.d("Reconfigured with mFavorites having size of %d", mFavorites.size());
+        if(mFavorites.isEmpty()) {
             mIndexHeader = 0;
             mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
             mHideShadow = mHideInform;
@@ -157,13 +156,13 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
             mIndexContent = 1 + (mHideShadow? 0 : 1) + (mHideInform? 0 : 1);
-            mIndexFooter = mCourses.size() + mIndexContent;
+            mIndexFooter = mFavorites.size() + mIndexContent;
             notifyDataSetChanged();
             AnimatorHelper.FADE_OUT(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_transparent);
             mEmptyState.setIconDrawable(R.drawable.emptystate_favorite).setTitle(R.string.emptystate_title_favorite).setBody(R.string.emptystate_body_favorite).show();
         } else {
-            mPage++;
+            mSinceId = mFavorites.get(mFavorites.size() - 1).id;
             mIndexHeader = 0;
             mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false) || mTempHideInform;
             mHideShadow = mHideInform;
@@ -171,7 +170,7 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
             mIndexSingle = -1;
             mIndexShadow = mHideShadow? -1 : 1 + (mHideInform? 0 : 1);
             mIndexContent = 1 + (mHideShadow? 0 : 1) + (mHideInform? 0 : 1);
-            mIndexFooter = mCourses.size() + mIndexContent;
+            mIndexFooter = mFavorites.size() + mIndexContent;
             notifyDataSetChanged();
             AnimatorHelper.FADE_IN(mFooterBorder).start();
             if(mShadow != null) mShadow.setBackgroundResource(R.drawable.shadow_white);
@@ -184,14 +183,19 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        Api.papyruth().get_users_me_favorites(User.getInstance().getAccessToken(), mPage = 1)
+        Api.papyruth().get_users_me_favorites(
+                User.getInstance().getAccessToken(),
+                null,
+                mSinceId == null ? null : mSinceId - 1,
+                null
+        )
             .map(response -> response.favorites)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(favorites -> {
                 mSwipeRefresh.setRefreshing(false);
-                mCourses.clear();
-                for(FavoriteData favorite : favorites) mCourses.add(favorite.course);
+                mFavorites.clear();
+                mFavorites.addAll(favorites);
                 mFullyLoaded = false;
                 mLoading = false;
                 reconfigure();
@@ -225,14 +229,16 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
         Api.papyruth()
             .get_users_me_favorites(
                 User.getInstance().getAccessToken(),
-                mPage == null? null : mPage
+                null,
+                mSinceId == null ? null : mSinceId - 1,
+                null
             )
             .map(response -> response.favorites)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(favorites -> {
                 if(favorites != null) {
-                    for(FavoriteData favorite : favorites) mCourses.add(favorite.course);
+                    mFavorites.addAll(favorites);
                     mFullyLoaded = favorites.isEmpty();
                 }
                 if(mFooterMaterialProgressBar != null)

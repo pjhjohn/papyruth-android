@@ -337,7 +337,9 @@ public interface Papyruth {
     @GET("/users/me/favorites")
     Observable<FavoriteCoursesResponse> get_users_me_favorites(
         @Header("Authorization") String authorization,
-        @Query("page") Integer page
+        @Query("since_id") Integer since_id,
+        @Query("max_id") Integer max_id,
+        @Query("limit") Integer limit
     );
     @GET("/users/me/evaluations")
     Observable<EvaluationsResponse> get_users_me_evaluations(
