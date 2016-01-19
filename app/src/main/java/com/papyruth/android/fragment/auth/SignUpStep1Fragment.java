@@ -86,6 +86,7 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
+        mCompositeSubscription.clear();
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP1);
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_next);
         if(SignUpForm.getInstance().getUniversityId() != null && SignUpForm.getInstance().getEntranceYear() != null) FloatingActionControl.getInstance().show(true);

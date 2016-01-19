@@ -96,6 +96,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
     @Override
     public void onResume() {
         super.onResume();
+        mCompositeSubscription.clear();
         mContainer.setOnBackListner(() -> {
             mNavigator.back();
             return true;

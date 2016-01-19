@@ -94,6 +94,7 @@ public class SignInFragment extends TrackerFragment {
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNIN);
         SignUpForm.getInstance().clear();
         FloatingActionControl.getInstance().clear();
+        mCompositeSubscriptions.clear();
         mCompositeSubscriptions.add(Observable.combineLatest(
             WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
             WidgetObservable.text(mTextPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
@@ -132,7 +133,7 @@ public class SignInFragment extends TrackerFragment {
 
     private void requestSignIn() {
         AnimatorHelper.FADE_IN(mProgress).start();
-        mCompositeSubscriptions.add(Api.papyruth()
+        Api.papyruth()
             .post_users_sign_in(
                     mTextEmail.getText().toString(),
                     mTextPassword.getText().toString(),
@@ -185,7 +186,6 @@ public class SignInFragment extends TrackerFragment {
                         }
                     }
                 }
-            )
         );
     }
 
