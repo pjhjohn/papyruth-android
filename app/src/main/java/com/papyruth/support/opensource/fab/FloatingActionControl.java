@@ -16,6 +16,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-29.
@@ -102,13 +103,11 @@ public class FloatingActionControl {
         final int previous_id = this.container.getChildCount() > 0 ? this.container.getChildAt(0).getId() : -1;
         final boolean hasControl = this.fab!=null || this.fam!=null;
         View control = this.inflater.inflate(layout_id, this.container, false);
-        if(previous_id == control.getId()) {
-            if(this.fab != null) this.fab.hide(animate);
-            if(this.fam != null) this.fam.hideMenuButton(animate);
-            return this;
-        }
+
         if(this.fab != null) this.fab.hide(animate);
         if(this.fam != null) this.fam.hideMenuButton(animate);
+        if(previous_id == control.getId()) return this;
+
         if(hasControl) {
             if(animate) new Handler().postDelayed(() -> this.container.removeView(this.container.findViewById(previous_id)), 300);
             else this.container.removeView(this.container.findViewById(previous_id));
