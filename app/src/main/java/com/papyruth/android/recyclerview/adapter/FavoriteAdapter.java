@@ -183,12 +183,13 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
     @Override
     public void refresh() {
         mSwipeRefresh.setRefreshing(true);
-        Api.papyruth().get_users_me_favorites(
+        Api.papyruth()
+            .get_users_me_favorites(
                 User.getInstance().getAccessToken(),
                 null,
                 mSinceId == null ? null : mSinceId - 1,
                 null
-        )
+            )
             .map(response -> response.favorites)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

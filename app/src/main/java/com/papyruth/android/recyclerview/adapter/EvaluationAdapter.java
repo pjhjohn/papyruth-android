@@ -89,7 +89,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                     Evaluation.getInstance().update(evaluationData);
                     mToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
                     notifyItemChanged(mIndexSingle);
-                }, error -> ErrorHandler.handle(error, this.getFragment()));
+                }, error -> ErrorHandler.handle(error, this.getFragment(), true));
         }
         loadMore();
     }
@@ -166,7 +166,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     public void setCommentId(int commentId){
         this.mCommentId = commentId;
     }
-    public int getFocusIndex(){
+    public int getFocusIndex() {
         if (mCommentId > 0 && mComments.get(mComments.size()-1).id < mCommentId){
             for(int i = 0; i < mComments.size(); i++){
                 if(mComments.get(i).id.equals(mCommentId))
@@ -248,11 +248,8 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                 reconfigure();
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
-                if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
-                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                    }
-                } else ErrorHandler.handle(error, this.getFragment());
+                if(ErrorNetwork.handle(error, this.getFragment()).handled) mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                else ErrorHandler.handle(error, this.getFragment(), true);
             });
     }
 
@@ -282,11 +279,8 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                if (error instanceof RetrofitError) {
-                    if (ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
-                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                    }
-                } else ErrorHandler.handle(error, this.getFragment());
+                if(ErrorNetwork.handle(error, this.getFragment()).handled) mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                else ErrorHandler.handle(error, this.getFragment(), true);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

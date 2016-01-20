@@ -76,7 +76,7 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
         RecyclerView.ViewHolder viewHolder;
         if(viewType == ViewHolderFactory.ViewType.HEADER){
             viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {}, R.layout.cardview_white_0dp);
-        }else {
+        } else {
             viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
                 if (position == mIndexFooter) {
                     mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY);
@@ -155,16 +155,15 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
 
     private boolean mLoadding = false, mFullyLoad = false;
     public void searchCourse(CandidateData candidate, String query, boolean clear) {
-        if (clear){
+        if (clear) {
             mPage = 1;
             mFullyLoad = false;
-        }else if(mLoadding || mFullyLoad) return;
+        } else if(mLoadding || mFullyLoad) return;
         mLoadding = true;
         if(candidate.course_id != null){
             nextEvaluatonStep(candidate);
-        }else {
-            if (mFooterMaterialProgressBar != null)
-                AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
+        } else {
+            if (mFooterMaterialProgressBar != null) AnimatorHelper.FADE_IN(mFooterMaterialProgressBar).start();
             Api.papyruth()
                 .get_search_search(
                     User.getInstance().getAccessToken(),
@@ -195,8 +194,7 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
                 }, error -> {
                     mLoadding = false;
                     ErrorHandler.handle(error, this.getFragment());
-                    if (mFooterMaterialProgressBar != null)
-                        AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                    if (mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 });
         }
     }

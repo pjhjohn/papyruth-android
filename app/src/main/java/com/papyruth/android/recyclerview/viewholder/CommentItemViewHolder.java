@@ -68,21 +68,21 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                 if(mVoteStatus == VoteStatus.UP) Api.papyruth()
                     .delete_comment_vote(User.getInstance().getAccessToken(), mCommentId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this, true));
                 else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), mCommentId, true)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.UP, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.UP, response), error ->  ErrorHandler.handle(error, this, true));
                 break;
             case R.id.comment_item_down_vote_icon:
                 if(mVoteStatus == VoteStatus.DOWN) Api.papyruth()
                     .delete_comment_vote(User.getInstance().getAccessToken(), mCommentId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this, true));
                 else Api.papyruth()
                     .post_comment_vote(User.getInstance().getAccessToken(), mCommentId, false)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.DOWN, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.DOWN, response), error ->  ErrorHandler.handle(error, this, true));
                 break;
             case R.id.comment_item_up_vote_count:
             case R.id.comment_item_down_vote_count:
@@ -93,7 +93,7 @@ public class CommentItemViewHolder extends RecyclerView.ViewHolder implements Vi
                         view.getContext(),
                         view.getId() == R.id.comment_item_up_vote_count ? "UP" : "DOWN",
                         view.getId() == R.id.comment_item_up_vote_count ? response.up : response.down
-                    ), error ->  ErrorHandler.handle(error, this));
+                    ), error ->  ErrorHandler.handle(error, this, true));
                 break;
             default : break;
         }
