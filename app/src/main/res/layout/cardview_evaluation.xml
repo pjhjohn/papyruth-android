@@ -307,7 +307,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/baseline_x1"
             android:paddingLeft="@dimen/baseline_x3"
-            android:paddingRight="@dimen/baseline_x3"/><!-- Body -->
+            android:paddingRight="@dimen/baseline_x3"
+            android:lineSpacingMultiplier="1.2"/><!-- Body -->
         <TextView
             android:id="@+id/evaluation_hashtags"
             android:layout_width="match_parent"
