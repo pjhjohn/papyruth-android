@@ -2,7 +2,6 @@ package com.papyruth.support.opensource.materialdialog;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -137,8 +136,8 @@ public class AlertDialog {
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         success -> {
-                            if(success) Toast.makeText(context, R.string.toast_alert_email_sent, Toast.LENGTH_SHORT).show();
-                            else Toast.makeText(context, R.string.toast_alert_email_not_sent, Toast.LENGTH_SHORT).show();
+                            if(success) Toast.makeText(context, R.string.toast_alert_legacy_user_email_sent, Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(context, R.string.toast_alert_legacy_user_email_not_sent, Toast.LENGTH_SHORT).show();
                         }, error -> ErrorHandler.handle(error, MaterialDialog.class)
                     );
                 break;

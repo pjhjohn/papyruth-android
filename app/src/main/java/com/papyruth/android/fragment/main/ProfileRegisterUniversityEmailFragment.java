@@ -178,10 +178,10 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             .subscribe(
                 success -> {
                     if (success) {
-                        Toast.makeText(mContext, R.string.toast_profile_register_university_email_sent, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.toast_profile_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
                         mNavigator.back();
                     } else {
-                        Toast.makeText(mContext, R.string.toast_profile_register_university_email_not_sent, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.toast_profile_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
                     }
                 }, error -> ErrorHandler.handle(error, MaterialDialog.class)
             );

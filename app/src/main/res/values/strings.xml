@@ -1,7 +1,7 @@
 <resources>
     <!-- Application Name -->
     <string name="application_title">Papyruth</string>
-    <string name="application_summary">University Course Evaluator</string>
+    <string name="application_summary">University Class Evaluation System</string>
     <string name="application_confirm_exit">Press again to close application</string>
 
     <!-- Navigation Drawer -->
@@ -39,21 +39,21 @@
     <string name="signup_btn">SIGN UP</string>
     <string name="signup_label">Sign Up</string>
     <string name="signup_field_required">This field is required</string>
-    <string name="signup_invalid_email">Invalid e-mail format</string>
-    <string name="signup_invalid_password">Password is too short</string>
-    <string name="signup_invalid_realname">Name is too long</string>
-    <string name="signup_invalid_nickname">Nickname is too long</string>
-    <string name="signup_invalid_gender">There is no such gender.</string>
-    <string name="signup_invalid_entrance_year">Invalid range of entrance year</string>
+    <string name="signup_invalid_email">Invalid email format</string>
+    <string name="signup_invalid_password">Password too short</string>
+    <string name="signup_invalid_realname">Name too long</string>
+    <string name="signup_invalid_nickname">Nickname too long</string>
+    <string name="signup_invalid_gender">There is no such gender</string>
+    <string name="signup_invalid_entrance_year">Entrance year value is not in valid range</string>
     <string name="signup_invalid_university">University not selected</string>
-    <string name="signup_agreement_message">If you sign up, you agree to the %1$s and %2$s.</string>
+    <string name="signup_agreement_message">By signing up, you will agree to %1$s and %2$s.</string>
     <string name="signup_terms_of_use">Terms and Conditions</string>
     <string name="signup_privacy_policy">Privacy Policy</string>
-    <string name="signup_email_duplication">duplicated email</string>
-    <string name="signup_nickname_duplication">duplicated nickname</string>
-    <string name="toast_signin_failed">Failed to Signin</string>
-    <string name="toast_signup_failed">Failed to Signup</string>
-    <string name="toast_signup_min_entrance_year_not_loaded">Start of Entrance Year has not been loaded. Try again.</string>
+    <string name="signup_email_duplication">Duplicated Email</string>
+    <string name="signup_nickname_duplication">Duplicated Nickname</string>
+    <string name="toast_signin_failed">Failed to signin</string>
+    <string name="toast_signup_failed">Failed to signup</string>
+    <string name="toast_signup_min_entrance_year_not_loaded">Start of Entrance Year not loaded. Try again.</string>
 
     <!-- Permission -->
     <string name="permission_title">Contacts Permission</string>
@@ -76,7 +76,7 @@
     <string name="course_label_point_gpa_satisfaction">GPA Sat.</string>
     <string name="course_label_point_clarity">Clarity</string>
     <string name="course_label_point_easiness">Easiness</string>
-    <string name="course_no_evaluations">There is no Evaluations for this Course.\nWhy don\'t you write an evaluation for others?</string>
+    <string name="course_no_evaluations">There is no evaluations for this course.\nWhy don\'t you compose an evaluation for this course?</string>
     <string name="course_point_hidden">HIDDEN</string>
 
     <!-- Evaluation -->
@@ -85,7 +85,7 @@
     <string name="evaluation_label_point_gpa_satisfaction">GPA Sat.</string>
     <string name="evaluation_label_point_clarity">Clarity</string>
     <string name="evaluation_label_point_easiness">Easiness</string>
-    <string name="evaluation_no_comments">There is no Comment for this Evaluation.\nWhy don\'t you comment one?</string>
+    <string name="evaluation_no_comments">There is no comments for this evaluation.\nWhy don\'t you comment one?</string>
     <string name="evaluation_point_hidden">HIDDEN</string>
     <string name="evaluation_forbidden">You cannot see this evaluation\n%s</string>
     <string name="evaluation_forbidden_email_confirmation_required">Confirm your email</string>
@@ -97,11 +97,11 @@
     <string name="compose_evaluation_label_point_gpa_satisfaction">GPA Sat.</string>
     <string name="compose_evaluation_label_point_clarity">Clarity</string>
     <string name="compose_evaluation_label_point_easiness">Easiness</string>
-    <string name="compose_evaluation_label_search">Click to Search Evaluation to Compose</string>
+    <string name="compose_evaluation_label_search">Click to Search Course</string>
     <string name="compose_evaluation_label_hashtags">Hashtags</string>
     <string name="compose_evaluation_label_body">Evaluation Content</string>
-    <string name="toast_compose_evaluation_submission_failed">Failed to register Evaluation</string>
-    <string name="toast_compose_evaluation_incomplete_data">Submit form is incomplete. Aborting submission</string>
+    <string name="toast_compose_evaluation_submission_failed">Failed to register evaluation</string>
+    <string name="toast_compose_evaluation_incomplete_data">Could not submit evaluation due to the lack of contents</string>
 
     <!-- EmptyState -->
     <string name="emptystate_title_network">Unstable Network</string>
@@ -133,14 +133,14 @@
     <string name="profile_value_male">Male</string>
     <string name="profile_value_female">Female</string>
     <string name="profile_value_university_email_confirmation_required">Confirmation Required</string>
-    <string name="profile_value_university_email_confirmation_pending">Waiting for Confirmation</string>
+    <string name="profile_value_university_email_confirmation_pending">Confirmation Waiting</string>
     <!-- Profile Register University Email -->
     <string name="profile_register_university_email_label">ENTER UNIVERSITY EMAIL</string>
     <string name="profile_register_university_email_body_prefix">ENTER</string>
     <string name="profile_register_university_email_body">UNIVERSITY</string>
     <string name="profile_register_university_email_body_postfix">EMAIL</string>
-    <string name="toast_profile_register_university_email_sent">Email send success</string>
-    <string name="toast_profile_register_university_email_not_sent">Email send fail</string>
+    <string name="toast_profile_university_confirmation_email_sent">University confirmation email has been sent</string>
+    <string name="toast_profile_university_confirmation_email_not_sent">Could not send an university confirmation email</string>
     <!-- Profile Change Nickname -->
     <string name="profile_change_nickname_label">ENTER NEW NICKNAME TO CHANGE</string>
     <string name="profile_change_nickname_body_prefix">ENTER</string>
@@ -162,12 +162,12 @@
 
     <!-- Dialog Title -->
     <string name="dialog_title_entrance_year">Please select your entrance year</string>
-    <string name="dialog_title_delete_hashtag">Removing Hashtag</string>
+    <string name="dialog_title_delete_hashtag">Delete Hashtag</string>
     <string name="dialog_title_password_recovery">Password Recovery</string>
     <string name="dialog_title_compose_evaluation_submit">Submit New Evaluation</string>
-    <string name="dialog_title_failure_register_university_email">university email</string>
-    <string name="dialog_title_failure_change_nickname">nickname</string>
-    <string name="dialog_title_failure_change_password">password</string>
+    <string name="dialog_title_failure_register_university_email">University Email</string>
+    <string name="dialog_title_failure_change_nickname">Nickname Change Failure</string>
+    <string name="dialog_title_failure_change_password">Password Change Failure</string>
     <!-- Dialog Content -->
     <string name="dialog_content_delete_hashtag">Are you sure to delete this hashtag?</string>
     <string name="dialog_content_password_recovery">Enter email address you want to sign in with.</string>
@@ -194,10 +194,10 @@
     <string name="dialog_negative_change_email">CHANGE EMAIL</string>
     <string name="dialog_neutral_repository">REPOSITORY</string>
     <!-- Dialog Toast -->
-    <string name="toast_alert_university_confirmation_email_sent">Email Sent</string>
-    <string name="toast_alert_university_confirmation_email_not_sent">Failed to send Email</string>
-    <string name="toast_alert_email_sent">Email Sent, Check your mail box</string>
-    <string name="toast_alert_email_not_sent">Failed to send Email</string>
+    <string name="toast_alert_university_confirmation_email_sent">University confirmation email has been sent</string>
+    <string name="toast_alert_university_confirmation_email_not_sent">Could not send an university confirmation email</string>
+    <string name="toast_alert_legacy_user_email_sent">Account integration email has been sent</string>
+    <string name="toast_alert_legacy_user_email_not_sent">Could not send an account integration email</string>
 
     <!-- Floating Action Button -->
     <string name="fab_change_nickname">Change Nickname</string>
@@ -210,28 +210,28 @@
     <!--Crashlytics-->
     <string name="crashlytics_key_university">university</string>
     <!--Search-->
-    <string name="search_candidate_type_lecture">lecture</string>
-    <string name="search_candidate_type_course">course</string>
-    <string name="search_candidate_type_professor">professor</string>
+    <string name="search_candidate_type_lecture">LECTURE</string>
+    <string name="search_candidate_type_course">COURSE</string>
+    <string name="search_candidate_type_professor">PROFESSOR</string>
 
     <!-- Error -->
-    <string name="toast_error_default">error_default</string>
-    <string name="toast_error_retrofit_401">Oops! Something went wrong</string>
-    <string name="toast_error_retrofit_403">Oops! Something went wrong</string>
+    <string name="toast_error_default">Something went wrong</string>
+    <string name="toast_error_retrofit_401">Account authorization has been expired. Proceed to sign-in page</string>
+    <string name="toast_error_retrofit_403">Something went wrong. Maybe you inserted wrong value</string>
     <string name="toast_error_retrofit_500">Oops! There must be something wrong with the server</string>
-    <string name="toast_error_retrofit_503">Oops! There must be something wrong with the server</string>
-    <string name="toast_error_retrofit_http">Oops! Something went wrong</string>
-    <string name="toast_error_retrofit_network">Please check your network</string>
-    <string name="toast_error_retrofit_default">error_retrofit_default</string>
+    <string name="toast_error_retrofit_503">We are under maintenance</string>
+    <string name="toast_error_retrofit_http">Something went wrong with connection</string>
+    <string name="toast_error_retrofit_network">Network status is low. Please check your data or wifi network status.</string>
+    <string name="toast_error_retrofit_default">Something went wrong with connection</string>
 
     <!-- Password Recovery -->
     <string name="password_recovery_label">Forgot Password?</string>
-    <string name="toast_password_recovery_failed">password_recovery_failed</string>
-    <string name="toast_password_recovery_succeed">password_recovery_succeed</string>
+    <string name="toast_password_recovery_email_sent">Password recovery email has been sent</string>
+    <string name="toast_password_recovery_email_not_sent">Could not send a password recovery email</string>
 
     <!-- ETC -->
     <string name="empty"/>
     <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
-    <string name="data_load_more">Load more</string>
+    <string name="data_load_more">See More</string>
 </resources>

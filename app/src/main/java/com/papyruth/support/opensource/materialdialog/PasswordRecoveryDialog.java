@@ -29,8 +29,8 @@ public class PasswordRecoveryDialog {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         response -> {
-                            if(response.success) Toast.makeText(context, R.string.toast_password_recovery_succeed, Toast.LENGTH_SHORT).show();
-                            else Toast.makeText(context, R.string.toast_password_recovery_failed, Toast.LENGTH_SHORT).show();
+                            if(response.success) Toast.makeText(context, R.string.toast_password_recovery_email_sent, Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(context, R.string.toast_password_recovery_email_not_sent, Toast.LENGTH_SHORT).show();
                         },
                         error -> {
                             ErrorHandleResult result = ErrorNetwork.handle(error, null);

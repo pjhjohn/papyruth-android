@@ -16,7 +16,7 @@
     </plurals>
 
     <plurals name="comments">
-        <item quantity="one">1 Comment</item>
-        <item quantity="other">%d Comments</item>
+        <item quantity="one">1 comment</item>
+        <item quantity="other">%d comments</item>
     </plurals>
 </resources>

@@ -1,48 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Google Analytics -->
-
-    <!-- GA - view : activity -->
-    <string name="ga_activity_main" translatable="false">Main Activity</string>
-    <string name="ga_activity_auth" translatable="false">Auth Activity</string>
-    <string name="ga_activity_splash" translatable="false">Splash Activity</string>
-
-    <!-- GA - view : fragment -->
-    <string name="ga_fragment_splash" translatable="false">splash_Splash</string>
-
-    <string name="ga_fragment_auth_loading" translatable="false">auth_Loading</string>
-    <string name="ga_fragment_auth_signin" translatable="false">auth_SignIn</string>
-    <string name="ga_fragment_auth_signup1" translatable="false">auth_Signup1</string>
-    <string name="ga_fragment_auth_signup2" translatable="false">auth_Signup2</string>
-    <string name="ga_fragment_auth_signup3" translatable="false">auth_Signup3</string>
-    <string name="ga_fragment_auth_signup4" translatable="false">auth_Signup4</string>
-
-    <string name="ga_fragment_main_recent" translatable="false">main_Recent</string>
-    <string name="ga_fragment_main_favorite" translatable="false">main_Favorite</string>
-    <string name="ga_fragment_main_course" translatable="false">main_Course</string>
-    <string name="ga_fragment_main_evaluation" translatable="false">main_Evaluation</string>
-    <string name="ga_fragment_main_write_evaluation1" translatable="false">main_Write Evaluation1</string>
-    <string name="ga_fragment_main_write_evaluation2" translatable="false">main_Write Evaluation2</string>
-    <string name="ga_fragment_main_write_evaluation3" translatable="false">main_Write Evaluation3</string>
-    <string name="ga_fragment_main_my_evaluation" translatable="false">main_My Evaluation</string>
-    <string name="ga_fragment_main_my_comment" translatable="false">main_My Comment</string>
-    <string name="ga_fragment_main_profile" translatable="false">main_Profile</string>
-    <string name="ga_fragment_main_profile_change_nickname" translatable="false">main_Edit Nickname</string>
-    <string name="ga_fragment_main_profile_change_university_email" translatable="false">Main_univ_email</string>
-    <string name="ga_fragment_main_profile_change_password" translatable="false">main_Edit password</string>
-    <string name="ga_fragment_main_setting" translatable="false">main_Setting</string>
-    <string name="ga_fragment_main_term" translatable="false">main_Term View</string>
-    <string name="ga_fragment_main_opensourse" translatable="false">main_Opensourse</string>
-    <string name="ga_fragment_main_search_result" translatable="false">main_Search Result</string>
-
-
     <!-- GA - evant : category -->
-    <string name="ga_category_search_view" translatable="false">Search View</string>
-    <string name="ga_category_evaluation_search_view" translatable="false">eval_Search View</string>
-    <string name="ga_category_drawer" translatable="false">Menu Drawer</string>
-    <string name="ga_category_inform" translatable="false">Inform view</string>
-
-    <!-- GA - event : api call -->
+    <string name="ga_category_search_view" translatable="false">SearchView</string>
+    <string name="ga_category_drawer" translatable="false">NavigationDrawer</string>
+    <string name="ga_category_inform" translatable="false">InformView</string>
 
     <!-- GA - event : action -->
     <string name="ga_event_open" translatable="false">Open</string>
@@ -50,10 +11,4 @@
     <string name="ga_event_click" translatable="false">Open</string>
     <string name="ga_event_hide_once" translatable="false">Hide Once</string>
     <string name="ga_event_hide_always" translatable="false">Hide Always</string>
-
-    <!-- GA - event : other -->
-
-    <!-- GA - error : network -->
-
-    <!-- GA - error : other -->
 </resources>
