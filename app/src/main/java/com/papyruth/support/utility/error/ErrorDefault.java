@@ -15,7 +15,7 @@ import timber.log.Timber;
  */
 public class ErrorDefault {
     private static boolean report2GoogleAnalytics(Throwable throwable, Object object, boolean toast) {
-        if (toast && object instanceof Context) Toast.makeText((Context) object, R.string.toast_error_default, Toast.LENGTH_SHORT).show();
+//        if (toast && object instanceof Context) Toast.makeText((Context) object, R.string.toast_error_default, Toast.LENGTH_SHORT).show();
         if (object instanceof Error.OnReportToGoogleAnalytics) {
             ((Error.OnReportToGoogleAnalytics) object).onReportToGoogleAnalytics(
                 Error.description(throwable.getMessage()),
