@@ -96,10 +96,12 @@ public class AlertDialog {
                 Api.papyruth().get_evaluation(User.getInstance().getAccessToken(), EvaluationForm.getInstance().getEvaluationId())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(response -> {
-                        EvaluationForm.getInstance().initForEdit(response.evaluation);
-                        navigator.navigate(EvaluationStep2Fragment.class, true);
-                    }, error -> ErrorHandler.handle(error, MaterialDialog.class));
+                    .subscribe(
+                        response -> {
+                            EvaluationForm.getInstance().initForEdit(response.evaluation);
+                            navigator.navigate(EvaluationStep2Fragment.class, true);
+                        }, error -> ErrorHandler.handle(error, context, true)
+                    );
                 break;
             case USER_CONFIRMATION_REQUIRED:
                 emailType = Papyruth.EMAIL_CONFIRMATION_USER;
@@ -113,7 +115,7 @@ public class AlertDialog {
                                 Toast.makeText(context, R.string.toast_alert_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
                                 navigator.back();
                             } else Toast.makeText(context, R.string.toast_alert_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
-                        }, error -> ErrorHandler.handle(error, MaterialDialog.class)
+                        }, error -> ErrorHandler.handle(error, context, true)
                     );
                 break;
             case UNIVERSITY_CONFIRMATION_REQUIRED:
@@ -126,7 +128,7 @@ public class AlertDialog {
                         success -> {
                             if(success) Toast.makeText(context, R.string.toast_alert_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
                             else Toast.makeText(context, R.string.toast_alert_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
-                        }, error -> ErrorHandler.handle(error, MaterialDialog.class)
+                        }, error -> ErrorHandler.handle(error, context, true)
                     );
                 break;
             case LEGACY_USER:
@@ -138,7 +140,7 @@ public class AlertDialog {
                         success -> {
                             if(success) Toast.makeText(context, R.string.toast_alert_legacy_user_email_sent, Toast.LENGTH_SHORT).show();
                             else Toast.makeText(context, R.string.toast_alert_legacy_user_email_not_sent, Toast.LENGTH_SHORT).show();
-                        }, error -> ErrorHandler.handle(error, MaterialDialog.class)
+                        }, error -> ErrorHandler.handle(error, context, true)
                     );
                 break;
         }

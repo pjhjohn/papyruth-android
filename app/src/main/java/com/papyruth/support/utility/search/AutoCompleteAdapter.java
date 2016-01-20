@@ -15,16 +15,13 @@ import com.papyruth.android.recyclerview.viewholder.AutoCompleteResponseViewHold
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.materialprogressbar.MaterialProgressBar;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -136,7 +133,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         getCandidates();
     }
 
-    public void getCandidates(){
+    public void getCandidates() {
         if(isHistory) return;
         Api.papyruth()
             .get_search_autocomplete(
@@ -160,9 +157,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 animators = new AnimatorSet();
                 animators.playTogether(AnimatorHelper.FADE_IN(mBackIcon), AnimatorHelper.FADE_OUT(mMaterialProgressBar));
                 animators.start();
-                boolean handled = ErrorNetwork.handle(((RetrofitError) error), this).handled;
-                if(!handled) handled = ErrorDefaultRetrofit.handle(((RetrofitError) error), this).handled;
-                if(!handled) handled = ErrorHandler.handle(error, this).handled;
+                ErrorHandler.handle(error, mContext, true);
                 mLoading = false;
             });
     }
