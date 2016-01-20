@@ -63,7 +63,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
             FloatingActionControl.clicks().subscribe(
                 unused -> {
                     EvaluationForm.getInstance().clear();
-                    mNavigator.navigate(EvaluationStep1Fragment.class, true, FragmentNavigator.AnimatorType.SLIDE_TO_DOWN);
+                    mNavigator.navigate(EvaluationStep1Fragment.class, true);
                 },
                 error -> ErrorHandler.handle(error, this)
             )
