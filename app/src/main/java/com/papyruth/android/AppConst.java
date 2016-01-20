@@ -19,10 +19,11 @@ public class AppConst {
     public static final String DEVICE_TYPE = "android";
 
     /* KOREAN : 1 WORD == 3 BYTES */
-    public static final int MAX_REALNAME_BYTES = 30;
-    public static final int MAX_NICKNAME_BYTES = 30;
+    public static final int MAX_REALNAME_LENGTH = 30;
+    public static final int MAX_NICKNAME_LENGTH = 30;
+    public static final int MIN_PASSWORD_LENGTH = 8;
     public static final int DEFAULT_RECYCLERVIEW_THRESHOLD_TO_ASK_MORE = 5;
-    public static final int MIN_EVALUATION_BODY_BYTES = 30;
+    public static final int MIN_EVALUATION_BODY_LENGTH = 30;
 
     /* in milli-seconds */
     public static final int ANIM_DURATION_SHORT = 200;
