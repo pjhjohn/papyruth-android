@@ -39,6 +39,7 @@ import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.helper.MetricHelper;
+import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
@@ -76,7 +77,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Bind(R.id.evaluation_recycler_view)  protected RecyclerView mRecyclerView;
     @Bind(R.id.evaluation_step_empty_state_view)    protected EmptyStateView mEmptyState;
     @Bind(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
     private EvaluationAdapter mAdapter;
     private boolean mCommentInputActive = false;
 
@@ -86,7 +87,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
         ButterKnife.bind(this, view);
-        mCompositeSubscription = new CompositeSubscription();
 
         /* Initialize SwipeRefresh & RecyclerView */
         mSwipeRefresh.setEnabled(true);
@@ -128,6 +128,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
             }
             getActivity().onBackPressed();
         });
+        StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_evaluation);
         ToolbarHelper.registerMenu(mToolbar, R.menu.evaluation, item -> {
             if (item.getItemId() != R.id.menu_evaluation_edit) return false;
             if (Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())) {
@@ -149,7 +150,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Evaluation.getInstance().clear();
         ButterKnife.unbind(this);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
@@ -203,8 +203,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 mAdapter.refresh();
             })
         );
-        setEvaluationFloatingActionControl();
-//        if (!mStandalone) return;
+        this.setEvaluationFloatingActionControl();
     }
 
     void morph2CommentInput() {
@@ -315,6 +314,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_comment).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
+        Timber.d("set FAB");
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput(), error->ErrorHandler.handle(error, this)));
     }
 
@@ -346,6 +346,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(course -> {
                     Course.getInstance().update(course);
+//                    this.getFragmentManager().beginTransaction().addToBackStack(this.getClass().getSimpleName()).commit();
                     mNavigator.navigate(CourseFragment.class, true);
                 }, error -> ErrorHandler.handle(error, this)
             );

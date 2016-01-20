@@ -24,9 +24,19 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
         super.onResume();
 
         if(Evaluation.getInstance().getId() != null){
-            mEvaluationFragment = new EvaluationFragment();
-            openEvaluation(null, false);
-        }else setFloatingActionControl();
+            if(mEvaluationOpened && Evaluation.getInstance().getId() == null) {
+                getFragmentManager().beginTransaction().remove(mEvaluationFragment).commit();
+                mEvaluationOpened = false;
+                mEvaluationContainer.setVisibility(View.GONE);
+            }else if(mEvaluationOpened && mEvaluationContainer.getVisibility() != View.VISIBLE && mEvaluationFragment != null) {
+                openEvaluation(null, false);
+            }else if(!mEvaluationOpened) {
+                if(mEvaluationFragment == null) {
+                    mEvaluationFragment = new EvaluationFragment();
+                }
+                openEvaluation(null, false);
+            }
+        } else setFloatingActionControl();
     }
 
     @Override
@@ -66,7 +76,7 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
     protected void setToolbarOptions() {
         mToolbar.setTitle(R.string.toolbar_my_comment);
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
-        setStatusBarOptions();
+        if(!mEvaluationOpened) setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
     }
