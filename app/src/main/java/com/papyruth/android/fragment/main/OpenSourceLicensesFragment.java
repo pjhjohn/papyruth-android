@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.activity.MainActivity;
 import com.papyruth.android.model.OpenSourceLicenseData;
 import com.papyruth.android.recyclerview.adapter.OpenSourceLicensesAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;

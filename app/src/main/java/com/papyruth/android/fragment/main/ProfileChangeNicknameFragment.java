@@ -34,12 +34,10 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.RetrofitError;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 import static com.papyruth.support.opensource.rx.RxValidator.toString;
 
@@ -137,7 +135,6 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 response -> {
-                    Timber.d("Response : %s", response);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
                     if(response.success) {
@@ -146,21 +143,14 @@ public class ProfileChangeNicknameFragment extends TrackerFragment {
                     }
                 },
                 error -> {
-                    Timber.d("Error : %s", error);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
-                    if(error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 400:
-                                FailureDialog.show(getActivity(), FailureDialog.Type.CHANGE_NICKNAME);
-                                setSubmissionCallback();
-                                break;
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                        }
-                    }
-                    ErrorHandler.handle(error, this);
+                    if(error instanceof RetrofitError && ((RetrofitError) error).getResponse().getStatus() == 400) {
+                        FailureDialog.show(getActivity(), FailureDialog.Type.CHANGE_NICKNAME);
+                        setSubmissionCallback();
+                    } else ErrorHandler.handle(error, this, true);
                 }
-            ));
+            )
+        );
     }
 }

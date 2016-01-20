@@ -93,7 +93,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                     mHashtagPresetData.clear();
                     for (String hashtag : response.hashtags) mHashtagPresetData.add(hashtag);
                     mHashtagPresetAdapter.notifyDataSetChanged();
-                }, Throwable::printStackTrace
+                }, error -> ErrorHandler.handle(error, this, true)
             );
         return view;
     }
@@ -266,7 +266,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
             }, error -> {
                 FloatingActionControl.getButton().setIndeterminate(false);
                 FloatingActionControl.getButton().setProgress(0, true);
-                ErrorHandler.handle(error, this);
+                ErrorHandler.handle(error, this, true);
             });
         else {
             Bundle bundle = new Bundle();

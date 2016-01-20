@@ -109,7 +109,7 @@ public class SettingsFragment extends TrackerFragment {
                         User.getInstance().clear();
                         mActivity.startActivity(new Intent(mActivity, SplashActivity.class));
                         mActivity.finish();
-                    }, error -> ErrorHandler.handle(error, this));
+                    }, error -> ErrorHandler.handle(error, this, true));
             }, error -> ErrorHandler.handle(error, this))
         );
     }
