@@ -54,6 +54,8 @@
     <string name="toast_signin_failed">로그인에 실패하였습니다</string>
     <string name="toast_signup_failed">회원가입에 실패하였습니다</string>
     <string name="toast_signup_min_entrance_year_not_loaded">최소 입학년도 값을 받아오지 못하였습니다. 다시 시도해 주세요.</string>
+    <string name="toast_fetch_users_me_failed">유저 정보를 가져오던 중 오류가 발생하였습니다</string>
+    <string name="toast_fetch_users_me_error">로그인 권한을 가져오던 중 오류가 발생하였습니다</string>
 
     <!-- Permission -->
     <string name="permission_title">주소록 접근 권한</string>

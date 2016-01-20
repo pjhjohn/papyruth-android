@@ -54,6 +54,8 @@
     <string name="toast_signin_failed">Failed to signin</string>
     <string name="toast_signup_failed">Failed to signup</string>
     <string name="toast_signup_min_entrance_year_not_loaded">Start of Entrance Year not loaded. Try again.</string>
+    <string name="toast_fetch_users_me_failed">Failed to fetch user information. Try again.</string>
+    <string name="toast_fetch_users_me_error">An error occurred during signing-in</string>
 
     <!-- Permission -->
     <string name="permission_title">Contacts Permission</string>
