@@ -2,45 +2,46 @@ package com.papyruth.support.utility.error;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.widget.Toast;
 
+import com.papyruth.android.R;
+
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-12-01.
  */
 public class ErrorDefault {
+    private static boolean report2GoogleAnalytics(Throwable throwable, Object object, boolean toast) {
+        if (toast && object instanceof Context) Toast.makeText((Context) object, R.string.toast_error_default, Toast.LENGTH_SHORT).show();
+        if (object instanceof Error.OnReportToGoogleAnalytics) {
+            ((Error.OnReportToGoogleAnalytics) object).onReportToGoogleAnalytics(
+                Error.description(throwable.getMessage()),
+                object.getClass().getSimpleName(),
+                false
+            );
+            return true;
+        } return false;
+    }
     public static ErrorHandleResult handle(Throwable throwable, Object object) {
-        Timber.d("Error : %s\n%s", throwable.getMessage(), throwable.getCause());
-        boolean sentToTracker = false;
+        return handle(throwable, object, false);
+    }
+    public static ErrorHandleResult handle(Throwable throwable, Object object, boolean toast) {
+        boolean reported = false;
         if (object instanceof Fragment) {
             Fragment fragment = (Fragment) object;
-            if (fragment instanceof Error.OnReportToGoogleAnalytics) {
-                ((Error.OnReportToGoogleAnalytics) fragment).onReportToGoogleAnalytics(
-                    Error.description(throwable.getMessage()),
-                    object.getClass().getSimpleName(),
-                    false
-                );
-                sentToTracker = true;
-            }
+            reported = report2GoogleAnalytics(throwable, fragment, toast);
             if (fragment.getActivity() != null) {
                 Activity activity = fragment.getActivity();
-                if (!sentToTracker && activity instanceof Error.OnReportToGoogleAnalytics) {
-                    ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
-                        Error.description(throwable.getMessage()),
-                        object.getClass().getSimpleName(),
-                        false
-                    );
-                } return new ErrorHandleResult(true);
-            } else return new ErrorHandleResult(false); // TODO : Handle when fragment doesn't have activity
-        } else if (object instanceof Activity) {
+                if(!reported) reported = report2GoogleAnalytics(throwable, activity, toast);
+                return new ErrorHandleResult(reported);
+            } else return new ErrorHandleResult(reported);
+        } else if(object instanceof Activity) {
             Activity activity = (Activity) object;
-            if (activity instanceof Error.OnReportToGoogleAnalytics) {
-                ((Error.OnReportToGoogleAnalytics) activity).onReportToGoogleAnalytics(
-                    Error.description(throwable.getMessage()),
-                    object.getClass().getSimpleName(),
-                    false
-                );
-            } return new ErrorHandleResult(true);
-        } else return new ErrorHandleResult(false); // TODO : Handle when object is neither Activity nor Fragment
+            reported = report2GoogleAnalytics(throwable, activity, toast);
+            return new ErrorHandleResult(reported);
+        } else return new ErrorHandleResult(reported);
     }
 }

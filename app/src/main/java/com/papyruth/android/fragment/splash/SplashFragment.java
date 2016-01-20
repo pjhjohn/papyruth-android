@@ -166,7 +166,7 @@ public class SplashFragment extends TrackerFragment {
                                 break;
                             case NETWORK :
                                 handled = ErrorNetwork.handle(throwable, this).handled;
-                                if( handled ) Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                                if( handled ) Toast.makeText(mActivity, R.string.toast_error_retrofit_network, Toast.LENGTH_SHORT).show();
                                 handled = false;
                                 break;
                             default :

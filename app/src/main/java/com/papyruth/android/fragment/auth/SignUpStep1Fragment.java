@@ -40,7 +40,6 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 
 /**
@@ -155,7 +154,7 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
             error -> {
                 boolean handled = false;
                 if(error instanceof RetrofitError) handled = ErrorNetwork.handle((RetrofitError) error, this).handled;
-                if(handled) Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                if(handled) Toast.makeText(mActivity, R.string.toast_error_retrofit_network, Toast.LENGTH_SHORT).show();
                 else Toast.makeText(mActivity, R.string.toast_signup_min_entrance_year_not_loaded, Toast.LENGTH_SHORT).show();
             }
         );

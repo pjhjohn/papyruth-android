@@ -34,7 +34,7 @@ public class PasswordRecoveryDialog {
                         },
                         error -> {
                             ErrorHandleResult result = ErrorNetwork.handle(error, null);
-                            if(result.handled) Toast.makeText(context, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                            if(result.handled) Toast.makeText(context, R.string.toast_error_retrofit_network, Toast.LENGTH_SHORT).show();
                             else if(result.code == null) Toast.makeText(context, R.string.toast_error_retrofit_default, Toast.LENGTH_SHORT).show();
                             else switch(result.code) {
                                 default : Toast.makeText(context, R.string.toast_error_default, Toast.LENGTH_SHORT).show();

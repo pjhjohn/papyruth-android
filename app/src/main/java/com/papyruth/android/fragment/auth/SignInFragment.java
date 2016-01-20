@@ -107,23 +107,19 @@ public class SignInFragment extends TrackerFragment {
             .subscribe(mButtonSignIn::setEnabled, error -> ErrorHandler.handle(error, this))
         );
 
-        mCompositeSubscriptions.add(
-            Observable.mergeDelayError(
-                ViewObservable.clicks(mButtonSignIn).map(unused -> mButtonSignIn.isEnabled()),
-                Observable.create(observer -> mTextPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    observer.onNext(mButtonSignIn.isEnabled());
-                    observer.onCompleted();
-                    return !mButtonSignIn.isEnabled();
-                }))
-            )
+        mCompositeSubscriptions.add(Observable.mergeDelayError(
+            ViewObservable.clicks(mButtonSignIn).map(unused -> mButtonSignIn.isEnabled()),
+            Observable.create(observer -> mTextPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                observer.onNext(mButtonSignIn.isEnabled());
+                observer.onCompleted();
+                return !mButtonSignIn.isEnabled();
+            })))
             .filter(trigger -> trigger)
             .subscribe(unused -> requestSignIn(), error -> ErrorHandler.handle(error, this))
         );
 
         mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
-            unused -> {
-                mNavigator.navigate(SignUpStep1Fragment.class, true);
-            }, error -> ErrorHandler.handle(error, this)
+            unused -> mNavigator.navigate(SignUpStep1Fragment.class, true), error -> ErrorHandler.handle(error, this)
         ));
 
         mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)

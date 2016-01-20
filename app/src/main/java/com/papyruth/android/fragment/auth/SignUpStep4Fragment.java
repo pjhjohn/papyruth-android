@@ -283,7 +283,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
                                 break;
                             case NETWORK:
                                 if (ErrorNetwork.handle(((RetrofitError) error), this).handled)
-                                    Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mActivity, R.string.toast_error_retrofit_network, Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 ErrorDefaultRetrofit.handle(((RetrofitError) error), this);

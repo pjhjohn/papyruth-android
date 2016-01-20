@@ -217,9 +217,12 @@
 
     <!-- Error -->
     <string name="toast_error_default">알 수 없는 오류 발생</string>
+    <string name="toast_error_retrofit_401">어머나, 뭔가 문제가 있네요!</string>
     <string name="toast_error_retrofit_403">어머나, 뭔가 문제가 있네요!</string>
     <string name="toast_error_retrofit_500">서버에 문제가 있나봐요 ㅠㅠ</string>
-    <string name="toast_error_retrofit_unstable_network">인터넷이 불안정합니다. 네트워크 상태를 확인해 주십시오</string>
+    <string name="toast_error_retrofit_503">서버에 문제가 있나봐요 ㅠㅠ</string>
+    <string name="toast_error_retrofit_http">어머나, 뭔가 문제가 있네요!</string>
+    <string name="toast_error_retrofit_network">인터넷이 불안정합니다. 네트워크 상태를 확인해 주십시오</string>
     <string name="toast_error_retrofit_default">요청에 문제가 있습니다.</string>
 
     <!-- Password Recovery -->
