@@ -8,50 +8,51 @@ import java.util.List;
  * Created by SSS on 2015-05-18.
  */
 public class Course {
-    private Integer id;
-    private Boolean isFavorite;
-    private Integer pointGpaSatisfaction;
-    private Integer lectureId;
-    private Integer professorId;
-    private String createdAt;
-    private Integer evaluationCount;
-    private Integer universityId;
-    private Integer pointClarity;
-    private Integer pointOverall;
-    private String professorName;
-    private String updatedAt;
-    private Integer pointEasiness;
+    private Integer      id;
+    private Boolean      isFavorite;
+    private Integer      pointGpaSatisfaction;
+    private Integer      lectureId;
+    private Integer      professorId;
+    private String       createdAt;
+    private Integer      evaluationCount;
+    private Integer      universityId;
+    private Integer      pointClarity;
+    private Integer      pointOverall;
+    private String       professorName;
+    private String       updatedAt;
+    private Integer      pointEasiness;
     private List<String> hashtags;
-    private String professorPhotoUrl;
-    private String name;
-    private Integer category;
+    private String       professorPhotoUrl;
+    private String       name;
+    private Integer      category;
 
     private static Course instance = null;
     public static synchronized Course getInstance() {
         if( Course.instance == null ) Course.instance = new Course();
         return Course.instance;
     }
-    public Course clear(){
+    public Course clear() {
         this.id = null;
-        this.isFavorite = null;
-        this.pointGpaSatisfaction = null;
-        this.lectureId = null;
-        this.professorId = null;
-        this.createdAt = null;
-        this.evaluationCount = null;
-        this.universityId = null;
-        this.pointClarity = null;
-        this.pointOverall = null;
-        this.professorName = null;
-        this.updatedAt = null;
-        this.pointEasiness = null;
-        this.hashtags = null;
-        this.professorPhotoUrl = null;
-        this.name = null;
+        this.isFavorite             = null;
+        this.pointGpaSatisfaction   = null;
+        this.lectureId              = null;
+        this.professorId            = null;
+        this.createdAt              = null;
+        this.evaluationCount        = null;
+        this.universityId           = null;
+        this.pointClarity           = null;
+        this.pointOverall           = null;
+        this.professorName          = null;
+        this.updatedAt              = null;
+        this.pointEasiness          = null;
+        this.hashtags               = null;
+        this.professorPhotoUrl      = null;
+        this.name                   = null;
+        this.category               = null;
         return this;
     }
 
-    public void update(CourseData courseData){
+    public void update(CourseData courseData) {
         this.setId(courseData.id);
         this.setIsFavorite(courseData.is_favorite);
         this.setPointGpaSatisfaction(courseData.point_gpa_satisfaction);
@@ -68,24 +69,16 @@ public class Course {
         this.setHashtags(courseData.hashtags);
         this.setProfessorPhotoUrl(courseData.professor_photo_url);
         this.setName(courseData.name);
+        this.setCategory(courseData.category);
     }
 
-    public boolean needToUpdateData(){
+    public boolean needToUpdateData() {
         return this.lectureId == null || this.professorId == null || this.pointOverall == null;
-    }
-
-    public boolean isValidData(){
-        return (pointOverall > 0
-                && pointEasiness > 0
-                && pointClarity > 0
-                && pointGpaSatisfaction > 0
-                && evaluationCount > 0 );
     }
 
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -93,7 +86,6 @@ public class Course {
     public Boolean getIsFavorite() {
         return isFavorite;
     }
-
     public void setIsFavorite(Boolean isFavorite) {
         this.isFavorite = isFavorite;
     }
@@ -101,7 +93,6 @@ public class Course {
     public Integer getPointGpaSatisfaction() {
         return pointGpaSatisfaction;
     }
-
     public void setPointGpaSatisfaction(Integer pointGpaSatisfaction) {
         this.pointGpaSatisfaction = pointGpaSatisfaction;
     }
@@ -109,7 +100,6 @@ public class Course {
     public Integer getLectureId() {
         return lectureId;
     }
-
     public void setLectureId(Integer lectureId) {
         this.lectureId = lectureId;
     }
@@ -117,7 +107,6 @@ public class Course {
     public Integer getProfessorId() {
         return professorId;
     }
-
     public void setProfessorId(Integer professorId) {
         this.professorId = professorId;
     }
@@ -125,7 +114,6 @@ public class Course {
     public String getCreatedAt() {
         return createdAt;
     }
-
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
@@ -133,7 +121,6 @@ public class Course {
     public Integer getEvaluationCount() {
         return evaluationCount;
     }
-
     public void setEvaluationCount(Integer evaluationCount) {
         this.evaluationCount = evaluationCount;
     }
@@ -141,7 +128,6 @@ public class Course {
     public Integer getUniversityId() {
         return universityId;
     }
-
     public void setUniversityId(Integer universityId) {
         this.universityId = universityId;
     }
@@ -149,7 +135,6 @@ public class Course {
     public Integer getPointClarity() {
         return pointClarity;
     }
-
     public void setPointClarity(Integer pointClarity) {
         this.pointClarity = pointClarity;
     }
@@ -157,7 +142,6 @@ public class Course {
     public Integer getPointOverall() {
         return pointOverall;
     }
-
     public void setPointOverall(Integer pointOverall) {
         this.pointOverall = pointOverall;
     }
@@ -165,7 +149,6 @@ public class Course {
     public String getProfessorName() {
         return professorName;
     }
-
     public void setProfessorName(String professorName) {
         this.professorName = professorName;
     }
@@ -173,7 +156,6 @@ public class Course {
     public String getUpdatedAt() {
         return updatedAt;
     }
-
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
@@ -181,7 +163,6 @@ public class Course {
     public Integer getPointEasiness() {
         return pointEasiness;
     }
-
     public void setPointEasiness(Integer pointEasiness) {
         this.pointEasiness = pointEasiness;
     }
@@ -189,7 +170,6 @@ public class Course {
     public List<String> getHashtags() {
         return hashtags;
     }
-
     public void setHashtags(List<String> hashtags) {
         this.hashtags = hashtags;
     }
@@ -197,7 +177,6 @@ public class Course {
     public String getProfessorPhotoUrl() {
         return professorPhotoUrl;
     }
-
     public void setProfessorPhotoUrl(String professorPhotoUrl) {
         this.professorPhotoUrl = professorPhotoUrl;
     }
@@ -205,7 +184,6 @@ public class Course {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -213,7 +191,6 @@ public class Course {
     public Integer getCategory() {
         return category;
     }
-
     public void setCategory(Integer category) {
         this.category = category;
     }

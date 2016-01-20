@@ -52,7 +52,7 @@ public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
         mLecture.setSelected(true);
         mLecture.setText(evaluation.lecture_name);
         mProfessor.setText(String.format("%s%s %s", mResources.getString(R.string.professor_prefix), evaluation.professor_name, mResources.getString(R.string.professor_postfix)));
-        CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.category);
+        CategoryHelper.assignColor(mContext, mCategory, mProfessor, evaluation.lecture_category);
         mTimestamp.setText(DateTimeHelper.timeago(mContext, evaluation.created_at));
         mBody.setText(evaluation.body.replace('\n', ' '));
         mNickname.setText(evaluation.user_nickname);
