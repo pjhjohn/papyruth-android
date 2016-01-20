@@ -38,6 +38,7 @@ import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickList
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  *
@@ -74,7 +75,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
 
         mRecyclerView.setLayoutManager(this.getRecyclerViewLayoutManager());
 
-        mEvaluationFragment = null;
+        mEvaluationFragment = ((EvaluationFragment) getFragmentManager().findFragmentById(mEvaluationContainer.getId()));
         mEvaluationIsOccupying = false;
         return view;
     }
@@ -92,9 +93,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     public void onResume() {
         super.onResume();
         mCompositeSubscription.clear();
-        mEvaluationOpened = false;
         this.setToolbarOptions();
-        this.setStatusBarOptions();
         mRecyclerView.setAdapter(mAdapter = getAdapter());
         mAdapter.setFragment(this);
 
@@ -111,7 +110,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     @Bind(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
     protected EvaluationFragment mEvaluationFragment;
     protected Boolean mEvaluationIsOccupying;
-    protected Boolean mEvaluationOpened;
+    protected Boolean mEvaluationOpened = false;
 
     @Override
     public boolean onBack() {
@@ -148,10 +147,14 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
 
                 if (mEvaluationFragment != null) {
                     mEvaluationFragment.setShowContentImmediately(true);
-                    getFragmentManager().beginTransaction().add(R.id.common_evaluation_container, mEvaluationFragment).commit();
-                    mEvaluationFragment.setEvaluationFloatingActionControl();
+                    if(mEvaluationFragment.isResumed()){
+                        mEvaluationFragment = new EvaluationFragment();
+                        mEvaluationFragment.setShowContentImmediately(true);
+                        getFragmentManager().beginTransaction().replace(mEvaluationContainer.getId(), mEvaluationFragment).commit();
+                    }else{
+                        getFragmentManager().beginTransaction().add(R.id.common_evaluation_container, mEvaluationFragment).commit();
+                    }
                 }
-
                 mEvaluationContainer.setY(0);
                 mToolbar.setY(-mToolbar.getHeight());
                 ToolbarHelper.hide(mToolbar);
@@ -215,7 +218,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
                         mToolbar.setY(0);
                     } else {
                         mEvaluationIsOccupying = true;
-                        mEvaluationFragment.setEvaluationFloatingActionControl();
                         mEvaluationFragment.showContent(true);
                         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_evaluation);
                     }
@@ -260,6 +262,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
             public void onAnimationEnd(Animator animation) {
                 getFragmentManager().beginTransaction().remove(mEvaluationFragment).commit();
                 mEvaluationContainer.setVisibility(View.GONE);
+                mEvaluationFragment = null;
                 mEvaluationIsOccupying = false;
                 setFloatingActionControl();
                 Evaluation.getInstance().clear();

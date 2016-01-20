@@ -97,7 +97,6 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewholder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
-            Timber.d("position : %s", position);
             if(!mHideInform && position == mIndexInform) {
                 String action = null;
                 switch(view.getId()) {

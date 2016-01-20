@@ -269,8 +269,6 @@ public class EvaluationStep3Fragment extends TrackerFragment {
                 ErrorHandler.handle(error, this, true);
             });
         else {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("STANDALONE", true);
             mNavigator.navigate(HomeFragment.class, true, true);
         }
     }
