@@ -53,11 +53,11 @@ public class SignUpStep3Fragment extends TrackerFragment {
         mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
     }
 
-    @Bind(R.id.signup_step3_container) protected NavigatableLinearLayout mContainer;
-    @Bind(R.id.signup_gender_radiogroup)        protected RadioGroup mRadioGroupGender;
-    @Bind(R.id.signup_realname_text)      protected EditText mTextRealname;
-    @Bind(R.id.signup_gender_icon)   protected ImageView mIconGender;
-    @Bind(R.id.signup_realname_icon) protected ImageView mIconRealname;
+    @Bind(R.id.signup_step3_container)      protected NavigatableLinearLayout mContainer;
+    @Bind(R.id.signup_gender_radiogroup)    protected RadioGroup mRadioGroupGender;
+    @Bind(R.id.signup_realname_text)        protected EditText mTextRealname;
+    @Bind(R.id.signup_gender_icon)          protected ImageView mIconGender;
+    @Bind(R.id.signup_realname_icon)        protected ImageView mIconRealname;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
@@ -98,9 +98,7 @@ public class SignUpStep3Fragment extends TrackerFragment {
             final String realname = SignUpForm.getInstance().getTempSaveRealname();
             if(realname != null) mTextRealname.setText(realname);
             else mTextRealname.getText().clear();
-        } else {
-            mTextRealname.setText(mTextRealname.getText());
-        }
+        } else mTextRealname.setText(mTextRealname.getText());
         mTextRealname.setSelection(mTextRealname.getText().length());
         if(mRadioGroupGender.getCheckedRadioButtonId() < 0) {
             final Boolean isboy = SignUpForm.getInstance().getTempSaveIsBoy();
@@ -138,23 +136,16 @@ public class SignUpStep3Fragment extends TrackerFragment {
             if(actionId == EditorInfo.IME_ACTION_NEXT) {
                 proceedNextStep();
                 return true;
-            }
-            return false;
+            } return false;
         });
-
-        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
-            unused -> {
-                proceedNextStep();
-            }
-        ));
-
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> proceedNextStep()));
         Observable.timer(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(unused -> {
             if(mTextRealname != null) mTextRealname.requestFocus();
             ((InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mTextRealname, InputMethodManager.SHOW_FORCED);
         });
     }
 
-    private void proceedNextStep(){
+    private void proceedNextStep() {
         if (mNextButtonEnabled) {
             SignUpForm.getInstance().setValidRealname();
             SignUpForm.getInstance().setValidIsBoy();
@@ -175,10 +166,7 @@ public class SignUpStep3Fragment extends TrackerFragment {
                 return RxValidator.getErrorMessageRealname.call(realname);
             })
             .observeOn(AndroidSchedulers.mainThread());
-
-        if(SignUpForm.getInstance().getTempSaveRealname() != null)
-            observable =  observable.startWith(RxValidator.getErrorMessageRealname.call(realnameTextView.getText().toString()));
-
+        if(SignUpForm.getInstance().getTempSaveRealname() != null)observable = observable.startWith(RxValidator.getErrorMessageRealname.call(realnameTextView.getText().toString()));
         return observable;
     }
 

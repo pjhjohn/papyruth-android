@@ -66,7 +66,6 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
         ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
-
         mUniversities = new ArrayList<>();
         mAdapter = new UniversityAdapter(mUniversities, this);
         mUniversityRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 2));
@@ -105,11 +104,8 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
                 .subscribe(universities -> {
                     notifyUniversityChanged(universities);
                     SignUpForm.getInstance().setUniversityList(universities);
-                }, error -> ErrorHandler.handle(error, this));
-        }else{
-            notifyUniversityChanged(SignUpForm.getInstance().getUniversityList());
-        }
-
+                }, error -> ErrorHandler.handle(error, this, true));
+        } else notifyUniversityChanged(SignUpForm.getInstance().getUniversityList());
     }
 
     private void notifyUniversityChanged(List<UniversityData> universities) {
@@ -152,10 +148,11 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
                     .show();
             },
             error -> {
-                boolean handled = false;
-                if(error instanceof RetrofitError) handled = ErrorNetwork.handle((RetrofitError) error, this).handled;
-                if(handled) Toast.makeText(mActivity, R.string.toast_error_retrofit_network, Toast.LENGTH_SHORT).show();
-                else Toast.makeText(mActivity, R.string.toast_signup_min_entrance_year_not_loaded, Toast.LENGTH_SHORT).show();
+                if(error instanceof RetrofitError) {
+                    final RetrofitError throwable = (RetrofitError) error;
+                    if(ErrorNetwork.handle(throwable, this, true).handled) return;
+                    Toast.makeText(mActivity, R.string.toast_signup_min_entrance_year_not_loaded, Toast.LENGTH_SHORT).show();
+                }
             }
         );
     }

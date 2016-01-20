@@ -112,13 +112,12 @@ public class SignUpStep4Fragment extends TrackerFragment {
         FloatingActionControl.getButton().setShowProgressBackground(false);
         mActivity.setCurrentAuthStep(AppConst.Navigator.Auth.SIGNUP_STEP4);
         mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
         Api.papyruth().get_terms().map(terms -> terms.terms).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
             terms -> {
                 if (terms == null || terms.isEmpty()) return;
                 mTermsOfUse = terms.get(0).body;
                 mPrivacyPolicy = terms.get(1).body;
-            }, error -> ErrorHandler.handle(error, this)
+            }, error -> ErrorHandler.handle(error, this, true)
         );
 
         String strTermsOfUse = getString(R.string.signup_terms_of_use);
@@ -257,79 +256,60 @@ public class SignUpStep4Fragment extends TrackerFragment {
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
                     if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getKind()) {
-                            case HTTP:
-                                switch (((RetrofitError) error).getResponse().getStatus()) {
-                                    case 400: // Invalid field or lack of required field.
-                                        SignupError signupError = new Gson().fromJson(
-                                                new String(((TypedByteArray) ((RetrofitError) error).getResponse().getBody()).getBytes()),
-                                                SignupError.class
-                                        );
+                        final RetrofitError retrofitError = (RetrofitError) error;
+                        switch (retrofitError.getKind()) {
+                            case HTTP :
+                                switch (retrofitError.getResponse().getStatus()) {
+                                    case 400 : // Invalid field or lack of required field.
+                                        SignupError signupError = new Gson().fromJson(new String(((TypedByteArray) retrofitError.getResponse().getBody()).getBytes()), SignupError.class);
                                         Toast.makeText(mActivity, signupError.errors.email != null ? R.string.signup_email_duplication : (signupError.errors.nickname != null ? R.string.signup_nickname_duplication : R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
-                                        if (signupError.errors.email != null || signupError.errors.nickname != null) {
-                                            mNavigator.navigate(SignUpStep2Fragment.class, true);
-                                        } else if (!validateSignUpForm()) {
-                                        } else {
-                                            mNavigator.navigate(SignUpStep1Fragment.class, true);
-                                        }
+                                        if (signupError.errors.email != null || signupError.errors.nickname != null) mNavigator.navigate(SignUpStep2Fragment.class, true);
+                                        else if (validateSignUpForm()) mNavigator.navigate(SignUpStep1Fragment.class, true);
                                         break;
-                                    case 403: // Failed to SignUp
+                                    case 403 : // Failed to SignUp
                                         Toast.makeText(mActivity, getResources().getString(R.string.toast_signup_failed), Toast.LENGTH_SHORT).show();
                                         break;
-                                    default:
-                                        Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                                        ErrorDefaultHTTP.handle(((RetrofitError) error), this);
-                                }
-                                break;
-                            case NETWORK:
-                                if (ErrorNetwork.handle(((RetrofitError) error), this).handled)
-                                    Toast.makeText(mActivity, R.string.toast_error_retrofit_network, Toast.LENGTH_SHORT).show();
-                                break;
-                            default:
-                                ErrorDefaultRetrofit.handle(((RetrofitError) error), this);
-                                break;
+                                    default : ErrorDefaultHTTP.handle(retrofitError, this, true);
+                                } break;
+                            case NETWORK: ErrorNetwork.handle(retrofitError, this, true); break;
+                            default : ErrorDefaultRetrofit.handle(retrofitError, this, true); break;
                         }
-                    }else{
-                        error.printStackTrace();
-                        ErrorDefault.handle(error, this);
-                    }
+                    } else ErrorDefault.handle(error, this, true);
                 }
             );
     }
 
     private boolean validateSignUpForm() {
-        String alertMsg;
-        int target = -1;
-        SignUpForm signupForm = SignUpForm.getInstance();
+        String message;
+        int rollbackTargetStep = -1;
+        SignUpForm form = SignUpForm.getInstance();
 
-        if(signupForm.getUniversityId() == null) {
-            alertMsg = getResources().getString(R.string.signup_invalid_university);
-            target = AppConst.Navigator.Auth.SIGNUP_STEP1;
-        } else if(signupForm.getEntranceYear() == null) {
-            alertMsg = getResources().getString(R.string.signup_invalid_entrance_year);
-            target = AppConst.Navigator.Auth.SIGNUP_STEP1;
-        } else if(signupForm.getValidEmail() == null || !RxValidator.isValidEmail.call(signupForm.getValidEmail())) {
-            alertMsg = getResources().getString(R.string.signup_invalid_email);
-            target = AppConst.Navigator.Auth.SIGNUP_STEP2;
-        } else if(signupForm.getValidNickname() == null || !RxValidator.isValidNickname.call(signupForm.getValidNickname())) {
-            alertMsg = getResources().getString(R.string.signup_invalid_nickname);
-            target = AppConst.Navigator.Auth.SIGNUP_STEP2;
-        } else if(signupForm.getValidRealname() == null || !RxValidator.isValidRealname.call(signupForm.getValidRealname())) {
-            alertMsg = getResources().getString(R.string.signup_invalid_realname);
-            target = AppConst.Navigator.Auth.SIGNUP_STEP3;
-        } else if(signupForm.getValidIsBoy() == null) {
-            alertMsg = getResources().getString(R.string.signup_invalid_gender);
-            target = AppConst.Navigator.Auth.SIGNUP_STEP3;
-        } else if(signupForm.getValidPassword() == null) {
-            alertMsg = getResources().getString(R.string.signup_invalid_password);
+        if(form.getUniversityId() == null) {
+            message = getResources().getString(R.string.signup_invalid_university);
+            rollbackTargetStep = AppConst.Navigator.Auth.SIGNUP_STEP1;
+        } else if(form.getEntranceYear() == null) {
+            message = getResources().getString(R.string.signup_invalid_entrance_year);
+            rollbackTargetStep = AppConst.Navigator.Auth.SIGNUP_STEP1;
+        } else if(form.getValidEmail() == null || !RxValidator.isValidEmail.call(form.getValidEmail())) {
+            message = getResources().getString(R.string.signup_invalid_email);
+            rollbackTargetStep = AppConst.Navigator.Auth.SIGNUP_STEP2;
+        } else if(form.getValidNickname() == null || !RxValidator.isValidNickname.call(form.getValidNickname())) {
+            message = getResources().getString(R.string.signup_invalid_nickname);
+            rollbackTargetStep = AppConst.Navigator.Auth.SIGNUP_STEP2;
+        } else if(form.getValidRealname() == null || !RxValidator.isValidRealname.call(form.getValidRealname())) {
+            message = getResources().getString(R.string.signup_invalid_realname);
+            rollbackTargetStep = AppConst.Navigator.Auth.SIGNUP_STEP3;
+        } else if(form.getValidIsBoy() == null) {
+            message = getResources().getString(R.string.signup_invalid_gender);
+            rollbackTargetStep = AppConst.Navigator.Auth.SIGNUP_STEP3;
+        } else if(form.getValidPassword() == null) {
+            message = getResources().getString(R.string.signup_invalid_password);
         } else return true;
-
-        Toast.makeText(mActivity, alertMsg, Toast.LENGTH_SHORT).show();
-        switch (target) {
+        Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
+        switch (rollbackTargetStep) {
             case AppConst.Navigator.Auth.SIGNUP_STEP1 : mNavigator.navigate(SignInFragment.class, true, true); break;
             case AppConst.Navigator.Auth.SIGNUP_STEP2 : mNavigator.navigate(SignInFragment.class, true, true); break;
             case AppConst.Navigator.Auth.SIGNUP_STEP3 : mNavigator.navigate(SignInFragment.class, true, true); break;
-        }
-        return false;
+        } return false;
     }
 }
