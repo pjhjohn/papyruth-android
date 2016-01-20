@@ -84,16 +84,12 @@ public class ProfileFragment extends TrackerFragment {
     public void onResume() {
         super.onResume();
         mToolbar.setTitle(R.string.toolbar_profile);
+        final boolean univConfirmed = User.getInstance().getUniversityConfirmed();
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, true);
-
-        if(User.getInstance().getUniversityConfirmed()) {
-            FloatingActionControl.getInstance().setControl(R.layout.fam_profile_without_university).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
-        }else {
-            FloatingActionControl.getInstance().setControl(R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
-        }
+        FloatingActionControl.getInstance().setControl(univConfirmed? R.layout.fam_profile_without_university : R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mUniversityName.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
         Picasso.with(mContext).load(User.getInstance().getUniversityImageUrl()).into(mUniversityImage);
@@ -106,25 +102,20 @@ public class ProfileFragment extends TrackerFragment {
         Picasso.with(mContext).load(R.drawable.ic_nickname_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mNicknameIcon);
         mNicknameText.setText(User.getInstance().getNickname());
         Picasso.with(mContext).load(R.drawable.ic_gender_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mGenderIcon);
-        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.profile_value_male : R.string.profile_value_female));
+        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy()? R.string.profile_value_male : R.string.profile_value_female));
         Picasso.with(mContext).load(R.drawable.ic_university_email_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
 
-        if(!User.getInstance().getUniversityConfirmed())
-            mUniversityEmailText.setText(R.string.profile_value_university_email_confirmation_pending);
-        else if(User.getInstance().getUniversityEmail() == null)
-            mUniversityEmailText.setText(mResources.getString(R.string.profile_value_university_email_confirmation_required));
-        else
-            mUniversityEmailText.setText(User.getInstance().getUniversityEmail());
+        if(User.getInstance().getUniversityEmail() == null) mUniversityEmailText.setText(mResources.getString(R.string.profile_value_university_email_confirmation_required));
+        else if(univConfirmed) mUniversityEmailText.setText(User.getInstance().getUniversityEmail());
+        else mUniversityEmailText.setText(R.string.profile_value_university_email_confirmation_pending);
 
         mCompositeSubscription.clear();
         mCompositeSubscription.add(FloatingActionControl
             .clicks(R.id.fab_mini_register_university_email)
             .subscribe(
                 unused -> {
-                    if(User.getInstance().getUniversityEmail() != null && !User.getInstance().getUniversityConfirmed())
-                        AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.UNIVERSITY_CONFIRMATION_REQUIRED);
-                    else
-                        mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true);
+                    if(User.getInstance().getUniversityEmail() != null && !univConfirmed) AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.UNIVERSITY_CONFIRMATION_REQUIRED);
+                    else mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true);
                 }, error -> ErrorHandler.handle(error, this)
             )
         );

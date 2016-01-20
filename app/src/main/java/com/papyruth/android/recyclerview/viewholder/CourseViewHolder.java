@@ -20,6 +20,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.picasso.SkewContrastColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.Hashtag;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.CategoryHelper;
 import com.papyruth.support.utility.helper.PointHelper;
@@ -142,7 +143,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
                     Picasso.with(mContext).load(R.drawable.ic_favorite_32dp)
                         .transform(new ColorFilterTransformation(mResources.getColor(favorite ? R.color.active : R.color.inactive)))
                         .into(mFavorite);
-                }, Throwable::printStackTrace
+                }, error -> ErrorHandler.handle(error, mContext, true)
             );
     }
 }

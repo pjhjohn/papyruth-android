@@ -42,7 +42,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class CourseAdapter extends TrackerAdapter implements IAdapter{
+public class CourseAdapter extends TrackerAdapter implements IAdapter {
     private static final String HIDE_INFORM = "CourseAdapter.mHideInform"; // Inform is UNIQUE per Adapter.
     private final Context mContext;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -91,9 +91,7 @@ public class CourseAdapter extends TrackerAdapter implements IAdapter{
                         Course.getInstance().update(course);
                         notifyItemChanged(mIndexSingle);
                     }
-                }, error -> {
-                    ErrorHandler.handle(error, this.getFragment());
-                });
+                }, error -> ErrorHandler.handle(error, this.getFragment(), true));
         }
     }
 
@@ -225,11 +223,8 @@ public class CourseAdapter extends TrackerAdapter implements IAdapter{
                 reconfigure();
             }, error -> {
                 mSwipeRefresh.setRefreshing(false);
-                if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
-                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                    }
-                } else ErrorHandler.handle(error, this.getFragment());
+                if(ErrorNetwork.handle(error, this.getFragment()).handled) mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                else ErrorHandler.handle(error, this.getFragment(), true);
             });
     }
 
@@ -270,11 +265,8 @@ public class CourseAdapter extends TrackerAdapter implements IAdapter{
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
-                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                    }
-                } else ErrorHandler.handle(error, this.getFragment());
+                if(ErrorNetwork.handle(error, this.getFragment()).handled) mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                else ErrorHandler.handle(error, this.getFragment(), true);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

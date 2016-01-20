@@ -101,8 +101,7 @@ public class FavoriteFragment extends ScrollableFragment implements RecyclerView
                 unused -> {
                     EvaluationForm.getInstance().clear();
                     this.mNavigator.navigate(EvaluationStep1Fragment.class, true);
-                },
-                error -> ErrorHandler.handle(error, this)
+                }, error -> ErrorHandler.handle(error, this)
             )
         );
         mCompositeSubscription.add(getSwipeRefreshObservable(mSwipeRefresh).subscribe(unused -> mAdapter.refresh()));
@@ -118,7 +117,7 @@ public class FavoriteFragment extends ScrollableFragment implements RecyclerView
         if(object instanceof CourseData){
             Course.getInstance().update(((CourseData) object));
             this.mNavigator.navigate(CourseFragment.class, true);
-        }else if(object instanceof Footer){
+        } else if(object instanceof Footer) {
             mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         }
     }

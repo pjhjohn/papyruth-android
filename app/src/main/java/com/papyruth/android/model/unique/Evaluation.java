@@ -107,8 +107,8 @@ public class Evaluation {
         if(evaluation.down_vote_count != null)          this.down_vote_count = evaluation.down_vote_count;
         if(evaluation.comment_count != null)            this.comment_count = evaluation.comment_count;
         if(evaluation.avatar_url != null)               this.avatar_url = evaluation.avatar_url;
-        if(evaluation.category != null)                 this.category = evaluation.category;
-        if(!evaluation.hashtags.isEmpty()){
+        if(evaluation.lecture_category != null)         this.category = evaluation.lecture_category;
+        if(!evaluation.hashtags.isEmpty()) {
             this.hashTag.clear();
             this.hashTag.addAll(evaluation.hashtags);
         }

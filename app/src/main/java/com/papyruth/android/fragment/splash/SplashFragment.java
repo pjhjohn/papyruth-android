@@ -102,18 +102,17 @@ public class SplashFragment extends TrackerFragment {
                 response -> {
                     // TODO : Try to refresh Access Token
                     if(response == null || response.user == null) {
-                        Toast.makeText(mActivity, "유저 정보를 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mActivity, R.string.toast_fetch_users_me_failed, Toast.LENGTH_SHORT).show();
                     } else {
                         User.getInstance().update(response.user);
                         userHasAccessToken[0] = User.getInstance().getAccessToken() != null;
-                        Api.papyruth()
-                            .post_users_refresh_token(
-                                    User.getInstance().getAccessToken(),
-                                    AppConst.DEVICE_TYPE,
-                                    AppManager.getInstance().getAppVersion(getActivity()),
-                                    Build.VERSION.RELEASE,
-                                    Build.MODEL
-                            )
+                        Api.papyruth().post_users_refresh_token(
+                            User.getInstance().getAccessToken(),
+                            AppConst.DEVICE_TYPE,
+                            AppManager.getInstance().getAppVersion(getActivity()),
+                            Build.VERSION.RELEASE,
+                            Build.MODEL
+                        )
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -160,23 +159,18 @@ public class SplashFragment extends TrackerFragment {
                                     case 401:
                                     case 419:
                                         handled = true;
-                                        if(userHasAccessToken[0]) Toast.makeText(mActivity, "로그인 권한을 가져오던 중 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                        if(userHasAccessToken[0]) Toast.makeText(mActivity, R.string.toast_fetch_users_me_error, Toast.LENGTH_SHORT).show();
                                         break;
                                 }
                                 break;
                             case NETWORK :
-                                handled = ErrorNetwork.handle(throwable, this).handled;
-                                if( handled ) Toast.makeText(mActivity, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
+                                ErrorNetwork.handle(throwable, this, true);
                                 handled = false;
                                 break;
                             default :
-                                handled = ErrorDefaultRetrofit.handle(throwable, this).handled;
+                                handled = ErrorDefaultRetrofit.handle(throwable, this, true).handled;
                         }
-                    } else {
-                        Timber.e("Uncatched Exception. Does Nothing");
-                        error.printStackTrace();
                     }
-
                     // Start AuthActivity
                     User.getInstance().clear();
                     if(handled) {

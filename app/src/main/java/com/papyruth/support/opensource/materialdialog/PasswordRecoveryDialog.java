@@ -8,8 +8,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.R;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandleResult;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
 
+import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -29,19 +31,14 @@ public class PasswordRecoveryDialog {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         response -> {
-                            if(response.success) Toast.makeText(context, R.string.toast_password_recovery_succeed, Toast.LENGTH_SHORT).show();
-                            else Toast.makeText(context, R.string.toast_password_recovery_failed, Toast.LENGTH_SHORT).show();
-                        },
-                        error -> {
-                            ErrorHandleResult result = ErrorNetwork.handle(error, null);
-                            if(result.handled) Toast.makeText(context, R.string.toast_error_retrofit_unstable_network, Toast.LENGTH_SHORT).show();
-                            else if(result.code == null) Toast.makeText(context, R.string.toast_error_retrofit_default, Toast.LENGTH_SHORT).show();
-                            else switch(result.code) {
-                                default : Toast.makeText(context, R.string.toast_error_default, Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                            if(response.success)
+                                Toast.makeText(context, R.string.toast_password_recovery_email_sent, Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(context, R.string.toast_password_recovery_email_not_sent, Toast.LENGTH_SHORT).show();
+                        }, error -> ErrorHandler.handle(error, context, true)
                     );
-            })
+                }
+            )
             .positiveText(R.string.dialog_positive_send)
             .negativeText(R.string.dialog_negative_cancel)
             .show();

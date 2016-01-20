@@ -27,7 +27,9 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.PasswordRecoveryDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.error.Error403;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.PermissionHelper;
@@ -47,7 +49,6 @@ import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 import static com.papyruth.support.opensource.rx.RxValidator.toString;
 
@@ -107,23 +108,19 @@ public class SignInFragment extends TrackerFragment {
             .subscribe(mButtonSignIn::setEnabled, error -> ErrorHandler.handle(error, this))
         );
 
-        mCompositeSubscriptions.add(
-            Observable.mergeDelayError(
-                ViewObservable.clicks(mButtonSignIn).map(unused -> mButtonSignIn.isEnabled()),
-                Observable.create(observer -> mTextPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
-                    observer.onNext(mButtonSignIn.isEnabled());
-                    observer.onCompleted();
-                    return !mButtonSignIn.isEnabled();
-                }))
-            )
+        mCompositeSubscriptions.add(Observable.mergeDelayError(
+            ViewObservable.clicks(mButtonSignIn).map(unused -> mButtonSignIn.isEnabled()),
+            Observable.create(observer -> mTextPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
+                observer.onNext(mButtonSignIn.isEnabled());
+                observer.onCompleted();
+                return !mButtonSignIn.isEnabled();
+            })))
             .filter(trigger -> trigger)
             .subscribe(unused -> requestSignIn(), error -> ErrorHandler.handle(error, this))
         );
 
         mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
-            unused -> {
-                mNavigator.navigate(SignUpStep1Fragment.class, true);
-            }, error -> ErrorHandler.handle(error, this)
+            unused -> mNavigator.navigate(SignUpStep1Fragment.class, true), error -> ErrorHandler.handle(error, this)
         ));
 
         mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
@@ -135,12 +132,13 @@ public class SignInFragment extends TrackerFragment {
         AnimatorHelper.FADE_IN(mProgress).start();
         Api.papyruth()
             .post_users_sign_in(
-                    mTextEmail.getText().toString(),
-                    mTextPassword.getText().toString(),
-                    AppConst.DEVICE_TYPE,
-                    AppManager.getInstance().getAppVersion(getActivity()),
-                    Build.VERSION.RELEASE,
-                    Build.MODEL)
+                mTextEmail.getText().toString(),
+                mTextPassword.getText().toString(),
+                AppConst.DEVICE_TYPE,
+                AppManager.getInstance().getAppVersion(getActivity()),
+                Build.VERSION.RELEASE,
+                Build.MODEL
+            )
             .map(response -> {
                 User.getInstance().update(response.user, response.access_token);
                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, response.access_token);
@@ -153,11 +151,11 @@ public class SignInFragment extends TrackerFragment {
                     AnimatorHelper.FADE_OUT(mProgress).start();
                     if (success) Api.papyruth()
                         .post_users_refresh_token(
-                                User.getInstance().getAccessToken(),
-                                AppConst.DEVICE_TYPE,
-                                AppManager.getInstance().getAppVersion(getActivity()),
-                                Build.VERSION.RELEASE,
-                                Build.MODEL
+                            User.getInstance().getAccessToken(),
+                            AppConst.DEVICE_TYPE,
+                            AppManager.getInstance().getAppVersion(getActivity()),
+                            Build.VERSION.RELEASE,
+                            Build.MODEL
                         )
                         .map(user -> user.access_token)
                         .subscribeOn(Schedulers.io())
@@ -167,23 +165,17 @@ public class SignInFragment extends TrackerFragment {
                                 User.getInstance().setAccessToken(token);
                                 AppManager.getInstance().putString(AppConst.Preference.ACCESS_TOKEN, token);
                                 mActivity.startMainActivity();
-                            }, error -> {
-                                Timber.d("refresh error : %s", error);
-                                error.printStackTrace();
-                            }
+                            }, error -> ErrorHandler.handle(error, this, true)
                         );
                     else Toast.makeText(mActivity, this.getResources().getString(R.string.toast_signin_failed), Toast.LENGTH_SHORT).show();
                 },
                 error -> {
                     AnimatorHelper.FADE_OUT(mProgress).start();
                     if (error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 403:
-                                Toast.makeText(mActivity, this.getResources().getString(R.string.toast_signin_failed), Toast.LENGTH_SHORT).show();
-                                break;
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                        }
+                        final RetrofitError throwable = (RetrofitError) error;
+                        if(ErrorNetwork.handle(throwable, this, true).handled) return;
+                        if(Error403.handle(throwable, this).handled) Toast.makeText(mActivity, this.getResources().getString(R.string.toast_signin_failed), Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(mActivity, this.getResources().getString(R.string.toast_error_default), Toast.LENGTH_SHORT).show();
                     }
                 }
         );

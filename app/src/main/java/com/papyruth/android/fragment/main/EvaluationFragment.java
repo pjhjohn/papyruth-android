@@ -201,7 +201,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 FloatingActionControl.getButton().setProgress(0, true);
                 mCommentText.getText().clear();
                 mAdapter.refresh();
-            })
+            }, error -> ErrorHandler.handle(error, this, true))
         );
         this.setEvaluationFloatingActionControl();
     }
@@ -348,7 +348,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                     Course.getInstance().update(course);
 //                    this.getFragmentManager().beginTransaction().addToBackStack(this.getClass().getSimpleName()).commit();
                     mNavigator.navigate(CourseFragment.class, true);
-                }, error -> ErrorHandler.handle(error, this)
+                }, error -> ErrorHandler.handle(error, this, true)
             );
         } else if(object instanceof Footer) {
             mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);

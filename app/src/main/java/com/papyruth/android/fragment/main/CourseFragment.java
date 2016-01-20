@@ -96,9 +96,8 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
                     ((MainActivity) this.getActivity()).navigate(EvaluationStep2Fragment.class, true);
                 } else {
                     EvaluationForm.getInstance().setEvaluationId(response.evaluation_id);
-                    AlertDialog.build(getActivity(), mNavigator, AlertDialog.Type.EVALUATION_ALREADY_REGISTERED)
-                        .show();
+                    AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.EVALUATION_ALREADY_REGISTERED);
                 }
-            }, error -> ErrorHandler.handle(error, this));
+            }, error -> ErrorHandler.handle(error, this, true));
     }
 }

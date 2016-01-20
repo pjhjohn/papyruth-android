@@ -1,20 +1,12 @@
 <resources>
     <string name="hint_email">이메일</string>
-    <string name="hint_email_example">email_address@gmail.com</string>
     <string name="hint_password">비밀번호</string>
     <string name="hint_old_password">기존 비밀번호</string>
     <string name="hint_new_password">새 비밀번호</string>
     <string name="hint_nickname">닉네임</string>
-    <string name="hint_evaluation_body">강의평은 최소 10자이상 적어주시기 바랍니다.</string>
     <string name="hint_realname">이름</string>
-    <string name="hint_gender">성별</string>
-    <string name="hint_university">학교</string>
-    <string name="hint_entrance">입학년도</string>
     <string name="hint_search">검색</string>
-    <string name="hint_search_course">강의 검색</string>
-    <string name="hint_lecture">강좌명</string>
-    <string name="hint_professor">교수명</string>
-    <string name="hint_register_university_email">sample\@snu.ac.kr</string>
-    <string name="hint_evalaution_form_hashtags">해시태그를 입력해 주세요(ex. #졸림)</string>
-    <string name="hint_evalaution_form_body">강의평 내용을 작성해주세요</string>
+    <string name="hint_register_university_email">university_email\@snu.ac.kr</string>
+    <string name="hint_evalaution_form_hashtags">해시태그를 등록해 주세요 (예: #졸림)</string>
+    <string name="hint_evalaution_form_body">주관식 강의평가를 작성해주세요</string>
 </resources>

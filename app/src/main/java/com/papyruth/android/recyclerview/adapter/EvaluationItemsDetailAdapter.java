@@ -183,11 +183,8 @@ public class EvaluationItemsDetailAdapter extends TrackerAdapter implements IAda
                     reconfigure();
                 }, error -> {
                     mSwipeRefresh.setRefreshing(false);
-                    if(error instanceof RetrofitError) {
-                        if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
-                            mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                        }
-                    } else ErrorHandler.handle(error, this.getFragment());
+                    if(ErrorNetwork.handle(error, this.getFragment()).handled) mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                    else ErrorHandler.handle(error, this.getFragment(), true);
                 }
             );
     }
@@ -222,11 +219,8 @@ public class EvaluationItemsDetailAdapter extends TrackerAdapter implements IAda
                 mLoading = false;
                 reconfigure();
             }, error -> {
-                if(error instanceof RetrofitError) {
-                    if(ErrorNetwork.handle(((RetrofitError) error), this.getFragment()).handled) {
-                        mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
-                    }
-                } else ErrorHandler.handle(error, this.getFragment());
+                if(ErrorNetwork.handle(error, this.getFragment()).handled) mEmptyState.setIconDrawable(R.drawable.emptystate_network).setTitle(R.string.emptystate_title_network).setBody(R.string.emptystate_body_network).show();
+                else ErrorHandler.handle(error, this.getFragment(), true);
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });

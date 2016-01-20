@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.User;
@@ -41,7 +40,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 import static com.papyruth.support.opensource.rx.RxValidator.toString;
 
@@ -143,7 +141,6 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 response -> {
-                    Timber.d("Response : %s", response);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
                     if(response.success) {
@@ -152,22 +149,15 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
                     }
                 },
                 error -> {
-                    Timber.d("Error : %s", error);
                     FloatingActionControl.getButton().setIndeterminate(false);
                     FloatingActionControl.getButton().setProgress(0, true);
-                    if(error instanceof RetrofitError) {
-                        switch (((RetrofitError) error).getResponse().getStatus()) {
-                            case 400:
-                                FailureDialog.show(getActivity(), FailureDialog.Type.REGISTER_UNIVERSITY_EMAIL);
-                                setSubmissionCallback();
-                                break;
-                            default:
-                                Timber.e("Unexpected Status code : %d - Needs to be implemented", ((RetrofitError) error).getResponse().getStatus());
-                        }
-                    }
-                    ErrorHandler.handle(error, this);
+                    if(error instanceof RetrofitError && ((RetrofitError) error).getResponse().getStatus() == 400) {
+                        FailureDialog.show(getActivity(), FailureDialog.Type.REGISTER_UNIVERSITY_EMAIL);
+                        setSubmissionCallback();
+                    } else ErrorHandler.handle(error, this, true);
                 }
-            ));
+            )
+        );
     }
 
     private void sendUniversityConfirmationEmail() {
@@ -178,12 +168,10 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
             .subscribe(
                 success -> {
                     if (success) {
-                        Toast.makeText(mContext, R.string.toast_profile_register_university_email_sent, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.toast_profile_university_confirmation_email_sent, Toast.LENGTH_SHORT).show();
                         mNavigator.back();
-                    } else {
-                        Toast.makeText(mContext, R.string.toast_profile_register_university_email_not_sent, Toast.LENGTH_SHORT).show();
-                    }
-                }, error -> ErrorHandler.handle(error, MaterialDialog.class)
+                    } else Toast.makeText(mContext, R.string.toast_profile_university_confirmation_email_not_sent, Toast.LENGTH_SHORT).show();
+                }, error -> ErrorHandler.handle(error, this, true)
             );
     }
 }

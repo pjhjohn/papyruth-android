@@ -6,7 +6,7 @@
 
     <!-- Navigation Drawer -->
     <string name="navigation_drawer_item_home">최신 강의평가</string>
-    <string name="navigation_drawer_item_compose_evaluation">강의평가 작성</string>
+    <string name="navigation_drawer_item_compose_evaluation">강의평가 쓰기</string>
     <string name="navigation_drawer_item_favorite">관심 강의</string>
     <string name="navigation_drawer_item_my_evaluation">나의 강의평가</string>
     <string name="navigation_drawer_item_my_comment">나의 댓글</string>
@@ -46,14 +46,16 @@
     <string name="signup_invalid_gender">존재하지 않는 성별입니다</string>
     <string name="signup_invalid_entrance_year">불가능한 입학년도입니다</string>
     <string name="signup_invalid_university">학교가 선택되지 않았습니다</string>
-    <string name="signup_agreement_message">가입하면 %1$s 및 %2$s에 동의하게 됩니다.</string>
+    <string name="signup_agreement_message">가입하면 %1$s 및 %2$s에 동의하게 됩니다</string>
     <string name="signup_terms_of_use">약관</string>
     <string name="signup_privacy_policy">개인정보 취급방침</string>
     <string name="signup_email_duplication">이메일이 중복되었습니다</string>
     <string name="signup_nickname_duplication">닉네임이 중복되었습니다</string>
     <string name="toast_signin_failed">로그인에 실패하였습니다</string>
     <string name="toast_signup_failed">회원가입에 실패하였습니다</string>
-    <string name="toast_signup_min_entrance_year_not_loaded">최소 입학년도 값을 받아오지 못하였습니다. 다시 시도해 주세요</string>
+    <string name="toast_signup_min_entrance_year_not_loaded">최소 입학년도 값을 받아오지 못하였습니다. 다시 시도해 주세요.</string>
+    <string name="toast_fetch_users_me_failed">유저 정보를 가져오던 중 오류가 발생하였습니다</string>
+    <string name="toast_fetch_users_me_error">로그인 권한을 가져오던 중 오류가 발생하였습니다</string>
 
     <!-- Permission -->
     <string name="permission_title">주소록 접근 권한</string>
@@ -76,7 +78,7 @@
     <string name="course_label_point_gpa_satisfaction">학점만족도</string>
     <string name="course_label_point_clarity">강의력</string>
     <string name="course_label_point_easiness">널널함</string>
-    <string name="course_no_evaluations">현재 이 강의에 대해 작성된 강의평가가 없습니다.\n수업을 들으셨다면 강의평가를 남겨주세요!</string>
+    <string name="course_no_evaluations">현재 이 강의에 대한 강의평가가 없습니다.\n수업을 들으셨다면 강의평가를 남겨주세요!</string>
     <string name="course_point_hidden">비공개</string>
 
     <!-- Evaluation -->
@@ -85,12 +87,12 @@
     <string name="evaluation_label_point_gpa_satisfaction">학점만족도</string>
     <string name="evaluation_label_point_clarity">강의력</string>
     <string name="evaluation_label_point_easiness">널널함</string>
-    <string name="evaluation_no_comments">현재 이 강의평가에 대해 작성된 댓글이 없습니다.\n댓글로 의견을 달아주세요!</string>
+    <string name="evaluation_no_comments">현재 이 강의평가에는 댓글이 없습니다.\n댓글로 의견을 달아주세요!</string>
     <string name="evaluation_point_hidden">비공개</string>
-    <string name="evaluation_forbidden">해당 강의평을 볼 수 없습니다\n%s</string>
-    <string name="evaluation_forbidden_email_confirmation_required">계정 이메일 인증이 필요합니다</string>
-    <string name="evaluation_forbidden_university_confirmation_required">학교 메일 인증이 필요합니다</string>
-    <string name="evaluation_forbidden_mandatory_evaluation_required">3개 이상의 강의평을 작성하시면 볼 수 있습니다</string>
+    <string name="evaluation_forbidden">해당 강의평을 볼 수 없습니다.\n%s</string>
+    <string name="evaluation_forbidden_email_confirmation_required">계정 이메일 인증이 필요합니다.</string>
+    <string name="evaluation_forbidden_university_confirmation_required">학교 이메일 인증이 필요합니다.</string>
+    <string name="evaluation_forbidden_mandatory_evaluation_required">3개 이상의 강의평을 남겨주셔야 볼 수 있습니다</string>
 
     <!-- Compose Evaluation -->
     <string name="compose_evaluation_label_point_overall">총점</string>
@@ -98,8 +100,8 @@
     <string name="compose_evaluation_label_point_clarity">강의력</string>
     <string name="compose_evaluation_label_point_easiness">널널함</string>
     <string name="compose_evaluation_label_search">클릭하여 강의 검색</string>
-    <string name="compose_evaluation_label_hashtags">해시태그 등록</string>
-    <string name="compose_evaluation_label_body">강의평가 내용</string>
+    <string name="compose_evaluation_label_hashtags">해시태그</string>
+    <string name="compose_evaluation_label_body">주관식 강의평가</string>
     <string name="toast_compose_evaluation_submission_failed">강의평가 등록에 실패하였습니다</string>
     <string name="toast_compose_evaluation_incomplete_data">필수 항목 중 누락된 부분이 있어 강의평가를 등록할 수 없습니다</string>
 
@@ -110,23 +112,23 @@
     <string name="emptystate_title_my_evaluation">나의 강의평가</string>
     <string name="emptystate_title_search_result">검색 결과 없음</string>
     <string name="emptystate_body_network">네트워크가 불안정합니다. 데이터 혹은 와이파이 네트워크 상태를 확인해주세요</string>
-    <string name="emptystate_body_favorite">관심강의가 저장되는 곳입니다. 강의 페이지에서 아이콘을 클릭하여 관심강의로 등록할 수 있습니다.</string>
-    <string name="emptystate_body_my_comment">작성한 나의 댓글들이 저장되는 공간입니다.</string>
-    <string name="emptystate_body_my_evaluation">작성한 나의 강의평가들이 저장되는 공간입니다.</string>
+    <string name="emptystate_body_favorite">관심강의가 저장되는 곳입니다. 강의정보 우측 상단의 아이콘을 클릭하여 관심강의로 등록할 수 있습니다.</string>
+    <string name="emptystate_body_my_comment">나의 댓글들이 저장되는 공간입니다.</string>
+    <string name="emptystate_body_my_evaluation">나의 강의평가들이 저장되는 공간입니다.</string>
     <string name="emptystate_body_search_result">해당 검색어로는 나오는 검색 결과가 없네요. 다른 검색어를 사용해보시는 건 어떨까요?</string>
 
     <!-- Inform View -->
-    <string name="inform_home">최신 강의평가를 보여주는 페이지입니다.\n강의평을 클릭하면 해당 강의평가의 상세 페이지를 열고 닫을 수 있습니다.</string>
-    <string name="inform_course">강의 통계와 강의평가를 보여주는 페이지입니다.\n강의평을 클릭하면 강의평 상세 페이지를 열고 닫을 수 있습니다.</string>
-    <string name="inform_evaluation">강의에 대한 강의평가를 보여주는 페이지입니다.\n댓글을 추가하거나 강의평가, 댓글에 투표를 위-아래 위-위-아래</string>
-    <string name="inform_favorite">(수줍) 네가 좋아한다고 말한 강의들을 준비해봤어\n댓글을 추가하거나 강의평가, 댓글에 투표를 위-아래 위-위-아래</string>
+    <string name="inform_home">최신 강의평가를 보여줍니다.\n강의평을 클릭하면 해당 강의평가의 상세 정보를 열람할 수 있습니다.</string>
+    <string name="inform_course">강의 통계와 강의평가를 보여줍니다.\n강의평을 클릭하면 강의평가의 상세 정보를 열람할 수 있습니다.</string>
+    <string name="inform_evaluation">강의에 대한 강의평가를 보여주며, 댓글을 통해 의견을 제시할 수 있습니다.\n강의평가, 댓글 투표를 위-아래 위-위-아래</string>
+    <string name="inform_favorite">네가 좋아한다 해준 강의들을 준비해봤어..(수줍)\n댓글을 추가하거나 강의평가, 댓글에 투표를 위-아래 위-위-아래</string>
     <string name="inform_btn_positive">확인</string>
-    <string name="inform_btn_optional">다시보지 않기</string>
+    <string name="inform_btn_optional">다시보지 않음</string>
 
     <!-- Profile -->
     <string name="profile_label_entrance_year_postfix">  학번</string>
     <string name="profile_label_email">이메일</string>
-    <string name="profile_label_university_mail">학교 메일</string>
+    <string name="profile_label_university_mail">학교 이메일</string>
     <string name="profile_label_realname">이름</string>
     <string name="profile_label_nickname">닉네임</string>
     <string name="profile_label_gender">성별</string>
@@ -139,8 +141,8 @@
     <string name="profile_register_university_email_body_prefix"></string>
     <string name="profile_register_university_email_body">학교 이메일 주소</string>
     <string name="profile_register_university_email_body_postfix">를 적어주세요</string>
-    <string name="toast_profile_register_university_email_sent">이메일 전송 성공</string>
-    <string name="toast_profile_register_university_email_not_sent">이메일 전송 실패</string>
+    <string name="toast_profile_university_confirmation_email_sent">학교 인증용 메일을 발송하였습니다</string>
+    <string name="toast_profile_university_confirmation_email_not_sent">학교 인증용 메일 발송에 실패하였습니다</string>
     <!-- Profile Change Nickname -->
     <string name="profile_change_nickname_label">변경하실 닉네임을 적어주세요</string>
     <string name="profile_change_nickname_body_prefix"></string>
@@ -171,16 +173,16 @@
     <!-- Dialog Content -->
     <string name="dialog_content_delete_hashtag">해당 해시태그를 삭제하시겠습니까?</string>
     <string name="dialog_content_password_recovery">가입할 때 입력한 이메일을 입력해주세요. 비밀번호 변경 이메일이 발송됩니다.</string>
-    <string name="dialog_content_compose_evaluation_submit">현재 기입된 정보로 새 강의평가를 작성하시겠습니까?</string>
-    <string name="dialog_content_alert_mandatory_evaluation_required">3개 이상의 강의평가를 써야 볼 수 있습니다. \n%d개 남았습니다.</string>
-    <string name="dialog_content_alert_evaluation_already_registered">해당 강의에 대한 평가를 이미 작성하셨으므로 수정만 가능합니다.</string>
-    <string name="dialog_content_alert_user_confirmation_required">가입 확인 메일을 보냈습니다.\n인증 메일을 다시 보내시겠습니까?</string>
-    <string name="dialog_content_alert_university_confirmation_required">학교 메일 계정(%1$s)으로 메일을 보냈습니다.\n메일을 다시 보내시겠습니까?</string>
-    <string name="dialog_content_alert_legacy_user">(%1$s)은 기존 SNUEV에 등록되어 있는 계정입니다.\n계정 통합을 통해 기존 계정의 데이터를 가져올 수 있습니다.\n이메일을 통해 통합 인증 절차를 진행하시겠습니까?</string>
+    <string name="dialog_content_compose_evaluation_submit">현재 기입된 정보로 새 강의평가를 등록하시겠습니까?</string>
+    <string name="dialog_content_alert_mandatory_evaluation_required">3개 이상의 강의평을 남겨주셔야 볼 수 있습니다. \n%d개 남았습니다.</string>
+    <string name="dialog_content_alert_evaluation_already_registered">해당 강의에 대한 강의평가는 이미 등록되어 있습니다. 기존 강의평가를 수정하시겠습니까?</string>
+    <string name="dialog_content_alert_user_confirmation_required">가입 인증용 메일이 발송된 상태입니다.\n인증 메일을 다시 보내시겠습니까?</string>
+    <string name="dialog_content_alert_university_confirmation_required">학교 인증용 메일이 학교 이메일(%1$s)로 발송된 상태입니다.\n인증 메일을 다시 보내시겠습니까?</string>
+    <string name="dialog_content_alert_legacy_user">가입하고자 하는 계정(%1$s)을 기존 SNUEV에서 찾았습니다.\n계정을 통합하면 기존 계정의 데이터를 가져올 수 있습니다.\n이메일을 통해 통합 인증 절차를 진행하시겠습니까?</string>
 
     <string name="dialog_content_failure_register_university_email">중복된 학교 이메일입니다</string>
     <string name="dialog_content_failure_change_nickname">중복된 닉네임 입니다</string>
-    <string name="dialog_content_failure_change_password">기존 비밀번호가 틀립니다</string>
+    <string name="dialog_content_failure_change_password">기존 비밀번호가 틀렸습니다</string>
     <!-- Dialog Button -->
     <string name="dialog_positive_delete">삭제</string>
     <string name="dialog_positive_send">전송</string>
@@ -195,10 +197,10 @@
     <string name="dialog_negative_change_email">이메일 변경</string>
     <string name="dialog_neutral_repository">웹페이지</string>
     <!-- Dialog Toast -->
-    <string name="toast_alert_university_confirmation_email_sent">이메일 전송 성공</string>
-    <string name="toast_alert_university_confirmation_email_not_sent">이메일 전송 실패</string>
-    <string name="toast_alert_email_sent">이메일 전송 성공했습니다. 메일함을 확인해주세요.</string>
-    <string name="toast_alert_email_not_sent">이메일 전송 실패</string>
+    <string name="toast_alert_university_confirmation_email_sent">학교 인증용 메일을 발송하였습니다</string>
+    <string name="toast_alert_university_confirmation_email_not_sent">학교 인증용 메일 발송에 실패하였습니다</string>
+    <string name="toast_alert_legacy_user_email_sent">계정 통합용 메일을 발송하였습니다</string>
+    <string name="toast_alert_legacy_user_email_not_sent">계정 통합용 메일 발송에 실패하였습니다</string>
 
     <!-- Floating Action Button -->
     <string name="fab_change_nickname">닉네임 변경</string>
@@ -216,16 +218,19 @@
     <string name="search_candidate_type_professor">교수</string>
 
     <!-- Error -->
-    <string name="toast_error_default">알 수 없는 오류 발생</string>
-    <string name="toast_error_retrofit_403">어머나, 뭔가 문제가 있네요!</string>
-    <string name="toast_error_retrofit_500">서버에 문제가 있나봐요 ㅠㅠ</string>
-    <string name="toast_error_retrofit_unstable_network">인터넷이 불안정합니다. 네트워크 상태를 확인해 주십시오</string>
-    <string name="toast_error_retrofit_default">요청에 문제가 있습니다.</string>
+    <string name="toast_error_default">뭔가 문제가 발생했나 봅니다 ㅠㅠ</string>
+    <string name="toast_error_retrofit_401">계정 접속 기간이 만료되어 로그인 화면으로 이동합니다</string>
+    <string name="toast_error_retrofit_403">잘못된 값을 입력하였습니다</string>
+    <string name="toast_error_retrofit_500">서버에 문제가 있나 봅니다 ㅠㅠ</string>
+    <string name="toast_error_retrofit_503">점검 중입니다</string>
+    <string name="toast_error_retrofit_http">연결하는 도중 문제가 발생하였습니다</string>
+    <string name="toast_error_retrofit_network">네트워크가 불안정합니다. 데이터 혹은 와이파이 네트워크 상태를 확인해주세요</string>
+    <string name="toast_error_retrofit_default">연결하는 도중 문제가 발생하였습니다</string>
 
     <!-- Password Recovery -->
     <string name="password_recovery_label">비밀번호를 잊어버리셨나요?</string>
-    <string name="toast_password_recovery_failed">비밀번호 변경 안내 이메일 발송에 실패하였습니다</string>
-    <string name="toast_password_recovery_succeed">비밀번호 변경 안내 이메일을 발송하였습니다</string>
+    <string name="toast_password_recovery_email_sent">비밀번호 변경 안내 이메일을 발송하였습니다</string>
+    <string name="toast_password_recovery_email_not_sent">비밀번호 변경 안내 이메일 발송에 실패하였습니다</string>
 
     <!-- ETC -->
     <string name="empty"/>

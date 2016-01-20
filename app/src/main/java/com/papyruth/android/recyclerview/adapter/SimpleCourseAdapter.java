@@ -200,8 +200,7 @@ public class SimpleCourseAdapter extends TrackerAdapter{
                             ErrorDefaultRetrofit.handle(((RetrofitError) error), this.getFragment());
                         }
                     } else ErrorHandler.handle(error, this.getFragment());
-                    if(mFooterMaterialProgressBar != null)
-                        AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
+                    if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 });
         }
     }

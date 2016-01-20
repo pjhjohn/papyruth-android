@@ -51,7 +51,6 @@ public class SimpleCourseFragment extends ScrollableFragment implements Recycler
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.mNavigator = (Navigator) activity;
-        SearchToolbar.getInstance().setSelectedQuery(null).setSelectedCandidate(new CandidateData());
     }
 
     @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;

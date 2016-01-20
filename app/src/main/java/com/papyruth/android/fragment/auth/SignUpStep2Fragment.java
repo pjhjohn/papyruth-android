@@ -22,10 +22,10 @@ import com.papyruth.android.activity.AuthActivity;
 import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
-import com.papyruth.support.opensource.materialdialog.FailureDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
+import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
@@ -64,8 +64,8 @@ public class SignUpStep2Fragment extends TrackerFragment {
     @Bind(R.id.signup_email_icon)    protected ImageView mIconEmail;
     @Bind(R.id.signup_nickname_icon) protected ImageView mIconNickname;
     private CompositeSubscription mCompositeSubscription;
-    private boolean typeEmail = false, typeNickName = false;
-    private boolean legacyEmail = false;
+    private boolean mEmailEdited = false, mNickNameEdited = false;
+    private boolean mEmailOfLegacyUser = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
         super.onResume();
         mCompositeSubscription.clear();
         mContainer.setOnBackListner(() -> {
-            this.mNavigator.back();
+            mNavigator.back();
             return true;
         });
 
@@ -108,48 +108,39 @@ public class SignUpStep2Fragment extends TrackerFragment {
                 getEmailValidationObservable(mTextEmail).startWith(((String) null)),
                 getNicknameValidationObservable(mTextNickname).startWith(((String) null)),
                 (String emailError, String nicknameError) -> {
-                    if(typeEmail)    mTextEmail.setError(emailError);
-                    if(typeNickName) mTextNickname.setError(nicknameError);
-                    return emailError == null && nicknameError == null && typeEmail && typeNickName;
+                    if(mEmailEdited)    mTextEmail.setError(emailError);
+                    if(mNickNameEdited) mTextNickname.setError(nicknameError);
+                    return emailError == null && nicknameError == null && mEmailEdited && mNickNameEdited;
                 }
             ).observeOn(AndroidSchedulers.mainThread()).subscribe(valid -> {
                 if (valid) mNextButtonEnabled = true;
                 boolean visible = FloatingActionControl.getButton().getVisibility() == View.VISIBLE;
                 if (!visible && valid) FloatingActionControl.getInstance().show(true);
                 else if (visible && !valid) FloatingActionControl.getInstance().hide(true);
-            }, Throwable::printStackTrace)
+            }, error -> ErrorHandler.handle(error, this))
         );
 
-        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(
-            unused -> {
-                proceedNextStep();
-            }
-        ));
+        mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> proceedNextStep()));
         mTextEmail.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == EditorInfo.IME_ACTION_NEXT) {
                 mTextNickname.requestFocus();
                 return true;
-            }
-            return false;
+            } return false;
         });
         mTextNickname.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == EditorInfo.IME_ACTION_NEXT) {
                 proceedNextStep();
                 return true;
-            }
-            return false;
+            } return false;
         });
 
         if(mTextEmail.getText().toString().isEmpty()) {
             final String email = SignUpForm.getInstance().getTempSaveEmail();
-            if(email != null) {
-                mTextEmail.setText(email);
-            }
+            if(email != null) mTextEmail.setText(email);
             else mTextEmail.getText().clear();
-        } else {
-            mTextEmail.setText(mTextEmail.getText());
-        }
+        } else mTextEmail.setText(mTextEmail.getText());
         mTextEmail.setSelection(mTextEmail.getText().length());
+
         if(mTextNickname.getText().toString().isEmpty()) {
             final String nickname = SignUpForm.getInstance().getTempSaveNickname();
             if(nickname != null) mTextNickname.setText(nickname);
@@ -162,10 +153,10 @@ public class SignUpStep2Fragment extends TrackerFragment {
         });
     }
 
-    private void proceedNextStep(){
-        if(mNextButtonEnabled && legacyEmail) {
+    private void proceedNextStep() {
+        if(mNextButtonEnabled && mEmailOfLegacyUser) {
             AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.LEGACY_USER);
-        }else if (mNextButtonEnabled) {
+        } else if (mNextButtonEnabled) {
             SignUpForm.getInstance().setValidEmail();
             SignUpForm.getInstance().setValidNickname();
             mNavigator.navigate(SignUpStep3Fragment.class, true);
@@ -181,26 +172,24 @@ public class SignUpStep2Fragment extends TrackerFragment {
             })
             .map(event -> event.text().toString())
             .flatMap(email -> {
-                this.typeEmail = true;
+                mEmailEdited = true;
                 SignUpForm.getInstance().setTempSaveEmail(email);
                 final String errorMessage = RxValidator.getErrorMessageEmail.call(email);
                 if (errorMessage == null) return Api.papyruth()
                     .post_users_sign_up_validate("email", email)
-                    .map(validator -> validator)
                     .map(valid -> {
                         if(valid.validation) {
-                            legacyEmail = false;
+                            mEmailOfLegacyUser = false;
                             return null;
-                        }
-                        switch (valid.status) {
+                        } else switch (valid.status) {
                             case 0:
-                                legacyEmail = false;
+                                mEmailOfLegacyUser = false;
                                 return null;
                             case 1:
-                                legacyEmail = false;
+                                mEmailOfLegacyUser = false;
                                 return getResources().getString(R.string.signup_email_duplication);
                             case 2:
-                                legacyEmail = true;
+                                mEmailOfLegacyUser = true;
                                 return null;
                             default:
                                 return getResources().getString(R.string.signup_email_duplication);
@@ -218,7 +207,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
             })
             .map(event -> event.text().toString())
             .flatMap(nickname -> {
-                typeNickName = true;
+                mNickNameEdited = true;
                 SignUpForm.getInstance().setTempSaveNickname(nickname);
                 final String errorMessage = RxValidator.getErrorMessageNickname.call(nickname);
                 if (errorMessage == null) return Api.papyruth()
@@ -226,11 +215,9 @@ public class SignUpStep2Fragment extends TrackerFragment {
                     .map(validator -> validator)
                     .map(valid -> {
                         if (valid.validation) return null;
-                        switch (valid.status) {
-                            case 1:
-                                return getResources().getString(R.string.signup_nickname_duplication);
-                            default:
-                                return getResources().getString(R.string.signup_nickname_duplication);
+                        else switch (valid.status) {
+                            case 1 : return getResources().getString(R.string.signup_nickname_duplication);
+                            default: return getResources().getString(R.string.signup_nickname_duplication);
                         }
                     });
                 else return Observable.just(errorMessage);

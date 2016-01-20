@@ -147,21 +147,21 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                 if(mVoteStatus == VoteStatus.UP) Api.papyruth()
                     .delete_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this, true));
                 else Api.papyruth()
                     .post_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId, true)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.UP, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.UP, response), error ->  ErrorHandler.handle(error, this, true));
                 break;
             case R.id.evaluation_down_vote_icon:
                 if(mVoteStatus == VoteStatus.DOWN) Api.papyruth()
                     .delete_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.NONE, response), error ->  ErrorHandler.handle(error, this, true));
                 else Api.papyruth()
                     .post_evaluation_vote(User.getInstance().getAccessToken(), mEvaluationId, false)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.DOWN, response), error ->  ErrorHandler.handle(error, this));
+                    .subscribe(response -> mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, VoteStatus.DOWN, response), error ->  ErrorHandler.handle(error, this, true));
                 break;
             case R.id.evaluation_up_vote_count:
             case R.id.evaluation_down_vote_count:
@@ -172,7 +172,7 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
                         view.getContext(),
                         view.getId() == R.id.evaluation_up_vote_count ? "UP" : "DOWN",
                         view.getId() == R.id.evaluation_up_vote_count ? response.up : response.down
-                    ), error ->  ErrorHandler.handle(error, this));
+                    ), error ->  ErrorHandler.handle(error, this, true));
                 break;
             default : Timber.d("Clicked view : %s", view);
         }

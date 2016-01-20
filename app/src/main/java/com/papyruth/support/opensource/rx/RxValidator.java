@@ -1,5 +1,6 @@
 package com.papyruth.support.opensource.rx;
 
+import android.util.Patterns;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -25,11 +26,11 @@ public class RxValidator {
     public static Func1<OnTextChangeEvent, String> toString = text -> text.text().toString();
     public static Func1<String, Boolean> isEmpty  = text -> text.length() == 0;
     public static Func1<String, Boolean> nonEmpty = text -> text.length() > 0;
-    public static Func1<String, Boolean> isValidEmail    = text -> nonEmpty.call(text) && text.contains("@");
-    public static Func1<String, Boolean> isValidPassword = text -> nonEmpty.call(text) && text.length() > 0;
-    public static Func1<String, Boolean> isValidRealname = text -> nonEmpty.call(text) && text.getBytes().length <= AppConst.MAX_REALNAME_BYTES;
-    public static Func1<String, Boolean> isValidNickname = text -> nonEmpty.call(text) && text.getBytes().length <= AppConst.MAX_NICKNAME_BYTES;
-    public static Func1<String, Boolean> isValidEvaluationBody = text -> nonEmpty.call(text) && text.getBytes().length >= AppConst.MIN_EVALUATION_BODY_BYTES;
+    public static Func1<String, Boolean> isValidEmail    = text -> nonEmpty.call(text) && Patterns.EMAIL_ADDRESS.matcher(text).matches();
+    public static Func1<String, Boolean> isValidPassword = text -> nonEmpty.call(text) && text.length() >= AppConst.MIN_PASSWORD_LENGTH;
+    public static Func1<String, Boolean> isValidRealname = text -> nonEmpty.call(text) && text.length() <= AppConst.MAX_REALNAME_LENGTH;
+    public static Func1<String, Boolean> isValidNickname = text -> nonEmpty.call(text) && text.length() <= AppConst.MAX_NICKNAME_LENGTH;
+    public static Func1<String, Boolean> isValidEvaluationBody = text -> nonEmpty.call(text) && text.length() >= AppConst.MIN_EVALUATION_BODY_LENGTH;
 
     public static Func1<String, String> getErrorMessageEmail = text -> {
         if (isValidEmail.call(text)) return null;

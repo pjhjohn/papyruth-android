@@ -88,9 +88,7 @@ public class EvaluationStep1Fragment extends ScrollableFragment implements Recyc
     @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if (object instanceof CourseData) mAdapter.nextEvaluatonStep(((CourseData) object));
-        else if(object instanceof Footer)
-            this.mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
-
+        else if(object instanceof Footer) this.mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
         ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 2);
     }
 

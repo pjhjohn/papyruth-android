@@ -81,9 +81,6 @@ public class TermsOfServiceAdapter extends TrackerAdapter {
                 mIndexFooter = mTerms.size() + mIndexContent;
                 notifyItemRangeInserted(mIndexContent, mTerms.size());
                 AnimatorHelper.FADE_IN(mFooterBorder).start();
-            }, error -> {
-                ErrorHandler.handle(error, this.getFragment());
-                error.printStackTrace();
-            });
+            }, error -> ErrorHandler.handle(error, this.getFragment(), true));
     }
 }
