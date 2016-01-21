@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         this.setContentView(R.layout.activity_main);
         mTracker = ((PapyruthApplication) getApplication()).getTracker();
 
-        Crashlytics.setUserIdentifier(User.getInstance().getId().toString());
+        Crashlytics.setUserIdentifier(User.getInstance().getId() == null? null : User.getInstance().getId().toString());
         Crashlytics.setUserEmail(User.getInstance().getEmail());
         Crashlytics.setUserName(User.getInstance().getNickname());
         Crashlytics.setString(getResources().getString(R.string.crashlytics_key_university), User.getInstance().getUniversityName());
