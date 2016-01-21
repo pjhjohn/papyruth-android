@@ -26,7 +26,7 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-05-07.
  * MontserratApp.onCreate handles application initialization which should be called once.
  */
-public class PapyruthApplication extends Application implements Error.OnReportToGoogleAnalytics{
+public class PapyruthApplication extends Application implements Error.OnReportToGoogleAnalytics {
     private Tracker mTracker;
     synchronized public Tracker getTracker() {
         if (mTracker == null) {
@@ -45,9 +45,10 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
     public void onCreate() {
         super.onCreate();
 
-        Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
-            ex.printStackTrace();
-            this.onReportToGoogleAnalytics(ex.getMessage(), this.getClass().getSimpleName(), false);
+        Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+            exception.printStackTrace();
+            onReportToGoogleAnalytics(exception.getMessage(), this.getClass().getSimpleName(), false);
+            System.exit(1);
         });
 
         /* Fabric for Crashlytics */
@@ -83,6 +84,5 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
         Timber.d("Application.onReportToGoogleAnalytics from %s\nCause : %s", from, cause);
         String description = Error.description(String.format("UncaughtExeption from %s : %s", from, cause));
         mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(isFatal).build());
-        System.exit(1);
     }
 }
