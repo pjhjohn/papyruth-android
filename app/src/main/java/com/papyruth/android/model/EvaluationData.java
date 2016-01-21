@@ -26,6 +26,7 @@ public class EvaluationData {
     public String avatar_url                = null;
     public Integer request_user_vote        = null; // 1 for up-vote, 0 for down-vote, null for neither.
     public Integer lecture_category         = null; // 0 for major, 1 for liberal-arts, etc for otherwise
+    public Boolean university_confirmation_needed = null;
     public List<String> hashtags            = new ArrayList<>();
 
     public boolean isValidData() {

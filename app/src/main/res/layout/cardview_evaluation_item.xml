@@ -116,6 +116,7 @@
         android:id="@+id/evaluation_item_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/baseline_x1"
         android:layout_below="@+id/evaluation_item_content">
         <TextView
             android:id="@+id/evaluation_item_hashtags"

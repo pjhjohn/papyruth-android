@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.devspark.robototextview.widget.RobotoTextView;
@@ -49,6 +51,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
     @Bind(R.id.evaluation_item_comment_count)     protected RobotoTextView mCommentCount;
     @Bind(R.id.material_progress_medium)          protected View mProgressbar;
+    @Bind(R.id.evaluation_item_statistics)          protected LinearLayout mStatisticsContainer;
     private Integer mEvaluationId;
     private final Context mContext;
     private final Resources mResources;
@@ -79,6 +82,8 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
             mHashtags.setText(Hashtag.plainString(evaluation.hashtags));
             mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
+            mStatisticsContainer.setVisibility(View.VISIBLE);
+            mHashtags.setVisibility(View.VISIBLE);
         } else {
             String messageEvaluationForbidden = String.format(mContext.getResources().getString(R.string.evaluation_forbidden),
                 User.getInstance().emailConfirmationRequired()?
@@ -93,6 +98,8 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             mPointOverall.setText(mContext.getString(R.string.evaluation_point_hidden));
             for(int i = 0; i < 3; i++) ((LayerDrawable) mRatingBarOverall.getProgressDrawable()).getDrawable(i).setColorFilter(mContext.getResources().getColor(R.color.white_60p), PorterDuff.Mode.SRC_ATOP);
             mRatingBarOverall.setRating(10);
+            mStatisticsContainer.setVisibility(View.GONE);
+            mHashtags.setVisibility(View.GONE);
         }
         AnimatorHelper.FADE_OUT(mProgressbar).start();
     }
