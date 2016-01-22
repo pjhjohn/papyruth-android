@@ -45,7 +45,8 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     @Override
     protected void setToolbarOptions() {
         this.mToolbar.setTitle(R.string.toolbar_course);
-        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
+//        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
+        mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar_green));
         if(!mEvaluationOpened) setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);

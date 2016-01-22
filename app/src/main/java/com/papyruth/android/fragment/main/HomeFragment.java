@@ -16,7 +16,6 @@ import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
-import com.papyruth.support.utility.navigator.FragmentNavigator;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,11 +25,7 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
     public void onResume() {
         super.onResume();
         if(Evaluation.getInstance().getId() != null){
-            if(mEvaluationOpened && Evaluation.getInstance().getId() == null) {
-                getFragmentManager().beginTransaction().remove(mEvaluationFragment).commit();
-                mEvaluationOpened = false;
-                mEvaluationContainer.setVisibility(View.GONE);
-            }else if(mEvaluationOpened && mEvaluationContainer.getVisibility() != View.VISIBLE && mEvaluationFragment != null) {
+            if(mEvaluationOpened && mEvaluationContainer.getVisibility() != View.VISIBLE && mEvaluationFragment != null) {
                 openEvaluation(null, false);
             }else if(!mEvaluationOpened) {
                 if(mEvaluationFragment == null) {
@@ -38,8 +33,13 @@ public class HomeFragment extends CommonRecyclerViewFragment<EvaluationItemsDeta
                 }
                 openEvaluation(null, false);
             }
-        } else setFloatingActionControl();
-
+        } else {
+            if(mEvaluationFragment != null) getFragmentManager().beginTransaction().remove(mEvaluationFragment).commit();
+            mEvaluationOpened = false;
+            mEvaluationContainer.setVisibility(View.GONE);
+            setFloatingActionControl();
+            setStatusBarOptions();
+        }
     }
 
     @Override
