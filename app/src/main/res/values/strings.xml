@@ -12,7 +12,9 @@
     <string name="navigation_drawer_item_my_comment">My Comment</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
-    <string name="navigation_drawer_contact_us">"Send Us Your Feedback"</string>
+    <string name="navigation_drawer_contact_us">Bug Report &amp; Feedback</string>
+    <string name="navigation_drawer_contact_us_email" translatable="false">contact@papyruth.com</string>
+    <string name="navigation_drawer_contact_us_email_intent_title">Bug Report &amp; Feedback using</string>
 
     <!-- Toolbar -->
     <string name="toolbar_home">@string/navigation_drawer_item_home</string>
@@ -238,5 +240,4 @@
     <string name="professor_prefix">PROF. </string>
     <string name="professor_postfix"/>
     <string name="data_load_more">See More</string>
-    <string name="contact_email" translatable="false">contact@papyruth.com</string>
 </resources>

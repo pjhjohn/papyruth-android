@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
@@ -119,11 +120,15 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         Picasso.with(getActivity()).load(R.drawable.ic_email_24dp).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(((ImageView) mContactUs.findViewById(R.id.navigation_drawer_item_icon)));
         ((TextView) mContactUs.findViewById(R.id.navigation_drawer_item_label)).setText(R.string.navigation_drawer_contact_us);
         mContactUs.setOnClickListener(v -> {
-            Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            emailIntent.setType("message/rfc822");
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, Uri.parse(getString(R.string.contact_email)));
-            Intent chooser = Intent.createChooser(emailIntent, "email");
-            startActivity(chooser);
+            Intent intentEmail = new Intent(Intent.ACTION_SEND);
+            intentEmail.setType("message/rfc822");
+            intentEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.navigation_drawer_contact_us_email)});
+            intentEmail.putExtra(Intent.EXTRA_TEXT, String.format("Device Name : %s\nAndroid Version : %s\nApplication Version : %s\n",
+                Build.MODEL,
+                Build.VERSION.RELEASE,
+                AppManager.getInstance().getAppVersion(getActivity())
+            ));
+            startActivity(Intent.createChooser(intentEmail, getString(R.string.navigation_drawer_contact_us_email_intent_title)));
         });
         return view;
     }

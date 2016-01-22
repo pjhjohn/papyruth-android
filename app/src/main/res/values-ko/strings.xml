@@ -13,6 +13,7 @@
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
     <string name="navigation_drawer_contact_us">버그 및 의견 보내기</string>
+    <string name="navigation_drawer_contact_us_email_intent_title">버그 및 의견을 보낼 앱을 선택해주세요</string>
 
     <!-- Toolbar -->
     <string name="toolbar_home">@string/navigation_drawer_item_home</string>
