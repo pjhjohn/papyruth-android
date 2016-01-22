@@ -16,6 +16,7 @@ import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.CourseItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
+import com.papyruth.android.recyclerview.viewholder.HeaderViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -99,7 +100,7 @@ public class SimpleCourseAdapter extends TrackerAdapter{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position <= mIndexHeader) return;
+        if (position <= mIndexHeader) {((HeaderViewHolder) holder).bind(R.color.toolbar_red); return;}
         if (position == mIndexInform) return;
         if (position == mIndexSingle) return;
         if (position == mIndexShadow) return;

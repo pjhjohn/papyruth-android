@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.papyruth.android.R;
 import com.papyruth.android.model.OpenSourceLicenseData;
+import com.papyruth.android.recyclerview.viewholder.HeaderViewHolder;
 import com.papyruth.android.recyclerview.viewholder.OpenSourceLicenseViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
@@ -37,7 +38,7 @@ public class OpenSourceLicensesAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position <= mIndexHeader) return;
+        if (position <= mIndexHeader) {((HeaderViewHolder) holder).bind(R.color.toolbar_blue); return;}
         ((OpenSourceLicenseViewHolder) holder).bind(mOpenSourceLicenseDataList.get(position - mIndexContent));  // 1 for header
     }
 

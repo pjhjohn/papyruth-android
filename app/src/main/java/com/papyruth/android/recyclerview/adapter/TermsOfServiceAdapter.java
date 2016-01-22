@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import com.papyruth.android.R;
 import com.papyruth.android.model.TermData;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
+import com.papyruth.android.recyclerview.viewholder.HeaderViewHolder;
 import com.papyruth.android.recyclerview.viewholder.TermViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -54,7 +55,7 @@ public class TermsOfServiceAdapter extends TrackerAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position <= mIndexHeader) return;
+        if (position <= mIndexHeader) {((HeaderViewHolder) holder).bind(R.color.toolbar_blue); return;}
         if (position == mIndexFooter) return;
         ((TermViewHolder) holder).bind(mTerms.get(position - mIndexContent));
     }

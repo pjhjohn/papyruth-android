@@ -17,6 +17,7 @@ import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.EvaluationItemDetailViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
+import com.papyruth.android.recyclerview.viewholder.HeaderViewHolder;
 import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
@@ -113,7 +114,7 @@ public class EvaluationItemsDetailAdapter extends TrackerAdapter implements IAda
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position <= mIndexHeader) return;
+        if (position <= mIndexHeader) {((HeaderViewHolder) holder).bind(R.color.toolbar_red); return;}
         if (position == mIndexInform) {((InformViewHolder) holder).bind(R.string.inform_home, R.color.inform_evaluation_item_detail); return; }
         if (position == mIndexSingle) return;
         if (position == mIndexShadow) return;

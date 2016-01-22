@@ -17,6 +17,7 @@ import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.viewholder.CourseItemViewHolder;
 import com.papyruth.android.recyclerview.viewholder.FooterViewHolder;
+import com.papyruth.android.recyclerview.viewholder.HeaderViewHolder;
 import com.papyruth.android.recyclerview.viewholder.InformViewHolder;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
 import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
@@ -120,7 +121,7 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(position <= mIndexHeader) return;
+        if(position <= mIndexHeader) {((HeaderViewHolder) holder).bind(R.color.toolbar_red); return;}
         if(position == mIndexInform) {
             ((InformViewHolder) holder).bind(R.string.inform_favorite, R.color.inform_favorite);
             return;
