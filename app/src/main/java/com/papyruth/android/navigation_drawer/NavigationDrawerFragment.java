@@ -123,10 +123,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             Intent intentEmail = new Intent(Intent.ACTION_SEND);
             intentEmail.setType("message/rfc822");
             intentEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.navigation_drawer_contact_us_email)});
-            intentEmail.putExtra(Intent.EXTRA_TEXT, String.format("Device Name : %s\nAndroid Version : %s\nApplication Version : %s\n",
+            intentEmail.putExtra(Intent.EXTRA_TEXT, String.format("Device Name : %s\nAndroid Version : %s\nApplication Version : %s\n%s\n",
                 Build.MODEL,
                 Build.VERSION.RELEASE,
-                AppManager.getInstance().getAppVersion(getActivity())
+                AppManager.getInstance().getAppVersion(getActivity()),
+                "--------------------------------------------------"
             ));
             startActivity(Intent.createChooser(intentEmail, getString(R.string.navigation_drawer_contact_us_email_intent_title)));
         });
