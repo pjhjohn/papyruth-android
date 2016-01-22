@@ -3,7 +3,9 @@ package com.papyruth.android.navigation_drawer;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.CircleTransformation;
+import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.search.SearchToolbar;
@@ -81,6 +85,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     @Bind(R.id.navigation_drawer_header_email)      protected TextView mUserEmail;
     @Bind(R.id.navigation_drawer_header_avatar)     protected ImageView mUserAvatar;
     @Bind(R.id.navigation_drawer_recyclerview)      protected RecyclerView mNavigationRecyclerView;
+    @Bind(R.id.contact_us)                          protected FrameLayout mContactUs;
     private NavigationDrawerAdapter mNavigationDrawerAdapter;
 
     @Override
@@ -111,6 +116,16 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mNavigationRecyclerView.setHasFixedSize(true);
         mNavigationRecyclerView.setAdapter(mNavigationDrawerAdapter);
         selectDrawerItem(mCurrentSelectedPosition, false);
+
+        Picasso.with(getActivity()).load(R.drawable.ic_email_24dp).transform(new ColorFilterTransformation(getResources().getColor(R.color.icon_material))).into(((ImageView) mContactUs.findViewById(R.id.navigation_drawer_item_icon)));
+        ((TextView) mContactUs.findViewById(R.id.navigation_drawer_item_label)).setText(R.string.navigation_drawer_contact_us);
+        mContactUs.setOnClickListener(v -> {
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("message/rfc822");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, Uri.parse(getString(R.string.contact_email)));
+            Intent chooser = Intent.createChooser(emailIntent, "email");
+            startActivity(chooser);
+        });
         return view;
     }
 

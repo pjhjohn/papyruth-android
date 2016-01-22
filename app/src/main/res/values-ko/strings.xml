@@ -12,6 +12,7 @@
     <string name="navigation_drawer_item_my_comment">나의 댓글</string>
     <string name="navigation_drawer_open"/>
     <string name="navigation_drawer_close"/>
+    <string name="navigation_drawer_contact_us">버그 및 의견 보내기</string>
 
     <!-- Toolbar -->
     <string name="toolbar_home">@string/navigation_drawer_item_home</string>
