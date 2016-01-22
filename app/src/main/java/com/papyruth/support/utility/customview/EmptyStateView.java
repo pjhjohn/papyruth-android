@@ -106,9 +106,11 @@ public class EmptyStateView extends RelativeLayout {
         mBody.setText(mBodyText);
         mBody.setTextColor(getResources().getColor(mBodyTextColorResId));
         this.setBackgroundResource(mBackgroundColorResId);
+        this.mEmptyStateContainer.setVisibility(View.VISIBLE);
         AnimatorHelper.FADE_IN(this).start();
     }
     public void hide() {
+        this.mEmptyStateContainer.setVisibility(View.GONE);
         AnimatorHelper.FADE_OUT(this).start();
     }
 }
