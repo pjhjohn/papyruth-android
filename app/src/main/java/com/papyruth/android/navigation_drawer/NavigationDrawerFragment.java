@@ -92,7 +92,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         ButterKnife.bind(this, view);
-        if(mHeaderBackgroundDrawableRes != 0) Picasso.with(getActivity()).load(mHeaderBackgroundDrawableRes).into(mHeaderBackground);
 
         mHeader.setOnClickListener(subtitleView -> {
             mNavigator.navigate(ProfileFragment.class, true);
@@ -211,6 +210,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public void update() {
         final String avatarUrl = User.getInstance().getAvatarUrl();
         if (avatarUrl != null) Picasso.with(mActivity).load(avatarUrl).transform(new CircleTransformation()).into(mUserAvatar);
+        if(mHeaderBackgroundDrawableRes != 0) Picasso.with(getActivity()).load(mHeaderBackgroundDrawableRes).into(mHeaderBackground);
     }
 
     /* Menu : TODO - What exactly this does? */

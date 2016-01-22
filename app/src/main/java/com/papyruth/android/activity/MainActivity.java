@@ -91,7 +91,6 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
 
         mNavigationDrawer = (NavigationDrawerFragment) this.getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawer.setup(R.id.navigation_drawer, mNavigationDrawerLayout, mToolbar);
-        mNavigationDrawer.update();
         mNavigator = new FragmentNavigator(mNavigationDrawer, this.getFragmentManager(), R.id.main_navigator, HomeFragment.class, mMaterialMenuDrawable, MaterialMenuDrawable.IconState.BURGER, mToolbar);
 
         ViewHolderFactory.getInstance().setContext(this);
@@ -118,6 +117,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     @Override
     public void onResume() {
         super.onResume();
+        mNavigationDrawer.update();
         if(SearchToolbar.getInstance().isOpened()) Observable.timer(100, TimeUnit.MILLISECONDS).subscribe(unused -> SearchToolbar.getInstance().showSoftKeyboard());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
