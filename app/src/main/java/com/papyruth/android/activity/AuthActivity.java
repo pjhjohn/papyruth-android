@@ -12,10 +12,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.BuildConfig;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.auth.SignInFragment;
@@ -48,6 +50,7 @@ public class AuthActivity extends Activity implements com.papyruth.support.utili
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
         mTracker = ((PapyruthApplication) getApplication()).getTracker();
+        Crashlytics.setBool(getResources().getString(R.string.crashlytics_key_debug_mode), BuildConfig.DEBUG);
         ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         mNavigator = new FragmentNavigator(this.getFragmentManager(), R.id.auth_navigator, SignInFragment.class);

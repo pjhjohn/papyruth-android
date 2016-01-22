@@ -15,6 +15,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
+import com.papyruth.android.BuildConfig;
 import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.CourseFragment;
@@ -67,6 +68,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         Crashlytics.setUserEmail(User.getInstance().getEmail());
         Crashlytics.setUserName(User.getInstance().getNickname());
         Crashlytics.setString(getResources().getString(R.string.crashlytics_key_university), User.getInstance().getUniversityName());
+        Crashlytics.setBool(getResources().getString(R.string.crashlytics_key_debug_mode), BuildConfig.DEBUG);
 
         ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);

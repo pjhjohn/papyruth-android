@@ -210,8 +210,6 @@
     <string name="ime_next">다음</string>
     <string name="ime_signup">회원가입</string>
 
-    <!--Crashlytics-->
-    <string name="crashlytics_key_university">대학교</string>
     <!--Search-->
     <string name="search_candidate_type_lecture">과목</string>
     <string name="search_candidate_type_course">강의</string>

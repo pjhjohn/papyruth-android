@@ -210,7 +210,8 @@
     <string name="ime_signup">SignUp</string>
 
     <!--Crashlytics-->
-    <string name="crashlytics_key_university">university</string>
+    <string name="crashlytics_key_university" translatable="false">university</string>
+    <string name="crashlytics_key_debug_mode" translatable="false">debugging mode</string>
     <!--Search-->
     <string name="search_candidate_type_lecture">LECTURE</string>
     <string name="search_candidate_type_course">COURSE</string>

@@ -12,7 +12,6 @@ import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.ApiManager;
 import com.papyruth.support.opensource.retrofit.RetrofitLogger;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.error.*;
 import com.papyruth.support.utility.error.Error;
 import com.squareup.picasso.Picasso;
 
@@ -52,7 +51,8 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
         });
 
         /* Fabric for Crashlytics */
-        Fabric.with(this, new Crashlytics());
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(true).build();
+        Fabric.with(fabric);
 
         /* Timber */
         Timber.plant(new Timber.DebugTree());
