@@ -80,7 +80,7 @@ public class EvaluationSearchAdapter extends TrackerAdapter{
             viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
                 if (position == mIndexFooter) {
                     mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY);
-                } else
+                } else if(position - mIndexContent >= 0 && position - mIndexContent < mCourses.size())
                     mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCourses.get(position - mIndexContent));
             });
         }

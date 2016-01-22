@@ -103,7 +103,7 @@ public class MyEvaluationItemsAdapter extends TrackerAdapter implements IAdapter
             } else if (position == mIndexFooter) {
                 if (mFullyLoaded)
                     mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY);
-            } else
+            } else if(position - mIndexContent >= 0 && position - mIndexContent < mMyEvaluation.size())
                 mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mMyEvaluation.get(position - mIndexContent));
         });
         if (viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) {

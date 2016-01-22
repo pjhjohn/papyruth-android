@@ -82,7 +82,7 @@ public class SimpleCourseAdapter extends TrackerAdapter{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position)->{
             if(position == mIndexFooter) { mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
-            else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCourses.get(position - mIndexContent));
+            else if(position - mIndexContent >= 0 && position - mIndexContent < mCourses.size()) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCourses.get(position - mIndexContent));
         });
         if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);

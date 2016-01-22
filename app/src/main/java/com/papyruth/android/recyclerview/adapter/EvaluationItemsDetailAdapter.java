@@ -96,7 +96,7 @@ public class EvaluationItemsDetailAdapter extends TrackerAdapter implements IAda
                 }
             }
             else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
-            else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mEvaluations.get(position - mIndexContent));
+            else if(position - mIndexContent >= 0 && position - mIndexContent < mEvaluations.size()) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mEvaluations.get(position - mIndexContent));
         });
         if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);

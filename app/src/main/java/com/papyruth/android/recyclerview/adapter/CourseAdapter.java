@@ -118,7 +118,7 @@ public class CourseAdapter extends TrackerAdapter implements IAdapter {
             }
             else if(position == mIndexSingle) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Evaluation.getInstance());
             else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
-            else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mEvaluations.get(position - mIndexContent));
+            else if(position >= mIndexContent && position - mIndexContent < mEvaluations.size()) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mEvaluations.get(position - mIndexContent));
         });
         if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);

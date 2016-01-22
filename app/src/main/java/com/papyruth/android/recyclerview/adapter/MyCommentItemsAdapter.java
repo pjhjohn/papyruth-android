@@ -101,7 +101,7 @@ public class MyCommentItemsAdapter extends TrackerAdapter implements IAdapter{
                 }
             }
             else if(position == mIndexFooter) { if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
-            else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mMyComments.get(position - mIndexContent));
+            else if(position - mIndexContent >= 0 && position - mIndexContent < mMyComments.size()) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mMyComments.get(position - mIndexContent));
         });
         if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);

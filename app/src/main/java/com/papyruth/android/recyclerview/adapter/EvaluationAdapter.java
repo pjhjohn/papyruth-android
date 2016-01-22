@@ -117,7 +117,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             }
             else if(position == mIndexSingle) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Evaluation.getInstance());
             else if(position == mIndexFooter) { mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY); }
-            else if(position - mIndexContent < mComments.size() && position > 0) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mComments.get(position - mIndexContent));
+            else if(position - mIndexContent < mComments.size() && position >= mIndexContent) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mComments.get(position - mIndexContent));
         });
         if (viewType == ViewHolderFactory.ViewType.SHADOW && viewholder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewholder.itemView.findViewById(R.id.cardview_shadow);

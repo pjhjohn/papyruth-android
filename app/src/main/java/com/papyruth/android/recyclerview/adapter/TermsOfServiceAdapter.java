@@ -44,7 +44,7 @@ public class TermsOfServiceAdapter extends TrackerAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position)-> {
             if(viewType == ViewHolderFactory.ViewType.TERM)
-                mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mTerms.get(position - mIndexContent));
+                if(position - mIndexContent >= 0 && position - mIndexContent < mTerms.size()) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mTerms.get(position - mIndexContent));
         });
         if (viewHolder instanceof FooterViewHolder) {
             mFooterBorder = viewHolder.itemView.findViewById(R.id.footer_border);

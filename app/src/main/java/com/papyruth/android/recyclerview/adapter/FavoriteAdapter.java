@@ -103,7 +103,7 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
                 }
             } else if(position == mIndexFooter) {
                 if(mFullyLoaded) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, Footer.DUMMY);
-            } else mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mFavorites.get(position - mIndexContent).course);
+            } else if(position - mIndexContent >= 0 && position - mIndexContent < mFavorites.size()) mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mFavorites.get(position - mIndexContent).course);
         });
         if(viewType == ViewHolderFactory.ViewType.SHADOW && viewHolder instanceof VoidViewHolder) {
             mShadow = (FrameLayout) viewHolder.itemView.findViewById(R.id.cardview_shadow);
