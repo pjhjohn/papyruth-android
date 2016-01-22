@@ -346,8 +346,9 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(course -> {
                     Course.getInstance().update(course);
-//                    this.getFragmentManager().beginTransaction().addToBackStack(this.getClass().getSimpleName()).commit();
-                    mNavigator.navigate(CourseFragment.class, true);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(AppConst.Bundle.TOOLBAR_ANIMATION, false);
+                    mNavigator.navigate(CourseFragment.class, bundle, true);
                 }, error -> ErrorHandler.handle(error, this, true)
             );
         } else if(object instanceof Footer) {

@@ -79,6 +79,6 @@
         <include layout="@layout/hr_nav_drawer"/>
         <include
             layout="@layout/cardview_navigation_drawer_item"
-            android:id="@+id/contact_us"/>
+            android:id="@+id/navigation_drawer_contact_us"/>
     </LinearLayout>
 </RelativeLayout>

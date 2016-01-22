@@ -85,7 +85,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     @Bind(R.id.navigation_drawer_header_email)      protected TextView mUserEmail;
     @Bind(R.id.navigation_drawer_header_avatar)     protected ImageView mUserAvatar;
     @Bind(R.id.navigation_drawer_recyclerview)      protected RecyclerView mNavigationRecyclerView;
-    @Bind(R.id.contact_us)                          protected FrameLayout mContactUs;
+    @Bind(R.id.navigation_drawer_contact_us)        protected FrameLayout mContactUs;
     private NavigationDrawerAdapter mNavigationDrawerAdapter;
 
     @Override

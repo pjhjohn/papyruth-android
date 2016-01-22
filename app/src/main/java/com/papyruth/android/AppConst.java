@@ -73,6 +73,10 @@ public class AppConst {
         public static final String ACTIVE_FRAGMENT = "FRAGMENT";
     }
 
+    public static class Bundle{
+        public static final String TOOLBAR_ANIMATION = "toolbar_animation";
+    }
+
     public static class Menu {
         public static final int SEARCH = R.id.menu_search;
         public static final int SETTING = R.id.menu_setting;

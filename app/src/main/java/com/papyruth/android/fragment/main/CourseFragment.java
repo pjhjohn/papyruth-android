@@ -1,5 +1,6 @@
 package com.papyruth.android.fragment.main;
 
+import android.os.Bundle;
 import android.view.View;
 
 import com.papyruth.android.AppConst;
@@ -25,6 +26,14 @@ import java.util.concurrent.TimeUnit;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
+    private boolean mToolbarAnimation;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mToolbarAnimation = this.getArguments().getBoolean(AppConst.Bundle.TOOLBAR_ANIMATION, true);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -45,8 +54,10 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     @Override
     protected void setToolbarOptions() {
         this.mToolbar.setTitle(R.string.toolbar_course);
-//        ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar_green));
+
+        if(mToolbarAnimation) ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_green).start();
+        else mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar_green));
+
         if(!mEvaluationOpened) setStatusBarOptions();
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, true);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);

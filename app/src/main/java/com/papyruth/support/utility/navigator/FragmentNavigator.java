@@ -49,6 +49,7 @@ public class FragmentNavigator implements Navigator {
         final Fragment current = this.manager.findFragmentById(this.containerViewId);
         Fragment next = this.instantiateFragment(target);
         if(bundle != null) next.setArguments(bundle);
+        else next.setArguments(new Bundle());
         if(current != null && current.getClass().getSimpleName().equals(target.getSimpleName())) return;
         if(clear) {
             this.manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
