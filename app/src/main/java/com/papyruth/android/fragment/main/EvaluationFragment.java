@@ -296,7 +296,9 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     public void showContent(boolean show) {
         ValueAnimator animAlpha = ValueAnimator.ofFloat(show ? 1.0f : 0.0f, show ? 0.0f : 1.0f);
         animAlpha.setDuration(AppConst.ANIM_DURATION_SHORT);
-        animAlpha.addUpdateListener(animator -> mEvaluationCover.setAlpha((float) animator.getAnimatedValue()));
+        animAlpha.addUpdateListener(animator -> {
+            if(mEvaluationCover != null) mEvaluationCover.setAlpha((float) animator.getAnimatedValue());
+        });
         animAlpha.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
