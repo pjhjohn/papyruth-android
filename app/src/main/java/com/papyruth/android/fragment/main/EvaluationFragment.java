@@ -143,7 +143,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         });
 
         /* Initialize Others */
-        if(!mCommentInputActive) mCommentInput.setVisibility(View.GONE);
+        if(!mCommentInputActive && mCommentInput != null) mCommentInput.setVisibility(View.GONE);
         return view;
     }
 
