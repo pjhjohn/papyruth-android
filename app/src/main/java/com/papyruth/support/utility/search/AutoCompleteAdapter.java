@@ -63,7 +63,10 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(viewType == ViewHolderFactory.ViewType.HR_WHITE || viewType == ViewHolderFactory.ViewType.TOOLBAR_SHADOW) {
             viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, null);
         } else {
-            viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCandidates.get(position - mIndexContent)) );
+            viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
+                if(position - mIndexContent >= 0 && position - mIndexContent < mCandidates.size())
+                    mRecyclerViewItemObjectClickListener.onRecyclerViewItemObjectClick(view, mCandidates.get(position - mIndexContent));
+            } );
         }
         return viewHolder;
     }
@@ -72,7 +75,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(position <= mIndexHeader) return;
         if(position == mIndexShadow) return;
-        if(!mCandidates.isEmpty()) ((AutoCompleteResponseViewHolder) holder).bind(mCandidates.get(position - mIndexContent), isHistory);
+        if(!mCandidates.isEmpty() && position - mIndexContent >= 0 && position - mIndexContent < mCandidates.size()) ((AutoCompleteResponseViewHolder) holder).bind(mCandidates.get(position - mIndexContent), isHistory);
     }
 
     @Override
