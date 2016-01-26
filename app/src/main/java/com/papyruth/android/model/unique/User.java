@@ -107,9 +107,8 @@ public class User {
     }
 
     public boolean mandatoryEvaluationsRequired(){ return this.mandatory_evaluation_count > 0; }
-    public boolean emailConfirmationRequired(){
-//        return false; // TODO: when apply new confirmed api, this code MUST change following code.
-        return !this.getConfirmed();
+    public boolean emailConfirmationRequired() {
+        return this.confirmed == null || !this.confirmed;
     }
 
     public void update(UserData user) {
