@@ -72,7 +72,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(position <= mIndexHeader) return;
         if(position == mIndexShadow) return;
-        ((AutoCompleteResponseViewHolder) holder).bind(mCandidates.get(position - mIndexContent), isHistory);
+        if(!mCandidates.isEmpty()) ((AutoCompleteResponseViewHolder) holder).bind(mCandidates.get(position - mIndexContent), isHistory);
     }
 
     @Override
