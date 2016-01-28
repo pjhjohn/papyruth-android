@@ -51,20 +51,21 @@
 
         <!-- Google Analytics -->
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background dispatching on non-Google Play devices -->
-        <receiver
-            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
-            </intent-filter>
-        </receiver>
-        <service
-            android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </service>
+        <!-- REMOVE following 2 options. Because, suppose these occurred to null point exception when application running background. -->
+        <!--<receiver-->
+            <!--android:name="com.google.android.gms.analytics.AnalyticsReceiver"-->
+            <!--android:enabled="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<service-->
+            <!--android:name="com.google.android.gms.analytics.AnalyticsService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.android.vending.INSTALL_REFERRER" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
     </application>
 </manifest>
