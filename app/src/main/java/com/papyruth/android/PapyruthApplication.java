@@ -30,6 +30,7 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
     synchronized public Tracker getTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            if(BuildConfig.DEBUG) GoogleAnalytics.getInstance(this).setDryRun(true);
             mTracker = analytics.newTracker(R.xml.ga_tracker);
         }
         mTracker.setAppName(getResources().getString(R.string.application_title));
@@ -46,7 +47,7 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
 
         Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
             exception.printStackTrace();
-            onReportToGoogleAnalytics(exception.getMessage(), this.getClass().getSimpleName(), false);
+            onReportToGoogleAnalytics(exception.getMessage(), this.getClass().getSimpleName(), true);
             System.exit(1);
         });
 
@@ -83,6 +84,6 @@ public class PapyruthApplication extends Application implements Error.OnReportTo
     public void onReportToGoogleAnalytics(String cause, String from, boolean isFatal) {
         Timber.d("Application.onReportToGoogleAnalytics from %s\nCause : %s", from, cause);
         String description = Error.description(String.format("UncaughtExeption from %s : %s", from, cause));
-        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(isFatal).build());
+        getTracker().send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(isFatal).build());
     }
 }

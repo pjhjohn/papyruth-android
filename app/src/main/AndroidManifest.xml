@@ -61,6 +61,10 @@
         <service
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>
