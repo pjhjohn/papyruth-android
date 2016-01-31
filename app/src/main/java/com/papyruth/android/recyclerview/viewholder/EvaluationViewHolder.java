@@ -3,7 +3,10 @@ package com.papyruth.android.recyclerview.viewholder;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -109,31 +112,76 @@ public class EvaluationViewHolder extends RecyclerView.ViewHolder implements Vie
             Picasso.with(mContext).load(evaluation.getAvatarUrl()).transform(new CircleTransformation()).into(mAvatar);
             mNickname.setText(evaluation.getUserNickname());
             mTimestamp.setText(DateTimeHelper.timestamp(evaluation.getCreatedAt(), AppConst.DateFormat.DATE));
-            mLabelOverall.setText(R.string.evaluation_label_point_overall);
-            PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
-            mLabelClarity.setText(R.string.evaluation_label_point_clarity);
-            mPostfixClarity.setText(R.string.evaluation_point_denominator);
-            mPostfixClarity.setTextColor(mContext.getResources().getColor(R.color.point_clarity));
-            PointHelper.applyProgress(mContext, mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
-            mLabelEasiness.setText(R.string.evaluation_label_point_easiness);
-            mPostfixEasiness.setText(R.string.evaluation_point_denominator);
-            mPostfixEasiness.setTextColor(mContext.getResources().getColor(R.color.point_easiness));
-            PointHelper.applyProgress(mContext, mLabelEasiness, mPointEasiness, mPostfixEasiness, evaluation.getPointEasiness());
-            mLabelGpaSatisfaction.setText(R.string.evaluation_label_point_gpa_satisfaction);
-            mPostfixGpaSatisfaction.setText(R.string.evaluation_point_denominator);
-            mPostfixGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_gpa_satisfaction));
-            PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
-            mBody.setText(evaluation.getBody());
-            mHashtags.setText(Hashtag.plainString(evaluation.getHashTag()));
-            mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
-            AnimatorHelper.FADE_OUT(mProgressbar).start();
+            if(
+                evaluation.getUniversityConfirmationNeeded()
+                    && !User.getInstance().getUniversityConfirmed()
+                ) {
+                String messageEvaluationForbidden = String.format(mContext.getResources().getString(R.string.evaluation_forbidden),
+                    User.getInstance().emailConfirmationRequired()?
+                        mContext.getString(R.string.evaluation_forbidden_email_confirmation_required) :
+                        User.getInstance().mandatoryEvaluationsRequired()?
+                            mContext.getString(R.string.evaluation_forbidden_mandatory_evaluation_required) :
+                            mContext.getString(R.string.evaluation_forbidden_university_confirmation_required)
+                );
+                mBody.setTextColor(mContext.getResources().getColor(R.color.colorchip_red));
+                mBody.setText(messageEvaluationForbidden);
+
+                mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                mPointOverall.setText(mContext.getString(R.string.evaluation_point_hidden));
+                for(int i = 0; i < 3; i++) ((LayerDrawable) mRatingBarOverall.getProgressDrawable()).getDrawable(i).setColorFilter(mContext.getResources().getColor(R.color.white_60p), PorterDuff.Mode.SRC_ATOP);
+                mRatingBarOverall.setRating(10);
+
+                mLabelClarity.setText(R.string.evaluation_label_point_clarity);
+                mLabelClarity.setTextColor(mContext.getResources().getColor(R.color.point_none));
+                mPointClarity.setText(R.string.evaluation_point_hidden);
+                mPointClarity.setTextColor(mContext.getResources().getColor(R.color.point_none));
+                mPostfixClarity.setText(R.string.empty);
+                mPostfixClarity.setTextColor(mContext.getResources().getColor(R.color.point_none));
+
+                mLabelEasiness.setText(R.string.evaluation_label_point_easiness);
+                mLabelEasiness.setTextColor(mContext.getResources().getColor(R.color.point_none));
+                mPointEasiness.setText(R.string.evaluation_point_hidden);
+                mPointEasiness.setTextColor(mContext.getResources().getColor(R.color.point_none));
+                mPostfixEasiness.setText(R.string.empty);
+                mPostfixEasiness.setTextColor(mContext.getResources().getColor(R.color.point_none));
+
+                mLabelGpaSatisfaction.setText(R.string.evaluation_label_point_gpa_satisfaction);
+                mLabelGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_none));
+                mPointGpaSatisfaction.setText(R.string.evaluation_point_hidden);
+                mPointGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_none));
+                mPostfixGpaSatisfaction.setText(R.string.empty);
+                mPostfixGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_none));
+
+                mHashtags.setVisibility(View.GONE);
+            }else {
+                mPointOverall.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                mLabelOverall.setText(R.string.evaluation_label_point_overall);
+                PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.getPointOverall());
+                mLabelClarity.setText(R.string.evaluation_label_point_clarity);
+                mPostfixClarity.setText(R.string.evaluation_point_denominator);
+                mPostfixClarity.setTextColor(mContext.getResources().getColor(R.color.point_clarity));
+                PointHelper.applyProgress(mContext, mLabelClarity, mPointClarity, mPostfixClarity, evaluation.getPointClarity());
+                mLabelEasiness.setText(R.string.evaluation_label_point_easiness);
+                mPostfixEasiness.setText(R.string.evaluation_point_denominator);
+                mPostfixEasiness.setTextColor(mContext.getResources().getColor(R.color.point_easiness));
+                PointHelper.applyProgress(mContext, mLabelEasiness, mPointEasiness, mPostfixEasiness, evaluation.getPointEasiness());
+                mLabelGpaSatisfaction.setText(R.string.evaluation_label_point_gpa_satisfaction);
+                mPostfixGpaSatisfaction.setText(R.string.evaluation_point_denominator);
+                mPostfixGpaSatisfaction.setTextColor(mContext.getResources().getColor(R.color.point_gpa_satisfaction));
+                PointHelper.applyProgress(mContext, mLabelGpaSatisfaction, mPointGpaSatisfaction, mPostfixGpaSatisfaction, evaluation.getPointGpaSatisfaction());
+                mBody.setText(evaluation.getBody());
+                mHashtags.setText(Hashtag.plainString(evaluation.getHashTag()));
+                mVoteStatus = VoteHelper.applyStatus(mContext, mVoteUpIcon, mVoteUpCount, mVoteDownIcon, mVoteDownCount, evaluation);
+            }
             final int commentCount = evaluation.getCommentCount();
-            if(commentCount <= 0) mCommentCount.setText(mContext.getResources().getString(R.string.evaluation_no_comments));
+            if (commentCount <= 0) mCommentCount.setText(mContext.getResources().getString(R.string.evaluation_no_comments));
             else mCommentCount.setText(String.format(mContext.getResources().getQuantityString(R.plurals.comments, commentCount), commentCount));
-            if(loadMore) {
+            if (loadMore) {
                 mCommentMore.setVisibility(View.VISIBLE);
                 mCommentMore.setText(R.string.data_load_more);
             } else mCommentMore.setVisibility(View.GONE);
+
+            AnimatorHelper.FADE_OUT(mProgressbar).start();
         } else {
             AnimatorHelper.FADE_IN(mProgressbar).start();
         }

@@ -29,6 +29,7 @@ public class Evaluation {
     private Integer request_user_vote; // 1 for up-vote, 0 for down-vote, null for neither.
     private List<String> hashTag;
     public Integer category;
+    private Boolean university_confirmation_needed;
 
     private static Evaluation instance = null;
     private Evaluation() {
@@ -84,6 +85,8 @@ public class Evaluation {
     public void addHashTag(String hashtag){ this.hashTag.add(hashtag); }
     public Integer getCategory() { return this.category; }
     public void setCategory(Integer category) { this.category = category; }
+    public Boolean getUniversityConfirmationNeeded() {return university_confirmation_needed == null ? false : university_confirmation_needed;}
+    public void setUniversityConfirmationNeeded(Boolean university_confirmation_needed) {this.university_confirmation_needed = university_confirmation_needed;}
 
     public boolean hasContents(){
         return this.body != null && this.id != null && this.user_id != null && this.course_id != null;
@@ -108,6 +111,7 @@ public class Evaluation {
         if(evaluation.comment_count != null)            this.comment_count = evaluation.comment_count;
         if(evaluation.avatar_url != null)               this.avatar_url = evaluation.avatar_url;
         if(evaluation.lecture_category != null)         this.category = evaluation.lecture_category;
+        if(evaluation.university_confirmation_needed != null) this.university_confirmation_needed = evaluation.university_confirmation_needed;
         if(!evaluation.hashtags.isEmpty()) {
             this.hashTag.clear();
             this.hashTag.addAll(evaluation.hashtags);
@@ -136,5 +140,6 @@ public class Evaluation {
         this.request_user_vote = null;
         this.hashTag.clear();
         this.category = null;
+        this.university_confirmation_needed = null;
     }
 }

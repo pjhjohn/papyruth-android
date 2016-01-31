@@ -206,7 +206,7 @@
                         android:layout_toStartOf="@+id/evaluation_clarity_postfix"
                         android:textSize="22sp"
                         android:textColor="@color/point_clarity"
-                        roboto:textWeight="medium"/><!-- Clarity Point -->
+                        roboto:textWeight="bold"/><!-- Clarity Point -->
                     <com.devspark.robototextview.widget.RobotoTextView
                         android:id="@+id/evaluation_clarity_postfix"
                         android:layout_width="wrap_content"
