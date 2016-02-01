@@ -78,6 +78,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         mCommentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
 
         if(evaluation.isValidData()) {
+            mBody.setTextColor(mContext.getResources().getColor(R.color.white_40p));
             mBody.setText(evaluation.body);
             PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
             mHashtags.setText(Hashtag.plainString(evaluation.hashtags));
