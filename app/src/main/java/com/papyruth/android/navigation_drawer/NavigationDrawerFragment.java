@@ -135,6 +135,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        this.update();
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);

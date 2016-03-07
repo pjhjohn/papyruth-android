@@ -117,7 +117,6 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     @Override
     public void onResume() {
         super.onResume();
-        mNavigationDrawer.update();
         if(SearchToolbar.getInstance().isOpened()) Observable.timer(100, TimeUnit.MILLISECONDS).subscribe(unused -> SearchToolbar.getInstance().showSoftKeyboard());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
