@@ -20,7 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class EsSplashActivityTest {
+public class SplashActivityTest {
     @Rule public ActivityTestRule<SplashActivity> mActivityRule = new ActivityTestRule(SplashActivity.class);
 
     @Test

@@ -1,10 +1,12 @@
 package com.papyruth.android.fragment.Auth;
 
 import android.content.Context;
+import android.support.test.espresso.action.EspressoKey;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.KeyEvent;
 
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
@@ -61,21 +63,26 @@ public class SignInFragmentTest {
         // case 1
         onView(withId(R.id.signin_email_text)).perform(ViewActions.clearText(), ViewActions.typeText("22222"));
         onView(withId(R.id.signin_password_text)).perform(ViewActions.click(), ViewActions.clearText(), ViewActions.typeText("322222"));
-        onView(isRoot()).perform(TestHelper.ErrorMessage.waitErrorMsg(R.id.signin_email_text, 5000, true));
-        onView(isRoot()).perform(TestHelper.ErrorMessage.waitErrorMsg(R.id.signin_password_text, 5000, true));
-        onView(withId(R.id.signin_email_text)).check(matches(TestHelper.ErrorMessage.withError("잘못된 이메일 형식입니다")));
-        onView(withId(R.id.signin_password_text)).perform(ViewActions.click()).check(matches(TestHelper.ErrorMessage.withError("비밀번호가 너무 짧습니다")));
+        onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signin_email_text, 5000, true));
+        onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signin_password_text, 5000, true));
+        onView(withId(R.id.signin_email_text)).check(matches(TestHelper.TextViewHelper.withError("잘못된 이메일 형식입니다")));
+        onView(withId(R.id.signin_password_text)).perform(ViewActions.click()).check(matches(TestHelper.TextViewHelper.withError("비밀번호가 너무 짧습니다")));
 
         //case 2
         onView(withId(R.id.signin_email_text)).perform(ViewActions.click(), ViewActions.clearText(), ViewActions.typeText("22222"));
         onView(withId(R.id.signin_password_text)).perform(ViewActions.click(), ViewActions.clearText(), ViewActions.typeText("22222222"));
-        onView(isRoot()).perform(TestHelper.ErrorMessage.waitErrorMsg(R.id.signin_email_text, 5000, true));
-        onView(isRoot()).perform(TestHelper.ErrorMessage.waitErrorMsg(R.id.signin_password_text, 5000, true));
-        onView(withId(R.id.signin_email_text)).check(matches(TestHelper.ErrorMessage.withError("잘못된 이메일 형식입니다")));
+        onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signin_email_text, 5000, true));
+        onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signin_password_text, 5000, true));
+        onView(withId(R.id.signin_email_text)).check(matches(TestHelper.TextViewHelper.withError("잘못된 이메일 형식입니다")));
 
         //case 3
         onView(withId(R.id.signin_email_text)).perform(ViewActions.click(), ViewActions.clearText(), ViewActions.typeText("2@2.2"));
-        onView(isRoot()).perform(TestHelper.ErrorMessage.waitErrorMsg(R.id.signin_email_text, 5000, false));
+        onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signin_email_text, 5000, false));
         onView(withId(R.id.signin_button)).check(matches(isEnabled()));
+    }
+
+    @Test
+    public void testEnterSignUp(){
+        new EspressoKey.Builder().withKeyCode(KeyEvent.KEYCODE_HOME).build();
     }
 }

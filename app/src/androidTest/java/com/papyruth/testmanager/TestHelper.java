@@ -6,6 +6,7 @@ import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.espresso.util.HumanReadables;
 import android.support.test.espresso.util.TreeIterables;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,12 +26,50 @@ import java.util.concurrent.TimeoutException;
  */
 public class TestHelper {
 
+    public static class CommonHelper{
+
+        public static ViewAction waitReveal(final int viewId, final long milliSeconds){
+            return new ViewAction() {
+                @Override
+                public Matcher<View> getConstraints() {
+                    return ViewMatchers.isRoot();
+                }
+
+                @Override
+                public String getDescription() {
+                    return "wait for a specific TextView error not Exist";
+                }
+
+                @Override
+                public void perform(UiController uiController, View view) {
+                    uiController.loopMainThreadUntilIdle();
+                    final long startTime = System.currentTimeMillis();
+                    final long endTime = startTime + milliSeconds;
+                    do{
+                        for(View child : TreeIterables.breadthFirstViewTraversal(view)){
+                            if( child.getId() == viewId && child.getVisibility() == View.VISIBLE) {
+                                return;
+                            }
+                        }
+                        uiController.loopMainThreadForAtLeast(50);
+                    }while (System.currentTimeMillis() < endTime);
+
+                    throw new PerformException.Builder()
+                            .withActionDescription(this.getDescription())
+                            .withViewDescription(HumanReadables.describe(view))
+                            .withCause(new TimeoutException())
+                            .build();
+                }
+            };
+        }
+    }
+
     /**
      * Check TextView show any error.<br/>
      *
      * @author SSS
      **/
-    public static class ErrorMessage {
+    public static class TextViewHelper {
         /**
          * Test view(instance of TextView) has error message.
         **/
@@ -97,6 +136,61 @@ public class TestHelper {
                         .withViewDescription(HumanReadables.describe(view))
                         .withCause(new TimeoutException())
                         .build();
+                }
+            };
+        }
+    }
+    public static class RecyclerViewHelper{
+        public static ViewAction waitItem(final int viewId, final long milliSeconds){
+            return new ViewAction() {
+                @Override
+                public Matcher<View> getConstraints() {
+                    return ViewMatchers.isRoot();
+                }
+
+                @Override
+                public String getDescription() {
+                    return "wait for child view binding";
+                }
+
+                @Override
+                public void perform(UiController uiController, View view) {
+                    uiController.loopMainThreadUntilIdle();
+                    final long startTime = System.currentTimeMillis();
+                    final long endTime = startTime + milliSeconds;
+                    do{
+                        for(View child : TreeIterables.breadthFirstViewTraversal(view)){
+                            if( child instanceof RecyclerView && ((RecyclerView) child).getChildCount() > 0)
+                                return;
+                        }
+                        uiController.loopMainThreadForAtLeast(50);
+                    }while (System.currentTimeMillis() < endTime);
+
+                    throw new PerformException.Builder()
+                            .withActionDescription(this.getDescription())
+                            .withViewDescription(HumanReadables.describe(view))
+                            .withCause(new TimeoutException())
+                            .build();
+                }
+            };
+        }
+
+        public static ViewAction clickItemInsideChildView(final int id){
+            return new ViewAction() {
+                @Override
+                public Matcher<View> getConstraints() {
+                    return null;
+                }
+
+                @Override
+                public String getDescription() {
+                    return null;
+                }
+
+                @Override
+                public void perform(UiController uiController, View view) {
+                    View child = view.findViewById(id);
+                    if(child != null) child.performClick();
                 }
             };
         }
