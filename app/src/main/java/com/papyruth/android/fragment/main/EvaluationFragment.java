@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.github.clans.fab.FloatingActionButton;
 import com.papyruth.android.AppConst;
@@ -32,6 +33,7 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
+import com.papyruth.android.recyclerview.viewholder.EvaluationViewHolder;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
@@ -57,7 +59,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack {
+public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack, View.OnLongClickListener {
     private Navigator mNavigator;
     private RevealFrameLayout mCommentContainer;
     private RelativeLayout mCommentInput;
@@ -92,7 +94,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         mSwipeRefresh.setEnabled(true);
         initSwipeRefresh(mSwipeRefresh);
 
-        mAdapter = new EvaluationAdapter(mContext, mSwipeRefresh, mEmptyState, mToolbar, this);
+        mAdapter = new EvaluationAdapter(mContext, mSwipeRefresh, mEmptyState, mToolbar, this, this);
         mAdapter.setFragment(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.setAdapter(mAdapter);
@@ -363,5 +365,19 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     }
     public void setCommentId(int mCommentId) {
         this.mCommentId = mCommentId;
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Timber.d("longclick!!");
+        CharSequence list1[] = {"수정", "삭제", "신고"};
+        CharSequence list2[] = {"신고"};
+            new MaterialDialog.Builder(this.getActivity())
+                    .items(list1)
+                    .itemsCallback((dialog, itemView, which, text) -> {
+
+                    })
+                    .show();
+            return true;
     }
 }

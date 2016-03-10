@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -49,6 +48,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     private Toolbar mToolbar;
     private List<CommentData> mComments;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
+    private View.OnLongClickListener mLongClickListener;
     private boolean mHideInform;
     private boolean mHideShadow;
     private Integer mSinceId;
@@ -65,13 +65,14 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
 
     private int mCommentId;
 
-    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener) {
+    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener, View.OnLongClickListener longClickListener) {
         mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
         mToolbar = toolbar;
         mComments = new ArrayList<>();
         mRecyclerViewItemObjectClickListener = listener;
+        mLongClickListener = longClickListener;
         mHideInform = AppManager.getInstance().getBoolean(HIDE_INFORM, false);
         mSinceId = null;
         mIndexHeader = 0;
@@ -89,6 +90,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                 .subscribe(evaluationData -> {
                     Evaluation.getInstance().update(evaluationData);
                     mToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
+                    mToolbar.getMenu().findItem(R.id.menu_evaluation_delete).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
                     notifyItemChanged(mIndexSingle);
                 }, error -> ErrorHandler.handle(error, this.getFragment(), true));
         }
@@ -138,10 +140,10 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position <= mIndexHeader) {((HeaderViewHolder) holder).bind(R.color.toolbar_evaluation); return;}
         if (position == mIndexInform) {((InformViewHolder) holder).bind(R.string.inform_evaluation, R.color.inform_evaluation); return; }
-        if (position == mIndexSingle) { ((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), this.isMoreComment()); return; }
+        if (position == mIndexSingle) {((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), this.isMoreComment()); return;}
         if (position == mIndexShadow) return;
         if (position == mIndexFooter) return;
-        if (position - mIndexContent < mComments.size()) ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent));
+        if (position - mIndexContent < mComments.size()) ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent), mLongClickListener);
         if (position - mIndexContent < mComments.size() && mComments.get(position - mIndexContent).id.equals(mCommentId)) {
 //            AnimatorHelper.FOCUS_EFFECT(holder.itemView).start();
             mCommentId = -1;

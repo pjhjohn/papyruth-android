@@ -8,5 +8,12 @@
         android:icon="@drawable/ic_edit_24dp"
         android:orderInCategory="1"
         android:visible="false"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
+    <item
+        android:title="@string/menu_delete_evaluation"
+        android:id="@+id/menu_evaluation_delete"
+        android:icon="@drawable/ic_delete_24dp"
+        android:orderInCategory="2"
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
 </menu>
