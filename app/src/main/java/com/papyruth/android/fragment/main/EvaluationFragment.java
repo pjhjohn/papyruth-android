@@ -37,6 +37,7 @@ import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
 import com.papyruth.android.recyclerview.viewholder.EvaluationViewHolder;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.opensource.materialdialog.DeleteDialog;
 import com.papyruth.support.opensource.materialdialog.ReportDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.EmptyStateView;
@@ -380,9 +381,8 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 .itemsCallback((dialog, itemView, which, text) -> {
                     Timber.d("witch : %s %s", which, text);
                     if (text.equals(popUpCategoryMine[0])) {
-                        Timber.d("witch 삭제");
+                        DeleteDialog.show(getActivity(), DeleteDialog.Type.COMMENT, ()->{});
                     } else if (text.equals(popUpCategoryAnother[0])) {
-                        Timber.d("witch 신고");
                         ReportDialog.show(getActivity(), o -> {
                             Api.papyruth().post_evaluations_report(User.getInstance().getAccessToken(), ((CommentData) object).id, ((String) o))
                                 .subscribe();

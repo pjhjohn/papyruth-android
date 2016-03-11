@@ -22,10 +22,6 @@ import timber.log.Timber;
  */
 
 public class ReportDialog {
-    public static void evaluationReportShow(Context context, Integer id){
-        show(context, object -> {
-        });
-    }
     public static void show(Context context, Action1 action1) {
         new MaterialDialog.Builder(context)
             .title(R.string.dialog_title_report)

@@ -176,6 +176,8 @@
     <string name="dialog_title_failure_change_nickname">Nickname Change Failure</string>
     <string name="dialog_title_failure_change_password">Password Change Failure</string>
     <string name="dialog_title_report">Report</string>
+    <string name="dialog_title_delete_evaluation">Delete Evaluation</string>
+    <string name="dialog_title_delete_comment">Delete Comment</string>
     <!-- Dialog Content -->
     <string name="dialog_content_delete_hashtag">Are you sure to delete this hashtag?</string>
     <string name="dialog_content_password_recovery">Enter email address you want to sign in with.</string>
@@ -189,6 +191,8 @@
     <string name="dialog_content_failure_change_nickname">Nickname : Nickname has been duplicated</string>
     <string name="dialog_content_failure_change_password">Password : Current password is incorrect</string>
     <string name="dialog_content_report">Contents</string>
+    <string name="dialog_content_delete_evaluation">Are you sure to delete this Evaluation?</string>
+    <string name="dialog_content_delete_comment">Are you sure to delete this Comment?</string>
 
     <!-- Dialog Button -->
     <string name="dialog_positive_delete">DELETE</string>
