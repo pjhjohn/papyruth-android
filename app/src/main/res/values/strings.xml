@@ -37,6 +37,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_edit_evaluation">Edit Evaluation</string>
     <string name="menu_delete_evaluation">Delete Evaluation</string>
+    <string name="menu_report_evaluation">Report Evaluation</string>
 
     <!-- Sign-in & Sign-up -->
     <string name="signin_btn">SIGN IN</string>
@@ -174,6 +175,7 @@
     <string name="dialog_title_failure_register_university_email">University Email</string>
     <string name="dialog_title_failure_change_nickname">Nickname Change Failure</string>
     <string name="dialog_title_failure_change_password">Password Change Failure</string>
+    <string name="dialog_title_report">Report</string>
     <!-- Dialog Content -->
     <string name="dialog_content_delete_hashtag">Are you sure to delete this hashtag?</string>
     <string name="dialog_content_password_recovery">Enter email address you want to sign in with.</string>
@@ -186,6 +188,8 @@
     <string name="dialog_content_failure_register_university_email">university email : Duplicate Email</string>
     <string name="dialog_content_failure_change_nickname">Nickname : Nickname has been duplicated</string>
     <string name="dialog_content_failure_change_password">Password : Current password is incorrect</string>
+    <string name="dialog_content_report">Contents</string>
+
     <!-- Dialog Button -->
     <string name="dialog_positive_delete">DELETE</string>
     <string name="dialog_positive_send">SEND</string>

@@ -27,6 +27,7 @@ import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.github.clans.fab.FloatingActionButton;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
+import com.papyruth.android.model.CommentData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
 import com.papyruth.android.model.unique.Evaluation;
@@ -36,6 +37,7 @@ import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
 import com.papyruth.android.recyclerview.viewholder.EvaluationViewHolder;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.opensource.materialdialog.ReportDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
@@ -46,6 +48,7 @@ import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectLongClickListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -59,7 +62,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack, View.OnLongClickListener {
+public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack, RecyclerViewItemObjectLongClickListener {
     private Navigator mNavigator;
     private RevealFrameLayout mCommentContainer;
     private RelativeLayout mCommentInput;
@@ -368,16 +371,25 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        Timber.d("longclick!!");
-        CharSequence list1[] = {"수정", "삭제", "신고"};
-        CharSequence list2[] = {"신고"};
+    public void onRecyclerViewItemObjectLongClick(View v, Object object) {
+        if(object instanceof CommentData) {
+            CharSequence popUpCategoryMine[] = {"댓글 삭제"};
+            CharSequence popUpCategoryAnother[] = {"댓글 신고"};
             new MaterialDialog.Builder(this.getActivity())
-                    .items(list1)
-                    .itemsCallback((dialog, itemView, which, text) -> {
-
-                    })
-                    .show();
-            return true;
+                .items(((CommentData) object).user_id.equals(User.getInstance().getId()) ? popUpCategoryMine : popUpCategoryAnother)
+                .itemsCallback((dialog, itemView, which, text) -> {
+                    Timber.d("witch : %s %s", which, text);
+                    if (text.equals(popUpCategoryMine[0])) {
+                        Timber.d("witch 삭제");
+                    } else if (text.equals(popUpCategoryAnother[0])) {
+                        Timber.d("witch 신고");
+                        ReportDialog.show(getActivity(), o -> {
+                            Api.papyruth().post_evaluations_report(User.getInstance().getAccessToken(), ((CommentData) object).id, ((String) o))
+                                .subscribe();
+                        });
+                    }
+                })
+                .show();
+        }
     }
 }

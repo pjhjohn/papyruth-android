@@ -30,6 +30,7 @@ import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
+import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectLongClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +49,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
     private Toolbar mToolbar;
     private List<CommentData> mComments;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
-    private View.OnLongClickListener mLongClickListener;
+    private RecyclerViewItemObjectLongClickListener mLongClickListener;
     private boolean mHideInform;
     private boolean mHideShadow;
     private Integer mSinceId;
@@ -65,7 +66,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
 
     private int mCommentId;
 
-    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener, View.OnLongClickListener longClickListener) {
+    public EvaluationAdapter(Context context, SwipeRefreshLayout swiperefresh, EmptyStateView emptystate, Toolbar toolbar, RecyclerViewItemObjectClickListener listener, RecyclerViewItemObjectLongClickListener longClickListener) {
         mContext = context;
         mSwipeRefresh = swiperefresh;
         mEmptyState = emptystate;
@@ -91,6 +92,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                     Evaluation.getInstance().update(evaluationData);
                     mToolbar.getMenu().findItem(R.id.menu_evaluation_edit).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
                     mToolbar.getMenu().findItem(R.id.menu_evaluation_delete).setVisible(Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
+                    mToolbar.getMenu().findItem(R.id.menu_evaluation_report).setVisible(Evaluation.getInstance().getUserId() != null && !Evaluation.getInstance().getUserId().equals(User.getInstance().getId()));
                     notifyItemChanged(mIndexSingle);
                 }, error -> ErrorHandler.handle(error, this.getFragment(), true));
         }
@@ -143,7 +145,10 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
         if (position == mIndexSingle) {((EvaluationViewHolder) holder).bind(Evaluation.getInstance(), this.isMoreComment()); return;}
         if (position == mIndexShadow) return;
         if (position == mIndexFooter) return;
-        if (position - mIndexContent < mComments.size()) ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent), mLongClickListener);
+        if (position - mIndexContent < mComments.size()) ((CommentItemViewHolder) holder).bind(mComments.get(position - mIndexContent), v -> {
+            this.mLongClickListener.onRecyclerViewItemObjectLongClick(v, mComments.get(position - mIndexContent));
+            return true;
+        });
         if (position - mIndexContent < mComments.size() && mComments.get(position - mIndexContent).id.equals(mCommentId)) {
 //            AnimatorHelper.FOCUS_EFFECT(holder.itemView).start();
             mCommentId = -1;

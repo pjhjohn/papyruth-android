@@ -81,6 +81,12 @@ public interface Papyruth {
         @Header("Authorization") String authorization,
         @Path("id") Integer id
     );
+    @POST("/comments/{id}/report")
+    Observable<VoidResponse> post_comment_report(
+        @Header("Authorization") String authorization,
+        @Path("id") Integer id,
+        @Query("body") String body
+    );
 
 
     /* COURSES */
@@ -205,6 +211,12 @@ public interface Papyruth {
         @Header("Authorization") String authorization,
         @Path("id") Integer id,
         @Query("hashtags[]") List<String> hashtags
+    );
+    @POST("/evaluations/{id}/report")
+    Observable<VoidResponse> post_evaluations_report(
+        @Header("Authorization") String authorization,
+        @Path("id") Integer id,
+        @Query("body") String body
     );
 
 
