@@ -136,14 +136,24 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         });
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_evaluation);
         ToolbarHelper.registerMenu(mToolbar, R.menu.evaluation, item -> {
-            if (item.getItemId() != R.id.menu_evaluation_edit) return false;
-            if (Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())) {
+            if (item.getItemId() == R.id.menu_evaluation_edit && Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())) {
                 if (mCommentInputActive) {
                     morph2FloatingActionButton();
                     ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
                 }
                 EvaluationForm.getInstance().initForEdit(Evaluation.getInstance());
                 mNavigator.navigate(EvaluationStep2Fragment.class, true);
+            }else if(item.getItemId() == R.id.menu_evaluation_report && Evaluation.getInstance().getUserId() != null && !Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
+                ReportDialog.show(getActivity(), o -> {
+                    Api.papyruth().post_evaluations_report(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), ((String) o))
+                        .subscribe();
+                });
+            } else if(item.getItemId() == R.id.menu_evaluation_delete && Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
+                DeleteDialog.show(getActivity(), DeleteDialog.Type.EVALUATION, () -> {
+//                    Api.papyruth().delete_evaluation(User.getInstance().getAccessToken(), Evaluation.getInstance().getId())
+//                        .subscribe();
+                    Timber.d("delete!");
+                });
             }
             return true;
         });
@@ -381,10 +391,14 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                 .itemsCallback((dialog, itemView, which, text) -> {
                     Timber.d("witch : %s %s", which, text);
                     if (text.equals(popUpCategoryMine[0])) {
-                        DeleteDialog.show(getActivity(), DeleteDialog.Type.COMMENT, ()->{});
+                        DeleteDialog.show(getActivity(), DeleteDialog.Type.COMMENT, () -> {
+//                            Api.papyruth().delete_comment(User.getInstance().getAccessToken(), ((CommentData) object).id)
+//                                .subscribe();
+                            Timber.d("delete!");
+                        });
                     } else if (text.equals(popUpCategoryAnother[0])) {
                         ReportDialog.show(getActivity(), o -> {
-                            Api.papyruth().post_evaluations_report(User.getInstance().getAccessToken(), ((CommentData) object).id, ((String) o))
+                            Api.papyruth().post_comment_report(User.getInstance().getAccessToken(), ((CommentData) object).id, ((String) o))
                                 .subscribe();
                         });
                     }
