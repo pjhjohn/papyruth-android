@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -173,6 +174,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
             }
             return true;
         });
+        if(mToolbar.getOverflowIcon() != null) mToolbar.getOverflowIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         /* Initialize Others */
         if(!mCommentInputActive && mCommentInput != null) mCommentInput.setVisibility(View.GONE);
