@@ -173,6 +173,16 @@
                     android:textSize="16sp"/>
             </RelativeLayout>
             <include layout="@layout/hr_padding"/>
+            <TextView
+                android:id="@+id/special_thanks_to"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/baseline_x5"
+                android:layout_marginTop="@dimen/baseline_x6"
+                android:layout_marginBottom="@dimen/baseline_x4"
+                android:layout_marginRight="@dimen/baseline_x4"
+                android:layout_marginLeft="@dimen/baseline_x4"
+                android:gravity="center"
+                android:textSize="16sp"/>
         </LinearLayout>
     </RelativeLayout>
 </com.papyruth.support.utility.navigator.NavigatableFrameLayout>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.papyruth.android.AppConst;
@@ -52,6 +53,7 @@ public class SettingsFragment extends TrackerFragment {
     @Bind(R.id.tos_icon)                protected ImageView mTermsOfServiceIcon;
     @Bind(R.id.clear_history_container) protected RelativeLayout mClearHistory;
     @Bind(R.id.clear_history_icon)      protected ImageView mClearHistoryIcon;
+    @Bind(R.id.special_thanks_to)       protected TextView mThanksTo;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
@@ -85,6 +87,8 @@ public class SettingsFragment extends TrackerFragment {
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
         mCompositeSubscription.clear();
+
+        if(User.getInstance().getUniversityId() == 2) mThanksTo.setText("Special Thanks to : 신승수");
 
         mCompositeSubscription.add(ViewObservable.clicks(mTermsOfService).subscribe(unused -> mNavigator.navigate(TermsOfServiceFragment.class, true), error -> ErrorHandler.handle(error, this)));
         mCompositeSubscription.add(ViewObservable.clicks(mOpenSourceLicense).subscribe(unused -> mNavigator.navigate(OpenSourceLicensesFragment.class, true), error -> ErrorHandler.handle(error, this)));
