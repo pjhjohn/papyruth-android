@@ -46,6 +46,10 @@ import timber.log.Timber;
  *
  */
 public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter> extends ScrollableFragment implements OnBack, RecyclerViewItemObjectClickListener {
+
+    public enum ChildType{
+        EVALUATION, COMMENT
+    }
     protected Navigator mNavigator;
 
     @Override
@@ -154,6 +158,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
                     }else{
                         getFragmentManager().beginTransaction().add(R.id.common_evaluation_container, mEvaluationFragment).commit();
                     }
+                    mEvaluationFragment.setParentFragment(CommonRecyclerViewFragment.this);
                 }
                 mEvaluationContainer.setY(0);
                 mToolbar.setY(-mToolbar.getHeight());
@@ -220,6 +225,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
                         mEvaluationIsOccupying = true;
                         mEvaluationFragment.showContent(true);
                         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_evaluation);
+                        mEvaluationFragment.setParentFragment(CommonRecyclerViewFragment.this);
                     }
                 }
             });
@@ -277,4 +283,6 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     protected RecyclerView.LayoutManager getRecyclerViewLayoutManager () {
         return new LinearLayoutManager(this.getActivity());
     }
+    public abstract void removeItem(int id);
+    public abstract ChildType getChildType();
 }

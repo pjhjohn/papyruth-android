@@ -67,6 +67,16 @@ public class CourseFragment extends CommonRecyclerViewFragment<CourseAdapter> {
     }
 
     @Override
+    public void removeItem(int id) {
+        this.mAdapter.removeItem(id);
+    }
+
+    @Override
+    public ChildType getChildType() {
+        return ChildType.EVALUATION;
+    }
+
+    @Override
     public void onRecyclerViewItemObjectClick(View view, Object object) {
         if (object instanceof EvaluationData) {
             if (User.getInstance().emailConfirmationRequired()) {

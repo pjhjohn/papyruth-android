@@ -185,7 +185,7 @@ public interface Papyruth {
         @Query("point_clarity") Integer point_clarity,
         @Query("body") String body
     );
-    @DELETE("/evaluations/{id")
+    @DELETE("/evaluations/{id}")
     Observable<SuccessResponse> delete_evaluation(
         @Header("Authorization") String authorization,
         @Path("id") Integer id

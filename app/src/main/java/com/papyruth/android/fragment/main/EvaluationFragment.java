@@ -41,6 +41,7 @@ import com.papyruth.support.opensource.materialdialog.ReportDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
+import com.papyruth.support.utility.fragment.CommonRecyclerViewFragment;
 import com.papyruth.support.utility.fragment.ScrollableFragment;
 import com.papyruth.support.utility.helper.MetricHelper;
 import com.papyruth.support.utility.helper.StatusBarHelper;
@@ -68,6 +69,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     private RelativeLayout mCommentInput;
     private EditText mCommentText;
     private ImageButton mCommentSubmit;
+    private CommonRecyclerViewFragment mParentFragment;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -145,12 +147,26 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
             }else if(item.getItemId() == R.id.menu_evaluation_report && Evaluation.getInstance().getUserId() != null && !Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
                 ReportDialog.show(getActivity(), o -> {
                     Api.papyruth().post_evaluations_report(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), ((String) o))
-                        .subscribe();
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(course -> {
+
+                            }, error -> ErrorHandler.handle(error, this, true)
+                        );
                 });
             } else if(item.getItemId() == R.id.menu_evaluation_delete && Evaluation.getInstance().getUserId() != null && Evaluation.getInstance().getUserId().equals(User.getInstance().getId())){
                 DeleteDialog.show(getActivity(), DeleteDialog.Type.EVALUATION, () -> {
-//                    Api.papyruth().delete_evaluation(User.getInstance().getAccessToken(), Evaluation.getInstance().getId())
-//                        .subscribe();
+                    Api.papyruth().delete_evaluation(User.getInstance().getAccessToken(), Evaluation.getInstance().getId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(course -> {
+                            this.morph2FloatingActionButton();
+                            mCommentInputActive = false;
+                            getActivity().onBackPressed();
+                            if(mParentFragment != null && mParentFragment.getChildType().equals(CommonRecyclerViewFragment.ChildType.EVALUATION)) {
+                                mParentFragment.removeItem(Evaluation.getInstance().getId());
+                            }
+                        }, error -> ErrorHandler.handle(error, this, true));
                     Timber.d("delete!");
                 });
             }
@@ -177,6 +193,11 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     public void showContentImmediately(boolean show) {
         if(mEvaluationCover == null) return;
         mEvaluationCover.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    public void setParentFragment(CommonRecyclerViewFragment parentFragment){
+        this.mParentFragment = parentFragment;
+        Timber.d("mParentFragment set %s", mParentFragment);
     }
 
     /* TODO : Finish below here */
@@ -396,6 +417,8 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(success -> {
                                     mAdapter.removeComment(((CommentData) object).id);
+                                    if(mParentFragment != null && mParentFragment.getChildType().equals(CommonRecyclerViewFragment.ChildType.COMMENT))
+                                        mParentFragment.removeItem(Evaluation.getInstance().getId());
                                 }, error -> {
 
                                 });

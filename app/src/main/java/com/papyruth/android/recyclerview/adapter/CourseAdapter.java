@@ -272,4 +272,14 @@ public class CourseAdapter extends TrackerAdapter implements IAdapter {
                 mLoading = false;
             });
     }
+
+    public void removeItem(int id) {
+        for(int i = 0; i < mEvaluations.size(); i++) {
+            if(this.mEvaluations.get(i).id.equals(id)){
+                mEvaluations.remove(i);
+                this.notifyItemRemoved(i+mIndexContent);
+                reconfigure();
+            }
+        }
+    }
 }

@@ -238,4 +238,14 @@ public class MyCommentItemsAdapter extends TrackerAdapter implements IAdapter{
                 mLoading = false;
             });
     }
+
+    public void removeItem(int id) {
+        for(int i = 0; i < mMyComments.size(); i++) {
+            if(this.mMyComments.get(i).id.equals(id)){
+                mMyComments.remove(i);
+                this.notifyItemRemoved(i+mIndexContent);
+                reconfigure();
+            }
+        }
+    }
 }

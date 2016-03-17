@@ -90,4 +90,14 @@ public class MyCommentFragment extends CommonRecyclerViewFragment<MyCommentItems
     protected void setStatusBarOptions() {
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
     }
+
+    @Override
+    public void removeItem(int id) {
+        this.mAdapter.removeItem(id);
+    }
+
+    @Override
+    public ChildType getChildType() {
+        return ChildType.COMMENT;
+    }
 }

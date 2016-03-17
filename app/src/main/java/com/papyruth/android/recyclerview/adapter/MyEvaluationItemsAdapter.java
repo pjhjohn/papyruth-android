@@ -246,4 +246,14 @@ public class MyEvaluationItemsAdapter extends TrackerAdapter implements IAdapter
                 mLoading = false;
             });
     }
+
+    public void removeItem(int id) {
+        for(int i = 0; i < mMyEvaluation.size(); i++) {
+            if(this.mMyEvaluation.get(i).id.equals(id)){
+                mMyEvaluation.remove(i);
+                this.notifyItemRemoved(i+mIndexContent);
+                reconfigure();
+            }
+        }
+    }
 }
