@@ -98,11 +98,11 @@
                         android:singleLine="true"
                         android:textSize="16sp"/>
                 </RelativeLayout>
-                <include layout="@layout/hr_padding"/>
                 <RelativeLayout
                     android:id="@+id/university_email_container"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/baseline_x7">
+                    <include layout="@layout/hr_padding"/>
                     <ImageView
                         android:id="@+id/university_email_icon"
                         android:layout_width="@dimen/baseline_x3"

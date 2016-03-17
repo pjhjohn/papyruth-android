@@ -1,5 +1,6 @@
 package com.papyruth.android.model.unique;
 
+import com.papyruth.android.model.UniversityData;
 import com.papyruth.android.model.UserData;
 
 import rx.Observable;
@@ -31,6 +32,7 @@ public class User {
     private String  university_name;
     private String  university_image_url;
     private String  avatar_url;
+    private UniversityData university_data;
 
     private BehaviorSubject<String> bsNickname;
     private BehaviorSubject<String> bsEmail;
@@ -105,6 +107,9 @@ public class User {
         this.avatar_url = url;
         this.bsAvatarUrl.onNext(url);
     }
+
+    public UniversityData getUniversityData() { return university_data; }
+    public void setUniversityData(UniversityData university_data) { this.university_data = university_data; }
 
     public boolean mandatoryEvaluationsRequired(){ return this.mandatory_evaluation_count > 0; }
     public boolean emailConfirmationRequired() {

@@ -123,6 +123,9 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         Api.papyruth().get_users_me(User.getInstance().getAccessToken()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
             response -> User.getInstance().update(response.user), error -> ErrorHandler.handle(error, this)
         );
+        Api.papyruth().get_universities(User.getInstance().getAccessToken(), User.getInstance().getUniversityId()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+            response -> User.getInstance().setUniversityData(response.university), error -> ErrorHandler.handle(error, this)
+        );
     }
 
     /* Double Back-Pressed Termination of MainActivity */
