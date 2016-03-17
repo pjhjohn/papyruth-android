@@ -241,7 +241,7 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
             Api.papyruth().get_comments(User.getInstance().getAccessToken(), Evaluation.getInstance().getId(), null, null, null),
             (evaluationResponse, commentsResponse) -> {
                 this.mCommentId = -1;
-                if(evaluationResponse.evaluation != null) {
+                if (evaluationResponse.evaluation != null) {
                     Evaluation.getInstance().update(evaluationResponse.evaluation);
                 }
                 return commentsResponse.comments;
@@ -291,5 +291,15 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                 if(mFooterMaterialProgressBar != null) AnimatorHelper.FADE_OUT(mFooterMaterialProgressBar).start();
                 mLoading = false;
             });
+    }
+
+    public void removeComment(Integer id) {
+        for(int i = 0; i < mComments.size(); i++){
+            if(mComments.get(i).id.equals(id)){
+                mComments.remove(i);
+                this.notifyItemRemoved(i + mIndexContent);
+                reconfigure();
+            }
+        }
     }
 }

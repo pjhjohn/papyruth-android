@@ -34,7 +34,6 @@ import com.papyruth.android.model.unique.Evaluation;
 import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.EvaluationAdapter;
-import com.papyruth.android.recyclerview.viewholder.EvaluationViewHolder;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.materialdialog.DeleteDialog;
@@ -392,9 +391,14 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                     Timber.d("witch : %s %s", which, text);
                     if (text.equals(popUpCategoryMine[0])) {
                         DeleteDialog.show(getActivity(), DeleteDialog.Type.COMMENT, () -> {
-//                            Api.papyruth().delete_comment(User.getInstance().getAccessToken(), ((CommentData) object).id)
-//                                .subscribe();
-                            Timber.d("delete!");
+                            Api.papyruth().delete_comment(User.getInstance().getAccessToken(), ((CommentData) object).id)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(success -> {
+                                    mAdapter.removeComment(((CommentData) object).id);
+                                }, error -> {
+
+                                });
                         });
                     } else if (text.equals(popUpCategoryAnother[0])) {
                         ReportDialog.show(getActivity(), o -> {
