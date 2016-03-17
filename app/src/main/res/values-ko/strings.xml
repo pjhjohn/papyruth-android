@@ -240,6 +240,7 @@
     <string name="password_recovery_label">비밀번호를 잊어버리셨나요?</string>
     <string name="toast_password_recovery_email_sent">비밀번호 변경 안내 이메일을 발송하였습니다</string>
     <string name="toast_password_recovery_email_not_sent">비밀번호 변경 안내 이메일 발송에 실패하였습니다</string>
+    <string name="toast_report_succeed">신고가 접수되었습니다</string>
 
     <!-- ETC -->
     <string name="empty"/>

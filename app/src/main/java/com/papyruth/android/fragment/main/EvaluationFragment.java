@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialmenu.MaterialMenuDrawable;
@@ -150,7 +151,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(course -> {
-
+                                Toast.makeText(getActivity(), R.string.toast_report_succeed, Toast.LENGTH_SHORT).show();
                             }, error -> ErrorHandler.handle(error, this, true)
                         );
                 });
@@ -419,14 +420,16 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                                     mAdapter.removeComment(((CommentData) object).id);
                                     if(mParentFragment != null && mParentFragment.getChildType().equals(CommonRecyclerViewFragment.ChildType.COMMENT))
                                         mParentFragment.removeItem(Evaluation.getInstance().getId());
-                                }, error -> {
-
-                                });
+                                }, error -> ErrorHandler.handle(error, this, true));
                         });
                     } else if (text.equals(popUpCategoryAnother[0])) {
                         ReportDialog.show(getActivity(), o -> {
                             Api.papyruth().post_comment_report(User.getInstance().getAccessToken(), ((CommentData) object).id, ((String) o))
-                                .subscribe();
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(success -> {
+                                    Toast.makeText(getActivity(), R.string.toast_report_succeed, Toast.LENGTH_SHORT).show();
+                                }, error -> ErrorHandler.handle(error, this, true));
                         });
                     }
                 })

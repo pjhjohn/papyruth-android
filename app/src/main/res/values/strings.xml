@@ -243,6 +243,7 @@
     <string name="password_recovery_label">Forgot Password?</string>
     <string name="toast_password_recovery_email_sent">Password recovery email has been sent</string>
     <string name="toast_password_recovery_email_not_sent">Could not send a password recovery email</string>
+    <string name="toast_report_succeed">The report received</string>
 
     <!-- ETC -->
     <string name="empty"/>
