@@ -94,7 +94,7 @@ public class ProfileFragment extends TrackerFragment {
 
         mCompositeSubscription.clear();
 
-        if(User.getInstance().getUniversityData().need_activation){
+        if(User.getInstance().getUniversityData().email_domain != null){
             this.mUniversityContainer.setVisibility(View.VISIBLE);
             FloatingActionControl.getInstance().setControl(univConfirmed? R.layout.fam_profile_without_university : R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
             mCompositeSubscription.add(FloatingActionControl

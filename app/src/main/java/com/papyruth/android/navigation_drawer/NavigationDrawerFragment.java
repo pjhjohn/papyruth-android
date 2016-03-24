@@ -60,6 +60,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
         if(User.getInstance().getUniversityId() != null && User.getInstance().getUniversityId() == 1) {
             mHeaderBackgroundDrawableRes = R.drawable.dummy_nav_university;
+        }else{
+            mHeaderBackgroundDrawableRes = R.drawable.common_nav_header;
         }
     }
 

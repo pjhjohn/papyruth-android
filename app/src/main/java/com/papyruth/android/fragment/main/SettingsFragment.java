@@ -88,7 +88,7 @@ public class SettingsFragment extends TrackerFragment {
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SETTING, false);
         mCompositeSubscription.clear();
 
-        if(User.getInstance().getUniversityId() == 2) mThanksTo.setText("Special Thanks to : 신승수");
+        if(User.getInstance().getUniversityData().acknowledgement != null) mThanksTo.setText(User.getInstance().getUniversityData().acknowledgement);
 
         mCompositeSubscription.add(ViewObservable.clicks(mTermsOfService).subscribe(unused -> mNavigator.navigate(TermsOfServiceFragment.class, true), error -> ErrorHandler.handle(error, this)));
         mCompositeSubscription.add(ViewObservable.clicks(mOpenSourceLicense).subscribe(unused -> mNavigator.navigate(OpenSourceLicensesFragment.class, true), error -> ErrorHandler.handle(error, this)));

@@ -176,6 +176,7 @@
     <string name="dialog_title_failure_change_nickname">Nickname Change Failure</string>
     <string name="dialog_title_failure_change_password">Password Change Failure</string>
     <string name="dialog_title_report">Report</string>
+    <string name="dialog_title_delete">Delete</string>
     <string name="dialog_title_delete_evaluation">Delete Evaluation</string>
     <string name="dialog_title_delete_comment">Delete Comment</string>
     <!-- Dialog Content -->

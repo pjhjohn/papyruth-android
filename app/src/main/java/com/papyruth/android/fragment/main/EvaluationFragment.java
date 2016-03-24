@@ -169,7 +169,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                                 mParentFragment.removeItem(Evaluation.getInstance().getId());
                             }
                         }, error -> ErrorHandler.handle(error, this, true));
-                    Timber.d("delete!");
                 });
             }
             return true;
@@ -200,7 +199,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
 
     public void setParentFragment(CommonRecyclerViewFragment parentFragment){
         this.mParentFragment = parentFragment;
-        Timber.d("mParentFragment set %s", mParentFragment);
     }
 
     /* TODO : Finish below here */
@@ -355,7 +353,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         FloatingActionControl.getInstance().setControl(R.layout.fab_normal_comment).show(true, 200, TimeUnit.MILLISECONDS);
         FloatingActionControl.getButton().setMax(100);
         FloatingActionControl.getButton().setShowProgressBackground(false);
-        Timber.d("set FAB");
         mCompositeSubscription.add(FloatingActionControl.clicks().subscribe(unused -> morph2CommentInput(), error->ErrorHandler.handle(error, this)));
     }
 
@@ -412,7 +409,6 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
             new MaterialDialog.Builder(this.getActivity())
                 .items(((CommentData) object).user_id.equals(User.getInstance().getId()) ? popUpCategoryMine : popUpCategoryAnother)
                 .itemsCallback((dialog, itemView, which, text) -> {
-                    Timber.d("witch : %s %s", which, text);
                     if (text.equals(popUpCategoryMine[0])) {
                         DeleteDialog.show(getActivity(), DeleteDialog.Type.COMMENT, () -> {
                             Api.papyruth().delete_comment(User.getInstance().getAccessToken(), ((CommentData) object).id)
@@ -422,6 +418,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
                                     mAdapter.removeComment(((CommentData) object).id);
                                     if(mParentFragment != null && mParentFragment.getChildType().equals(CommonRecyclerViewFragment.ChildType.COMMENT))
                                         mParentFragment.removeItem(Evaluation.getInstance().getId());
+                                    Evaluation.getInstance().setCommentCount(Evaluation.getInstance().getCommentCount()-1);
                                 }, error -> ErrorHandler.handle(error, this, true));
                         });
                     } else if (text.equals(popUpCategoryAnother[0])) {

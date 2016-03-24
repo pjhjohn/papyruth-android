@@ -9,9 +9,10 @@ public class UniversityData {
     public String updated_at;
     public String name;
     public String english_name;
+    public String acknowledgement;
     public String image_url;
     public Integer user_count;
     public Integer evaluation_count;
     public String email_domain;
-    public Boolean need_activation;
+    public Boolean need_activation; // legacy parameter for need Confirmation University Email.
 }
