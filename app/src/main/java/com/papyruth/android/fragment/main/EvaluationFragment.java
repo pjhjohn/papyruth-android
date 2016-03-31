@@ -216,31 +216,33 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
 
         showContentImmediately(mShowContentImmediately);
 
-        mCompositeSubscription.add(ViewObservable
-            .clicks(mCommentSubmit)
-            .filter(unused -> !mCommentText.getText().toString().isEmpty())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map(unused -> {
-                morph2FloatingActionButton();
-                ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
-                FloatingActionControl.getButton().setIndeterminate(true);
-                return null;
-            })
-            .observeOn(Schedulers.io())
-            .flatMap(unused -> Api.papyruth().post_comment(
-                User.getInstance().getAccessToken(),
-                Evaluation.getInstance().getId(),
-                mCommentText.getText().toString()
-            ))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(unused -> {
-                FloatingActionControl.getButton().setIndeterminate(false);
-                FloatingActionControl.getButton().setProgress(0, true);
-                mCommentText.getText().clear();
-                mAdapter.refresh();
-            }, error -> ErrorHandler.handle(error, this, true))
-        );
-        this.setEvaluationFloatingActionControl();
+        if(this.isVisible()) {
+            mCompositeSubscription.add(ViewObservable
+                .clicks(mCommentSubmit)
+                .filter(unused -> !mCommentText.getText().toString().isEmpty())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(unused -> {
+                    morph2FloatingActionButton();
+                    ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
+                    FloatingActionControl.getButton().setIndeterminate(true);
+                    return null;
+                })
+                .observeOn(Schedulers.io())
+                .flatMap(unused -> Api.papyruth().post_comment(
+                    User.getInstance().getAccessToken(),
+                    Evaluation.getInstance().getId(),
+                    mCommentText.getText().toString()
+                ))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(unused -> {
+                    FloatingActionControl.getButton().setIndeterminate(false);
+                    FloatingActionControl.getButton().setProgress(0, true);
+                    mCommentText.getText().clear();
+                    mAdapter.refresh();
+                }, error -> ErrorHandler.handle(error, this, true))
+            );
+            this.setEvaluationFloatingActionControl();
+        }
     }
 
     void morph2CommentInput() {
