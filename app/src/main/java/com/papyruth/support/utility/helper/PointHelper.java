@@ -19,7 +19,7 @@ public class PointHelper {
     public static final int BOUND_LOWER = 0;
     public static final int BOUND_UPPER = 10;
     public static final int BOUND_UPPER_EXTENDED = 100;
-    public static final String NOT_ASSIGNED = "N/A";
+    public static final String NOT_ASSIGNED = "-";
 
     /* Rating Values in float */
     private static boolean pointInRange(float point) {

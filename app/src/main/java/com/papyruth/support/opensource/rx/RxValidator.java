@@ -59,10 +59,8 @@ public class RxValidator {
     public static Func2<TextView, Integer, Integer> assignProgressValue = (text, value) -> {
         if(text == null || value == ON_STOP_TRACKING_TOUCH_SEEKBAR) return value;
         if(value < 1) {
-            text.setTextSize(32);
             text.setText(PointHelper.NOT_ASSIGNED);
         } else {
-            text.setTextSize(48);
             text.setText(value >= 10? "10" : String.format("%d", value));
         } return value;
     };
@@ -98,10 +96,8 @@ public class RxValidator {
     public static Func2<TextView, Float, Float> assignRatingValue = (text, value) -> {
         if(text == null) return value;
         if(value < 0.5f) {
-            text.setTextSize(32);
             text.setText(PointHelper.NOT_ASSIGNED);
         } else {
-            text.setTextSize(48);
             text.setText(value >= 5.0f? "10" : String.format("%d", (int)(2*value)));
         } return value;
     };

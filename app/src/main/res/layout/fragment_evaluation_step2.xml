@@ -88,7 +88,7 @@
                 </FrameLayout>
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/evaluation_form_overall_point"
-                    android:layout_width="@dimen/baseline_x8"
+                    android:layout_width="@dimen/baseline_x10"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
@@ -155,7 +155,7 @@
                 </FrameLayout>
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/evaluation_form_clarity_point"
-                    android:layout_width="@dimen/baseline_x8"
+                    android:layout_width="@dimen/baseline_x10"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
@@ -222,7 +222,7 @@
                 </FrameLayout>
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/evaluation_form_easiness_point"
-                    android:layout_width="@dimen/baseline_x8"
+                    android:layout_width="@dimen/baseline_x10"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
@@ -288,7 +288,7 @@
                 </FrameLayout>
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/evaluation_form_gpa_satisfaction_point"
-                    android:layout_width="@dimen/baseline_x8"
+                    android:layout_width="@dimen/baseline_x10"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
