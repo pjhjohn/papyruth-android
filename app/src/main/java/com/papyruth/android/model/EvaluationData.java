@@ -30,8 +30,7 @@ public class EvaluationData {
     public List<String> hashtags            = new ArrayList<>();
 
     public boolean isValidData() {
-        return  !body.isEmpty()
-                && point_overall > 0
+        return  point_overall > 0
                 && point_easiness > 0
                 && point_clarity > 0
                 && point_gpa_satisfaction > 0;

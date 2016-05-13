@@ -18,7 +18,7 @@ public class RetrofitLogger implements RestAdapter.Log {
 
     public RetrofitLogger(String tag) {
         this.tag = tag;
-        this.pattern = Pattern.compile(DEFAULT_FILTER);;
+        this.pattern = Pattern.compile(DEFAULT_FILTER);
     }
     public RetrofitLogger(String tag, String regex) {
         this.tag = tag;

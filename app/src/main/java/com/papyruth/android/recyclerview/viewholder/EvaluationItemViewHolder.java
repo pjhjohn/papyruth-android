@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.devspark.robototextview.widget.RobotoTextView;
@@ -77,7 +76,7 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
         Picasso.with(mContext).load(R.drawable.ic_comment_24dp).transform(new SkewContrastColorFilterTransformation(mResources.getColor(R.color.icon_skew_dark))).into(mCommentIcon);
         mCommentCount.setText(String.valueOf(evaluation.comment_count == null ? 0 : evaluation.comment_count));
 
-        if(evaluation.isValidData()) {
+        if(isValidData(evaluation, User.getInstance())) {
             mBody.setTextColor(mContext.getResources().getColor(R.color.white_40p));
             mBody.setText(evaluation.body);
             PointHelper.applyRating(mContext, mLabelOverall, mRatingBarOverall, mPointOverall, evaluation.point_overall);
@@ -91,7 +90,9 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
                     mContext.getString(R.string.evaluation_forbidden_email_confirmation_required) :
                     User.getInstance().mandatoryEvaluationsRequired()?
                         mContext.getString(R.string.evaluation_forbidden_mandatory_evaluation_required) :
-                        mContext.getString(R.string.evaluation_forbidden_university_confirmation_required)
+                            evaluation.university_confirmation_needed != null && evaluation.university_confirmation_needed?
+                                mContext.getString(R.string.evaluation_forbidden_university_confirmation_required) :
+                                    mContext.getString(R.string.empty)
             );
             mBody.setTextColor(mContext.getResources().getColor(R.color.colorchip_red));
             mBody.setText(messageEvaluationForbidden);
@@ -103,5 +104,12 @@ public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
             mHashtags.setVisibility(View.GONE);
         }
         AnimatorHelper.FADE_OUT(mProgressbar).start();
+    }
+
+    public static boolean isValidData(EvaluationData evaluation, User user){
+        return evaluation.isValidData()
+                && !user.emailConfirmationRequired()
+                && !user.mandatoryEvaluationsRequired()
+                && (!(evaluation.university_confirmation_needed != null && evaluation.university_confirmation_needed )|| User.getInstance().getUniversityConfirmed());
     }
 }
