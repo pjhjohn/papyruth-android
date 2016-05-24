@@ -2,6 +2,7 @@ package com.papyruth.android.fragment.Auth;
 
 import android.content.Context;
 import android.support.test.espresso.action.EspressoKey;
+import android.support.test.espresso.action.KeyEventAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -17,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -79,6 +81,11 @@ public class SignInFragmentTest {
         onView(withId(R.id.signin_email_text)).perform(ViewActions.click(), ViewActions.clearText(), ViewActions.typeText("2@2.2"));
         onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signin_email_text, 5000, false));
         onView(withId(R.id.signin_button)).check(matches(isEnabled()));
+
+        //
+        pressBack();
+        onView(withId(R.id.signin_signup_button)).perform(ViewActions.click());
+        onView(isRoot()).perform(TestHelper.CommonHelper.doWait(5000));
     }
 
     @Test

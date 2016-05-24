@@ -62,6 +62,30 @@ public class TestHelper {
                 }
             };
         }
+
+        public static ViewAction doWait(final long milliSeconds){
+            return new ViewAction() {
+                @Override
+                public Matcher<View> getConstraints() {
+                    return ViewMatchers.isRoot();
+                }
+
+                @Override
+                public String getDescription() {
+                    return "wait "+milliSeconds+" ms";
+                }
+
+                @Override
+                public void perform(UiController uiController, View view) {
+                    uiController.loopMainThreadUntilIdle();
+                    final long startTime = System.currentTimeMillis();
+                    final long endTime = startTime + milliSeconds;
+                    do{
+                        uiController.loopMainThreadForAtLeast(50);
+                    }while (System.currentTimeMillis() < endTime);
+                }
+            };
+        }
     }
 
     /**
