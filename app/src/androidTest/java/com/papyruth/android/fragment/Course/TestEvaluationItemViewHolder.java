@@ -1,4 +1,4 @@
-package com.papyruth.android.fragment.Course;
+package com.papyruth.android.fragment.course;
 
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;

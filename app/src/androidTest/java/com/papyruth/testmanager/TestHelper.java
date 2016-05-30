@@ -1,8 +1,10 @@
 package com.papyruth.testmanager;
 
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.PerformException;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.espresso.util.HumanReadables;
 import android.support.test.espresso.util.TreeIterables;
@@ -184,7 +186,8 @@ public class TestHelper {
                     final long endTime = startTime + milliSeconds;
                     do{
                         for(View child : TreeIterables.breadthFirstViewTraversal(view)){
-                            if( child instanceof RecyclerView && ((RecyclerView) child).getChildCount() > 0)
+                            if( child instanceof RecyclerView && /*((RecyclerView) child).getChildCount() > 0*/
+                            ((RecyclerView) child).getAdapter().getItemCount() > 0)
                                 return;
                         }
                         uiController.loopMainThreadForAtLeast(50);

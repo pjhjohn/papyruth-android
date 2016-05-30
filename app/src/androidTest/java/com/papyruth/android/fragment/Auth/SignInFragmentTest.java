@@ -2,7 +2,6 @@ package com.papyruth.android.fragment.auth;
 
 import android.content.Context;
 import android.support.test.espresso.action.EspressoKey;
-import android.support.test.espresso.action.KeyEventAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
