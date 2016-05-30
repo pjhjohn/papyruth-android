@@ -1,4 +1,4 @@
-package com.papyruth.android.fragment.Auth;
+package com.papyruth.android.fragment.auth;
 
 import android.content.Context;
 import android.support.test.espresso.action.ViewActions;
