@@ -23,6 +23,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
  * Created by SSS on 2016-03-07.<br/>
@@ -41,10 +42,12 @@ public class SignUpFragmentTest {
 
     @Test
     public void testSuit(){
+        mContext = mActivityRule.getActivity();
         enterSignUp();
         signupTestStep1();
         signupTestStep2();
         signupTestStep3();
+        signupTestStep4();
     }
 
     private void enterSignUp() {
@@ -70,11 +73,39 @@ public class SignUpFragmentTest {
             onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signup_nickname_text, 5000, true));
             onView(withId(R.id.signup_nickname_text)).perform(ViewActions.clearText(), ViewActions.typeText("222+snu"));
             onView(isRoot()).perform(TestHelper.TextViewHelper.waitErrorMsg(R.id.signup_nickname_text, 5000, false));
+            if(FloatingActionControl.getButton().isShown()){
+                onView(withId(FloatingActionControl.getButton().getId())).check(matches(isDisplayed())).perform(ViewActions.click());
+            }
         }
     }
     public void signupTestStep3(){
-        if(FloatingActionControl.getButton().isShown()){
-            onView(withId(FloatingActionControl.getButton().getId())).check(matches(isDisplayed())).perform(ViewActions.click());
+
+        if(mActivityRule.getActivity().getFragmentManager().findFragmentById(R.id.auth_navigator).getClass().getSimpleName().equals(SignUpStep2Fragment.class.getSimpleName())){
+            signupTestStep2();
+        }else if(mActivityRule.getActivity().getFragmentManager().findFragmentById(R.id.auth_navigator).getClass().getSimpleName().equals(SignUpStep3Fragment.class.getSimpleName())){
+            onView(withId(R.id.signup_realname_text)).perform(ViewActions.clearText(), ViewActions.typeText("name"));
+            onView(withId(R.id.signup_gender_radio_male)).perform(ViewActions.click());
+            if(FloatingActionControl.getButton().isShown()){
+                onView(withId(FloatingActionControl.getButton().getId())).check(matches(isDisplayed())).perform(ViewActions.click());
+            }
         }
+    }
+    public void signupTestStep4(){
+        if(mActivityRule.getActivity().getFragmentManager().findFragmentById(R.id.auth_navigator).getClass().getSimpleName().equals(SignUpStep3Fragment.class.getSimpleName())){
+            signupTestStep3();
+        }else if(mActivityRule.getActivity().getFragmentManager().findFragmentById(R.id.auth_navigator).getClass().getSimpleName().equals(SignUpStep4Fragment.class.getSimpleName())){
+            onView(withId(R.id.signup_password_text)).perform(ViewActions.clearText(), ViewActions.typeText("password!"));
+            onView(withId(FloatingActionControl.getButton().getId())).check(matches(isDisplayed()));
+        }
+    }
+    public void testTermDialog(){
+        onView(withId(R.id.signup_agreement)).perform(ViewActions.openLinkWithText(mContext.getResources().getString(R.string.signup_terms_of_use)));
+        onView(isRoot()).perform(TestHelper.CommonHelper.doWait(5000));
+        onView(withText("서비스")).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_positive_ok)).perform(ViewActions.click());
+        onData(withText(R.string.signup_privacy_policy)).perform(ViewActions.click());
+        onView(isRoot()).perform(TestHelper.CommonHelper.doWait(5000));
+        onView(withText("개인정보")).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_positive_ok)).perform(ViewActions.click());
     }
 }
