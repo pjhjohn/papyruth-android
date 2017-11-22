@@ -1,13 +1,13 @@
 package com.papyruth.support.utility.customview;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 /**
  * SourceCode Originated from "https://github.com/rogcg/gridview-autoresized-images-sample"
  */
-public class SquareImageView extends ImageView{
+public class SquareImageView extends AppCompatImageView {
     public SquareImageView(Context context){
         super(context);
     }

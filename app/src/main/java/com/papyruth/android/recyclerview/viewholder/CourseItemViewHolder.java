@@ -20,23 +20,23 @@ import com.papyruth.support.utility.helper.PointHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class CourseItemViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.course_item_professor_image)    protected ImageView mProfessorImage;
-    @Bind(R.id.course_item_lecture)            protected TextView mLecture;
-    @Bind(R.id.course_item_category)           protected TextView mCategory;
-    @Bind(R.id.course_item_professor)          protected TextView mProfessor;
-    @Bind(R.id.course_item_overall_label)      protected TextView mLabelOverall;
-    @Bind(R.id.course_item_overall_point)      protected RobotoTextView mPointOverall;
-    @Bind(R.id.course_item_overall_ratingbar)  protected RatingBar mRatingBarOverall;
-    @Bind(R.id.course_item_hashtags)           protected TextView mHashtags;
-    @Bind(R.id.course_item_evaluation_icon)    protected ImageView mEvaluationIcon;
-    @Bind(R.id.course_item_evaluation_count)   protected TextView mEvaluationCount;
+    @BindView(R.id.course_item_professor_image)    protected ImageView mProfessorImage;
+    @BindView(R.id.course_item_lecture)            protected TextView mLecture;
+    @BindView(R.id.course_item_category)           protected TextView mCategory;
+    @BindView(R.id.course_item_professor)          protected TextView mProfessor;
+    @BindView(R.id.course_item_overall_label)      protected TextView mLabelOverall;
+    @BindView(R.id.course_item_overall_point)      protected RobotoTextView mPointOverall;
+    @BindView(R.id.course_item_overall_ratingbar)  protected RatingBar mRatingBarOverall;
+    @BindView(R.id.course_item_hashtags)           protected TextView mHashtags;
+    @BindView(R.id.course_item_evaluation_icon)    protected ImageView mEvaluationIcon;
+    @BindView(R.id.course_item_evaluation_count)   protected TextView mEvaluationCount;
     private final Context mContext;
     private final Resources mResources;
     public CourseItemViewHolder(View view, RecyclerViewItemClickListener listener) {

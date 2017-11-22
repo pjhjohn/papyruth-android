@@ -19,21 +19,21 @@ import com.papyruth.support.utility.helper.PointHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationItemDetailViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.evaluation_item_avatar)               protected ImageView mAvatar;
-    @Bind(R.id.evaluation_item_nickname)             protected TextView mNickname;
-    @Bind(R.id.evaluation_item_lecture)              protected TextView mLecture;
-    @Bind(R.id.evaluation_item_timestamp)            protected RobotoTextView mTimestamp;
-    @Bind(R.id.evaluation_item_category)             protected TextView mCategory;
-    @Bind(R.id.evaluation_item_professor)            protected TextView mProfessor;
-    @Bind(R.id.evaluation_item_body)                 protected TextView mBody;
-    @Bind(R.id.evaluation_item_overall_ratingbar)    protected RatingBar mRatingBarOverall;
+    @BindView(R.id.evaluation_item_avatar)               protected ImageView mAvatar;
+    @BindView(R.id.evaluation_item_nickname)             protected TextView mNickname;
+    @BindView(R.id.evaluation_item_lecture)              protected TextView mLecture;
+    @BindView(R.id.evaluation_item_timestamp)            protected RobotoTextView mTimestamp;
+    @BindView(R.id.evaluation_item_category)             protected TextView mCategory;
+    @BindView(R.id.evaluation_item_professor)            protected TextView mProfessor;
+    @BindView(R.id.evaluation_item_body)                 protected TextView mBody;
+    @BindView(R.id.evaluation_item_overall_ratingbar)    protected RatingBar mRatingBarOverall;
 
     private final Context mContext;
     private final Resources mResources;

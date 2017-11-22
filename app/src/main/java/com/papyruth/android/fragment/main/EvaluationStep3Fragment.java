@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
@@ -31,7 +33,6 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.customview.Hashtag;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -40,11 +41,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -52,8 +53,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  */
 
-public class EvaluationStep3Fragment extends TrackerFragment {
+public class EvaluationStep3Fragment extends Fragment {
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
     private MainActivity mActivity;
     @Override
     public void onAttach(Activity activity) {
@@ -62,13 +64,13 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         mActivity = (MainActivity) activity;
     }
 
-    @Bind(R.id.evaluation_hashtags_icon)            protected ImageView mHashtagsIcon;
-    @Bind(R.id.evaluation_hashtags_label)           protected TextView mHashtagsLabel;
-    @Bind(R.id.evaluation_hashtags_container)       protected TextView mHashtagsContainer;
-    @Bind(R.id.evaluation_hashtags_text)            protected AutoCompleteTextView mHashtagsText;
-    @Bind(R.id.evaluation_body_icon)                protected ImageView mBodyIcon;
-    @Bind(R.id.evaluation_body_label)               protected TextView mBodyLabel;
-    @Bind(R.id.evaluation_body)                     protected EditText mBody;
+    @BindView(R.id.evaluation_hashtags_icon)            protected ImageView mHashtagsIcon;
+    @BindView(R.id.evaluation_hashtags_label)           protected TextView mHashtagsLabel;
+    @BindView(R.id.evaluation_hashtags_container)       protected TextView mHashtagsContainer;
+    @BindView(R.id.evaluation_hashtags_text)            protected AutoCompleteTextView mHashtagsText;
+    @BindView(R.id.evaluation_body_icon)                protected ImageView mBodyIcon;
+    @BindView(R.id.evaluation_body_label)               protected TextView mBodyLabel;
+    @BindView(R.id.evaluation_body)                     protected EditText mBody;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
     private List<String> mHashtagPresetData;
@@ -77,7 +79,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step3, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
         if(EvaluationForm.getInstance().getBody() != null) mBody.setText(EvaluationForm.getInstance().getBody());
@@ -101,7 +103,7 @@ public class EvaluationStep3Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -142,8 +144,8 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         mBodyLabel.setText(R.string.compose_evaluation_label_body);
         mBodyLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | mBodyLabel.getPaintFlags());
         mHashtagsLabel.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG | mHashtagsLabel.getPaintFlags());
-        mCompositeSubscription.add(WidgetObservable.text(mBody)
-            .map(RxValidator.toString)
+        mCompositeSubscription.add(RxTextView.textChanges(mBody)
+            .map(CharSequence::toString)
             .map(body -> {
                 if(EvaluationForm.getInstance().isEditMode())
                     EvaluationForm.getInstance().setEdited(true);
@@ -157,8 +159,8 @@ public class EvaluationStep3Fragment extends TrackerFragment {
         if(EvaluationForm.getInstance().isCompleted()) showFAB(true);
 
         /* Type new hashtag. */
-        mCompositeSubscription.add(WidgetObservable.text(mHashtagsText)
-            .map(RxValidator.toString)
+        mCompositeSubscription.add(RxTextView.textChanges(mHashtagsText)
+            .map(CharSequence::toString)
             .filter(s -> s.length() > 1 && (s.charAt(s.length() - 1) == ' ' || s.charAt(s.length() - 1) == '#'))
             .subscribe(s -> {
                 final String str = s.subSequence(0, s.length() - 1).toString();

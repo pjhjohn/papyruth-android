@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.papyruth.support.utility.navigator.NavigatableFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:roboto="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="?attr/actionBarSize">
@@ -96,7 +96,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_overall"
-                    roboto:textWeight="normal"/>
+                    app:robotoTextWeight="normal"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -163,7 +163,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_clarity"
-                    roboto:textWeight="normal"/>
+                    app:robotoTextWeight="normal"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -230,7 +230,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_easiness"
-                    roboto:textWeight="normal"/>
+                    app:robotoTextWeight="normal"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/evaluation_form_gpa_satisfaction"
@@ -296,7 +296,7 @@
                     android:gravity="center"
                     android:textSize="48sp"
                     android:textColor="@color/point_gpa_satisfaction"
-                    roboto:textWeight="normal"/>
+                    app:robotoTextWeight="normal"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

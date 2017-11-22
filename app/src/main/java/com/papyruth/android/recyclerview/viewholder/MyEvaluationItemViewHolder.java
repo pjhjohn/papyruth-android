@@ -20,23 +20,23 @@ import com.papyruth.support.utility.helper.VoteHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class MyEvaluationItemViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.my_evaluation_item_lecture)           protected TextView mLecture;
-    @Bind(R.id.my_evaluation_item_timestamp)         protected TextView mTimestamp;
-    @Bind(R.id.my_evaluation_item_body)              protected TextView mBody;
-    @Bind(R.id.my_evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
-    @Bind(R.id.my_evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
-    @Bind(R.id.my_evaluation_item_up_vote_count)     protected RobotoTextView mVoteUpCount;
-    @Bind(R.id.my_evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
-    @Bind(R.id.my_evaluation_item_down_vote_count)   protected RobotoTextView mVoteDownCount;
-    @Bind(R.id.my_evaluation_item_comment_icon)      protected ImageView mCommentIcon;
-    @Bind(R.id.my_evaluation_item_comment_count)     protected RobotoTextView mCommentCount;
+    @BindView(R.id.my_evaluation_item_lecture)           protected TextView mLecture;
+    @BindView(R.id.my_evaluation_item_timestamp)         protected TextView mTimestamp;
+    @BindView(R.id.my_evaluation_item_body)              protected TextView mBody;
+    @BindView(R.id.my_evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
+    @BindView(R.id.my_evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @BindView(R.id.my_evaluation_item_up_vote_count)     protected RobotoTextView mVoteUpCount;
+    @BindView(R.id.my_evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @BindView(R.id.my_evaluation_item_down_vote_count)   protected RobotoTextView mVoteDownCount;
+    @BindView(R.id.my_evaluation_item_comment_icon)      protected ImageView mCommentIcon;
+    @BindView(R.id.my_evaluation_item_comment_count)     protected RobotoTextView mCommentCount;
     private final Context mContext;
     private final Resources mResources;
 

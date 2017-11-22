@@ -1,24 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
-def props = new Properties()
-props.load(new FileInputStream(rootProject.file("release.properties")))
-
 android {
-    signingConfigs {
-        release {
-            keyAlias props.keyAlias
-            keyPassword props.keyAliasPassword
-            storeFile rootProject.file(props.keyStore)
-            storePassword props.keyStorePassword
-        }
-    }
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId "com.papyruth.android"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 16
         versionName "1.1.0"
         multiDexEnabled true
@@ -29,7 +18,6 @@ android {
             minifyEnabled false
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
@@ -42,61 +30,60 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
-        checkReleaseBuilds true
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
-    }
 }
 
 dependencies {
     /* Unit Test */
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:2.2.1') {
         /* for espresso contrib */
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
 
-    androidTestCompile 'com.android.support:support-annotations:23.1.1'
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestImplementation 'com.android.support:support-annotations:27.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
 
     /* Android Support Libraries */
-    compile 'com.android.support:support-v4:23.1.1'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
-    compile 'com.android.support:support-v13:23.1.1'
-    compile 'com.google.android.gms:play-services-analytics:8.3.0'
-    compile 'com.android.support:multidex:1.0.1'
-    //    compile 'com.android.support:palette-v7:23.0.1'
-    //    compile 'com.android.support:design:23.0.1'
+    implementation 'com.android.support:support-v4:27.0.1'
+    implementation 'com.android.support:appcompat-v7:27.0.1'
+    implementation 'com.android.support:recyclerview-v7:27.0.1'
+    implementation 'com.android.support:cardview-v7:27.0.1'
+    implementation 'com.android.support:support-v13:27.0.1'
+    implementation 'com.android.support:multidex:1.0.2'
+    //    implementation 'com.android.support:palette-v7:23.0.1'
+    //    implementation 'com.android.support:design:23.0.1'
     /* Utility */
-    compile 'io.reactivex:rxandroid:0.24.0'
-    compile 'com.jakewharton.timber:timber:3.0.2'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.2.3'
+    implementation 'com.jakewharton.rxbinding:rxbinding:1.0.0'
+    implementation 'com.jakewharton.timber:timber:4.5.0'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     /* Square's */
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
-    compile 'com.squareup.okhttp:okhttp:2.2.0'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    //    compile 'com.squareup:otto:1.3.8'
-    //    compile 'com.squareup.phrase:phrase:1.1.0'
+    implementation 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    implementation 'com.squareup.okhttp:okhttp:2.2.0'
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    //    implementation 'com.squareup:otto:1.3.8'
+    //    implementation 'com.squareup.phrase:phrase:1.1.0'
     /* Design Features */
-    compile 'com.github.clans:fab:1.5.0'
-    compile 'com.afollestad:material-dialogs:0.7.5.1'
-    compile 'com.balysv.materialmenu:material-menu-toolbar:1.5.4'
-    compile 'com.github.johnkil.android-robototextview:robototextview:2.4.0'
-    compile 'com.github.ozodrukh:CircularReveal:1.1.1'
-    //    compile 'com.nispok:snackbar:2.10.7'
+    implementation 'com.github.clans:fab:1.5.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
+    implementation 'com.balysv.materialmenu:material-menu-toolbar:1.5.4'
+    implementation 'com.github.johnkil.android-robototextview:robototextview:4.0.0'
+    implementation ('com.github.ozodrukh:CircularReveal:1.1.1@aar') {
+        transitive = true;
+    }
+    //    implementation 'com.nispok:snackbar:2.10.7'
     //    /* Crash Report & Memory Leak Detector */
-    //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 }
@@ -104,6 +91,7 @@ repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
     maven { url "https://maven.fabric.io/public" }
+    google()
 }
 
 
@@ -114,14 +102,7 @@ buildscript {
         maven { url "https://maven.fabric.io/public" }
     }
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.google.gms.google-services'
-retrolambda {
-    oldJdk System.getenv("JAVA7_HOME")
-}

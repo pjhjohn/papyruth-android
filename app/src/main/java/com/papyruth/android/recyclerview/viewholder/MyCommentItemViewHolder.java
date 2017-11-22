@@ -15,20 +15,20 @@ import com.papyruth.support.utility.helper.DateTimeHelper;
 import com.papyruth.support.utility.helper.VoteHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class MyCommentItemViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.my_comment_item_lecture)           protected TextView mLecture;
-    @Bind(R.id.my_comment_item_timestamp)         protected TextView mTimestamp;
-    @Bind(R.id.my_comment_item_body)              protected TextView mBody;
-    @Bind(R.id.my_comment_item_up_vote_icon)      protected ImageView mVoteUpIcon;
-    @Bind(R.id.my_comment_item_up_vote_count)     protected RobotoTextView mVoteUpCount;
-    @Bind(R.id.my_comment_item_down_vote_icon)    protected ImageView mVoteDownIcon;
-    @Bind(R.id.my_comment_item_down_vote_count)   protected RobotoTextView mVoteDownCount;
+    @BindView(R.id.my_comment_item_lecture)           protected TextView mLecture;
+    @BindView(R.id.my_comment_item_timestamp)         protected TextView mTimestamp;
+    @BindView(R.id.my_comment_item_body)              protected TextView mBody;
+    @BindView(R.id.my_comment_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @BindView(R.id.my_comment_item_up_vote_count)     protected RobotoTextView mVoteUpCount;
+    @BindView(R.id.my_comment_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @BindView(R.id.my_comment_item_down_vote_count)   protected RobotoTextView mVoteDownCount;
     private final Context mContext;
 
     public MyCommentItemViewHolder(View view, RecyclerViewItemClickListener listener) {

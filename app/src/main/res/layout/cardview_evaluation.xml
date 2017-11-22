@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:roboto="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
@@ -156,8 +156,8 @@
                             android:layout_toEndOf="@+id/evaluation_overall_label"
                             android:gravity="bottom"
                             android:textSize="40sp"
-                            roboto:fontFamily="roboto"
-                            roboto:textWeight="medium"/><!-- Overall Point -->
+                            app:robotoFontFamily="roboto"
+                            app:robotoTextWeight="medium"/><!-- Overall Point -->
                     </RelativeLayout>
                     <RatingBar
                         android:id="@+id/evaluation_overall_ratingbar"
@@ -206,7 +206,7 @@
                         android:layout_toStartOf="@+id/evaluation_clarity_postfix"
                         android:textSize="22sp"
                         android:textColor="@color/point_clarity"
-                        roboto:textWeight="bold"/><!-- Clarity Point -->
+                        app:robotoTextWeight="bold"/><!-- Clarity Point -->
                     <com.devspark.robototextview.widget.RobotoTextView
                         android:id="@+id/evaluation_clarity_postfix"
                         android:layout_width="wrap_content"
@@ -216,7 +216,7 @@
                         android:layout_alignParentEnd="true"
                         android:textSize="14sp"
                         android:textColor="@color/point_clarity"
-                        roboto:textWeight="normal"/><!-- Clarity Postfix -->
+                        app:robotoTextWeight="normal"/><!-- Clarity Postfix -->
                 </RelativeLayout><!-- Clarity -->
                 <RelativeLayout
                     android:id="@+id/evaluation_easiness"
@@ -245,7 +245,7 @@
                         android:layout_toStartOf="@+id/evaluation_easiness_postfix"
                         android:textSize="22sp"
                         android:textColor="@color/point_easiness"
-                        roboto:textWeight="bold"/><!-- Easiness Point -->
+                        app:robotoTextWeight="bold"/><!-- Easiness Point -->
                     <com.devspark.robototextview.widget.RobotoTextView
                         android:id="@+id/evaluation_easiness_postfix"
                         android:layout_width="wrap_content"
@@ -255,7 +255,7 @@
                         android:layout_alignParentEnd="true"
                         android:textSize="14sp"
                         android:textColor="@color/point_easiness"
-                        roboto:textWeight="normal"/><!-- Easiness Postfix -->
+                        app:robotoTextWeight="normal"/><!-- Easiness Postfix -->
                 </RelativeLayout><!-- Easiness -->
                 <RelativeLayout
                     android:id="@+id/evaluation_gpa_satisfaction"
@@ -284,7 +284,7 @@
                         android:layout_toStartOf="@+id/evaluation_gpa_satisfaction_postfix"
                         android:textSize="22sp"
                         android:textColor="@color/point_gpa_satisfaction"
-                        roboto:textWeight="bold"/><!-- GPA Satisfaction Point -->
+                        app:robotoTextWeight="bold"/><!-- GPA Satisfaction Point -->
                     <com.devspark.robototextview.widget.RobotoTextView
                         android:id="@+id/evaluation_gpa_satisfaction_postfix"
                         android:layout_width="wrap_content"
@@ -294,7 +294,7 @@
                         android:layout_alignParentEnd="true"
                         android:textSize="14sp"
                         android:textColor="@color/point_gpa_satisfaction"
-                        roboto:textWeight="normal"/><!-- GPA Satisfaction Postfix -->
+                        app:robotoTextWeight="normal"/><!-- GPA Satisfaction Postfix -->
                 </RelativeLayout><!-- GPA Satisfaction -->
             </LinearLayout><!-- Clarity & Easiness & GPA Satisfaction -->
         </RelativeLayout><!-- Avatar & Nickname & Timestamp & Overall & Clarity & Easiness & GPA Satisfaction -->
@@ -349,7 +349,7 @@
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/><!-- Vote Up Count -->
+                    app:robotoTextWeight="bold"/><!-- Vote Up Count -->
             </RelativeLayout><!-- Vote Up -->
             <RelativeLayout
                 android:id="@+id/evaluation_down_vote"
@@ -375,7 +375,7 @@
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/><!-- Vote Down Count -->
+                    app:robotoTextWeight="bold"/><!-- Vote Down Count -->
             </RelativeLayout><!-- Body -->
         </LinearLayout><!--Footer : Vote Up/Down-->
         <include layout="@layout/hr_nopadding"/>

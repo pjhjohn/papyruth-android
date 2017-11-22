@@ -10,14 +10,14 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class FooterViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.footer_fully_loaded_indicator_icon) protected ImageView mFullyLoadedIndicatorIcon;
+    @BindView(R.id.footer_fully_loaded_indicator_icon) protected ImageView mFullyLoadedIndicatorIcon;
     private final Context mContext;
     public FooterViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);

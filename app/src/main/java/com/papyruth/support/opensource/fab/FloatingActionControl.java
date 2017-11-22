@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.jakewharton.rxbinding.view.RxView;
 import com.papyruth.android.AppManager;
 import com.papyruth.support.utility.customview.FloatingActionControlContainer;
 
@@ -13,10 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.OnClickEvent;
-import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-05-29.
@@ -48,11 +46,11 @@ public class FloatingActionControl {
         FloatingActionControl fac = FloatingActionControl.getInstance();
         return fac.fam;
     }
-    public static rx.Observable<OnClickEvent> clicks() {
-        return ViewObservable.clicks(FloatingActionControl.getButton());
+    public static rx.Observable<Void> clicks() {
+        return RxView.clicks(FloatingActionControl.getButton());
     }
-    public static rx.Observable<OnClickEvent> clicks(int fab_id) {
-        return ViewObservable.clicks(FloatingActionControl.getButton(fab_id));
+    public static rx.Observable<Void> clicks(int fab_id) {
+        return RxView.clicks(FloatingActionControl.getButton(fab_id));
     }
 
     public FloatingActionControl toggle(boolean animate) {

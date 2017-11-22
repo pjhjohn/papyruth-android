@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
@@ -34,11 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
-import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 
 public class SearchToolbar implements RecyclerViewItemObjectClickListener {
@@ -49,12 +49,12 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
         return SearchToolbar.instance;
     }
 
-    @Bind(R.id.search_toolbar_root)                   protected LinearLayout mRootView;
-    @Bind(R.id.search_toolbar_back_icon)              protected ImageView mBackIcon;
-    @Bind(R.id.search_toolbar_material_progressbar)   protected MaterialProgressBar mMaterialProgressBar;
-    @Bind(R.id.search_toolbar_query_text)             protected EditText mQueryText;
-    @Bind(R.id.search_toolbar_query_clear_icon)       protected ImageView mQueryClearIcon;
-    @Bind(R.id.search_toolbar_query_result)           protected RecyclerView mAutoCompleteRecyclerView;
+    @BindView(R.id.search_toolbar_root)                   protected LinearLayout mRootView;
+    @BindView(R.id.search_toolbar_back_icon)              protected ImageView mBackIcon;
+    @BindView(R.id.search_toolbar_material_progressbar)   protected MaterialProgressBar mMaterialProgressBar;
+    @BindView(R.id.search_toolbar_query_text)             protected EditText mQueryText;
+    @BindView(R.id.search_toolbar_query_clear_icon)       protected ImageView mQueryClearIcon;
+    @BindView(R.id.search_toolbar_query_result)           protected RecyclerView mAutoCompleteRecyclerView;
 
     private RecyclerViewItemObjectClickListener mDefaultRecyclerViewItemObjectClickListener;
     private RecyclerViewItemObjectClickListener mRecyclerViewItemObjectClickListener;
@@ -122,8 +122,8 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
             }
         });
 
-        mCompositeSubscription.add(WidgetObservable.text(mQueryText)
-            .map(event -> event.text().toString())
+        mCompositeSubscription.add(RxTextView.textChanges(mQueryText)
+            .map(CharSequence::toString)
             .observeOn(AndroidSchedulers.mainThread())
             .map(query -> {
                 AnimatorSet animators = new AnimatorSet();
@@ -144,7 +144,7 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
             .subscribe(mAutoCompleteAdapter::search, Throwable::printStackTrace)
         );
 
-        mCompositeSubscription.add(ViewObservable.clicks(mQueryClearIcon)
+        mCompositeSubscription.add(RxView.clicks(mQueryClearIcon)
             .subscribeOn(AndroidSchedulers.mainThread())
             .subscribe(event -> {
                 mQueryText.getText().clear();
@@ -152,7 +152,7 @@ public class SearchToolbar implements RecyclerViewItemObjectClickListener {
             }, Throwable::printStackTrace)
         );
 
-        mCompositeSubscription.add(ViewObservable.clicks(mBackIcon)
+        mCompositeSubscription.add(RxView.clicks(mBackIcon)
             .subscribeOn(AndroidSchedulers.mainThread())
             .subscribe(event -> {
                 if(mAnimator != null && mAnimator.isRunning()) mAnimator.cancel();

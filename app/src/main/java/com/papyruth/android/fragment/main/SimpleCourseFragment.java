@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
-import com.papyruth.android.model.CandidateData;
 import com.papyruth.android.model.CourseData;
 import com.papyruth.android.model.Footer;
 import com.papyruth.android.model.unique.Course;
@@ -22,20 +21,20 @@ import com.papyruth.android.model.unique.User;
 import com.papyruth.android.recyclerview.adapter.SimpleCourseAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
+import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.ScrollableFragment;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
-import com.papyruth.support.utility.customview.EmptyStateView;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -46,6 +45,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class SimpleCourseFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener {
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
 
     @Override
     public void onAttach(Activity activity) {
@@ -53,9 +53,9 @@ public class SimpleCourseFragment extends ScrollableFragment implements Recycler
         this.mNavigator = (Navigator) activity;
     }
 
-    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
+    @BindView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @BindView(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
     private SimpleCourseAdapter mAdapter;
@@ -64,7 +64,7 @@ public class SimpleCourseFragment extends ScrollableFragment implements Recycler
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -81,7 +81,7 @@ public class SimpleCourseFragment extends ScrollableFragment implements Recycler
     public void onDestroyView() {
         super.onDestroyView();
         FloatingActionControl.getInstance().closeMenuButton(true);
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         SearchToolbar.getInstance().setOnSearchByQueryListener(null).setItemObjectClickListener(null);
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();

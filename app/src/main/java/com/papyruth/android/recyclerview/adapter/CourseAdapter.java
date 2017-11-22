@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
 import com.papyruth.android.model.EvaluationData;
 import com.papyruth.android.model.Footer;
@@ -27,7 +25,6 @@ import com.papyruth.android.recyclerview.viewholder.VoidViewHolder;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.customview.EmptyStateView;
-import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
 import com.papyruth.support.utility.helper.AnimatorHelper;
@@ -37,7 +34,6 @@ import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickList
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -100,18 +96,12 @@ public class CourseAdapter extends TrackerAdapter implements IAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewholder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
             if(!mHideInform && position == mIndexInform) {
-                String action = null;
                 switch(view.getId()) {
                     case R.id.inform_btn_optional :
                         AppManager.getInstance().putBoolean(HIDE_INFORM, true);
-                        action = parent.getResources().getString(R.string.ga_event_hide_always);
                     case R.id.inform_btn_positive :
                         notifyItemRemoved(position);
                         mHideInform = true;
-                        if(action == null) action = parent.getResources().getString(R.string.ga_event_hide_once);
-                        AppTracker.getInstance().getTracker().send(
-                            new HitBuilders.EventBuilder(parent.getResources().getString(R.string.ga_category_inform), action).build()
-                        );
                         reconfigure();
                         break;
                     default : Timber.d("Unexpected view #%x", view.getId());

@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,18 +18,19 @@ import com.papyruth.android.model.OpenSourceLicenseData;
 import com.papyruth.android.recyclerview.adapter.OpenSourceLicensesAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.OpenSourceLicenseDialog;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
 
-public class OpenSourceLicensesFragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
+public class OpenSourceLicensesFragment extends Fragment implements RecyclerViewItemObjectClickListener {
     private Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription;
+    private Unbinder mUnbinder;
 
     @Override
     public void onAttach(Activity activity) {
@@ -36,15 +38,15 @@ public class OpenSourceLicensesFragment extends TrackerFragment implements Recyc
         this.mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
     }
 
-    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @BindView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     private OpenSourceLicensesAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         this.mCompositeSubscription = new CompositeSubscription();
         mSwipeRefresh.setEnabled(false);
 
@@ -60,8 +62,7 @@ public class OpenSourceLicensesFragment extends TrackerFragment implements Recyc
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.materialdialog.AlertDialog;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -28,17 +28,19 @@ import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileFragment extends TrackerFragment {
+public class ProfileFragment extends Fragment {
     private Navigator mNavigator;
     private Context mContext;
     private Resources mResources;
+    private Unbinder mUnbinder;
 
     @Override
     public void onAttach(Activity activity) {
@@ -48,27 +50,27 @@ public class ProfileFragment extends TrackerFragment {
         mResources = mContext.getResources();
     }
 
-    @Bind(R.id.university_image)      protected ImageView mUniversityImage;
-    @Bind(R.id.university_name)       protected TextView mUniversityName;
-    @Bind(R.id.entrance_year)         protected TextView mEntranceYear;
-    @Bind(R.id.email_icon)            protected ImageView mEmailIcon;
-    @Bind(R.id.email_text)            protected TextView mEmailText;
-    @Bind(R.id.university_email_icon) protected ImageView mUniversityEmailIcon;
-    @Bind(R.id.university_email_text) protected TextView mUniversityEmailText;
-    @Bind(R.id.university_email_container) protected RelativeLayout mUniversityContainer;
-    @Bind(R.id.realname_icon)         protected ImageView mRealnameIcon;
-    @Bind(R.id.realname_text)         protected TextView mRealnameText;
-    @Bind(R.id.nickname_icon)         protected ImageView mNicknameIcon;
-    @Bind(R.id.nickname_text)         protected TextView mNicknameText;
-    @Bind(R.id.gender_icon)           protected ImageView mGenderIcon;
-    @Bind(R.id.gender_text)           protected TextView mGenderText;
+    @BindView(R.id.university_image)      protected ImageView mUniversityImage;
+    @BindView(R.id.university_name)       protected TextView mUniversityName;
+    @BindView(R.id.entrance_year)         protected TextView mEntranceYear;
+    @BindView(R.id.email_icon)            protected ImageView mEmailIcon;
+    @BindView(R.id.email_text)            protected TextView mEmailText;
+    @BindView(R.id.university_email_icon) protected ImageView mUniversityEmailIcon;
+    @BindView(R.id.university_email_text) protected TextView mUniversityEmailText;
+    @BindView(R.id.university_email_container) protected RelativeLayout mUniversityContainer;
+    @BindView(R.id.realname_icon)         protected ImageView mRealnameIcon;
+    @BindView(R.id.realname_text)         protected TextView mRealnameText;
+    @BindView(R.id.nickname_icon)         protected ImageView mNicknameIcon;
+    @BindView(R.id.nickname_text)         protected TextView mNicknameText;
+    @BindView(R.id.gender_icon)           protected ImageView mGenderIcon;
+    @BindView(R.id.gender_text)           protected TextView mGenderText;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         return view;
@@ -77,7 +79,7 @@ public class ProfileFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

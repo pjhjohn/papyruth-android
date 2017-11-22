@@ -13,13 +13,13 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class AutoCompleteResponseViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.type_icon) protected ImageView mIcon;
-    @Bind(R.id.content)   protected TextView mContent;
-    @Bind(R.id.type_text) protected TextView mTypeText;
+    @BindView(R.id.type_icon) protected ImageView mIcon;
+    @BindView(R.id.content)   protected TextView mContent;
+    @BindView(R.id.type_text) protected TextView mTypeText;
     private final Context mContext;
     private final Resources mResources;
     private int mIconColor;

@@ -3,6 +3,7 @@ package com.papyruth.android.fragment.auth;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
@@ -26,7 +28,6 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -37,20 +38,21 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep2Fragment extends TrackerFragment {
+public class SignUpStep2Fragment extends Fragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -58,11 +60,11 @@ public class SignUpStep2Fragment extends TrackerFragment {
         mNavigator = (Navigator) activity;
     }
 
-    @Bind(R.id.signup_step2_container) protected NavigatableLinearLayout mContainer;
-    @Bind(R.id.signup_email_text)    protected EditText mTextEmail;
-    @Bind(R.id.signup_nickname_text) protected EditText mTextNickname;
-    @Bind(R.id.signup_email_icon)    protected ImageView mIconEmail;
-    @Bind(R.id.signup_nickname_icon) protected ImageView mIconNickname;
+    @BindView(R.id.signup_step2_container) protected NavigatableLinearLayout mContainer;
+    @BindView(R.id.signup_email_text)    protected EditText mTextEmail;
+    @BindView(R.id.signup_nickname_text) protected EditText mTextNickname;
+    @BindView(R.id.signup_email_icon)    protected ImageView mIconEmail;
+    @BindView(R.id.signup_nickname_icon) protected ImageView mIconNickname;
     private CompositeSubscription mCompositeSubscription;
     private boolean mEmailEdited = false, mNickNameEdited = false;
     private boolean mEmailOfLegacyUser = false;
@@ -70,7 +72,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step2, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         List<String> emails = getEmails();
         if(emails.size()>0 && emailNotAssigned() && SignUpForm.getInstance().getTempSaveEmail() == null) SignUpForm.getInstance().setTempSaveEmail(emails.get(0));
@@ -80,7 +82,7 @@ public class SignUpStep2Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -165,12 +167,11 @@ public class SignUpStep2Fragment extends TrackerFragment {
 
     private boolean mNextButtonEnabled;
     private Observable<String> getEmailValidationObservable(TextView emailTextView) {
-        return WidgetObservable.text(emailTextView)
-            .map(event -> {
+        return RxTextView.textChanges(emailTextView)
+            .map(charsequence -> {
                 mNextButtonEnabled = false;
-                return event;
+                return charsequence.toString();
             })
-            .map(event -> event.text().toString())
             .flatMap(email -> {
                 mEmailEdited = true;
                 SignUpForm.getInstance().setTempSaveEmail(email);
@@ -200,12 +201,11 @@ public class SignUpStep2Fragment extends TrackerFragment {
     }
 
     private Observable<String> getNicknameValidationObservable(TextView nicknameTextView) {
-        return WidgetObservable.text(nicknameTextView)
-            .map(event -> {
+        return RxTextView.textChanges(nicknameTextView)
+            .map(charsequence -> {
                 mNextButtonEnabled = false;
-                return event;
+                return charsequence.toString();
             })
-            .map(event -> event.text().toString())
             .flatMap(nickname -> {
                 mNickNameEdited = true;
                 SignUpForm.getInstance().setTempSaveNickname(nickname);

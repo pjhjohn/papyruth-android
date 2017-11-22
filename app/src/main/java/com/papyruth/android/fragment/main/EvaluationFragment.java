@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.github.clans.fab.FloatingActionButton;
+import com.jakewharton.rxbinding.view.RxView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CommentData;
@@ -55,15 +56,14 @@ import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectLongClick
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.widget.RevealFrameLayout;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class EvaluationFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener, OnBack, RecyclerViewItemObjectLongClickListener {
     private Navigator mNavigator;
@@ -72,6 +72,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     private EditText mCommentText;
     private ImageButton mCommentSubmit;
     private CommonRecyclerViewFragment mParentFragment;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -82,10 +83,10 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         mCommentSubmit      = (ImageButton) activity.findViewById(R.id.comment_submit);
     }
 
-    @Bind(R.id.evaluation_swipe_refresh)  protected SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.evaluation_recycler_view)  protected RecyclerView mRecyclerView;
-    @Bind(R.id.evaluation_step_empty_state_view)    protected EmptyStateView mEmptyState;
-    @Bind(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
+    @BindView(R.id.evaluation_swipe_refresh)  protected SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.evaluation_recycler_view)  protected RecyclerView mRecyclerView;
+    @BindView(R.id.evaluation_step_empty_state_view)    protected EmptyStateView mEmptyState;
+    @BindView(R.id.evaluation_toolbar)        protected Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
     private EvaluationAdapter mAdapter;
     private boolean mCommentInputActive = false;
@@ -183,12 +184,12 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
 
-    @Bind(R.id.evaluation_container_cover) protected FrameLayout mEvaluationCover;
+    @BindView(R.id.evaluation_container_cover) protected FrameLayout mEvaluationCover;
     public void setShowContentImmediately(boolean show) {
         showContentImmediately(mShowContentImmediately = show);
     }
@@ -217,7 +218,7 @@ public class EvaluationFragment extends ScrollableFragment implements RecyclerVi
         showContentImmediately(mShowContentImmediately);
 
         if(this.isVisible()) {
-            mCompositeSubscription.add(ViewObservable
+            mCompositeSubscription.add(RxView
                 .clicks(mCommentSubmit)
                 .filter(unused -> !mCommentText.getText().toString().isEmpty())
                 .observeOn(AndroidSchedulers.mainThread())

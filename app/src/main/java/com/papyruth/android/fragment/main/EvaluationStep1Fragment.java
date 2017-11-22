@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
@@ -25,7 +26,6 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.utility.customview.EmptyStateView;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.fragment.ScrollableFragment;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -33,10 +33,10 @@ import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 import com.papyruth.support.utility.search.SearchToolbar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -53,18 +53,19 @@ public class EvaluationStep1Fragment extends ScrollableFragment implements Recyc
         SearchToolbar.getInstance().setSelectedQuery(null).setSelectedCandidate(new CandidateData());
     }
 
-    @Bind(R.id.evaluation_form_query_button) protected Button mQueryButton;
-    @Bind(R.id.evaluation_form_query_result) protected RecyclerView mRecyclerView;
-    @Bind(R.id.evaluation_step_empty_state_view)  protected EmptyStateView mEmptyStateView;
+    @BindView(R.id.evaluation_form_query_button) protected Button mQueryButton;
+    @BindView(R.id.evaluation_form_query_result) protected RecyclerView mRecyclerView;
+    @BindView(R.id.evaluation_step_empty_state_view)  protected EmptyStateView mEmptyStateView;
     private CompositeSubscription mCompositeSubscription;
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
     private Context mContext;
     private EvaluationSearchAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step1, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mQueryButton.setText(R.string.compose_evaluation_label_search);
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -79,7 +80,7 @@ public class EvaluationStep1Fragment extends ScrollableFragment implements Recyc
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         SearchToolbar.getInstance().setItemObjectClickListener(null).setOnSearchByQueryListener(null);
         if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
         this.mCompositeSubscription.unsubscribe();
@@ -104,7 +105,7 @@ public class EvaluationStep1Fragment extends ScrollableFragment implements Recyc
 
         mCompositeSubscription.clear();
 
-        mCompositeSubscription.add(ViewObservable.clicks(mQueryButton)
+        mCompositeSubscription.add(RxView.clicks(mQueryButton)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(event -> SearchToolbar.getInstance().show(), error -> ErrorHandler.handle(error, this))
         );

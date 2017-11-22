@@ -19,7 +19,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.papyruth.android.AppConst;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.EvaluationFragment;
 import com.papyruth.android.model.unique.Evaluation;
@@ -35,10 +34,10 @@ import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.navigator.OnBack;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  *
@@ -55,14 +54,14 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mTracker = ((PapyruthApplication) getActivity().getApplication()).getTracker();
         mNavigator = (Navigator) activity;
     }
 
-    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
+    @BindView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @BindView(R.id.common_empty_state_view)   protected EmptyStateView mEmptyState;
     protected CompositeSubscription mCompositeSubscription;
+    protected Unbinder mUnbinder;
     protected Toolbar mToolbar;
     protected ADAPTER mAdapter;
 
@@ -70,7 +69,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -88,7 +87,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
     public void onDestroyView() {
         super.onDestroyView();
         FloatingActionControl.getInstance().closeMenuButton(true);
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -111,7 +110,7 @@ public abstract class CommonRecyclerViewFragment<ADAPTER extends TrackerAdapter>
         }
     }
 
-    @Bind(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
+    @BindView(R.id.common_evaluation_container) protected FrameLayout mEvaluationContainer;
     protected EvaluationFragment mEvaluationFragment;
     protected Boolean mEvaluationIsOccupying;
     protected Boolean mEvaluationOpened = false;

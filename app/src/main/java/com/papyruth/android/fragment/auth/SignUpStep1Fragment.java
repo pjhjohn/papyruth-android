@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,7 +24,6 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableFrameLayout;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
@@ -33,8 +33,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -46,9 +47,11 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep1Fragment extends TrackerFragment implements RecyclerViewItemClickListener {
+public class SignUpStep1Fragment extends Fragment implements RecyclerViewItemClickListener {
     private AuthActivity mActivity;
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -56,15 +59,15 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
         mNavigator = (Navigator) activity;
     }
 
-    @Bind(R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
-    @Bind(R.id.signup_step1_container) protected NavigatableFrameLayout mContainer;
+    @BindView(R.id.signup_university_recyclerview) protected RecyclerView mUniversityRecyclerView;
+    @BindView(R.id.signup_step1_container) protected NavigatableFrameLayout mContainer;
     private CompositeSubscription mCompositeSubscription;
     private List<UniversityData> mUniversities;
     private UniversityAdapter mAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step1, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mUniversities = new ArrayList<>();
         mAdapter = new UniversityAdapter(mUniversities, this);
@@ -76,7 +79,7 @@ public class SignUpStep1Fragment extends TrackerFragment implements RecyclerView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

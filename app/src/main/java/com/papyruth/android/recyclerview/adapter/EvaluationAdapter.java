@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
 import com.papyruth.android.model.CommentData;
 import com.papyruth.android.model.Footer;
@@ -112,9 +110,6 @@ public class EvaluationAdapter extends TrackerAdapter implements IAdapter {
                         notifyItemRemoved(position);
                         mHideInform = true;
                         if(action == null) action = parent.getResources().getString(R.string.ga_event_hide_once);
-                        AppTracker.getInstance().getTracker().send(
-                            new HitBuilders.EventBuilder(parent.getResources().getString(R.string.ga_category_inform), action).build()
-                        );
                         reconfigure();
                         break;
                     default : Timber.d("Unexpected view #%x", view.getId());

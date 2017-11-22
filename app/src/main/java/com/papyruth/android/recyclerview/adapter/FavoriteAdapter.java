@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.AppTracker;
 import com.papyruth.android.R;
 import com.papyruth.android.model.FavoriteData;
 import com.papyruth.android.model.Footer;
@@ -82,21 +80,14 @@ public class FavoriteAdapter extends TrackerAdapter implements IAdapter, Error.O
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = ViewHolderFactory.getInstance().create(parent, viewType, (view, position) -> {
             if(!mHideInform && position == mIndexInform) {
-                String action = null;
                 switch (view.getId()) {
                     case R.id.inform_btn_optional:
                         AppManager.getInstance().putBoolean(HIDE_INFORM, true);
-                        action = parent.getResources().getString(R.string.ga_event_hide_always);
                     case R.id.inform_btn_positive:
                         notifyItemRemoved(position);
                         mHideInform = true;
                         mHideShadow = true;
                         mTempHideInform = true;
-                        if(action == null)
-                            action = parent.getResources().getString(R.string.ga_event_hide_once);
-                        AppTracker.getInstance().getTracker().send(
-                            new HitBuilders.EventBuilder(parent.getResources().getString(R.string.ga_category_inform), action).build()
-                        );
                         reconfigure();
                         break;
                     default:

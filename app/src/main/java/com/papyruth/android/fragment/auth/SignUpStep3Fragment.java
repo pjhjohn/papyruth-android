@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxRadioGroup;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.AuthActivity;
@@ -21,7 +25,6 @@ import com.papyruth.android.model.unique.SignUpForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.rx.RxValidator;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.squareup.picasso.Picasso;
 
@@ -31,21 +34,21 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
-import rx.android.widget.WidgetObservable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep3Fragment extends TrackerFragment {
+public class SignUpStep3Fragment extends Fragment {
     private AuthActivity mActivity;
     private com.papyruth.support.utility.navigator.Navigator mNavigator;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -53,17 +56,17 @@ public class SignUpStep3Fragment extends TrackerFragment {
         mNavigator = (com.papyruth.support.utility.navigator.Navigator) activity;
     }
 
-    @Bind(R.id.signup_step3_container)      protected NavigatableLinearLayout mContainer;
-    @Bind(R.id.signup_gender_radiogroup)    protected RadioGroup mRadioGroupGender;
-    @Bind(R.id.signup_realname_text)        protected EditText mTextRealname;
-    @Bind(R.id.signup_gender_icon)          protected ImageView mIconGender;
-    @Bind(R.id.signup_realname_icon)        protected ImageView mIconRealname;
+    @BindView(R.id.signup_step3_container)      protected NavigatableLinearLayout mContainer;
+    @BindView(R.id.signup_gender_radiogroup)    protected RadioGroup mRadioGroupGender;
+    @BindView(R.id.signup_realname_text)        protected EditText mTextRealname;
+    @BindView(R.id.signup_gender_icon)          protected ImageView mIconGender;
+    @BindView(R.id.signup_realname_icon)        protected ImageView mIconRealname;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step3, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         return view;
     }
@@ -71,7 +74,7 @@ public class SignUpStep3Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -155,12 +158,11 @@ public class SignUpStep3Fragment extends TrackerFragment {
 
     private boolean mNextButtonEnabled;
     private Observable<String> getRealnameValidationObservable(TextView realnameTextView) {
-        Observable<String> observable =  WidgetObservable.text(realnameTextView)
-            .map(event -> {
+        Observable<String> observable = RxTextView.textChanges(realnameTextView)
+            .map(charsequence -> {
                 mNextButtonEnabled = false;
-                return event;
+                return charsequence.toString();
             })
-            .map(event -> event.text().toString())
             .map(realname -> {
                 SignUpForm.getInstance().setTempSaveRealname(realname);
                 return RxValidator.getErrorMessageRealname.call(realname);
@@ -185,10 +187,12 @@ public class SignUpStep3Fragment extends TrackerFragment {
                 }
             }
         }
-        return Observable.from(buttons).flatMap(ViewObservable::clicks).map(event -> {
-            if(event.view().getId() > 0) SignUpForm.getInstance().setTempSaveIsBoy(event.view().getId() == R.id.signup_gender_radio_male);
+
+
+        return RxRadioGroup.checkedChanges(mRadioGroupGender).map(id -> {
+            if (id > 0) SignUpForm.getInstance().setTempSaveIsBoy(id == R.id.signup_gender_radio_male);
             else SignUpForm.getInstance().setTempSaveIsBoy(null);
-            return event.view().getId();
+            return id;
         }).startWith(mRadioGroupGender.getCheckedRadioButtonId());
     }
 }

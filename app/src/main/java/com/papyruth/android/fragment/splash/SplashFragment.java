@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -32,12 +33,12 @@ import com.papyruth.support.utility.customview.CircleAngleAnimation;
 import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,13 +50,14 @@ import timber.log.Timber;
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SplashFragment extends TrackerFragment {
-    @Bind(R.id.splash_background)           protected ImageView mSplashBackground;
-    @Bind(R.id.splash_background_circle)    protected Circle mSplashBackgroundCircle;
-    @Bind(R.id.splash_application_logo)     protected ImageView mSplashApplicationLogo;
-    @Bind(R.id.splash_version_name)         protected RobotoTextView mVersionName;
+public class SplashFragment extends Fragment {
+    @BindView(R.id.splash_background)           protected ImageView mSplashBackground;
+    @BindView(R.id.splash_background_circle)    protected Circle mSplashBackgroundCircle;
+    @BindView(R.id.splash_application_logo)     protected ImageView mSplashApplicationLogo;
+    @BindView(R.id.splash_version_name)         protected RobotoTextView mVersionName;
     private CompositeSubscription mCompositeSubscription;
     private SplashActivity mActivity;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -64,7 +66,7 @@ public class SplashFragment extends TrackerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         User.getInstance().setAccessToken(AppManager.getInstance().getString(AppConst.Preference.ACCESS_TOKEN, null));
         return view;
@@ -72,7 +74,7 @@ public class SplashFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

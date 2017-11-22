@@ -11,12 +11,8 @@ import android.widget.Toast;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.BuildConfig;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.CourseFragment;
 import com.papyruth.android.fragment.main.HomeFragment;
@@ -42,27 +38,27 @@ import com.papyruth.support.utility.search.SearchToolbar;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainActivity extends Activity implements NavigationDrawerCallback, Navigator, SearchToolbar.OnVisibilityChangedListener, SearchToolbar.OnSearchByQueryListener, Error.OnReportToGoogleAnalytics {
-    @Bind(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
-    @Bind(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
-    @Bind(R.id.search_toolbar_root)      protected LinearLayout mSearchToolbarRoot;
-    @Bind(R.id.toolbar)                  protected Toolbar mToolbar;
+    @BindView(R.id.fac)                      protected FloatingActionControlContainer mFloatingActionControlContainer;
+    @BindView(R.id.navigation_drawer_layout) protected DrawerLayout mNavigationDrawerLayout;
+    @BindView(R.id.search_toolbar_root)      protected LinearLayout mSearchToolbarRoot;
+    @BindView(R.id.toolbar)                  protected Toolbar mToolbar;
     private NavigationDrawerFragment mNavigationDrawer;
     private FragmentNavigator mNavigator;
-    private Tracker mTracker;
+    private Unbinder mUnbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
-        mTracker = ((PapyruthApplication) getApplication()).getTracker();
 
         Crashlytics.setUserIdentifier(User.getInstance().getId() == null? null : User.getInstance().getId().toString());
         Crashlytics.setUserEmail(User.getInstance().getEmail());
@@ -70,7 +66,7 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         Crashlytics.setString(getResources().getString(R.string.crashlytics_key_university), User.getInstance().getUniversityName());
         Crashlytics.setBool(getResources().getString(R.string.crashlytics_key_debug_mode), BuildConfig.DEBUG);
 
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
         MaterialMenuDrawable mMaterialMenuDrawable = new MaterialMenuDrawable(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
 
@@ -111,14 +107,13 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if(SearchToolbar.getInstance().isOpened()) Observable.timer(100, TimeUnit.MILLISECONDS).subscribe(unused -> SearchToolbar.getInstance().showSoftKeyboard());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         SearchToolbar.getInstance().setOnVisibilityChangedListener(this);
         Api.papyruth().get_users_me(User.getInstance().getAccessToken()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
             response -> User.getInstance().update(response.user), error -> ErrorHandler.handle(error, this)
@@ -149,28 +144,15 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
         Class<? extends Fragment> fragmentClass = NavigationDrawerUtils.getFragmentClassOf(position);
         Evaluation.getInstance().clear();
         this.navigate(fragmentClass, true, fromUser);
-        mTracker.send(
-            new HitBuilders.EventBuilder(
-                getString(R.string.ga_category_drawer),
-                getString(R.string.ga_event_click)
-            ).build()
-        );
     }
 
     /* Toolbar Search */
     @Override
     public void onVisibilityChanged(boolean visible) {
-        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(getString(R.string.ga_category_search_view));
         if (visible) {
             FloatingActionControl.getInstance().hide(false);
-            mTracker.send(builder
-                .setAction(getResources().getString(R.string.ga_event_open))
-                .build());
-        }else {
+        } else {
             FloatingActionControl.getInstance().show(false);
-            mTracker.send(builder
-                .setAction(getResources().getString(R.string.ga_event_close))
-                .build());
         }
     }
     @Override
@@ -182,17 +164,14 @@ public class MainActivity extends Activity implements NavigationDrawerCallback, 
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
     @Override
     protected void onStop() {
         super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
     @Override
     public void onReportToGoogleAnalytics(String description, String source, boolean fatal) {
         Timber.d("MainActivity.onReportToGoogleAnalytics from %s\nCause : %s", source, description);
-        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(fatal).build());
     }
 
     /* Bind FragmentNavigator methods to mNavigator */

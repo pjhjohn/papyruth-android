@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.model.unique.User;
@@ -24,7 +26,6 @@ import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.opensource.retrofit.apis.Papyruth;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -33,23 +34,23 @@ import com.squareup.picasso.Picasso;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit.RetrofitError;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.papyruth.support.opensource.rx.RxValidator.toString;
 
 /**
  * Created by pjhjohn on 2015-05-19.
  */
-public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
+public class ProfileRegisterUniversityEmailFragment extends Fragment {
     private Navigator mNavigator;
     private Context mContext;
     private Resources mResources;
+    private Unbinder mUnbinder;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,16 +68,16 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         mNavigator = null;
     }
 
-    @Bind(R.id.university_email_icon)    protected ImageView mUniversityEmailIcon;
-    @Bind(R.id.university_email_label)   protected TextView mUniversityEmailLabel;
-    @Bind(R.id.university_email_text)    protected EditText mUniversityEmail;
+    @BindView(R.id.university_email_icon)    protected ImageView mUniversityEmailIcon;
+    @BindView(R.id.university_email_label)   protected TextView mUniversityEmailLabel;
+    @BindView(R.id.university_email_text)    protected EditText mUniversityEmail;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_register_university_email, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         Picasso.with(mContext).load(R.drawable.ic_university_email_48dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
         if(Locale.getDefault().equals(Locale.KOREA)) mUniversityEmailLabel.setText(Html.fromHtml(String.format("%s<strong>%s</strong>%s", mResources.getString(R.string.profile_register_university_email_body_prefix), mResources.getString(R.string.profile_register_university_email_body), mResources.getString(R.string.profile_register_university_email_body_postfix))));
@@ -89,7 +90,7 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -109,10 +110,10 @@ public class ProfileRegisterUniversityEmailFragment extends TrackerFragment {
         }
         mCompositeSubscription.clear();
         setSubmissionCallback();
-        mCompositeSubscription.add(WidgetObservable
-            .text(mUniversityEmail)
+        mCompositeSubscription.add(RxTextView
+            .textChanges(mUniversityEmail)
             .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .map(toString)
+            .map(CharSequence::toString)
             .map(RxValidator.getErrorMessageEmail)
             .startWith((String) null)
             .map(error -> error == null)

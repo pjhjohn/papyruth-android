@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:roboto="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_pressed_selector_white"
@@ -45,7 +45,7 @@
         android:gravity="end"
         android:textSize="14sp"
         android:textColor="@color/timestamp"
-        roboto:textWeight="normal"/><!-- Timestamp -->
+        app:robotoTextWeight="normal"/><!-- Timestamp -->
     <RelativeLayout
         android:id="@+id/evaluation_item_content"
         android:layout_width="match_parent"
@@ -96,8 +96,8 @@
                     android:layout_toEndOf="@+id/evaluation_item_overall_label"
                     android:gravity="bottom"
                     android:textSize="36sp"
-                    roboto:fontFamily="roboto"
-                    roboto:textWeight="medium"/><!-- Overall Point -->
+                    app:robotoFontFamily="roboto"
+                    app:robotoTextWeight="medium"/><!-- Overall Point -->
             </RelativeLayout>
             <RatingBar
                 android:id="@+id/evaluation_item_overall_ratingbar"
@@ -159,7 +159,7 @@
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/>
+                    app:robotoTextWeight="bold"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/evaluation_item_down_vote"
@@ -185,7 +185,7 @@
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/>
+                    app:robotoTextWeight="bold"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/evaluation_item_comment"
@@ -211,7 +211,7 @@
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:paddingBottom="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/>
+                    app:robotoTextWeight="bold"/>
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

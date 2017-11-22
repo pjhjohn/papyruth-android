@@ -22,19 +22,19 @@ import com.papyruth.support.utility.helper.VoteHelper.VoteStatus;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class CommentItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    @Bind(R.id.comment_item_avatar)           protected ImageView mAvatar;
-    @Bind(R.id.comment_item_nickname)         protected TextView mNickname;
-    @Bind(R.id.comment_item_timestamp)        protected RobotoTextView mTimestamp;
-    @Bind(R.id.comment_item_body)             protected TextView mBody;
-    @Bind(R.id.comment_item_up_vote_icon)     protected ImageView mVoteUpIcon;
-    @Bind(R.id.comment_item_up_vote_count)    protected RobotoTextView mVoteUpCount;
-    @Bind(R.id.comment_item_down_vote_icon)   protected ImageView mVoteDownIcon;
-    @Bind(R.id.comment_item_down_vote_count)  protected RobotoTextView mVoteDownCount;
+    @BindView(R.id.comment_item_avatar)           protected ImageView mAvatar;
+    @BindView(R.id.comment_item_nickname)         protected TextView mNickname;
+    @BindView(R.id.comment_item_timestamp)        protected RobotoTextView mTimestamp;
+    @BindView(R.id.comment_item_body)             protected TextView mBody;
+    @BindView(R.id.comment_item_up_vote_icon)     protected ImageView mVoteUpIcon;
+    @BindView(R.id.comment_item_up_vote_count)    protected RobotoTextView mVoteUpCount;
+    @BindView(R.id.comment_item_down_vote_icon)   protected ImageView mVoteDownIcon;
+    @BindView(R.id.comment_item_down_vote_count)  protected RobotoTextView mVoteDownCount;
     private int mCommentId;
     private VoteStatus mVoteStatus;
     private final Context mContext;

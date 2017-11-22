@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.auth;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
@@ -38,31 +40,30 @@ import com.papyruth.support.utility.error.ErrorDefaultHTTP;
 import com.papyruth.support.utility.error.ErrorDefaultRetrofit;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.navigator.NavigatableLinearLayout;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit.RetrofitError;
 import retrofit.mime.TypedByteArray;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by pjhjohn on 2015-04-12.
  */
 
-public class SignUpStep4Fragment extends TrackerFragment {
+public class SignUpStep4Fragment extends Fragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -70,17 +71,17 @@ public class SignUpStep4Fragment extends TrackerFragment {
         mNavigator = (Navigator) activity;
     }
 
-    @Bind(R.id.signup_step4_container)  protected NavigatableLinearLayout mContainer;
-    @Bind(R.id.signup_password_text)    protected EditText mTextPassword;
-    @Bind(R.id.signup_password_icon)    protected ImageView mIconPassword;
-    @Bind(R.id.signup_agreement)        protected TextView mTextAgreement;
+    @BindView(R.id.signup_step4_container)  protected NavigatableLinearLayout mContainer;
+    @BindView(R.id.signup_password_text)    protected EditText mTextPassword;
+    @BindView(R.id.signup_password_icon)    protected ImageView mIconPassword;
+    @BindView(R.id.signup_agreement)        protected TextView mTextAgreement;
     private String mTermsOfUse, mPrivacyPolicy;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup_step4, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         return view;
     }
@@ -88,7 +89,7 @@ public class SignUpStep4Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -212,11 +213,12 @@ public class SignUpStep4Fragment extends TrackerFragment {
 
     private boolean mSubmitButtonEnabled;
     private Observable<String> getPasswordValidationObservable(TextView passwordTextView) {
-        return WidgetObservable.text(passwordTextView)
-            .map(event -> {
+        return RxTextView.textChanges(passwordTextView)
+            .map(CharSequence::toString)
+            .map(text -> {
                 mSubmitButtonEnabled = false;
-                SignUpForm.getInstance().setTempSavePassword(event.text().toString());
-                return event.text().toString();
+                SignUpForm.getInstance().setTempSavePassword(text);
+                return text;
             })
             .map(RxValidator.getErrorMessagePassword)
             .observeOn(AndroidSchedulers.mainThread());

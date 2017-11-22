@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
@@ -22,22 +24,22 @@ import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.opensource.retrofit.apis.Api;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class SettingsFragment extends TrackerFragment {
+public class SettingsFragment extends Fragment {
     private Navigator mNavigator;
     private MainActivity mActivity;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -45,22 +47,22 @@ public class SettingsFragment extends TrackerFragment {
         mActivity = (MainActivity) activity;
     }
 
-    @Bind(R.id.signout_container)       protected RelativeLayout mSignOut;
-    @Bind(R.id.signout_icon)            protected ImageView mSignOutIcon;
-    @Bind(R.id.osl_container)           protected RelativeLayout mOpenSourceLicense;
-    @Bind(R.id.osl_icon)                protected ImageView mOpenSourceLicenseIcon;
-    @Bind(R.id.tos_container)           protected RelativeLayout mTermsOfService;
-    @Bind(R.id.tos_icon)                protected ImageView mTermsOfServiceIcon;
-    @Bind(R.id.clear_history_container) protected RelativeLayout mClearHistory;
-    @Bind(R.id.clear_history_icon)      protected ImageView mClearHistoryIcon;
-    @Bind(R.id.special_thanks_to)       protected TextView mThanksTo;
+    @BindView(R.id.signout_container)       protected RelativeLayout mSignOut;
+    @BindView(R.id.signout_icon)            protected ImageView mSignOutIcon;
+    @BindView(R.id.osl_container)           protected RelativeLayout mOpenSourceLicense;
+    @BindView(R.id.osl_icon)                protected ImageView mOpenSourceLicenseIcon;
+    @BindView(R.id.tos_container)           protected RelativeLayout mTermsOfService;
+    @BindView(R.id.tos_icon)                protected ImageView mTermsOfServiceIcon;
+    @BindView(R.id.clear_history_container) protected RelativeLayout mClearHistory;
+    @BindView(R.id.clear_history_icon)      protected ImageView mClearHistoryIcon;
+    @BindView(R.id.special_thanks_to)       protected TextView mThanksTo;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         Picasso.with(mActivity).load(R.drawable.ic_terms_of_service_24dp).transform(new ColorFilterTransformation(mActivity.getResources().getColor(R.color.icon_material))).into(mTermsOfServiceIcon);
@@ -72,7 +74,7 @@ public class SettingsFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription ==null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }
@@ -90,9 +92,9 @@ public class SettingsFragment extends TrackerFragment {
 
         if(User.getInstance().getUniversityData().acknowledgement != null) mThanksTo.setText(User.getInstance().getUniversityData().acknowledgement);
 
-        mCompositeSubscription.add(ViewObservable.clicks(mTermsOfService).subscribe(unused -> mNavigator.navigate(TermsOfServiceFragment.class, true), error -> ErrorHandler.handle(error, this)));
-        mCompositeSubscription.add(ViewObservable.clicks(mOpenSourceLicense).subscribe(unused -> mNavigator.navigate(OpenSourceLicensesFragment.class, true), error -> ErrorHandler.handle(error, this)));
-        mCompositeSubscription.add(ViewObservable.clicks(mClearHistory).subscribe(
+        mCompositeSubscription.add(RxView.clicks(mTermsOfService).subscribe(unused -> mNavigator.navigate(TermsOfServiceFragment.class, true), error -> ErrorHandler.handle(error, this)));
+        mCompositeSubscription.add(RxView.clicks(mOpenSourceLicense).subscribe(unused -> mNavigator.navigate(OpenSourceLicensesFragment.class, true), error -> ErrorHandler.handle(error, this)));
+        mCompositeSubscription.add(RxView.clicks(mClearHistory).subscribe(
             unused -> {
                 AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 Toast.makeText(mActivity, R.string.toast_settings_history_clear_succeed, Toast.LENGTH_SHORT).show();
@@ -102,7 +104,7 @@ public class SettingsFragment extends TrackerFragment {
                 Toast.makeText(mActivity, R.string.toast_settings_history_clear_failed, Toast.LENGTH_SHORT).show();
             }
         ));
-        mCompositeSubscription.add(ViewObservable.clicks(mSignOut).subscribe(
+        mCompositeSubscription.add(RxView.clicks(mSignOut).subscribe(
             unused -> {
                 AppManager.getInstance().clear(AppConst.Preference.HISTORY);
                 AppManager.getInstance().remove(AppConst.Preference.ACCESS_TOKEN);

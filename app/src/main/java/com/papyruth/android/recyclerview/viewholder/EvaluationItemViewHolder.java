@@ -28,29 +28,29 @@ import com.papyruth.support.utility.helper.VoteHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class EvaluationItemViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.evaluation_item_avatar)            protected ImageView mAvatar;
-    @Bind(R.id.evaluation_item_nickname)          protected TextView mNickname;
-    @Bind(R.id.evaluation_item_timestamp)         protected RobotoTextView mTimestamp;
-    @Bind(R.id.evaluation_item_body)              protected TextView mBody;
-    @Bind(R.id.evaluation_item_overall_label)     protected TextView mLabelOverall;
-    @Bind(R.id.evaluation_item_overall_point)     protected RobotoTextView mPointOverall;
-    @Bind(R.id.evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
-    @Bind(R.id.evaluation_item_hashtags)          protected TextView mHashtags;
-    @Bind(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
-    @Bind(R.id.evaluation_item_up_vote_count)     protected RobotoTextView mVoteUpCount;
-    @Bind(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
-    @Bind(R.id.evaluation_item_down_vote_count)   protected RobotoTextView mVoteDownCount;
-    @Bind(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
-    @Bind(R.id.evaluation_item_comment_count)     protected RobotoTextView mCommentCount;
-    @Bind(R.id.material_progress_medium)          protected View mProgressbar;
-    @Bind(R.id.evaluation_item_statistics)          protected LinearLayout mStatisticsContainer;
+    @BindView(R.id.evaluation_item_avatar)            protected ImageView mAvatar;
+    @BindView(R.id.evaluation_item_nickname)          protected TextView mNickname;
+    @BindView(R.id.evaluation_item_timestamp)         protected RobotoTextView mTimestamp;
+    @BindView(R.id.evaluation_item_body)              protected TextView mBody;
+    @BindView(R.id.evaluation_item_overall_label)     protected TextView mLabelOverall;
+    @BindView(R.id.evaluation_item_overall_point)     protected RobotoTextView mPointOverall;
+    @BindView(R.id.evaluation_item_overall_ratingbar) protected RatingBar mRatingBarOverall;
+    @BindView(R.id.evaluation_item_hashtags)          protected TextView mHashtags;
+    @BindView(R.id.evaluation_item_up_vote_icon)      protected ImageView mVoteUpIcon;
+    @BindView(R.id.evaluation_item_up_vote_count)     protected RobotoTextView mVoteUpCount;
+    @BindView(R.id.evaluation_item_down_vote_icon)    protected ImageView mVoteDownIcon;
+    @BindView(R.id.evaluation_item_down_vote_count)   protected RobotoTextView mVoteDownCount;
+    @BindView(R.id.evaluation_item_comment_icon)      protected ImageView mCommentIcon;
+    @BindView(R.id.evaluation_item_comment_count)     protected RobotoTextView mCommentCount;
+    @BindView(R.id.material_progress_medium)          protected View mProgressbar;
+    @BindView(R.id.evaluation_item_statistics)          protected LinearLayout mStatisticsContainer;
     private Integer mEvaluationId;
     private final Context mContext;
     private final Resources mResources;

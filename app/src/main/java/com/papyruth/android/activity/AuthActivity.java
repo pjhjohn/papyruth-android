@@ -13,12 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.BuildConfig;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.auth.SignInFragment;
 import com.papyruth.android.recyclerview.viewholder.ViewHolderFactory;
@@ -30,7 +26,7 @@ import com.papyruth.support.utility.navigator.FragmentNavigator;
 import com.papyruth.support.utility.navigator.NavigationCallback;
 import com.papyruth.support.utility.navigator.Navigator;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
@@ -38,18 +34,16 @@ import timber.log.Timber;
  * Activity For Authentication.
  */
 public class AuthActivity extends Activity implements com.papyruth.support.utility.navigator.Navigator, Error.OnReportToGoogleAnalytics {
-    @Bind(R.id.fac)                       protected FloatingActionControlContainer mFloatingActionControlContainer;
-    @Bind(R.id.auth_app_logo_horizontal)  protected ImageView mApplicationLogoHorizontal;
-    @Bind(R.id.auth_signup_progress)      protected ProgressBar mSignUpProgress;
-    @Bind(R.id.auth_signup_label)         protected TextView mSignUpLabel;
+    @BindView(R.id.fac)                       protected FloatingActionControlContainer mFloatingActionControlContainer;
+    @BindView(R.id.auth_app_logo_horizontal)  protected ImageView mApplicationLogoHorizontal;
+    @BindView(R.id.auth_signup_progress)      protected ProgressBar mSignUpProgress;
+    @BindView(R.id.auth_signup_label)         protected TextView mSignUpLabel;
     private FragmentNavigator mNavigator;
-    private Tracker mTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
-        mTracker = ((PapyruthApplication) getApplication()).getTracker();
         Crashlytics.setBool(getResources().getString(R.string.crashlytics_key_debug_mode), BuildConfig.DEBUG);
         ButterKnife.bind(this);
         FloatingActionControl.getInstance().setContainer(mFloatingActionControlContainer);
@@ -60,7 +54,6 @@ public class AuthActivity extends Activity implements com.papyruth.support.utili
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
         ViewHolderFactory.getInstance().setContext(this);
     }
@@ -103,17 +96,14 @@ public class AuthActivity extends Activity implements com.papyruth.support.utili
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
     @Override
     protected void onStop() {
         super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
     @Override
     public void onReportToGoogleAnalytics(String description, String source, boolean fatal) {
         Timber.d("AuthActivity.onReportToGoogleAnalytics from %s\nCause : %s", source, description);
-        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(description).setFatal(fatal).build());
     }
 
     /* Bind FragmentNavigator methods to mNavigator */

@@ -13,15 +13,15 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemClickListener;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by pjhjohn on 2015-06-29.
  */
 public class OpenSourceLicenseViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.osl_icon) protected ImageView mIcon;
-    @Bind(R.id.osl_name) protected TextView mName;
+    @BindView(R.id.osl_icon) protected ImageView mIcon;
+    @BindView(R.id.osl_name) protected TextView mName;
     private final Context mContext;
     public OpenSourceLicenseViewHolder(View view, RecyclerViewItemClickListener listener) {
         super(view);

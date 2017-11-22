@@ -3,6 +3,7 @@ package com.papyruth.android.fragment.auth;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
 import com.papyruth.android.R;
@@ -30,7 +33,6 @@ import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.Error403;
 import com.papyruth.support.utility.error.ErrorHandler;
 import com.papyruth.support.utility.error.ErrorNetwork;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.papyruth.support.utility.helper.PermissionHelper;
 import com.papyruth.support.utility.navigator.Navigator;
@@ -40,24 +42,22 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit.RetrofitError;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
-import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-
-import static com.papyruth.support.opensource.rx.RxValidator.toString;
 
 /**
  * Created by mrl on 2015-04-07.
  */
-public class SignInFragment extends TrackerFragment {
+public class SignInFragment extends Fragment {
     private AuthActivity mActivity;
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -65,18 +65,18 @@ public class SignInFragment extends TrackerFragment {
         mNavigator = (Navigator) activity;
     }
 
-    @Bind(R.id.signin_email_text)        protected AutoCompleteTextView mTextEmail;
-    @Bind(R.id.signin_password_text)     protected EditText mTextPassword;
-    @Bind(R.id.signin_button)            protected Button mButtonSignIn;
-    @Bind(R.id.signin_signup_button)     protected Button mButtonSignUp;
-    @Bind(R.id.signin_password_recovery) protected TextView mTextPasswordRecovery;
-    @Bind(R.id.material_progress_large)  protected View mProgress;
+    @BindView(R.id.signin_email_text)        protected AutoCompleteTextView mTextEmail;
+    @BindView(R.id.signin_password_text)     protected EditText mTextPassword;
+    @BindView(R.id.signin_button)            protected Button mButtonSignIn;
+    @BindView(R.id.signin_signup_button)     protected Button mButtonSignUp;
+    @BindView(R.id.signin_password_recovery) protected TextView mTextPasswordRecovery;
+    @BindView(R.id.material_progress_large)  protected View mProgress;
     private CompositeSubscription mCompositeSubscriptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscriptions = new CompositeSubscription();
         mTextEmail.setAdapter(new ArrayAdapter<>(mActivity, android.R.layout.simple_dropdown_item_1line, getEmails()));
         return view;
@@ -84,7 +84,7 @@ public class SignInFragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscriptions ==null || mCompositeSubscriptions.isUnsubscribed()) return;
         mCompositeSubscriptions.unsubscribe();
     }
@@ -97,8 +97,8 @@ public class SignInFragment extends TrackerFragment {
         FloatingActionControl.getInstance().clear();
         mCompositeSubscriptions.clear();
         mCompositeSubscriptions.add(Observable.combineLatest(
-            WidgetObservable.text(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessageEmail),
-            WidgetObservable.text(mTextPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(toString).map(RxValidator.getErrorMessagePassword),
+            RxTextView.textChanges(mTextEmail).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(CharSequence::toString).map(RxValidator.getErrorMessageEmail),
+            RxTextView.textChanges(mTextPassword).debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).map(CharSequence::toString).map(RxValidator.getErrorMessagePassword),
             (String emailError, String passwordError) -> {
                 mTextEmail.setError(emailError);
                 mTextPassword.setError(passwordError);
@@ -109,7 +109,7 @@ public class SignInFragment extends TrackerFragment {
         );
 
         mCompositeSubscriptions.add(Observable.mergeDelayError(
-            ViewObservable.clicks(mButtonSignIn).map(unused -> mButtonSignIn.isEnabled()),
+            RxView.clicks(mButtonSignIn).map(unused -> mButtonSignIn.isEnabled()),
             Observable.create(observer -> mTextPassword.setOnEditorActionListener((TextView v, int action, KeyEvent event) -> {
                 observer.onNext(mButtonSignIn.isEnabled());
                 observer.onCompleted();
@@ -119,11 +119,11 @@ public class SignInFragment extends TrackerFragment {
             .subscribe(unused -> requestSignIn(), error -> ErrorHandler.handle(error, this))
         );
 
-        mCompositeSubscriptions.add(ViewObservable.clicks(mButtonSignUp).subscribe(
+        mCompositeSubscriptions.add(RxView.clicks(mButtonSignUp).subscribe(
             unused -> mNavigator.navigate(SignUpStep1Fragment.class, true), error -> ErrorHandler.handle(error, this)
         ));
 
-        mCompositeSubscriptions.add(ViewObservable.clicks(this.mTextPasswordRecovery)
+        mCompositeSubscriptions.add(RxView.clicks(this.mTextPasswordRecovery)
             .subscribe(event -> PasswordRecoveryDialog.show(mActivity), error -> ErrorHandler.handle(error, this))
         );
     }

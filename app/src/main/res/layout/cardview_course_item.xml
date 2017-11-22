@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:roboto="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_pressed_selector_white"
@@ -55,8 +55,8 @@
         android:layout_marginRight="@dimen/baseline_x1"
         android:layout_marginEnd="@dimen/baseline_x1"
         android:textSize="36sp"
-        roboto:fontFamily="roboto"
-        roboto:textWeight="medium"/><!-- Overall Point -->
+        app:robotoFontFamily="roboto"
+        app:robotoTextWeight="medium"/><!-- Overall Point -->
     <TextView
         android:id="@+id/course_item_category"
         android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/><!-- Evaluation Count -->
+                    app:robotoTextWeight="bold"/><!-- Evaluation Count -->
             </RelativeLayout><!-- Evaluation -->
         </LinearLayout><!-- Statistics -->
     </RelativeLayout><!-- Footer -->

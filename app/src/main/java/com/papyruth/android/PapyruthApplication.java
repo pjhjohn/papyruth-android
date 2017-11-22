@@ -5,17 +5,11 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.papyruth.android.model.unique.User;
 import com.papyruth.support.opensource.retrofit.ApiManager;
 import com.papyruth.support.opensource.retrofit.RetrofitLogger;
 import com.papyruth.support.opensource.retrofit.apis.Api;
-import com.papyruth.support.utility.error.Error;
 import com.squareup.picasso.Picasso;
-
-import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit.RestAdapter;
@@ -26,20 +20,6 @@ import timber.log.Timber;
  * MontserratApp.onCreate handles application initialization which should be called once.
  */
 public class PapyruthApplication extends Application {
-    private Tracker mTracker;
-    synchronized public Tracker getTracker() {
-        if (mTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            if(BuildConfig.DEBUG) GoogleAnalytics.getInstance(this).setDryRun(true);
-            mTracker = analytics.newTracker(R.xml.ga_tracker);
-        }
-        mTracker.setAppName(getResources().getString(R.string.application_title));
-        mTracker.set("&uid", User.getInstance().getId() == null ? "null" : User.getInstance().getId().toString());
-        mTracker.set("&ul", Locale.getDefault().getDisplayLanguage());
-        mTracker.enableAutoActivityTracking(true);
-        AppTracker.getInstance().setTracker(mTracker);
-        return mTracker;
-    }
 
     @Override
     public void onCreate() {

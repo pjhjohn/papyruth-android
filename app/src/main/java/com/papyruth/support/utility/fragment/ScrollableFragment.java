@@ -1,6 +1,7 @@
 package com.papyruth.support.utility.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,7 +20,7 @@ import rx.Observable;
 /**
  * Created by pjhjohn on 2015-04-13.
  */
-public abstract class ScrollableFragment extends TrackerFragment {
+public abstract class ScrollableFragment extends Fragment {
     protected boolean mHideToolbarOnScroll, mHideFloatingActionControlOnScroll;
     protected Context mContext;
     @Override

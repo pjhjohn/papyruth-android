@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -20,13 +21,13 @@ import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
 import com.papyruth.support.opensource.rx.RxValidator;
 import com.papyruth.support.utility.error.ErrorHandler;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.navigator.Navigator;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -35,8 +36,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by pjhjohn on 2015-04-26.
  */
 
-public class EvaluationStep2Fragment extends TrackerFragment {
+public class EvaluationStep2Fragment extends Fragment {
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
     private Context mContext;
     @Override
     public void onAttach(Activity activity) {
@@ -56,23 +58,23 @@ public class EvaluationStep2Fragment extends TrackerFragment {
         super.onCreate(savedInstanceState);
     }
 
-    @Bind(R.id.evaluation_form_lecture)                   protected TextView mLecture;
-    @Bind(R.id.evaluation_form_professor)                 protected TextView mProfessor;
-    @Bind(R.id.evaluation_form_overall_ratingbar)         protected RatingBar mRatingBarOverall;
-    @Bind(R.id.evaluation_form_overall_point)             protected TextView mPointOverall;
-    @Bind(R.id.evaluation_form_clarity_seekbar)           protected SeekBar mSeekBarClarity;
-    @Bind(R.id.evaluation_form_clarity_point)             protected TextView mPointClarity;
-    @Bind(R.id.evaluation_form_easiness_seekbar)          protected SeekBar mSeekBarEasiness;
-    @Bind(R.id.evaluation_form_easiness_point)            protected TextView mPointEasiness;
-    @Bind(R.id.evaluation_form_gpa_satisfaction_seekbar)  protected SeekBar mSeekBarGpaSatisfaction;
-    @Bind(R.id.evaluation_form_gpa_satisfaction_point)    protected TextView mPointGpaSatisfaction;
+    @BindView(R.id.evaluation_form_lecture)                   protected TextView mLecture;
+    @BindView(R.id.evaluation_form_professor)                 protected TextView mProfessor;
+    @BindView(R.id.evaluation_form_overall_ratingbar)         protected RatingBar mRatingBarOverall;
+    @BindView(R.id.evaluation_form_overall_point)             protected TextView mPointOverall;
+    @BindView(R.id.evaluation_form_clarity_seekbar)           protected SeekBar mSeekBarClarity;
+    @BindView(R.id.evaluation_form_clarity_point)             protected TextView mPointClarity;
+    @BindView(R.id.evaluation_form_easiness_seekbar)          protected SeekBar mSeekBarEasiness;
+    @BindView(R.id.evaluation_form_easiness_point)            protected TextView mPointEasiness;
+    @BindView(R.id.evaluation_form_gpa_satisfaction_seekbar)  protected SeekBar mSeekBarGpaSatisfaction;
+    @BindView(R.id.evaluation_form_gpa_satisfaction_point)    protected TextView mPointGpaSatisfaction;
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         View view = inflater.inflate(R.layout.fragment_evaluation_step2, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
         mLecture.setPaintFlags(mLecture.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
@@ -101,7 +103,7 @@ public class EvaluationStep2Fragment extends TrackerFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || this.mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

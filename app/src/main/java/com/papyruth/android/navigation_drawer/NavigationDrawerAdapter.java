@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -101,8 +101,8 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
     public class NavigationDrawerItemViewHolder extends RecyclerView.ViewHolder {
         public static final int VIEWTYPE = 0x2;
-        @Bind(R.id.navigation_drawer_item_icon)  protected ImageView mNavigationDrawerItemIcon; // 54% #000000
-        @Bind(R.id.navigation_drawer_item_label) protected TextView mNavigationDrawerItemLabel; // Roboto Medium, 14sp, 87% #000000
+        @BindView(R.id.navigation_drawer_item_icon)  protected ImageView mNavigationDrawerItemIcon; // 54% #000000
+        @BindView(R.id.navigation_drawer_item_label) protected TextView mNavigationDrawerItemLabel; // Roboto Medium, 14sp, 87% #000000
         private int mColorIconMaterial;
         private final Context mContext;
 

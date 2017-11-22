@@ -5,11 +5,6 @@ import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.papyruth.android.R;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by pjhjohn on 2015-06-29.
  */

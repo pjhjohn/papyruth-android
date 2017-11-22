@@ -29,8 +29,9 @@ import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickList
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -41,6 +42,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class FavoriteFragment extends ScrollableFragment implements RecyclerViewItemObjectClickListener{
     private Navigator mNavigator;
+    private Unbinder mUnbinder;
 
     @Override
     public void onAttach(Activity activity) {
@@ -48,9 +50,9 @@ public class FavoriteFragment extends ScrollableFragment implements RecyclerView
         this.mNavigator = (Navigator) activity;
     }
 
-    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_empty_state_view) protected EmptyStateView mEmptyStateView;
+    @BindView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @BindView(R.id.common_empty_state_view) protected EmptyStateView mEmptyStateView;
 
     private CompositeSubscription mCompositeSubscription;
     private Toolbar mToolbar;
@@ -60,7 +62,7 @@ public class FavoriteFragment extends ScrollableFragment implements RecyclerView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
 
         mToolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -79,7 +81,7 @@ public class FavoriteFragment extends ScrollableFragment implements RecyclerView
     public void onDestroyView() {
         super.onDestroyView();
         FloatingActionControl.getInstance().closeMenuButton(true);
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

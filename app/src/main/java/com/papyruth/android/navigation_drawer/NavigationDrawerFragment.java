@@ -20,11 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.papyruth.android.AppConst;
 import com.papyruth.android.AppManager;
-import com.papyruth.android.PapyruthApplication;
 import com.papyruth.android.R;
 import com.papyruth.android.fragment.main.ProfileFragment;
 import com.papyruth.android.model.unique.User;
@@ -39,19 +35,17 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallback {
     private NavigationDrawerCallback mNavigationDrawerCallback;
     private Navigator mNavigator;
     private Activity mActivity;
-    private Tracker mTracker;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        mTracker  = ((PapyruthApplication) activity.getApplicationContext()).getTracker();
         try {
             mNavigationDrawerCallback = (NavigationDrawerCallback) activity;
             mNavigator = (Navigator) activity;
@@ -82,13 +76,13 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
     }
 
-    @Bind(R.id.navigation_drawer_header)            protected RelativeLayout mHeader;
-    @Bind(R.id.navigation_drawer_header_background) protected ImageView mHeaderBackground;
-    @Bind(R.id.navigation_drawer_header_nickname)   protected TextView mUserNickname;
-    @Bind(R.id.navigation_drawer_header_email)      protected TextView mUserEmail;
-    @Bind(R.id.navigation_drawer_header_avatar)     protected ImageView mUserAvatar;
-    @Bind(R.id.navigation_drawer_recyclerview)      protected RecyclerView mNavigationRecyclerView;
-    @Bind(R.id.navigation_drawer_contact_us)        protected FrameLayout mContactUs;
+    @BindView(R.id.navigation_drawer_header)            protected RelativeLayout mHeader;
+    @BindView(R.id.navigation_drawer_header_background) protected ImageView mHeaderBackground;
+    @BindView(R.id.navigation_drawer_header_nickname)   protected TextView mUserNickname;
+    @BindView(R.id.navigation_drawer_header_email)      protected TextView mUserEmail;
+    @BindView(R.id.navigation_drawer_header_avatar)     protected ImageView mUserAvatar;
+    @BindView(R.id.navigation_drawer_recyclerview)      protected RecyclerView mNavigationRecyclerView;
+    @BindView(R.id.navigation_drawer_contact_us)        protected FrameLayout mContactUs;
     private NavigationDrawerAdapter mNavigationDrawerAdapter;
 
     @Override
@@ -170,13 +164,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
                     mUserLearnedDrawer = true;
                     AppManager.getInstance().putBoolean(USER_LEARNED_DRAWER, true);
                 }
-                mTracker.send(new HitBuilders.EventBuilder().setAction(getString(R.string.navigation_drawer_open)).setCategory(getString(R.string.ga_category_drawer)).build());
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                mTracker.send(new HitBuilders.EventBuilder().setAction(getString(R.string.navigation_drawer_close)).setCategory(getString(R.string.ga_category_drawer)).build());
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerListener);

@@ -20,7 +20,12 @@ import com.squareup.picasso.Target;
  */
 public class VotersDialog {
     public static void show(Context context, String title, VotersData users) {
-        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(context);
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+
+            }
+        });
         for(UserData user : users.users) {
             MaterialSimpleListItem.Builder builder = new MaterialSimpleListItem.Builder(context).content(user.nickname);
             Target target = new Target() {

@@ -12,7 +12,6 @@ import com.papyruth.android.model.unique.EvaluationForm;
 import com.papyruth.support.utility.helper.PointHelper;
 
 import rx.Observable;
-import rx.android.widget.OnTextChangeEvent;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
@@ -23,7 +22,6 @@ import rx.functions.Func2;
 
 public class RxValidator {
     /* for Text Validation. WidgetObservable.text() emits OnTextChangeEvent */
-    public static Func1<OnTextChangeEvent, String> toString = text -> text.text().toString();
     public static Func1<String, Boolean> isEmpty  = text -> text.length() == 0;
     public static Func1<String, Boolean> nonEmpty = text -> text.length() > 0;
     public static Func1<String, Boolean> isValidEmail    = text -> nonEmpty.call(text) && Patterns.EMAIL_ADDRESS.matcher(text).matches();

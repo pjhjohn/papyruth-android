@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:roboto="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_pressed_selector_white"
@@ -35,7 +35,7 @@
         android:gravity="end"
         android:textSize="14sp"
         android:textColor="@color/timestamp"
-        roboto:textWeight="normal"/><!-- Timestamp -->
+        app:robotoTextWeight="normal"/><!-- Timestamp -->
     <RelativeLayout
         android:id="@+id/my_evaluation_item_content"
         android:layout_width="match_parent"
@@ -108,7 +108,7 @@
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/>
+                    app:robotoTextWeight="bold"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/my_evaluation_item_down_vote"
@@ -134,7 +134,7 @@
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/>
+                    app:robotoTextWeight="bold"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/my_evaluation_item_comment"
@@ -160,7 +160,7 @@
                     android:paddingLeft="@dimen/baseline_x0.5"
                     android:paddingRight="@dimen/baseline_x0.5"
                     android:gravity="center"
-                    roboto:textWeight="bold"/>
+                    app:robotoTextWeight="bold"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

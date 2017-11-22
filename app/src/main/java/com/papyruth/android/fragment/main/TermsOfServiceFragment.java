@@ -1,6 +1,7 @@
 package com.papyruth.android.fragment.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,26 +14,24 @@ import android.view.ViewGroup;
 import com.papyruth.android.AppConst;
 import com.papyruth.android.R;
 import com.papyruth.android.activity.MainActivity;
-import com.papyruth.android.model.OpenSourceLicenseData;
 import com.papyruth.android.model.TermData;
 import com.papyruth.android.recyclerview.adapter.TermsOfServiceAdapter;
 import com.papyruth.support.opensource.fab.FloatingActionControl;
-import com.papyruth.support.opensource.materialdialog.OpenSourceLicenseDialog;
 import com.papyruth.support.opensource.materialdialog.TermsOfServiceDialog;
-import com.papyruth.support.utility.fragment.TrackerFragment;
 import com.papyruth.support.utility.helper.StatusBarHelper;
 import com.papyruth.support.utility.helper.ToolbarHelper;
 import com.papyruth.support.utility.recyclerview.RecyclerViewItemObjectClickListener;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
-public class TermsOfServiceFragment extends TrackerFragment implements RecyclerViewItemObjectClickListener {
+public class TermsOfServiceFragment extends Fragment implements RecyclerViewItemObjectClickListener {
     private Toolbar mToolbar;
     private CompositeSubscription mCompositeSubscription;
     private MainActivity mActivity;
+    private Unbinder mUnbinder;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -40,14 +39,14 @@ public class TermsOfServiceFragment extends TrackerFragment implements RecyclerV
         mToolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
     }
 
-    @Bind(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
-    @Bind(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.common_recycler_view) protected RecyclerView mRecyclerView;
+    @BindView(R.id.common_swipe_refresh) protected SwipeRefreshLayout mSwipeRefresh;
     private TermsOfServiceAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common_recyclerview, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mCompositeSubscription = new CompositeSubscription();
         mSwipeRefresh.setEnabled(false);
 
@@ -62,7 +61,7 @@ public class TermsOfServiceFragment extends TrackerFragment implements RecyclerV
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         if(mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) return;
         mCompositeSubscription.unsubscribe();
     }

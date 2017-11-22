@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:roboto="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -113,7 +113,7 @@
                     android:textSize="34sp"
                     android:textColor="@color/point_overall"
                     android:minWidth="@dimen/baseline_x3"
-                    roboto:textWeight="medium"/>
+                    app:robotoTextWeight="medium"/>
             </RelativeLayout>
         </RelativeLayout><!--Overall-->
         <RelativeLayout
@@ -141,7 +141,7 @@
                 android:textSize="20sp"
                 android:textColor="@color/point_clarity"
                 android:minWidth="@dimen/baseline_x3"
-                roboto:textWeight="medium"/>
+                app:robotoTextWeight="medium"/>
             <ProgressBar
                 android:id="@+id/course_clarity_progressbar"
                 android:layout_width="match_parent"
@@ -180,7 +180,7 @@
                 android:textSize="20sp"
                 android:textColor="@color/point_easiness"
                 android:minWidth="@dimen/baseline_x3"
-                roboto:textWeight="medium"/>
+                app:robotoTextWeight="medium"/>
             <ProgressBar
                 android:id="@+id/course_easiness_progressbar"
                 android:layout_width="match_parent"
@@ -219,7 +219,7 @@
                 android:textSize="20sp"
                 android:textColor="@color/point_gpa_satisfaction"
                 android:minWidth="@dimen/baseline_x3"
-                roboto:textWeight="medium"/>
+                app:robotoTextWeight="medium"/>
             <ProgressBar
                 android:id="@+id/course_gpa_satisfaction_progressbar"
                 android:layout_width="match_parent"
@@ -280,7 +280,7 @@
                         android:paddingLeft="@dimen/baseline_x0.25"
                         android:paddingRight="@dimen/baseline_x0.25"
                         android:gravity="center"
-                        roboto:textWeight="bold"/><!-- Evaluation Count -->
+                        app:robotoTextWeight="bold"/><!-- Evaluation Count -->
                 </RelativeLayout><!-- Evaluation -->
             </LinearLayout><!-- Statistics -->
             <LinearLayout

@@ -13,7 +13,7 @@ import com.papyruth.support.opensource.picasso.ColorFilterTransformation;
 import com.papyruth.support.utility.helper.AnimatorHelper;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -28,10 +28,10 @@ public class EmptyStateView extends RelativeLayout {
     private int     mBodyTextColorResId;
     private int     mBackgroundColorResId;
 
-    @Bind(R.id.empty_state_container)   protected RelativeLayout mEmptyStateContainer;
-    @Bind(R.id.empty_state_icon)        protected ImageView mIcon;
-    @Bind(R.id.empty_state_title)       protected TextView mTitle;
-    @Bind(R.id.empty_state_body)        protected TextView mBody;
+    @BindView(R.id.empty_state_container)   protected RelativeLayout mEmptyStateContainer;
+    @BindView(R.id.empty_state_icon)        protected ImageView mIcon;
+    @BindView(R.id.empty_state_title)       protected TextView mTitle;
+    @BindView(R.id.empty_state_body)        protected TextView mBody;
 
     public EmptyStateView(Context context) {
         super(context);
