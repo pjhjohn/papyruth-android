@@ -86,7 +86,7 @@ public class User {
     public void setEntranceYear (Integer entrance_year) { this.entrance_year = entrance_year; }
     public Integer getUniversityId() { return this.university_id; }
     public void setUniversityId (Integer university_id) { this.university_id = university_id; }
-    public boolean getGenderIsBoy() { return this.is_boy; }
+    public Boolean getGenderIsBoy() { return this.is_boy; }
     public void setGenderIsBoy (boolean is_boy) { this.is_boy = is_boy; }
 
     public Boolean getConfirmed() { return confirmed; }

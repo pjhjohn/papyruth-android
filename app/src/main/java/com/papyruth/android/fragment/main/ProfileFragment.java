@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mToolbar.setTitle(R.string.toolbar_profile);
-        final boolean univConfirmed = User.getInstance().getUniversityConfirmed();
+        final Boolean univConfirmed = User.getInstance().getUniversityConfirmed();
         ToolbarHelper.getColorTransitionAnimator(mToolbar, R.color.toolbar_blue).start();
         StatusBarHelper.changeColorTo(getActivity(), R.color.status_bar_blue);
         ToolbarHelper.menuItemVisibility(mToolbar, AppConst.Menu.SEARCH, false);
@@ -96,21 +96,21 @@ public class ProfileFragment extends Fragment {
 
         mCompositeSubscription.clear();
 
-        if(User.getInstance().getUniversityData().email_domain != null){
+        if(User.getInstance().getUniversityData() != null && User.getInstance().getUniversityData().email_domain != null) {
             this.mUniversityContainer.setVisibility(View.VISIBLE);
-            FloatingActionControl.getInstance().setControl(univConfirmed? R.layout.fam_profile_without_university : R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
+            FloatingActionControl.getInstance().setControl(Boolean.TRUE.equals(univConfirmed)? R.layout.fam_profile_without_university : R.layout.fam_profile).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
             mCompositeSubscription.add(FloatingActionControl
                 .clicks(R.id.fab_mini_register_university_email)
                 .subscribe(
                     unused -> {
-                        if (User.getInstance().getUniversityEmail() != null && !univConfirmed)
+                        if (User.getInstance().getUniversityEmail() != null && Boolean.FALSE.equals(univConfirmed))
                             AlertDialog.show(getActivity(), mNavigator, AlertDialog.Type.UNIVERSITY_CONFIRMATION_REQUIRED);
                         else
                             mNavigator.navigate(ProfileRegisterUniversityEmailFragment.class, true);
                     }, error -> ErrorHandler.handle(error, this)
                 )
             );
-        }else{
+        } else {
             this.mUniversityContainer.setVisibility(View.GONE);
             FloatingActionControl.getInstance().setControl(R.layout.fam_profile_without_university).show(true, AppConst.ANIM_DURATION_SHORT, TimeUnit.MILLISECONDS);
         }
@@ -127,7 +127,7 @@ public class ProfileFragment extends Fragment {
         Picasso.with(mContext).load(R.drawable.ic_nickname_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mNicknameIcon);
         mNicknameText.setText(User.getInstance().getNickname());
         Picasso.with(mContext).load(R.drawable.ic_gender_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mGenderIcon);
-        mGenderText.setText(mResources.getString(User.getInstance().getGenderIsBoy() ? R.string.profile_value_male : R.string.profile_value_female));
+        mGenderText.setText(mResources.getString(Boolean.TRUE.equals(User.getInstance().getGenderIsBoy()) ? R.string.profile_value_male : R.string.profile_value_female));
         Picasso.with(mContext).load(R.drawable.ic_university_email_24dp).transform(new ColorFilterTransformation(mResources.getColor(R.color.icon_material))).into(mUniversityEmailIcon);
 
         if(User.getInstance().getUniversityEmail() == null) mUniversityEmailText.setText(mResources.getString(R.string.profile_value_university_email_confirmation_required));
